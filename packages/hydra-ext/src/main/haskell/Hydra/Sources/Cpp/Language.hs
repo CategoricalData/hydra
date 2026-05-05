@@ -87,8 +87,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.cpp.language"),
             moduleDefinitions = [toDefinition cppLanguage, toDefinition cppReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for C++"}
 cppLanguage :: TTermDefinition Language
 cppLanguage = define "cppLanguage" $
@@ -158,8 +157,8 @@ cppLanguage = define "cppLanguage" $
     Variants.typeVariantWrap],       -- wrapper class
   "typePredicate">: constant true] $ -- TODO: refine this with C++ specific constraints
   Coders.language
-    (Coders.languageName_ $ string "hydra.cpp")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.cpp")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

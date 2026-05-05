@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | C++ naming utilities: encoding Hydra names as C++ names
 
 module Hydra.Cpp.Names where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Cpp.Environment as Environment
 import qualified Hydra.Cpp.Language as Language
@@ -22,26 +20,21 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Get the C++ class name from a Hydra Name
 className :: Core.Name -> String
 className name = sanitizeCppName (Names.localNameOf name)
-
 -- | Create a type reference, optionally wrapped in shared_ptr
 createTypeReference :: Bool -> Environment.CppEnvironment -> Core.Name -> Syntax.TypeExpression
 createTypeReference isPointer env name =
 
       let baseType = Syntax.TypeExpressionBasic (Syntax.BasicTypeNamed (encodeName True Util.CaseConventionPascal env name))
       in (Logic.ifElse isPointer (Utils.toConstType baseType) baseType)
-
 -- | Encode an enum value with appropriate naming convention
 encodeEnumValue :: Environment.CppEnvironment -> Core.Name -> String
 encodeEnumValue = encodeName False Util.CaseConventionUpperSnake
-
 -- | Encode a field name with appropriate naming convention
 encodeFieldName :: Environment.CppEnvironment -> Core.Name -> String
 encodeFieldName env fname = encodeName False Util.CaseConventionLowerSnake env fname
-
 -- | Encode a name with specified convention
 encodeName :: Bool -> Util.CaseConvention -> Environment.CppEnvironment -> Core.Name -> String
 encodeName isQualified conv env name =
@@ -55,7 +48,6 @@ encodeName isQualified conv env name =
           cppNs =
                   \nsVal -> Strings.intercalate "::" (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unNamespace nsVal)))
       in (Logic.ifElse isQualified (Maybes.maybe (Maybes.maybe cppLocal (\nsVal -> Strings.cat2 (cppNs nsVal) (Strings.cat2 "::" cppLocal)) mns) (\n -> n) (Maps.lookup name boundVars)) cppLocal)
-
 -- | Encode a qualified name with namespace
 encodeNameQualified :: Environment.CppEnvironment -> Core.Name -> String
 encodeNameQualified env name =
@@ -66,55 +58,44 @@ encodeNameQualified env name =
           mns = Packaging.qualifiedNameNamespace qualName
           local = Packaging.qualifiedNameLocal qualName
       in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (sanitizeCppName local) (Strings.intercalate "::" (Lists.map sanitizeCppName (Strings.splitOn "." (Core.unName name))))) (\n -> n) (Maps.lookup name boundVars))
-
 -- | Encode a namespace as a C++ namespace string
 encodeNamespace :: Packaging.Namespace -> String
 encodeNamespace nsVal =
     Strings.intercalate "::" (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unNamespace nsVal)))
-
 -- | Encode a type variable name
 encodeTypeVariable :: Core.Name -> String
 encodeTypeVariable name = Formatting.capitalize (Core.unName name)
-
 -- | Get the forward header name for a namespace
 fwdHeaderName :: Packaging.Namespace -> Core.Name
 fwdHeaderName nsVal =
     Names.unqualifyName (Packaging.QualifiedName {
       Packaging.qualifiedNameNamespace = (Just nsVal),
       Packaging.qualifiedNameLocal = "Fwd"})
-
 -- | Create a namespace declaration wrapping inner declarations
 namespaceDecl :: Packaging.Namespace -> [Syntax.Declaration] -> Syntax.Declaration
 namespaceDecl nsVal decls =
     Syntax.DeclarationNamespace (Syntax.NamespaceDeclaration {
       Syntax.namespaceDeclarationName = (encodeNamespace nsVal),
       Syntax.namespaceDeclarationDeclarations = decls})
-
 -- | Get the partial visitor name for a type
 partialVisitorName :: Core.Name -> String
 partialVisitorName name = sanitizeCppName (Strings.cat2 (Names.localNameOf name) "PartialVisitor")
-
 -- | Sanitize a name to be valid in C++
 sanitizeCppName :: String -> String
 sanitizeCppName = Formatting.sanitizeWithUnderscores Language.cppReservedWords
-
 -- | Create a reference to a term variable
 termVariableReference :: Environment.CppEnvironment -> Core.Name -> Syntax.Expression
 termVariableReference = variableReference Util.CaseConventionLowerSnake
-
 -- | Create a reference to a type variable
 typeVariableReference :: Environment.CppEnvironment -> Core.Name -> Syntax.TypeExpression
 typeVariableReference env name =
     Syntax.TypeExpressionBasic (Syntax.BasicTypeNamed (encodeName True Util.CaseConventionPascal env name))
-
 -- | Create a variable reference expression
 variableReference :: Util.CaseConvention -> Environment.CppEnvironment -> Core.Name -> Syntax.Expression
 variableReference conv env name = Utils.createIdentifierExpr (encodeName True conv env name)
-
 -- | Get the variant name by combining type name and field name
 variantName :: Core.Name -> Core.Name -> String
 variantName tname fname = sanitizeCppName (Strings.cat2 (Names.localNameOf tname) (Formatting.capitalize (Core.unName fname)))
-
 -- | Get the visitor name for a type
 visitorName :: Core.Name -> String
 visitorName name = sanitizeCppName (Strings.cat2 (Names.localNameOf name) "Visitor")

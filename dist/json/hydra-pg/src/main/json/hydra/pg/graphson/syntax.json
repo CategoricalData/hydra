@@ -10,12 +10,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "type",
-                "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
-              {
-                "name": "fields",
-                "type": {"variable": "hydra.pg.graphson.syntax.Map"}}]},
+              {"name": "type", "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
+              {"name": "fields", "type": {"variable": "hydra.pg.graphson.syntax.Map"}}]},
           "variables": []}}},
     {
       "type": {
@@ -54,9 +50,7 @@
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.Map",
-        "typeScheme": {
-          "body": {"wrap": {"list": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}},
-          "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.pg.graphson.syntax.ValuePair"}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.pg.graphson.syntax.AdjacentEdge",
@@ -64,15 +58,11 @@
           "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
-              {
-                "name": "vertexId",
-                "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
+              {"name": "vertexId", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
               {
                 "name": "properties",
                 "type": {
-                  "map": {
-                    "keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"},
-                    "values": {"variable": "hydra.pg.graphson.syntax.Value"}}}}]},
+                  "map": {"keys": {"variable": "hydra.pg.graphson.syntax.PropertyKey"}, "values": {"variable": "hydra.pg.graphson.syntax.Value"}}}}]},
           "variables": []}}},
     {
       "type": {
@@ -80,9 +70,7 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "type",
-                "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
+              {"name": "type", "type": {"variable": "hydra.pg.graphson.syntax.TypeName"}},
               {"name": "value", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
@@ -103,49 +91,27 @@
         "typeScheme": {
           "body": {
             "union": [
-              {
-                "name": "bigDecimal",
-                "type": {"variable": "hydra.pg.graphson.syntax.BigDecimalValue"}},
-              {
-                "name": "bigInteger",
-                "type": {"literal": {"integer": {"bigint": {}}}}},
+              {"name": "bigDecimal", "type": {"variable": "hydra.pg.graphson.syntax.BigDecimalValue"}},
+              {"name": "bigInteger", "type": {"literal": {"integer": {"bigint": {}}}}},
               {"name": "binary", "type": {"literal": {"string": {}}}},
               {"name": "boolean", "type": {"literal": {"boolean": {}}}},
               {"name": "byte", "type": {"literal": {"integer": {"uint8": {}}}}},
               {"name": "char", "type": {"literal": {"integer": {"uint32": {}}}}},
-              {
-                "name": "composite",
-                "type": {"variable": "hydra.pg.graphson.syntax.CompositeTypedValue"}},
-              {
-                "name": "dateTime",
-                "type": {"variable": "hydra.pg.graphson.syntax.DateTime"}},
-              {
-                "name": "double",
-                "type": {"variable": "hydra.pg.graphson.syntax.DoubleValue"}},
-              {
-                "name": "duration",
-                "type": {"variable": "hydra.pg.graphson.syntax.Duration"}},
-              {
-                "name": "float",
-                "type": {"variable": "hydra.pg.graphson.syntax.FloatValue"}},
+              {"name": "composite", "type": {"variable": "hydra.pg.graphson.syntax.CompositeTypedValue"}},
+              {"name": "dateTime", "type": {"variable": "hydra.pg.graphson.syntax.DateTime"}},
+              {"name": "double", "type": {"variable": "hydra.pg.graphson.syntax.DoubleValue"}},
+              {"name": "duration", "type": {"variable": "hydra.pg.graphson.syntax.Duration"}},
+              {"name": "float", "type": {"variable": "hydra.pg.graphson.syntax.FloatValue"}},
               {"name": "integer", "type": {"literal": {"integer": {"int32": {}}}}},
-              {
-                "name": "list",
-                "type": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+              {"name": "list", "type": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}}},
               {"name": "long", "type": {"literal": {"integer": {"int64": {}}}}},
               {"name": "map", "type": {"variable": "hydra.pg.graphson.syntax.Map"}},
               {"name": "null", "type": {"unit": {}}},
-              {
-                "name": "primitive",
-                "type": {"variable": "hydra.pg.graphson.syntax.PrimitiveTypedValue"}},
-              {
-                "name": "set",
-                "type": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+              {"name": "primitive", "type": {"variable": "hydra.pg.graphson.syntax.PrimitiveTypedValue"}},
+              {"name": "set", "type": {"list": {"variable": "hydra.pg.graphson.syntax.Value"}}},
               {"name": "short", "type": {"literal": {"integer": {"int16": {}}}}},
               {"name": "string", "type": {"literal": {"string": {}}}},
-              {
-                "name": "uuid",
-                "type": {"variable": "hydra.pg.graphson.syntax.Uuid"}}]},
+              {"name": "uuid", "type": {"variable": "hydra.pg.graphson.syntax.Uuid"}}]},
           "variables": []}}},
     {
       "type": {
@@ -153,12 +119,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "first",
-                "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
-              {
-                "name": "second",
-                "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
+              {"name": "first", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
+              {"name": "second", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
           "variables": []}}},
     {
       "type": {
@@ -167,9 +129,7 @@
           "body": {
             "record": [
               {"name": "id", "type": {"variable": "hydra.pg.graphson.syntax.Value"}},
-              {
-                "name": "label",
-                "type": {"maybe": {"variable": "hydra.pg.graphson.syntax.VertexLabel"}}},
+              {"name": "label", "type": {"maybe": {"variable": "hydra.pg.graphson.syntax.VertexLabel"}}},
               {
                 "name": "inEdges",
                 "type": {
@@ -199,14 +159,9 @@
         "typeScheme": {
           "body": {
             "record": [
-              {
-                "name": "id",
-                "type": {"maybe": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-              {
-                "name": "value",
-                "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
+              {"name": "id", "type": {"maybe": {"variable": "hydra.pg.graphson.syntax.Value"}}},
+              {"name": "value", "type": {"variable": "hydra.pg.graphson.syntax.Value"}}]},
           "variables": []}}}],
+  "dependencies": ["hydra.core"],
   "description": "A syntax model for TinkerPop's GraphSON format. This model is designed to be as inclusive as possible, supporting GraphSON 4.0 as well as earlier versions. See https://github.com/apache/tinkerpop/blob/master/docs/src/dev/io/graphson.asciidoc.",
-  "namespace": "hydra.pg.graphson.syntax",
-  "termDependencies": [],
-  "typeDependencies": ["hydra.core"]}
+  "namespace": "hydra.pg.graphson.syntax"}

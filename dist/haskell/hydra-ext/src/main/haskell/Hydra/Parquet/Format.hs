@@ -1,61 +1,44 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | A model for the Parquet format. Based on the Thrift-based specification at:
 -- |   https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift
 
 module Hydra.Parquet.Format where
-
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.ByteString as B
 import qualified Data.Int as I
-
 -- | Types supported by Parquet.  These types are intended to be used in combination with the encodings to control the on disk storage format. For example INT16 is not included as a type since a good encoding of INT32 would handle this.
 data Type =
-  TypeBoolean  |
-  TypeInt32  |
-  TypeInt64  |
-  TypeFloat  |
-  TypeDouble  |
-  TypeByteArray  |
+  TypeBoolean |
+  TypeInt32 |
+  TypeInt64 |
+  TypeFloat |
+  TypeDouble |
+  TypeByteArray |
   TypeFixedLenByteArray
   deriving (Eq, Ord, Read, Show)
-
 _Type = Core.Name "hydra.parquet.format.Type"
-
 _Type_boolean = Core.Name "boolean"
-
 _Type_int32 = Core.Name "int32"
-
 _Type_int64 = Core.Name "int64"
-
 _Type_float = Core.Name "float"
-
 _Type_double = Core.Name "double"
-
 _Type_byteArray = Core.Name "byteArray"
-
 _Type_fixedLenByteArray = Core.Name "fixedLenByteArray"
-
 -- | Representation of Schemas
 data FieldRepetitionType =
   -- | This field is required (can not be null) and each record has exactly 1 value.
-  FieldRepetitionTypeRequired  |
+  FieldRepetitionTypeRequired |
   -- | The field is optional (can be null) and each record has 0 or 1 values.
-  FieldRepetitionTypeOptional  |
+  FieldRepetitionTypeOptional |
   -- | The field is repeated and can contain 0 or more values
   FieldRepetitionTypeRepeated
   deriving (Eq, Ord, Read, Show)
-
 _FieldRepetitionType = Core.Name "hydra.parquet.format.FieldRepetitionType"
-
 _FieldRepetitionType_required = Core.Name "required"
-
 _FieldRepetitionType_optional = Core.Name "optional"
-
 _FieldRepetitionType_repeated = Core.Name "repeated"
-
 -- | Statistics per row group and per page. All fields are optional.
 data Statistics =
   Statistics {
@@ -66,97 +49,70 @@ data Statistics =
     -- | Max value for the column, determined by its ColumnOrder. Values are encoded using PLAIN encoding, except that variable-length byte arrays do not include a length prefix.
     statisticsMinValue :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
-
 _Statistics = Core.Name "hydra.parquet.format.Statistics"
-
 _Statistics_nullCount = Core.Name "nullCount"
-
 _Statistics_distinctCount = Core.Name "distinctCount"
-
 _Statistics_maxValue = Core.Name "maxValue"
-
 _Statistics_minValue = Core.Name "minValue"
-
 -- | Decimal logical type annotation. To maintain forward-compatibility in v1, implementations using this logical type must also set scale and precision on the annotated SchemaElement. Allowed for physical types: INT32, INT64, FIXED, and BINARY
 data DecimalType =
   DecimalType {
     decimalTypeScale :: Int,
     decimalTypePrecision :: Int}
   deriving (Eq, Ord, Read, Show)
-
 _DecimalType = Core.Name "hydra.parquet.format.DecimalType"
-
 _DecimalType_scale = Core.Name "scale"
-
 _DecimalType_precision = Core.Name "precision"
-
 data TimeUnit =
-  TimeUnitMillis  |
-  TimeUnitMicros  |
+  TimeUnitMillis |
+  TimeUnitMicros |
   TimeUnitNanos
   deriving (Eq, Ord, Read, Show)
-
 _TimeUnit = Core.Name "hydra.parquet.format.TimeUnit"
-
 _TimeUnit_millis = Core.Name "millis"
-
 _TimeUnit_micros = Core.Name "micros"
-
 _TimeUnit_nanos = Core.Name "nanos"
-
 -- | Timestamp logical type annotation. Allowed for physical types: INT64
 data TimestampType =
   TimestampType {
     timestampTypeIsAdjustedToUtc :: Bool,
     timestampTypeUnit :: TimeUnit}
   deriving (Eq, Ord, Read, Show)
-
 _TimestampType = Core.Name "hydra.parquet.format.TimestampType"
-
 _TimestampType_isAdjustedToUtc = Core.Name "isAdjustedToUtc"
-
 _TimestampType_unit = Core.Name "unit"
-
 -- | Time logical type annotation. Allowed for physical types: INT32 (millis), INT64 (micros, nanos)
 data TimeType =
   TimeType {
     timeTypeIsAdjustedToUtc :: Bool,
     timeTypeUnit :: TimeUnit}
   deriving (Eq, Ord, Read, Show)
-
 _TimeType = Core.Name "hydra.parquet.format.TimeType"
-
 _TimeType_isAdjustedToUtc = Core.Name "isAdjustedToUtc"
-
 _TimeType_unit = Core.Name "unit"
-
 -- | Integer logical type annotation. bitWidth must be 8, 16, 32, or 64. Allowed for physical types: INT32, INT64
 data IntType =
   IntType {
     intTypeBitWidth :: I.Int16,
     intTypeIsSigned :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _IntType = Core.Name "hydra.parquet.format.IntType"
-
 _IntType_bitWidth = Core.Name "bitWidth"
-
 _IntType_isSigned = Core.Name "isSigned"
-
 -- | LogicalType annotations to replace ConvertedType. To maintain compatibility, implementations using LogicalType for a SchemaElement aust also set the corresponding ConvertedType (if any) from the following table.
 data LogicalType =
   -- | use ConvertedType UTF8
-  LogicalTypeString  |
+  LogicalTypeString |
   -- | use ConvertedType MAP
-  LogicalTypeMap  |
+  LogicalTypeMap |
   -- | use ConvertedType LIST
-  LogicalTypeList  |
+  LogicalTypeList |
   -- | use ConvertedType ENUM
-  LogicalTypeEnum  |
+  LogicalTypeEnum |
   -- | use ConvertedType DECIMAL + SchemaElement.{scale, precision}
   LogicalTypeDecimal DecimalType |
   -- | use ConvertedType DATE
-  LogicalTypeDate  |
+  LogicalTypeDate |
   -- | use ConvertedType TIME_MICROS for TIME(isAdjustedToUTC = *, unit = MICROS). use ConvertedType TIME_MILLIS for TIME(isAdjustedToUTC = *, unit = MILLIS)
   LogicalTypeTime TimeType |
   -- | use ConvertedType TIMESTAMP_MICROS for TIMESTAMP(isAdjustedToUTC = *, unit = MICROS). use ConvertedType TIMESTAMP_MILLIS for TIMESTAMP(isAdjustedToUTC = *, unit = MILLIS)
@@ -164,43 +120,28 @@ data LogicalType =
   -- | use ConvertedType INT_* or UINT_*
   LogicalTypeInteger IntType |
   -- | no compatible ConvertedType
-  LogicalTypeUnknown  |
+  LogicalTypeUnknown |
   -- | use ConvertedType JSON
-  LogicalTypeJson  |
+  LogicalTypeJson |
   -- | use ConvertedType BSON
-  LogicalTypeBson  |
+  LogicalTypeBson |
   -- | no compatible ConvertedType
   LogicalTypeUuid
   deriving (Eq, Ord, Read, Show)
-
 _LogicalType = Core.Name "hydra.parquet.format.LogicalType"
-
 _LogicalType_string = Core.Name "string"
-
 _LogicalType_map = Core.Name "map"
-
 _LogicalType_list = Core.Name "list"
-
 _LogicalType_enum = Core.Name "enum"
-
 _LogicalType_decimal = Core.Name "decimal"
-
 _LogicalType_date = Core.Name "date"
-
 _LogicalType_time = Core.Name "time"
-
 _LogicalType_timestamp = Core.Name "timestamp"
-
 _LogicalType_integer = Core.Name "integer"
-
 _LogicalType_unknown = Core.Name "unknown"
-
 _LogicalType_json = Core.Name "json"
-
 _LogicalType_bson = Core.Name "bson"
-
 _LogicalType_uuid = Core.Name "uuid"
-
 -- | Represents a element inside a schema definition.
 -- | - if it is a group (inner node) then type is undefined and num_children is defined
 -- | - if it is a primitive type (leaf) then type is defined and num_children is undefined
@@ -222,23 +163,14 @@ data SchemaElement =
     -- | The logical type of this SchemaElement. LogicalType replaces ConvertedType, but ConvertedType is still required for some logical types to ensure forward-compatibility in format v1.
     schemaElementLogicalType :: (Maybe LogicalType)}
   deriving (Eq, Ord, Read, Show)
-
 _SchemaElement = Core.Name "hydra.parquet.format.SchemaElement"
-
 _SchemaElement_type = Core.Name "type"
-
 _SchemaElement_typeLength = Core.Name "typeLength"
-
 _SchemaElement_repetitionType = Core.Name "repetitionType"
-
 _SchemaElement_name = Core.Name "name"
-
 _SchemaElement_numChildren = Core.Name "numChildren"
-
 _SchemaElement_fieldId = Core.Name "fieldId"
-
 _SchemaElement_logicalType = Core.Name "logicalType"
-
 -- | Encodings supported by Parquet.  Not all encodings are valid for all types.  These enums are also used to specify the encoding of definition and repetition levels. See the accompanying doc for the details of the more complicated encodings.
 data Encoding =
   -- | Default encoding.
@@ -249,103 +181,73 @@ data Encoding =
   -- | DOUBLE - 8 bytes per value.  IEEE. Stored as little-endian.
   -- | BYTE_ARRAY - 4 byte length stored as little endian, followed by bytes.
   -- | FIXED_LEN_BYTE_ARRAY - Just the bytes.
-  EncodingPlain  |
+  EncodingPlain |
   -- | Group packed run length encoding. Usable for definition/repetition levels encoding and Booleans (on one bit: 0 is false; 1 is true.)
-  EncodingRle  |
+  EncodingRle |
   -- | Bit packed encoding.  This can only be used if the data has a known max width.  Usable for definition/repetition levels encoding.
-  EncodingBitPacked  |
+  EncodingBitPacked |
   -- | Delta encoding for integers. This can be used for int columns and works best on sorted data
-  EncodingDeltaBinaryPacked  |
+  EncodingDeltaBinaryPacked |
   -- | Encoding for byte arrays to separate the length values and the data. The lengths are encoded using DELTA_BINARY_PACKED
-  EncodingDeltaLengthByteArray  |
+  EncodingDeltaLengthByteArray |
   -- | Incremental-encoded byte array. Prefix lengths are encoded using DELTA_BINARY_PACKED. Suffixes are stored as delta length byte arrays.
-  EncodingDeltaByteArray  |
+  EncodingDeltaByteArray |
   -- | Dictionary encoding: the ids are encoded using the RLE encoding
-  EncodingRleDictionary  |
+  EncodingRleDictionary |
   -- | Encoding for floating-point data. K byte-streams are created where K is the size in bytes of the data type. The individual bytes of an FP value are scattered to the corresponding stream and the streams are concatenated. This itself does not reduce the size of the data but can lead to better compression afterwards.
   EncodingByteStreamSplit
   deriving (Eq, Ord, Read, Show)
-
 _Encoding = Core.Name "hydra.parquet.format.Encoding"
-
 _Encoding_plain = Core.Name "plain"
-
 _Encoding_rle = Core.Name "rle"
-
 _Encoding_bitPacked = Core.Name "bitPacked"
-
 _Encoding_deltaBinaryPacked = Core.Name "deltaBinaryPacked"
-
 _Encoding_deltaLengthByteArray = Core.Name "deltaLengthByteArray"
-
 _Encoding_deltaByteArray = Core.Name "deltaByteArray"
-
 _Encoding_rleDictionary = Core.Name "rleDictionary"
-
 _Encoding_byteStreamSplit = Core.Name "byteStreamSplit"
-
 -- | Supported compression algorithms. Codecs added in format version X.Y can be read by readers based on X.Y and later. Codec support may vary between readers based on the format version and libraries available at runtime. See Compression.md for a detailed specification of these algorithms.
 data CompressionCodec =
-  CompressionCodecUncompressed  |
-  CompressionCodecSnappy  |
-  CompressionCodecGzip  |
-  CompressionCodecLzo  |
+  CompressionCodecUncompressed |
+  CompressionCodecSnappy |
+  CompressionCodecGzip |
+  CompressionCodecLzo |
   -- | Added in 2.4
-  CompressionCodecBrotli  |
+  CompressionCodecBrotli |
   -- | Added in 2.4
-  CompressionCodecZstd  |
+  CompressionCodecZstd |
   -- | Added in 2.9
   CompressionCodecLz4Raw
   deriving (Eq, Ord, Read, Show)
-
 _CompressionCodec = Core.Name "hydra.parquet.format.CompressionCodec"
-
 _CompressionCodec_uncompressed = Core.Name "uncompressed"
-
 _CompressionCodec_snappy = Core.Name "snappy"
-
 _CompressionCodec_gzip = Core.Name "gzip"
-
 _CompressionCodec_lzo = Core.Name "lzo"
-
 _CompressionCodec_brotli = Core.Name "brotli"
-
 _CompressionCodec_zstd = Core.Name "zstd"
-
 _CompressionCodec_lz4Raw = Core.Name "lz4Raw"
-
 data PageType =
-  PageTypeDataPage  |
-  PageTypeIndexPage  |
-  PageTypeDictionaryPage  |
+  PageTypeDataPage |
+  PageTypeIndexPage |
+  PageTypeDictionaryPage |
   PageTypeDataPageV2
   deriving (Eq, Ord, Read, Show)
-
 _PageType = Core.Name "hydra.parquet.format.PageType"
-
 _PageType_dataPage = Core.Name "dataPage"
-
 _PageType_indexPage = Core.Name "indexPage"
-
 _PageType_dictionaryPage = Core.Name "dictionaryPage"
-
 _PageType_dataPageV2 = Core.Name "dataPageV2"
-
 -- | Enum to annotate whether lists of min/max elements inside ColumnIndex are ordered and if so, in which direction.
 data BoundaryOrder =
-  BoundaryOrderUnordered  |
-  BoundaryOrderAscending  |
+  BoundaryOrderUnordered |
+  BoundaryOrderAscending |
   BoundaryOrderDescending
   deriving (Eq, Ord, Read, Show)
-
 _BoundaryOrder = Core.Name "hydra.parquet.format.BoundaryOrder"
-
 _BoundaryOrder_unordered = Core.Name "unordered"
-
 _BoundaryOrder_ascending = Core.Name "ascending"
-
 _BoundaryOrder_descending = Core.Name "descending"
-
 -- | Data page header
 data DataPageHeader =
   DataPageHeader {
@@ -360,25 +262,16 @@ data DataPageHeader =
     -- | Optional statistics for the data in this page
     dataPageHeaderStatistics :: (Maybe Statistics)}
   deriving (Eq, Ord, Read, Show)
-
 _DataPageHeader = Core.Name "hydra.parquet.format.DataPageHeader"
-
 _DataPageHeader_numValues = Core.Name "numValues"
-
 _DataPageHeader_encoding = Core.Name "encoding"
-
 _DataPageHeader_definitionLevelEncoding = Core.Name "definitionLevelEncoding"
-
 _DataPageHeader_repetitionLevelEncoding = Core.Name "repetitionLevelEncoding"
-
 _DataPageHeader_statistics = Core.Name "statistics"
-
 data IndexPageHeader =
   IndexPageHeader {}
   deriving (Eq, Ord, Read, Show)
-
 _IndexPageHeader = Core.Name "hydra.parquet.format.IndexPageHeader"
-
 -- | The dictionary page must be placed at the first position of the column chunk if it is partly or completely dictionary encoded. At most one dictionary page can be placed in a column chunk.
 data DictionaryPageHeader =
   DictionaryPageHeader {
@@ -389,15 +282,10 @@ data DictionaryPageHeader =
     -- | If true, the entries in the dictionary are sorted in ascending order
     dictionaryPageHeaderIsSorted :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
-
 _DictionaryPageHeader = Core.Name "hydra.parquet.format.DictionaryPageHeader"
-
 _DictionaryPageHeader_numValues = Core.Name "numValues"
-
 _DictionaryPageHeader_encoding = Core.Name "encoding"
-
 _DictionaryPageHeader_isSorted = Core.Name "isSorted"
-
 -- | New page format allowing reading levels without decompressing the data Repetition and definition levels are uncompressed The remaining section containing the data is compressed if is_compressed is true
 data DataPageHeaderV2 =
   DataPageHeaderV2 {
@@ -418,54 +306,35 @@ data DataPageHeaderV2 =
     -- | optional statistics for the data in this page
     dataPageHeaderV2Statistics :: (Maybe Statistics)}
   deriving (Eq, Ord, Read, Show)
-
 _DataPageHeaderV2 = Core.Name "hydra.parquet.format.DataPageHeaderV2"
-
 _DataPageHeaderV2_numValues = Core.Name "numValues"
-
 _DataPageHeaderV2_numNulls = Core.Name "numNulls"
-
 _DataPageHeaderV2_numRows = Core.Name "numRows"
-
 _DataPageHeaderV2_encoding = Core.Name "encoding"
-
 _DataPageHeaderV2_definitionLevelsByteLength = Core.Name "definitionLevelsByteLength"
-
 _DataPageHeaderV2_repetitionLevelsByteLength = Core.Name "repetitionLevelsByteLength"
-
 _DataPageHeaderV2_isCompressed = Core.Name "isCompressed"
-
 _DataPageHeaderV2_statistics = Core.Name "statistics"
-
 -- | The algorithm used in Bloom filter.
 data BloomFilterAlgorithm =
   -- | Block-based Bloom filter.
   BloomFilterAlgorithmBlock
   deriving (Eq, Ord, Read, Show)
-
 _BloomFilterAlgorithm = Core.Name "hydra.parquet.format.BloomFilterAlgorithm"
-
 _BloomFilterAlgorithm_block = Core.Name "block"
-
 -- | The hash function used in Bloom filter. This function takes the hash of a column value using plain encoding.
 data BloomFilterHash =
   -- | xxHash Strategy.
   BloomFilterHashXxhash
   deriving (Eq, Ord, Read, Show)
-
 _BloomFilterHash = Core.Name "hydra.parquet.format.BloomFilterHash"
-
 _BloomFilterHash_xxhash = Core.Name "xxhash"
-
 -- | The compression used in the Bloom filter.
 data BloomFilterCompression =
   BloomFilterCompressionUncompressed
   deriving (Eq, Ord, Read, Show)
-
 _BloomFilterCompression = Core.Name "hydra.parquet.format.BloomFilterCompression"
-
 _BloomFilterCompression_uncompressed = Core.Name "uncompressed"
-
 -- | Bloom filter header is stored at beginning of Bloom filter data of each column and followed by its bitset.
 data BloomFilterHeader =
   BloomFilterHeader {
@@ -478,17 +347,11 @@ data BloomFilterHeader =
     -- | The compression used in the Bloom filter
     bloomFilterHeaderCompression :: BloomFilterCompression}
   deriving (Eq, Ord, Read, Show)
-
 _BloomFilterHeader = Core.Name "hydra.parquet.format.BloomFilterHeader"
-
 _BloomFilterHeader_numBytes = Core.Name "numBytes"
-
 _BloomFilterHeader_algorithm = Core.Name "algorithm"
-
 _BloomFilterHeader_hash = Core.Name "hash"
-
 _BloomFilterHeader_compression = Core.Name "compression"
-
 data PageHeader =
   PageHeader {
     -- | the type of the page: indicates which of the *_header fields is set
@@ -520,45 +383,31 @@ data PageHeader =
     -- |     the uncompressed concatenation.
     -- | - In encrypted columns, CRC is calculated after page encryption; the
     -- |   encryption itself is performed after page compression (if compressed)
-    -- | If enabled, this allows for disabling checksumming in HDFS if only a few pages need to be read.
+    -- | If enabled, this allows for disabling checksumming in HDFS if only a few pages need to be read. 
     pageHeaderCrc :: (Maybe Int),
     pageHeaderDataPageHeader :: (Maybe DataPageHeader),
     pageHeaderIndexPageHeader :: (Maybe IndexPageHeader),
     pageHeaderDictionaryPageHeader :: (Maybe DictionaryPageHeader),
     pageHeaderDataPageHeaderV2 :: (Maybe DataPageHeaderV2)}
   deriving (Eq, Ord, Read, Show)
-
 _PageHeader = Core.Name "hydra.parquet.format.PageHeader"
-
 _PageHeader_type = Core.Name "type"
-
 _PageHeader_uncompressedPageSize = Core.Name "uncompressedPageSize"
-
 _PageHeader_compressedPageSize = Core.Name "compressedPageSize"
-
 _PageHeader_crc = Core.Name "crc"
-
 _PageHeader_dataPageHeader = Core.Name "dataPageHeader"
-
 _PageHeader_indexPageHeader = Core.Name "indexPageHeader"
-
 _PageHeader_dictionaryPageHeader = Core.Name "dictionaryPageHeader"
-
 _PageHeader_dataPageHeaderV2 = Core.Name "dataPageHeaderV2"
-
 -- | Wrapper struct to store key values
 data KeyValue =
   KeyValue {
     keyValueKey :: String,
     keyValueValue :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
-
 _KeyValue = Core.Name "hydra.parquet.format.KeyValue"
-
 _KeyValue_key = Core.Name "key"
-
 _KeyValue_value = Core.Name "value"
-
 -- | Wrapper struct to specify sort order
 data SortingColumn =
   SortingColumn {
@@ -569,15 +418,10 @@ data SortingColumn =
     -- | If true, nulls will come before non-null values, otherwise, nulls go at the end.
     sortingColumnNullsFirst :: Bool}
   deriving (Eq, Ord, Read, Show)
-
 _SortingColumn = Core.Name "hydra.parquet.format.SortingColumn"
-
 _SortingColumn_columnIdx = Core.Name "columnIdx"
-
 _SortingColumn_descending = Core.Name "descending"
-
 _SortingColumn_nullsFirst = Core.Name "nullsFirst"
-
 -- | statistics of a given page type and encoding
 data PageEncodingStats =
   PageEncodingStats {
@@ -588,15 +432,10 @@ data PageEncodingStats =
     -- | number of pages of this type with this encoding
     pageEncodingStatsCount :: Int}
   deriving (Eq, Ord, Read, Show)
-
 _PageEncodingStats = Core.Name "hydra.parquet.format.PageEncodingStats"
-
 _PageEncodingStats_pageType = Core.Name "pageType"
-
 _PageEncodingStats_encoding = Core.Name "encoding"
-
 _PageEncodingStats_count = Core.Name "count"
-
 -- | Description for column metadata
 data ColumnMetaData =
   ColumnMetaData {
@@ -629,43 +468,25 @@ data ColumnMetaData =
     -- | Byte offset from beginning of file to Bloom filter data.
     columnMetaDataBloomFilterOffset :: (Maybe I.Int64)}
   deriving (Eq, Ord, Read, Show)
-
 _ColumnMetaData = Core.Name "hydra.parquet.format.ColumnMetaData"
-
 _ColumnMetaData_type = Core.Name "type"
-
 _ColumnMetaData_encodings = Core.Name "encodings"
-
 _ColumnMetaData_pathInSchema = Core.Name "pathInSchema"
-
 _ColumnMetaData_codec = Core.Name "codec"
-
 _ColumnMetaData_numValues = Core.Name "numValues"
-
 _ColumnMetaData_totalUncompressedSize = Core.Name "totalUncompressedSize"
-
 _ColumnMetaData_totalCompressedSize = Core.Name "totalCompressedSize"
-
 _ColumnMetaData_keyValueMetadata = Core.Name "keyValueMetadata"
-
 _ColumnMetaData_dataPageOffset = Core.Name "dataPageOffset"
-
 _ColumnMetaData_indexPageOffset = Core.Name "indexPageOffset"
-
 _ColumnMetaData_dictionaryPageOffset = Core.Name "dictionaryPageOffset"
-
 _ColumnMetaData_statistics = Core.Name "statistics"
-
 _ColumnMetaData_encodingStats = Core.Name "encodingStats"
-
 _ColumnMetaData_bloomFilterOffset = Core.Name "bloomFilterOffset"
-
 data EncryptionWithFooterKey =
   EncryptionWithFooterKey {}
   deriving (Eq, Ord, Read, Show)
-
 _EncryptionWithFooterKey = Core.Name "hydra.parquet.format.EncryptionWithFooterKey"
-
 data EncryptionWithColumnKey =
   EncryptionWithColumnKey {
     -- | Column path in schema
@@ -673,24 +494,16 @@ data EncryptionWithColumnKey =
     -- | Retrieval metadata of column encryption key
     encryptionWithColumnKeyKeyMetadata :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
-
 _EncryptionWithColumnKey = Core.Name "hydra.parquet.format.EncryptionWithColumnKey"
-
 _EncryptionWithColumnKey_pathInSchema = Core.Name "pathInSchema"
-
 _EncryptionWithColumnKey_keyMetadata = Core.Name "keyMetadata"
-
 data ColumnCryptoMetaData =
   ColumnCryptoMetaDataEncryptionWithFooterKey EncryptionWithFooterKey |
   ColumnCryptoMetaDataEncryptionWithColumnKey EncryptionWithColumnKey
   deriving (Eq, Ord, Read, Show)
-
 _ColumnCryptoMetaData = Core.Name "hydra.parquet.format.ColumnCryptoMetaData"
-
 _ColumnCryptoMetaData_encryptionWithFooterKey = Core.Name "encryptionWithFooterKey"
-
 _ColumnCryptoMetaData_encryptionWithColumnKey = Core.Name "encryptionWithColumnKey"
-
 data ColumnChunk =
   ColumnChunk {
     -- | File where column data is stored.  If not set, assumed to be same file as metadata.  This path is relative to the current file.
@@ -712,27 +525,16 @@ data ColumnChunk =
     -- | Encrypted column metadata for this chunk
     columnChunkEncryptedColumnMetadata :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
-
 _ColumnChunk = Core.Name "hydra.parquet.format.ColumnChunk"
-
 _ColumnChunk_filePath = Core.Name "filePath"
-
 _ColumnChunk_fileOffset = Core.Name "fileOffset"
-
 _ColumnChunk_metaData = Core.Name "metaData"
-
 _ColumnChunk_offsetIndexOffset = Core.Name "offsetIndexOffset"
-
 _ColumnChunk_offsetIndexLength = Core.Name "offsetIndexLength"
-
 _ColumnChunk_columnIndexOffset = Core.Name "columnIndexOffset"
-
 _ColumnChunk_columnIndexLength = Core.Name "columnIndexLength"
-
 _ColumnChunk_cryptoMetadata = Core.Name "cryptoMetadata"
-
 _ColumnChunk_encryptedColumnMetadata = Core.Name "encryptedColumnMetadata"
-
 data RowGroup =
   RowGroup {
     -- | Metadata for each column chunk in this row group. This list must have the same order as the SchemaElement list in FileMetaData.
@@ -750,26 +552,17 @@ data RowGroup =
     -- | Row group ordinal in the file
     rowGroupOrdinal :: (Maybe I.Int16)}
   deriving (Eq, Ord, Read, Show)
-
 _RowGroup = Core.Name "hydra.parquet.format.RowGroup"
-
 _RowGroup_columns = Core.Name "columns"
-
 _RowGroup_totalByteSize = Core.Name "totalByteSize"
-
 _RowGroup_numRows = Core.Name "numRows"
-
 _RowGroup_sortingColumns = Core.Name "sortingColumns"
-
 _RowGroup_fileOffset = Core.Name "fileOffset"
-
 _RowGroup_totalCompressedSize = Core.Name "totalCompressedSize"
-
 _RowGroup_ordinal = Core.Name "ordinal"
-
 -- | Union to specify the order used for the min_value and max_value fields for a column. This union takes the role of an enhanced enum that allows rich elements (which will be needed for a collation-based ordering in the future). Possible values are:
 -- | * TypeDefinedOrder - the column uses the order defined by its logical or physical type (if there is no logical type).
--- | If the reader does not support the value of this union, min and max stats for this column should be ignored.
+-- | If the reader does not support the value of this union, min and max stats for this column should be ignored. 
 data ColumnOrder =
   -- | The sort orders for logical types are:
   -- |   UTF8 - unsigned byte-wise comparison
@@ -812,11 +605,8 @@ data ColumnOrder =
   -- |     - When looking for NaN values, min and max should be ignored.
   ColumnOrderTypeOrder
   deriving (Eq, Ord, Read, Show)
-
 _ColumnOrder = Core.Name "hydra.parquet.format.ColumnOrder"
-
 _ColumnOrder_typeOrder = Core.Name "typeOrder"
-
 data PageLocation =
   PageLocation {
     -- | Offset of the page in the file
@@ -826,25 +616,17 @@ data PageLocation =
     -- | Index within the RowGroup of the first row of the page; this means pages change on record boundaries (r = 0).
     pageLocationFirstRowIndex :: I.Int64}
   deriving (Eq, Ord, Read, Show)
-
 _PageLocation = Core.Name "hydra.parquet.format.PageLocation"
-
 _PageLocation_offset = Core.Name "offset"
-
 _PageLocation_compressedPageSize = Core.Name "compressedPageSize"
-
 _PageLocation_firstRowIndex = Core.Name "firstRowIndex"
-
 data OffsetIndex =
   OffsetIndex {
     -- | PageLocations, ordered by increasing PageLocation.offset. It is required that page_locations[i].first_row_index < page_locations[i+1].first_row_index.
     offsetIndexPageLocations :: [PageLocation]}
   deriving (Eq, Ord, Read, Show)
-
 _OffsetIndex = Core.Name "hydra.parquet.format.OffsetIndex"
-
 _OffsetIndex_pageLocations = Core.Name "pageLocations"
-
 -- | Description for ColumnIndex. Each <array-field>[i] refers to the page at OffsetIndex.page_locations[i]
 data ColumnIndex =
   ColumnIndex {
@@ -858,19 +640,12 @@ data ColumnIndex =
     -- | A list containing the number of null values for each page
     columnIndexNullCounts :: (Maybe [I.Int64])}
   deriving (Eq, Ord, Read, Show)
-
 _ColumnIndex = Core.Name "hydra.parquet.format.ColumnIndex"
-
 _ColumnIndex_nullPages = Core.Name "nullPages"
-
 _ColumnIndex_minValues = Core.Name "minValues"
-
 _ColumnIndex_maxValues = Core.Name "maxValues"
-
 _ColumnIndex_boundaryOrder = Core.Name "boundaryOrder"
-
 _ColumnIndex_nullCounts = Core.Name "nullCounts"
-
 data AesGcmV1 =
   AesGcmV1 {
     -- | AAD prefix
@@ -880,15 +655,10 @@ data AesGcmV1 =
     -- | In files encrypted with AAD prefix without storing it, readers must supply the prefix
     aesGcmV1SupplyAadPrefix :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
-
 _AesGcmV1 = Core.Name "hydra.parquet.format.AesGcmV1"
-
 _AesGcmV1_aadPrefix = Core.Name "aadPrefix"
-
 _AesGcmV1_aadFileUnique = Core.Name "aadFileUnique"
-
 _AesGcmV1_supplyAadPrefix = Core.Name "supplyAadPrefix"
-
 data AesGcmCtrV1 =
   AesGcmCtrV1 {
     -- | AAD prefix
@@ -898,26 +668,17 @@ data AesGcmCtrV1 =
     -- | In files encrypted with AAD prefix without storing it, readers must supply the prefix
     aesGcmCtrV1SupplyAadPrefix :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
-
 _AesGcmCtrV1 = Core.Name "hydra.parquet.format.AesGcmCtrV1"
-
 _AesGcmCtrV1_aadPrefix = Core.Name "aadPrefix"
-
 _AesGcmCtrV1_aadFileUnique = Core.Name "aadFileUnique"
-
 _AesGcmCtrV1_supplyAadPrefix = Core.Name "supplyAadPrefix"
-
 data EncryptionAlgorithm =
   EncryptionAlgorithmAesGcmV1 AesGcmV1 |
   EncryptionAlgorithmAesGcmCtrV1 AesGcmCtrV1
   deriving (Eq, Ord, Read, Show)
-
 _EncryptionAlgorithm = Core.Name "hydra.parquet.format.EncryptionAlgorithm"
-
 _EncryptionAlgorithm_aesGcmV1 = Core.Name "aesGcmV1"
-
 _EncryptionAlgorithm_aesGcmCtrV1 = Core.Name "aesGcmCtrV1"
-
 -- | Description for file metadata
 data FileMetaData =
   FileMetaData {
@@ -942,27 +703,16 @@ data FileMetaData =
     -- | Retrieval metadata of key used for signing the footer. Used only in encrypted files with plaintext footer.
     fileMetaDataFooterSigningKeyMetadata :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
-
 _FileMetaData = Core.Name "hydra.parquet.format.FileMetaData"
-
 _FileMetaData_version = Core.Name "version"
-
 _FileMetaData_schema = Core.Name "schema"
-
 _FileMetaData_numRows = Core.Name "numRows"
-
 _FileMetaData_rowGroups = Core.Name "rowGroups"
-
 _FileMetaData_keyValueMetadata = Core.Name "keyValueMetadata"
-
 _FileMetaData_createdBy = Core.Name "createdBy"
-
 _FileMetaData_columnOrders = Core.Name "columnOrders"
-
 _FileMetaData_encryptionAlgorithm = Core.Name "encryptionAlgorithm"
-
 _FileMetaData_footerSigningKeyMetadata = Core.Name "footerSigningKeyMetadata"
-
 -- | Crypto metadata for files with encrypted footer
 data FileCryptoMetaData =
   FileCryptoMetaData {
@@ -971,9 +721,6 @@ data FileCryptoMetaData =
     -- | Retrieval metadata of key used for encryption of footer, and (possibly) columns
     fileCryptoMetaDataKeyMetadata :: (Maybe B.ByteString)}
   deriving (Eq, Ord, Read, Show)
-
 _FileCryptoMetaData = Core.Name "hydra.parquet.format.FileCryptoMetaData"
-
 _FileCryptoMetaData_encryptionAlgorithm = Core.Name "encryptionAlgorithm"
-
 _FileCryptoMetaData_keyMetadata = Core.Name "keyMetadata"

@@ -40,8 +40,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [PgModel.ns, Coders.ns, Core.ns],
-            moduleTypeDependencies = [Core.ns],
+            moduleDependencies = [PgModel.ns, Coders.ns, Core.ns, Core.ns],
             moduleDescription = Just "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs"}
   where
     definitions = [

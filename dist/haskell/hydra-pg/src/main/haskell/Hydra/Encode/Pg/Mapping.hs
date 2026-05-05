@@ -1,16 +1,13 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term encoders for hydra.pg.mapping
 
 module Hydra.Encode.Pg.Mapping where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Pg.Model as Model
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Pg.Mapping as Mapping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 annotationSchema :: Mapping.AnnotationSchema -> Core.Term
 annotationSchema x =
     Core.TermRecord (Core.Record {
@@ -61,7 +58,6 @@ annotationSchema x =
         Core.Field {
           Core.fieldName = (Core.Name "ignore"),
           Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Mapping.annotationSchemaIgnore x))}]})
-
 edgeSpec :: Mapping.EdgeSpec -> Core.Term
 edgeSpec x =
     Core.TermRecord (Core.Record {
@@ -82,7 +78,6 @@ edgeSpec x =
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map propertySpec xs)) (Mapping.edgeSpecProperties x))}]})
-
 elementSpec :: Mapping.ElementSpec -> Core.Term
 elementSpec x =
     case x of
@@ -96,7 +91,6 @@ elementSpec x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "edge"),
           Core.fieldTerm = (edgeSpec v0)}})
-
 propertySpec :: Mapping.PropertySpec -> Core.Term
 propertySpec x =
     Core.TermRecord (Core.Record {
@@ -108,7 +102,6 @@ propertySpec x =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (valueSpec (Mapping.propertySpecValue x))}]})
-
 valueSpec :: Mapping.ValueSpec -> Core.Term
 valueSpec x =
     case x of
@@ -122,7 +115,6 @@ valueSpec x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
-
 vertexSpec :: Mapping.VertexSpec -> Core.Term
 vertexSpec x =
     Core.TermRecord (Core.Record {

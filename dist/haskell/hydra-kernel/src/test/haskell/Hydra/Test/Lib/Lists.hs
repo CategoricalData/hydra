@@ -2027,13 +2027,15 @@ allTests =
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))], (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (
+                  Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))],
+                  (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -2054,10 +2056,12 @@ allTests =
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))], (Core.TermList []))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (
+                  Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))],
+                  (Core.TermList []))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -2078,10 +2082,12 @@ allTests =
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermList [], (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (
+                  Core.TermList [],
+                  (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -2103,13 +2109,15 @@ allTests =
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))], (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))]))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (
+                  Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6)))],
+                  (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))]))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -2558,12 +2566,14 @@ allTests =
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))], (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (
+                  Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
+                  (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -2584,10 +2594,12 @@ allTests =
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))], (Core.TermList []))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (
+                  Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))],
+                  (Core.TermList []))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -2608,10 +2620,12 @@ allTests =
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermList [], (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (
+                  Core.TermList [],
+                  (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -2845,9 +2859,11 @@ allTests =
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermPair (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)), (Core.TermList [
-                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
-                  (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))))})),
+                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermPair (
+                  Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                  (Core.TermList [
+                    Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
+                    (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {

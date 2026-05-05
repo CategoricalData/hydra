@@ -32,15 +32,18 @@ typeToScheme = go []
     go vars body = TypeScheme vars body Nothing
 
 -- | The test graph with primitives, schema types, and kernel term bindings.
-testGraph :: M.Map Name Type -> Graph
-testGraph testTypes = let
+-- The testTerms argument is accepted for signature parity with the DSL
+-- (Map Name Type -> Map Name Term -> Graph) but ignored — Haskell tests
+-- read test terms directly from Hydra.Test.TestTerms.
+testGraph :: M.Map Name Type -> M.Map Name Term -> Graph
+testGraph testTypes _testTerms = let
     allPrims = L.concatMap libraryPrimitives standardLibraries
     primsMap = M.fromList $ fmap (\p -> (primitiveName p, p)) allPrims
     kernelSchemas = M.map typeToScheme typesByName
     testSchemas = M.map typeToScheme testTypes
     allSchemas = M.union kernelSchemas testSchemas
-    -- Kernel term bindings needed for reduceTerm to evaluate kernel functions
-    kernelTermBindings = L.concat $ fmap moduleBindings
+    -- Kernel term definitions needed for reduceTerm to evaluate kernel functions
+    kernelTermDefs = L.concat $ fmap moduleDefinitions
       [ TermAnnotations.module_
       , TermConstants.module_
       , TermDependencies.module_
@@ -52,9 +55,11 @@ testGraph testTypes = let
       , TermStrip.module_
       , TermVariables.module_
       ]
-    boundTerms = M.fromList $ fmap (\b -> (bindingName b, bindingTerm b)) kernelTermBindings
+    boundTerms = M.fromList
+      [ (termDefinitionName td, termDefinitionTerm td) | DefinitionTerm td <- kernelTermDefs ]
     boundTypes = M.fromList
-      [ (bindingName b, ts) | b <- kernelTermBindings, Just ts <- [bindingTypeScheme b] ]
+      [ (termDefinitionName td, ts)
+      | DefinitionTerm td <- kernelTermDefs, Just ts <- [termDefinitionTypeScheme td] ]
     base = emptyGraph
   in base {
     graphPrimitives = primsMap,

@@ -73,37 +73,26 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Functions for generating term encoders from type modules"}
   where
     definitions = [
       toDefinition encodeBinding,
       toDefinition encodeBindingName,
-      toDefinition encoderCollectForallVariables,
-      toDefinition encoderCollectOrdVars,
-      toDefinition encoderCollectTypeVarsFromType,
-      toDefinition encoderFullResultType,
-      toDefinition encoderFullResultTypeNamed,
-      toDefinition encoderType,
-      toDefinition encoderTypeNamed,
-      toDefinition encoderTypeScheme,
-      toDefinition encoderTypeSchemeNamed,
-      toDefinition prependForallEncoders,
+      toDefinition encodeEitherType,
       toDefinition encodeFieldValue,
       toDefinition encodeFloatValue,
+      toDefinition encodeForallType,
       toDefinition encodeInjection,
       toDefinition encodeIntegerValue,
       toDefinition encodeListType,
       toDefinition encodeLiteralType,
-      toDefinition encodeEitherType,
-      toDefinition encodeForallType,
       toDefinition encodeMapType,
-      toDefinition encodeOptionalType,
-      toDefinition encodePairType,
       toDefinition encodeModule,
       toDefinition encodeName,
       toDefinition encodeNamespace,
+      toDefinition encodeOptionalType,
+      toDefinition encodePairType,
       toDefinition encodeRecordType,
       toDefinition encodeRecordTypeNamed,
       toDefinition encodeSetType,
@@ -113,9 +102,19 @@ module_ = Module {
       toDefinition encodeUnionTypeNamed,
       toDefinition encodeWrappedType,
       toDefinition encodeWrappedTypeNamed,
+      toDefinition encoderCollectForallVariables,
+      toDefinition encoderCollectOrdVars,
+      toDefinition encoderCollectTypeVarsFromType,
+      toDefinition encoderFullResultType,
+      toDefinition encoderFullResultTypeNamed,
+      toDefinition encoderType,
+      toDefinition encoderTypeNamed,
+      toDefinition encoderTypeScheme,
+      toDefinition encoderTypeSchemeNamed,
       toDefinition filterTypeBindings,
       toDefinition isEncodableBinding,
-      toDefinition isUnitType_]
+      toDefinition isUnitType_,
+      toDefinition prependForallEncoders]
 
 define :: String -> TTerm x -> TTermDefinition x
 define = definitionInModule module_
@@ -134,9 +133,13 @@ encodeBinding = define "encodeBinding" $
   "cx" ~> "graph" ~> "b" ~>
     Eithers.bind (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm (var "b"))) (
       "typ" ~>
+      "rawBody" <~ (encodeTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ")) $
+      "description" <~ (Strings.cat $ list [
+        string "Encoder for ",
+        Core.unName (Core.bindingName (var "b"))]) $
       right (Core.binding
         (encodeBindingName @@ (Core.bindingName (var "b")))
-        (encodeTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ"))
+        (Annotations.setTermDescription @@ (just (var "description")) @@ var "rawBody")
         (just (encoderTypeSchemeNamed @@ (Core.bindingName (var "b")) @@ var "typ"))))
 
 -- | Construct a TypeScheme for an encoder function from a source type definition.
@@ -146,50 +149,460 @@ encodeBinding = define "encodeBinding" $
 -- The type scheme uses the same variable names as the original type definition.
 -- Variable normalization (to t0, t1, etc.) happens later in the pipeline and
 -- handles renaming both variables and constraint keys consistently.
-encoderTypeSchemeNamed :: TTermDefinition (Name -> Type -> TypeScheme)
-encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
-  doc "Construct a TypeScheme for an encoder function, with element name for nominal types" $
-  "ename" ~> "typ" ~> lets [
-    "typeVars">: encoderCollectForallVariables @@ var "typ",
-    "encoderFunType">: encoderTypeNamed @@ var "ename" @@ var "typ",
-    "allOrdVars">: encoderCollectOrdVars @@ var "typ",
-    "ordVars">: Lists.filter
-      ("v" ~> Lists.elem (var "v" :: TTerm Name) (var "typeVars" :: TTerm [Name]))
-      (var "allOrdVars"),
-    "constraints">:
-      Logic.ifElse (Lists.null (var "ordVars"))
+-- | Generate a fully qualified binding name for an encoder function from a type name
+-- For example, "hydra.core.Name" -> "hydra.encode.core.name"
+-- For local types (no namespace), returns just the decapitalized local name
+encodeBindingName :: TTermDefinition (Name -> Name)
+encodeBindingName = define "encodeBindingName" $
+  doc "Generate a binding name for an encoder function from a type name" $
+  "n" ~>
+  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
+  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
+  "localResult" <~ (Core.name (var "localPart")) $
+  -- Extract namespace parts (all but the last); if the name has no namespace,
+  -- fall back to the bare decapitalized local name.
+  Maybes.maybe
+    (var "localResult")
+    ("nsParts" ~>
+      Maybes.maybe
+        (var "localResult")  -- unreachable: nsParts empty means no namespace
+        ("nsUc" ~>
+          "tail" <~ Pairs.second (var "nsUc") $
+          Core.name (Strings.intercalate (string ".") (Lists.concat2
+            (list [string "hydra", string "encode"])
+            (Lists.concat2
+              (var "tail")
+              (list [var "localPart"])))))
+        (Lists.uncons $ var "nsParts"))
+    (Lists.maybeInit $ var "parts")
+
+-- | Generate the encoder term for a field value
+-- Creates a lambda that encodes the field value and wraps in an encoded union/injection
+
+-- | Generate an encoder for an Either type
+-- Generates a case match over Left/Right variants
+encodeEitherType :: TTermDefinition (EitherType -> Term)
+encodeEitherType = define "encodeEitherType" $
+  doc "Generate an encoder for an Either type" $
+  "et" ~>
+    DC.lambda "e" $
+      DC.injection _Term (DC.field _Term_either
+        (DC.primitiveEncoded _eithers_bimap
+          @@@ (encodeType @@ Core.eitherTypeLeft (var "et"))
+          @@@ (encodeType @@ Core.eitherTypeRight (var "et"))
+          @@@ DC.var "e"))
+
+-- | Generate an encoder for a polymorphic (forall) type
+-- For a type like `forall a. T[a]`, generates a lambda that takes an encoder for `a`
+-- and returns an encoder for the body type `T[a]`
+-- | Generate the encoder term for a field value
+-- Creates a lambda that encodes the field value and wraps in an encoded union/injection
+encodeFieldValue :: TTermDefinition (Name -> Name -> Type -> Term)
+encodeFieldValue = define "encodeFieldValue" $
+  doc "Generate the encoder for a field's value" $
+  "typeName" ~> "fieldName" ~> "fieldType" ~>
+    -- Create a lambda that encodes the value and wraps in Term.union with injection
+    -- Note: use "y" instead of "v" to avoid shadowing type variable parameters named "v"
+    DC.lambda "y" $
+      -- Build Term.union containing an encoded Injection with the encoded value
+      DC.injection _Term (DC.field _Term_inject
+        (encodeInjection @@ var "typeName" @@ var "fieldName"
+          @@ ((encodeType @@ var "fieldType") @@@ DC.var "y")))
+
+-- | Encode an Injection as a Term (produces a Record of type hydra.core.Injection)
+-- | Encode a float value based on its float type
+-- Wraps the value in the appropriate FloatValue variant as an injection
+encodeFloatValue :: TTermDefinition (FloatType -> Term -> Term)
+encodeFloatValue = define "encodeFloatValue" $
+  doc "Encode a float value based on its float type" $
+  "floatType" ~> "valTerm" ~>
+    Core.termInject $ Core.injection
+      (Core.nameLift _FloatValue)
+      (Core.field (floatTypeToFieldName @@ var "floatType") (var "valTerm"))
+  where
+    floatTypeToFieldName :: TTerm (FloatType -> Name)
+    floatTypeToFieldName = match _FloatType Nothing [
+      _FloatType_bigfloat>>: constant $ Core.nameLift _FloatValue_bigfloat,
+      _FloatType_float32>>:  constant $ Core.nameLift _FloatValue_float32,
+      _FloatType_float64>>:  constant $ Core.nameLift _FloatValue_float64]
+
+-- | Generate an encoder for a list type
+-- Maps the element encoder over the list and wraps in Term.list
+-- | Generate an encoder for a polymorphic (forall) type
+-- For a type like `forall a. T[a]`, generates a lambda that takes an encoder for `a`
+-- and returns an encoder for the body type `T[a]`
+encodeForallType :: TTermDefinition (ForallType -> Term)
+encodeForallType = define "encodeForallType" $
+  doc "Generate an encoder for a polymorphic (forall) type" $
+  "ft" ~>
+    -- Generate a lambda that takes an encoder for the type parameter
+    Core.termLambda $ Core.lambda
+        (encodeBindingName @@ Core.forallTypeParameter (var "ft"))
         nothing
-        (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering))
-          (var "ordVars"))] $
-  Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
+        (encodeType @@ Core.forallTypeBody (var "ft"))
 
-encoderTypeScheme :: TTermDefinition (Type -> TypeScheme)
-encoderTypeScheme = define "encoderTypeScheme" $
-  doc "Construct a TypeScheme for an encoder function from a source type" $
-  "typ" ~> lets [
-    -- Collect forall variables
-    "typeVars">: encoderCollectForallVariables @@ var "typ",
+-- | Generate an encoder for a Maybe type
+-- Encodes the inner value if present and wraps in Term.maybe
+-- | Encode an Injection as a Term (produces a Record of type hydra.core.Injection)
+encodeInjection :: TTermDefinition (Name -> Name -> Term -> Term)
+encodeInjection = define "encodeInjection" $
+  doc "Encode an Injection as a term" $
+  "typeName" ~> "fieldName" ~> "fieldTerm" ~> DC.record _Injection [
+    DC.field _Injection_typeName (encodeName @@ var "typeName"),
+    DC.field _Injection_field (encodeField @@ var "fieldName" @@ var "fieldTerm")]
+  where
+    -- Encode a Field as a Term (produces a Record of type hydra.core.Field)
+    encodeField :: TTerm (Name -> Term -> Term)
+    encodeField = "fname" ~> "fterm" ~> DC.record _Field [
+      DC.field _Field_name (encodeName @@ var "fname"),
+      DC.field _Field_term (var "fterm")]
 
-    -- Build the encoder function type
-    "encoderFunType">: encoderType @@ var "typ",
+-- | Generate an encoder for a literal type
+-- For literals, the input is a native Haskell value (e.g., String, Int32).
+-- We need to wrap it in encoded TermLiteral with the appropriate Literal constructor.
+-- | Encode an integer value based on its integer type
+-- Wraps the value in the appropriate IntegerValue variant as an injection
+encodeIntegerValue :: TTermDefinition (IntegerType -> Term -> Term)
+encodeIntegerValue = define "encodeIntegerValue" $
+  doc "Encode an integer value based on its integer type" $
+  "intType" ~> "valTerm" ~>
+    Core.termInject $ Core.injection
+      (Core.nameLift _IntegerValue)
+      (Core.field (intTypeToFieldName @@ var "intType") (var "valTerm"))
+  where
+    intTypeToFieldName :: TTerm (IntegerType -> Name)
+    intTypeToFieldName = match _IntegerType Nothing [
+      _IntegerType_bigint>>: constant $ Core.nameLift _IntegerValue_bigint,
+      _IntegerType_int8>>:   constant $ Core.nameLift _IntegerValue_int8,
+      _IntegerType_int16>>:  constant $ Core.nameLift _IntegerValue_int16,
+      _IntegerType_int32>>:  constant $ Core.nameLift _IntegerValue_int32,
+      _IntegerType_int64>>:  constant $ Core.nameLift _IntegerValue_int64,
+      _IntegerType_uint8>>:  constant $ Core.nameLift _IntegerValue_uint8,
+      _IntegerType_uint16>>: constant $ Core.nameLift _IntegerValue_uint16,
+      _IntegerType_uint32>>: constant $ Core.nameLift _IntegerValue_uint32,
+      _IntegerType_uint64>>: constant $ Core.nameLift _IntegerValue_uint64]
 
-    -- Find Ord-constrained variables (those used as Map keys or Set elements)
-    "allOrdVars">: encoderCollectOrdVars @@ var "typ",
-    -- Filter to only actual forall-bound variables
-    "ordVars">: Lists.filter
-      ("v" ~> Lists.elem (var "v" :: TTerm Name) (var "typeVars" :: TTerm [Name]))
-      (var "allOrdVars"),
+-- | Encode a float value based on its float type
+-- Wraps the value in the appropriate FloatValue variant as an injection
+-- | Generate an encoder for a list type
+-- Maps the element encoder over the list and wraps in Term.list
+encodeListType :: TTermDefinition (Type -> Term)
+encodeListType = define "encodeListType" $
+  doc "Generate an encoder for a list type" $
+  "elemType" ~>
+    DC.lambda "xs" $
+      DC.injection _Term (DC.field _Term_list
+        (DC.primitiveEncoded _lists_map @@@ (encodeType @@ var "elemType") @@@ DC.var "xs"))
 
-    -- Build constraints map: {varName -> TypeVariableMetadata {classes = {ordering}}}
-    "constraints">:
-      Logic.ifElse (Lists.null (var "ordVars"))
+-- | Generate an encoder for a map type
+-- Encodes each key/value pair and wraps in Term.map
+
+-- | Generate an encoder for a literal type
+-- For literals, the input is a native Haskell value (e.g., String, Int32).
+-- We need to wrap it in encoded TermLiteral with the appropriate Literal constructor.
+encodeLiteralType :: TTermDefinition (LiteralType -> Term)
+encodeLiteralType = define "encodeLiteralType" $
+  doc "Generate an encoder for a literal type" $
+  match _LiteralType (Just identityEncoder) [
+    _LiteralType_binary>>: constant $
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_binary (DC.var "x")),
+    _LiteralType_boolean>>: constant $
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_boolean (DC.var "x")),
+    _LiteralType_decimal>>: constant $
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_decimal (DC.var "x")),
+    _LiteralType_string>>: constant $
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_string (DC.var "x")),
+    -- For integer types, wrap in Term.literal.integer with the specific integer variant
+    _LiteralType_integer>>: "intType" ~>
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal
+        (DC.field _Literal_integer (encodeIntegerValue @@ var "intType" @@ DC.var "x")),
+    -- For float types, wrap in Term.literal.float with the specific float variant
+    _LiteralType_float>>: "floatType" ~>
+      DC.lambda "x" $ termLiteral $ DC.injection _Literal
+        (DC.field _Literal_float (encodeFloatValue @@ var "floatType" @@ DC.var "x"))]
+  where
+    -- Helper to wrap a Literal value in Term.literal
+    termLiteral lit = DC.injection _Term (DC.field _Term_literal lit)
+    -- Default: identity (should not be reached for well-formed types)
+    identityEncoder = DC.lambda "x" $ DC.var "x"
+
+-- | Transform a type module into an encoder module
+-- Returns Nothing if the module has no encodable type definitions
+-- | Generate an encoder for a map type
+-- Encodes each key/value pair and wraps in Term.map
+encodeMapType :: TTermDefinition (MapType -> Term)
+encodeMapType = define "encodeMapType" $
+  doc "Generate an encoder for a map type" $
+  "mt" ~>
+    DC.lambda "m" $
+      DC.injection _Term (DC.field _Term_map
+        (DC.primitiveEncoded _maps_bimap
+          @@@ (encodeType @@ Core.mapTypeKeys (var "mt"))
+          @@@ (encodeType @@ Core.mapTypeValues (var "mt"))
+          @@@ DC.var "m"))
+
+-- | Generate an encoder for an Either type
+-- Generates a case match over Left/Right variants
+-- | Transform a type module into an encoder module
+-- Returns Nothing if the module has no encodable type definitions
+encodeModule :: TTermDefinition (Context -> Graph -> Module -> Prelude.Either Error (Maybe Module))
+encodeModule = define "encodeModule" $
+  doc "Transform a type module into an encoder module" $
+  "cx" ~> "graph" ~> "mod" ~>
+    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
+      (Maybes.cat $ Lists.map
+        ("d" ~> cases _Definition (var "d") (Just nothing) [
+          _Definition_type>>: "td" ~>
+            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
+        (Packaging.moduleDefinitions (var "mod")))) $
+    Logic.ifElse (Lists.null (var "typeBindings"))
+      (right nothing)
+      ("encodedBindings" <<~ Eithers.mapList ("b" ~>
+        Eithers.bimap
+          ("_e" ~> Error.errorDecoding $ var "_e")
+          ("x" ~> var "x")
+          (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
+        -- The encoder module depends on encoder modules of the source's dependencies, plus the original module
+        right (just (Packaging.module_
+          (just (Strings.cat $ list [
+            string "Term encoders for ",
+            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
+          (encodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
+          (Lists.nub (Lists.concat2
+            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleDependencies (var "mod")))
+            (list [Packaging.moduleNamespace (var "mod")])))
+          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
+            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
+            (Core.bindingTypeScheme $ var "b")))
+            (var "encodedBindings")))))
+
+-- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
+-- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
+encodeName :: TTermDefinition (Name -> Term)
+encodeName = define "encodeName" $
+  doc "Encode a Name as a term" $
+  "n" ~> DC.wrap _Name (DC.string (Core.unName (var "n")))
+
+-- | Generate an encoder module namespace from a source module namespace
+-- For example, "hydra.util" -> "hydra.encode.util"
+-- | Generate an encoder module namespace from a source module namespace
+-- For example, "hydra.util" -> "hydra.encode.util"
+encodeNamespace :: TTermDefinition (Namespace -> Namespace)
+encodeNamespace = define "encodeNamespace" $
+  doc "Generate an encoder module namespace from a source module namespace" $
+  "ns" ~>
+  "parts" <~ Strings.splitOn (string ".") (Packaging.unNamespace (var "ns")) $
+  "fallback" <~ Packaging.namespace (Packaging.unNamespace (var "ns")) $
+  -- Drop the first segment (e.g. "hydra") and prepend "hydra.encode".
+  Maybes.maybe
+    (var "fallback")
+    ("uc" ~>
+      Packaging.namespace (
+        Strings.cat $ list [
+          string "hydra.encode.",
+          Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
+    (Lists.uncons $ var "parts")
+
+-- | Generate an encoder for a record type
+-- For records, project each field, encode it, and build an encoded record
+-- | Generate an encoder for a Maybe type
+-- Encodes the inner value if present and wraps in Term.maybe
+encodeOptionalType :: TTermDefinition (Type -> Term)
+encodeOptionalType = define "encodeOptionalType" $
+  doc "Generate an encoder for a Maybe type" $
+  "elemType" ~> DC.lambda "opt" $
+    DC.injection _Term (DC.field _Term_maybe
+      (DC.primitiveEncoded _maybes_map @@@ (encodeType @@ var "elemType") @@@ DC.var "opt"))
+
+-- | Generate an encoder for a pair type
+-- Encodes both elements and wraps in Term.pair
+-- | Generate an encoder for a pair type
+-- Encodes both elements and wraps in Term.pair
+encodePairType :: TTermDefinition (PairType -> Term)
+encodePairType = define "encodePairType" $
+  doc "Generate an encoder for a pair type" $
+  "pt" ~> DC.lambda "p" $ DC.injection _Term $ DC.field _Term_pair $ DC.primitiveEncoded _pairs_bimap
+    @@@ (encodeType @@ Core.pairTypeFirst (var "pt"))
+    @@@ (encodeType @@ Core.pairTypeSecond (var "pt"))
+    @@@ DC.var "p"
+
+-- | Generate an encoder for a set type
+-- Encodes each element and wraps in Term.set
+encodeRecordType :: TTermDefinition ([FieldType] -> Term)
+encodeRecordType = define "encodeRecordType" $
+  doc "Generate an encoder for a record type (unnamed — should not be called directly)" $
+  "rt" ~> encodeRecordTypeNamed @@ Core.name (string "unknown") @@ var "rt"
+
+-- | Generate an encoder term for a given Type, using the element name for record/union/wrap
+-- | Generate an encoder for a record type
+-- For records, project each field, encode it, and build an encoded record
+encodeRecordTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
+encodeRecordTypeNamed = define "encodeRecordTypeNamed" $
+  doc "Generate an encoder for a record type with the given element name" $
+  "ename" ~> "rt" ~>
+    DC.lambda "x" $
+      DC.injection _Term (DC.field _Term_record
+        (DC.record _Record [
+          DC.field _Record_typeName (encodeName @@ var "ename"),
+          DC.field _Record_fields
+            (DC.list (primitive _lists_map @@ (encodeRecordFieldNamed @@ var "ename" @@ var "rt") @@ var "rt"))]))
+  where
+    encodeRecordFieldNamed :: TTerm (Name -> [FieldType] -> FieldType -> Term)
+    encodeRecordFieldNamed =
+      "tname" ~> "recType" ~> "ft" ~>
+        DC.record _Field [
+          DC.field _Field_name (encodeName @@ Core.fieldTypeName (var "ft")),
+          DC.field _Field_term
+            ((encodeType @@ Core.fieldTypeType (var "ft"))
+              @@@ (projectField (var "tname") (Core.fieldTypeName (var "ft"))
+                    @@@ DC.var "x"))]
+
+    projectField typeName fieldName =
+      Core.termProject $ Core.projection typeName fieldName
+-- | Generate an encoder for a set type
+-- Encodes each element and wraps in Term.set
+encodeSetType :: TTermDefinition (Type -> Term)
+encodeSetType = define "encodeSetType" $
+  doc "Generate an encoder for a set type" $
+  "elemType" ~> DC.lambda "s" $
+    DC.injection _Term (DC.field _Term_set
+      (DC.primitiveEncoded _sets_map @@@ (encodeType @@ var "elemType") @@@ DC.var "s"))
+
+-- | Generate an encoder term for a given Type (without element name context)
+encodeType :: TTermDefinition (Type -> Term)
+encodeType = define "encodeType" $
+  doc "Generate an encoder term for a Type" $
+  match _Type (Just identityEncoder) [
+    _Type_annotated>>: "at" ~>
+      encodeType @@ Core.annotatedTypeBody (var "at"),
+    _Type_application>>: "appType" ~>
+      (encodeType @@ Core.applicationTypeFunction (var "appType"))
+        @@@ (encodeType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~>
+      encodeEitherType @@ var "et",
+    _Type_forall>>: "ft" ~>
+      encodeForallType @@ var "ft",
+    _Type_function>>: constant identityEncoder,
+    _Type_list>>: "elemType" ~>
+      encodeListType @@ var "elemType",
+    _Type_literal>>: "lt" ~>
+      encodeLiteralType @@ var "lt",
+    _Type_map>>: "mt" ~>
+      encodeMapType @@ var "mt",
+    _Type_maybe>>: "elemType" ~>
+      encodeOptionalType @@ var "elemType",
+    _Type_pair>>: "pt" ~>
+      encodePairType @@ var "pt",
+    _Type_record>>: "rt" ~>
+      encodeRecordType @@ var "rt",
+    _Type_set>>: "elemType" ~>
+      encodeSetType @@ var "elemType",
+    _Type_union>>: "rt" ~>
+      encodeUnionType @@ var "rt",
+    _Type_wrap>>: "wt" ~>
+      encodeWrappedType @@ var "wt",
+    _Type_unit>>: constant $
+      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+    _Type_void>>: constant $
+      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+    _Type_variable>>: "typeName" ~>
+      Core.termVariable (encodeBindingName @@ var "typeName")]
+  where
+    identityEncoder = DC.lambda "x" $ DC.var "x"
+
+-- | Generate an encoder for a union type with a given element name
+-- | Generate an encoder term for a given Type, using the element name for record/union/wrap
+encodeTypeNamed :: TTermDefinition (Name -> Type -> Term)
+encodeTypeNamed = define "encodeTypeNamed" $
+  doc "Generate an encoder term for a Type, with the element name for nominal types" $
+  "ename" ~> "typ" ~>
+  cases _Type (var "typ") (Just identityEncoder) [
+    _Type_annotated>>: "at" ~>
+      encodeTypeNamed @@ var "ename" @@ Core.annotatedTypeBody (var "at"),
+    _Type_application>>: "appType" ~>
+      (encodeType @@ Core.applicationTypeFunction (var "appType"))
+        @@@ (encodeType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~>
+      encodeEitherType @@ var "et",
+    _Type_forall>>: "ft" ~>
+      Core.termLambda $ Core.lambda (encodeBindingName @@ Core.forallTypeParameter (var "ft")) nothing
+          (encodeTypeNamed @@ var "ename" @@ Core.forallTypeBody (var "ft")),
+    _Type_function>>: constant identityEncoder,
+    _Type_list>>: "elemType" ~>
+      encodeListType @@ var "elemType",
+    _Type_literal>>: "lt" ~>
+      encodeLiteralType @@ var "lt",
+    _Type_map>>: "mt" ~>
+      encodeMapType @@ var "mt",
+    _Type_maybe>>: "elemType" ~>
+      encodeOptionalType @@ var "elemType",
+    _Type_pair>>: "pt" ~>
+      encodePairType @@ var "pt",
+    _Type_record>>: "rt" ~>
+      encodeRecordTypeNamed @@ var "ename" @@ var "rt",
+    _Type_set>>: "elemType" ~>
+      encodeSetType @@ var "elemType",
+    _Type_union>>: "rt" ~>
+      encodeUnionTypeNamed @@ var "ename" @@ var "rt",
+    _Type_wrap>>: "wt" ~>
+      encodeWrappedTypeNamed @@ var "ename" @@ var "wt",
+    _Type_unit>>: constant $
+      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+    _Type_void>>: constant $
+      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+    _Type_variable>>: "typeName" ~>
+      Core.termVariable (encodeBindingName @@ var "typeName")]
+  where
+    identityEncoder = DC.lambda "x" $ DC.var "x"
+
+-- | Generate an encoder term for a given Type (without element name context)
+-- | Generate an encoder for a union type (placeholder name)
+encodeUnionType :: TTermDefinition ([FieldType] -> Term)
+encodeUnionType = define "encodeUnionType" $
+  doc "Generate an encoder for a union type (placeholder name)" $
+  "rt" ~> encodeUnionTypeNamed @@ Core.name (string "unknown") @@ var "rt"
+
+-- | Generate an encoder for a wrapped type with a given element name
+-- | Generate an encoder for a union type with a given element name
+encodeUnionTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
+encodeUnionTypeNamed = define "encodeUnionTypeNamed" $
+  doc "Generate an encoder for a union type with the given element name" $
+  "ename" ~> "rt" ~>
+    Core.termCases $ Core.caseStatement
+        (var "ename")
         nothing
-        (just $ Maps.fromList $ Lists.map
-          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering))
-          (var "ordVars"))] $
-  Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
+        (primitive _lists_map @@
+          ("ft" ~> Core.field
+            (Core.fieldTypeName (var "ft"))
+            (encodeFieldValue
+              @@ var "ename"
+              @@ Core.fieldTypeName (var "ft")
+              @@ Core.fieldTypeType (var "ft")))
+          @@ var "rt")
 
+-- | Generate an encoder for a union type (placeholder name)
+-- | Generate an encoder for a wrapped type (placeholder name)
+encodeWrappedType :: TTermDefinition (Type -> Term)
+encodeWrappedType = define "encodeWrappedType" $
+  doc "Generate an encoder for a wrapped type (placeholder name)" $
+  "wt" ~> encodeWrappedTypeNamed @@ Core.name (string "unknown") @@ var "wt"
+
+-- | Filter bindings to only encodable type definitions
+-- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)
+-- | Generate an encoder for a wrapped type with a given element name
+encodeWrappedTypeNamed :: TTermDefinition (Name -> Type -> Term)
+encodeWrappedTypeNamed = define "encodeWrappedTypeNamed" $
+  doc "Generate an encoder for a wrapped type with the given element name" $
+  "ename" ~> "wt" ~>
+    DC.lambda "x" $
+      DC.injection _Term (DC.field _Term_wrap
+        (DC.record _WrappedTerm [
+          DC.field _WrappedTerm_typeName (encodeName @@ var "ename"),
+          DC.field _WrappedTerm_body
+            ((encodeType @@ var "wt")
+              @@@ (DC.unwrapDynamic (var "ename") @@@ DC.var "x"))]))
+
+-- | Generate an encoder for a wrapped type (placeholder name)
 -- | Collect forall type variables from a type
 encoderCollectForallVariables :: TTermDefinition (Type -> [Name])
 encoderCollectForallVariables = define "encoderCollectForallVariables" $
@@ -202,6 +615,7 @@ encoderCollectForallVariables = define "encoderCollectForallVariables" $
       Lists.cons (Core.forallTypeParameter (var "ft"))
         (encoderCollectForallVariables @@ Core.forallTypeBody (var "ft"))]
 
+-- | Collect type variables that need Ord constraints (from Map key and Set element positions)
 -- | Collect type variables that need Ord constraints (from Map key and Set element positions)
 encoderCollectOrdVars :: TTermDefinition (Type -> [Name])
 encoderCollectOrdVars = define "encoderCollectOrdVars" $
@@ -251,6 +665,7 @@ encoderCollectOrdVars = define "encoderCollectOrdVars" $
       encoderCollectOrdVars @@ var "wt"]
 
 -- | Collect all type variables from a type expression
+-- | Collect all type variables from a type expression
 encoderCollectTypeVarsFromType :: TTermDefinition (Type -> [Name])
 encoderCollectTypeVarsFromType = define "encoderCollectTypeVarsFromType" $
   doc "Collect all type variable names from a type expression" $
@@ -291,6 +706,8 @@ encoderCollectTypeVarsFromType = define "encoderCollectTypeVarsFromType" $
     _Type_wrap>>: "wt" ~>
       encoderCollectTypeVarsFromType @@ var "wt"]
 
+-- | Get the full result type for an encoder (the input type of the encoder function)
+-- Maps structural types to their nominal names, preserving type applications.
 -- | Get the full result type for an encoder (the input type of the encoder function)
 -- Maps structural types to their nominal names, preserving type applications.
 encoderFullResultType :: TTermDefinition (Type -> Type)
@@ -336,6 +753,7 @@ encoderFullResultType = define "encoderFullResultType" $
     _Type_void>>: constant Core.typeVoid,
     _Type_wrap>>: constant (Core.typeVariable (Core.nameLift _Term))]
 
+-- | Get full result type for encoder input, with element name for nominal types
 -- | Get full result type for encoder input, with element name for nominal types
 encoderFullResultTypeNamed :: TTermDefinition (Name -> Type -> Type)
 encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
@@ -383,16 +801,6 @@ encoderFullResultTypeNamed = define "encoderFullResultTypeNamed" $
 -- | Build the encoder function type for a given type
 -- For monomorphic types: InputType -> Term
 -- For polymorphic types: (a -> Term) -> ... -> InputType<a,...> -> Term
-encoderTypeNamed :: TTermDefinition (Name -> Type -> Type)
-encoderTypeNamed = define "encoderTypeNamed" $
-  doc "Build encoder function type with element name for nominal types" $
-  "ename" ~> "typ" ~>
-  "resultType" <~ (encoderFullResultTypeNamed @@ var "ename" @@ var "typ") $
-  "baseType" <~ (Core.typeFunction $ Core.functionType
-    (var "resultType")
-    (Core.typeVariable (Core.nameLift _Term))) $
-  prependForallEncoders @@ var "baseType" @@ var "typ"
-
 encoderType :: TTermDefinition (Type -> Type)
 encoderType = define "encoderType" $
   doc "Build encoder function type" $
@@ -403,6 +811,101 @@ encoderType = define "encoderType" $
     (Core.typeVariable (Core.nameLift _Term))) $
   prependForallEncoders @@ var "baseType" @@ var "typ"
 
+-- | Prepend encoder types for forall parameters
+-- For forall a. T: prepends (a -> Term) -> to the base type
+-- | Build the encoder function type for a given type
+-- For monomorphic types: InputType -> Term
+-- For polymorphic types: (a -> Term) -> ... -> InputType<a,...> -> Term
+encoderTypeNamed :: TTermDefinition (Name -> Type -> Type)
+encoderTypeNamed = define "encoderTypeNamed" $
+  doc "Build encoder function type with element name for nominal types" $
+  "ename" ~> "typ" ~>
+  "resultType" <~ (encoderFullResultTypeNamed @@ var "ename" @@ var "typ") $
+  "baseType" <~ (Core.typeFunction $ Core.functionType
+    (var "resultType")
+    (Core.typeVariable (Core.nameLift _Term))) $
+  prependForallEncoders @@ var "baseType" @@ var "typ"
+encoderTypeScheme :: TTermDefinition (Type -> TypeScheme)
+encoderTypeScheme = define "encoderTypeScheme" $
+  doc "Construct a TypeScheme for an encoder function from a source type" $
+  "typ" ~> lets [
+    -- Collect forall variables
+    "typeVars">: encoderCollectForallVariables @@ var "typ",
+
+    -- Build the encoder function type
+    "encoderFunType">: encoderType @@ var "typ",
+
+    -- Find Ord-constrained variables (those used as Map keys or Set elements)
+    "allOrdVars">: encoderCollectOrdVars @@ var "typ",
+    -- Filter to only actual forall-bound variables
+    "ordVars">: Lists.filter
+      ("v" ~> Lists.elem (var "v" :: TTerm Name) (var "typeVars" :: TTerm [Name]))
+      (var "allOrdVars"),
+
+    -- Build constraints map: {varName -> TypeVariableMetadata {classes = {ordering}}}
+    "constraints">:
+      Logic.ifElse (Lists.null (var "ordVars"))
+        nothing
+        (just $ Maps.fromList $ Lists.map
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering))
+          (var "ordVars"))] $
+  Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
+
+-- | Collect forall type variables from a type
+-- | Construct a TypeScheme for an encoder function from a source type definition.
+-- For a type like @forall v. Graph v@ (where Graph has Map v (Vertex v)),
+-- produces the scheme @forall v. (v -> Term) -> Graph v -> Term@ with Ord constraint on v.
+--
+-- The type scheme uses the same variable names as the original type definition.
+-- Variable normalization (to t0, t1, etc.) happens later in the pipeline and
+-- handles renaming both variables and constraint keys consistently.
+encoderTypeSchemeNamed :: TTermDefinition (Name -> Type -> TypeScheme)
+encoderTypeSchemeNamed = define "encoderTypeSchemeNamed" $
+  doc "Construct a TypeScheme for an encoder function, with element name for nominal types" $
+  "ename" ~> "typ" ~> lets [
+    "typeVars">: encoderCollectForallVariables @@ var "typ",
+    "encoderFunType">: encoderTypeNamed @@ var "ename" @@ var "typ",
+    "allOrdVars">: encoderCollectOrdVars @@ var "typ",
+    "ordVars">: Lists.filter
+      ("v" ~> Lists.elem (var "v" :: TTerm Name) (var "typeVars" :: TTerm [Name]))
+      (var "allOrdVars"),
+    "constraints">:
+      Logic.ifElse (Lists.null (var "ordVars"))
+        nothing
+        (just $ Maps.fromList $ Lists.map
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering))
+          (var "ordVars"))] $
+  Core.typeScheme (var "typeVars") (var "encoderFunType") (var "constraints")
+-- | Filter bindings to only encodable type definitions
+-- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)
+filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Prelude.Either Error [Binding])
+filterTypeBindings = define "filterTypeBindings" $
+  doc "Filter bindings to only encodable type definitions" $
+  "cx" ~> "graph" ~> "bindings" ~>
+    -- First filter to native types, then check serializability for each
+    Eithers.map (primitive _maybes_cat) $
+      Eithers.mapList (isEncodableBinding @@ var "cx" @@ var "graph") $
+        primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
+
+-- | Check if a binding is encodable and return Just binding if so, Nothing otherwise
+-- | Check if a binding is encodable and return Just binding if so, Nothing otherwise
+isEncodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
+isEncodableBinding = define "isEncodableBinding" $
+  doc "Check if a binding is encodable (serializable type)" $
+  "cx" ~> "graph" ~> "b" ~>
+    "serializable" <<~ Predicates.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
+    right (Logic.ifElse (var "serializable") (just (var "b")) nothing)
+
+-- | Check whether a type is the unit type
+-- | Check whether a type is the unit type
+isUnitType_ :: TTermDefinition (Type -> Bool)
+isUnitType_ = define "isUnitType" $
+  doc "Check whether a type is the unit type" $
+  match _Type (Just $ false) [
+    _Type_unit>>: constant true]
+
+-- | Encode an integer value based on its integer type
+-- Wraps the value in the appropriate IntegerValue variant as an injection
 -- | Prepend encoder types for forall parameters
 -- For forall a. T: prepends (a -> Term) -> to the base type
 prependForallEncoders :: TTermDefinition (Type -> Type -> Type)
@@ -421,444 +924,3 @@ prependForallEncoders = define "prependForallEncoders" $
 -- | Generate a fully qualified binding name for an encoder function from a type name
 -- For example, "hydra.core.Name" -> "hydra.encode.core.name"
 -- For local types (no namespace), returns just the decapitalized local name
-encodeBindingName :: TTermDefinition (Name -> Name)
-encodeBindingName = define "encodeBindingName" $
-  doc "Generate a binding name for an encoder function from a type name" $
-  "n" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Core.unName (var "n"))) $
-  "localPart" <~ (Formatting.decapitalize @@ (Names.localNameOf @@ (var "n"))) $
-  "localResult" <~ (Core.name (var "localPart")) $
-  -- Extract namespace parts (all but the last); if the name has no namespace,
-  -- fall back to the bare decapitalized local name.
-  Maybes.maybe
-    (var "localResult")
-    ("nsParts" ~>
-      Maybes.maybe
-        (var "localResult")  -- unreachable: nsParts empty means no namespace
-        ("nsUc" ~>
-          "tail" <~ Pairs.second (var "nsUc") $
-          Core.name (Strings.intercalate (string ".") (Lists.concat2
-            (list [string "hydra", string "encode"])
-            (Lists.concat2
-              (var "tail")
-              (list [var "localPart"])))))
-        (Lists.uncons $ var "nsParts"))
-    (Lists.maybeInit $ var "parts")
-
--- | Generate the encoder term for a field value
--- Creates a lambda that encodes the field value and wraps in an encoded union/injection
-encodeFieldValue :: TTermDefinition (Name -> Name -> Type -> Term)
-encodeFieldValue = define "encodeFieldValue" $
-  doc "Generate the encoder for a field's value" $
-  "typeName" ~> "fieldName" ~> "fieldType" ~>
-    -- Create a lambda that encodes the value and wraps in Term.union with injection
-    -- Note: use "y" instead of "v" to avoid shadowing type variable parameters named "v"
-    DC.lambda "y" $
-      -- Build Term.union containing an encoded Injection with the encoded value
-      DC.injection _Term (DC.field _Term_inject
-        (encodeInjection @@ var "typeName" @@ var "fieldName"
-          @@ ((encodeType @@ var "fieldType") @@@ DC.var "y")))
-
--- | Encode an Injection as a Term (produces a Record of type hydra.core.Injection)
-encodeInjection :: TTermDefinition (Name -> Name -> Term -> Term)
-encodeInjection = define "encodeInjection" $
-  doc "Encode an Injection as a term" $
-  "typeName" ~> "fieldName" ~> "fieldTerm" ~> DC.record _Injection [
-    DC.field _Injection_typeName (encodeName @@ var "typeName"),
-    DC.field _Injection_field (encodeField @@ var "fieldName" @@ var "fieldTerm")]
-  where
-    -- Encode a Field as a Term (produces a Record of type hydra.core.Field)
-    encodeField :: TTerm (Name -> Term -> Term)
-    encodeField = "fname" ~> "fterm" ~> DC.record _Field [
-      DC.field _Field_name (encodeName @@ var "fname"),
-      DC.field _Field_term (var "fterm")]
-
--- | Generate an encoder for a literal type
--- For literals, the input is a native Haskell value (e.g., String, Int32).
--- We need to wrap it in encoded TermLiteral with the appropriate Literal constructor.
-encodeLiteralType :: TTermDefinition (LiteralType -> Term)
-encodeLiteralType = define "encodeLiteralType" $
-  doc "Generate an encoder for a literal type" $
-  match _LiteralType (Just identityEncoder) [
-    _LiteralType_binary>>: constant $
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_binary (DC.var "x")),
-    _LiteralType_boolean>>: constant $
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_boolean (DC.var "x")),
-    _LiteralType_decimal>>: constant $
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_decimal (DC.var "x")),
-    _LiteralType_string>>: constant $
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_string (DC.var "x")),
-    -- For integer types, wrap in Term.literal.integer with the specific integer variant
-    _LiteralType_integer>>: "intType" ~>
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal
-        (DC.field _Literal_integer (encodeIntegerValue @@ var "intType" @@ DC.var "x")),
-    -- For float types, wrap in Term.literal.float with the specific float variant
-    _LiteralType_float>>: "floatType" ~>
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal
-        (DC.field _Literal_float (encodeFloatValue @@ var "floatType" @@ DC.var "x"))]
-  where
-    -- Helper to wrap a Literal value in Term.literal
-    termLiteral lit = DC.injection _Term (DC.field _Term_literal lit)
-    -- Default: identity (should not be reached for well-formed types)
-    identityEncoder = DC.lambda "x" $ DC.var "x"
-
--- | Transform a type module into an encoder module
--- Returns Nothing if the module has no encodable type definitions
-encodeModule :: TTermDefinition (Context -> Graph -> Module -> Prelude.Either Error (Maybe Module))
-encodeModule = define "encodeModule" $
-  doc "Transform a type module into an encoder module" $
-  "cx" ~> "graph" ~> "mod" ~>
-    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@
-      (Maybes.cat $ Lists.map
-        ("d" ~> cases _Definition (var "d") (Just nothing) [
-          _Definition_type>>: "td" ~>
-            just (Annotations.typeBinding @@ (Packaging.typeDefinitionName $ var "td") @@ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme $ var "td"))])
-        (Packaging.moduleDefinitions (var "mod")))) $
-    Logic.ifElse (Lists.null (var "typeBindings"))
-      (right nothing)
-      ("encodedBindings" <<~ Eithers.mapList ("b" ~>
-        Eithers.bimap
-          ("_e" ~> Error.errorDecoding $ var "_e")
-          ("x" ~> var "x")
-          (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
-        -- The encoder module depends on encoder modules for both the type and term dependencies
-        -- E.g., hydra.encode.constraints depends on hydra.encode.core (type dep) and hydra.encode.query (term dep)
-        right (just (Packaging.module_
-          (just (Strings.cat $ list [
-            string "Term encoders for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
-          (encodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          -- Transform both type and term dependency namespaces to their encoder namespaces
-          (Lists.nub (Lists.concat2
-            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTypeDependencies (var "mod")))
-            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleTermDependencies (var "mod")))))
-          -- The encoder module depends on the original type module
-          (list [Packaging.moduleNamespace (var "mod")])
-          (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
-            (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
-            (Core.bindingTypeScheme $ var "b")))
-            (var "encodedBindings")))))
-
--- | Encode a Name as a Term (produces a wrapped term of type hydra.core.Name)
-encodeName :: TTermDefinition (Name -> Term)
-encodeName = define "encodeName" $
-  doc "Encode a Name as a term" $
-  "n" ~> DC.wrap _Name (DC.string (Core.unName (var "n")))
-
--- | Generate an encoder module namespace from a source module namespace
--- For example, "hydra.util" -> "hydra.encode.util"
-encodeNamespace :: TTermDefinition (Namespace -> Namespace)
-encodeNamespace = define "encodeNamespace" $
-  doc "Generate an encoder module namespace from a source module namespace" $
-  "ns" ~>
-  "parts" <~ Strings.splitOn (string ".") (Packaging.unNamespace (var "ns")) $
-  "fallback" <~ Packaging.namespace (Packaging.unNamespace (var "ns")) $
-  -- Drop the first segment (e.g. "hydra") and prepend "hydra.encode".
-  Maybes.maybe
-    (var "fallback")
-    ("uc" ~>
-      Packaging.namespace (
-        Strings.cat $ list [
-          string "hydra.encode.",
-          Strings.intercalate (string ".") (Pairs.second $ var "uc")]))
-    (Lists.uncons $ var "parts")
-
--- | Generate an encoder for a record type
--- For records, project each field, encode it, and build an encoded record
-encodeRecordTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
-encodeRecordTypeNamed = define "encodeRecordTypeNamed" $
-  doc "Generate an encoder for a record type with the given element name" $
-  "ename" ~> "rt" ~>
-    DC.lambda "x" $
-      DC.injection _Term (DC.field _Term_record
-        (DC.record _Record [
-          DC.field _Record_typeName (encodeName @@ var "ename"),
-          DC.field _Record_fields
-            (DC.list (primitive _lists_map @@ (encodeRecordFieldNamed @@ var "ename" @@ var "rt") @@ var "rt"))]))
-  where
-    encodeRecordFieldNamed :: TTerm (Name -> [FieldType] -> FieldType -> Term)
-    encodeRecordFieldNamed =
-      "tname" ~> "recType" ~> "ft" ~>
-        DC.record _Field [
-          DC.field _Field_name (encodeName @@ Core.fieldTypeName (var "ft")),
-          DC.field _Field_term
-            ((encodeType @@ Core.fieldTypeType (var "ft"))
-              @@@ (projectField (var "tname") (Core.fieldTypeName (var "ft"))
-                    @@@ DC.var "x"))]
-
-    projectField typeName fieldName =
-      Core.termProject $ Core.projection typeName fieldName
-
-encodeRecordType :: TTermDefinition ([FieldType] -> Term)
-encodeRecordType = define "encodeRecordType" $
-  doc "Generate an encoder for a record type (unnamed — should not be called directly)" $
-  "rt" ~> encodeRecordTypeNamed @@ Core.name (string "unknown") @@ var "rt"
-
--- | Generate an encoder term for a given Type, using the element name for record/union/wrap
-encodeTypeNamed :: TTermDefinition (Name -> Type -> Term)
-encodeTypeNamed = define "encodeTypeNamed" $
-  doc "Generate an encoder term for a Type, with the element name for nominal types" $
-  "ename" ~> "typ" ~>
-  cases _Type (var "typ") (Just identityEncoder) [
-    _Type_annotated>>: "at" ~>
-      encodeTypeNamed @@ var "ename" @@ Core.annotatedTypeBody (var "at"),
-    _Type_application>>: "appType" ~>
-      (encodeType @@ Core.applicationTypeFunction (var "appType"))
-        @@@ (encodeType @@ Core.applicationTypeArgument (var "appType")),
-    _Type_either>>: "et" ~>
-      encodeEitherType @@ var "et",
-    _Type_forall>>: "ft" ~>
-      Core.termLambda $ Core.lambda (encodeBindingName @@ Core.forallTypeParameter (var "ft")) nothing
-          (encodeTypeNamed @@ var "ename" @@ Core.forallTypeBody (var "ft")),
-    _Type_function>>: constant identityEncoder,
-    _Type_list>>: "elemType" ~>
-      encodeListType @@ var "elemType",
-    _Type_literal>>: "lt" ~>
-      encodeLiteralType @@ var "lt",
-    _Type_map>>: "mt" ~>
-      encodeMapType @@ var "mt",
-    _Type_maybe>>: "elemType" ~>
-      encodeOptionalType @@ var "elemType",
-    _Type_pair>>: "pt" ~>
-      encodePairType @@ var "pt",
-    _Type_record>>: "rt" ~>
-      encodeRecordTypeNamed @@ var "ename" @@ var "rt",
-    _Type_set>>: "elemType" ~>
-      encodeSetType @@ var "elemType",
-    _Type_union>>: "rt" ~>
-      encodeUnionTypeNamed @@ var "ename" @@ var "rt",
-    _Type_wrap>>: "wt" ~>
-      encodeWrappedTypeNamed @@ var "ename" @@ var "wt",
-    _Type_unit>>: constant $
-      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
-    _Type_void>>: constant $
-      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
-    _Type_variable>>: "typeName" ~>
-      Core.termVariable (encodeBindingName @@ var "typeName")]
-  where
-    identityEncoder = DC.lambda "x" $ DC.var "x"
-
--- | Generate an encoder term for a given Type (without element name context)
-encodeType :: TTermDefinition (Type -> Term)
-encodeType = define "encodeType" $
-  doc "Generate an encoder term for a Type" $
-  match _Type (Just identityEncoder) [
-    _Type_annotated>>: "at" ~>
-      encodeType @@ Core.annotatedTypeBody (var "at"),
-    _Type_application>>: "appType" ~>
-      (encodeType @@ Core.applicationTypeFunction (var "appType"))
-        @@@ (encodeType @@ Core.applicationTypeArgument (var "appType")),
-    _Type_either>>: "et" ~>
-      encodeEitherType @@ var "et",
-    _Type_forall>>: "ft" ~>
-      encodeForallType @@ var "ft",
-    _Type_function>>: constant identityEncoder,
-    _Type_list>>: "elemType" ~>
-      encodeListType @@ var "elemType",
-    _Type_literal>>: "lt" ~>
-      encodeLiteralType @@ var "lt",
-    _Type_map>>: "mt" ~>
-      encodeMapType @@ var "mt",
-    _Type_maybe>>: "elemType" ~>
-      encodeOptionalType @@ var "elemType",
-    _Type_pair>>: "pt" ~>
-      encodePairType @@ var "pt",
-    _Type_record>>: "rt" ~>
-      encodeRecordType @@ var "rt",
-    _Type_set>>: "elemType" ~>
-      encodeSetType @@ var "elemType",
-    _Type_union>>: "rt" ~>
-      encodeUnionType @@ var "rt",
-    _Type_wrap>>: "wt" ~>
-      encodeWrappedType @@ var "wt",
-    _Type_unit>>: constant $
-      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
-    _Type_void>>: constant $
-      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
-    _Type_variable>>: "typeName" ~>
-      Core.termVariable (encodeBindingName @@ var "typeName")]
-  where
-    identityEncoder = DC.lambda "x" $ DC.var "x"
-
--- | Generate an encoder for a union type with a given element name
-encodeUnionTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
-encodeUnionTypeNamed = define "encodeUnionTypeNamed" $
-  doc "Generate an encoder for a union type with the given element name" $
-  "ename" ~> "rt" ~>
-    Core.termCases $ Core.caseStatement
-        (var "ename")
-        nothing
-        (primitive _lists_map @@
-          ("ft" ~> Core.field
-            (Core.fieldTypeName (var "ft"))
-            (encodeFieldValue
-              @@ var "ename"
-              @@ Core.fieldTypeName (var "ft")
-              @@ Core.fieldTypeType (var "ft")))
-          @@ var "rt")
-
--- | Generate an encoder for a union type (placeholder name)
-encodeUnionType :: TTermDefinition ([FieldType] -> Term)
-encodeUnionType = define "encodeUnionType" $
-  doc "Generate an encoder for a union type (placeholder name)" $
-  "rt" ~> encodeUnionTypeNamed @@ Core.name (string "unknown") @@ var "rt"
-
--- | Generate an encoder for a wrapped type with a given element name
-encodeWrappedTypeNamed :: TTermDefinition (Name -> Type -> Term)
-encodeWrappedTypeNamed = define "encodeWrappedTypeNamed" $
-  doc "Generate an encoder for a wrapped type with the given element name" $
-  "ename" ~> "wt" ~>
-    DC.lambda "x" $
-      DC.injection _Term (DC.field _Term_wrap
-        (DC.record _WrappedTerm [
-          DC.field _WrappedTerm_typeName (encodeName @@ var "ename"),
-          DC.field _WrappedTerm_body
-            ((encodeType @@ var "wt")
-              @@@ (DC.unwrapDynamic (var "ename") @@@ DC.var "x"))]))
-
--- | Generate an encoder for a wrapped type (placeholder name)
-encodeWrappedType :: TTermDefinition (Type -> Term)
-encodeWrappedType = define "encodeWrappedType" $
-  doc "Generate an encoder for a wrapped type (placeholder name)" $
-  "wt" ~> encodeWrappedTypeNamed @@ Core.name (string "unknown") @@ var "wt"
-
--- | Filter bindings to only encodable type definitions
--- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)
-filterTypeBindings :: TTermDefinition (Context -> Graph -> [Binding] -> Prelude.Either Error [Binding])
-filterTypeBindings = define "filterTypeBindings" $
-  doc "Filter bindings to only encodable type definitions" $
-  "cx" ~> "graph" ~> "bindings" ~>
-    -- First filter to native types, then check serializability for each
-    Eithers.map (primitive _maybes_cat) $
-      Eithers.mapList (isEncodableBinding @@ var "cx" @@ var "graph") $
-        primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
-
--- | Check if a binding is encodable and return Just binding if so, Nothing otherwise
-isEncodableBinding :: TTermDefinition (Context -> Graph -> Binding -> Prelude.Either Error (Maybe Binding))
-isEncodableBinding = define "isEncodableBinding" $
-  doc "Check if a binding is encodable (serializable type)" $
-  "cx" ~> "graph" ~> "b" ~>
-    "serializable" <<~ Predicates.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
-    right (Logic.ifElse (var "serializable") (just (var "b")) nothing)
-
--- | Check whether a type is the unit type
-isUnitType_ :: TTermDefinition (Type -> Bool)
-isUnitType_ = define "isUnitType" $
-  doc "Check whether a type is the unit type" $
-  match _Type (Just $ false) [
-    _Type_unit>>: constant true]
-
--- | Encode an integer value based on its integer type
--- Wraps the value in the appropriate IntegerValue variant as an injection
-encodeIntegerValue :: TTermDefinition (IntegerType -> Term -> Term)
-encodeIntegerValue = define "encodeIntegerValue" $
-  doc "Encode an integer value based on its integer type" $
-  "intType" ~> "valTerm" ~>
-    Core.termInject $ Core.injection
-      (Core.nameLift _IntegerValue)
-      (Core.field (intTypeToFieldName @@ var "intType") (var "valTerm"))
-  where
-    intTypeToFieldName :: TTerm (IntegerType -> Name)
-    intTypeToFieldName = match _IntegerType Nothing [
-      _IntegerType_bigint>>: constant $ Core.nameLift _IntegerValue_bigint,
-      _IntegerType_int8>>:   constant $ Core.nameLift _IntegerValue_int8,
-      _IntegerType_int16>>:  constant $ Core.nameLift _IntegerValue_int16,
-      _IntegerType_int32>>:  constant $ Core.nameLift _IntegerValue_int32,
-      _IntegerType_int64>>:  constant $ Core.nameLift _IntegerValue_int64,
-      _IntegerType_uint8>>:  constant $ Core.nameLift _IntegerValue_uint8,
-      _IntegerType_uint16>>: constant $ Core.nameLift _IntegerValue_uint16,
-      _IntegerType_uint32>>: constant $ Core.nameLift _IntegerValue_uint32,
-      _IntegerType_uint64>>: constant $ Core.nameLift _IntegerValue_uint64]
-
--- | Encode a float value based on its float type
--- Wraps the value in the appropriate FloatValue variant as an injection
-encodeFloatValue :: TTermDefinition (FloatType -> Term -> Term)
-encodeFloatValue = define "encodeFloatValue" $
-  doc "Encode a float value based on its float type" $
-  "floatType" ~> "valTerm" ~>
-    Core.termInject $ Core.injection
-      (Core.nameLift _FloatValue)
-      (Core.field (floatTypeToFieldName @@ var "floatType") (var "valTerm"))
-  where
-    floatTypeToFieldName :: TTerm (FloatType -> Name)
-    floatTypeToFieldName = match _FloatType Nothing [
-      _FloatType_bigfloat>>: constant $ Core.nameLift _FloatValue_bigfloat,
-      _FloatType_float32>>:  constant $ Core.nameLift _FloatValue_float32,
-      _FloatType_float64>>:  constant $ Core.nameLift _FloatValue_float64]
-
--- | Generate an encoder for a list type
--- Maps the element encoder over the list and wraps in Term.list
-encodeListType :: TTermDefinition (Type -> Term)
-encodeListType = define "encodeListType" $
-  doc "Generate an encoder for a list type" $
-  "elemType" ~>
-    DC.lambda "xs" $
-      DC.injection _Term (DC.field _Term_list
-        (DC.primitiveEncoded _lists_map @@@ (encodeType @@ var "elemType") @@@ DC.var "xs"))
-
--- | Generate an encoder for a map type
--- Encodes each key/value pair and wraps in Term.map
-encodeMapType :: TTermDefinition (MapType -> Term)
-encodeMapType = define "encodeMapType" $
-  doc "Generate an encoder for a map type" $
-  "mt" ~>
-    DC.lambda "m" $
-      DC.injection _Term (DC.field _Term_map
-        (DC.primitiveEncoded _maps_bimap
-          @@@ (encodeType @@ Core.mapTypeKeys (var "mt"))
-          @@@ (encodeType @@ Core.mapTypeValues (var "mt"))
-          @@@ DC.var "m"))
-
--- | Generate an encoder for an Either type
--- Generates a case match over Left/Right variants
-encodeEitherType :: TTermDefinition (EitherType -> Term)
-encodeEitherType = define "encodeEitherType" $
-  doc "Generate an encoder for an Either type" $
-  "et" ~>
-    DC.lambda "e" $
-      DC.injection _Term (DC.field _Term_either
-        (DC.primitiveEncoded _eithers_bimap
-          @@@ (encodeType @@ Core.eitherTypeLeft (var "et"))
-          @@@ (encodeType @@ Core.eitherTypeRight (var "et"))
-          @@@ DC.var "e"))
-
--- | Generate an encoder for a polymorphic (forall) type
--- For a type like `forall a. T[a]`, generates a lambda that takes an encoder for `a`
--- and returns an encoder for the body type `T[a]`
-encodeForallType :: TTermDefinition (ForallType -> Term)
-encodeForallType = define "encodeForallType" $
-  doc "Generate an encoder for a polymorphic (forall) type" $
-  "ft" ~>
-    -- Generate a lambda that takes an encoder for the type parameter
-    Core.termLambda $ Core.lambda
-        (encodeBindingName @@ Core.forallTypeParameter (var "ft"))
-        nothing
-        (encodeType @@ Core.forallTypeBody (var "ft"))
-
--- | Generate an encoder for a Maybe type
--- Encodes the inner value if present and wraps in Term.maybe
-encodeOptionalType :: TTermDefinition (Type -> Term)
-encodeOptionalType = define "encodeOptionalType" $
-  doc "Generate an encoder for a Maybe type" $
-  "elemType" ~> DC.lambda "opt" $
-    DC.injection _Term (DC.field _Term_maybe
-      (DC.primitiveEncoded _maybes_map @@@ (encodeType @@ var "elemType") @@@ DC.var "opt"))
-
--- | Generate an encoder for a pair type
--- Encodes both elements and wraps in Term.pair
-encodePairType :: TTermDefinition (PairType -> Term)
-encodePairType = define "encodePairType" $
-  doc "Generate an encoder for a pair type" $
-  "pt" ~> DC.lambda "p" $ DC.injection _Term $ DC.field _Term_pair $ DC.primitiveEncoded _pairs_bimap
-    @@@ (encodeType @@ Core.pairTypeFirst (var "pt"))
-    @@@ (encodeType @@ Core.pairTypeSecond (var "pt"))
-    @@@ DC.var "p"
-
--- | Generate an encoder for a set type
--- Encodes each element and wraps in Term.set
-encodeSetType :: TTermDefinition (Type -> Term)
-encodeSetType = define "encodeSetType" $
-  doc "Generate an encoder for a set type" $
-  "elemType" ~> DC.lambda "s" $
-    DC.injection _Term (DC.field _Term_set
-      (DC.primitiveEncoded _sets_map @@@ (encodeType @@ var "elemType") @@@ DC.var "s"))

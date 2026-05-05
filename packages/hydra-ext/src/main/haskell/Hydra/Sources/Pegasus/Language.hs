@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.pegasus.language"),
             moduleDefinitions = [toDefinition pdlLanguage],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for LinkedIn Pegasus (PDL)"}
 pdlLanguage :: TTermDefinition Language
 pdlLanguage = define "pdlLanguage" $
@@ -131,8 +130,8 @@ pdlLanguage = define "pdlLanguage" $
     Variants.typeVariantVariable],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.pegasus.pdl")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.pegasus.pdl")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

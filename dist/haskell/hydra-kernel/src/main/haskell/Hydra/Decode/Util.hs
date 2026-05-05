@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.util.CaseConvention
 caseConvention :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.CaseConvention
 caseConvention cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -31,6 +32,7 @@ caseConvention cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.util.Comparison
 comparison :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Comparison
 comparison cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -48,6 +50,7 @@ comparison cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.util.Precision
 precision :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Precision
 precision cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -58,13 +61,15 @@ precision cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "arbitrary", (\input -> Eithers.map (\t -> Util.PrecisionArbitrary) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "bits", (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralInteger v2 -> case v2 of
-                            Core.IntegerValueInt32 v3 -> Right v3
-                            _ -> Left (Errors.DecodingError "expected int32 value")
-                          _ -> Left (Errors.DecodingError "expected int32 literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "bits",
+                        (\input -> Eithers.map (\t -> Util.PrecisionBits t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralInteger v2 -> case v2 of
+                              Core.IntegerValueInt32 v3 -> Right v3
+                              _ -> Left (Errors.DecodingError "expected int32 value")
+                            _ -> Left (Errors.DecodingError "expected int32 literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),

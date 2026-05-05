@@ -41,8 +41,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [TestTerms.ns, TestTypes.ns, TestEnv.ns, Lexical.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [TestTerms.ns, TestTypes.ns, TestEnv.ns, Lexical.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("A module defining the graph used in the test suite.")}
   where
    definitions = [
@@ -65,10 +64,10 @@ testNamespace :: TTermDefinition Namespace
 testNamespace = define "testNamespace" $ DPackaging.namespace $ Phantoms.string "testGraph"
 
 -- | The test graph. Emits a call to the hand-written
--- Hydra.Test.TestEnv.testGraph (applied to testTypes).
+-- Hydra.Test.TestEnv.testGraph (applied to testTypes and testTerms).
 testGraph :: TTermDefinition Graph
 testGraph = define "testGraph" $
-  TestEnv.testGraph Phantoms.@@ testTypes
+  TestEnv.testGraph Phantoms.@@ testTypes Phantoms.@@ testTerms
 
 -- | The test context. Emits a reference to the hand-written
 -- Hydra.Test.TestEnv.testContext.

@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.csharp.language"),
             moduleDefinitions = [toDefinition csharpLanguage, toDefinition csharpReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for C Sharp (C#)"}
 csharpLanguage :: TTermDefinition Language
 csharpLanguage = define "csharpLanguage" $
@@ -160,8 +159,8 @@ csharpLanguage = define "csharpLanguage" $
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $ -- TODO: verify whether all are supported
   Coders.language
-    (Coders.languageName_ $ string "hydra.csharp")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.csharp")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

@@ -5,18 +5,12 @@
         "name": "hydra.test.checking.all.allTests",
         "term": {
           "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "The group of all type checking tests"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "The group of all type checking tests"}}}],
             "body": {
               "record": {
                 "fields": [
                   {"name": "name", "term": {"literal": {"string": "checking"}}},
-                  {
-                    "name": "description",
-                    "term": {
-                      "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                  {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                   {
                     "name": "subgroups",
                     "term": {
@@ -29,23 +23,17 @@
                         {"variable": "hydra.test.checking.nominalTypes.allTests"}]}},
                   {
                     "name": "cases",
-                    "term": {
-                      "typeApplication": {
-                        "body": {"list": []},
-                        "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
+                    "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "description": "Hydra's type checking test suite",
-  "namespace": "hydra.test.checking.all",
-  "termDependencies": [
+  "dependencies": [
     "hydra.test.checking.advanced",
     "hydra.test.checking.algebraicTypes",
     "hydra.test.checking.collections",
     "hydra.test.checking.failures",
     "hydra.test.checking.fundamentals",
     "hydra.test.checking.nominalTypes",
-    "hydra.rewriting"],
-  "typeDependencies": [
+    "hydra.rewriting",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
@@ -68,4 +56,7 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants"]}
+    "hydra.validation",
+    "hydra.variants"],
+  "description": "Hydra's type checking test suite",
+  "namespace": "hydra.test.checking.all"}

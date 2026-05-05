@@ -219,6 +219,7 @@ adaptTerm constraints litmap cx graph term0 =
                               let supportedVariant = Sets.member (Reflect.termVariant term) (Coders.languageConstraintsTermVariants constraints)
                               in (Logic.ifElse supportedVariant (forSupported term) (forUnsupported term))
                 in (Eithers.bind (recurse term02) (\term1 -> case term1 of
+                  Core.TermAnnotated _ -> Right term1
                   Core.TermTypeApplication v0 -> Eithers.bind (adaptType constraints litmap (Core.typeApplicationTermType v0)) (\atyp -> Right (Core.TermTypeApplication (Core.TypeApplicationTerm {
                     Core.typeApplicationTermBody = (Core.typeApplicationTermBody v0),
                     Core.typeApplicationTermType = atyp})))
@@ -341,7 +342,36 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
         let adapted = Pairs.first adaptResult
             adaptedBindings = Pairs.second adaptResult
         in (Eithers.bind (checkBindingsTyped "after adaptation" adaptedBindings) (\bins4 ->
-          let bins5 = normalizeBindings bins4
+          let bins5Raw = normalizeBindings bins4
+              peelOne =
+                      \t -> case t of
+                        Core.TermTypeLambda v0 -> Core.typeLambdaBody v0
+                        Core.TermTypeApplication v0 -> Core.typeApplicationTermBody v0
+                        _ -> t
+              extractAnn =
+                      \t -> case t of
+                        Core.TermAnnotated v0 -> Just (Core.annotatedTermAnnotation v0)
+                        _ -> Nothing
+              findAnn =
+                      \t ->
+                        let t1 = peelOne t
+                            t2 = peelOne t1
+                            t3 = peelOne t2
+                        in (Maybes.maybe (Maybes.maybe (Maybes.maybe (extractAnn t3) (\a -> Just a) (extractAnn t2)) (\a -> Just a) (extractAnn t1)) (\a -> Just a) (extractAnn t))
+              originalAnnotations =
+                      Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.maybe Nothing (\ann -> Just (Core.bindingName b, ann)) (findAnn (Core.bindingTerm b))) originalBindings))
+              reattachAnnotation =
+                      \b -> Maybes.maybe b (\ann -> Core.Binding {
+                        Core.bindingName = (Core.bindingName b),
+                        Core.bindingTerm = case (Core.bindingTerm b) of
+                          Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
+                            Core.annotatedTermBody = (Core.annotatedTermBody v0),
+                            Core.annotatedTermAnnotation = (Maps.union (Core.annotatedTermAnnotation v0) ann)})
+                          _ -> Core.TermAnnotated (Core.AnnotatedTerm {
+                            Core.annotatedTermBody = (Core.bindingTerm b),
+                            Core.annotatedTermAnnotation = ann}),
+                        Core.bindingTypeScheme = (Core.bindingTypeScheme b)}) (Maps.lookup (Core.bindingName b) originalAnnotations)
+              bins5 = Lists.map reattachAnnotation bins5Raw
               toDef =
                       \el -> Maybes.map (\ts -> Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.bindingName el),
@@ -359,15 +389,17 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                         let elsForNs = Maybes.maybe [] Equality.identity (Maps.lookup ns elementsByNamespace)
                         in (Maybes.cat (Lists.map toDef elsForNs))) namespaces
               g = Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted)
-          in (Right (Graph.Graph {
-            Graph.graphBoundTerms = (Graph.graphBoundTerms g),
-            Graph.graphBoundTypes = (Graph.graphBoundTypes g),
-            Graph.graphClassConstraints = (Graph.graphClassConstraints g),
-            Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
-            Graph.graphMetadata = (Graph.graphMetadata g),
-            Graph.graphPrimitives = (Graph.graphPrimitives g),
-            Graph.graphSchemaTypes = (Graph.graphSchemaTypes adapted),
-            Graph.graphTypeVariables = (Graph.graphTypeVariables g)}, defsGrouped))))))))
+          in (Right (
+            Graph.Graph {
+              Graph.graphBoundTerms = (Graph.graphBoundTerms g),
+              Graph.graphBoundTypes = (Graph.graphBoundTypes g),
+              Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+              Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
+              Graph.graphMetadata = (Graph.graphMetadata g),
+              Graph.graphPrimitives = (Graph.graphPrimitives g),
+              Graph.graphSchemaTypes = (Graph.graphSchemaTypes adapted),
+              Graph.graphTypeVariables = (Graph.graphTypeVariables g)},
+            defsGrouped))))))))
 -- | Check if a literal type is supported by the given language constraints
 literalTypeSupported :: Coders.LanguageConstraints -> Core.LiteralType -> Bool
 literalTypeSupported constraints lt =
@@ -382,60 +414,96 @@ literalTypeSupported constraints lt =
 prepareFloatType :: Core.FloatType -> (Core.FloatType, ((Core.FloatValue -> Core.FloatValue), (S.Set String)))
 prepareFloatType ft =
     case ft of
-      Core.FloatTypeBigfloat -> (Core.FloatTypeFloat64, ((\v -> case v of
-        Core.FloatValueBigfloat v1 -> Core.FloatValueFloat64 (LibLiterals.bigfloatToFloat64 v1)
-        _ -> v), (Sets.fromList [
-        "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"])))
+      Core.FloatTypeBigfloat -> (
+        Core.FloatTypeFloat64,
+        (
+          (\v -> case v of
+            Core.FloatValueBigfloat v1 -> Core.FloatValueFloat64 (LibLiterals.bigfloatToFloat64 v1)
+            _ -> v),
+          (Sets.fromList [
+            "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"])))
       _ -> prepareSame ft
 -- | Prepare an integer type, substituting unsupported types
 prepareIntegerType :: Core.IntegerType -> (Core.IntegerType, ((Core.IntegerValue -> Core.IntegerValue), (S.Set String)))
 prepareIntegerType it =
     case it of
-      Core.IntegerTypeBigint -> (Core.IntegerTypeInt64, ((\v -> case v of
-        Core.IntegerValueBigint v1 -> Core.IntegerValueInt64 (LibLiterals.bigintToInt64 v1)
-        _ -> v), (Sets.fromList [
-        "replace arbitrary-precision integers with 64-bit integers"])))
-      Core.IntegerTypeUint8 -> (Core.IntegerTypeInt8, ((\v -> case v of
-        Core.IntegerValueUint8 v1 -> Core.IntegerValueInt8 (LibLiterals.bigintToInt8 (LibLiterals.uint8ToBigint v1))
-        _ -> v), (Sets.fromList [
-        "replace unsigned 8-bit integers with signed 8-bit integers"])))
-      Core.IntegerTypeUint32 -> (Core.IntegerTypeInt32, ((\v -> case v of
-        Core.IntegerValueUint32 v1 -> Core.IntegerValueInt32 (LibLiterals.bigintToInt32 (LibLiterals.uint32ToBigint v1))
-        _ -> v), (Sets.fromList [
-        "replace unsigned 32-bit integers with signed 32-bit integers"])))
-      Core.IntegerTypeUint64 -> (Core.IntegerTypeInt64, ((\v -> case v of
-        Core.IntegerValueUint64 v1 -> Core.IntegerValueInt64 (LibLiterals.bigintToInt64 (LibLiterals.uint64ToBigint v1))
-        _ -> v), (Sets.fromList [
-        "replace unsigned 64-bit integers with signed 64-bit integers"])))
+      Core.IntegerTypeBigint -> (
+        Core.IntegerTypeInt64,
+        (
+          (\v -> case v of
+            Core.IntegerValueBigint v1 -> Core.IntegerValueInt64 (LibLiterals.bigintToInt64 v1)
+            _ -> v),
+          (Sets.fromList [
+            "replace arbitrary-precision integers with 64-bit integers"])))
+      Core.IntegerTypeUint8 -> (
+        Core.IntegerTypeInt8,
+        (
+          (\v -> case v of
+            Core.IntegerValueUint8 v1 -> Core.IntegerValueInt8 (LibLiterals.bigintToInt8 (LibLiterals.uint8ToBigint v1))
+            _ -> v),
+          (Sets.fromList [
+            "replace unsigned 8-bit integers with signed 8-bit integers"])))
+      Core.IntegerTypeUint32 -> (
+        Core.IntegerTypeInt32,
+        (
+          (\v -> case v of
+            Core.IntegerValueUint32 v1 -> Core.IntegerValueInt32 (LibLiterals.bigintToInt32 (LibLiterals.uint32ToBigint v1))
+            _ -> v),
+          (Sets.fromList [
+            "replace unsigned 32-bit integers with signed 32-bit integers"])))
+      Core.IntegerTypeUint64 -> (
+        Core.IntegerTypeInt64,
+        (
+          (\v -> case v of
+            Core.IntegerValueUint64 v1 -> Core.IntegerValueInt64 (LibLiterals.bigintToInt64 (LibLiterals.uint64ToBigint v1))
+            _ -> v),
+          (Sets.fromList [
+            "replace unsigned 64-bit integers with signed 64-bit integers"])))
       _ -> prepareSame it
 -- | Prepare a literal type, substituting unsupported types
 prepareLiteralType :: Core.LiteralType -> (Core.LiteralType, ((Core.Literal -> Core.Literal), (S.Set String)))
 prepareLiteralType at =
     case at of
-      Core.LiteralTypeBinary -> (Core.LiteralTypeString, ((\v -> case v of
-        Core.LiteralBinary v1 -> Core.LiteralString (LibLiterals.binaryToString v1)
-        _ -> v), (Sets.fromList [
-        "replace binary strings with character strings"])))
-      Core.LiteralTypeDecimal -> (Core.LiteralTypeFloat Core.FloatTypeFloat64, ((\v -> case v of
-        Core.LiteralDecimal v1 -> Core.LiteralFloat (Core.FloatValueFloat64 (LibLiterals.decimalToFloat64 v1))
-        _ -> v), (Sets.fromList [
-        "replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"])))
+      Core.LiteralTypeBinary -> (
+        Core.LiteralTypeString,
+        (
+          (\v -> case v of
+            Core.LiteralBinary v1 -> Core.LiteralString (LibLiterals.binaryToString v1)
+            _ -> v),
+          (Sets.fromList [
+            "replace binary strings with character strings"])))
+      Core.LiteralTypeDecimal -> (
+        Core.LiteralTypeFloat Core.FloatTypeFloat64,
+        (
+          (\v -> case v of
+            Core.LiteralDecimal v1 -> Core.LiteralFloat (Core.FloatValueFloat64 (LibLiterals.decimalToFloat64 v1))
+            _ -> v),
+          (Sets.fromList [
+            "replace arbitrary-precision decimal numbers with 64-bit floating-point numbers (doubles)"])))
       Core.LiteralTypeFloat v0 ->
         let result = prepareFloatType v0
             rtyp = Pairs.first result
             rep = Pairs.first (Pairs.second result)
             msgs = Pairs.second (Pairs.second result)
-        in (Core.LiteralTypeFloat rtyp, ((\v -> case v of
-          Core.LiteralFloat v1 -> Core.LiteralFloat (rep v1)
-          _ -> v), msgs))
+        in (
+          Core.LiteralTypeFloat rtyp,
+          (
+            (\v -> case v of
+              Core.LiteralFloat v1 -> Core.LiteralFloat (rep v1)
+              _ -> v),
+            msgs))
       Core.LiteralTypeInteger v0 ->
         let result = prepareIntegerType v0
             rtyp = Pairs.first result
             rep = Pairs.first (Pairs.second result)
             msgs = Pairs.second (Pairs.second result)
-        in (Core.LiteralTypeInteger rtyp, ((\v -> case v of
-          Core.LiteralInteger v1 -> Core.LiteralInteger (rep v1)
-          _ -> v), msgs))
+        in (
+          Core.LiteralTypeInteger rtyp,
+          (
+            (\v -> case v of
+              Core.LiteralInteger v1 -> Core.LiteralInteger (rep v1)
+              _ -> v),
+            msgs))
       _ -> prepareSame at
 -- | Return a value unchanged with identity transform and no messages
 prepareSame :: Ord t2 => (t0 -> (t0, ((t1 -> t1), (S.Set t2))))
@@ -449,9 +517,13 @@ prepareType cx typ =
             rtyp = Pairs.first result
             rep = Pairs.first (Pairs.second result)
             msgs = Pairs.second (Pairs.second result)
-        in (Core.TypeLiteral rtyp, ((\v -> case v of
-          Core.TermLiteral v1 -> Core.TermLiteral (rep v1)
-          _ -> v), msgs))
+        in (
+          Core.TypeLiteral rtyp,
+          (
+            (\v -> case v of
+              Core.TermLiteral v1 -> Core.TermLiteral (rep v1)
+              _ -> v),
+            msgs))
       _ -> prepareSame typ
 -- | Normalize a term by pushing TermTypeApplication inward past TermApplication and TermLambda. This corrects structures produced by poly-let hoisting and eta expansion, where type applications from inference end up wrapping term applications or lambda abstractions instead of being directly on the polymorphic variable.
 pushTypeAppsInward :: Core.Term -> Core.Term
@@ -459,6 +531,9 @@ pushTypeAppsInward term =
 
       let push =
               \body -> \typ -> case body of
+                Core.TermAnnotated v0 -> Core.TermAnnotated (Core.AnnotatedTerm {
+                  Core.annotatedTermBody = (push (Core.annotatedTermBody v0) typ),
+                  Core.annotatedTermAnnotation = (Core.annotatedTermAnnotation v0)})
                 Core.TermApplication v0 -> go (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermTypeApplication (Core.TypeApplicationTerm {
                     Core.typeApplicationTermBody = (Core.applicationFunction v0),
@@ -554,7 +629,9 @@ schemaGraphToDefinitions constraints graph nameLists cx =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Pairs.second pair),
                     Core.typeSchemeConstraints = Nothing}}
-        in (Right (tmap1, (Lists.map (\names -> Lists.map toDef (Maybes.mapMaybe (\n -> Maybes.map (\t -> (n, t)) (Maps.lookup n tmap1)) names)) nameLists))))))
+        in (Right (
+          tmap1,
+          (Lists.map (\names -> Lists.map toDef (Maybes.mapMaybe (\n -> Maybes.map (\t -> (n, t)) (Maps.lookup n tmap1)) names)) nameLists))))))
 -- | Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity.
 simpleLanguageAdapter :: Coders.Language -> t0 -> Graph.Graph -> Core.Type -> Either Errors.Error (Coders.Adapter Core.Type Core.Type Core.Term Core.Term)
 simpleLanguageAdapter lang cx g typ =

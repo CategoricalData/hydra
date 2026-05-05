@@ -11,6 +11,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
+-- | DSL constructor for hydra.graph.Graph
 graph :: Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme) -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm (M.Map Core.Name Graph.Primitive) -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Graph.Graph
 graph boundTerms boundTypes classConstraints lambdaVariables metadata primitives schemaTypes typeVariables =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -40,6 +41,7 @@ graph boundTerms boundTypes classConstraints lambdaVariables metadata primitives
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Phantoms.unTTerm typeVariables)}]}))
+-- | DSL accessor for the boundTerms field of hydra.graph.Graph
 graphBoundTerms :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.Term)
 graphBoundTerms x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -47,6 +49,7 @@ graphBoundTerms x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
         Core.projectionField = (Core.Name "boundTerms")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the boundTypes field of hydra.graph.Graph
 graphBoundTypes :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme)
 graphBoundTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -54,6 +57,7 @@ graphBoundTypes x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
         Core.projectionField = (Core.Name "boundTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the classConstraints field of hydra.graph.Graph
 graphClassConstraints :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata)
 graphClassConstraints x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -61,6 +65,7 @@ graphClassConstraints x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
         Core.projectionField = (Core.Name "classConstraints")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the lambdaVariables field of hydra.graph.Graph
 graphLambdaVariables :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name)
 graphLambdaVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -68,6 +73,7 @@ graphLambdaVariables x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
         Core.projectionField = (Core.Name "lambdaVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the metadata field of hydra.graph.Graph
 graphMetadata :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.Term)
 graphMetadata x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -75,6 +81,7 @@ graphMetadata x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
         Core.projectionField = (Core.Name "metadata")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the primitives field of hydra.graph.Graph
 graphPrimitives :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Graph.Primitive)
 graphPrimitives x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -82,6 +89,7 @@ graphPrimitives x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
         Core.projectionField = (Core.Name "primitives")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the schemaTypes field of hydra.graph.Graph
 graphSchemaTypes :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme)
 graphSchemaTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -89,6 +97,7 @@ graphSchemaTypes x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
         Core.projectionField = (Core.Name "schemaTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the typeVariables field of hydra.graph.Graph
 graphTypeVariables :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name)
 graphTypeVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -96,6 +105,7 @@ graphTypeVariables x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
         Core.projectionField = (Core.Name "typeVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the boundTerms field of hydra.graph.Graph
 graphWithBoundTerms :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Graph.Graph
 graphWithBoundTerms original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -153,6 +163,7 @@ graphWithBoundTerms original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
               Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the boundTypes field of hydra.graph.Graph
 graphWithBoundTypes :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme) -> Phantoms.TTerm Graph.Graph
 graphWithBoundTypes original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -210,6 +221,7 @@ graphWithBoundTypes original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
               Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the classConstraints field of hydra.graph.Graph
 graphWithClassConstraints :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm Graph.Graph
 graphWithClassConstraints original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -267,6 +279,7 @@ graphWithClassConstraints original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
               Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the lambdaVariables field of hydra.graph.Graph
 graphWithLambdaVariables :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Graph.Graph
 graphWithLambdaVariables original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -324,6 +337,7 @@ graphWithLambdaVariables original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
               Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the metadata field of hydra.graph.Graph
 graphWithMetadata :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Graph.Graph
 graphWithMetadata original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -381,6 +395,7 @@ graphWithMetadata original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
               Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the primitives field of hydra.graph.Graph
 graphWithPrimitives :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Graph.Primitive) -> Phantoms.TTerm Graph.Graph
 graphWithPrimitives original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -438,6 +453,7 @@ graphWithPrimitives original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
               Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the schemaTypes field of hydra.graph.Graph
 graphWithSchemaTypes :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme) -> Phantoms.TTerm Graph.Graph
 graphWithSchemaTypes original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -495,6 +511,7 @@ graphWithSchemaTypes original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
               Core.projectionField = (Core.Name "typeVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the typeVariables field of hydra.graph.Graph
 graphWithTypeVariables :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Graph.Graph
 graphWithTypeVariables original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -552,6 +569,7 @@ graphWithTypeVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL constructor for hydra.graph.Primitive
 primitive :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Phantoms.TTerm Graph.Primitive
 primitive name typeScheme implementation =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -566,6 +584,7 @@ primitive name typeScheme implementation =
         Core.Field {
           Core.fieldName = (Core.Name "implementation"),
           Core.fieldTerm = (Phantoms.unTTerm implementation)}]}))
+-- | DSL accessor for the implementation field of hydra.graph.Primitive
 primitiveImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term)
 primitiveImplementation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -573,6 +592,7 @@ primitiveImplementation x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
         Core.projectionField = (Core.Name "implementation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the name field of hydra.graph.Primitive
 primitiveName :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.Name
 primitiveName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -580,6 +600,7 @@ primitiveName x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
         Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the typeScheme field of hydra.graph.Primitive
 primitiveTypeScheme :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme
 primitiveTypeScheme x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -587,6 +608,7 @@ primitiveTypeScheme x =
         Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
         Core.projectionField = (Core.Name "typeScheme")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the implementation field of hydra.graph.Primitive
 primitiveWithImplementation :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Phantoms.TTerm Graph.Primitive
 primitiveWithImplementation original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -609,6 +631,7 @@ primitiveWithImplementation original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "implementation"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the name field of hydra.graph.Primitive
 primitiveWithName :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Graph.Primitive
 primitiveWithName original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -631,6 +654,7 @@ primitiveWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
               Core.projectionField = (Core.Name "implementation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the typeScheme field of hydra.graph.Primitive
 primitiveWithTypeScheme :: Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Graph.Primitive
 primitiveWithTypeScheme original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -653,6 +677,7 @@ primitiveWithTypeScheme original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
               Core.projectionField = (Core.Name "implementation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.graph.TermCoder
 termCoder :: Phantoms.TTerm Core.Type -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error a) -> Phantoms.TTerm (Context.Context -> a -> Either Errors.Error Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
 termCoder type_ encode decode =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -667,6 +692,7 @@ termCoder type_ encode decode =
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Phantoms.unTTerm decode)}]}))
+-- | DSL accessor for the decode field of hydra.graph.TermCoder
 termCoderDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either Errors.Error Core.Term)
 termCoderDecode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -674,6 +700,7 @@ termCoderDecode x =
         Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
         Core.projectionField = (Core.Name "decode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the encode field of hydra.graph.TermCoder
 termCoderEncode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error a)
 termCoderEncode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -681,6 +708,7 @@ termCoderEncode x =
         Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
         Core.projectionField = (Core.Name "encode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the type field of hydra.graph.TermCoder
 termCoderType :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm Core.Type
 termCoderType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -688,6 +716,7 @@ termCoderType x =
         Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
         Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the decode field of hydra.graph.TermCoder
 termCoderWithDecode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either Errors.Error Core.Term) -> Phantoms.TTerm (Graph.TermCoder a)
 termCoderWithDecode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -710,6 +739,7 @@ termCoderWithDecode original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "decode"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the encode field of hydra.graph.TermCoder
 termCoderWithEncode :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either Errors.Error a) -> Phantoms.TTerm (Graph.TermCoder a)
 termCoderWithEncode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -732,6 +762,7 @@ termCoderWithEncode original newVal =
               Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
               Core.projectionField = (Core.Name "decode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the type field of hydra.graph.TermCoder
 termCoderWithType :: Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm Core.Type -> Phantoms.TTerm (Graph.TermCoder a)
 termCoderWithType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {

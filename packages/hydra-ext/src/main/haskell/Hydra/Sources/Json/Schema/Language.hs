@@ -78,12 +78,14 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
+ns :: Namespace
+ns = Namespace "hydra.json.schema.language"
+
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.json.schema.language"),
+            moduleNamespace = ns,
             moduleDefinitions = [toDefinition jsonSchemaLanguage],
-            moduleTermDependencies = [Reflect.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Reflect.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for JSON Schema"}
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
@@ -103,7 +105,9 @@ jsonSchemaLanguage = define "jsonSchemaLanguage" $
   "termVariants">: Sets.fromList Reflect.termVariants,
   "typeVariants">: Sets.fromList $ list [
     Variants.typeVariantAnnotated,
+    Variants.typeVariantApplication,
     Variants.typeVariantEither,
+    Variants.typeVariantForall,
     Variants.typeVariantList,
     Variants.typeVariantLiteral,
     Variants.typeVariantMap,
@@ -116,8 +120,8 @@ jsonSchemaLanguage = define "jsonSchemaLanguage" $
     Variants.typeVariantWrap],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.json.schema")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.json.schema")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

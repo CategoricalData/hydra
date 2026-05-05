@@ -310,8 +310,14 @@ The core principles (see CLAUDE.md and the
 
 1. **No post-generation patches.** Generated code (anything under `dist/`) must
    match what the generator produces. If the output is wrong, fix the generator.
-   The only exception is a deliberate bootstrap patch that will be overwritten by
-   the next regeneration — document it as such.
+   This applies to any read-modify-write of generated content, regardless of
+   form: shell `sed` against `dist/` files, Haskell directory walks that
+   read-and-rewrite, Python scripts that open generated files in `'w'` or
+   `'a'` mode after they've been written, etc. A whole-file content transform
+   applied **during** emission (between the codegen output and the file
+   write) is part of the generation pipeline, not a post-pass.
+   The only exception is a deliberate bootstrap patch that will be overwritten
+   by the next regeneration — document it as such.
 2. **No hand-written files under `dist/`.** If a file needs to live alongside
    generated artifacts (because tests import it from that location), write it
    under `heads/` and copy it in from a sync script.
@@ -325,19 +331,30 @@ The core principles (see CLAUDE.md and the
 
 ### Procedure
 
-**Check 1: post-generation patches in sync scripts.**
-Sync scripts are the most common place violations hide.
-Grep for the patterns that indicate patches:
+**Check 1: post-generation patches in sync scripts and codegen pipeline.**
+Sync scripts are the most common place violations hide. Haskell-side
+read-back passes (functions in `heads/haskell/src/main/haskell/` and
+`heads/haskell/src/exec/` that read a file from `dist/` and write a
+modified version back) count too.
+
+Shell-level scan:
 
 ```bash
 grep -rn "sed_inplace\|sed -i\|Post-process\|Patch\|patching\|post-process" \
-  bin/ heads/haskell/bin/ demos/bootstrapping/bin/ 2>/dev/null \
+  bin/ heads/ demos/bootstrapping/bin/ 2>/dev/null \
   | grep -v "test\|grep" \
   | grep -vE ":\s*#"
 ```
 
-Every match is a potential violation.
-For each, ask:
+Haskell-side scan (look for read-back patterns over `dist/`):
+
+```bash
+grep -rn "readFile\|hGetContents\|withFile.*ReadMode" \
+  heads/haskell/src/main/ heads/haskell/src/exec/ 2>/dev/null \
+  | grep -v "digest\|content-hash\|byte-identical"
+```
+
+Every match is a potential violation. For each, ask:
 - **Is this fixing the generator, or working around it?**
   A patch that renames `case macro(` to `` case `macro`( `` is working around
   a missing keyword-escape in the Scala code generator.
@@ -345,10 +362,15 @@ For each, ask:
 - **Is this copying a hand-written file into `dist/`?**
   That is principle 2; the canonical copy must live in `heads/`.
   Copying *into* `dist/` is acceptable; hand-writing *in* `dist/` is not.
+- **Is this part of the generation pipeline, or a post-pass?**
+  A `String -> String` transform applied between codegen output and
+  file write (e.g. via `generateSourcesWithTransform`) is part of
+  generation. A pass that walks `dist/` after files have been written
+  to re-read and rewrite them is a post-generation patch.
 - **Is this a deliberate bootstrap patch?**
   Bootstrap patches are explicitly allowed but must be overwritten by the next
   regeneration.
-  A `sed` patch that runs on every sync is not a bootstrap patch — it means
+  A patch that runs on every sync is not a bootstrap patch — it means
   the generator is broken.
 
 Track the list of accepted post-generation patches.
@@ -389,36 +411,44 @@ Fix it at the generator level.
 
 ### Known accepted patches
 
-No post-generation patches are currently applied in the active sync path.
-The former `TestGraph.hs` patch (which replaced `emptyGraph` / `emptyContext`
-with `TestEnv.testGraph testTypes` / `TestEnv.testContext`) was eliminated
-when the DSL was updated to emit the `TestEnv` references directly; see
-`heads/haskell/bin/sync-haskell.sh` step 5 for the current no-op note.
-
-`Hydra.Test.TestEnv` remains hand-written and checked in under
-`dist/haskell/hydra-kernel/src/test/haskell/`; it is exempted from
-regeneration because `bootstrap-from-json` does not target it. This is
-tolerated under principle 2 (hand-written file under `dist/`) rather than
-moved to `heads/` because the Haskell test harness imports it from that
-location and the bridge is small. Treat it as tech debt, not precedent.
-
-Two patches that were previously applied by retired per-language sync
-scripts are NOT currently re-applied anywhere:
-
-- Java Lisp `Coder.java`: a `PartialVisitor` type parameter that the Java
-  coder infers incorrectly. Surfaces when generating `hydra-lisp` into Java.
-- Python `test_graph.py`: empty `test_graph` / `test_context` assignments
-  needing a `__getattr__` shim to a hand-written `test_env.py`. Surfaces
-  when running Python kernel tests.
-
-These patches need to be re-added (probably to per-target assemblers or a
-post-processing step) before the affected combinations work again. The
-current bootstrapping-triad sync (haskell/java/python kernel + self-hosting)
-does not exercise either combination, so the patches are queued, not blocking.
+**None.** All post-generation `sed` patches were eliminated in #307.
 
 When adding a new accepted patch, document it here and open an issue against
-the generator.
-When removing a patch (because the generator was fixed), update this list too.
+the generator. The bar is high: prefer fixing the generator, and exhaust
+that path before introducing a patch.
+
+### Hand-written files under `dist/`
+
+The hard rule is "no hand-written files under `dist/`." One bridge file
+remains:
+
+- `dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs` —
+  the Haskell-level runtime counterpart of the DSL stub
+  `Hydra.Sources.Test.TestEnv`. The kernel filters `hydra.test.testEnv`
+  from emitted output (via `testSkipEmitNamespaces` in
+  `Hydra.Sources.Test.All`), so this file is left alone by regeneration.
+  Tolerated for now because the Haskell test build's source set spans
+  `dist/haskell/.../src/test/haskell/`, and moving the file to `heads/`
+  would require restructuring the Haskell test build's source layout.
+
+For every other target, the hand-written `test_env` runtime lives in
+`heads/<target>/src/test/...` and is copied into `dist/` at assemble time
+by the per-target `assemble-distribution.sh`. The pattern, target by target:
+
+- Java: `heads/java/src/test/java/hydra/test/TestEnv.java`
+- Python: `heads/python/src/test/python/hydra/test/test_env.py`
+- Scala: `heads/scala/src/test/scala/hydra/test/testEnv.scala`
+- Clojure: `heads/lisp/clojure/src/test/clojure/hydra/test/testEnv.clj`
+- Common Lisp: `heads/lisp/common-lisp/src/test/common-lisp/hydra/test/test_env.lisp`
+- Emacs Lisp: `heads/lisp/emacs-lisp/src/test/emacs-lisp/hydra/test/test_env.el`
+- Scheme: `heads/lisp/scheme/src/test/scheme/hydra/test/test_env.scm`
+
+Each provides `hydra_test_test_env_test_context` (a `Context` value) and
+`hydra_test_test_env_test_graph` (a function `Map Name Type → Map Name Term → Graph`),
+matching the DSL signature in `Hydra.Sources.Test.TestEnv`. Scala and the
+four Lisp dialects (Clojure, Common Lisp, Emacs Lisp, Scheme) curry the
+function as `((f types) terms)` to match their coders' multi-arg emission;
+Java and Python use the flat `f(types, terms)` form.
 
 ---
 
@@ -449,32 +479,54 @@ This applies to:
 Generated files inherit their ordering from Source modules,
 so fixing the Source fixes all implementations.
 
-**Check a single module:**
-```bash
-grep 'toDefinition\|toBinding' packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Lexical.hs \
-  | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \
-  | awk '{name=$1} NR>1 && name<prev {print prev " before " name " (out of order)"} {prev=name}'
-```
+**Generator-derived modules are exempt.** The `hydra.dsl.*`, `hydra.encode.*`,
+and `hydra.decode.*` module families are produced by `dslModule`,
+`encodeModule`, and `decodeModule` from the corresponding type modules. Their
+`definitions` lists are deliberately grouped by source type (e.g., for each
+record: constructor, then field accessors, then with-updaters), which is more
+readable than alphabetical and reflects the structure of the originating type.
+The validator must not be applied to these modules; they pass through
+generation untouched by ordering checks.
 
-**Batch check all Source modules:**
-```bash
-#!/bin/bash
-# check-definition-order.sh — run from the repo root
-for f in $(find packages/*/src/main/haskell -name '*.hs' 2>/dev/null); do
-  out=$(grep 'toDefinition\|toBinding' "$f" \
-    | sed 's/.*toDefinition //; s/.*toBinding //; s/[,\]]//g' \
-    | awk '{name=$1} NR>1 && name<prev {print "  " prev " before " name} {prev=name}')
-  if [ -n "$out" ]; then
-    echo "$f:"
-    echo "$out"
-  fi
-done
-```
+**`definitions` list ordering is validator-enforced.**
+The `Validate.Packaging.checkDefinitionOrdering` check (run as part of
+`Validate.Packaging.kernelModule` / `kernelPackage`) walks each module's
+`definitions` list and reports any consecutive pair whose local names are
+not in ascending lexicographic ASCII order.
+This check runs against `Sources.kernelModules` as part of `/sync-haskell()`,
+so list-order violations fail the sync.
+A maintenance pass therefore does not need to re-check the list order.
 
-Modules with no output are correctly ordered.
+**Body ordering is not validator-enforced.**
+The validator inspects only the `definitions` list, not the order of
+function bindings in the source file.
+Per the style guide, body order must mirror list order, but this
+correspondence is still a manual / LLM-assisted check.
+For each Source module, walk the file and confirm that top-level bindings
+appear in the same order as their entries in the `definitions` list.
 
 **Fixing violations:** reorder both the `definitions` list entry *and* the corresponding
 definition body together — they must stay in sync.
+
+When reordering, preserve the original list shape.
+Term-style modules (e.g. `Hydra/Sources/Kernel/Terms/*.hs`) wrap each
+entry in `toDefinition X`; type-style modules (e.g.
+`Hydra/Sources/Kernel/Types/*.hs`) use the binding name alone:
+
+```haskell
+-- Term-style
+definitions = [
+  toDefinition adaptType,
+  toDefinition adaptTermForLanguage]
+
+-- Type-style
+definitions = [
+  annotatedTerm,
+  application]
+```
+
+Adding `toDefinition` to a type-style list (or removing it from a
+term-style list) breaks the build.
 
 ### Other style checks
 
@@ -647,6 +699,22 @@ heads/haskell/bin/verify-json-kernel.sh
 This loads each kernel module from Haskell, decodes the corresponding JSON file,
 and compares them element by element.
 Run this after any kernel changes, or as a periodic sanity check.
+
+If verification fails with `definition differs at Name {unName = "..."}` for a
+module whose source you didn't directly edit, the cause is usually that the
+incremental dirty-detector missed a *transitive* change.
+A common trigger is renaming a kernel definition: every module that *references*
+the renamed name has a different in-memory body, but only the modules whose own
+sources changed get re-emitted to JSON, so the on-disk JSON for the dependents
+stays at the pre-rename name.
+
+Workaround: invalidate the encoder identity by editing the `encoderId` field at
+the top of `dist/json/digest.main.json` to all-zeros (or any value that won't
+match the running binary's hash). The next `update-json-main` run will treat
+every module as dirty and re-emit JSON across the kernel; the encoderId is
+restamped from the binary on the next successful run.
+This is a known limitation; see the `incremental_inference_wiring_pending`
+follow-up.
 
 ---
 
@@ -876,13 +944,48 @@ To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
 3. Check for design violations (post-generation patches, hand-written files under
    `dist/`, host-specific code under `packages/`); fix at the generator or move
    to `heads/`.
-4. Check coding style (definition ordering) across all Source modules; fix violations.
-5. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
-6. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
-7. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
-8. Check Python `__init__.py` freshness.
-9. Review user documentation for accuracy, broken links, and small improvements.
-10. Do a logical code review pass on a sampled slice (report-first, no edits);
+4. Check that definition **bodies** are listed in the same order as the `definitions`
+   list across all Source modules; fix violations.
+   The `definitions` list itself is validator-enforced — see below.
+5. Run `Validate.Packaging.kernelPackage` against `Sources.kernelModules`
+   (i.e. the kernel-quality validator suite, including `checkDefinitionOrdering`,
+   `checkDefinitionDocumentation`, `checkDefinitionNameConvention`, etc.).
+   This step belongs in `/sync-haskell()` and may move there in the future;
+   until it does, run it as part of `/maintenance()`.
+   The validator must be invoked only on the hand-written Source modules
+   (`Sources.kernelModules`); do not pass in generator-derived modules
+   (`hydra.dsl.*`, `hydra.encode.*`, `hydra.decode.*`) — those use a
+   semantic grouping in their definitions list and would always fail the
+   ordering check.
+
+   Until a dedicated executable lands, a one-shot `runghc` driver works.
+   Save the script below to a temp file, then run from `heads/haskell/`:
+
+   ```haskell
+   -- /tmp/run-kernel-validate.hs
+   import Hydra.Kernel
+   import Hydra.Sources.All (kernelModules)
+   import qualified Hydra.Validate.Packaging as VP
+
+   main :: IO ()
+   main = do
+     let bad = [(moduleNamespace m, e) | m <- kernelModules, Just e <- [VP.kernelModule m]]
+     putStrLn $ "Modules with errors: " ++ show (length bad)
+     mapM_ (\(ns, e) -> putStrLn $ "  " ++ show ns ++ ": " ++ show e) bad
+   ```
+
+   ```bash
+   cd heads/haskell && stack runghc /tmp/run-kernel-validate.hs
+   ```
+
+   Drives `kernelModule` per-module so all violations surface in one run
+   rather than just the first.
+6. Verify primitive consistency (coverage, `forall` variable ordering, documentation).
+7. Check `.cabal`/`package.yaml` exposed-modules for stale entries.
+8. Verify JSON kernel freshness via `heads/haskell/bin/verify-json-kernel.sh`.
+9. Check Python `__init__.py` freshness.
+10. Review user documentation for accuracy, broken links, and small improvements.
+11. Do a logical code review pass on a sampled slice (report-first, no edits);
     discuss findings with the user before acting.
 
 After all checks, present a summary of findings and changes to the user.
@@ -901,7 +1004,8 @@ If no changes affect generated files or tests, skip the sync.
 | Non-source file scan | After branch merges, periodically |
 | Stale generated files | After refactoring (renames, deletes, splits) |
 | Design violations | Periodically, before release, after adding sync-script patches |
-| Coding style | After large changes, before release |
+| Coding style (body order vs list order) | After large changes, before release |
+| Kernel package validation (`kernelPackage`) | Every maintenance pass; ideally part of `/sync-haskell()` |
 | Primitive consistency | After adding/changing primitives, after adding a new implementation |
 | Test parity | After sync-all, after benchmarking runs |
 | `.cabal` exposed-modules | After deleting generated Haskell modules |

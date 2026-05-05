@@ -6,6 +6,7 @@ import Hydra.Dsl.Annotations (doc)
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
+import qualified Hydra.Encode.Core as EncodeCore
 
 import qualified Data.Map as M
 
@@ -17,14 +18,23 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 hydraCoreGraph :: Graph
-hydraCoreGraph = elementsToGraph bootstrapGraph M.empty (moduleBindings module_)
+hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
+    [typeDefinitionAsBinding td | DefinitionType td <- moduleDefinitions module_]
+  where
+    -- elementsToGraph still consumes Bindings; module_ contains only type definitions.
+    typeDefinitionAsBinding td = Binding {
+        bindingName = typeDefinitionName td,
+        bindingTerm = TermAnnotated $ AnnotatedTerm {
+          annotatedTermBody = EncodeCore.type_ (typeSchemeBody (typeDefinitionTypeScheme td)),
+          annotatedTermAnnotation = M.fromList [
+            (Name "type", TermVariable (Name "hydra.core.Type"))]},
+        bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
 
 module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [ns],
+            moduleDependencies = [ns],
             moduleDescription = Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."}
   where
     definitions = [
@@ -35,7 +45,6 @@ module_ = Module {
       binding,
       caseStatement,
       eitherType,
-      pairType,
       field,
       fieldType,
       floatType,
@@ -51,6 +60,7 @@ module_ = Module {
       literalType,
       mapType,
       name,
+      pairType,
       projection,
       record,
       term,
@@ -142,17 +152,6 @@ eitherType = define "EitherType" $
       type_,
     "right">:
       doc "The 'right' alternative"
-      type_]
-
-pairType :: Binding
-pairType = define "PairType" $
-  doc "A type which pairs a 'first' type and a 'second' type" $
-  T.record [
-    "first">:
-      doc "The first component of the pair"
-      type_,
-    "second">:
-      doc "The second component of the pair"
       type_]
 
 field :: Binding
@@ -368,6 +367,17 @@ name :: Binding
 name = define "Name" $
   doc "A unique identifier in some context; a string-valued key" $
   T.wrap T.string
+
+pairType :: Binding
+pairType = define "PairType" $
+  doc "A type which pairs a 'first' type and a 'second' type" $
+  T.record [
+    "first">:
+      doc "The first component of the pair"
+      type_,
+    "second">:
+      doc "The second component of the pair"
+      type_]
 
 projection :: Binding
 projection = define "Projection" $

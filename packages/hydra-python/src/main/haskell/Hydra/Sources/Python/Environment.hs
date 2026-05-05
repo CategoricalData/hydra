@@ -46,8 +46,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleTermDependencies = [],
-            moduleTypeDependencies = [Syntax.ns, Util.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
+            moduleDependencies = [Syntax.ns, Util.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
             moduleDescription = Just "Environment types for Python code generation"}
   where
     definitions = [

@@ -12,6 +12,7 @@ import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | Decoder for hydra.typing.FunctionStructure
 functionStructure :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Typing.FunctionStructure t0)
 functionStructure env cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -26,6 +27,7 @@ functionStructure env cx raw =
           Typing.functionStructureCodomain = field_codomain,
           Typing.functionStructureEnvironment = field_environment})))))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.InferenceResult
 inferenceResult :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.InferenceResult
 inferenceResult cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -38,11 +40,13 @@ inferenceResult cx raw =
           Typing.inferenceResultClassConstraints = field_classConstraints,
           Typing.inferenceResultContext = field_context})))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.TermSubst
 termSubst :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TermSubst
 termSubst cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
       Core.TermWrap v0 -> Eithers.map (\b -> Typing.TermSubst b) (ExtractCore.decodeMap DecodeCore.name DecodeCore.term cx (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.TypeConstraint
 typeConstraint :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeConstraint
 typeConstraint cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -57,6 +61,7 @@ typeConstraint cx raw =
           Typing.typeConstraintRight = field_right,
           Typing.typeConstraintComment = field_comment})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.typing.TypeSubst
 typeSubst :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Typing.TypeSubst
 typeSubst cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

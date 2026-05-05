@@ -86,8 +86,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.protobuf.language"),
             moduleDefinitions = [toDefinition protobufLanguage, toDefinition protobufReservedWords],
-            moduleTermDependencies = [Lexical.ns, Strip.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for Protobuf v3"}
 protobufLanguage :: TTermDefinition Language
 protobufLanguage = definition_ "protobufLanguage" $
@@ -144,8 +143,8 @@ protobufLanguage = definition_ "protobufLanguage" $
         (Just true) [
         _Type_maybe>>: constant false]]] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.protobuf")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.protobuf")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

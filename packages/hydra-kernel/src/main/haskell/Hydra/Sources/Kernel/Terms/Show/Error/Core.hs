@@ -64,8 +64,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [ShowCore.ns, ShowVariants.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, ShowVariants.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "String representations of hydra.error.core types"}
   where
    definitions = [

@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Term decoders for hydra.pg.mapping
 
 module Hydra.Decode.Pg.Mapping where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Pg.Model as Model
 import qualified Hydra.Errors as Errors
@@ -16,7 +14,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Pg.Mapping as Mapping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 annotationSchema :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.AnnotationSchema
 annotationSchema cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -99,7 +96,6 @@ annotationSchema cx raw =
           Mapping.annotationSchemaInEdgeLabel = field_inEdgeLabel,
           Mapping.annotationSchemaIgnore = field_ignore})))))))))))))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 edgeSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.EdgeSpec
 edgeSpec cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -112,7 +108,6 @@ edgeSpec cx raw =
           Mapping.edgeSpecIn = field_in,
           Mapping.edgeSpecProperties = field_properties})))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 elementSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.ElementSpec
 elementSpec cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -129,7 +124,6 @@ elementSpec cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 propertySpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.PropertySpec
 propertySpec cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -139,7 +133,6 @@ propertySpec cx raw =
           Mapping.propertySpecKey = field_key,
           Mapping.propertySpecValue = field_value}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
-
 valueSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.ValueSpec
 valueSpec cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of
@@ -150,17 +143,18 @@ valueSpec cx raw =
             variantMap =
                     Maps.fromList [
                       (Core.Name "value", (\input -> Eithers.map (\t -> Mapping.ValueSpecValue) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "pattern", (\input -> Eithers.map (\t -> Mapping.ValueSpecPattern t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                        Core.TermLiteral v1 -> case v1 of
-                          Core.LiteralString v2 -> Right v2
-                          _ -> Left (Errors.DecodingError "expected string literal")
-                        _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
+                      (
+                        Core.Name "pattern",
+                        (\input -> Eithers.map (\t -> Mapping.ValueSpecPattern t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
+                          Core.TermLiteral v1 -> case v1 of
+                            Core.LiteralString v2 -> Right v2
+                            _ -> Left (Errors.DecodingError "expected string literal")
+                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input))))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
           "no such field ",
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
-
 vertexSpec :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Mapping.VertexSpec
 vertexSpec cx raw =
     Eithers.either (\err -> Left err) (\stripped -> case stripped of

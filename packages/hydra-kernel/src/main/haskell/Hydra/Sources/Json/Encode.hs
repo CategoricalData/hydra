@@ -93,18 +93,98 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."}
   where
     definitions = [
-      toDefinition toJson,
-      toDefinition toJsonUntyped,
-      toDefinition encodeLiteral,
       toDefinition encodeFloat,
       toDefinition encodeInteger,
-      toDefinition requiresJsonStringSentinel]
+      toDefinition encodeLiteral,
+      toDefinition requiresJsonStringSentinel,
+      toDefinition toJson,
+      toDefinition toJsonUntyped]
 
+-- | Encode a float value to JSON.
+-- Bigfloat uses native JSON numbers (lossless for finite values via Scientific). Bigfloat
+-- rejects every IEEE value that cannot be represented by its target types (Java BigDecimal,
+-- Python Decimal cannot hold NaN, ±Infinity, or -0.0 at all), so those produce an error.
+-- Float32 always uses a JSON string to preserve exact source precision. Float64 encodes via
+-- a JSON number for finite, non-negative-zero values and via a JSON string for the values
+-- that the JSON grammar cannot express (NaN, ±Infinity, -0.0) — keeping those IEEE values
+-- round-trippable through JSON.
+encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
+encodeFloat = define "encodeFloat" $
+  doc "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode. Bigfloat rejects anything the decimal space can't hold." $
+  "fv" ~> cases _FloatValue (var "fv") Nothing [
+    _FloatValue_bigfloat>>: "bf" ~>
+      "s" <~ (Literals.showBigfloat $ var "bf") $
+      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
+        (left $ Strings.cat $ list [string "JSON cannot represent bigfloat value: ", var "s"])
+        (right $ Json.valueNumber $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "bf"),
+    _FloatValue_float32>>: "f" ~>
+      "s" <~ (Literals.showFloat32 $ var "f") $
+      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
+        (right $ Json.valueString $ var "s")
+        (right $ Json.valueNumber $ Literals.float32ToDecimal $ var "f"),
+    _FloatValue_float64>>: "f" ~>
+      "s" <~ (Literals.showFloat64 $ var "f") $
+      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
+        (right $ Json.valueString $ var "s")
+        (right $ Json.valueNumber $ Literals.float64ToDecimal $ var "f")]
+
+-- | Check whether a float's string form is an IEEE value that the JSON number grammar or
+-- Scientific-backed decoding cannot round-trip: NaN, Infinity, -Infinity, or -0.0.
+-- | Encode an integer value to JSON
+-- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
+-- Large integers (int64, uint32, uint64, bigint) use strings to preserve precision
+encodeInteger :: TTermDefinition (IntegerValue -> Either String Value)
+encodeInteger = define "encodeInteger" $
+  doc "Encode an integer value to JSON. Small ints use native numbers; large ints use strings." $
+  "iv" ~> cases _IntegerValue (var "iv") Nothing [
+    -- Large integers: use strings to preserve precision
+    _IntegerValue_bigint>>: "bi" ~> right $ Json.valueString $ Literals.showBigint $ var "bi",
+    _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.showInt64 $ var "i",
+    _IntegerValue_uint32>>: "i" ~> right $ Json.valueString $ Literals.showUint32 $ var "i",
+    _IntegerValue_uint64>>: "i" ~> right $ Json.valueString $ Literals.showUint64 $ var "i",
+    -- Small integers: use native JSON numbers (convert to decimal for JSON)
+    _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int8ToBigint $ var "i",
+    _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i",
+    _IntegerValue_int32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int32ToBigint $ var "i",
+    _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "i",
+    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint16ToBigint $ var "i"]
+-- | Encode a literal value to JSON
+encodeLiteral :: TTermDefinition (Literal -> Either String Value)
+encodeLiteral = define "encodeLiteral" $
+  doc "Encode a Hydra literal to a JSON value" $
+  "lit" ~> cases _Literal (var "lit") Nothing [
+    _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToString $ var "b",
+    _Literal_boolean>>: "b" ~> right $ Json.valueBoolean $ var "b",
+    _Literal_decimal>>: "d" ~> right $ Json.valueNumber $ var "d",
+    _Literal_float>>: "f" ~> encodeFloat @@ var "f",
+    _Literal_integer>>: "i" ~> encodeInteger @@ var "i",
+    _Literal_string>>: "s" ~> right $ Json.valueString $ var "s"]
+
+-- | Encode a float value to JSON.
+-- Bigfloat uses native JSON numbers (lossless for finite values via Scientific). Bigfloat
+-- rejects every IEEE value that cannot be represented by its target types (Java BigDecimal,
+-- Python Decimal cannot hold NaN, ±Infinity, or -0.0 at all), so those produce an error.
+-- Float32 always uses a JSON string to preserve exact source precision. Float64 encodes via
+-- a JSON number for finite, non-negative-zero values and via a JSON string for the values
+-- that the JSON grammar cannot express (NaN, ±Infinity, -0.0) — keeping those IEEE values
+-- round-trippable through JSON.
+-- | Check whether a float's string form is an IEEE value that the JSON number grammar or
+-- Scientific-backed decoding cannot round-trip: NaN, Infinity, -Infinity, or -0.0.
+requiresJsonStringSentinel :: TTermDefinition (String -> Bool)
+requiresJsonStringSentinel = define "requiresJsonStringSentinel" $
+  doc "True for IEEE sentinel strings that JSON must escape as a string to preserve." $
+  "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
+         Logic.or (Equality.equal (var "s") (string "Infinity")) $
+         Logic.or (Equality.equal (var "s") (string "-Infinity"))
+                  (Equality.equal (var "s") (string "-0.0"))
+
+-- | Encode an integer value to JSON
+-- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
+-- Large integers (int64, uint32, uint64, bigint) use strings to preserve precision
 -- | Encode a Term to a JSON Value, given a type and type lookup table.
 -- Returns Left with an error message for unsupported term constructs.
 -- The type is used to determine idiomatic encoding for optional (Maybe) fields:
@@ -315,6 +395,11 @@ toJson = define "toJson" $
 -- type variables). It encodes terms based on their structure alone, using the legacy encoding
 -- for Maybe (null/[value]) since without type info we cannot determine if idiomatic encoding
 -- is safe.
+-- | Encode a Term to a JSON Value without type information.
+-- This is a structural fallback used when type information is unavailable (e.g. unresolved
+-- type variables). It encodes terms based on their structure alone, using the legacy encoding
+-- for Maybe (null/[value]) since without type info we cannot determine if idiomatic encoding
+-- is safe.
 toJsonUntyped :: TTermDefinition (Term -> Either String Value)
 toJsonUntyped = define "toJsonUntyped" $
   doc "Encode a Hydra term to a JSON value without type information. Falls back to array-wrapped Maybe encoding." $
@@ -421,70 +506,3 @@ toJsonUntyped = define "toJsonUntyped" $
         (var "e")]
 
 -- | Encode a literal value to JSON
-encodeLiteral :: TTermDefinition (Literal -> Either String Value)
-encodeLiteral = define "encodeLiteral" $
-  doc "Encode a Hydra literal to a JSON value" $
-  "lit" ~> cases _Literal (var "lit") Nothing [
-    _Literal_binary>>: "b" ~> right $ Json.valueString $ Literals.binaryToString $ var "b",
-    _Literal_boolean>>: "b" ~> right $ Json.valueBoolean $ var "b",
-    _Literal_decimal>>: "d" ~> right $ Json.valueNumber $ var "d",
-    _Literal_float>>: "f" ~> encodeFloat @@ var "f",
-    _Literal_integer>>: "i" ~> encodeInteger @@ var "i",
-    _Literal_string>>: "s" ~> right $ Json.valueString $ var "s"]
-
--- | Encode a float value to JSON.
--- Bigfloat uses native JSON numbers (lossless for finite values via Scientific). Bigfloat
--- rejects every IEEE value that cannot be represented by its target types (Java BigDecimal,
--- Python Decimal cannot hold NaN, ±Infinity, or -0.0 at all), so those produce an error.
--- Float32 always uses a JSON string to preserve exact source precision. Float64 encodes via
--- a JSON number for finite, non-negative-zero values and via a JSON string for the values
--- that the JSON grammar cannot express (NaN, ±Infinity, -0.0) — keeping those IEEE values
--- round-trippable through JSON.
-encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
-encodeFloat = define "encodeFloat" $
-  doc "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode. Bigfloat rejects anything the decimal space can't hold." $
-  "fv" ~> cases _FloatValue (var "fv") Nothing [
-    _FloatValue_bigfloat>>: "bf" ~>
-      "s" <~ (Literals.showBigfloat $ var "bf") $
-      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
-        (left $ Strings.cat $ list [string "JSON cannot represent bigfloat value: ", var "s"])
-        (right $ Json.valueNumber $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "bf"),
-    _FloatValue_float32>>: "f" ~>
-      "s" <~ (Literals.showFloat32 $ var "f") $
-      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
-        (right $ Json.valueString $ var "s")
-        (right $ Json.valueNumber $ Literals.float32ToDecimal $ var "f"),
-    _FloatValue_float64>>: "f" ~>
-      "s" <~ (Literals.showFloat64 $ var "f") $
-      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
-        (right $ Json.valueString $ var "s")
-        (right $ Json.valueNumber $ Literals.float64ToDecimal $ var "f")]
-
--- | Check whether a float's string form is an IEEE value that the JSON number grammar or
--- Scientific-backed decoding cannot round-trip: NaN, Infinity, -Infinity, or -0.0.
-requiresJsonStringSentinel :: TTermDefinition (String -> Bool)
-requiresJsonStringSentinel = define "requiresJsonStringSentinel" $
-  doc "True for IEEE sentinel strings that JSON must escape as a string to preserve." $
-  "s" ~> Logic.or (Equality.equal (var "s") (string "NaN")) $
-         Logic.or (Equality.equal (var "s") (string "Infinity")) $
-         Logic.or (Equality.equal (var "s") (string "-Infinity"))
-                  (Equality.equal (var "s") (string "-0.0"))
-
--- | Encode an integer value to JSON
--- Small integers (int8, int16, int32, uint8, uint16) use native JSON numbers
--- Large integers (int64, uint32, uint64, bigint) use strings to preserve precision
-encodeInteger :: TTermDefinition (IntegerValue -> Either String Value)
-encodeInteger = define "encodeInteger" $
-  doc "Encode an integer value to JSON. Small ints use native numbers; large ints use strings." $
-  "iv" ~> cases _IntegerValue (var "iv") Nothing [
-    -- Large integers: use strings to preserve precision
-    _IntegerValue_bigint>>: "bi" ~> right $ Json.valueString $ Literals.showBigint $ var "bi",
-    _IntegerValue_int64>>: "i" ~> right $ Json.valueString $ Literals.showInt64 $ var "i",
-    _IntegerValue_uint32>>: "i" ~> right $ Json.valueString $ Literals.showUint32 $ var "i",
-    _IntegerValue_uint64>>: "i" ~> right $ Json.valueString $ Literals.showUint64 $ var "i",
-    -- Small integers: use native JSON numbers (convert to decimal for JSON)
-    _IntegerValue_int8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int8ToBigint $ var "i",
-    _IntegerValue_int16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int16ToBigint $ var "i",
-    _IntegerValue_int32>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.int32ToBigint $ var "i",
-    _IntegerValue_uint8>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint8ToBigint $ var "i",
-    _IntegerValue_uint16>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ Literals.uint16ToBigint $ var "i"]

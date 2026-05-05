@@ -20,9 +20,11 @@ camel_to_snake() {
     echo "$1" | sed -E 's/([a-z0-9])([A-Z])/\1_\2/g' | tr '[:upper:]' '[:lower:]'
 }
 
-# Extract all cl:defstruct definitions
-grep -h "cl:defstruct" "$GENDIR"/*.lisp "$GENDIR"/**/*.lisp 2>/dev/null | \
-    sed 's/.*(cl:defstruct //' | sed 's/)//' | sort -u | \
+# Extract all cl:defstruct definitions.
+# Anchor to start-of-line so we don't match the literal "cl:defstruct" string
+# embedded in defvar bodies (e.g., the lambda_keyword match expression).
+grep -h "^(cl:defstruct " "$GENDIR"/*.lisp "$GENDIR"/**/*.lisp 2>/dev/null | \
+    sed 's/^(cl:defstruct //' | sed 's/)$//' | sort -u | \
 while read -r line; do
     # Parse: StructName field1 field2 ...
     struct_name=$(echo "$line" | awk '{print $1}')
@@ -53,6 +55,35 @@ while read -r line; do
     # Also create copy and predicate
     echo "(defun copy-${snake_name} (x) (copy-alist x))" >> "$OUTFILE"
     echo "(defun ${snake_name}-p (x) (listp x))" >> "$OUTFILE"
+
+    # Short-name aliases: drop the "hydra_<ns>_" prefix.
+    # Hand-written runtime files (e.g., prims.lisp) reference structs
+    # by their unqualified short name (e.g., make-term_coder rather
+    # than make-hydra_graph_term_coder). Provide aliases for backward
+    # compatibility. If multiple structs would generate the same
+    # short name, the later definition wins; this matches the
+    # pre-#290 behavior when struct names were unprefixed in the
+    # kernel.
+    short_name=$(echo "$snake_name" | sed -E 's/^hydra_[a-z]+_//')
+    # Skip aliases when the short name collides with a Common Lisp
+    # built-in (make-symbol, make-string, etc.). These would trigger a
+    # SYMBOL-PACKAGE-LOCKED-ERROR. The hand-written runtime is
+    # responsible for using the prefixed name in those cases.
+    case "$short_name" in
+        symbol|string|list|array|package|sequence|hash_table|broadcast_stream|\
+        concatenated_stream|echo_stream|string_input_stream|string_output_stream|\
+        synonym_stream|two_way_stream|pathname|random_state|condition|instance|\
+        method|generic_function|standard_class|structure_class|built_in_class)
+            short_name="$snake_name" ;;
+    esac
+    if [ "$short_name" != "$snake_name" ]; then
+        echo "(setf (symbol-function 'make-${short_name}) #'make-${snake_name})" >> "$OUTFILE"
+        for f in $fields; do
+            echo "(setf (symbol-function '${short_name}-${f}) #'${snake_name}-${f})" >> "$OUTFILE"
+        done
+        echo "(setf (symbol-function 'copy-${short_name}) #'copy-${snake_name})" >> "$OUTFILE"
+        echo "(setf (symbol-function '${short_name}-p) #'${snake_name}-p)" >> "$OUTFILE"
+    fi
 done
 
 echo "" >> "$OUTFILE"

@@ -36,8 +36,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Namespace "hydra.reduction", ShowCore.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Namespace "hydra.reduction", ShowCore.ns] ++ kernelTypesNamespaces,
             moduleDescription = Just "Test cases for hydra.lib.maps primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]

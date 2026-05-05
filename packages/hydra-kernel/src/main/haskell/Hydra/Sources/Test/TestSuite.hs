@@ -67,6 +67,7 @@ import qualified Hydra.Sources.Test.Substitution as Substitution
 import qualified Hydra.Sources.Test.Unification as Unification
 import qualified Hydra.Sources.Test.Validate.All as ValidateAll
 import qualified Hydra.Sources.Test.Validate.Core as ValidateCore
+import qualified Hydra.Sources.Test.Validate.Packaging as ValidatePackaging
 import qualified Hydra.Sources.Test.Variables as Variables
 
 
@@ -77,8 +78,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = namespaces,
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = namespaces ++ kernelTypesNamespaces,
             moduleDescription = Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")}
   where
@@ -119,12 +119,11 @@ otherPairs = [
   (Generation.ns, Generation.allTests),
   (HoistingAll.ns, HoistingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
-  -- TODO #336: JsonParser temporarily excluded — polymorphic ParseResult type blocks code generation
-  -- (JsonParser.ns, JsonParser.allTests),
+  (JsonParser.ns, JsonParser.allTests),
   (JsonRoundtrip.ns, JsonRoundtrip.allTests),
   (JsonWriter.ns, JsonWriter.allTests),
   (JsonYaml.ns, JsonYaml.allTests),
-  -- TODO #336: (Ordering.ns, Ordering.allTests) temporarily removed - needs investigation
+  (Ordering.ns, Ordering.allTests),
   (Reduction.ns, Reduction.allTests),
   (Rewriting.ns, Rewriting.allTests),
   (Serialization.ns, Serialization.allTests),
@@ -150,10 +149,9 @@ testSuiteModules =
    -- Other tests
    Annotations.module_, Dependencies.module_, Differentiation.module_, EtaExpansion.module_, Formatting.module_,
    Generation.module_,
-   JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
+   JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_, JsonYaml.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
-   Strip.module_, Variables.module_,
-   -- TODO #336: Ordering.module_ temporarily removed - needs investigation
+   Strip.module_, Variables.module_, Ordering.module_,
    -- Checking tests (including sub-modules)
    CheckingAll.module_,
    CheckingAdvanced.module_, CheckingAlgebraicTypes.module_, CheckingCollections.module_,
@@ -165,4 +163,4 @@ testSuiteModules =
    -- Substitution and unification tests
    Substitution.module_, Unification.module_,
    -- Validation tests
-   ValidateAll.module_, ValidateCore.module_]
+   ValidateAll.module_, ValidateCore.module_, ValidatePackaging.module_]

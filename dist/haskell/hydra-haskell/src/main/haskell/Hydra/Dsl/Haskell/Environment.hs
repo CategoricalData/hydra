@@ -7,6 +7,7 @@ import qualified Hydra.Haskell.Environment as Environment
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+-- | DSL constructor for hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadata :: Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
 haskellModuleMetadata usesByteString usesInt usesMap usesSet =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -24,6 +25,7 @@ haskellModuleMetadata usesByteString usesInt usesMap usesSet =
         Core.Field {
           Core.fieldName = (Core.Name "usesSet"),
           Core.fieldTerm = (Phantoms.unTTerm usesSet)}]}))
+-- | DSL accessor for the usesByteString field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataUsesByteString :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool
 haskellModuleMetadataUsesByteString x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -31,6 +33,7 @@ haskellModuleMetadataUsesByteString x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionField = (Core.Name "usesByteString")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the usesInt field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataUsesInt :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool
 haskellModuleMetadataUsesInt x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -38,6 +41,7 @@ haskellModuleMetadataUsesInt x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionField = (Core.Name "usesInt")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the usesMap field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataUsesMap :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool
 haskellModuleMetadataUsesMap x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -45,6 +49,7 @@ haskellModuleMetadataUsesMap x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionField = (Core.Name "usesMap")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the usesSet field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataUsesSet :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool
 haskellModuleMetadataUsesSet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -52,6 +57,7 @@ haskellModuleMetadataUsesSet x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
         Core.projectionField = (Core.Name "usesSet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the usesByteString field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesByteString :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesByteString original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -81,6 +87,7 @@ haskellModuleMetadataWithUsesByteString original newVal =
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionField = (Core.Name "usesSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the usesInt field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesInt :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesInt original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -110,6 +117,7 @@ haskellModuleMetadataWithUsesInt original newVal =
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionField = (Core.Name "usesSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the usesMap field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesMap :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesMap original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -139,6 +147,7 @@ haskellModuleMetadataWithUsesMap original newVal =
               Core.projectionTypeName = (Core.Name "hydra.haskell.environment.HaskellModuleMetadata"),
               Core.projectionField = (Core.Name "usesSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the usesSet field of hydra.haskell.environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesSet :: Phantoms.TTerm Environment.HaskellModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.HaskellModuleMetadata
 haskellModuleMetadataWithUsesSet original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {

@@ -2,7 +2,7 @@ module Main where
 
 import Hydra.Generation (writeModulesJson)
 import Hydra.Sources.All (kernelModules)
-import Hydra.Sources.Eval.Lib.All (evalLibModules)
+import Hydra.Sources.Kernel.Lib.Defaults.All (defaultLibModules)
 import System.Environment (getArgs)
 import System.Exit (exitFailure)
 import Control.Exception (catch, SomeException)
@@ -11,10 +11,10 @@ import Control.Exception (catch, SomeException)
 main :: IO ()
 main = do
   outputDir <- parseOutputDir "../../dist/json/hydra-kernel/src/main/json"
-  let allMods = kernelModules ++ evalLibModules
+  let allMods = kernelModules ++ defaultLibModules
   putStrLn "=== Generate Hydra kernel JSON ==="
   putStrLn ""
-  putStrLn $ "Generating " ++ show (length allMods) ++ " kernel + eval lib modules to JSON..."
+  putStrLn $ "Generating " ++ show (length allMods) ++ " kernel + default lib modules to JSON..."
   putStrLn ""
 
   result <- catch (writeModulesJson True outputDir allMods allMods >> return True)

@@ -1,0 +1,35 @@
+{
+  "$defs": {
+    "Edge": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {"$ref": "#/$defs/v", "description": "The unique identifier of the edge"},
+        "in": {"$ref": "#/$defs/v", "description": "The id of the in-vertex (head) of the edge"},
+        "label": {"$ref": "#/$defs/EdgeLabel", "description": "The label of the edge"},
+        "out": {"$ref": "#/$defs/v", "description": "The id of the out-vertex (tail) of the edge"},
+        "properties": {"additionalProperties": {"$ref": "#/$defs/v"}, "description": "A key/value map of edge properties", "type": "object"}},
+      "required": ["label", "id", "out", "in", "properties"],
+      "title": "Edge",
+      "type": "object"},
+    "EdgeLabel": {"title": "EdgeLabel", "type": "string"},
+    "Graph": {
+      "additionalProperties": false,
+      "properties": {
+        "edges": {"additionalProperties": {"$ref": "#/$defs/Edge"}, "type": "object"},
+        "vertices": {"additionalProperties": {"$ref": "#/$defs/Vertex"}, "type": "object"}},
+      "required": ["vertices", "edges"],
+      "title": "Graph",
+      "type": "object"},
+    "PropertyKey": {"title": "PropertyKey", "type": "string"},
+    "Vertex": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {"$ref": "#/$defs/v", "description": "The unique identifier of the vertex"},
+        "label": {"$ref": "#/$defs/VertexLabel", "description": "The label of the vertex"},
+        "properties": {"additionalProperties": {"$ref": "#/$defs/v"}, "description": "A key/value map of vertex properties", "type": "object"}},
+      "required": ["label", "id", "properties"],
+      "title": "Vertex",
+      "type": "object"},
+    "VertexLabel": {"title": "VertexLabel", "type": "string"}},
+  "$ref": "#/$defs/Graph",
+  "$schema": "http://json-schema.org/2020-12/schema"}

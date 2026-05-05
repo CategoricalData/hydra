@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.shacl.language"),
             moduleDefinitions = [toDefinition shaclLanguage],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints for W3C SHACL"}
 shaclLanguage :: TTermDefinition Language
 shaclLanguage = define "shaclLanguage" $
@@ -125,8 +124,8 @@ shaclLanguage = define "shaclLanguage" $
     Variants.typeVariantUnion],
   "typePredicate">: constant true] $
   Coders.language
-    (Coders.languageName_ $ string "hydra.shacl")
-    (Coders.languageConstraints_
+    (Coders.languageName2 $ string "hydra.shacl")
+    (Coders.languageConstraints2
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

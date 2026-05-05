@@ -87,8 +87,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.javaScript.language"),
             moduleDefinitions = [toDefinition javaScriptLanguage, toDefinition javaScriptReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for JavaScript (ECMAScript 2024)"}
 javaScriptLanguage :: TTermDefinition Language
 javaScriptLanguage = define "javaScriptLanguage" $
@@ -160,8 +159,8 @@ javaScriptLanguage = define "javaScriptLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $ -- All types supported via runtime representation
     Coders.language
-      (Coders.languageName_ $ string "hydra.javaScript")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.javaScript")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")

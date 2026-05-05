@@ -139,6 +139,7 @@ unifyTypeConstraints cx schemaTypes constraints =
                     _ -> tryBinding v0 sright
                   _ -> dflt
       in (Maybes.maybe (Right Substitution.idTypeSubst) (\uc -> withConstraint (Pairs.first uc) (Pairs.second uc)) (Lists.uncons constraints))
+-- | Unify two lists of types pairwise, producing a single substitution that satisfies every pair. The lists must have the same length; the comment is attached to each generated constraint for diagnostics.
 unifyTypeLists :: t0 -> M.Map Core.Name t1 -> [Core.Type] -> [Core.Type] -> String -> Either Errors.UnificationError Typing.TypeSubst
 unifyTypeLists cx schemaTypes l r comment =
 
@@ -148,6 +149,7 @@ unifyTypeLists cx schemaTypes l r comment =
                 Typing.typeConstraintRight = r2,
                 Typing.typeConstraintComment = comment}
       in (unifyTypeConstraints cx schemaTypes (Lists.zipWith toConstraint l r))
+-- | Unify two types, producing a substitution that makes them equal (or an error). The comment is attached to the generated constraint for diagnostics.
 unifyTypes :: t0 -> M.Map Core.Name t1 -> Core.Type -> Core.Type -> String -> Either Errors.UnificationError Typing.TypeSubst
 unifyTypes cx schemaTypes l r comment =
     unifyTypeConstraints cx schemaTypes [

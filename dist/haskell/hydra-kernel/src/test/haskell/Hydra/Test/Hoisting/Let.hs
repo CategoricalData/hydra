@@ -1631,11 +1631,13 @@ allTests =
                                 Core.typeLambdaParameter = (Core.Name "t0"),
                                 Core.typeLambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
                                   Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                                    Core.typeApplicationTermBody = (Core.TermPair (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                                      Core.typeApplicationTermBody = (Core.TermList []),
-                                      Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}), (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
-                                      Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})))),
+                                    Core.typeApplicationTermBody = (Core.TermPair (
+                                      Core.TermTypeApplication (Core.TypeApplicationTerm {
+                                        Core.typeApplicationTermBody = (Core.TermList []),
+                                        Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}),
+                                      (Core.TermApplication (Core.Application {
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
+                                        Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})))),
                                     Core.typeApplicationTermType = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
                                   Core.typeApplicationTermType = (Core.TypeSet (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)))}))})),
                               Core.bindingTypeScheme = (Just (Core.TypeScheme {
@@ -1684,11 +1686,13 @@ allTests =
                           Core.lambdaDomain = (Just (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString))),
                           Core.lambdaBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
                             Core.typeApplicationTermBody = (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                              Core.typeApplicationTermBody = (Core.TermPair (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                                Core.typeApplicationTermBody = (Core.TermList []),
-                                Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}), (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})))),
+                              Core.typeApplicationTermBody = (Core.TermPair (
+                                Core.TermTypeApplication (Core.TypeApplicationTerm {
+                                  Core.typeApplicationTermBody = (Core.TermList []),
+                                  Core.typeApplicationTermType = (Core.TypeVariable (Core.Name "t0"))}),
+                                (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "singleton")),
+                                  Core.applicationArgument = (Core.TermVariable (Core.Name "b"))})))),
                               Core.typeApplicationTermType = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))})),
                             Core.typeApplicationTermType = (Core.TypeSet (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)))}))}))})),
                       Core.bindingTypeScheme = (Just (Core.TypeScheme {

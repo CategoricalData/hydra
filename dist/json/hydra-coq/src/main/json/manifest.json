@@ -1,6 +1,6 @@
 {
+  "defaultLibModules": [],
   "dslModules": [],
-  "evalLibModules": [],
   "mainModules": [
     "hydra.coq.coder",
     "hydra.coq.environment",

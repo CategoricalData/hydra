@@ -1,0 +1,34 @@
+{
+  "@description": "A graph; a self-contained collection of vertices and edges",
+  "fields": [
+    {
+      "name": "vertices",
+      "type": {
+        "type": "map",
+        "values": {
+          "@description": "A vertex",
+          "fields": [
+            {"name": "label", "type": "string"},
+            {"name": "id", "type": "string"},
+            {"name": "properties", "type": {"type": "map", "values": "string"}}],
+          "name": "Vertex",
+          "namespace": "hydra.pg.model",
+          "type": "record"}}},
+    {
+      "name": "edges",
+      "type": {
+        "type": "map",
+        "values": {
+          "@description": "An edge",
+          "fields": [
+            {"name": "label", "type": "string"},
+            {"name": "id", "type": "string"},
+            {"name": "out", "type": "string"},
+            {"name": "in", "type": "string"},
+            {"name": "properties", "type": {"type": "map", "values": "string"}}],
+          "name": "Edge",
+          "namespace": "hydra.pg.model",
+          "type": "record"}}}],
+  "name": "Graph",
+  "namespace": "hydra.pg.model",
+  "type": "record"}

@@ -1278,17 +1278,21 @@ allTests =
                 Testing.universalTestCaseActual = (ShowCore.term (Variables.unshadowVariables (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermPair (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "x"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}), (Core.TermVariable (Core.Name "x"))))})))),
+                  Core.lambdaBody = (Core.TermPair (
+                    Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x"))}),
+                    (Core.TermVariable (Core.Name "x"))))})))),
                 Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermPair (Core.TermLambda (Core.Lambda {
-                    Core.lambdaParameter = (Core.Name "x2"),
-                    Core.lambdaDomain = Nothing,
-                    Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}), (Core.TermVariable (Core.Name "x"))))})))})),
+                  Core.lambdaBody = (Core.TermPair (
+                    Core.TermLambda (Core.Lambda {
+                      Core.lambdaParameter = (Core.Name "x2"),
+                      Core.lambdaDomain = Nothing,
+                      Core.lambdaBody = (Core.TermVariable (Core.Name "x2"))}),
+                    (Core.TermVariable (Core.Name "x"))))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {

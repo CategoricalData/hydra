@@ -1,6 +1,6 @@
 {
+  "defaultLibModules": [],
   "dslModules": [],
-  "evalLibModules": [],
   "mainModules": [
     "hydra.atlas",
     "hydra.avro.coder",

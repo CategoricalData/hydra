@@ -96,8 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Serialization.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "AST operators for JavaScript with precedence and associativity"}
   where
     definitions = [

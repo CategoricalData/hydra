@@ -7,11 +7,11 @@ module Hydra.TestUtils (
 ) where
 
 import Hydra.Kernel
-import Hydra.Generation (showError)
+import Hydra.Generation (moduleAsBindings, showError)
 import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
-import qualified Hydra.EvalPrimitives as EvalPrims
+import qualified Hydra.DefaultsPrimitives as DefaultPrims
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
 import qualified Hydra.Sources.Kernel.Types.Context as TypeContext
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
@@ -57,7 +57,7 @@ testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (
   where
     -- Include only essential kernel term definitions for interpreter tests.
     -- The evaluator needs hydra.annotations (and its dependencies).
-    kernelTermBindings = L.concat $ fmap moduleBindings
+    kernelTermBindings = L.concat $ fmap moduleAsBindings
       [ TermAnnotations.module_
       , TermConstants.module_
       , TermDecodeCore.module_
@@ -79,7 +79,7 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGra
     -- CoderDirection (hydra.coders), Coder (hydra.util), and Type/Name/ForallType (hydra.core).
     (kernelElements ++ testElements)
   where
-    kernelElements = L.concat $ fmap moduleBindings
+    kernelElements = L.concat $ fmap moduleAsBindings
       [ TypeCoders.module_
       , TypeContext.module_
       , TypeCore.module_
@@ -127,7 +127,7 @@ eval term = case reduceTerm testContext testGraph True term of
 evalTestGraph :: Graph
 evalTestGraph = elementsToGraph evalCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
   where
-    kernelTermBindings = L.concat $ fmap moduleBindings
+    kernelTermBindings = L.concat $ fmap moduleAsBindings
       [ TermAnnotations.module_
       , TermConstants.module_
       , TermDecodeCore.module_
@@ -151,7 +151,7 @@ evalCoreGraph = hydraCoreGraph {
   graphPrimitives = M.union evalPrimMap (graphPrimitives hydraCoreGraph)}
   where
     evalPrimMap = M.fromList $ fmap (\p -> (primitiveName p, p))
-      (L.concat (libraryPrimitives <$> EvalPrims.evalLibraries))
+      (L.concat (libraryPrimitives <$> DefaultPrims.defaultLibraries))
 
 evalEval :: Term -> Either String Term
 evalEval term = case reduceTerm testContext evalTestGraph True term of

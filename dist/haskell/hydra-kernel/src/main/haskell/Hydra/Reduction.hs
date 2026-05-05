@@ -82,6 +82,7 @@ contractTerm term =
                       _ -> rec
                   _ -> rec
       in (Rewriting.rewriteTerm rewrite term)
+-- | Compile-time flag controlling whether primitive invocations are counted during evaluation. For demo and instrumentation purposes.
 countPrimitiveInvocations :: Bool
 countPrimitiveInvocations = True
 -- | Recursively transform terms to eliminate partial application, e.g. 'add 42' becomes '\x.add 42 x'. Uses the Graph to look up types for arity calculation. Bare primitives and variables are NOT expanded; eliminations and partial applications are. This version properly tracks the Graph through nested scopes.
@@ -240,9 +241,34 @@ etaExpandTerm tx0 term0 =
                         Core.recordTypeName = (Core.recordTypeName v0),
                         Core.recordFields = (Lists.map forField (Core.recordFields v0))}))
                       Core.TermSet v0 -> afterRecursion (Core.TermSet (Sets.fromList (Lists.map (\el -> recurse tx el) (Sets.toList v0))))
-                      Core.TermTypeApplication v0 -> afterRecursion (Core.TermTypeApplication (Core.TypeApplicationTerm {
-                        Core.typeApplicationTermBody = (recurse tx (Core.typeApplicationTermBody v0)),
-                        Core.typeApplicationTermType = (Core.typeApplicationTermType v0)}))
+                      Core.TermTypeApplication v0 ->
+                        let gatherTypeApps =
+                                \acc -> \trm -> case (Strip.deannotateTerm trm) of
+                                  Core.TermTypeApplication v1 -> gatherTypeApps (Lists.cons (Core.typeApplicationTermType v1) acc) (Core.typeApplicationTermBody v1)
+                                  _ -> (trm, acc)
+                            gathered = gatherTypeApps [
+                                  Core.typeApplicationTermType v0] (Core.typeApplicationTermBody v0)
+                            innermost = Pairs.first gathered
+                            tApps = Pairs.second gathered
+                        in case (Strip.deannotateTerm innermost) of
+                          Core.TermCases v1 ->
+                            let newCs =
+                                    Core.CaseStatement {
+                                      Core.caseStatementTypeName = (Core.caseStatementTypeName v1),
+                                      Core.caseStatementDefault = (Maybes.map (\t1 -> recurse tx t1) (Core.caseStatementDefault v1)),
+                                      Core.caseStatementCases = (Lists.map forCaseBranch (Core.caseStatementCases v1))}
+                                casesWithTypeApps =
+                                        Lists.foldl (\trm -> \t -> Core.TermTypeApplication (Core.TypeApplicationTerm {
+                                          Core.typeApplicationTermBody = trm,
+                                          Core.typeApplicationTermType = t})) (Core.TermCases newCs) tApps
+                                elimHeadTypeTyped =
+                                        Just (Core.TypeFunction (Core.FunctionType {
+                                          Core.functionTypeDomain = (Resolution.nominalApplication (Core.caseStatementTypeName v1) tApps),
+                                          Core.functionTypeCodomain = Core.TypeUnit}))
+                            in (expand True args 1 elimHeadTypeTyped casesWithTypeApps)
+                          _ -> afterRecursion (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                            Core.typeApplicationTermBody = (recurse tx (Core.typeApplicationTermBody v0)),
+                            Core.typeApplicationTermType = (Core.typeApplicationTermType v0)}))
                       Core.TermTypeLambda v0 ->
                         let tx1 = Scoping.extendGraphForTypeLambda tx v0
                             result =

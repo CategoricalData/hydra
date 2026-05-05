@@ -89,11 +89,11 @@ def _read_manifest_field_or_empty(pkg_dir, field_name):
 
 
 def _load_package_main(root, pkg):
-    """Load the mainModules + evalLibModules from a package's manifest."""
+    """Load the mainModules + defaultLibModules from a package's manifest."""
     pkg_dir = _package_main_dir(root, pkg)
     main_ns = _read_manifest_field_or_empty(pkg_dir, "mainModules")
-    eval_ns = _read_manifest_field_or_empty(pkg_dir, "evalLibModules")
-    all_ns = main_ns + eval_ns
+    default_ns = _read_manifest_field_or_empty(pkg_dir, "defaultLibModules")
+    all_ns = main_ns + default_ns
     if not all_ns:
         return []
     print(f"  {pkg}: {len(all_ns)} modules from {pkg_dir}", flush=True)
@@ -283,7 +283,7 @@ def main():
         if args.kernel_only:
             test_ext_deps = set()
             for m in test_mods:
-                for ns in m.term_dependencies:
+                for ns in m.dependencies:
                     if ns.value.startswith("hydra."):
                         test_ext_deps.add(ns.value)
             if test_ext_deps:

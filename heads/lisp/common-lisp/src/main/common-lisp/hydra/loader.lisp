@@ -383,7 +383,15 @@
 
 (defun hydra-load-gen-main ()
   "Load all generated main modules. Uses retry loop to handle forward references."
-  (let* ((base *hydra-gen-main-dir*)
+  ;; Resolve `..` segments in base via probe-file. Without this, SBCL's
+  ;; `directory` recursion through a path containing `../` enumerates
+  ;; only a partial subdir set, silently dropping files like
+  ;; show/util.lisp from the load order. The bug is filesystem-dependent
+  ;; and only surfaces under the run-tests harness (which sets cwd
+  ;; elsewhere) — calling hydra-load-gen-main standalone happens to work.
+  (let* ((dir-only (make-pathname :name nil :type nil
+                                  :defaults *hydra-gen-main-dir*))
+         (base (or (probe-file dir-only) dir-only))
          ;; Priority files: load these first for best dependency order
          (priority '("core.lisp" "error/core.lisp" "error/checking.lisp" "error/packaging.lisp"
                      "context.lisp" "graph.lisp"

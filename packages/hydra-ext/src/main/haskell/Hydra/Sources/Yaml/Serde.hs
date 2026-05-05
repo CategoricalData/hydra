@@ -35,8 +35,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [],
-            moduleTypeDependencies = (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"]),
+            moduleDependencies = (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"]),
             moduleDescription = Just "Native YAML serialization: YAML Node to String"}
   where
     definitions = [

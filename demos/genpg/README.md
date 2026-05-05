@@ -38,7 +38,7 @@ demos/
 │   │   └── sources/health/           # CSV input files (health example)
 │   └── output/                       # GraphSON output (shared by all modes)
 ├── src/main/                         # Cross-demo sources (shared with other demos)
-│   ├── haskell/Hydra/Demos/GenPG/    # Haskell sources for this demo
+│   ├── haskell/Hydra/Demos/Genpg/    # Haskell sources for this demo
 │   │   ├── Demo.hs                   # Haskell GraphSON driver
 │   │   ├── Rdf.hs                    # Haskell RDF/SHACL driver
 │   │   ├── Modules.hs                # Shared module definitions (sales/health)
@@ -168,7 +168,7 @@ with [pyshacl](https://github.com/RDFLib/pySHACL) if installed.
 
 Haskell (GHCi):
 ```haskell
-:l Hydra.Demos.GenPG.Rdf
+:l Hydra.Demos.Genpg.Rdf
 generateSalesRdf
 ```
 
@@ -302,7 +302,7 @@ stack ghci < ../../demos/genpg/bin/generate-python.ghci
 
 Or interactively in GHCI:
 ```haskell
-import Hydra.Demos.GenPG.GeneratePython
+import Hydra.Demos.Genpg.GeneratePython
 generatePythonModules
 ```
 
@@ -326,7 +326,7 @@ stack ghci --ghci-options='+RTS -K256M -A32M -RTS' < ../../demos/genpg/bin/gener
 
 Or interactively in GHCI:
 ```haskell
-import Hydra.Demos.GenPG.GenerateJava
+import Hydra.Demos.Genpg.GenerateJava
 generateJavaModules
 ```
 

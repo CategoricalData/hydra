@@ -66,8 +66,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleTermDependencies = [Annotations.ns, Constants.ns, Formatting.ns],
-            moduleTypeDependencies = kernelTypesNamespaces,
+            moduleDependencies = [Annotations.ns, Constants.ns, Formatting.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Functions for working with qualified names.")}
   where
    definitions = [
@@ -114,10 +113,10 @@ nameToFilePath = define "nameToFilePath" $
   "qualName" <~ qualifyName @@ var "name" $
   "ns" <~ Packaging.qualifiedNameNamespace (var "qualName") $
   "local" <~ Packaging.qualifiedNameLocal (var "qualName") $
-  "nsToFilePath" <~ ("ns" ~>
+  "nsToFilePath" <~ ("nsArg" ~>
     Strings.intercalate (string "/") (Lists.map
       ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
-      (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))) $
+      (Strings.splitOn (string ".") (Packaging.unNamespace (var "nsArg"))))) $
   "prefix" <~ Maybes.maybe (string "")
     ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
     (var "ns") $
@@ -189,10 +188,10 @@ freshName :: TTermDefinition (Context -> (Name, Context))
 freshName = define "freshName" $
   doc "Generate a fresh type variable name, threading Context" $
   "cx" ~>
-  "count" <~ Annotations.getCount @@ Constants.key_freshTypeVariableCount @@ var "cx" $
+  "count" <~ Annotations.getCount @@ Constants.keyFreshTypeVariableCount @@ var "cx" $
   pair
     (normalTypeVariable @@ var "count")
-    (Annotations.putCount @@ Constants.key_freshTypeVariableCount @@ Math.add (var "count") (int32 1) @@ var "cx")
+    (Annotations.putCount @@ Constants.keyFreshTypeVariableCount @@ Math.add (var "count") (int32 1) @@ var "cx")
 
 freshNames :: TTermDefinition (Int -> Context -> ([Name], Context))
 freshNames = define "freshNames" $

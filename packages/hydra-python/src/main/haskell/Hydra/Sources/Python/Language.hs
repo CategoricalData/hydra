@@ -85,8 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.python.language"),
             moduleDefinitions = [toDefinition pythonLanguage, toDefinition pythonReservedWords],
-            moduleTermDependencies = [Lexical.ns],
-            moduleTypeDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
             moduleDescription = Just "Language constraints and reserved words for Python 3"}
 pythonLanguage :: TTermDefinition Language
 pythonLanguage = define "pythonLanguage" $
@@ -156,8 +155,8 @@ pythonLanguage = define "pythonLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $ -- TODO: verify whether all are supported
     Coders.language
-      (Coders.languageName_ $ string "hydra.python")
-      (Coders.languageConstraints_
+      (Coders.languageName2 $ string "hydra.python")
+      (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")

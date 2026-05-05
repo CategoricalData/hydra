@@ -77,10 +77,16 @@ collectTypeVariablesFromType typ =
 -- | Transform a type binding into a decoder binding
 decodeBinding :: t0 -> Graph.Graph -> Core.Binding -> Either Errors.DecodingError Core.Binding
 decodeBinding cx graph b =
-    Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ -> Right (Core.Binding {
-      Core.bindingName = (decodeBindingName (Core.bindingName b)),
-      Core.bindingTerm = (decodeTypeNamed (Core.bindingName b) typ),
-      Core.bindingTypeScheme = (Just (decoderTypeSchemeNamed (Core.bindingName b) typ))}))
+    Eithers.bind (DecodeCore.type_ graph (Core.bindingTerm b)) (\typ ->
+      let rawBody = decodeTypeNamed (Core.bindingName b) typ
+          description =
+                  Strings.cat [
+                    "Decoder for ",
+                    (Core.unName (Core.bindingName b))]
+      in (Right (Core.Binding {
+        Core.bindingName = (decodeBindingName (Core.bindingName b)),
+        Core.bindingTerm = (Annotations.setTermDescription (Just description) rawBody),
+        Core.bindingTypeScheme = (Just (decoderTypeSchemeNamed (Core.bindingName b) typ))})))
 -- | Generate a binding name for a decoder function from a type name
 decodeBindingName :: Core.Name -> Core.Name
 decodeBindingName n =
@@ -1107,7 +1113,7 @@ decodeModule cx graph mod =
                     Annotations.normalizeTermAnnotations (Core.TermAnnotated (Core.AnnotatedTerm {
                       Core.annotatedTermBody = (EncodeCore.type_ typ),
                       Core.annotatedTermAnnotation = (Maps.fromList [
-                        (Constants.key_type, schemaTerm)])}))
+                        (Constants.keyType, schemaTerm)])}))
         in Core.Binding {
           Core.bindingName = name,
           Core.bindingTerm = dataTerm,
@@ -1116,21 +1122,18 @@ decodeModule cx graph mod =
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
-      let decodedTypeDeps = Lists.map decodeNamespace (Packaging.moduleTypeDependencies mod)
-          decodedTermDeps = Lists.map decodeNamespace (Packaging.moduleTermDependencies mod)
-          allDecodedDeps = Lists.nub (Lists.concat2 decodedTypeDeps decodedTermDeps)
+      let allDecodedDeps = Lists.nub (Lists.map decodeNamespace (Packaging.moduleDependencies mod))
       in (Right (Just (Packaging.Module {
         Packaging.moduleDescription = (Just (Strings.cat [
           "Term decoders for ",
           (Packaging.unNamespace (Packaging.moduleNamespace mod))])),
         Packaging.moduleNamespace = (decodeNamespace (Packaging.moduleNamespace mod)),
-        Packaging.moduleTermDependencies = (Lists.concat2 [
+        Packaging.moduleDependencies = (Lists.concat2 [
           Packaging.Namespace "hydra.extract.core",
           (Packaging.Namespace "hydra.lexical"),
-          (Packaging.Namespace "hydra.rewriting")] allDecodedDeps),
-        Packaging.moduleTypeDependencies = [
-          Packaging.moduleNamespace mod,
-          (Packaging.Namespace "hydra.util")],
+          (Packaging.Namespace "hydra.rewriting"),
+          (Packaging.moduleNamespace mod),
+          (Packaging.Namespace "hydra.util")] allDecodedDeps),
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
@@ -1319,27 +1322,29 @@ decodeUnionTypeNamed :: Core.Name -> [Core.FieldType] -> Core.Term
 decodeUnionTypeNamed ename rt =
 
       let toVariantPair =
-              \ft -> Core.TermPair (Core.TermWrap (Core.WrappedTerm {
-                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))}), (Core.TermLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "input"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
-                    Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                      Core.lambdaParameter = (Core.Name "t"),
-                      Core.lambdaDomain = Nothing,
-                      Core.lambdaBody = (Core.TermInject (Core.Injection {
-                        Core.injectionTypeName = ename,
-                        Core.injectionField = Core.Field {
-                          Core.fieldName = (Core.fieldTypeName ft),
-                          Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
-                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+              \ft -> Core.TermPair (
+                Core.TermWrap (Core.WrappedTerm {
+                  Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))}),
+                (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "input"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
-                      Core.applicationFunction = (decodeType (Core.fieldTypeType ft)),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-                    Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))
+                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
+                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "t"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermInject (Core.Injection {
+                          Core.injectionTypeName = ename,
+                          Core.injectionField = Core.Field {
+                            Core.fieldName = (Core.fieldTypeName ft),
+                            Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (decodeType (Core.fieldTypeType ft)),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))
       in (Core.TermLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "cx"),
         Core.lambdaDomain = Nothing,
