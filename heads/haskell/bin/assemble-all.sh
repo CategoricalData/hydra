@@ -33,18 +33,12 @@ fi
 
 BATCH_PACKAGES=$(batch_emit_packages)
 
-# Wipe per-package generated source dirs before regenerating, so that
-# stale modules left behind by deleted/renamed sources don't survive.
-# bootstrap-from-json writes only the modules currently in the
-# dist/json universe; without this wipe, an older generated file with
-# no upstream JSON source would persist, get hashed into the digest,
-# and silently become part of the build. See #357 for the generator-side
-# fix that would make this wipe redundant.
-echo "Wiping per-package generated source dirs..."
-for pkg in $BATCH_PACKAGES; do
-    rm -rf "$DIST_ROOT/$pkg/src/main/haskell" "$DIST_ROOT/$pkg/src/test/haskell"
-done
-
+# Stale-file warning: bootstrap-from-json writes only the modules
+# currently in the dist/json universe; if a previously-generated
+# module has been deleted or renamed at the source, the old
+# dist/<lang>/.../<Module>.<ext> stays on disk. The digest refresh
+# below will hash it and silently include it in the build. See #357
+# for the generator-side fix.
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 
