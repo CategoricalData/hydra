@@ -71,14 +71,6 @@ def build_type_scheme(vars: list[TypeVar_], typ: Type):
 
 # Basic numeric types
 
-def bigfloat() -> TermCoder[Decimal]:
-    return TermCoder(
-        type=types.bigfloat(),
-        encode=lambda cx, g, t: extract.bigfloat(g, t),
-        decode=lambda cx, v: Right(terms.bigfloat(float(v)))
-    )
-
-
 def bigint() -> TermCoder[int]:
     return TermCoder(
         type=types.bigint(),

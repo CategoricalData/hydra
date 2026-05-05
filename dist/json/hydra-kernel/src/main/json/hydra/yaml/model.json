@@ -61,7 +61,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
-                        "body": {"literal": {"float": {"bigfloat": {}}}}}}},
+                        "body": {"literal": {"float": {"float64": {}}}}}}},
                   {
                     "name": "int",
                     "type": {

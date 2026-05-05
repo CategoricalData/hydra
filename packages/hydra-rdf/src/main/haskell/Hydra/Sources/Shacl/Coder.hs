@@ -263,7 +263,6 @@ encodeLiteralType = define "encodeLiteralType" $
       _LiteralType_boolean>>: constant $ var "xsd" @@ string "boolean",
       _LiteralType_float>>: lambda "ft" $
         cases _FloatType (var "ft") Nothing [
-          _FloatType_bigfloat>>: constant $ var "xsd" @@ string "decimal",
           _FloatType_float32>>: constant $ var "xsd" @@ string "float",
           _FloatType_float64>>: constant $ var "xsd" @@ string "double"],
       _LiteralType_integer>>: lambda "it" $

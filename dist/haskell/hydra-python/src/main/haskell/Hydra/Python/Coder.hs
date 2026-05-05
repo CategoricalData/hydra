@@ -609,20 +609,18 @@ encodeFieldType cx env fieldType =
 encodeFloatValue :: Core.FloatValue -> Either t0 Syntax.Expression
 encodeFloatValue fv =
     case fv of
-      Core.FloatValueBigfloat v0 -> Right (Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "Decimal")) [
-        Utils.singleQuotedString (Literals.showBigfloat v0)])
       Core.FloatValueFloat32 v0 -> encodeFloatValue_encodeFloat32 v0
       Core.FloatValueFloat64 v0 -> encodeFloatValue_encodeFloat64 v0
 encodeFloatValue_encodeFloat32 :: Float -> Either t0 Syntax.Expression
 encodeFloatValue_encodeFloat32 v =
 
       let s = Literals.showFloat32 v
-      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float32ToBigfloat v))))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float32ToFloat64 v))))))))
 encodeFloatValue_encodeFloat64 :: Double -> Either t0 Syntax.Expression
 encodeFloatValue_encodeFloat64 v =
 
       let s = Literals.showFloat64 v
-      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Logic.ifElse (Equality.equal s "-0.0") (Right (encodeFloatValue_pySpecialFloat "-0.0")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat (Literals.float64ToBigfloat v)))))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (Right (encodeFloatValue_pySpecialFloat "nan")) (Logic.ifElse (Equality.equal s "Infinity") (Right (encodeFloatValue_pySpecialFloat "inf")) (Logic.ifElse (Equality.equal s "-Infinity") (Right (encodeFloatValue_pySpecialFloat "-inf")) (Logic.ifElse (Equality.equal s "-0.0") (Right (encodeFloatValue_pySpecialFloat "-0.0")) (Right (Utils.pyAtomToPyExpression (Syntax.AtomNumber (Syntax.NumberFloat v))))))))
 encodeFloatValue_pySpecialFloat :: String -> Syntax.Expression
 encodeFloatValue_pySpecialFloat value =
     Utils.functionCall (Utils.pyNameToPyPrimary (Syntax.Name "float")) [
@@ -744,7 +742,6 @@ encodeLiteralType lt =
                 Core.LiteralTypeBoolean -> "bool"
                 Core.LiteralTypeDecimal -> "Decimal"
                 Core.LiteralTypeFloat v0 -> case v0 of
-                  Core.FloatTypeBigfloat -> "Decimal"
                   Core.FloatTypeFloat32 -> "float"
                   Core.FloatTypeFloat64 -> "float"
                 Core.LiteralTypeInteger _ -> "int"
@@ -1418,9 +1415,6 @@ extendMetaForTerm topLevel meta0 term =
                     in forBinding) meta bindings)
                 Core.TermLiteral v0 -> case v0 of
                   Core.LiteralDecimal _ -> setMetaUsesDecimal meta True
-                  Core.LiteralFloat v1 -> case v1 of
-                    Core.FloatValueBigfloat _ -> setMetaUsesDecimal meta True
-                    _ -> meta
                   _ -> meta
                 Core.TermMap _ -> setMetaUsesFrozenDict meta True
                 Core.TermMaybe v0 -> Maybes.maybe (setMetaUsesNothing meta True) (\_ -> setMetaUsesJust meta True) v0
@@ -1448,9 +1442,6 @@ extendMetaForType topLevel isTermAnnot typ meta =
         Core.TypeEither _ -> setMetaUsesEither metaWithSubtypes True
         Core.TypeLiteral v0 -> case v0 of
           Core.LiteralTypeDecimal -> setMetaUsesDecimal metaWithSubtypes True
-          Core.LiteralTypeFloat v1 -> case v1 of
-            Core.FloatTypeBigfloat -> setMetaUsesDecimal metaWithSubtypes True
-            _ -> metaWithSubtypes
           _ -> metaWithSubtypes
         Core.TypeUnion v0 -> Logic.ifElse (Predicates.isEnumRowType v0) (setMetaUsesEnum metaWithSubtypes True) (Logic.ifElse (Logic.not (Lists.null v0)) (setMetaUsesNode metaWithSubtypes True) metaWithSubtypes)
         Core.TypeForall v0 ->

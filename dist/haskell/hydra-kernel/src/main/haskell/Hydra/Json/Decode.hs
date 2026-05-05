@@ -22,12 +22,6 @@ import qualified Data.Map as M
 decodeFloat :: Core.FloatType -> Model.Value -> Either String Core.Term
 decodeFloat ft value =
     case ft of
-      Core.FloatTypeBigfloat -> case value of
-        Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (Literals.float64ToBigfloat (Literals.decimalToFloat64 v1)))))
-        Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [
-          "invalid bigfloat sentinel: ",
-          v1])) (\v -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat (Literals.float64ToBigfloat v))))) (parseSpecialFloat v1)
-        _ -> Left "expected number or special float string for bigfloat"
       Core.FloatTypeFloat32 -> case value of
         Model.ValueNumber v1 -> Right (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 (Literals.decimalToFloat32 v1))))
         Model.ValueString v1 -> Maybes.maybe (Left (Strings.cat [

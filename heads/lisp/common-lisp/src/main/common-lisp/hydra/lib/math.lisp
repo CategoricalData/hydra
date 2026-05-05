@@ -338,6 +338,3 @@
                         (rounded (float (/ (round (* fx factor)) factor) 1.0d0)))
                    ;; Snap to float32 precision by round-tripping through single-float
                    (float (float rounded 1.0f0) 1.0d0))))))))
-
-;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
-(defvar hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)

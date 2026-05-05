@@ -1228,12 +1228,6 @@ lossyIntegerFloatSpec = H.describe "Lossy integer and float type mapping" $ do
           Avro.SchemaPrimitive Avro.PrimitiveLong -> return ()
           other -> H.expectationFailure $ "expected long, got: " ++ show other
 
-  H.it "bigfloat -> double (lossy)" $ do
-    let hydraType = Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeBigfloat)
-    case Encoder.hydraAvroAdapter emptyContext M.empty hydraType of
-      Left e -> H.expectationFailure $ "adapter failed: " ++ show e
-      Right adapter -> Util.adapterIsLossy adapter `H.shouldBe` True
-
   H.it "float32 -> float (not lossy)" $ do
     case Encoder.hydraAvroAdapter emptyContext M.empty Types.float32 of
       Left e -> H.expectationFailure $ "adapter failed: " ++ show e

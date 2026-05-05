@@ -125,13 +125,13 @@ literalYamlCoder = define "literalYamlCoder" $
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected decimal, found scalar"])) (var "cx")) [
       YM._Scalar_decimal>>: "d" ~> right (Core.literalDecimal $ var "d"),
-      YM._Scalar_float>>: "f" ~> right (Core.literalDecimal $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "f"),
+      YM._Scalar_float>>: "f" ~> right (Core.literalDecimal $ Literals.float64ToDecimal $ var "f"),
       YM._Scalar_int>>: "i" ~> right (Core.literalDecimal $ Literals.bigintToDecimal $ var "i")]) $
   "decodeFloat" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected float, found scalar"])) (var "cx")) [
-      YM._Scalar_decimal>>: "d" ~> right (Core.literalFloat $ Core.floatValueBigfloat $ Literals.float64ToBigfloat $ Literals.decimalToFloat64 $ var "d"),
-      YM._Scalar_float>>: "f" ~> right (Core.literalFloat $ Core.floatValueBigfloat $ var "f")]) $
+      YM._Scalar_decimal>>: "d" ~> right (Core.literalFloat $ Core.floatValueFloat64 $ Literals.decimalToFloat64 $ var "d"),
+      YM._Scalar_float>>: "f" ~> right (Core.literalFloat $ Core.floatValueFloat64 $ var "f")]) $
   "decodeInteger" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected integer, found scalar"])) (var "cx")) [
@@ -154,10 +154,12 @@ literalYamlCoder = define "literalYamlCoder" $
     _LiteralType_float>>: constant $ Coders.coder
       ("cx" ~> "lit" ~>
         "f" <<~ ExtractCore.floatLiteral @@ var "lit" $
-        "bf" <<~ ExtractCore.bigfloatValue @@ var "f" $
-        "shown" <~ (Literals.showBigfloat $ var "bf") $
+        "bf" <~ (cases _FloatValue (var "f") Nothing [
+          _FloatValue_float32>>: "v" ~> Literals.float32ToFloat64 (var "v"),
+          _FloatValue_float64>>: "v" ~> var "v"]) $
+        "shown" <~ (Literals.showFloat64 $ var "bf") $
         Logic.ifElse (requiresYamlStringSentinel @@ var "shown")
-          (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "YAML cannot represent bigfloat value: ", var "shown"])) (var "cx"))
+          (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "YAML cannot represent float value: ", var "shown"])) (var "cx"))
           (right (Yaml.scalarFloat $ var "bf")))
       (var "decodeFloat"),
     _LiteralType_integer>>: constant $ Coders.coder

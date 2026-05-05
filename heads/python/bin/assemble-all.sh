@@ -3,6 +3,10 @@
 # package in a single bootstrap-from-json invocation. Much faster than
 # calling assemble-distribution.sh once per package because the JSON
 # universe is loaded only once.
+#
+# The per-package post-processing applied below MUST stay in sync with
+# heads/python/bin/assemble-distribution.sh Step 3, since both scripts
+# are entry points for sync.sh (per-package) and sync-packages.sh (batch).
 set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -53,11 +57,11 @@ stack exec bootstrap-from-json -- \
 
 cd "$HYDRA_ROOT_DIR"
 
-# Per-package post-processing for hydra-kernel: copy test_env.py.
-# (test_graph.py post-generation patch eliminated: the DSL now emits
-# test_graph = lambda: test_env.test_graph(test_types()) directly, via
-# the FQN stubs in Hydra.Sources.Test.TestEnv. See task #25 in the
-# feature_290_packaging plan.)
+# Per-package post-processing for hydra-kernel: copy test_env.py and
+# the hand-written Python runtime. Must mirror
+# heads/python/bin/assemble-distribution.sh Step 3 — both entrypoints
+# (sync.sh per-package and sync-packages.sh batch) must produce the
+# same dist tree.
 TEST_ENV_SRC="$HEAD_DIR/src/test/python/hydra/test/test_env.py"
 TEST_ENV_DST="$DIST_ROOT/hydra-kernel/src/test/python/hydra/test/test_env.py"
 if [ -f "$TEST_ENV_SRC" ]; then
@@ -66,6 +70,12 @@ if [ -f "$TEST_ENV_SRC" ]; then
     mkdir -p "$(dirname "$TEST_ENV_DST")"
     cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
 fi
+
+# Copy hand-written Python runtime so the published kernel wheel is
+# self-contained.
+echo ""
+echo "Step 3b: Copying hand-written Python runtime into hydra-kernel dist..."
+"$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
 
 # Refresh per-source-set digests for fresh-check cache.
 for pkg_dir in "$DIST_ROOT"/*/; do

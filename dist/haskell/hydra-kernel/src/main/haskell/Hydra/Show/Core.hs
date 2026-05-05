@@ -90,14 +90,12 @@ fields flds =
 float :: Core.FloatValue -> String
 float fv =
     case fv of
-      Core.FloatValueBigfloat v0 -> Strings.cat2 (Literals.showBigfloat v0) ":bigfloat"
       Core.FloatValueFloat32 v0 -> Strings.cat2 (Literals.showFloat32 v0) ":float32"
       Core.FloatValueFloat64 v0 -> Strings.cat2 (Literals.showFloat64 v0) ":float64"
 -- | Show a float type as a string
 floatType :: Core.FloatType -> String
 floatType ft =
     case ft of
-      Core.FloatTypeBigfloat -> "bigfloat"
       Core.FloatTypeFloat32 -> "float32"
       Core.FloatTypeFloat64 -> "float64"
 -- | Show an injection as a string

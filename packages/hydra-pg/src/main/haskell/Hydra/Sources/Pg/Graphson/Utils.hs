@@ -143,9 +143,6 @@ encodeTermValue = define "encodeTermValue" $
             right $ inject G._Value G._Value_boolean (var "b"),
           _Literal_float>>: "fv" ~>
             match _FloatValue (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
-              _FloatValue_bigfloat>>: "f" ~>
-                right $ inject G._Value G._Value_bigDecimal
-                  (wrap G._BigDecimalValue $ Literals.showBigfloat $ var "f"),
               _FloatValue_float32>>: "f" ~>
                 right $ inject G._Value G._Value_float
                   (inject G._FloatValue G._FloatValue_finite (var "f")),

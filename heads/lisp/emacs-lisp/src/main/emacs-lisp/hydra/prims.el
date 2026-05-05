@@ -84,11 +84,6 @@
 ;; TermCoder constructors — each carries its actual Hydra type
 ;; ============================================================================
 
-(defun tc-bigfloat ()
-  (make-hydra_graph_term_coder (list :literal (list :float (list :bigfloat nil)))
-    (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_bigfloat g) t_))))
-    (lambda (cx) (ignore cx) (lambda (v) (list :right (list :literal (list :float (list :bigfloat (float v)))))))))
-
 (defun tc-bigint ()
   (make-hydra_graph_term_coder (list :literal (list :integer (list :bigint nil)))
     (lambda (cx) (lambda (g) (lambda (t_) (funcall (funcall hydra_extract_core_bigint g) t_))))

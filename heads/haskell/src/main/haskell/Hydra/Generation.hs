@@ -67,7 +67,27 @@ generateSources
   -> [Module]  -- ^ Universe
   -> [Module]  -- ^ Modules to generate
   -> IO Int  -- ^ Number of files written
-generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
+generateSources = generateSourcesWithTransform id
+
+-- | Like 'generateSources' but applies a 'String -> String' transform to
+-- each generated file's content before writing. The transform is part of
+-- the generation pipeline (not a post-pass that reads back from disk),
+-- which is the appropriate place for whole-file textual passes such as
+-- the Scala line-wrap that 'writeScala' uses to keep individual lines
+-- within scalac's stack-friendly threshold.
+generateSourcesWithTransform
+  :: (String -> String)  -- ^ Per-file content transform (id for no-op)
+  -> (Module -> [Definition] -> Context.Context -> Graph -> Either Error.Error (M.Map FilePath String))
+  -> Language
+  -> Bool
+  -> Bool
+  -> Bool
+  -> Bool
+  -> FilePath
+  -> [Module]
+  -> [Module]
+  -> IO Int
+generateSourcesWithTransform transform printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
     let cx = Context.Context [] [] M.empty
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
       Left err -> fail $ "Failed to generate source files: " ++ showError err
@@ -75,7 +95,7 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
         mapM_ writePair files
         return $ length files
   where
-    writePair (path, s) = do
+    writePair (path, raw) = do
         let fullPath = FP.combine basePath path
         SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
         -- Skip writes when content is byte-identical. Rewriting the file with
@@ -95,6 +115,7 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
                   else return False
         CM.unless skip $ writeFile fullPath withNewline
       where
+        s = transform raw
         -- Trailing whitespace is the coder's responsibility. The Hydra
         -- serialization layer in `hydra.serialization` and per-coder
         -- writers (e.g. the Haskell `toHaskellComments` formatter)
@@ -399,16 +420,30 @@ refreshPerPackageDigests distJsonRoot _universeMods targetMods = do
       putStrLn $ "  Per-package digest: " ++ dpath
         ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
--- | Ensure per-package digest files exist on disk. Called on cache
--- hit so that Stage 3+ tooling has digests to read even when no
--- regen ran. Compared to refreshPerPackageDigests, this is a no-op
--- if every per-package digest already exists; cheap to call.
+-- | Ensure per-package digest files exist on disk AND match current DSL source
+-- content. Called on cache hit so that Stage 3+ tooling has correct digests to
+-- read even when no full regen ran.
+--
+-- For each package, compute the current input hash from packages/<pkg>/.../*.hs
+-- and compare against the on-disk per-package digest. Rewrite if missing or
+-- stale. Without this, a universe-wide cache hit on top of an out-of-date
+-- per-package digest leaves Phase 3 to silently believe its inputs haven't
+-- changed when in fact they have — causing per-target dist regeneration to be
+-- skipped.
 ensurePerPackageDigests :: FilePath -> [Module] -> IO ()
 ensurePerPackageDigests distJsonRoot mods = do
+  nsFiles <- Digest.discoverNamespaceFiles
   let groups = groupByPackage mods
-      paths  = [ perPackageDigestPath distJsonRoot pkg | (pkg, _) <- groups ]
-  allExist <- fmap and (mapM SD.doesFileExist paths)
-  CM.unless allExist $ refreshPerPackageDigests distJsonRoot [] mods
+  CM.forM_ groups $ \(pkg, pkgMods) -> do
+    pkgDigest <- Digest.hashUniverse nsFiles pkgMods
+    CM.when (not (M.null pkgDigest)) $ do
+      let dpath = perPackageDigestPath distJsonRoot pkg
+      exists <- SD.doesFileExist dpath
+      stored <- if exists then Digest.readDigest dpath else return M.empty
+      CM.when (stored /= pkgDigest) $ do
+        Digest.writeDigest dpath pkgDigest
+        putStrLn $ "  Per-package digest refreshed: " ++ dpath
+          ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
 -- | Try the incremental inference path: partition universeMods into
 --   * cleanMods — DSL hash matches recorded digest AND existing JSON

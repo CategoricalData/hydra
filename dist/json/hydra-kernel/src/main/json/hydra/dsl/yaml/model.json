@@ -327,7 +327,7 @@
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
-                        "body": {"literal": {"float": {"bigfloat": {}}}}}},
+                        "body": {"literal": {"float": {"float64": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -339,7 +339,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Represents an approximation to real numbers"}}}],
-                      "body": {"literal": {"float": {"bigfloat": {}}}}}},
+                      "body": {"literal": {"float": {"float64": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {

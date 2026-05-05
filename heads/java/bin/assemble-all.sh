@@ -7,9 +7,8 @@
 # Usage:
 #   assemble-all.sh [--dist-root <dir>]
 #
-# Produces <dist-root>/<pkg>/ for every package in one shot. Applies the
-# same per-package post-processing sed patches as
-# assemble-distribution.sh (TestGraph, Lisp Coder).
+# Produces <dist-root>/<pkg>/ for every package in one shot. Per-package
+# post-processing matches assemble-distribution.sh.
 
 set -euo pipefail
 
@@ -64,15 +63,10 @@ stack exec bootstrap-from-json -- \
 
 cd "$HYDRA_ROOT_DIR"
 
-# Per-package post-processing: hydra-lisp Coder.
-# (TestGraph.java post-generation patch has been eliminated: the DSL now
-# emits TestEnv refs directly. See task #25 in feature_290_packaging plan.)
-LISPCODER="$DIST_ROOT/hydra-lisp/src/main/java/hydra/lisp/Coder.java"
-if [ -f "$LISPCODER" ]; then
-    echo "Step 3b: Patching hydra-lisp Coder.java (PartialVisitor type inference)..."
-    sed_inplace 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"
-    sed_inplace 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> visit/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> visit/' "$LISPCODER"
-fi
+# (TestGraph.java post-generation patch eliminated: the DSL emits TestEnv
+# refs directly. hydra-lisp Coder.java PartialVisitor type-inference
+# patch eliminated: the Java coder now emits Either<T2, ...> generics
+# directly; the sed pattern matched no occurrences in regenerated output.)
 
 # Refresh per-source-set digests for fresh-check cache. Each package
 # gets up to two digests: src/main/digest.json (always) and

@@ -42,14 +42,12 @@ instance QC.Arbitrary Literal
 instance QC.Arbitrary FloatType
   where
     arbitrary = QC.oneof $ pure <$> [
-      FloatTypeBigfloat,
       FloatTypeFloat32,
       FloatTypeFloat64]
 
 instance QC.Arbitrary FloatValue
   where
     arbitrary = QC.oneof [
-      FloatValueBigfloat <$> QC.arbitrary,
       FloatValueFloat32 <$> QC.arbitrary,
       FloatValueFloat64 <$> QC.arbitrary]
 
@@ -116,7 +114,6 @@ arbitraryFieldType n = FieldType <$> QC.arbitrary <*> arbitraryType n
 
 arbitraryFloatValue :: FloatType -> QC.Gen FloatValue
 arbitraryFloatValue ft = case ft of
-  FloatTypeBigfloat -> FloatValueBigfloat <$> QC.arbitrary
   FloatTypeFloat32 -> FloatValueFloat32 <$> QC.arbitrary
   FloatTypeFloat64 -> FloatValueFloat64 <$> QC.arbitrary
 

@@ -54,13 +54,10 @@ stack exec bootstrap-from-json -- \
 
 cd "$HYDRA_ROOT_DIR"
 
-# Per-package post-processing: hydra-kernel testGraph.scala patch.
-TESTGRAPH="$DIST_ROOT/hydra-kernel/src/test/scala/hydra/test/testGraph.scala"
-if [ -f "$TESTGRAPH" ]; then
-    echo ""
-    echo "Step 3: Patching hydra-kernel testGraph.scala..."
-    sed_inplace 's/hydra\.lexical\.emptyGraph/hydra.TestSuiteRunner.buildTestGraph()/g' "$TESTGRAPH"
-fi
+# (testGraph.scala emptyGraph-to-buildTestGraph patch eliminated: the
+# DSL emits hydra.test.testEnv.testGraph(testTypes) directly, and the
+# hand-written heads/scala testEnv.scala resolves the call to
+# TestSuiteRunner.buildTestGraph. Mirrors heads/scala/bin/assemble-distribution.sh.)
 
 # Refresh per-source-set digests for fresh-check cache.
 for pkg_dir in "$DIST_ROOT"/*/; do

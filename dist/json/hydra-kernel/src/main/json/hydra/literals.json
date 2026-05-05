@@ -2,67 +2,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.literals.bigfloatToFloatValue",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a bigfloat to a floating-point value of a given type (note: lossy)"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "lambda": {
-                    "body": {
-                      "application": {
-                        "argument": {"variable": "ft"},
-                        "function": {
-                          "cases": {
-                            "cases": [
-                              {
-                                "name": "bigfloat",
-                                "term": {
-                                  "lambda": {
-                                    "body": {"inject": {"field": {"name": "bigfloat", "term": {"variable": "bf"}}, "typeName": "hydra.core.FloatValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}}},
-                              {
-                                "name": "float32",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "float32",
-                                          "term": {"application": {"argument": {"variable": "bf"}, "function": {"variable": "hydra.lib.literals.bigfloatToFloat32"}}}},
-                                        "typeName": "hydra.core.FloatValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}}},
-                              {
-                                "name": "float64",
-                                "term": {
-                                  "lambda": {
-                                    "body": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "float64",
-                                          "term": {"application": {"argument": {"variable": "bf"}, "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}}},
-                                        "typeName": "hydra.core.FloatValue"}},
-                                    "domain": {"unit": {}},
-                                    "parameter": "_"}}}],
-                            "typeName": "hydra.core.FloatType"}}}},
-                    "domain": {"literal": {"float": {"bigfloat": {}}}},
-                    "parameter": "bf"}},
-                "domain": {"variable": "hydra.core.FloatType"},
-                "parameter": "ft"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.FloatValue"}, "domain": {"literal": {"float": {"bigfloat": {}}}}}},
-              "domain": {"variable": "hydra.core.FloatType"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.literals.bigintToIntegerValue",
         "term": {
           "annotated": {
@@ -193,39 +132,6 @@
             "function": {
               "codomain": {"function": {"codomain": {"variable": "hydra.core.IntegerValue"}, "domain": {"literal": {"integer": {"bigint": {}}}}}},
               "domain": {"variable": "hydra.core.IntegerType"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.literals.floatValueToBigfloat",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Convert a floating-point value of any precision to a bigfloat"}}}],
-            "body": {
-              "cases": {
-                "cases": [
-                  {
-                    "name": "bigfloat",
-                    "term": {"lambda": {"body": {"variable": "bf"}, "domain": {"literal": {"float": {"bigfloat": {}}}}, "parameter": "bf"}}},
-                  {
-                    "name": "float32",
-                    "term": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "f32"}, "function": {"variable": "hydra.lib.literals.float32ToBigfloat"}}},
-                        "domain": {"literal": {"float": {"float32": {}}}},
-                        "parameter": "f32"}}},
-                  {
-                    "name": "float64",
-                    "term": {
-                      "lambda": {
-                        "body": {"application": {"argument": {"variable": "f64"}, "function": {"variable": "hydra.lib.literals.float64ToBigfloat"}}},
-                        "domain": {"literal": {"float": {"float64": {}}}},
-                        "parameter": "f64"}}}],
-                "typeName": "hydra.core.FloatValue"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"literal": {"float": {"bigfloat": {}}}}, "domain": {"variable": "hydra.core.FloatValue"}}},
           "variables": []}}},
     {
       "term": {

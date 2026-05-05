@@ -59,13 +59,10 @@ encodeLiteral lit =
       Core.LiteralString v0 -> Syntax.ExpressionLiteral (Syntax.LiteralString v0)
       Core.LiteralFloat v0 -> case v0 of
         Core.FloatValueFloat32 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
-          Syntax.floatLiteralValue = (Literals.bigfloatToFloat64 (Literals.float32ToBigfloat v1)),
+          Syntax.floatLiteralValue = (Literals.float32ToFloat64 v1),
           Syntax.floatLiteralSuffix = (Just "f32")}))
         Core.FloatValueFloat64 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
           Syntax.floatLiteralValue = v1,
-          Syntax.floatLiteralSuffix = Nothing}))
-        Core.FloatValueBigfloat v1 -> Syntax.ExpressionLiteral (Syntax.LiteralFloat (Syntax.FloatLiteral {
-          Syntax.floatLiteralValue = (Literals.bigfloatToFloat64 v1),
           Syntax.floatLiteralSuffix = Nothing}))
       Core.LiteralInteger v0 -> case v0 of
         Core.IntegerValueInt8 v1 -> Syntax.ExpressionLiteral (Syntax.LiteralInteger (Syntax.IntegerLiteral {
@@ -101,7 +98,6 @@ encodeLiteralType lt =
       Core.LiteralTypeBinary -> rustApply1 "Vec" (rustPath "u8")
       Core.LiteralTypeBoolean -> rustPath "bool"
       Core.LiteralTypeFloat v0 -> case v0 of
-        Core.FloatTypeBigfloat -> rustPath "f64"
         Core.FloatTypeFloat32 -> rustPath "f32"
         Core.FloatTypeFloat64 -> rustPath "f64"
       Core.LiteralTypeInteger v0 -> case v0 of

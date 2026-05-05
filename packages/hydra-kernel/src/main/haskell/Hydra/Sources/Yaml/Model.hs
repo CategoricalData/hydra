@@ -67,12 +67,11 @@ scalar = define "Scalar" $
       T.decimal,
     -- Represents an approximation to real numbers
     -- JSON schema: tag:yaml.org,2002:float
-    -- In addition to arbitrary-precision floating-point numbers in scientific notation,
     -- YAML allows for three special values, which are not supported here:
-    -- positive and negative infinity (.inf and -.inf), and "not a number (.nan)
+    -- positive and negative infinity (.inf and -.inf), and "not a number" (.nan)
     "float">:
       doc "Represents an approximation to real numbers"
-      T.bigfloat,
+      T.float64,
     -- Represents arbitrary sized finite mathematical integers
     -- JSON schema: tag:yaml.org,2002:int
     "int">:
