@@ -38,7 +38,8 @@ BATCH_PACKAGES=$(batch_emit_packages)
 # bootstrap-from-json writes only the modules currently in the
 # dist/json universe; without this wipe, an older generated file with
 # no upstream JSON source would persist, get hashed into the digest,
-# and silently become part of the build.
+# and silently become part of the build. See #357 for the generator-side
+# fix that would make this wipe redundant.
 echo "Wiping per-package generated source dirs..."
 for pkg in $BATCH_PACKAGES; do
     rm -rf "$DIST_ROOT/$pkg/src/main/scala" "$DIST_ROOT/$pkg/src/test/scala"
