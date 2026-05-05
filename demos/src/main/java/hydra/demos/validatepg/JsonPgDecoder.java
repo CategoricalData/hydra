@@ -128,7 +128,6 @@ class JsonPgDecoder {
 
     private static FloatType decodeFloatType(Value json) {
         Map<String, Value> obj = expectObject(json);
-        if (obj.get("bigfloat") != null) return new FloatType.Bigfloat();
         if (obj.get("float32") != null) return new FloatType.Float32();
         if (obj.get("float64") != null) return new FloatType.Float64();
         throw new RuntimeException("Unknown float type: " + obj);
@@ -160,7 +159,6 @@ class JsonPgDecoder {
 
     private static FloatValue decodeFloatValue(Value json) {
         Map<String, Value> obj = expectObject(json);
-        if (obj.get("bigfloat") != null) return new FloatValue.Bigfloat(expectNumber(obj.get("bigfloat")));
         if (obj.get("float32") != null) return new FloatValue.Float32(expectNumber(obj.get("float32")).floatValue());
         if (obj.get("float64") != null) return new FloatValue.Float64(expectNumber(obj.get("float64")).doubleValue());
         throw new RuntimeException("Unknown float value: " + obj);
