@@ -180,12 +180,11 @@ adaptDataGraph = define "adaptDataGraph" $
   "els1Raw" <~ Lists.concat (Lists.map Environment.termAsBindings (var "adaptedTerms")) $
 
   -- Adapt nested let binding TypeSchemes within each top-level binding's term.
-  -- These TypeSchemes may carry stale types from JSON modules (e.g. bigfloat→float64).
   -- Applied per-binding AFTER termAsBindings so that top-level binding TypeSchemes
   -- (which carry type-class constraints like Ord) are preserved.
   -- Process each binding: adapt nested let TypeSchemes AND adapt top-level TypeSchemes.
-  -- Adapting (rather than stripping) TypeSchemes converts stale types like bigfloat→float64
-  -- while preserving type-class constraints like Ord needed by decodeSet.
+  -- Adapting (rather than stripping) TypeSchemes preserves type-class constraints
+  -- like Ord needed by decodeSet.
   "processBinding" <~ ("el" ~>
     "newTerm" <<~ Rewriting.rewriteTermM @@ (adaptNestedTypes @@ var "constraints" @@ var "litmap") @@ (Core.bindingTerm $ var "el") $
     "adaptedType" <<~ optCases (Core.bindingTypeScheme $ var "el")
@@ -219,10 +218,8 @@ adaptFloatType = define "adaptFloatType" $
   "alt" <~ (adaptFloatType @@ var "constraints") $
   "forUnsupported" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
---    _FloatType_bigfloat>>: constant nothing,
-    _FloatType_bigfloat>>: constant $ var "alt" @@ Core.floatTypeFloat64, -- TODO: temporary; the only non-lossy alternative for bigfloat is string, but some migration is needed
     _FloatType_float32>>: constant $ var "alt" @@ Core.floatTypeFloat64,
-    _FloatType_float64>>: constant $ var "alt" @@ Core.floatTypeBigfloat]) $
+    _FloatType_float64>>: constant $ var "alt" @@ Core.floatTypeFloat32]) $
   Logic.ifElse (var "supported")
     (just $ var "ft")
     (var "forUnsupported" @@ var "ft")
@@ -305,8 +302,16 @@ adaptLiteral = define "adaptLiteral" $
       _LiteralType_string>>: constant $ Core.literalString $ Literals.showDecimal (var "d")],
     _Literal_float>>: "f" ~> cases _LiteralType (var "lt")
       Nothing [
-      _LiteralType_float>>: "ft" ~> Core.literalFloat $
-        Literals.bigfloatToFloatValue @@ var "ft" @@ (Literals.floatValueToBigfloat @@ var "f")],
+      _LiteralType_float>>: "ft" ~> Core.literalFloat $ cases _FloatType (var "ft")
+        Nothing [
+        _FloatType_float32>>: constant $ Core.floatValueFloat32 $ cases _FloatValue (var "f")
+          Nothing [
+          _FloatValue_float32>>: "f32" ~> var "f32",
+          _FloatValue_float64>>: "f64" ~> Literals.float64ToFloat32 $ var "f64"],
+        _FloatType_float64>>: constant $ Core.floatValueFloat64 $ cases _FloatValue (var "f")
+          Nothing [
+          _FloatValue_float32>>: "f32" ~> Literals.float32ToFloat64 $ var "f32",
+          _FloatValue_float64>>: "f64" ~> var "f64"]]],
     _Literal_integer>>: "i" ~> cases _LiteralType (var "lt")
       Nothing [
       _LiteralType_integer>>: "it" ~> Core.literalInteger $
@@ -720,13 +725,19 @@ prepareFloatType :: TTermDefinition (FloatType -> (FloatType, FloatValue -> Floa
 prepareFloatType = define "prepareFloatType" $
   doc "Prepare a float type, substituting unsupported types" $
   lambda "ft" $
-    (cases _FloatType (var "ft") (Just (prepareSame @@ var "ft")) [
-      _FloatType_bigfloat>>: (constant $
+    (cases _FloatType (var "ft") Nothing [
+      _FloatType_float32>>: (constant $
+        triple
+          Core.floatTypeFloat32
+          ("v" ~> cases _FloatValue (var "v") (Just (var "v")) [
+            _FloatValue_float32>>: ("f" ~> inject _FloatValue _FloatValue_float32 (var "f"))])
+          Sets.empty),
+      _FloatType_float64>>: (constant $
         triple
           Core.floatTypeFloat64
           ("v" ~> cases _FloatValue (var "v") (Just (var "v")) [
-            _FloatValue_bigfloat>>: ("d" ~> inject _FloatValue _FloatValue_float64 (Literals.bigfloatToFloat64 (var "d")))])
-          (Sets.fromList $ list [string "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"]))])
+            _FloatValue_float64>>: ("f" ~> inject _FloatValue _FloatValue_float64 (var "f"))])
+          Sets.empty)])
 
 -- | Prepare an integer type, substituting unsupported types.
 
