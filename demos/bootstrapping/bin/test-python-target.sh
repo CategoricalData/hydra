@@ -25,34 +25,11 @@ for gen_dir in "$OUTPUT_DIR/src/main/python" "$OUTPUT_DIR/src/test/python"; do
     fi
 done
 
-# Patch test_graph.py to use test_env (real graph with primitives) instead of emptyGraph.
-# TODO: Replace this with hydra.test.environment module.
-echo "Patching test_graph.py..."
-TESTGRAPH="$OUTPUT_DIR/src/test/python/hydra/test/test_graph.py"
-if [ -f "$TESTGRAPH" ]; then
-    sed -i '' '/^test_graph = /d' "$TESTGRAPH"
-    sed -i '' '/^test_context = /d' "$TESTGRAPH"
-    cat >> "$TESTGRAPH" << 'PYEOF'
-
-_test_graph_cache = None
-_test_context_cache = None
-
-def __getattr__(name):
-    global _test_graph_cache, _test_context_cache
-    if name == "test_graph":
-        if _test_graph_cache is None:
-            import hydra.test.test_env as _test_env
-            _test_graph_cache = _test_env.test_graph()
-        return _test_graph_cache
-    if name == "test_context":
-        if _test_context_cache is None:
-            import hydra.context
-            import hydra.lib.maps
-            _test_context_cache = hydra.context.Context([], [], hydra.lib.maps.empty())
-        return _test_context_cache
-    raise AttributeError(f"module 'hydra.test.test_graph' has no attribute {name!r}")
-PYEOF
-fi
+# test_graph.py post-generation patch removed. The DSL emits
+# test_graph as @lru_cache(1) def test_graph() (lazy, complex term)
+# and test_context as `test_context = test_env.test_context` (eager
+# value reference). The hand-written test_env.py exposes both at the
+# same arity expected by the DSL.
 
 echo "Running Python tests..."
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
