@@ -42,7 +42,8 @@ fi
 # Packages that go through the JSON pipeline. Read from the project-level
 # manifest (hydra.json) which is the authoritative registry; dependency
 # order is derived from each package's own package.json.
-ALL_PACKAGES=$(python3 -c "import json; print(' '.join(json.load(open('$HYDRA_ROOT_DIR/hydra.json'))['packages']))")
+HYDRA_PACKAGES_PY="$HYDRA_ROOT_DIR/bin/lib/hydra-packages.py"
+ALL_PACKAGES=$("$HYDRA_PACKAGES_PY" list)
 
 # Valid target languages.
 ALL_TARGETS="haskell java python scala clojure scheme common-lisp emacs-lisp"
@@ -88,102 +89,18 @@ done
 # Read a package's dependencies from its package.json.
 # Returns space-separated list, or empty if none.
 pkg_deps() {
-    local pkg="$1"
-    local pkg_json="$HYDRA_ROOT_DIR/packages/$pkg/package.json"
-    if [ ! -f "$pkg_json" ]; then
-        echo ""
-        return
-    fi
-    # Extract the dependencies array; one dep per line, stripped of quotes.
-    python3 -c "
-import json, sys
-try:
-    with open('$pkg_json') as f:
-        m = json.load(f)
-    deps = m.get('dependencies', [])
-    print(' '.join(deps))
-except Exception as e:
-    print('', file=sys.stderr)
-" 2>/dev/null
+    "$HYDRA_PACKAGES_PY" deps "$1"
 }
 
 # Topologically sort the given list of packages by dependency order.
-# Uses a simple DFS-based topo sort.
 topo_sort() {
-    python3 <<EOF
-import json, os, sys
-
-packages = "$1".split()
-root = "$HYDRA_ROOT_DIR"
-
-def load_deps(pkg):
-    path = os.path.join(root, "packages", pkg, "package.json")
-    if not os.path.exists(path):
-        return []
-    with open(path) as f:
-        return json.load(f).get("dependencies", [])
-
-deps = {pkg: load_deps(pkg) for pkg in packages}
-
-# DFS topo sort
-visited = set()
-order = []
-def visit(pkg):
-    if pkg in visited:
-        return
-    visited.add(pkg)
-    for d in deps.get(pkg, []):
-        if d in deps:
-            visit(d)
-    order.append(pkg)
-
-for pkg in packages:
-    visit(pkg)
-
-print(" ".join(order))
-EOF
+    # Word-split intentionally: $1 is a space-separated list of packages.
+    "$HYDRA_PACKAGES_PY" topo $1
 }
 
 # Compute reverse-dependency closure: all packages that transitively depend on <root_pkg>.
 reverse_dep_closure() {
-    local root_pkg="$1"
-    python3 <<EOF
-import json, os
-
-root_pkg = "$root_pkg"
-root = "$HYDRA_ROOT_DIR"
-all_packages = "$ALL_PACKAGES".split()
-
-def load_deps(pkg):
-    path = os.path.join(root, "packages", pkg, "package.json")
-    if not os.path.exists(path):
-        return []
-    with open(path) as f:
-        return json.load(f).get("dependencies", [])
-
-deps = {pkg: load_deps(pkg) for pkg in all_packages}
-
-# Build reverse-dep map: for each package, who depends on it?
-rdeps = {p: [] for p in all_packages}
-for p, ds in deps.items():
-    for d in ds:
-        if d in rdeps:
-            rdeps[d].append(p)
-
-# BFS from root_pkg
-closure = {root_pkg}
-frontier = [root_pkg]
-while frontier:
-    next_frontier = []
-    for p in frontier:
-        for dependent in rdeps.get(p, []):
-            if dependent not in closure:
-                closure.add(dependent)
-                next_frontier.append(dependent)
-    frontier = next_frontier
-
-print(" ".join(sorted(closure)))
-EOF
+    "$HYDRA_PACKAGES_PY" reverse-closure "$1"
 }
 
 # -----------------------------------------------------------------------
@@ -418,23 +335,7 @@ echo ""
 # hydra-javascript, and hydra-wasm list just ["haskell"] because their
 # coders are implemented only against the Haskell runtime.
 pkg_supports_target() {
-    local pkg="$1"
-    local target="$2"
-    local pkg_json="$HYDRA_ROOT_DIR/packages/$pkg/package.json"
-    if [ ! -f "$pkg_json" ]; then
-        return 0
-    fi
-    python3 -c "
-import json, sys
-try:
-    d = json.load(open('$pkg_json'))
-    tls = d.get('targetLanguages')
-    if tls is None:
-        sys.exit(0)
-    sys.exit(0 if '$target' in tls else 1)
-except Exception:
-    sys.exit(0)
-"
+    "$HYDRA_PACKAGES_PY" supports-target "$1" "$2"
 }
 
 # Phase 2: Assemblers. When generating every package for a target and
