@@ -150,10 +150,10 @@ javaArrayCreation :: Syntax.PrimitiveTypeWithAnnotations -> Maybe Syntax.ArrayIn
 javaArrayCreation primType minit =
 
       let init_ = Maybes.cases minit (Syntax.ArrayInitializer []) (\i -> i)
-      in (javaPrimaryToJavaExpression (Syntax.PrimaryArrayCreation (Syntax.ArrayCreationExpressionPrimitiveArray (Syntax.ArrayCreationExpression_PrimitiveArray {
-        Syntax.arrayCreationExpression_PrimitiveArrayType = primType,
-        Syntax.arrayCreationExpression_PrimitiveArrayDims = [],
-        Syntax.arrayCreationExpression_PrimitiveArrayArray = init_}))))
+      in (javaPrimaryToJavaExpression (Syntax.PrimaryArrayCreation (Syntax.ArrayCreationExpressionWithInitializer_ (Syntax.ArrayCreationExpressionWithInitializerPrimitive (Syntax.ArrayCreationExpressionWithInitializer_Primitive {
+        Syntax.arrayCreationExpressionWithInitializer_PrimitiveType = primType,
+        Syntax.arrayCreationExpressionWithInitializer_PrimitiveDims = [],
+        Syntax.arrayCreationExpressionWithInitializer_PrimitiveArray = init_})))))
 javaArrayInitializer :: [Syntax.Expression] -> Syntax.ArrayInitializer
 javaArrayInitializer exprs = Syntax.ArrayInitializer [
   Lists.map (\e -> Syntax.VariableInitializerExpression e) exprs]
@@ -206,6 +206,7 @@ javaClassDeclaration aliases tparams elName mods supname impls bodyDecls =
         Syntax.normalClassDeclarationParameters = tparams,
         Syntax.normalClassDeclarationExtends = extends_,
         Syntax.normalClassDeclarationImplements = impls,
+        Syntax.normalClassDeclarationPermits = [],
         Syntax.normalClassDeclarationBody = (Syntax.ClassBody bodyDecls)}))
 javaClassType :: [Syntax.ReferenceType] -> Maybe Syntax.PackageName -> String -> Syntax.ClassType
 javaClassType args pkg id =
@@ -365,9 +366,9 @@ javaIdentifierToJavaUnaryExpression id =
       Syntax.expressionNameIdentifier = id})))
 javaInstanceOf :: Syntax.RelationalExpression -> Syntax.ReferenceType -> Syntax.RelationalExpression
 javaInstanceOf lhs rhs =
-    Syntax.RelationalExpressionInstanceof (Syntax.RelationalExpression_InstanceOf {
-      Syntax.relationalExpression_InstanceOfLhs = lhs,
-      Syntax.relationalExpression_InstanceOfRhs = rhs})
+    Syntax.RelationalExpressionInstanceofExpression (Syntax.InstanceofExpression {
+      Syntax.instanceofExpressionLhs = lhs,
+      Syntax.instanceofExpressionRhs = (Syntax.InstanceofExpression_RhsReferenceType rhs)})
 javaInt :: Integer -> Syntax.Literal
 javaInt i = Syntax.LiteralInteger (Syntax.IntegerLiteral i)
 javaIntExpression :: Integer -> Syntax.Expression
