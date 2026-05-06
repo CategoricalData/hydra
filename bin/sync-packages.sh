@@ -67,7 +67,7 @@ while [ $# -gt 0 ]; do
         --no-tests) NO_TEST=true; shift ;;
         --list) LIST_ONLY=true; shift ;;
         --help|-h)
-            sed -n '2,/^$/p' "$0" | sed 's/^# //;s/^#$//'
+            sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
             ;;
         --*)

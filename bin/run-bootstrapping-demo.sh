@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
 # Run the bootstrapping demo and display the dashboard.
 #
 # Usage:
@@ -25,13 +23,15 @@ set -euo pipefail
 #                           (default is incremental; use --clean for cold-start
 #                           timing measurements).
 
+set -euo pipefail
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 RUNS_DIR="$REPO_ROOT/bootstrap/runs"
 DEMO_DIR="$REPO_ROOT/demos/bootstrapping/bin"
 
 if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
-    sed -n '4,26p' "$0" | sed 's/^# //; s/^#//'
+    sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
     exit 0
 fi
 

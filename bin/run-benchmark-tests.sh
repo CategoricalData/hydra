@@ -2,21 +2,24 @@
 # Run benchmark tests for Hydra implementations and display the dashboard.
 #
 # Usage:
-#   bin/run-benchmark-tests.sh                                          # Run default (Haskell + Java + Python)
-#   bin/run-benchmark-tests.sh --hosts haskell,java                   # Run specific hosts
-#   bin/run-benchmark-tests.sh --hosts all                            # Run all 7 implementations
-#   bin/run-benchmark-tests.sh --hosts lisp                           # Run all four Lisp dialects
-#   bin/run-benchmark-tests.sh dashboard                                # Just show the dashboard
+#   bin/run-benchmark-tests.sh                          # Default (haskell, java, python)
+#   bin/run-benchmark-tests.sh --hosts haskell,java     # Specific hosts
+#   bin/run-benchmark-tests.sh --hosts all              # All 7 implementations
+#   bin/run-benchmark-tests.sh --hosts lisp             # All four Lisp dialects
+#   bin/run-benchmark-tests.sh dashboard [opts]         # Just show the dashboard
+#                                                       # (forwards opts to bin/benchmark-dashboard.py)
+#   bin/run-benchmark-tests.sh --help
+#
+# Options:
+#   --hosts H,...   Comma-separated list of hosts (default: haskell,java,python)
+#   --repeat N      Run each language N times (default: 1)
+#   --tag TAG       Append a human-readable tag to the run directory name
+#   --help          Show this help.
 #
 # Hosts:
 #   haskell, java, python, clojure, common-lisp, emacs-lisp, scheme
 #   lisp  = clojure,common-lisp,emacs-lisp,scheme
 #   all   = haskell,java,python,clojure,common-lisp,emacs-lisp,scheme
-#
-# Options:
-#   --hosts H,...   Comma-separated list of hosts (default: haskell,java,python)
-#   --repeat N        Run each language N times (default: 1)
-#   --tag TAG         Append a human-readable tag to the run directory name
 
 set -euo pipefail
 
@@ -42,36 +45,16 @@ TAG=""
 HOSTS="haskell,java,python"
 EXTRA_ARGS=()
 
-while [[ $# -gt 0 ]]; do
+while [ $# -gt 0 ]; do
     case "$1" in
-        --repeat)
-            REPEAT="$2"
-            shift 2
-            ;;
-        --tag)
-            TAG="$2"
-            shift 2
-            ;;
-        --hosts)
-            HOSTS="$2"
-            shift 2
-            ;;
+        --repeat) REPEAT="$2"; shift 2 ;;
+        --repeat=*) REPEAT="${1#--repeat=}"; shift ;;
+        --tag) TAG="$2"; shift 2 ;;
+        --tag=*) TAG="${1#--tag=}"; shift ;;
+        --hosts) HOSTS="$2"; shift 2 ;;
+        --hosts=*) HOSTS="${1#--hosts=}"; shift ;;
         --help|-h)
-            echo "Usage: $0 [OPTIONS]"
-            echo "       $0 dashboard [dashboard options...]"
-            echo ""
-            echo "Run benchmark tests for Hydra implementations."
-            echo ""
-            echo "Options:"
-            echo "  --hosts H,...   Comma-separated list of hosts (default: haskell,java,python)"
-            echo "  --repeat N        Run each language N times (default: 1)"
-            echo "  --tag TAG         Append a human-readable tag to the run directory name"
-            echo "  --help            Show this help message"
-            echo ""
-            echo "Hosts:"
-            echo "  haskell, java, python, clojure, common-lisp, emacs-lisp, scheme"
-            echo "  lisp        All four Lisp dialects"
-            echo "  all         All 7 implementations"
+            sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
             ;;
         *)
