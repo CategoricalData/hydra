@@ -401,8 +401,11 @@ else
         done
     fi
     # Also regenerate per-package manifests so readers see the updated module list.
+    # stdout is suppressed (manifest exec is chatty about per-package writes); stderr
+    # stays visible so build/runtime errors surface instead of silently aborting the
+    # script via `set -euo pipefail`.
     cd "$HYDRA_ROOT_DIR/heads/haskell"
-    stack build hydra:exe:update-json-manifest >/dev/null 2>&1
+    stack build hydra:exe:update-json-manifest >/dev/null
     stack exec update-json-manifest >/dev/null
     cd "$HYDRA_ROOT_DIR"
 fi
