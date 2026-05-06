@@ -84,8 +84,11 @@ apply (TTerm lhs) (TTerm rhs) = TTerm $ Terms.apply lhs rhs
 eitherBind :: AsTerm t (Either e a) => String -> t -> TTerm (Either e b) -> TTerm (Either e b)
 eitherBind v def body = primitive2 _eithers_bind (asTerm def) $ lambda v $ body
 
-binaryFunction :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
-binaryFunction f = case (unTTerm $ f (var "x") (var "y")) of
+-- | Reify a binary Haskell-level meta-function over phantom-typed terms into a
+-- first-class term-level function. See also 'reify' for the unary form.
+-- Example: @reify2 (\\x y -> Maths.add x (Maths.mul x y))@
+reify2 :: (TTerm a -> TTerm b -> TTerm c) -> TTerm (a -> b -> c)
+reify2 f = case (unTTerm $ f (var "x") (var "y")) of
   TermApplication (Application (TermApplication (Application lhs _)) _) -> TTerm lhs
   t -> TTerm $ Terms.string $ "unexpected term as binary function: " <> ShowCore.term t
 
@@ -255,8 +258,8 @@ identity = TTerm Terms.identity
 
 -- | Create a union injection
 -- Example: inject (Name "Result") (Name "success") (string "ok")
-inject :: Name -> Name -> TTerm a -> TTerm b
-inject name fname (TTerm term) = TTerm $ Terms.inject name fname term
+inject :: (AsName t, AsName f) => t -> f -> TTerm a -> TTerm b
+inject n fn (TTerm term) = TTerm $ Terms.inject (asName n) (asName fn) term
 
 -- | Create a function that injects its argument into a union variant
 -- Example: injectLambda (Name "Result") (Name "success")
@@ -329,8 +332,8 @@ map = TTerm . Terms.map . M.fromList . fmap fromTTerm . M.toList
 
 -- | Create a pattern match on a union term
 -- Example: match (Name "Result") (Just $ string "what?") ["success">: string "yay", "error">: string "boo"]
-match :: Name -> Maybe (TTerm b) -> [Field] -> TTerm (a -> b)
-match name dflt fields = TTerm $ Terms.match name (unTTerm <$> dflt) fields
+match :: AsName n => n -> Maybe (TTerm b) -> [Field] -> TTerm (a -> b)
+match n dflt fields = TTerm $ Terms.match (asName n) (unTTerm <$> dflt) fields
 
 -- | Create a 'Nothing' optional value
 -- Example: nothing
@@ -373,13 +376,13 @@ primitive3 primName (TTerm a) (TTerm b) (TTerm c) = TTerm $ Terms.primitive prim
 
 -- | Extract a field from a record
 -- Example: project (Name "Person") (Name "name")
-project :: Name -> Name -> TTerm (a -> b)
-project name fname = TTerm $ Terms.project name fname
+project :: (AsName t, AsName f) => t -> f -> TTerm (a -> b)
+project n fn = TTerm $ Terms.project (asName n) (asName fn)
 
 -- | Create a record with named fields
 -- Example: record (Name "Person") [field (Name "name") (string "John"), field (Name "age") (int32 30)]
-record :: Name -> [Field] -> TTerm a
-record name fields = TTerm $ Terms.record name fields
+record :: AsName n => n -> [Field] -> TTerm a
+record n fields = TTerm $ Terms.record (asName n) fields
 
 -- | Create a set of terms
 -- Example: set [string "a", string "b", string "c"]
@@ -406,8 +409,11 @@ tuple4 (TTerm a) (TTerm b) (TTerm c) (TTerm d) = TTerm $ Terms.tuple4 a b c d
 tuple5 :: TTerm a -> TTerm b -> TTerm c -> TTerm d -> TTerm e -> TTerm (a, b, c, d, e)
 tuple5 (TTerm a) (TTerm b) (TTerm c) (TTerm d) (TTerm e) = TTerm $ Terms.tuple5 a b c d e
 
-unaryFunction :: (TTerm a -> TTerm b) -> TTerm (a -> b)
-unaryFunction f = case (unTTerm $ f $ var "x") of
+-- | Reify a Haskell-level meta-function over phantom-typed terms into a first-class
+-- term-level function. See also 'reify2' for the binary form.
+-- Example: @reify Literals.showInt32@ has type @TTerm (Int -> String)@
+reify :: (TTerm a -> TTerm b) -> TTerm (a -> b)
+reify f = case (unTTerm $ f $ var "x") of
   TermApplication (Application lhs _) -> TTerm lhs
   TermEither (Prelude.Left _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Left $ Terms.var "x"
   TermEither (Prelude.Right _) -> lambda "x" $ TTerm $ TermEither $ Prelude.Right $ Terms.var "x"
@@ -425,13 +431,13 @@ unit = TTerm Terms.unit
 
 -- | Create a unit variant of a union
 -- Example: injectUnit (Name "Result") (Name "success")
-injectUnit :: Name -> Name -> TTerm a
-injectUnit name fname = TTerm $ Terms.inject name fname Terms.unit
+injectUnit :: (AsName t, AsName f) => t -> f -> TTerm a
+injectUnit n fn = TTerm $ Terms.inject (asName n) (asName fn) Terms.unit
 
 -- | Create an unwrap function for a wrapped type
 -- Example: unwrap (Name "Email")
-unwrap :: Name -> TTerm (a -> b)
-unwrap = TTerm . Terms.unwrap
+unwrap :: AsName n => n -> TTerm (a -> b)
+unwrap = TTerm . Terms.unwrap . asName
 
 -- | Create a variable reference
 -- Example: var "x"
@@ -441,8 +447,8 @@ var v = TTerm $ Terms.var v
 -- | Create a wrapped term (instance of a newtype)
 -- Example: wrap (Name "Email") (string "user@example.com")
 -- Note: the phantom types provide no guarantee of type safety in this case
-wrap :: Name -> TTerm a -> TTerm b
-wrap name (TTerm term) = TTerm $ Terms.wrap name term
+wrap :: AsName n => n -> TTerm a -> TTerm b
+wrap n (TTerm term) = TTerm $ Terms.wrap (asName n) term
 
 -- | Lift a Haskell Name value to a phantom-typed TTerm Name
 nameLift :: Name -> TTerm Name
