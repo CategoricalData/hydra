@@ -2,7 +2,7 @@
   "version": 2,
   "generator": "v0-unstamped",
   "inputs": {
-    "hydra.java.coder": { "kind": "Other", "hash": "cbb9531b62e4a84131a655f586627aebc785dce5e64037e436307554df533784" },
+    "hydra.java.coder": { "kind": "Other", "hash": "60b7b1aa6b1765e963b5b0e42de0a7e87cfabae053507af0fb65fb21e556cc95" },
     "hydra.java.environment": { "kind": "Other", "hash": "49a3ee2d105ef7d5b9f7d57ed54a5e2283ff7b97f813a7441a08b1d11d67b976" },
     "hydra.java.language": { "kind": "Other", "hash": "9cbbda83acc69e0b27da6e4d1a6d5706e7cd33b5a1ebdb9a5ea5b0caa7b3249e" },
     "hydra.java.names": { "kind": "Other", "hash": "4d01b3816cf9b286eac00a34fe9d850dd7d53947722c49051d78f6ef2196f232" },
