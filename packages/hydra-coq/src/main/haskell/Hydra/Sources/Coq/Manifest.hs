@@ -17,20 +17,20 @@ module Hydra.Sources.Coq.Manifest (
 import Hydra.Kernel
 
 import qualified Hydra.Sources.Coq.Coder as CoqCoder
-import qualified Hydra.Sources.Coq.Environment as CoqEnvironment
+import qualified Hydra.Sources.Coq.Environment as CoqEnvironmentSource
 import qualified Hydra.Sources.Coq.Generate as CoqGenerate
 import qualified Hydra.Sources.Coq.Language as CoqLanguage
-import qualified Hydra.Sources.Coq.Serde as CoqSerde
+import qualified Hydra.Sources.Coq.Serde as CoqSerdeSource
 import qualified Hydra.Sources.Coq.Syntax as CoqSyntax
 import qualified Hydra.Sources.Coq.Utils as CoqUtils
 
 mainModules :: [Module]
 mainModules = [
   CoqCoder.module_,
-  CoqEnvironment.module_,
+  CoqEnvironmentSource.module_,
   CoqGenerate.module_,
   CoqLanguage.module_,
-  CoqSerde.module_,
+  CoqSerdeSource.module_,
   CoqSyntax.module_,
   CoqUtils.module_]
 

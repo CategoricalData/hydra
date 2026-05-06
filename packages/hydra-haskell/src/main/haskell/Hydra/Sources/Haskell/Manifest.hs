@@ -17,7 +17,7 @@ import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
 import qualified Hydra.Sources.Haskell.Syntax as HaskellSyntax
 import qualified Hydra.Sources.Haskell.Testing as HaskellTesting
-import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
+import qualified Hydra.Sources.Haskell.Utils as HaskellUtilsSource
 
 mainModules :: [Module]
 mainModules = [
@@ -28,7 +28,7 @@ mainModules = [
   HaskellSerde.module_,
   HaskellSyntax.module_,
   HaskellTesting.module_,
-  HaskellUtils.module_]
+  HaskellUtilsSource.module_]
 
 testModules :: [Module]
 testModules = []
