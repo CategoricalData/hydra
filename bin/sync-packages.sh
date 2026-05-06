@@ -2,14 +2,14 @@
 # Layer 3 orchestrator: bring dist/ into sync with packages/ and heads/.
 #
 # Usage:
-#   bin/sync.sh                              # all packages, all targets
-#   bin/sync.sh <pkg>                        # one package, all targets
-#   bin/sync.sh <pkg> --target <lang>        # one package, one target
-#   bin/sync.sh --target <lang>              # all packages, one target
-#   bin/sync.sh --from <pkg>                 # <pkg> + reverse-dep closure
-#   bin/sync.sh --list                       # print packages and exit
-#   bin/sync.sh --no-tests                    # skip Layer 2.5 testers
-#   bin/sync.sh --help
+#   bin/sync-packages.sh                              # all packages, all targets
+#   bin/sync-packages.sh <pkg>                        # one package, all targets
+#   bin/sync-packages.sh <pkg> --targets L1,L2,...    # one package, named targets
+#   bin/sync-packages.sh --targets L1,L2,...          # all packages, named targets
+#   bin/sync-packages.sh --from <pkg>                 # <pkg> + reverse-dep closure
+#   bin/sync-packages.sh --list                       # print packages and exit
+#   bin/sync-packages.sh --no-tests                   # skip Layer 2.5 testers
+#   bin/sync-packages.sh --help
 #
 # Targets: haskell, java, python, scala, clojure, scheme, common-lisp,
 #          emacs-lisp. Default: all.
@@ -54,14 +54,14 @@ ALL_TARGETS="haskell java python scala clojure scheme common-lisp emacs-lisp"
 
 PACKAGES=""          # explicit package arg (positional); empty means "all"
 FROM_PACKAGE=""      # --from <pkg>
-TARGETS=""           # --target <lang>; empty means "all"
+TARGETS=""           # --targets <list>; empty means "all"
 NO_TEST=false
 LIST_ONLY=false
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        --target) TARGETS="${TARGETS}${TARGETS:+ }$2"; shift 2 ;;
-        --target=*) TARGETS="${TARGETS}${TARGETS:+ }${1#--target=}"; shift ;;
+        --targets) TARGETS=$(echo "$2" | tr ',' ' '); shift 2 ;;
+        --targets=*) TARGETS=$(echo "${1#--targets=}" | tr ',' ' '); shift ;;
         --from) FROM_PACKAGE="$2"; shift 2 ;;
         --from=*) FROM_PACKAGE="${1#--from=}"; shift ;;
         --no-tests) NO_TEST=true; shift ;;
