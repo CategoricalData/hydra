@@ -53,17 +53,41 @@ shell's `ulimit` blocks.
 
 ### Stale `dist/haskell` artifacts after non-baseline edits
 
-`bin/sync-haskell.sh` regenerates the JSON and the *baseline* Haskell packages
-(`hydra-kernel`, `hydra-haskell`) but does not by default re-run the per-package
-`assemble-distribution.sh` for non-baseline packages like `hydra-pg`,
-`hydra-rdf`, `hydra-coq`, etc.
-If you've edited a DSL source under one of those packages and the corresponding
-`dist/haskell/<pkg>/` file hasn't picked up your change, run
-`heads/haskell/bin/assemble-distribution.sh <pkg>` directly
-(or use `bin/sync-packages.sh <pkg>`).
-Cache hits can also mask edits;
-deleting `dist/haskell/<pkg>/src/main/digest.json` and the relevant
-`dist/json/<pkg>/src/main/digest.json` forces a full regen.
+`bin/sync-haskell.sh` regenerates the JSON for every package and the
+*baseline* Haskell packages (`hydra-kernel`, `hydra-haskell`) but does not
+by default re-run the per-package `assemble-distribution.sh` for any other
+package. Every coder package is non-baseline: `hydra-java`, `hydra-python`,
+`hydra-scala`, `hydra-lisp`, `hydra-go`, `hydra-pg`, `hydra-rdf`, `hydra-coq`,
+`hydra-javascript`, `hydra-wasm`, `hydra-ext`.
+
+A common surprise: editing a Java-coder DSL source under
+`packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs` and running
+`sync-haskell.sh` regenerates the JSON correctly but leaves
+`dist/haskell/hydra-java/.../Coder.hs` at its old contents. The runtime Java
+codegen is loaded from `dist/haskell/hydra-java/`, so subsequent
+`bin/sync-packages.sh hydra-kernel --targets java` runs use the *old* coder
+and produce the *old* output. Symptom: source-level fix appears not to take
+effect.
+
+If you've edited a DSL source under any non-baseline package and the
+corresponding `dist/haskell/<pkg>/` file hasn't picked up your change, run
+`bin/sync-packages.sh <pkg> --targets haskell` (or
+`heads/haskell/bin/assemble-distribution.sh <pkg>` directly).
+
+Cache hits can also mask edits.
+A coarse "make me clean" sequence:
+
+```sh
+rm -f dist/haskell/<pkg>/src/main/digest.json
+rm -f dist/json/<pkg>/src/main/digest.json
+rm -f dist/json/digest.main.json
+rm -f heads/haskell/.stack-work/bootstrap-from-json-cache.txt
+rm -f heads/haskell/.stack-work/verify-json-kernel-cache.txt
+heads/haskell/bin/sync-haskell.sh --no-tests
+bin/sync-packages.sh <pkg> --targets haskell --no-tests
+```
+
+Then sync forward into whatever target language consumes the regenerated coder.
 
 ### Stale per-dialect Lisp `struct-compat.lisp`
 
