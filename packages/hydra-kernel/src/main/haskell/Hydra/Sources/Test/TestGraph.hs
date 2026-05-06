@@ -1,6 +1,6 @@
 module Hydra.Sources.Test.TestGraph where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for kernel test fixtures
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
@@ -24,7 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Meta.Lib.Math      as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes    as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
-import           Hydra.Dsl.Meta.Lib.Strings   as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Terms              as DslTerms
 import qualified Hydra.Dsl.Types              as Types
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
