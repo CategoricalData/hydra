@@ -4,6 +4,8 @@
 
 grammar GQL;
 
+@header { package net.fortytwo.hydra.gql.parser; }
+
 options { caseInsensitive = true; }
 
 // 6 <GQL-program>

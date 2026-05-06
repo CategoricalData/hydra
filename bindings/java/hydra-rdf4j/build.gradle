@@ -1,0 +1,126 @@
+// Hydra binding for Eclipse RDF4j: serializes hydra.rdf.syntax.* to standards
+// RDF formats (N-Triples, Turtle, etc.) via rdf4j's Rio writer, and deserializes
+// the reverse. Pure handwritten Java; not part of the DSL pipeline.
+//
+// Depends on hydra-rdf (the Hydra RDF model package) and rdf4j-rio-ntriples.
+
+// nmcp publish plugins (Sonatype Central Portal) require Java 17 to load.
+// We apply them conditionally so the build still loads under Java 11 (for
+// compile/test). When running on Java 17+, publish tasks become available.
+buildscript {
+    repositories { mavenCentral() }
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+        dependencies {
+            classpath 'com.gradleup.nmcp:nmcp:1.4.4'
+        }
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+    apply plugin: 'com.gradleup.nmcp'
+    apply plugin: 'com.gradleup.nmcp.aggregation'
+}
+
+group = 'net.fortytwo.hydra'
+version = '0.16.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    withSourcesJar()
+    // withJavadocJar() is intentionally omitted: the in-tree dist/java/* generated
+    // sources have unresolved `{@link hydra.errors.Error}` references (the actual
+    // class is `Error_`), which makes javadoc fail. Enable for publish runs once
+    // the upstream generator's javadoc generation is fixed.
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    api 'net.fortytwo.hydra:hydra-rdf:0.16.0'
+    api 'org.eclipse.rdf4j:rdf4j-rio-ntriples:5.0.2'
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+        nmcpAggregation project
+    }
+}
+
+// Skip tests for the standalone publish-focused build. The rollup at
+// packages/hydra-java/build.gradle is where developer tests run.
+tasks.matching { it.name in ['compileTestJava', 'test', 'processTestResources'] }.configureEach {
+    enabled = false
+}
+
+// Make javadoc warnings non-fatal — the in-tree dist/java/* generated sources
+// have unresolved doc references (`{@link hydra.errors.Error}` for `Error_`,
+// etc.) that javadoc can't tolerate by default. Failure here is upstream
+// generator output, not the binding's own code.
+tasks.withType(Javadoc).configureEach {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    failOnError = false
+}
+
+// sourcesJar can see the same file via multiple sourceSet srcDirs (the
+// dist/java/* entries, bindings/java/hydra-rdf4j/src/main/java). Skip
+// duplicates — the source content is identical, the path collision is
+// purely from how Gradle composes the source tree.
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'hydra-rdf4j'
+            pom {
+                name = 'hydra-rdf4j'
+                description = 'Hydra ↔ Eclipse RDF4j binding: serialize and deserialize hydra.rdf.syntax.* against rdf4j Rio.'
+                url = 'https://github.com/CategoricalData/hydra'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'joshsh'
+                        name = 'Joshua Shinavier'
+                        email = 'josh@fortytwo.net'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/CategoricalData/hydra'
+                    connection = 'scm:git://github.com/CategoricalData/hydra.git'
+                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    required { gradle.taskGraph.hasTask('publishAggregationToCentralPortal') ||
+                gradle.taskGraph.hasTask('publishToCentralPortal') }
+    sign publishing.publications.mavenJava
+}
+
+// nmcpAggregation config is only meaningful when the plugin is applied.
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+    nmcpAggregation {
+        centralPortal {
+            username.set(providers.gradleProperty('sonatypeUsername'))
+            password.set(providers.gradleProperty('sonatypePassword'))
+            publishingType = 'USER_MANAGED'
+        }
+    }
+}
