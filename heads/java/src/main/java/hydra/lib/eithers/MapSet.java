@@ -44,7 +44,6 @@ public class MapSet extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.set(graph, args.get(1)), items -> {
                 Term fn = args.get(0);
-                @SuppressWarnings({"rawtypes", "unchecked"})
                 PersistentSet<Term> results = PersistentSet.<Term>empty();
                 for (Term element : items) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
@@ -72,7 +71,6 @@ public class MapSet extends PrimitiveFunction {
     public static <A, B, Z> hydra.util.Either<Z, Set<B>> apply(
             Function<A, hydra.util.Either<Z, B>> fn,
             Set<A> items) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentSet<B> results = PersistentSet.<B>empty();
         for (A item : items) {
             hydra.util.Either<Z, B> result = fn.apply(item);

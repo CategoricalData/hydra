@@ -52,7 +52,6 @@ public class FilterWithKey extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
                 Term pred = args.get(0);
-                @SuppressWarnings({"rawtypes", "unchecked"})
                 PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
@@ -89,7 +88,6 @@ public class FilterWithKey extends PrimitiveFunction {
      * @return the filtered map
      */
     public static <K, V> Map<K, V> apply(Function<K, Function<V, Boolean>> pred, Map<K, V> mp) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentMap<K, V> result = PersistentMap.<K, V>empty();
         for (Map.Entry<K, V> e : mp.entrySet()) {
             if (pred.apply(e.getKey()).apply(e.getValue())) {
