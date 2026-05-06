@@ -15,6 +15,7 @@
 
 module Hydra.Sources.Test.TestEnv where
 
+-- Standard imports for kernel test fixtures
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
