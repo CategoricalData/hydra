@@ -2,11 +2,11 @@
   "version": 2,
   "generator": "v0-unstamped",
   "inputs": {
-    "hydra.scala.coder": { "kind": "Other", "hash": "a4a53c2a66bdd5c09c80b62ecafe82ef553b6910b33ac02c4973480476633ab9" },
-    "hydra.scala.language": { "kind": "Other", "hash": "4112bd41ed4a202a50a6c59a39bd0ddfe2699108c4345724d5abf34d46a8619e" },
-    "hydra.scala.serde": { "kind": "Other", "hash": "1e1bce0fb249f7321222aba12b2f3cdc51d43552c6929edc86c7a97c41757d1b" },
+    "hydra.scala.coder": { "kind": "Other", "hash": "cc7135a69bd94854bc49f1715010cfd7ca26ec0fdf4df37b529508fa88fdb94d" },
+    "hydra.scala.language": { "kind": "Other", "hash": "1f81535f98ce3eb6bf9635b8a59e10cd4b35470d1b27e2e606c7a637d8c0d4af" },
+    "hydra.scala.serde": { "kind": "Other", "hash": "68511149591464dbfdd6d38aae87897aeb53e0544a97ee0461ef818365471847" },
     "hydra.scala.syntax": { "kind": "Other", "hash": "9df2fe60a19e3362db2a841c9f53e68590cf2461b943a70e8ff659426517c750" },
-    "hydra.scala.utils": { "kind": "Other", "hash": "16bc5caed032e250ec59f16c2fe87ef04800c4319d98c8f0a1e194bc0a795e74" }
+    "hydra.scala.utils": { "kind": "Other", "hash": "a7540d8d53a639105e1525f269a2e9f9c31f1921ca8a340e22974e525eed2a59" }
   },
   "outputs": {
     "Hydra/Dsl/Scala/Syntax.hs": { "kind": "TargetFile", "hash": "686e450acae3161b9e4daff875d4a56687deb38b80fc2a10f86f6ca394df4133" },
