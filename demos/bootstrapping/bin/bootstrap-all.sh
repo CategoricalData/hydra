@@ -552,6 +552,49 @@ write_metadata() {
 ENDJSON
 }
 
+# Invoke the target language's test runner inside <demo_dir>, with
+# HYDRA_BENCHMARK_OUTPUT pointing at <bench_file>. Returns the test runner's
+# exit code; the caller is responsible for set +e / set -e around the call
+# if it needs to inspect a non-zero exit without aborting under `set -e`.
+#
+# A single source of truth for the per-target test invocation. Two callers:
+# run_tests_for_path (first run per path) and the --repeat loop in
+# do_generate (additional runs).
+_invoke_target_tests() {
+    local target=$1
+    local demo_dir=$2
+    local bench_file=$3
+
+    cd "$demo_dir"
+    case "$target" in
+        haskell)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" stack test 2>&1
+            ;;
+        java)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" ./gradlew test 2>&1
+            ;;
+        python)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
+            ;;
+        clojure)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" clojure -M -m run-tests 2>&1
+            ;;
+        scheme)
+            if command -v guile > /dev/null 2>&1; then
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" guile -L src/main/scheme -L src/test/scheme -L src/main/scheme -s run-tests.scm 2>&1
+            else
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" chibi-scheme -I src/main/scheme -I src/test/scheme -I src/main/scheme run-tests.scm 2>&1
+            fi
+            ;;
+        common-lisp)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
+            ;;
+        emacs-lisp)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" emacs --batch --load run-tests.el 2>&1
+            ;;
+    esac
+}
+
 # Run tests for a single path, writing benchmark JSON to run_dir
 run_tests_for_path() {
     local path_key=$1
@@ -575,47 +618,8 @@ run_tests_for_path() {
 
         local test_exit=0
         set +e
-        case "$target" in
-            haskell)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" stack test 2>&1
-                test_exit=$?
-                ;;
-            java)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" ./gradlew test 2>&1
-                test_exit=$?
-                ;;
-            python)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
-                test_exit=$?
-                ;;
-            clojure)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" clojure -M -m run-tests 2>&1
-                test_exit=$?
-                ;;
-            scheme)
-                cd "$demo_dir"
-                if command -v guile > /dev/null 2>&1; then
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" guile -L src/main/scheme -L src/test/scheme -L src/main/scheme -s run-tests.scm 2>&1
-                else
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" chibi-scheme -I src/main/scheme -I src/test/scheme -I src/main/scheme run-tests.scm 2>&1
-                fi
-                test_exit=$?
-                ;;
-            common-lisp)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
-                test_exit=$?
-                ;;
-            emacs-lisp)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" emacs --batch --load run-tests.el 2>&1
-                test_exit=$?
-                ;;
-        esac
+        _invoke_target_tests "$target" "$demo_dir" "$bench_file"
+        test_exit=$?
         set -e
 
         if [ "$test_exit" -ne 0 ]; then
@@ -764,47 +768,8 @@ ENDJSON
                         local extra_bench="$RUN_DIR/${path_key}_${ri}.benchmark.json"
                         local test_exit=0
                         set +e
-                        case "$target" in
-                            haskell)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" stack test 2>&1
-                                test_exit=$?
-                                ;;
-                            java)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" ./gradlew test 2>&1
-                                test_exit=$?
-                                ;;
-                            python)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
-                                test_exit=$?
-                                ;;
-                            clojure)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" clojure -M -m run-tests 2>&1
-                                test_exit=$?
-                                ;;
-                            scheme)
-                                cd "$demo_dir"
-                                if command -v guile > /dev/null 2>&1; then
-                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" guile -L src/main/scheme -L src/test/scheme -L src/main/scheme -s run-tests.scm 2>&1
-                                else
-                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" chibi-scheme -I src/main/scheme -I src/test/scheme -I src/main/scheme run-tests.scm 2>&1
-                                fi
-                                test_exit=$?
-                                ;;
-                            common-lisp)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
-                                test_exit=$?
-                                ;;
-                            emacs-lisp)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" emacs --batch --load run-tests.el 2>&1
-                                test_exit=$?
-                                ;;
-                        esac
+                        _invoke_target_tests "$target" "$demo_dir" "$extra_bench"
+                        test_exit=$?
                         set -e
                         if [ "$test_exit" -ne 0 ]; then
                             echo "    Tests FAILED on repeat $ri"
