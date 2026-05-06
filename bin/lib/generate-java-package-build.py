@@ -172,17 +172,6 @@ signing {{
     sign publishing.publications.mavenJava
 }}
 
-// Generated source files contain `{{@link Foo}}` references that don't always
-// resolve under javadoc's strict checking — e.g. classes renamed to avoid
-// Java reserved words (`Error` → `Error_`) keep the original name in their
-// own docstrings. Until the Java codegen rewrites those references, suppress
-// javadoc fatal errors so the `:javadocJar` task (and the publish path that
-// depends on it) succeeds.
-tasks.withType(Javadoc).configureEach {{
-    options.addStringOption('Xdoclint:none', '-quiet')
-    failOnError = false
-}}
-
 // sourcesJar may see a file via multiple sourceSet srcDirs. Skip duplicates;
 // the source content is identical, the path collision is just a Gradle quirk.
 tasks.named('sourcesJar') {{
