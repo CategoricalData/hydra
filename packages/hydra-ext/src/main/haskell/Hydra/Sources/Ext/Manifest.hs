@@ -1,15 +1,12 @@
 -- | Package manifest for hydra-ext.
 --
 -- Owns DSL sources for the "truly-ext" coders and formats: Avro, Protobuf,
--- GraphQL, Pegasus/PDL, Yaml, Atlas, Cpp, Csharp, Go, Json Schema, Rust,
+-- GraphQL, Pegasus/PDL, Yaml, Atlas, Cpp, Csharp, Json Schema, Rust,
 -- TypeScript, and various miscellaneous domain modules. See
 -- feature_290_packaging-plan.md, "Sync system redesign / Package manifests".
 --
--- Note: The following files exist in packages/hydra-ext/ but are intentionally
--- excluded from mainModules, preserving the exclusions from
--- heads/haskell/Sources/Ext.hs:
---
---   * Go.Serde — WIP, incomplete module
+-- Note: Go DSL sources moved out of hydra-ext into the hydra-go package
+-- as part of issue #289 (Go head).
 
 module Hydra.Sources.Ext.Manifest (
   mainModules,
@@ -35,8 +32,6 @@ import qualified Hydra.Sources.Cpp.Utils as CppUtils
 import qualified Hydra.Sources.Csharp.Language as CsharpLanguage
 import qualified Hydra.Sources.Csharp.Syntax as CsharpSyntax
 import qualified Hydra.Sources.Delta.Parquet as DeltaParquet
-import qualified Hydra.Sources.Go.Language as GoLanguage
-import qualified Hydra.Sources.Go.Syntax as GoSyntax
 import qualified Hydra.Sources.Graphql.Coder as GraphqlCoder
 import qualified Hydra.Sources.Graphql.Language as GraphqlLanguage
 import qualified Hydra.Sources.Graphql.Serde as GraphqlSerde
@@ -101,8 +96,6 @@ mainModules = [
   Datalog.module_,
   DeltaParquet.module_,
   GeoJson.module_,
-  GoLanguage.module_,
-  GoSyntax.module_,
   GraphqlCoder.module_,
   GraphqlLanguage.module_,
   GraphqlSerde.module_,
