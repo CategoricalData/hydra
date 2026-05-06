@@ -41,7 +41,12 @@ cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json hydra:exe:digest-check >/dev/null 2>&1
 
 # Invalidate per-target digests so Stage 7 can't trust stale records.
-rm -f "$DIST_ROOT"/*/src/main/digest.json "$DIST_ROOT"/*/src/test/digest.json
+# Scoped to $BATCH_PACKAGES — packages outside the batch emit set
+# (e.g. hydra-pg, hydra-rdf, hydra-ext) keep their digests untouched;
+# those are managed by per-package assemble-distribution.sh runs.
+for pkg in $BATCH_PACKAGES; do
+    rm -f "$DIST_ROOT/$pkg/src/main/digest.json" "$DIST_ROOT/$pkg/src/test/digest.json"
+done
 
 echo "Step 1: Generating main scala modules for every package..."
 stack exec bootstrap-from-json -- \
