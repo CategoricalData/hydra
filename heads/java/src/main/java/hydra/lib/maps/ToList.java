@@ -9,11 +9,9 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -23,6 +21,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -57,10 +56,12 @@ public class ToList extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Either<Error_, Map<Term, Term>> r = hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
-            return hydra.lib.eithers.Map.apply(map -> {
-                List<Term> pairTerms = map.entrySet().stream().map(
-                    e -> Terms.pair(e.getKey(), e.getValue())).collect(Collectors.toList());
-                return Terms.list(pairTerms);
+            return hydra.lib.eithers.Map.apply(m -> {
+                ConsList<Term> reversed = ConsList.empty();
+                for (Map.Entry<Term, Term> e : m.entrySet()) {
+                    reversed = ConsList.cons(Terms.pair(e.getKey(), e.getValue()), reversed);
+                }
+                return Terms.list(reversed.reverse());
             }, r);
         };
     }
@@ -73,10 +74,10 @@ public class ToList extends PrimitiveFunction {
      * @return a list of key-value pairs
      */
     public static <K, V> List<Pair<K, V>> apply(Map<K, V> map) {
-        List<Pair<K, V>> result = new ArrayList<>();
+        ConsList<Pair<K, V>> reversed = ConsList.empty();
         for (Map.Entry<K, V> e : map.entrySet()) {
-            result.add(new Pair<>(e.getKey(), e.getValue()));
+            reversed = ConsList.cons(new Pair<>(e.getKey(), e.getValue()), reversed);
         }
-        return result;
+        return reversed.reverse();
     }
 }

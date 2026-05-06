@@ -30,7 +30,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -164,7 +164,7 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
   "augment" <~ ("b" ~>
     "freeVars" <~ Sets.toList (Sets.intersection (var "boundVars") (Variables.freeVariablesInTerm @@ (Core.bindingTerm $ var "b"))) $
     "varTypePairs" <~ Lists.map ("v" ~> pair (var "v") (Maps.lookup (var "v") (var "types"))) (var "freeVars") $
-    "varTypes" <~ Maybes.cat (Lists.map (unaryFunction Pairs.second) (var "varTypePairs")) $
+    "varTypes" <~ Maybes.cat (Lists.map (reify Pairs.second) (var "varTypePairs")) $
     Logic.ifElse (Logic.or (Lists.null $ var "freeVars")
                            (Logic.not $ Equality.equal (Lists.length $ var "varTypes") (Lists.length $ var "varTypePairs")))
       (pair (var "b") nothing)
@@ -187,8 +187,8 @@ augmentBindingsWithNewFreeVars = define "augmentBindingsWithNewFreeVars" $
             (var "freeVars"))))) $
   "results" <~ Lists.map (var "augment") (var "bindings") $
   pair
-    (Lists.map (unaryFunction Pairs.first) (var "results"))
-    (Typing.termSubst $ Maps.fromList $ Maybes.cat $ Lists.map (unaryFunction Pairs.second) (var "results"))
+    (Lists.map (reify Pairs.first) (var "results"))
+    (Typing.termSubst $ Maps.fromList $ Maybes.cat $ Lists.map (reify Pairs.second) (var "results"))
 
 -- | Predicate for hoisting polymorphic bindings.
 -- A binding should be hoisted if it is polymorphic or uses outer type variables.
@@ -234,7 +234,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
       (var "capturedTermVars") $
     -- We can only construct a new type scheme if all of the captured term variables have types
     -- If there are any captured term variables, we create a function type
-    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Strip.deannotateTypeParameters @@ var "typ") (Maybes.cat (Lists.map (unaryFunction Pairs.second) (var "capturedTermVarTypePairs"))) $
+    "capturedTermVarTypes" <~ Lists.map ("typ" ~> Strip.deannotateTypeParameters @@ var "typ") (Maybes.cat (Lists.map (reify Pairs.second) (var "capturedTermVarTypePairs"))) $
     -- Captured type vars include those free in the binding's type AND those free in captured term var types.
     -- The latter is needed because wrapping with lambdas for captured term vars introduces their types
     -- into the hoisted binding's type.
@@ -273,7 +273,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
     "termWithTypeLambdas" <~ Lists.foldl
       ("t" ~> "v" ~> Core.termTypeLambda $ Core.typeLambda (var "v") (var "t"))
       (var "termWithLambdas")
-      (Lists.reverse $ Maybes.maybe (list ([] :: [TTerm Name])) (unaryFunction Core.typeSchemeVariables) $ var "newTypeScheme") $
+      (Lists.reverse $ Maybes.maybe (list ([] :: [TTerm Name])) (reify Core.typeSchemeVariables) $ var "newTypeScheme") $
 
     -- Build the replacement: first apply type variables for captured type vars,
     -- then apply term variables for captured term vars.
@@ -326,7 +326,7 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
         -- Find all of the term-level variables which are captured by each binding to be hoisted.
         -- Because of dependencies between sibling bindings, this must be done all at once, rather than
         -- individually per binding.
-        "hoistedBindingNames" <~ Lists.map (unaryFunction $ Core.bindingName) (var "hoistUs") $
+        "hoistedBindingNames" <~ Lists.map (reify $ Core.bindingName) (var "hoistUs") $
 
         -- Polymorphic let-bound variables, which are hoisted themselves.
         -- We need to include them for argument propagation, but exclude them from the final list of arguments
@@ -352,10 +352,10 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
           (var "freeVariablesInEachBinding") $
         "bindingEdges" <~ Lists.zip
           (var "hoistedBindingNames")
-          (Lists.map (unaryFunction Pairs.first) (var "bindingDependencies")) $
+          (Lists.map (reify Pairs.first) (var "bindingDependencies")) $
         "bindingImmediateCapturedVars" <~ Lists.zip
           (var "hoistedBindingNames")
-          (Lists.map (unaryFunction Pairs.second) (var "bindingDependencies")) $
+          (Lists.map (reify Pairs.second) (var "bindingDependencies")) $
         "capturedVarsMap" <~ Maps.fromList (Sorting.propagateTags @@ var "bindingEdges" @@ var "bindingImmediateCapturedVars") $
         "bindingsWithCapturedVars" <~ Lists.map
           ("b" ~> pair (var "b") $ optCases (Maps.lookup (Core.bindingName $ var "b") (var "capturedVarsMap"))
@@ -370,13 +370,13 @@ hoistLetBindingsWithPredicate = define "hoistLetBindingsWithPredicate" $
           (pair (list ([] :: [TTerm (Binding, Term)])) (var "alreadyUsedNames"))
           (var "bindingsWithCapturedVars") $
         "hoistPairs" <~ Lists.reverse (Pairs.first $ var "hoistPairsAndNames") $
-        "hoistedBindings" <~ Lists.map (unaryFunction Pairs.first) (var "hoistPairs") $
-        "replacements" <~ Lists.map (unaryFunction Pairs.second) (var "hoistPairs") $
+        "hoistedBindings" <~ Lists.map (reify Pairs.first) (var "hoistPairs") $
+        "replacements" <~ Lists.map (reify Pairs.second) (var "hoistPairs") $
         "finalUsedNames" <~ Pairs.second (var "hoistPairsAndNames") $
 
         -- Pair each hoisted name with its replacement
         "hoistNameReplacementPairs" <~ Lists.zip
-          (Lists.map (unaryFunction Core.bindingName) (var "hoistUs"))
+          (Lists.map (reify Core.bindingName) (var "hoistUs"))
           (var "replacements") $
 
         -- Map from binding name to original binding (for checking polymorphism)

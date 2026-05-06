@@ -3,13 +3,14 @@
 -- | Test cases for variable analysis and manipulation (free variables, unshadowing, normalization)
 module Hydra.Sources.Test.Variables where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -21,7 +22,7 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Variables as VariablesModule
+import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
 import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
@@ -36,7 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, VariablesModule.ns, TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Variables.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for variable analysis and manipulation")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -44,10 +45,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- Field constructor for cases/match (uses Phantoms.>>: to create Field, since the unqualified >>: from Testing creates tuples)
 (~>:) :: AsTerm t a => Name -> t -> Field
@@ -56,7 +53,7 @@ infixr 0 ~>:
 
 -- | Show a term as a string using ShowCore.term
 showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term # t
+showTerm t = ShowCore.term @@ t
 
 -- | Show a set of names as a sorted, comma-separated string: "{name1, name2, ...}"
 showNameSet :: TTerm (S.Set Name) -> TTerm String
@@ -69,7 +66,7 @@ showNameSet s = Strings.cat $ plist [
 
 -- | Helper for Term -> Term kernel function test cases
 termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-termCase cname func input output = universalCase cname (showTerm (func # input)) (showTerm output)
+termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
 
 -- Helper to build names
 nm :: String -> TTerm Name
@@ -84,19 +81,17 @@ letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper for multi-binding let
-multiLet :: [(String, TTerm Term)] -> TTerm Term -> TTerm Term
-multiLet bindings body = lets ((\(n, v) -> (nm n, v)) <$> bindings) body
 
 -- | Convenience helpers for specific kernel functions
 unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-unshadowCase cname = termCase cname VariablesModule.unshadowVariables
+unshadowCase cname = termCase cname Variables.unshadowVariables
 
 normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-normalizeTypeVarsCase cname = termCase cname VariablesModule.normalizeTypeVariablesInTerm
+normalizeTypeVarsCase cname = termCase cname Variables.normalizeTypeVariablesInTerm
 
 freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
 freeVarsCase cname input expected = universalCase cname
-  (showNameSet (VariablesModule.freeVariablesInTerm # input))
+  (showNameSet (Variables.freeVariablesInTerm @@ input))
   (showNameSet expected)
 
 -- | Test cases for free variables computation
@@ -334,9 +329,9 @@ unshadowVariablesGroup = subgroup "unshadowVariables" [
       (letExpr "x" (int32 1) (lambda "x2" (var "x2"))),
 
     unshadowCase "lambda shadows one of multiple let bindings"
-      (multiLet [("x", int32 1), ("y", int32 2)]
+      (lets [(nm "x", int32 1), (nm "y", int32 2)]
         (lambda "x" (list [var "x", var "y"])))
-      (multiLet [("x", int32 1), ("y", int32 2)]
+      (lets [(nm "x", int32 1), (nm "y", int32 2)]
         (lambda "x2" (list [var "x2", var "y"]))),
 
     -- === Nested lets ===
@@ -436,8 +431,8 @@ unshadowVariablesGroup = subgroup "unshadowVariables" [
     -- === Shadowing inside annotation ===
 
     unshadowCase "shadowed lambda inside annotated term"
-      (lambda "x" (annot emptyAnnMap (lambda "x" (var "x"))))
-      (lambda "x" (annot emptyAnnMap (lambda "x2" (var "x2")))),
+      (lambda "x" (annots emptyAnnMap (lambda "x" (var "x"))))
+      (lambda "x" (annots emptyAnnMap (lambda "x2" (var "x2")))),
 
     -- === Complex nesting ===
 

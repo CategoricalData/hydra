@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -19,6 +18,7 @@ import static hydra.dsl.Types.map;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -53,7 +53,7 @@ public class Keys extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Either<Error_, Map<Term, Term>> r = hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
-            return hydra.lib.eithers.Map.apply(map -> Terms.list(new ArrayList<>(map.keySet())), r);
+            return hydra.lib.eithers.Map.apply(m -> Terms.list(apply(m)), r);
         };
     }
 
@@ -65,6 +65,10 @@ public class Keys extends PrimitiveFunction {
      * @return the keys
      */
     public static <K, V> List<K> apply(Map<K, V> map) {
-        return new ArrayList<>(map.keySet());
+        ConsList<K> reversed = ConsList.empty();
+        for (K k : map.keySet()) {
+            reversed = ConsList.cons(k, reversed);
+        }
+        return reversed.reverse();
     }
 }

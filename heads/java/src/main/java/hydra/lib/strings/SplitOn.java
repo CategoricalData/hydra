@@ -7,9 +7,7 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
@@ -18,6 +16,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -68,15 +67,15 @@ public class SplitOn extends PrimitiveFunction {
      * @return the list of substrings
      */
     public static List<String> apply(String delim, String string) {
-        ArrayList<String> parts = new ArrayList<>();
+        ConsList<String> reversed = ConsList.empty();
 
         if (delim.isEmpty()) {
-            parts.add("");
+            reversed = ConsList.cons("", reversed);
             int i = 0;
             while (i < string.length()) {
                 int cp = string.codePointAt(i);
                 int charCount = Character.charCount(cp);
-                parts.add(string.substring(i, i + charCount));
+                reversed = ConsList.cons(string.substring(i, i + charCount), reversed);
                 i += charCount;
             }
         } else {
@@ -87,12 +86,12 @@ public class SplitOn extends PrimitiveFunction {
                 if (idx < 0) {
                     break;
                 }
-                parts.add(string.substring(k, idx));
+                reversed = ConsList.cons(string.substring(k, idx), reversed);
                 k = idx + delimLen;
             }
-            parts.add(string.substring(k));
+            reversed = ConsList.cons(string.substring(k), reversed);
         }
 
-        return parts;
+        return reversed.reverse();
     }
 }

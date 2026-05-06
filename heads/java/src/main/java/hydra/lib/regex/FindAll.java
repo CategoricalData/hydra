@@ -6,7 +6,6 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -18,6 +17,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -48,10 +48,10 @@ public class FindAll extends PrimitiveFunction {
 
     public static List<String> apply(String pattern, String input) {
         Matcher m = Pattern.compile(pattern).matcher(input);
-        ArrayList<String> results = new ArrayList<>();
+        ConsList<String> reversed = ConsList.empty();
         while (m.find()) {
-            results.add(m.group());
+            reversed = ConsList.cons(m.group(), reversed);
         }
-        return results;
+        return reversed.reverse();
     }
 }

@@ -40,7 +40,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -196,7 +196,7 @@ isEncodedType = define "isEncodedType" $
 isEnumRowType :: TTermDefinition ([FieldType] -> Bool)
 isEnumRowType = define "isEnumRowType" $
   doc "Check if a row type represents an enum (all fields are unit-typed)" $
-  "rt" ~> Lists.foldl (binaryFunction Logic.and) true $
+  "rt" ~> Lists.foldl (reify2 Logic.and) true $
     Lists.map ("f" ~> isUnitType @@ (Strip.deannotateType @@ (Core.fieldTypeType (var "f")))) $
       var "rt"
 
@@ -233,7 +233,7 @@ isSerializable = define "isSerializable" $
     ("deps" ~>
       "allVariants" <~ Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps")))) $
       Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
-    (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (unaryFunction Equality.identity) @@ Core.bindingName (var "el"))
+    (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Equality.identity) @@ Core.bindingName (var "el"))
 
 isSerializableType :: TTermDefinition (Type -> Bool)
 isSerializableType = define "isSerializableType" $
@@ -255,7 +255,7 @@ isSerializableByName = define "isSerializableByName" $
     ("deps" ~>
       "allVariants" <~ Sets.fromList (Lists.concat (Lists.map (var "variants") (Maps.elems (var "deps")))) $
       Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants")))
-    (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (unaryFunction Equality.identity) @@ var "name")
+    (typeDependencies @@ var "cx" @@ var "graph" @@ false @@ (reify Equality.identity) @@ var "name")
 
 isType :: TTermDefinition (Type -> Bool)
 isType = define "isType" $
@@ -332,7 +332,7 @@ typeDependencies = define "typeDependencies" $
       (Eithers.bind (Eithers.mapList (var "toPair") (Sets.toList (var "seeds"))) (
         "pairs" ~>
         "newNames" <~ Maps.union (var "names") (Maps.fromList (var "pairs")) $
-        "refs" <~ Lists.foldl (binaryFunction Sets.union) Sets.empty (Lists.map
+        "refs" <~ Lists.foldl (reify2 Sets.union) Sets.empty (Lists.map
           ("pair" ~> Dependencies.typeDependencyNames @@ var "withSchema" @@ Pairs.second (var "pair"))
           (var "pairs")) $
         "visited" <~ Sets.fromList (Maps.keys (var "names")) $

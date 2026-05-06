@@ -7,11 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -19,6 +16,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -48,9 +46,13 @@ public class Lines extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(
-            s -> Terms.list(apply(s).stream().map(Terms::string).collect(Collectors.toList())),
-            hydra.extract.Core.string(graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> {
+                ConsList<Term> reversed = ConsList.empty();
+                for (String line : apply(s)) {
+                    reversed = ConsList.cons(Terms.string(line), reversed);
+                }
+                return Terms.list(reversed.reverse());
+            }, hydra.extract.Core.string(graph, args.get(0)));
     }
 
     /**
@@ -60,13 +62,16 @@ public class Lines extends PrimitiveFunction {
      */
     public static List<String> apply(String s) {
         if (s.isEmpty()) {
-            return new ArrayList<>();
+            return ConsList.empty();
         }
         String[] parts = s.split("\\n", -1);
         // Remove trailing empty string if the string ends with newline
-        if (parts.length > 0 && parts[parts.length - 1].isEmpty()) {
-            return new ArrayList<>(Arrays.asList(Arrays.copyOf(parts, parts.length - 1)));
+        int end = (parts.length > 0 && parts[parts.length - 1].isEmpty())
+            ? parts.length - 1 : parts.length;
+        ConsList<String> result = ConsList.empty();
+        for (int i = end - 1; i >= 0; i--) {
+            result = ConsList.cons(parts[i], result);
         }
-        return new ArrayList<>(Arrays.asList(parts));
+        return result;
     }
 }

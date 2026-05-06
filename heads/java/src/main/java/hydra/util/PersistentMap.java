@@ -105,6 +105,29 @@ public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Ent
     }
 
     /**
+     * Coerces an arbitrary {@code Map<K, V>} into a {@code PersistentMap<K, V>}.
+     * Returns the input unchanged if it is already a PersistentMap. Otherwise builds
+     * a new PersistentMap by inserting each entry, which requires K to be Comparable
+     * at runtime (an unchecked cast is used; callers are responsible for ensuring
+     * keys are mutually comparable).
+     * <p>
+     * This bridge exists for primitive {@code apply} methods whose static signatures
+     * are {@code <K, V>} (no Comparable bound) but whose runtime keys are guaranteed
+     * to be Comparable by the kernel's type-scheme constraints.
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static <K, V> PersistentMap<K, V> coerce(Map<K, V> source) {
+        if (source instanceof PersistentMap) {
+            return (PersistentMap<K, V>) source;
+        }
+        PersistentMap map = empty();
+        for (Map.Entry<K, V> entry : source.entrySet()) {
+            map = map.insert(entry.getKey(), entry.getValue());
+        }
+        return map;
+    }
+
+    /**
      * Returns the number of entries.
      */
     public abstract int size();

@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -67,7 +67,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
-import qualified Hydra.Dsl.Meta.DeepCore as DC
+import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 
 
@@ -135,24 +135,24 @@ formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 -- Note: We use the original inline style - the Python coder should handle this pattern by recognizing
 -- when a lambda body is a case application and generating a proper function with match statement.
 deannotateAndMatch :: TTerm (Maybe Term) -> [TTerm Field] -> TTerm Term
-deannotateAndMatch dflt cses = DC.lambda "cx" $ DC.lambda "raw" $
-  DC.primitive _eithers_either
+deannotateAndMatch dflt cses = DeepCore.lambda "cx" $ DeepCore.lambda "raw" $
+  DeepCore.primitive _eithers_either
     -- If Left (decoding error), propagate it
-    @@@ (DC.lambda "err" $ DC.left $ DC.var "err")
+    @@@ (DeepCore.lambda "err" $ DeepCore.left $ DeepCore.var "err")
     -- If Right (stripped term), do the case match
-    @@@ (DC.lambda "stripped" $ DC.cases _Term (DC.var "stripped") dflt cses)
+    @@@ (DeepCore.lambda "stripped" $ DeepCore.cases _Term (DeepCore.var "stripped") dflt cses)
     -- Call stripWithDecodingError cx raw (returns Either DecodingError Term)
-    @@@ (DC.ref ExtractCore.stripWithDecodingError @@@ DC.var "cx" @@@ DC.var "raw")
+    @@@ (DeepCore.ref ExtractCore.stripWithDecodingError @@@ DeepCore.var "cx" @@@ DeepCore.var "raw")
 
 -- | Helper to create a decoding error term from a message (object-level)
 -- Returns: Term.wrap (WrappedTerm "hydra.util.DecodingError" (Term.literal (Literal.string msg)))
 decodingErrorTerm :: TTerm String -> TTerm Term
-decodingErrorTerm msg = DC.wrap _DecodingError $ DC.string msg
+decodingErrorTerm msg = DeepCore.wrap _DecodingError $ DeepCore.string msg
 
 -- | Helper to create a Left (error) result term
 -- Returns: Term.either (Left (decodingErrorTerm msg))
 leftError :: TTerm String -> TTerm Term
-leftError msg = DC.left $ decodingErrorTerm msg
+leftError msg = DeepCore.left $ decodingErrorTerm msg
 
 -- | Helper to strip and dereference with DecodingError — delegates to the module-level definition
 stripWithDecodingError :: TTerm Graph -> TTerm Term -> TTerm (Either DecodingError Term)
@@ -346,7 +346,7 @@ decodeEitherType = define "decodeEitherType" $
   "et" ~>
   "leftDecoder" <~ decodeType @@ Core.eitherTypeLeft (var "et") $
   "rightDecoder" <~ decodeType @@ Core.eitherTypeRight (var "et") $
-  DC.ref ExtractCore.decodeEither @@@ var "leftDecoder" @@@ var "rightDecoder"
+  DeepCore.ref ExtractCore.decodeEither @@@ var "leftDecoder" @@@ var "rightDecoder"
 
 -- | Generate a decoder for a list type
 -- | Generate a decoder for a polymorphic (forall) type
@@ -369,7 +369,7 @@ decodeListType = define "decodeListType" $
   doc "Generate a decoder for a list type" $
   "elemType" ~>
   "elemDecoder" <~ decodeType @@ var "elemType" $
-  DC.ref ExtractCore.decodeList @@@ var "elemDecoder"
+  DeepCore.ref ExtractCore.decodeList @@@ var "elemDecoder"
 
 -- | Generate a decoder for a map type
 -- | Generate a decoder for a literal type
@@ -390,22 +390,22 @@ decodeLiteralType = define "decodeLiteralType" $
     -- Helper to wrap a Literal handler with Term.literal matching
     decodeLiteral handleLiteral = deannotateAndMatch
       (just $ leftError (string "expected literal")) [
-      DC.field _Term_literal $ DC.lambda "v" $ handleLiteral @@@ DC.var "v"]
+      DeepCore.field _Term_literal $ DeepCore.lambda "v" $ handleLiteral @@@ DeepCore.var "v"]
 
     -- Decode binary: Term -> Either DecodingError Binary
-    decodeBinary = decodeLiteral $ DC.match _Literal
+    decodeBinary = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (string "expected binary literal")) [
-      DC.field _Literal_binary $ DC.lambda "b" $ DC.right $ DC.var "b"]
+      DeepCore.field _Literal_binary $ DeepCore.lambda "b" $ DeepCore.right $ DeepCore.var "b"]
 
     -- Decode boolean: Term -> Either DecodingError Bool
-    decodeBoolean = decodeLiteral $ DC.match _Literal
+    decodeBoolean = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (string "expected boolean literal")) [
-      DC.field _Literal_boolean $ DC.lambda "b" $ DC.right $ DC.var "b"]
+      DeepCore.field _Literal_boolean $ DeepCore.lambda "b" $ DeepCore.right $ DeepCore.var "b"]
 
     -- Decode decimal: Term -> Either DecodingError Scientific
-    decodeDecimal = decodeLiteral $ DC.match _Literal
+    decodeDecimal = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (string "expected decimal literal")) [
-      DC.field _Literal_decimal $ DC.lambda "d" $ DC.right $ DC.var "d"]
+      DeepCore.field _Literal_decimal $ DeepCore.lambda "d" $ DeepCore.right $ DeepCore.var "d"]
 
     -- Decode float: Term -> Either DecodingError <specific float type>
     decodeFloat ft = cases _FloatType ft Nothing [
@@ -413,11 +413,11 @@ decodeLiteralType = define "decodeLiteralType" $
         _FloatType_float64>>: constant $ decodeFloatVariant _FloatValue_float64 (string "float64")]
 
     -- Helper to decode a specific float variant
-    decodeFloatVariant floatVariant floatName = decodeLiteral $ DC.match _Literal
+    decodeFloatVariant floatVariant floatName = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (Strings.cat $ list [string "expected ", floatName, string " literal"])) [
-      DC.field _Literal_float $ DC.match _FloatValue
+      DeepCore.field _Literal_float $ DeepCore.match _FloatValue
         (just $ leftError (Strings.cat $ list [string "expected ", floatName, string " value"])) [
-        DC.field floatVariant $ DC.lambda "f" $ DC.right $ DC.var "f"]]
+        DeepCore.field floatVariant $ DeepCore.lambda "f" $ DeepCore.right $ DeepCore.var "f"]]
 
     -- Decode integer: Term -> Either DecodingError <specific integer type>
     decodeInteger it = cases _IntegerType it Nothing [
@@ -432,16 +432,16 @@ decodeLiteralType = define "decodeLiteralType" $
         _IntegerType_uint64>>: constant $ decodeIntegerVariant _IntegerValue_uint64 (string "uint64")]
 
     -- Helper to decode a specific integer variant
-    decodeIntegerVariant intVariant intName = decodeLiteral $ DC.match _Literal
+    decodeIntegerVariant intVariant intName = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (Strings.cat $ list [string "expected ", intName, string " literal"])) [
-      DC.field _Literal_integer $ DC.match _IntegerValue
+      DeepCore.field _Literal_integer $ DeepCore.match _IntegerValue
         (just $ leftError (Strings.cat $ list [string "expected ", intName, string " value"])) [
-        DC.field intVariant $ DC.lambda "i" $ DC.right $ DC.var "i"]]
+        DeepCore.field intVariant $ DeepCore.lambda "i" $ DeepCore.right $ DeepCore.var "i"]]
 
     -- Decode string: Term -> Either DecodingError String
-    decodeString = decodeLiteral $ DC.match _Literal
+    decodeString = decodeLiteral $ DeepCore.match _Literal
       (just $ leftError (string "expected string literal")) [
-      DC.field _Literal_string $ DC.lambda "s" $ DC.right $ DC.var "s"]
+      DeepCore.field _Literal_string $ DeepCore.lambda "s" $ DeepCore.right $ DeepCore.var "s"]
 
 -- | Transform a type module into a decoder module
 -- Returns Nothing if the module has no decodable type definitions
@@ -452,7 +452,7 @@ decodeMapType = define "decodeMapType" $
   "mt" ~>
   "keyDecoder" <~ decodeType @@ Core.mapTypeKeys (var "mt") $
   "valDecoder" <~ decodeType @@ Core.mapTypeValues (var "mt") $
-  DC.ref ExtractCore.decodeMap @@@ var "keyDecoder" @@@ var "valDecoder"
+  DeepCore.ref ExtractCore.decodeMap @@@ var "keyDecoder" @@@ var "valDecoder"
 
 -- | Generate a decoder for an optional/maybe type
 -- | Generate a decoder for an optional/maybe type
@@ -461,7 +461,7 @@ decodeMaybeType = define "decodeMaybeType" $
   doc "Generate a decoder for an optional type" $
   "elemType" ~>
   "elemDecoder" <~ decodeType @@ var "elemType" $
-  DC.ref ExtractCore.decodeMaybe @@@ var "elemDecoder"
+  DeepCore.ref ExtractCore.decodeMaybe @@@ var "elemDecoder"
 
 -- | Generate a decoder for a pair type
 -- | Transform a type module into a decoder module
@@ -534,7 +534,7 @@ decodePairType = define "decodePairType" $
   "pt" ~>
   "firstDecoder" <~ decodeType @@ Core.pairTypeFirst (var "pt") $
   "secondDecoder" <~ decodeType @@ Core.pairTypeSecond (var "pt") $
-  DC.ref ExtractCore.decodePair @@@ var "firstDecoder" @@@ var "secondDecoder"
+  DeepCore.ref ExtractCore.decodePair @@@ var "firstDecoder" @@@ var "secondDecoder"
 
 -- | Generate a decoder for a set type
 -- | Generate a decoder for a record type (no element name)
@@ -552,11 +552,11 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
   -- For each field, build a term that decodes it from fieldMap using requireField helper
   -- Returns: Either DecodingError fieldValue
   "decodeFieldTerm" <~ ("ft" ~>
-    DC.ref ExtractCore.requireField
-      @@@ (DC.string $ Core.unName $ Core.fieldTypeName $ var "ft")
+    DeepCore.ref ExtractCore.requireField
+      @@@ (DeepCore.string $ Core.unName $ Core.fieldTypeName $ var "ft")
       @@@ (decodeType @@ (Core.fieldTypeType $ var "ft"))
-      @@@ DC.var "fieldMap"
-      @@@ DC.var "cx") $
+      @@@ DeepCore.var "fieldMap"
+      @@@ DeepCore.var "cx") $
   -- Build the body: a nested chain of eithers.bind calls that decode each field and build the record
   -- We need: d1 >>= \v1 -> d2 >>= \v2 -> d3 >>= \v3 -> Right Record{...}
   -- Using foldl on reversed list to build from inside out
@@ -567,20 +567,20 @@ decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
   "decodeBody" <~ (
     Lists.foldl
       ("acc" ~> "ft" ~>
-        DC.primitive _eithers_bind
+        DeepCore.primitive _eithers_bind
           @@@ (var "decodeFieldTerm" @@ var "ft")
           @@@ (var "toFieldLambda" @@ var "ft" @@ var "acc"))
       -- Base case: Right with the decoded record value
-      (DC.right $ Core.termRecord $ Core.record (var "tname") $
+      (DeepCore.right $ Core.termRecord $ Core.record (var "tname") $
         Lists.map ("ft" ~> Core.field (Core.fieldTypeName $ var "ft") $ Core.termVariable $ var "localVarName" @@ var "ft")
           (var "rt"))
       (Lists.reverse $ var "rt")) $
   deannotateAndMatch
     (just $ leftError (string "expected record")) [
-    DC.field _Term_record $ DC.lambda "record" $
-      DC.lets [
+    DeepCore.field _Term_record $ DeepCore.lambda "record" $
+      DeepCore.lets [
         -- Build Map Name Term from the record's fields using toFieldMap helper
-        ("fieldMap", DC.ref ExtractCore.toFieldMap @@@ DC.var "record")] $
+        ("fieldMap", DeepCore.ref ExtractCore.toFieldMap @@@ DeepCore.var "record")] $
         var "decodeBody"]
 
 -- | Generate a decoder for a polymorphic (forall) type
@@ -599,7 +599,7 @@ decodeSetType = define "decodeSetType" $
   doc "Generate a decoder for a set type" $
   "elemType" ~>
   "elemDecoder" <~ decodeType @@ var "elemType" $
-  DC.ref ExtractCore.decodeSet @@@ var "elemDecoder"
+  DeepCore.ref ExtractCore.decodeSet @@@ var "elemDecoder"
 
 -- | Generate a decoder term for a given Type with element name context
 -- | Generate a decoder term for a given Type (without element name context)
@@ -608,7 +608,7 @@ decodeType = define "decodeType" $
   doc "Generate a decoder term for a Type" $
   "typ" ~>
   cases _Type (var "typ")
-    (Just $ DC.lambda "cx" $ DC.lambda "t" $ leftError $ string "unsupported type variant") [
+    (Just $ DeepCore.lambda "cx" $ DeepCore.lambda "t" $ leftError $ string "unsupported type variant") [
     _Type_annotated>>: "at" ~> decodeType @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
       (decodeType @@ Core.applicationTypeFunction (var "appType"))
@@ -635,7 +635,7 @@ decodeTypeNamed = define "decodeTypeNamed" $
   doc "Generate a decoder term for a Type, with element name for nominal types" $
   "ename" ~> "typ" ~>
   cases _Type (var "typ")
-    (Just $ DC.lambda "cx" $ DC.lambda "t" $ leftError $ string "unsupported type variant") [
+    (Just $ DeepCore.lambda "cx" $ DeepCore.lambda "t" $ leftError $ string "unsupported type variant") [
     _Type_annotated>>: "at" ~> decodeTypeNamed @@ var "ename" @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: "appType" ~>
       (decodeType @@ Core.applicationTypeFunction (var "appType"))
@@ -671,36 +671,36 @@ decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
   doc "Generate a decoder for a union type with the given element name" $
   "ename" ~> "rt" ~>
   "toVariantPair" <~ ("ft" ~>
-    DC.pair
-      (DC.wrap _Name $ DC.string $ Core.unName $ Core.fieldTypeName $ var "ft")
-      (DC.lambda "input" $ DC.primitive _eithers_map
-        @@@ (DC.lambda "t" $ Core.termInject $ Core.injection (var "ename") $ Core.field (Core.fieldTypeName $ var "ft") $ DC.var "t")
-        @@@ ((decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DC.var "cx" @@@ DC.var "input"))) $
+    DeepCore.pair
+      (DeepCore.wrap _Name $ DeepCore.string $ Core.unName $ Core.fieldTypeName $ var "ft")
+      (DeepCore.lambda "input" $ DeepCore.primitive _eithers_map
+        @@@ (DeepCore.lambda "t" $ Core.termInject $ Core.injection (var "ename") $ Core.field (Core.fieldTypeName $ var "ft") $ DeepCore.var "t")
+        @@@ ((decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DeepCore.var "cx" @@@ DeepCore.var "input"))) $
   deannotateAndMatch
     (just $ leftError $ string "expected union") [
-    DC.field _Term_inject $ DC.lambda "inj" $ DC.lets [
-      ("field", DC.project _Injection _Injection_field @@@ DC.var "inj"),
-      ("fname", DC.project _Field _Field_name @@@ DC.var "field"),
-      ("fterm", DC.project _Field _Field_term @@@ DC.var "field"),
-      ("variantMap", DC.primitive _maps_fromList
-        @@@ (DC.list $ Lists.map (var "toVariantPair") $ var "rt"))] $
-      DC.primitive _maybes_maybe
-        @@@ (DC.left $ DC.wrap _DecodingError $ DC.primitive _strings_cat
-          @@@ (DC.list $ list [
-            DC.string $ string "no such field ",
-            DC.unwrap _Name @@@ DC.var "fname",
-            DC.string $ string " in union"]))
-        @@@ (DC.lambda "f" $ DC.var "f" @@@ DC.var "fterm")
-        @@@ (DC.primitive _maps_lookup
-          @@@ DC.var "fname"
-          @@@ DC.var "variantMap")]
+    DeepCore.field _Term_inject $ DeepCore.lambda "inj" $ DeepCore.lets [
+      ("field", DeepCore.project _Injection _Injection_field @@@ DeepCore.var "inj"),
+      ("fname", DeepCore.project _Field _Field_name @@@ DeepCore.var "field"),
+      ("fterm", DeepCore.project _Field _Field_term @@@ DeepCore.var "field"),
+      ("variantMap", DeepCore.primitive _maps_fromList
+        @@@ (DeepCore.list $ Lists.map (var "toVariantPair") $ var "rt"))] $
+      DeepCore.primitive _maybes_maybe
+        @@@ (DeepCore.left $ DeepCore.wrap _DecodingError $ DeepCore.primitive _strings_cat
+          @@@ (DeepCore.list $ list [
+            DeepCore.string $ string "no such field ",
+            DeepCore.unwrap _Name @@@ DeepCore.var "fname",
+            DeepCore.string $ string " in union"]))
+        @@@ (DeepCore.lambda "f" $ DeepCore.var "f" @@@ DeepCore.var "fterm")
+        @@@ (DeepCore.primitive _maps_lookup
+          @@@ DeepCore.var "fname"
+          @@@ DeepCore.var "variantMap")]
 
 -- | Generate a decoder for a union type (without element name)
 -- | Generate a decoder for the unit type
 decodeUnitType :: TTermDefinition Term
 decodeUnitType = define "decodeUnitType" $
   doc "Generate a decoder for the unit type" $
-  DC.lambda "cx" $ DC.lambda "t" $ DC.ref ExtractCore.decodeUnit @@@ DC.var "cx" @@@ DC.var "t"
+  DeepCore.lambda "cx" $ DeepCore.lambda "t" $ DeepCore.ref ExtractCore.decodeUnit @@@ DeepCore.var "cx" @@@ DeepCore.var "t"
 
 -- | Generate a decoder for a union type with element name
 -- | Generate a decoder for a wrapped type (without element name)
@@ -718,11 +718,11 @@ decodeWrappedTypeNamed = define "decodeWrappedTypeNamed" $
   "bodyDecoder" <~ decodeType @@ var "wt" $
   deannotateAndMatch
     (just $ leftError (string "expected wrapped type")) [
-    DC.field _Term_wrap $ DC.lambda "wrappedTerm" $
-      DC.primitive _eithers_map
-        @@@ (DC.lambda "b" $ DC.wrapDynamic (var "ename") (DC.var "b"))
-        @@@ (var "bodyDecoder" @@@ DC.var "cx"
-          @@@ (DC.project _WrappedTerm _WrappedTerm_body @@@ DC.var "wrappedTerm"))]
+    DeepCore.field _Term_wrap $ DeepCore.lambda "wrappedTerm" $
+      DeepCore.primitive _eithers_map
+        @@@ (DeepCore.lambda "b" $ DeepCore.wrapDynamic (var "ename") (DeepCore.var "b"))
+        @@@ (var "bodyDecoder" @@@ DeepCore.var "cx"
+          @@@ (DeepCore.project _WrappedTerm _WrappedTerm_body @@@ DeepCore.var "wrappedTerm"))]
 
 -- | Generate a decoder for a wrapped type (without element name)
 -- | Get the full result type for a decoder, preserving type applications

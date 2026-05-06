@@ -8,16 +8,15 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -39,7 +38,7 @@ public class Bind extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(0)), argsArg -> {
                 Term mapping = args.get(1);
-                List<Term> allResults = new ArrayList<>();
+                ConsList<Term> reversed = ConsList.empty();
                 for (Term a : argsArg) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(mapping, a));
@@ -47,9 +46,11 @@ public class Bind extends PrimitiveFunction {
                     Either<Error_, List<Term>> inner = hydra.extract.Core.list(graph,
                         ((Either.Right<Error_, Term>) r).value);
                     if (inner.isLeft()) return (Either) inner;
-                    allResults.addAll(((Either.Right<Error_, List<Term>>) inner).value);
+                    for (Term y : ((Either.Right<Error_, List<Term>>) inner).value) {
+                        reversed = ConsList.cons(y, reversed);
+                    }
                 }
-                return Either.right(Terms.list(allResults));
+                return Either.right(Terms.list(reversed.reverse()));
             });
     }
 
@@ -73,12 +74,12 @@ public class Bind extends PrimitiveFunction {
      * @return the flattened result list
      */
     public static <X, Y> List<Y> apply(List<X> args, Function<X, List<Y>> mapping) {
-        ArrayList<Y> all = new ArrayList<>();
+        ConsList<Y> reversed = ConsList.empty();
         for (X x : args) {
             for (Y y : mapping.apply(x)) {
-                all.add(y);
+                reversed = ConsList.cons(y, reversed);
             }
         }
-        return all;
+        return reversed.reverse();
     }
 }

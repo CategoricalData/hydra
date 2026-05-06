@@ -23,7 +23,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -74,15 +74,15 @@ module_ = Module {
 primitiveArity :: TTermDefinition (Primitive -> Int)
 primitiveArity = define "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
-  (typeArity <.> unaryFunction Core.typeSchemeBody <.> unaryFunction Graph.primitiveTypeScheme)
+  (typeArity <.> reify Core.typeSchemeBody <.> reify Graph.primitiveTypeScheme)
 
 termArity :: TTermDefinition (Term -> Int)
 termArity = define "termArity" $
   doc "Find the arity (expected number of arguments) of a term" $
   match _Term (Just $ int32 0) [
-    _Term_application>>: (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> termArity <.> unaryFunction Core.applicationFunction,
+    _Term_application>>: (lambda "xapp" $ Math.sub (var "xapp") (int32 1)) <.> termArity <.> reify Core.applicationFunction,
     _Term_cases>>: constant (int32 1),
-    _Term_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (termArity <.> unaryFunction Core.lambdaBody),
+    _Term_lambda>>: (lambda "i" $ Math.add (int32 1) (var "i")) <.> (termArity <.> reify Core.lambdaBody),
     _Term_project>>: constant (int32 1),
     _Term_unwrap>>: constant (int32 1)]
     -- Note: ignoring variables which might resolve to functions
@@ -91,24 +91,24 @@ typeArity :: TTermDefinition (Type -> Int)
 typeArity = define "typeArity" $
   doc "Find the arity (expected number of arguments) of a type" $
   match _Type (Just $ int32 0) [
-    _Type_annotated>>: typeArity <.> unaryFunction Core.annotatedTypeBody,
-    _Type_application>>: typeArity <.> unaryFunction Core.applicationTypeFunction,
-    _Type_forall>>: typeArity <.> unaryFunction Core.forallTypeBody,
+    _Type_annotated>>: typeArity <.> reify Core.annotatedTypeBody,
+    _Type_application>>: typeArity <.> reify Core.applicationTypeFunction,
+    _Type_forall>>: typeArity <.> reify Core.forallTypeBody,
     _Type_function>>: lambda "f" $
-      Math.add (int32 1) (typeArity <.> unaryFunction Core.functionTypeCodomain @@ var "f")]
+      Math.add (int32 1) (typeArity <.> reify Core.functionTypeCodomain @@ var "f")]
 
 typeSchemeArity :: TTermDefinition (TypeScheme -> Int)
 typeSchemeArity = define "typeSchemeArity" $
   doc "Find the arity (expected number of arguments) of a type scheme" $
-  typeArity <.> unaryFunction Core.typeSchemeBody
+  typeArity <.> reify Core.typeSchemeBody
 
 uncurryType :: TTermDefinition (Type -> [Type])
 uncurryType = define "uncurryType" $
   doc "Uncurry a type expression into a list of types, turning a function type a -> b into cons a (uncurryType b)" $
   lambda "t" ((match _Type (Just $ list [var "t"]) [
-    _Type_annotated>>: uncurryType <.> unaryFunction Core.annotatedTypeBody,
-    _Type_application>>: uncurryType <.> unaryFunction Core.applicationTypeFunction,
-    _Type_forall>>: uncurryType <.> unaryFunction Core.forallTypeBody,
+    _Type_annotated>>: uncurryType <.> reify Core.annotatedTypeBody,
+    _Type_application>>: uncurryType <.> reify Core.applicationTypeFunction,
+    _Type_forall>>: uncurryType <.> reify Core.forallTypeBody,
     _Type_function>>: lambda "ft" $ Lists.cons
       (Core.functionTypeDomain $ var "ft")
-      (uncurryType <.> unaryFunction Core.functionTypeCodomain @@ var "ft")]) @@ var "t")
+      (uncurryType <.> reify Core.functionTypeCodomain @@ var "ft")]) @@ var "t")

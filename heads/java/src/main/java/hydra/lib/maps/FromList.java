@@ -8,10 +8,8 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
 
-import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
@@ -23,6 +21,7 @@ import static hydra.dsl.Types.variable;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.util.Either;
+import hydra.util.PersistentMap;
 
 /**
  * Creates a map from a list of pairs.
@@ -63,72 +62,10 @@ public class FromList extends PrimitiveFunction {
      * @return a map constructed from the pairs
      */
     public static <K, V> Map<K, V> apply(List<Pair<K, V>> pairs) {
-        Map<K, V> result = new TreeMap<>();
+        PersistentMap<K, V> result = PersistentMap.<K, V>empty();
         for (Pair<K, V> p : pairs) {
-            result.put(p.first, p.second);
+            result = result.insert(p.first, p.second);
         }
         return result;
-    }
-
-    /**
-     * Creates an ordered map from an existing map.
-     * Uses TreeMap when keys are Comparable (matching Haskell's Data.Map behavior).
-     * If the source is already a TreeMap, returns a shallow copy using the same comparator.
-     */
-    @SuppressWarnings("unchecked")
-    static <K, V> Map<K, V> orderedMap(Map<K, V> source) {
-        if (source instanceof TreeMap) {
-            // Use the SortedMap copy constructor which iterates linearly,
-            // rather than putAll which uses recursive buildFromSorted and
-            // can cause StackOverflowError on large maps.
-            return new TreeMap<>((java.util.SortedMap<K, V>) source);
-        }
-        if (source.isEmpty()) {
-            return new TreeMap<>();
-        }
-        for (K key : source.keySet()) {
-            if (key != null) {
-                if (key instanceof Comparable) {
-                    try {
-                        TreeMap<K, V> result = new TreeMap<>((a, b) -> ((Comparable<K>) a).compareTo(b));
-                        result.putAll(source);
-                        return result;
-                    } catch (ClassCastException e) {
-                        return new TreeMap<>(source);
-                    }
-                } else {
-                    return new TreeMap<>(source);
-                }
-            }
-        }
-        return new TreeMap<>(source);
-    }
-
-    /**
-     * Creates an empty ordered map with the same ordering strategy as the source map.
-     * If the source is a TreeMap, creates a new empty TreeMap with the same comparator.
-     * If the source has Comparable keys, creates a TreeMap.
-     * Otherwise creates a TreeMap.
-     */
-    @SuppressWarnings("unchecked")
-    static <K, V1, V2> Map<K, V2> emptyLike(Map<K, V1> source) {
-        if (source instanceof TreeMap) {
-            return new TreeMap<>(((TreeMap<K, V1>) source).comparator());
-        }
-        if (!source.isEmpty()) {
-            for (K key : source.keySet()) {
-                if (key != null) {
-                    if (key instanceof Comparable) {
-                        try {
-                            return new TreeMap<>((a, b) -> ((Comparable<K>) a).compareTo(b));
-                        } catch (ClassCastException e) {
-                            return new TreeMap<>();
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        return new TreeMap<>();
     }
 }

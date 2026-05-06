@@ -16,7 +16,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
@@ -31,7 +31,7 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
-import qualified Hydra.Dsl.Meta.DeepCore as DC
+import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 import           Prelude hiding ((++))
 import qualified Data.List                   as L
@@ -637,7 +637,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
   "ns" <~ (Names.namespaceOf @@ Core.bindingName (var "b")) $
-  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (unaryFunction Packaging.unNamespace) (var "ns")) (string "hydra.phantoms"))
+  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (reify Packaging.unNamespace) (var "ns")) (string "hydra.phantoms"))
     (right nothing)
     (right (just (var "b")))
 
