@@ -14,18 +14,18 @@ module Hydra.Sources.Scala.Manifest (
 import Hydra.Kernel
 
 import qualified Hydra.Sources.Scala.Coder as ScalaCoder
-import qualified Hydra.Sources.Scala.Language as ScalaLanguage
-import qualified Hydra.Sources.Scala.Serde as ScalaSerde
+import qualified Hydra.Sources.Scala.Language as ScalaLanguageSource
+import qualified Hydra.Sources.Scala.Serde as ScalaSerdeSource
 import qualified Hydra.Sources.Scala.Syntax as ScalaSyntax
-import qualified Hydra.Sources.Scala.Utils as ScalaUtils
+import qualified Hydra.Sources.Scala.Utils as ScalaUtilsSource
 
 mainModules :: [Module]
 mainModules = [
   ScalaCoder.module_,
-  ScalaLanguage.module_,
-  ScalaSerde.module_,
+  ScalaLanguageSource.module_,
+  ScalaSerdeSource.module_,
   ScalaSyntax.module_,
-  ScalaUtils.module_]
+  ScalaUtilsSource.module_]
 
 testModules :: [Module]
 testModules = []

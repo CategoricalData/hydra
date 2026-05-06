@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -19,6 +18,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -39,19 +39,18 @@ public class DropWhile extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), lst -> {
-                ArrayList<Term> indexed = new ArrayList<>(lst);
-                int dropCount = 0;
-                for (Term x : indexed) {
+                ConsList<Term> remaining = ConsList.fromList(lst);
+                while (!remaining.isEmpty()) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
+                        hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), remaining.head()));
                     if (r.isLeft()) return (Either) r;
                     Either<Error_, Boolean> b = hydra.extract.Core.boolean_(graph,
                         ((Either.Right<Error_, Term>) r).value);
                     if (b.isLeft()) return (Either) b;
                     if (!((Either.Right<Error_, Boolean>) b).value) break;
-                    dropCount++;
+                    remaining = remaining.tail();
                 }
-                return Either.right(Terms.list(new ArrayList<>(indexed.subList(dropCount, indexed.size()))));
+                return Either.right(Terms.list(remaining));
             });
     }
 
@@ -94,10 +93,10 @@ public class DropWhile extends PrimitiveFunction {
      * @return the remaining list after dropping
      */
     public static <X> List<X> apply(Function<X, Boolean> pred, List<X> lst) {
-        int i = 0;
-        while (i < lst.size() && pred.apply(lst.get(i))) {
-            i++;
+        ConsList<X> remaining = ConsList.fromList(lst);
+        while (!remaining.isEmpty() && pred.apply(remaining.head())) {
+            remaining = remaining.tail();
         }
-        return new ArrayList<>(lst.subList(i, lst.size()));
+        return remaining;
     }
 }

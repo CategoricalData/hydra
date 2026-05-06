@@ -24,7 +24,7 @@ import qualified Hydra.Sources.Gql.OpenGql as OpenGql
 import qualified Hydra.Sources.Gql.PathAlgebra.Expressions as PathAlgebraExpressions
 import qualified Hydra.Sources.Gql.PathAlgebra.Syntax as PathAlgebraSyntax
 import qualified Hydra.Sources.Graphviz.Coder as GraphvizCoder
-import qualified Hydra.Sources.Graphviz.Dot as GraphvizDot
+import qualified Hydra.Sources.Graphviz.Dot as DotSyntax
 import qualified Hydra.Sources.Graphviz.Serde as GraphvizSerde
 import qualified Hydra.Sources.Pg.Coder as PgCoder
 import qualified Hydra.Sources.Pg.Graphson.Coder as GraphsonCoder
@@ -37,7 +37,7 @@ import qualified Hydra.Sources.Pg.Printing as PgPrinting
 import qualified Hydra.Sources.Pg.Query as PgQuery
 import qualified Hydra.Sources.Pg.Rdf.Environment as PgRdfEnvironment
 import qualified Hydra.Sources.Pg.Rdf.Mappings as PgRdfMappings
-import qualified Hydra.Sources.Pg.TermsToElements as PgTermsToElements
+import qualified Hydra.Sources.Pg.TermsToElements as TermsToElements
 import qualified Hydra.Sources.Pg.Utils as PgUtils
 import qualified Hydra.Sources.Tinkerpop.Features as TinkerpopFeatures
 import qualified Hydra.Sources.Tinkerpop.Gremlin as Gremlin
@@ -53,7 +53,7 @@ mainModules = [
   GraphsonSyntax.module_,
   GraphsonUtils.module_,
   GraphvizCoder.module_,
-  GraphvizDot.module_,
+  DotSyntax.module_,
   GraphvizSerde.module_,
   Gremlin.module_,
   OpenCypher.module_,
@@ -67,7 +67,7 @@ mainModules = [
   PgQuery.module_,
   PgRdfEnvironment.module_,
   PgRdfMappings.module_,
-  PgTermsToElements.module_,
+  TermsToElements.module_,
   PgUtils.module_,
   TinkerpopFeatures.module_,
   TinkerpopLanguage.module_,

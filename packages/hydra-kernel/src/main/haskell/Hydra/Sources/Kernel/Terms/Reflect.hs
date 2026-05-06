@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -215,8 +215,8 @@ literalTypes = define "literalTypes" $
       Core.literalTypeBinary,
       Core.literalTypeBoolean,
       Core.literalTypeDecimal],
-    Lists.map (unaryFunction Core.literalTypeFloat) (floatTypes),
-    Lists.map (unaryFunction Core.literalTypeInteger) (integerTypes),
+    Lists.map (reify Core.literalTypeFloat) (floatTypes),
+    Lists.map (reify Core.literalTypeInteger) (integerTypes),
     list [
       Core.literalTypeString]]
 

@@ -6,10 +6,9 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -61,6 +60,6 @@ public class ToList extends PrimitiveFunction {
      * @return a singleton list if Just, an empty list if Nothing
      */
     public static <X> List<X> apply(Maybe<X> opt) {
-        return opt.map(Collections::singletonList).orElse(new ArrayList<>());
+        return opt.isJust() ? ConsList.singleton(opt.fromJust()) : ConsList.empty();
     }
 }

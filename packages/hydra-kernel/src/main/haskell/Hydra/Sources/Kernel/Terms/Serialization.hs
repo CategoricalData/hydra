@@ -34,7 +34,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -293,7 +293,7 @@ expressionLength = define "expressionLength" $
     _Ws_breakAndIndent>>: "s" ~> int32 10000,
     _Ws_doubleBreak>>: constant $ int32 10000]) $
   "blockStyleLength" <~ ("style" ~>
-    "mindentLen" <~ Maybes.maybe (int32 0) (unaryFunction Strings.length) (Ast.blockStyleIndent $ var "style") $
+    "mindentLen" <~ Maybes.maybe (int32 0) (reify Strings.length) (Ast.blockStyleIndent $ var "style") $
     "nlBeforeLen" <~ Logic.ifElse (Ast.blockStyleNewlineBeforeContent $ var "style") (int32 1) (int32 0) $
     "nlAfterLen" <~ Logic.ifElse (Ast.blockStyleNewlineAfterContent $ var "style") (int32 1) (int32 0) $
     Math.add (var "mindentLen") $ Math.add (var "nlBeforeLen") (var "nlAfterLen")) $
@@ -327,7 +327,7 @@ expressionLength = define "expressionLength" $
   "seqExprLength" <~ ("se" ~>
     "sopLen" <~ var "opLength" @@ (Ast.seqExprOp $ var "se") $
     "elementLens" <~ Lists.map (expressionLength) (Ast.seqExprElements $ var "se") $
-    "totalElLen" <~ Lists.foldl (binaryFunction Math.add) (int32 0) (var "elementLens") $
+    "totalElLen" <~ Lists.foldl (reify2 Math.add) (int32 0) (var "elementLens") $
     "numSeps" <~ Math.sub (Lists.length $ Ast.seqExprElements $ var "se") (int32 1) $
     Math.add (var "totalElLen") (Math.mul (var "sopLen") (Logic.ifElse (Equality.gt (var "numSeps") (int32 0)) (var "numSeps") (int32 0)))) $
   cases _Expr (var "e") Nothing [

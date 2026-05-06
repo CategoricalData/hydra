@@ -36,7 +36,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -130,7 +130,7 @@ graphAsTypes = define "graphAsTypes" $
     Eithers.map
       ("typ" ~> pair (Core.bindingName $ var "el") (var "typ"))
       (decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "el"))) $
-  Eithers.map (unaryFunction Maps.fromList) (Eithers.mapList (var "toPair") (var "els"))
+  Eithers.map (reify Maps.fromList) (Eithers.mapList (var "toPair") (var "els"))
 
 partitionDefinitions :: TTermDefinition ([Definition] -> ([TypeDefinition], [TermDefinition]))
 partitionDefinitions = define "partitionDefinitions" $
@@ -199,7 +199,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
       _Term_record>>: "r" ~>
         Logic.ifElse
           (Equality.equal (Core.recordTypeName (var "r")) (Core.nameLift _TypeScheme))
-          (Eithers.map (unaryFunction just) (var "decodeTypeScheme" @@ Core.bindingTerm (var "el")))
+          (Eithers.map (reify just) (var "decodeTypeScheme" @@ Core.bindingTerm (var "el")))
           (right nothing),
       _Term_inject>>: "i" ~>
         Logic.ifElse (Equality.equal (Core.injectionTypeName (var "i")) (Core.nameLift _Type))
@@ -211,7 +211,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
       (Eithers.map ("typ" ~> just $ Scoping.fTypeToTypeScheme @@ var "typ") $ var "decodeType" @@ (Core.bindingTerm (var "el")))
       ("ts" ~> Logic.ifElse
         (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))
-        (Eithers.map (unaryFunction just) (var "decodeTypeScheme" @@ Core.bindingTerm (var "el")))
+        (Eithers.map (reify just) (var "decodeTypeScheme" @@ Core.bindingTerm (var "el")))
         (Logic.ifElse
           (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _Type)) Phantoms.nothing))
           (Eithers.map ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded")) (var "decodeType" @@ Core.bindingTerm (var "el")))

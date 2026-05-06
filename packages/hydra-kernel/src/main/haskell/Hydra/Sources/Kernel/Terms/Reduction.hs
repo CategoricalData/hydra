@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -779,7 +779,7 @@ reduceTerm = define "reduceTerm" $
     Maybes.maybe
       (Maybes.maybe
         (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")) (var "cx"))
-        (unaryFunction right)
+        (reify right)
         (Core.caseStatementDefault $ var "cs"))
       ("mf" ~> right $ Core.termApplication $ Core.application
         (Core.fieldTerm $ var "mf")
