@@ -328,6 +328,17 @@ The core principles (see CLAUDE.md and the
 4. **Generated files have the "do not edit" header.** If you see a file under
    `dist/` without the header, it is either hand-written (violation) or the
    generator is missing the header (bug in the generator).
+5. **Metadata over file-system discovery.** When a build script needs to know
+   *which files to operate on*, the answer comes from a declaration
+   (`hydra.json`, per-package `package.json`, an in-DSL module manifest, an
+   explicit list inside the script with rationale per entry), not from a
+   `find` or directory walk. See
+   [implementation.md, principle 6](../implementation.md#key-design-principles).
+   Auto-discovery inverts the source-of-truth relationship: the build follows
+   whatever happens to be in the tree, instead of the tree reflecting
+   declared intent. The cost is silent drift when files are added, renamed,
+   or hand-edited; debug pain is high because the missing-file symptom
+   usually surfaces far from the script that should have known.
 
 ### Procedure
 
@@ -408,6 +419,32 @@ If the same type of patch appears in multiple sync scripts (e.g., "escape the
 `macro` keyword" and "escape the `type` keyword"), that is a signal the
 generator is missing a whole class of handling, not just one edge case.
 Fix it at the generator level.
+
+**Check 5: file-system discovery in build logic.**
+Build scripts should learn *what to do* from declared metadata, not by
+walking the file system. Hashing or copying *known* paths is fine; using
+`find` / `ls` to *enumerate* files for the script to act on is a violation
+of principle 5. Look for `find` or shell-glob patterns that drive a loop
+(`for f in $(find …); do <act on $f>; done`) rather than a measurement
+(`shasum`, `wc`, etc.):
+
+```bash
+grep -rnE '(for .* in .*\$\(find |for .* in [^"]*\*\.|find .* -exec )' \
+  bin/ heads/ demos/ 2>/dev/null \
+  | grep -v 'shasum\|wc -l\|test\|grep'
+```
+
+Each match is a candidate. For each, ask:
+- **Is the script deciding what files exist, or measuring them?**
+  Hashing the contents of a directory to detect drift (e.g., the
+  `setup-haskell-target.sh` cache key in #309) is fine — the result feeds
+  a comparison, not a per-file action. Copying every `*.java` it finds
+  under `heads/java/src/main/java/hydra/` is a violation — the head should
+  declare which files belong in the bootstrap distribution.
+- **Where is the source of truth?** If the answer is "whatever's in the
+  tree," that's the violation. The fix is to add an explicit list (with
+  rationale per entry) or push the declaration into existing metadata
+  (`hydra.json`, `package.json`, an in-DSL module manifest).
 
 ### Known accepted patches
 
