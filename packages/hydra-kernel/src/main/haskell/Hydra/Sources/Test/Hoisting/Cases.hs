@@ -4,14 +4,15 @@
 
 module Hydra.Sources.Test.Hoisting.Cases where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing hiding (
   hoistPredicateNothing, hoistPredicateLists, hoistPredicateApplications, hoistPredicateCaseStatements)
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -55,14 +56,10 @@ nm s = Core.name $ Phantoms.string s
 emptyAnnMap :: TTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- | Show a term as a string using ShowCore.term
 showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term # t
+showTerm t = ShowCore.term @@ t
 
 -- Field constructor for cases/match (Phantoms.>>: creates Field; unqualified >>: from Testing creates tuples)
 (~>:) :: AsTerm t a => Name -> t -> Field
@@ -94,13 +91,13 @@ hoistPredicateCaseStatements = Phantoms.lambda "pt" $
 -- | Universal hoistSubterms test case
 hoistCase :: String -> TTerm (([SubtermStep], Term) -> Bool) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 hoistCase cname predicate input output = universalCase cname
-  (showTerm (HoistingModule.hoistSubterms # predicate # Lexical.emptyGraph # input))
+  (showTerm (HoistingModule.hoistSubterms @@ predicate @@ Lexical.emptyGraph @@ input))
   (showTerm output)
 
 -- | Local universal version of hoistCaseStatementsCase
 hoistCaseStatementsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 hoistCaseStatementsCase cname input output = universalCase cname
-  (showTerm (HoistingModule.hoistCaseStatements # Lexical.emptyGraph # input))
+  (showTerm (HoistingModule.hoistCaseStatements @@ Lexical.emptyGraph @@ input))
   (showTerm output)
 
 -- Helper for single-binding let
@@ -536,14 +533,14 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Input: let f = @ann (match Optional with ...) in f
       -- The case is wrapped in annotation - annotations are transparent
       (letExpr "f"
-        (annot emptyAnnMap
+        (annots emptyAnnMap
           (match (nm "Optional") nothing
             [(nm "just", lambda "y" (var "y")),
              (nm "nothing", int32 0)]))
         (var "f"))
       -- Output: unchanged - case is at top level (through annotation)
       (letExpr "f"
-        (annot emptyAnnMap
+        (annots emptyAnnMap
           (match (nm "Optional") nothing
             [(nm "just", lambda "y" (var "y")),
              (nm "nothing", int32 0)]))

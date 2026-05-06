@@ -1,12 +1,13 @@
 module Hydra.Sources.Test.Json.Parser where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -64,7 +65,7 @@ showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
     _ParseResult_success Phantoms.>>: Phantoms.lambda "ps" (Strings.cat2
       (Phantoms.string "success(")
       (Strings.cat2
-        (JsonWriter.printJson Phantoms.@@ Parsing.parseSuccessValue (Phantoms.var "ps"))
+        (JsonWriter.printJson @@ Parsing.parseSuccessValue (Phantoms.var "ps"))
         (Strings.cat2 (Phantoms.string ", ")
           (Strings.cat2 (Parsing.parseSuccessRemainder (Phantoms.var "ps")) (Phantoms.string ")"))))),
     _ParseResult_failure Phantoms.>>: Phantoms.lambda "pe" (Strings.cat2
@@ -74,7 +75,7 @@ showParseResult pr = Phantoms.cases _ParseResult pr Nothing [
 -- Helper for creating successful JSON parser test cases as UniversalTestCase
 parserCase :: String -> String -> TTerm Value -> TTerm TestCaseWithMetadata
 parserCase name input expectedValue = universalCase name
-  (showParseResult (Parsers.runParser Phantoms.@@ JsonParser.jsonValue Phantoms.@@ Phantoms.string input))
+  (showParseResult (Parsers.runParser @@ JsonParser.jsonValue @@ Phantoms.string input))
   (showParseResult (Parsing.parseResultSuccess $ Parsing.parseSuccess expectedValue (Phantoms.string "")))
 
 primitivesGroup :: TTerm TestGroup

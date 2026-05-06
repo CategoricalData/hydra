@@ -3,10 +3,11 @@ module Hydra.Sources.Test.TestGraph where
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Test.TestEnv as TestEnv
@@ -67,7 +68,7 @@ testNamespace = define "testNamespace" $ DPackaging.namespace $ Phantoms.string 
 -- Hydra.Test.TestEnv.testGraph (applied to testTypes).
 testGraph :: TTermDefinition Graph
 testGraph = define "testGraph" $
-  TestEnv.testGraph Phantoms.@@ testTypes
+  TestEnv.testGraph @@ testTypes
 
 -- | The test context. Emits a reference to the hand-written
 -- Hydra.Test.TestEnv.testContext.

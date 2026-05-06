@@ -3,13 +3,14 @@
 -- | Test cases for type unification operations
 module Hydra.Sources.Test.Unification where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Lib.Pairs     as Pairs
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Dsl.Typing             as Typing
@@ -51,15 +52,12 @@ nm :: String -> TTerm Name
 nm s = Core.name $ Phantoms.string s
 
 -- Local alias for polymorphic application
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- | Universal variableOccursInType test case
 variableOccursCase :: String -> TTerm Name -> TTerm Type -> TTerm Bool -> TTerm TestCaseWithMetadata
 variableOccursCase cname variable typ expected =
   universalCase cname
-    (Literals.showBoolean (UnificationModule.variableOccursInType # variable # typ))
+    (Literals.showBoolean (UnificationModule.variableOccursInType @@ variable @@ typ))
     (Literals.showBoolean expected)
 
 -- | Build schema types map from a list of names.
@@ -77,7 +75,7 @@ showTypeSubst ts = Strings.cat (Phantoms.list [
     (Lists.map (Phantoms.lambda "p" $ Strings.cat (Phantoms.list [
       Core.unName (Pairs.first (Phantoms.var "p")),
       Phantoms.string ": ",
-      ShowCore.type_ # Pairs.second (Phantoms.var "p")]))
+      ShowCore.type_ @@ Pairs.second (Phantoms.var "p")]))
       (Maps.toList (Typing.unTypeSubst ts))),
   Phantoms.string "}"])
 
@@ -88,9 +86,9 @@ showConstraints cs = Strings.cat (Phantoms.list [
   Strings.intercalate (Phantoms.string ", ")
     (Lists.map (Phantoms.lambda "c" $ Strings.cat (Phantoms.list [
       Phantoms.string "(",
-      ShowCore.type_ # Typing.typeConstraintLeft (Phantoms.var "c"),
+      ShowCore.type_ @@ Typing.typeConstraintLeft (Phantoms.var "c"),
       Phantoms.string " ~ ",
-      ShowCore.type_ # Typing.typeConstraintRight (Phantoms.var "c"),
+      ShowCore.type_ @@ Typing.typeConstraintRight (Phantoms.var "c"),
       Phantoms.string ")"]))
       cs),
   Phantoms.string "]"])
@@ -101,7 +99,7 @@ unifyTypesCase cname schemaTypes left right substPairs = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
-    (UnificationModule.unifyTypes # LexicalModule.emptyContext # buildSchemaMap schemaTypes # left # right # Phantoms.string "test"))
+    (UnificationModule.unifyTypes @@ LexicalModule.emptyContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
   (showTypeSubst (Phantoms.wrap _TypeSubst (Phantoms.map (M.fromList substPairs))))
 
 -- | Universal unifyTypes test case (expecting failure)
@@ -110,7 +108,7 @@ unifyTypesFailCase cname schemaTypes left right _errSubstring = universalCase cn
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
-    (UnificationModule.unifyTypes # LexicalModule.emptyContext # buildSchemaMap schemaTypes # left # right # Phantoms.string "test"))
+    (UnificationModule.unifyTypes @@ LexicalModule.emptyContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
   (Phantoms.string "failure")
 
 -- | Universal joinTypes test case (expecting success)
@@ -119,7 +117,7 @@ joinTypesCase cname left right constraints = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
-    (UnificationModule.joinTypes # LexicalModule.emptyContext # left # right # Phantoms.string "test"))
+    (UnificationModule.joinTypes @@ LexicalModule.emptyContext @@ left @@ right @@ Phantoms.string "test"))
   (showConstraints constraints)
 
 -- | Universal joinTypes test case (expecting failure)
@@ -128,7 +126,7 @@ joinTypesFailCase cname left right = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
-    (UnificationModule.joinTypes # LexicalModule.emptyContext # left # right # Phantoms.string "test"))
+    (UnificationModule.joinTypes @@ LexicalModule.emptyContext @@ left @@ right @@ Phantoms.string "test"))
   (Phantoms.string "failure")
 
 -- ============================================================
