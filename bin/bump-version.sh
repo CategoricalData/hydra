@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
 # Propagate the version from the VERSION file to all implementation config files.
 #
 # Usage:
 #   bin/bump-version.sh          # Read VERSION and patch all config files
-#   bin/bump-version.sh 0.13.0   # Set VERSION to 0.13.0 and patch all config files
-#   bin/bump-version.sh --help   # Show this help
+#   bin/bump-version.sh 0.16.0   # Set VERSION to 0.16.0 and patch all config files
+#   bin/bump-version.sh --help
+#
+# Files patched:
+#   heads/haskell/package.yaml
+#   demos/bootstrapping/resources/haskell/package.yaml
+#   build.gradle
+#   demos/bootstrapping/resources/java/build.gradle
+#   packages/hydra-scala/build.sbt
+#   heads/python/pyproject.toml
+#   demos/bootstrapping/resources/python/pyproject.toml
+#   pixi.toml
+#   README.md
+
+set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
@@ -17,22 +28,7 @@ VERSION_FILE="$REPO_ROOT/VERSION"
 
 case "${1:-}" in
     --help|-h)
-        echo "Usage: $0 [NEW_VERSION]"
-        echo ""
-        echo "Propagate the version from the VERSION file to all implementation config files."
-        echo ""
-        echo "If NEW_VERSION is provided, it is written to VERSION first."
-        echo ""
-        echo "Files patched:"
-        echo "  heads/haskell/package.yaml"
-        echo "  demos/bootstrapping/resources/haskell/package.yaml"
-        echo "  build.gradle"
-        echo "  demos/bootstrapping/resources/java/build.gradle"
-        echo "  packages/hydra-scala/build.sbt"
-        echo "  heads/python/pyproject.toml"
-        echo "  demos/bootstrapping/resources/python/pyproject.toml"
-        echo "  pixi.toml"
-        echo "  README.md"
+        sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
         exit 0
         ;;
 esac
