@@ -11,24 +11,24 @@ module Hydra.Sources.Java.Manifest (
 import Hydra.Kernel
 
 import qualified Hydra.Sources.Java.Coder as JavaCoder
-import qualified Hydra.Sources.Java.Environment as JavaEnvironment
-import qualified Hydra.Sources.Java.Language as JavaLanguage
-import qualified Hydra.Sources.Java.Names as JavaNames
-import qualified Hydra.Sources.Java.Serde as JavaSerde
+import qualified Hydra.Sources.Java.Environment as JavaEnvironmentSource
+import qualified Hydra.Sources.Java.Language as JavaLanguageSource
+import qualified Hydra.Sources.Java.Names as JavaNamesSource
+import qualified Hydra.Sources.Java.Serde as JavaSerdeSource
 import qualified Hydra.Sources.Java.Syntax as JavaSyntax
 import qualified Hydra.Sources.Java.Testing as JavaTesting
-import qualified Hydra.Sources.Java.Utils as JavaUtils
+import qualified Hydra.Sources.Java.Utils as JavaUtilsSource
 
 mainModules :: [Module]
 mainModules = [
   JavaCoder.module_,
-  JavaEnvironment.module_,
-  JavaLanguage.module_,
-  JavaNames.module_,
-  JavaSerde.module_,
+  JavaEnvironmentSource.module_,
+  JavaLanguageSource.module_,
+  JavaNamesSource.module_,
+  JavaSerdeSource.module_,
   JavaSyntax.module_,
   JavaTesting.module_,
-  JavaUtils.module_]
+  JavaUtilsSource.module_]
 
 testModules :: [Module]
 testModules = []

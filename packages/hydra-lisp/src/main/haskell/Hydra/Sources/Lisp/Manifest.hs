@@ -12,14 +12,14 @@ module Hydra.Sources.Lisp.Manifest (
 import Hydra.Kernel
 
 import qualified Hydra.Sources.Lisp.Coder as LispCoder
-import qualified Hydra.Sources.Lisp.Language as LispLanguage
+import qualified Hydra.Sources.Lisp.Language as LispLanguageSource
 import qualified Hydra.Sources.Lisp.Serde as LispSerde
 import qualified Hydra.Sources.Lisp.Syntax as LispSyntax
 
 mainModules :: [Module]
 mainModules = [
   LispCoder.module_,
-  LispLanguage.module_,
+  LispLanguageSource.module_,
   LispSerde.module_,
   LispSyntax.module_]
 
