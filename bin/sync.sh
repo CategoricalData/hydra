@@ -46,10 +46,10 @@ set -euo pipefail
 #
 # Packages NOT in the matrix: hydra-coq, hydra-javascript, hydra-wasm,
 # hydra-ext, hydra-pg, hydra-rdf. These are extensions, not bootstrapping
-# dependencies. Generate them on demand:
+# dependencies. Generate them on demand via bin/sync-packages.sh:
 #
-#   bin/sync.sh hydra-pg                       # pg into every target
-#   bin/sync.sh hydra-pg --target haskell      # pg into haskell only
+#   bin/sync-packages.sh hydra-pg                       # pg into every target
+#   bin/sync-packages.sh hydra-pg --targets haskell     # pg into haskell only
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
@@ -72,9 +72,15 @@ while [ $# -gt 0 ]; do
             HOSTS_ARG="$2"
             shift
             ;;
+        --hosts=*)
+            HOSTS_ARG="${1#--hosts=}"
+            ;;
         --targets)
             TARGETS_ARG="$2"
             shift
+            ;;
+        --targets=*)
+            TARGETS_ARG="${1#--targets=}"
             ;;
         --help|-h)
             cat <<'EOF'
@@ -110,7 +116,7 @@ Derived matrix:
 
 Packages outside the matrix (invoke explicitly when needed):
   hydra-coq, hydra-javascript, hydra-wasm, hydra-ext, hydra-pg, hydra-rdf
-  → bin/sync.sh <pkg> [--target <lang>]
+  → bin/sync-packages.sh <pkg> [--targets L1,L2,...]
 
 Stops at the first error. Reports total elapsed time.
 EOF

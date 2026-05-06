@@ -152,7 +152,7 @@ bin/sync-scala.sh
 bin/sync-clojure.sh        # or common-lisp, emacs-lisp, scheme
 
 # Just one package, any target
-bin/sync-packages.sh hydra-pg --target java
+bin/sync-packages.sh hydra-pg --targets java
 
 # Skip target-language tests (Phase 3)
 bin/sync-all.sh --no-tests

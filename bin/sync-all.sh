@@ -56,7 +56,7 @@ the bootstrapping path. For routine work, prefer:
   bin/sync.sh --hosts <H,...> --targets <T,...>      (matrix prep)
   bin/sync-default.sh                                 (haskell,java,python)
   bin/sync-<lang>.sh                                  (single language)
-  bin/sync-packages.sh <pkg> [--target <lang>]        (per-package)
+  bin/sync-packages.sh <pkg> [--targets L1,L2,...]    (per-package)
 EOF
             exit 0
             ;;

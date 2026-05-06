@@ -37,11 +37,10 @@ source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
 NO_TESTS=false
 
-for arg in "$@"; do
-    case $arg in
+while [ $# -gt 0 ]; do
+    case "$1" in
         --no-tests)
             NO_TESTS=true
-            shift
             ;;
         --help|-h)
             echo "Usage: $0 [OPTIONS]"
@@ -63,9 +62,10 @@ for arg in "$@"; do
             exit 0
             ;;
         *)
-            die "Unknown argument: $arg (try --help)"
+            die "Unknown argument: $1 (try --help)"
             ;;
     esac
+    shift
 done
 
 cd "$HYDRA_HASKELL_DIR"

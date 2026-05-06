@@ -61,9 +61,9 @@ PATH_FILTER=""
 while [ $# -gt 0 ]; do
     case "$1" in
         --hosts) HOSTS="$2"; shift ;;
-        --hosts=*) HOSTS="${1#--hosts=}" ;;  # legacy
+        --hosts=*) HOSTS="${1#--hosts=}" ;;
         --targets) TARGETS="$2"; shift ;;
-        --targets=*) TARGETS="${1#--targets=}" ;;  # legacy
+        --targets=*) TARGETS="${1#--targets=}" ;;
         --types-only) EXTRA_FLAGS="$EXTRA_FLAGS --types-only" ;;
         --kernel-only) EXTRA_FLAGS="$EXTRA_FLAGS --kernel-only" ;;
         --tag) TAG="$2"; shift ;;
@@ -79,6 +79,15 @@ while [ $# -gt 0 ]; do
         --paths) PATH_FILTER="$2"; shift ;;
         --paths=*) PATH_FILTER="${1#--paths=}" ;;
         --clean) export HYDRA_BOOTSTRAP_CLEAN=1 ;;
+        --help|-h)
+            sed -n '2,/^$/p' "$0" | sed 's/^# //;s/^#$//'
+            exit 0
+            ;;
+        --*)
+            echo "Error: unknown flag '$1'" >&2
+            echo "Try: $0 --help" >&2
+            exit 1
+            ;;
     esac
     shift
 done
