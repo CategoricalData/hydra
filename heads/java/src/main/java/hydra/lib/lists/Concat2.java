@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -17,6 +16,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -47,8 +47,6 @@ public class Concat2 extends PrimitiveFunction {
      * @return the concatenated list
      */
     public static <X> List<X> apply(List<X> l1, List<X> l2) {
-        ArrayList<X> result = new ArrayList<>(l1);
-        result.addAll(l2);
-        return result;
+        return ConsList.fromList(l1).concat(ConsList.fromList(l2));
     }
 }

@@ -58,8 +58,13 @@ public abstract class ConsList<T> extends AbstractList<T> implements Serializabl
 
     /**
      * Builds a ConsList from a java.util.List. The resulting ConsList has the same order.
+     * Returns the input unchanged if it is already a ConsList.
      */
+    @SuppressWarnings("unchecked")
     public static <T> ConsList<T> fromList(List<T> list) {
+        if (list instanceof ConsList) {
+            return (ConsList<T>) list;
+        }
         ConsList<T> result = empty();
         for (int i = list.size() - 1; i >= 0; i--) {
             result = cons(list.get(i), result);

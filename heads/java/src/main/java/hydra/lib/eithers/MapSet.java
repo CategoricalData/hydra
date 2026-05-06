@@ -7,7 +7,6 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -20,6 +19,7 @@ import static hydra.dsl.Types.var;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.util.Either;
+import hydra.util.PersistentSet;
 
 /**
  * Map a function that may fail over a set, collecting results or returning the first error.
@@ -44,7 +44,8 @@ public class MapSet extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.set(graph, args.get(1)), items -> {
                 Term fn = args.get(0);
-                Set<Term> results = new HashSet<>();
+                @SuppressWarnings({"rawtypes", "unchecked"})
+                PersistentSet<Term> results = PersistentSet.<Term>empty();
                 for (Term element : items) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(fn, element));
@@ -59,7 +60,7 @@ public class MapSet extends PrimitiveFunction {
                         return Either.right(new Term.Either(new hydra.util.Either.Left<>(
                             ((hydra.util.Either.Left<Term, Term>) inner).value)));
                     }
-                    results.add(((hydra.util.Either.Right<Term, Term>) inner).value);
+                    results = results.insert(((hydra.util.Either.Right<Term, Term>) inner).value);
                 }
                 return Either.right(new Term.Either(new hydra.util.Either.Right<>(Terms.set(results))));
             });
@@ -71,13 +72,14 @@ public class MapSet extends PrimitiveFunction {
     public static <A, B, Z> hydra.util.Either<Z, Set<B>> apply(
             Function<A, hydra.util.Either<Z, B>> fn,
             Set<A> items) {
-        Set<B> results = new HashSet<>();
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        PersistentSet<B> results = PersistentSet.<B>empty();
         for (A item : items) {
             hydra.util.Either<Z, B> result = fn.apply(item);
             if (result.isLeft()) {
                 return new hydra.util.Either.Left<>(((hydra.util.Either.Left<Z, B>) result).value);
             }
-            results.add(((hydra.util.Either.Right<Z, B>) result).value);
+            results = results.insert(((hydra.util.Either.Right<Z, B>) result).value);
         }
         return new hydra.util.Either.Right<>(results);
     }

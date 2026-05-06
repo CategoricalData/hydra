@@ -1,7 +1,8 @@
 package hydra.tools;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import hydra.util.ConsList;
 
 
 /**
@@ -88,12 +89,12 @@ public class LList<X> {
      * @return the new list
      */
     public static <X> List<X> take(int n, LList<X> list) {
-        List<X> javaList = new ArrayList<>();
+        ConsList<X> reversed = ConsList.empty();
         LList<X> cur = list;
         for (int i = 0; i < n; i++) {
-            javaList.add(cur.first);
+            reversed = ConsList.cons(cur.first, reversed);
             cur = cur.rest;
         }
-        return javaList;
+        return reversed.reverse();
     }
 }

@@ -17,9 +17,10 @@ import hydra.lib.maps.Elems;
 import hydra.lib.sets.Delete;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import hydra.util.ConsList;
 
 
 /**
@@ -35,22 +36,26 @@ public class Libraries {
      * @return a list containing all standard primitive functions from all categories
      */
     public static List<PrimitiveFunction> standardPrimitives() {
-        List<PrimitiveFunction> prims = new ArrayList<>();
-        prims.addAll(charsPrimitives());
-        prims.addAll(eithersPrimitives());
-        prims.addAll(equalityPrimitives());
-        prims.addAll(listsPrimitives());
-        prims.addAll(literalsPrimitives());
-        prims.addAll(logicPrimitives());
-        prims.addAll(mapsPrimitives());
-        prims.addAll(mathPrimitives());
-        prims.addAll(maybesPrimitives());
-        prims.addAll(pairsPrimitives());
-        prims.addAll(regexPrimitives());
-        prims.addAll(setsPrimitives());
-        prims.addAll(stringsPrimitives());
-
-        return prims;
+        ConsList<PrimitiveFunction> reversed = ConsList.empty();
+        for (List<PrimitiveFunction> group : Arrays.asList(
+                charsPrimitives(),
+                eithersPrimitives(),
+                equalityPrimitives(),
+                listsPrimitives(),
+                literalsPrimitives(),
+                logicPrimitives(),
+                mapsPrimitives(),
+                mathPrimitives(),
+                maybesPrimitives(),
+                pairsPrimitives(),
+                regexPrimitives(),
+                setsPrimitives(),
+                stringsPrimitives())) {
+            for (PrimitiveFunction p : group) {
+                reversed = ConsList.cons(p, reversed);
+            }
+        }
+        return reversed.reverse();
     }
 
     private static List<PrimitiveFunction> charsPrimitives() {
