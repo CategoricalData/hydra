@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -19,6 +17,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -59,12 +58,6 @@ public class Take extends PrimitiveFunction {
      * @return the sublist containing the first n elements
      */
     public static <X> List<X> apply(Integer n, List<X> lst) {
-        if (n <= 0) {
-            return Collections.emptyList();
-        }
-        if (n >= lst.size()) {
-            return lst;
-        }
-        return new ArrayList<>(lst.subList(0, n));
+        return ConsList.fromList(lst).take(n);
     }
 }

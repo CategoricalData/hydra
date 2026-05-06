@@ -3,7 +3,7 @@ module Hydra.Sources.Lisp.Language where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -145,7 +145,6 @@ lispLanguage = define "lispLanguage" $
       Variants.literalVariantInteger, -- integers (all dialects have arbitrary-precision)
       Variants.literalVariantString], -- strings
     "floatTypes">: Sets.fromList $ list [
-      Core.floatTypeBigfloat, -- all dialects support arbitrary-precision floats via libraries
       Core.floatTypeFloat64], -- double-precision float (native in all dialects)
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination, -- case/cond dispatch, field projection

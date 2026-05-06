@@ -3,7 +3,7 @@ module Hydra.Sources.Json.Schema.Language where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -99,7 +99,7 @@ jsonSchemaLanguage = define "jsonSchemaLanguage" $
     Variants.literalVariantFloat,
     Variants.literalVariantInteger,
     Variants.literalVariantString],
-  "floatTypes">: Sets.fromList $ list [Core.floatTypeBigfloat],
+  "floatTypes">: Sets.fromList $ list [Core.floatTypeFloat64],
   "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [Core.integerTypeBigint],
   "termVariants">: Sets.fromList Reflect.termVariants,

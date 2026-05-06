@@ -129,11 +129,6 @@ fieldType x =
 floatType :: Core.FloatType -> Core.Term
 floatType x =
     case x of
-      Core.FloatTypeBigfloat -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.core.FloatType"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "bigfloat"),
-          Core.fieldTerm = Core.TermUnit}})
       Core.FloatTypeFloat32 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.FloatType"),
         Core.injectionField = Core.Field {
@@ -148,11 +143,6 @@ floatType x =
 floatValue :: Core.FloatValue -> Core.Term
 floatValue x =
     case x of
-      Core.FloatValueBigfloat v0 -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "bigfloat"),
-          Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueBigfloat v0)))}})
       Core.FloatValueFloat32 v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
         Core.injectionField = Core.Field {

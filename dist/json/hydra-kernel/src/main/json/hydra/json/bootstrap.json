@@ -3622,38 +3622,6 @@
                                               {
                                                 "record": {
                                                   "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "bigfloat"}}, "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "type",
-                                                      "term": {
-                                                        "inject": {
-                                                          "field": {
-                                                            "name": "annotated",
-                                                            "term": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {"name": "body", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Type"}}},
-                                                                  {
-                                                                    "name": "annotation",
-                                                                    "term": {
-                                                                      "map": [
-                                                                        {
-                                                                          "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
-                                                                          "value": {
-                                                                            "inject": {
-                                                                              "field": {
-                                                                                "name": "literal",
-                                                                                "term": {
-                                                                                  "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "An arbitrary-precision floating-point type"}}},
-                                                                                    "typeName": "hydra.core.Literal"}}},
-                                                                              "typeName": "hydra.core.Term"}}}]}}],
-                                                                "typeName": "hydra.core.AnnotatedType"}}},
-                                                          "typeName": "hydra.core.Type"}}}],
-                                                  "typeName": "hydra.core.FieldType"}},
-                                              {
-                                                "record": {
-                                                  "fields": [
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "float32"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "type",
@@ -3753,50 +3721,6 @@
                                           "name": "union",
                                           "term": {
                                             "list": [
-                                              {
-                                                "record": {
-                                                  "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "bigfloat"}}, "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "type",
-                                                      "term": {
-                                                        "inject": {
-                                                          "field": {
-                                                            "name": "annotated",
-                                                            "term": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {
-                                                                    "name": "body",
-                                                                    "term": {
-                                                                      "inject": {
-                                                                        "field": {
-                                                                          "name": "literal",
-                                                                          "term": {
-                                                                            "inject": {
-                                                                              "field": {
-                                                                                "name": "float",
-                                                                                "term": {"inject": {"field": {"name": "bigfloat", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}}},
-                                                                              "typeName": "hydra.core.LiteralType"}}},
-                                                                        "typeName": "hydra.core.Type"}}},
-                                                                  {
-                                                                    "name": "annotation",
-                                                                    "term": {
-                                                                      "map": [
-                                                                        {
-                                                                          "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
-                                                                          "value": {
-                                                                            "inject": {
-                                                                              "field": {
-                                                                                "name": "literal",
-                                                                                "term": {
-                                                                                  "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "An arbitrary-precision floating-point value"}}},
-                                                                                    "typeName": "hydra.core.Literal"}}},
-                                                                              "typeName": "hydra.core.Term"}}}]}}],
-                                                                "typeName": "hydra.core.AnnotatedType"}}},
-                                                          "typeName": "hydra.core.Type"}}}],
-                                                  "typeName": "hydra.core.FieldType"}},
                                               {
                                                 "record": {
                                                   "fields": [

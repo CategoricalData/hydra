@@ -87,7 +87,6 @@ encodeFloatValue floatType valTerm =
       Core.injectionTypeName = (Core.Name "hydra.core.FloatValue"),
       Core.injectionField = Core.Field {
         Core.fieldName = case floatType of
-          Core.FloatTypeBigfloat -> Core.Name "bigfloat"
           Core.FloatTypeFloat32 -> Core.Name "float32"
           Core.FloatTypeFloat64 -> Core.Name "float64",
         Core.fieldTerm = valTerm}})

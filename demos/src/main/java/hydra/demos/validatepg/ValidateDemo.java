@@ -50,7 +50,6 @@ public class ValidateDemo {
             @Override public String visit(Literal.Decimal instance) { return "decimal"; }
             @Override public String visit(Literal.Float_ instance) {
                 return "float:" + instance.value.accept(new hydra.core.FloatValue.Visitor<String>() {
-                    @Override public String visit(hydra.core.FloatValue.Bigfloat i) { return "bigfloat"; }
                     @Override public String visit(hydra.core.FloatValue.Float32 i) { return "float32"; }
                     @Override public String visit(hydra.core.FloatValue.Float64 i) { return "float64"; }
                 });

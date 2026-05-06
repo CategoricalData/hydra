@@ -1092,7 +1092,7 @@ integerLiteral :: Binding
 integerLiteral = define "IntegerLiteral" $ T.wrap T.bigint
 
 floatLiteral :: Binding
-floatLiteral = define "FloatLiteral" $ T.wrap T.bigfloat
+floatLiteral = define "FloatLiteral" $ T.wrap T.float64
 
 numericLiteral :: Binding
 numericLiteral = define "NumericLiteral" $ T.union [

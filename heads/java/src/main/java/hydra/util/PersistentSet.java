@@ -85,6 +85,28 @@ public class PersistentSet<T> implements Set<T>, Serializable, Comparable<Persis
     }
 
     /**
+     * Coerces an arbitrary {@code Set<T>} into a {@code PersistentSet<T>}.
+     * Returns the input unchanged if it is already a PersistentSet. Otherwise builds
+     * a new PersistentSet by inserting each element, which requires T to be Comparable
+     * at runtime.
+     * <p>
+     * This bridge exists for primitive {@code apply} methods whose static signatures
+     * are {@code <T>} (no Comparable bound) but whose runtime elements are guaranteed
+     * to be Comparable by the kernel's type-scheme constraints.
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static <T> PersistentSet<T> coerce(Set<T> source) {
+        if (source instanceof PersistentSet) {
+            return (PersistentSet<T>) source;
+        }
+        PersistentMap m = PersistentMap.empty();
+        for (T elem : source) {
+            m = m.insert(elem, PRESENT);
+        }
+        return new PersistentSet<>(m);
+    }
+
+    /**
      * Returns the number of elements.
      */
     public int size() {

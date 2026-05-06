@@ -40,7 +40,6 @@ javaLanguage =
           Variants.LiteralVariantString]
     floatTypes =
         Sets.fromList [
-          Core.FloatTypeBigfloat,
           Core.FloatTypeFloat32,
           Core.FloatTypeFloat64]
     functionVariants =

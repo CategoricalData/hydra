@@ -7,11 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
@@ -19,6 +16,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -49,9 +47,13 @@ public class Range extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), arg0 -> hydra.lib.eithers.Map.apply(arg1 -> Terms.list(apply(arg0, arg1).stream()
-                .map(Terms::int32)
-                .collect(Collectors.toList())), hydra.extract.Core.int32(graph, args.get(1))));
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.int32(graph, args.get(0)), arg0 -> hydra.lib.eithers.Map.apply(arg1 -> {
+                ConsList<Term> result = ConsList.empty();
+                for (int i = arg1; i >= arg0; i--) {
+                    result = ConsList.cons(Terms.int32(i), result);
+                }
+                return Terms.list(result);
+            }, hydra.extract.Core.int32(graph, args.get(1))));
     }
 
     /**
@@ -71,10 +73,12 @@ public class Range extends PrimitiveFunction {
      */
     public static List<Integer> apply(Integer start, Integer end) {
         if (start > end) {
-            return new ArrayList<>();
+            return ConsList.empty();
         }
-        return IntStream.rangeClosed(start, end)
-            .boxed()
-            .collect(Collectors.toList());
+        ConsList<Integer> result = ConsList.empty();
+        for (int i = end; i >= start; i--) {
+            result = ConsList.cons(i, result);
+        }
+        return result;
     }
 }

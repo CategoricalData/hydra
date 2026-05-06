@@ -38,10 +38,8 @@ pythonLanguage =
           Variants.LiteralVariantFloat,
           Variants.LiteralVariantInteger,
           Variants.LiteralVariantString]
-    floatTypes =
-        Sets.fromList [
-          Core.FloatTypeBigfloat,
-          Core.FloatTypeFloat64]
+    floatTypes = Sets.fromList [
+      Core.FloatTypeFloat64]
     functionVariants =
         Sets.fromList [
           Variants.FunctionVariantElimination,

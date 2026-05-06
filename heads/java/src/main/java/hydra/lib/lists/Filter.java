@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -19,6 +18,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -39,7 +39,7 @@ public class Filter extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), lst -> {
-                List<Term> results = new ArrayList<>();
+                ConsList<Term> reversed = ConsList.empty();
                 for (Term x : lst) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
@@ -48,10 +48,10 @@ public class Filter extends PrimitiveFunction {
                         ((Either.Right<Error_, Term>) r).value);
                     if (b.isLeft()) return (Either) b;
                     if (((Either.Right<Error_, Boolean>) b).value) {
-                        results.add(x);
+                        reversed = ConsList.cons(x, reversed);
                     }
                 }
-                return Either.right(Terms.list(results));
+                return Either.right(Terms.list(reversed.reverse()));
             });
     }
 
@@ -73,12 +73,6 @@ public class Filter extends PrimitiveFunction {
      * @return a new list containing only elements for which the predicate returns true
      */
     public static <X> List<X> apply(Function<X, Boolean> pred, List<X> lst) {
-        ArrayList<X> result = new ArrayList<>();
-        for (X x : lst) {
-            if (pred.apply(x)) {
-                result.add(x);
-            }
-        }
-        return result;
+        return ConsList.fromList(lst).filter(pred::apply);
     }
 }

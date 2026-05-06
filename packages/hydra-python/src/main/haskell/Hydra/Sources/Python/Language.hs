@@ -3,7 +3,7 @@ module Hydra.Sources.Python.Language where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -102,7 +102,6 @@ pythonLanguage = define "pythonLanguage" $
       Variants.literalVariantInteger, -- (see integer types)
       Variants.literalVariantString], -- str
     "floatTypes">: Sets.fromList $ list [
-      Core.floatTypeBigfloat, -- Decimal. mpmath's mpf type would be another option.
       Core.floatTypeFloat64], -- float
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination,

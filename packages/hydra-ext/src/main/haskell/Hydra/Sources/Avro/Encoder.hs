@@ -3,7 +3,7 @@ module Hydra.Sources.Avro.Encoder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -407,7 +407,6 @@ floatValueToDouble = define "floatValueToDouble" $
   doc "Convert any float value to a JSON decimal number" $
   lambda "fv" $
     cases _FloatValue (var "fv") Nothing [
-      _FloatValue_bigfloat>>: lambda "d" $ Literals.float64ToDecimal (Literals.bigfloatToFloat64 (var "d")),
       _FloatValue_float32>>: lambda "f" $ Literals.float32ToDecimal (var "f"),
       _FloatValue_float64>>: lambda "d" $ Literals.float64ToDecimal (var "d")]
 

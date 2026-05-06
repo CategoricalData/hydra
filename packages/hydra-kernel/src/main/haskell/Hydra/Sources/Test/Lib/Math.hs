@@ -1,6 +1,6 @@
 module Hydra.Sources.Test.Lib.Math where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for term-encoded tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
@@ -200,7 +200,7 @@ mathMaybeSucc = subgroup "maybeSucc" [
 --
 -- When adding float64 test cases for transcendental functions:
 --   * Prefer inputs that produce exact results: sin(0)=0, exp(0)=1, sqrt(4)=2
---   * If a non-trivial input is needed, use roundFloat64 (or roundFloat32/roundBigfloat)
+--   * If a non-trivial input is needed, use roundFloat64 (or roundFloat32)
 --     on both the expected value and the test input's expected result to eliminate
 --     platform-dependent rounding in the last digit.
 
@@ -616,18 +616,6 @@ mathRound = subgroup "round" [
   where
     test name x result = primCase name _math_round [float64 x] (float64 result)
 
-mathRoundBigfloat :: TTerm TestGroup
-mathRoundBigfloat = subgroup "roundBigfloat" [
-  test "zero" 5 0.0 0.0,
-  test "round pi to 4 digits" 4 3.141592653589793 3.142,
-  test "round 1234.5 to 3 digits" 3 1234.5 1230.0,
-  test "round 0.001234 to 2 digits" 2 0.001234 0.0012,
-  test "negative" 3 (-1234.5) (-1230.0)]
-  -- NOTE: bigfloat (Java BigDecimal / Python Decimal) cannot represent NaN or Inf,
-  -- so roundBigfloat cannot be tested with those special values.]
-  where
-    test name n x result = primCase name _math_roundBigfloat [int32 n, bigfloat x] (bigfloat result)
-
 mathRoundFloat32 :: TTerm TestGroup
 mathRoundFloat32 = subgroup "roundFloat32" [
   test "zero" 5 0.0 0.0,
@@ -719,7 +707,6 @@ allTests = definitionInModule module_ "allTests" $
       mathCeiling,
       mathFloor,
       mathRound,
-      mathRoundBigfloat,
       mathRoundFloat32,
       mathRoundFloat64,
       mathTruncate]

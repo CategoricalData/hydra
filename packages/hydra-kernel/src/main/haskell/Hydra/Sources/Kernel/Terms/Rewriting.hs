@@ -43,7 +43,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -207,13 +207,13 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         "rmd" <~ Maybes.map (var "recurse" @@ var "val0") (Core.caseStatementDefault $ var "cs") $
         "val1" <~ optCases (var "rmd")
           (var "val0")
-          (unaryFunction Pairs.first) $
+          (reify Pairs.first) $
         "rcases" <~ var "forFields" @@ var "val1" @@ (Core.caseStatementCases $ var "cs") $
         pair
           (Pairs.first $ var "rcases")
           (Core.termCases $ Core.caseStatement
             (Core.caseStatementTypeName $ var "cs")
-            (Maybes.map (unaryFunction Pairs.second) (var "rmd"))
+            (Maybes.map (reify Pairs.second) (var "rmd"))
             (Pairs.second $ var "rcases")),
       _Term_either>>: "e" ~> Eithers.either_
         ("l" ~>
@@ -236,7 +236,7 @@ rewriteAndFoldTerm = define "rewriteAndFoldTerm" $
         var "forMany" @@ var "forBinding"
           @@ ("bins" ~> Core.termLet $ Core.let_ (var "bins") (Pairs.second $ var "renv"))
           @@ Pairs.first (var "renv") @@ (Core.letBindings $ var "l"),
-      _Term_list>>: "els" ~> var "forMany" @@ var "recurse" @@ (unaryFunction Core.termList) @@ var "val0" @@ var "els",
+      _Term_list>>: "els" ~> var "forMany" @@ var "recurse" @@ (reify Core.termList) @@ var "val0" @@ var "els",
       _Term_map>>: "m" ~> var "forMany" @@ var "forPair"
         @@ ("pairs" ~> Core.termMap $ Maps.fromList $ var "pairs") @@ var "val0" @@ Maps.toList (var "m"),
       _Term_maybe>>: "mt" ~> optCases (var "mt")
@@ -379,7 +379,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
           (Core.caseStatementDefault $ var "cs") $
         "val1" <~ optCases (var "rmd")
           (var "val0")
-          (unaryFunction Pairs.first) $
+          (reify Pairs.first) $
         "rcases" <~ var "forManyWithAccessors"
           @@ var "recurse"
           @@ ("x" ~> var "x")
@@ -393,13 +393,13 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
           (Pairs.first $ var "rcases")
           (Core.termCases $ Core.caseStatement
             (Core.caseStatementTypeName $ var "cs")
-            (Maybes.map (unaryFunction Pairs.second) (var "rmd"))
+            (Maybes.map (reify Pairs.second) (var "rmd"))
             (Lists.map
               ("ft" ~> Core.field
                 (Pairs.first $ var "ft")
                 (Pairs.second $ var "ft"))
               (Lists.zip
-                (Lists.map (unaryFunction Core.fieldName) (Core.caseStatementCases $ var "cs"))
+                (Lists.map (reify Core.fieldName) (Core.caseStatementCases $ var "cs"))
                 (Pairs.second $ var "rcases")))),
       _Term_either>>: "e" ~> Eithers.either_
         ("l" ~>
@@ -510,7 +510,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
             (Lists.map
               ("ft" ~> Core.field (Pairs.first $ var "ft") (Pairs.second $ var "ft"))
               (Lists.zip
-                (Lists.map (unaryFunction Core.fieldName) (Core.recordFields $ var "r"))
+                (Lists.map (reify Core.fieldName) (Core.recordFields $ var "r"))
                 (Pairs.second $ var "rfields")))),
       _Term_set>>: "els" ~>
         "idx" <~ int32 0 $
@@ -652,7 +652,7 @@ rewriteTermM = define "rewriteTermM" $
         "def" <~ Core.caseStatementDefault (var "cs") $
         "csCases" <~ Core.caseStatementCases (var "cs") $
         "rdef" <<~ Maybes.maybe (right nothing)
-          ("t" ~> Eithers.map (unaryFunction just) $ var "recurse" @@ var "t")
+          ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t")
           (var "def") $
         Eithers.map
           ("rcases" ~> Core.termCases $
@@ -660,8 +660,8 @@ rewriteTermM = define "rewriteTermM" $
           (Eithers.mapList (var "forField") (var "csCases")),
       _Term_either>>: "e" ~>
         "re" <<~ Eithers.either_
-          ("l" ~> Eithers.map (unaryFunction left) $ var "recurse" @@ var "l")
-          ("r" ~> Eithers.map (unaryFunction right) $ var "recurse" @@ var "r")
+          ("l" ~> Eithers.map (reify left) $ var "recurse" @@ var "l")
+          ("r" ~> Eithers.map (reify right) $ var "recurse" @@ var "r")
           (var "e") $
         right $ Core.termEither $ var "re",
       _Term_lambda>>: "l" ~>
@@ -824,7 +824,7 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
         "def" <~ Core.caseStatementDefault (var "cs") $
         "csCases" <~ Core.caseStatementCases (var "cs") $
         "rdef" <<~ Maybes.maybe (right nothing)
-          ("t" ~> Eithers.map (unaryFunction just) $ var "recurse" @@ var "t")
+          ("t" ~> Eithers.map (reify just) $ var "recurse" @@ var "t")
           (var "def") $
         Eithers.map
           ("rcases" ~> Core.termCases $
@@ -832,8 +832,8 @@ rewriteTermWithContextM = define "rewriteTermWithContextM" $
           (Eithers.mapList (var "forField") (var "csCases")),
       _Term_either>>: "e" ~>
         "re" <<~ Eithers.either_
-          ("l" ~> Eithers.map (unaryFunction left) $ var "recurse" @@ var "l")
-          ("r" ~> Eithers.map (unaryFunction right) $ var "recurse" @@ var "r")
+          ("l" ~> Eithers.map (reify left) $ var "recurse" @@ var "l")
+          ("r" ~> Eithers.map (reify right) $ var "recurse" @@ var "r")
           (var "e") $
         right $ Core.termEither $ var "re",
       _Term_lambda>>: "l" ~>
@@ -1015,7 +1015,7 @@ subterms = define "subterms" $
       Core.applicationArgument $ var "p"],
     _Term_cases>>: "cs" ~> Lists.concat2
       (Maybes.maybe (list ([] :: [TTerm Term])) ("t" ~> list [var "t"]) (Core.caseStatementDefault $ var "cs"))
-      (Lists.map (unaryFunction Core.fieldTerm) (Core.caseStatementCases $ var "cs")),
+      (Lists.map (reify Core.fieldTerm) (Core.caseStatementCases $ var "cs")),
     _Term_either>>: "e" ~> Eithers.either_
       ("l" ~> list [var "l"])
       ("r" ~> list [var "r"])
@@ -1023,7 +1023,7 @@ subterms = define "subterms" $
     _Term_lambda>>: "l" ~> list [Core.lambdaBody $ var "l"],
     _Term_let>>: "lt" ~> Lists.cons
       (Core.letBody $ var "lt")
-      (Lists.map (unaryFunction Core.bindingTerm) (Core.letBindings $ var "lt")),
+      (Lists.map (reify Core.bindingTerm) (Core.letBindings $ var "lt")),
     _Term_list>>: "l" ~> var "l",
     _Term_literal>>: constant $ list ([] :: [TTerm Term]),
     _Term_map>>: "m" ~> Lists.concat $ Lists.map
@@ -1032,7 +1032,7 @@ subterms = define "subterms" $
     _Term_maybe>>: "m" ~> Maybes.maybe (list ([] :: [TTerm Term])) ("t" ~> list [var "t"]) (var "m"),
     _Term_pair>>: "p" ~> list [Pairs.first $ var "p", Pairs.second $ var "p"],
     _Term_project>>: constant $ list ([] :: [TTerm Term]),
-    _Term_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTerm) (Core.recordFields $ var "rt"),
+    _Term_record>>: "rt" ~> Lists.map (reify Core.fieldTerm) (Core.recordFields $ var "rt"),
     _Term_set>>: "l" ~> Sets.toList $ var "l",
     _Term_typeApplication>>: "ta" ~> list [Core.typeApplicationTermBody $ var "ta"],
     _Term_typeLambda>>: "ta" ~> list [Core.typeLambdaBody $ var "ta"],
@@ -1130,9 +1130,9 @@ subtypes = define "subtypes" $
       Core.mapTypeKeys $ var "mt",
       Core.mapTypeValues $ var "mt"],
     _Type_maybe>>: "ot" ~> list [var "ot"],
-    _Type_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (var "rt"),
+    _Type_record>>: "rt" ~> Lists.map (reify Core.fieldTypeType) (var "rt"),
     _Type_set>>: "st" ~> list [var "st"],
-    _Type_union>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (var "rt"),
+    _Type_union>>: "rt" ~> Lists.map (reify Core.fieldTypeType) (var "rt"),
     _Type_unit>>: constant $ list ([] :: [TTerm Type]),
     _Type_variable>>: constant $ list ([] :: [TTerm Type]),
     _Type_void>>: constant $ list ([] :: [TTerm Type]),

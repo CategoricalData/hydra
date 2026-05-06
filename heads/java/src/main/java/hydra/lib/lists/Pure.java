@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -17,6 +16,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -45,6 +45,6 @@ public class Pure extends PrimitiveFunction {
      * @return a singleton list containing the element
      */
     public static <X> List<X> apply(X single) {
-        return Collections.singletonList(single);
+        return ConsList.singleton(single);
     }
 }

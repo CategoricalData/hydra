@@ -1,5 +1,6 @@
 module Hydra.Sources.Test.TestTypes where
 
+-- Standard imports for kernel test fixtures
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++), (>:))

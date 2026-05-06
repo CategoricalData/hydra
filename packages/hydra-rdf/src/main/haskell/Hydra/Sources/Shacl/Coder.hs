@@ -3,7 +3,7 @@ module Hydra.Sources.Shacl.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -263,7 +263,6 @@ encodeLiteralType = define "encodeLiteralType" $
       _LiteralType_boolean>>: constant $ var "xsd" @@ string "boolean",
       _LiteralType_float>>: lambda "ft" $
         cases _FloatType (var "ft") Nothing [
-          _FloatType_bigfloat>>: constant $ var "xsd" @@ string "decimal",
           _FloatType_float32>>: constant $ var "xsd" @@ string "float",
           _FloatType_float64>>: constant $ var "xsd" @@ string "double"],
       _LiteralType_integer>>: lambda "it" $

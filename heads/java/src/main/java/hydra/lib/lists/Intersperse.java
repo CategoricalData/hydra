@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -17,6 +16,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -55,16 +55,16 @@ public class Intersperse extends PrimitiveFunction {
      * @return the list with the separator inserted between elements
      */
     public static <X> List<X> apply(X delim, List<X> list) {
-        ArrayList<X> result = new ArrayList<>();
+        ConsList<X> reversed = ConsList.empty();
         boolean first = true;
         for (X a : list) {
             if (first) {
                 first = false;
             } else {
-                result.add(delim);
+                reversed = ConsList.cons(delim, reversed);
             }
-            result.add(a);
+            reversed = ConsList.cons(a, reversed);
         }
-        return result;
+        return reversed.reverse();
     }
 }

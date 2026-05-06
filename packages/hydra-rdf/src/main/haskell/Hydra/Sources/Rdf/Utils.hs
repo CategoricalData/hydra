@@ -3,7 +3,7 @@ module Hydra.Sources.Rdf.Utils where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -162,11 +162,6 @@ encodeLiteral = define "encodeLiteral" $
           Rdf._Literal_languageTag>>: nothing],
       _Literal_float>>: lambda "f" $
         cases _FloatValue (var "f") Nothing [
-          _FloatValue_bigfloat>>: lambda "v" $
-            record Rdf._Literal [
-              Rdf._Literal_lexicalForm>>: Literals.showBigfloat (var "v"),
-              Rdf._Literal_datatypeIri>>: xmlSchemaDatatypeIri @@ string "decimal",
-              Rdf._Literal_languageTag>>: nothing],
           _FloatValue_float32>>: lambda "v" $
             record Rdf._Literal [
               Rdf._Literal_lexicalForm>>: Literals.showFloat32 (var "v"),

@@ -3,7 +3,7 @@ module Hydra.Sources.Demos.GenPG.Transform where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -286,7 +286,7 @@ tableForEdge = define "tableForEdge" $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
       (Maybes.maybe
         (left $ string "unreachable: empty tables set")
-        (unaryFunction right)
+        (reify right)
         (Lists.maybeHead $ Sets.toList $ var "tables"))
       (left $ Strings.cat $ list [
         string "Specification for ",
@@ -305,7 +305,7 @@ tableForVertex = define "tableForVertex" $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
       (Maybes.maybe
         (left $ string "unreachable: empty tables set")
-        (unaryFunction right)
+        (reify right)
         (Lists.maybeHead $ Sets.toList $ var "tables"))
       (left $ Strings.cat $ list [
         string "Specification for ",
@@ -610,11 +610,6 @@ decodeCell = define "decodeCell" $
               match _FloatType (Just $ left $ Strings.cat $ list [
                 string "Unsupported float type for column ",
                 var "cname"]) [
-                _FloatType_bigfloat>>: constant $
-                  Maybes.maybe
-                    (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "parsed")
-                    (Literals.readBigfloat $ var "value"),
                 _FloatType_float32>>: constant $
                   Maybes.maybe
                     (left $ var "parseError")

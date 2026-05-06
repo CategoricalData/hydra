@@ -14,7 +14,7 @@ import qualified Hydra.Sources.Kernel.Types.Core           as Core
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Packaging as Module
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
-import qualified Hydra.Sources.Java.Syntax as Syntax
+import qualified Hydra.Sources.Java.Syntax as JavaSyntax
 
 
 ns :: Namespace
@@ -27,7 +27,7 @@ environment :: String -> Type
 environment = typeref ns
 
 syntax :: String -> Type
-syntax = typeref Syntax.ns
+syntax = typeref JavaSyntax.ns
 
 core :: String -> Type
 core = typeref Core.ns
@@ -45,7 +45,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Syntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
+            moduleDependencies = [JavaSyntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
             moduleDescription = Just "Environment types for Java code generation"}
   where
     definitions = [

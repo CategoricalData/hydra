@@ -1,36 +1,5 @@
 (in-package :cl-user)
 
-;; bigfloat_to_bigint :: Double -> BigInteger
-;; Convert a bigfloat (Double) to a bigint (Integer).
-(defvar hydra_lib_literals_bigfloat_to_bigint
-  (lambda (x)
-    (round x)))
-
-;; bigfloat_to_float :: Double -> Double  (identity)
-;; Convert a bigfloat (Double) to a float.
-(defvar hydra_lib_literals_bigfloat_to_float
-  (lambda (x)
-    (float x 1.0d0)))
-
-;; bigfloat_to_float32 :: Double -> Float
-;; Convert a bigfloat (Double) to a float32 (Float).
-;; Convert to single-float precision, then back to double for representation.
-(defvar hydra_lib_literals_bigfloat_to_float32
-  (lambda (x)
-    (float (float x 1.0f0) 1.0d0)))
-
-;; bigfloat_to_float64 :: Double -> Double
-;; Convert a bigfloat (Double) to a float64 (Double).
-(defvar hydra_lib_literals_bigfloat_to_float64
-  (lambda (x)
-    (float x 1.0d0)))
-
-;; bigint_to_bigfloat :: BigInteger -> Double
-;; Convert a bigint (Integer) to a bigfloat (Double).
-(defvar hydra_lib_literals_bigint_to_bigfloat
-  (lambda (x)
-    (float x 1.0d0)))
-
 ;; bigint_to_decimal :: BigInteger -> Decimal
 ;; Convert a bigint to a decimal. Common Lisp has no native decimal type;
 ;; values represented as double-float (adapter fallback policy).
@@ -141,20 +110,14 @@
     (lambda (x)
       (float x 1.0d0))))
 
-;; float32_to_bigfloat :: Float -> Double
-;; Convert a float32 (Float) to a bigfloat (Double).
-(defvar hydra_lib_literals_float32_to_bigfloat
-  (lambda (x)
-    (float x 1.0d0)))
-
 ;; float32_to_decimal :: Float -> Decimal
 (defvar hydra_lib_literals_float32_to_decimal
   (lambda (x)
     (float x 1.0d0)))
 
-;; float64_to_bigfloat :: Double -> Double
-;; Convert a float64 (Double) to a bigfloat (Double).
-(defvar hydra_lib_literals_float64_to_bigfloat
+;; float32_to_float64 :: Float -> Double
+;; Lossless widening from single-float to double-float.
+(defvar hydra_lib_literals_float32_to_float64
   (lambda (x)
     (float x 1.0d0)))
 
@@ -162,6 +125,12 @@
 (defvar hydra_lib_literals_float64_to_decimal
   (lambda (x)
     (float x 1.0d0)))
+
+;; float64_to_float32 :: Double -> Float
+;; Lossy narrowing from double-float to single-float.
+(defvar hydra_lib_literals_float64_to_float32
+  (lambda (x)
+    (float x 1.0f0)))
 
 ;; int :: IntPrecision -> Int -> Int
 ;; Convert an int to a given precision.
@@ -189,16 +158,6 @@
 ;; Convert an int64 to a bigint (Integer).
 (defvar hydra_lib_literals_int64_to_bigint
   (lambda (x) x))
-
-;; read_bigfloat :: String -> Maybe Double
-;; Parse a string to a bigfloat (Double).
-(defvar hydra_lib_literals_read_bigfloat
-  (lambda (s)
-    (let* ((*read-default-float-format* 'double-float)
-           (n (ignore-errors (read-from-string s))))
-      (if (and n (numberp n))
-          (list :just (float n 1.0d0))
-          (list :nothing)))))
 
 ;; read_decimal :: String -> Maybe Decimal
 ;; No native decimal; parse as double-float.
@@ -441,12 +400,6 @@
                (if (< adj-mantissa 0) "-" "")
                (strip-float-suffix (write-to-string sf-mantissa)) adj-exp)))
     (t (strip-float-suffix (write-to-string x)))))
-
-;; show_bigfloat :: Double -> String
-;; Convert a bigfloat (Double) to string.
-(defvar hydra_lib_literals_show_bigfloat
-  (lambda (x)
-    (haskell-show-float (float x 1.0d0))))
 
 ;; show_decimal :: Decimal -> String
 ;; No native decimal; formatted as double-float.

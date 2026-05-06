@@ -40,10 +40,7 @@
                     "name": "floatTypes",
                     "term": {
                       "application": {
-                        "argument": {
-                          "list": [
-                            {"inject": {"field": {"name": "bigfloat", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}},
-                            {"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}}]},
+                        "argument": {"list": [{"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}}]},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.FloatType"}}}}},
                     "typeScheme": {"body": {"set": {"variable": "hydra.core.FloatType"}}, "variables": []}},
                   {

@@ -24,35 +24,36 @@ sourceSets {
             srcDirs += file("$projectDir/../../dist/java/hydra-python/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-scala/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-lisp/src/main/java")
-            srcDirs += file("$projectDir/../../dist/java/hydra-pg/src/main/java")
-            srcDirs += file("$projectDir/../../dist/java/hydra-rdf/src/main/java")
-            srcDirs += file("$projectDir/../../dist/java/hydra-ext/src/main/java")
+            // hydra-pg, hydra-rdf, hydra-ext are NOT included here — they're
+            // independent Maven artifacts (published per-package from their
+            // dist/java/<pkg>/build.gradle) and don't belong in the rollup.
+            // Code that needs them (the cypher binding, demos) consumes them
+            // via Maven coords.
         }
     }
     // Files in heads/java that are NOT copied into dist/java/hydra-kernel
-    // (developer drivers + third-party-binding stubs), plus the demos that
-    // depend on them. Compiles AFTER main so it can see the kernel + every
-    // coder package on the classpath.
+    // (developer drivers + json-io coder stub). Compiles AFTER main so it
+    // can see the kernel + every coder package on the classpath.
+    //
+    // The cypher/gql/rdf bindings (formerly under heads/java/src/main/java/
+    // hydra/{cypher,gql,rdf}) and the AntlrReaderBase utility have been
+    // moved to bindings/java/hydra-{rdf4j,neo4j}/. The pg DSL helpers
+    // (Queries, Graphs, *Builder, Merging) have been moved to
+    // bindings/java/hydra-pg-dsl/. The validatepg/genpg demos that consume
+    // those have been removed from this rollup; once they have their own
+    // gradle subproject (e.g. demos/pg-rdf-demos/) they will be reinstated
+    // there.
     headsExtras {
         java {
             srcDir file("$projectDir/../../heads/java/src/main/java")
-            srcDir file("$projectDir/../../demos/src/main/java")
-            // Only the heads/java files NOT copied by copy-kernel-runtime.sh.
-            // include applies to every srcDir; for demos every file is
-            // included by default since these patterns don't match its tree.
             include 'hydra/Bootstrap.java'
             include 'hydra/Generation.java'
             include 'hydra/HydraTestBase.java'
-            include 'hydra/cypher/**'
-            include 'hydra/gql/**'
-            include 'hydra/rdf/**'
             include 'hydra/json/JsonIoCoder.java'
             include 'hydra/json/JsonSerde.java'
-            include 'hydra/tools/AntlrReaderBase.java'
-            include 'hydra/demos/**'
         }
         compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
-        runtimeClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
     }
     test {
         java {
@@ -76,11 +77,10 @@ dependencies {
     api('org.junit.jupiter:junit-jupiter')
     api group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: junitVersion
 
-    // Ext dependencies (formerly in hydra-ext build.gradle)
-    api group: 'org.apache.commons', name: 'commons-text', version: '1.10.0'
+    // json-io powers JsonIoCoder.java in headsExtras (the JSON serialization stub
+    // for the bootstrap demo). Kept as a hydra-java dep until JsonIoCoder
+    // either moves to a binding or is replaced.
     api group: 'com.cedarsoftware', name: 'json-io', version: '4.14.1'
-    api group: 'org.eclipse.rdf4j', name: 'rdf4j-rio-ntriples', version: rdf4jVersion
-    api 'org.antlr:antlr4-runtime:4.13.2'
 
     testImplementation 'org.apache.commons:commons-csv:1.10.0'
 }
@@ -89,39 +89,34 @@ tasks.named('sourcesJar') {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-// Exclude generated ext files with class-name/filename mismatches or stale patterns,
-// and ANTLR-dependent readers (require grammar generation plugin not available here)
+// Print the headsExtras runtime classpath (main + headsExtras outputs plus
+// every resolved third-party jar) on a single line. Consumed by
+// demos/bootstrapping/bin/invoke-java-host.sh so it doesn't need to
+// hand-build a classpath by walking ~/.gradle/caches with hardcoded jar
+// versions. Reads dependency declarations as the source of truth via
+// Gradle's resolution machinery.
+tasks.register('printHeadsExtrasRuntimeClasspath') {
+    doLast {
+        println sourceSets.headsExtras.runtimeClasspath.asPath
+    }
+}
+
+// hydra/lisp/Coder.java has class-name/filename mismatches that javac rejects
+// (a known generator wart in the lisp coder); skip until that's fixed.
+// hydra/scala/** is excluded because the Scala coder's generated Java doesn't
+// type-check standalone (it's only used through the Scala dist).
 compileJava {
     exclude '**/hydra/lisp/Coder.java'
     exclude '**/hydra/scala/**'
-    exclude '**/hydra/gql/GQLReader.java'
-    exclude '**/hydra/cypher/CypherReader.java'
-    exclude '**/hydra/cypher/FromCypher.java'
-    exclude '**/hydra/tools/AntlrReaderBase.java'
-    exclude '**/hydra/shex/syntax/**'
-    exclude '**/hydra/owl/**'
-    exclude '**/hydra/xml/schema/Integer.java'
-    exclude '**/hydra/xml/schema/Boolean.java'
-    exclude '**/hydra/xml/schema/Byte.java'
-    exclude '**/hydra/xml/schema/Double.java'
-    exclude '**/hydra/xml/schema/Float.java'
-    exclude '**/hydra/xml/schema/Long.java'
-    exclude '**/hydra/xml/schema/Short.java'
-    exclude '**/hydra/xml/schema/String.java'
 }
 
-// Same ANTLR/grammar-driven exclusions for the headsExtras source set, where
-// the cypher/gql readers actually live.
-compileHeadsExtrasJava {
-    exclude '**/hydra/gql/GQLReader.java'
-    exclude '**/hydra/cypher/CypherReader.java'
-    exclude '**/hydra/cypher/FromCypher.java'
-    exclude '**/hydra/tools/AntlrReaderBase.java'
-}
-
-// Test-side excludes: tests that depend on classes excluded from compileJava above
+// Test-side excludes: tests that imported the cypher/rdf/pg code that has
+// moved to bindings/java/hydra-{neo4j,rdf4j,pg-dsl}/. The tests themselves
+// still live in heads/java/src/test/java/hydra/{cypher,pg}/ and need their
+// own move; those tests need a shared HydraTestBase placement decision first.
 compileTestJava {
     exclude '**/hydra/cypher/**'
+    exclude '**/hydra/pg/**'
 }
 
 test {
