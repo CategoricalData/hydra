@@ -8,8 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
@@ -18,6 +18,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeEq;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -37,24 +38,12 @@ public class Group extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
-                // Convert to ArrayList for index-based access
-                ArrayList<Term> items = new ArrayList<>(lst);
-                List<List<Term>> groups = new ArrayList<>();
-                if (!items.isEmpty()) {
-                    List<Term> currentGroup = new ArrayList<>();
-                    currentGroup.add(items.get(0));
-                    for (int i = 1; i < items.size(); i++) {
-                        if (items.get(i).equals(items.get(i - 1))) {
-                            currentGroup.add(items.get(i));
-                        } else {
-                            groups.add(currentGroup);
-                            currentGroup = new ArrayList<>();
-                            currentGroup.add(items.get(i));
-                        }
-                    }
-                    groups.add(currentGroup);
+                List<List<Term>> groups = apply(lst);
+                ConsList<Term> reversed = ConsList.empty();
+                for (List<Term> g : groups) {
+                    reversed = ConsList.cons(Terms.list(g), reversed);
                 }
-                return Terms.list(groups.stream().map(Terms::list).collect(java.util.stream.Collectors.toList()));
+                return Terms.list(reversed.reverse());
             }, hydra.extract.Core.list(graph, args.get(0)));
     }
 
@@ -65,26 +54,29 @@ public class Group extends PrimitiveFunction {
      * @return the list of groups of consecutive equal elements
      */
     public static <X> List<List<X>> apply(List<X> lst) {
-        List<List<X>> groups = new ArrayList<>();
-        if (lst.isEmpty()) {
-            return groups;
-        }
-        ArrayList<X> items = new ArrayList<>(lst);
-        List<X> currentGroup = new ArrayList<>();
-        currentGroup.add(items.get(0));
-        for (int i = 1; i < items.size(); i++) {
-            X current = items.get(i);
-            X previous = items.get(i - 1);
-            if ((current == null && previous == null)
-                    || (current != null && current.equals(previous))) {
-                currentGroup.add(current);
+        ConsList<ConsList<X>> reversedGroups = ConsList.empty();
+        ConsList<X> reversedCurrent = ConsList.empty();
+        boolean started = false;
+        X previous = null;
+        for (X current : lst) {
+            if (!started) {
+                reversedCurrent = ConsList.cons(current, reversedCurrent);
+                started = true;
+            } else if (Objects.equals(current, previous)) {
+                reversedCurrent = ConsList.cons(current, reversedCurrent);
             } else {
-                groups.add(currentGroup);
-                currentGroup = new ArrayList<>();
-                currentGroup.add(current);
+                reversedGroups = ConsList.cons(reversedCurrent.reverse(), reversedGroups);
+                reversedCurrent = ConsList.cons(current, ConsList.empty());
             }
+            previous = current;
         }
-        groups.add(currentGroup);
-        return groups;
+        if (started) {
+            reversedGroups = ConsList.cons(reversedCurrent.reverse(), reversedGroups);
+        }
+        ConsList<List<X>> result = ConsList.empty();
+        for (ConsList<X> g : reversedGroups) {
+            result = ConsList.cons(g, result);
+        }
+        return result;
     }
 }

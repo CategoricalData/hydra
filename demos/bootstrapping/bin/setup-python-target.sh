@@ -67,24 +67,11 @@ if [ -d "$PY_BASELINE/hydra" ]; then
     find "$PY_GEN/hydra" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
     echo "    Copied hydra/ generated kernel modules from dist baseline"
 fi
-# Ensure every coder package the Python bootstrap driver references has a
-# Python distribution. bootstrap.py / generation.py import
-# hydra.{java,python,haskell,lisp,scala}.coder to dispatch on target language;
-# sync-default() doesn't generate hydra-lisp/hydra-scala into Python, so on a
-# clean checkout they can be missing. Assemble them on demand — warm-cache
-# short-circuits in seconds. Redirect assembler output to a log file: it
-# prints its own "Done: N main..." line per package, which would otherwise
-# pollute the bootstrap-all log parser.
-ASSEMBLE_LOG="$OUTPUT_DIR/.coder-assembly.log"
-mkdir -p "$OUTPUT_DIR"
-: > "$ASSEMBLE_LOG"
-for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
-    coder_base="$HYDRA_ROOT/dist/python/$coder_pkg/src/main/python"
-    if [ ! -d "$coder_base/hydra" ]; then
-        echo "    $coder_pkg not present; generating into Python (see $ASSEMBLE_LOG)..."
-        (cd "$HYDRA_ROOT" && heads/python/bin/assemble-distribution.sh "$coder_pkg") >> "$ASSEMBLE_LOG" 2>&1
-    fi
-done
+# On-demand coder-package assembly used to live here (and again in
+# invoke-python-host.sh). Both loops were eliminated in #309 by hoisting
+# the work into bootstrap-all.sh's pre-sync step (audit flaw F8). See
+# setup-java-target.sh for the matching change.
+
 # Overlay coder packages from per-package dist dirs. The Python bootstrap
 # driver (bootstrap.py / generation.py) imports hydra.{java,python,haskell,
 # lisp,scala}.coder to dispatch on target language.

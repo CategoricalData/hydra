@@ -20,6 +20,7 @@ import static hydra.dsl.Types.schemeOrd;
 import static hydra.dsl.Types.set;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -51,9 +52,11 @@ public class ToList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(terms -> {
-            java.util.List<Term> sorted = new java.util.ArrayList<>(terms);
-            sorted.sort(hydra.lib.equality.Compare::compareTerms);
-            return Terms.list(sorted);
+            // Term needs a custom comparator (compareTerms), so sort in an ArrayList scratch
+            // buffer and convert the sorted result to a ConsList.
+            ArrayList<Term> scratch = new ArrayList<>(terms);
+            scratch.sort(hydra.lib.equality.Compare::compareTerms);
+            return Terms.list(ConsList.fromList(scratch));
         }, hydra.extract.Core.set(graph, args.get(0)));
     }
 
@@ -64,6 +67,10 @@ public class ToList extends PrimitiveFunction {
      * @return a list containing all elements from the set
      */
     public static <X> List<X> apply(Set<X> arg) {
-        return new ArrayList<>(arg);
+        ConsList<X> reversed = ConsList.empty();
+        for (X x : arg) {
+            reversed = ConsList.cons(x, reversed);
+        }
+        return reversed.reverse();
     }
 }

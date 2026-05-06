@@ -7,7 +7,6 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,6 +17,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -43,7 +43,7 @@ public class MapList extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), lst -> {
                 Term fn = args.get(0);
-                List<Term> results = new ArrayList<>();
+                ConsList<Term> reversed = ConsList.empty();
                 for (Term element : lst) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(fn, element));
@@ -58,9 +58,9 @@ public class MapList extends PrimitiveFunction {
                         return Either.right(new Term.Either(new hydra.util.Either.Left<>(
                             ((hydra.util.Either.Left<Term, Term>) inner).value)));
                     }
-                    results.add(((hydra.util.Either.Right<Term, Term>) inner).value);
+                    reversed = ConsList.cons(((hydra.util.Either.Right<Term, Term>) inner).value, reversed);
                 }
-                return Either.right(new Term.Either(new hydra.util.Either.Right<>(Terms.list(results))));
+                return Either.right(new Term.Either(new hydra.util.Either.Right<>(Terms.list(reversed.reverse()))));
             });
     }
 
@@ -70,15 +70,15 @@ public class MapList extends PrimitiveFunction {
     public static <A, B, Z> hydra.util.Either<Z, List<B>> apply(
             Function<A, hydra.util.Either<Z, B>> fn,
             List<A> items) {
-        ArrayList<B> results = new ArrayList<>();
+        ConsList<B> reversed = ConsList.empty();
         for (A item : items) {
             hydra.util.Either<Z, B> result = fn.apply(item);
             if (result.isLeft()) {
                 return new hydra.util.Either.Left<>(((hydra.util.Either.Left<Z, B>) result).value);
             }
-            results.add(((hydra.util.Either.Right<Z, B>) result).value);
+            reversed = ConsList.cons(((hydra.util.Either.Right<Z, B>) result).value, reversed);
         }
-        return new hydra.util.Either.Right<>(results);
+        return new hydra.util.Either.Right<>(reversed.reverse());
     }
 
     /**
