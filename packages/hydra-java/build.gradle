@@ -52,7 +52,7 @@ sourceSets {
             include 'hydra/demos/**'
         }
         compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
-        runtimeClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output + sourceSets.main.runtimeClasspath
     }
     test {
         java {
@@ -87,6 +87,18 @@ dependencies {
 
 tasks.named('sourcesJar') {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+// Print the headsExtras runtime classpath (main + headsExtras outputs plus
+// every resolved third-party jar) on a single line. Consumed by
+// demos/bootstrapping/bin/invoke-java-host.sh so it doesn't need to
+// hand-build a classpath by walking ~/.gradle/caches with hardcoded jar
+// versions. Reads dependency declarations as the source of truth via
+// Gradle's resolution machinery.
+tasks.register('printHeadsExtrasRuntimeClasspath') {
+    doLast {
+        println sourceSets.headsExtras.runtimeClasspath.asPath
+    }
 }
 
 // Exclude generated ext files with class-name/filename mismatches or stale patterns,
