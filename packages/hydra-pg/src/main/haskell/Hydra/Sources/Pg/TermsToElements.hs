@@ -10,7 +10,7 @@ import Hydra.Kernel hiding (
   readInjection, readRecord, requireUnique, termToElementsAdapter,
   termToString)
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -525,7 +525,7 @@ requireUnique = define "requireUnique" $
           (Logic.ifElse (Equality.equal (Lists.length $ var "results") (int32 1))
             (Maybes.maybe
               (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context")
-              (unaryFunction right)
+              (reify right)
               (Lists.maybeHead $ var "results"))
             (left $ Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context")))
 

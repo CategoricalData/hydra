@@ -6,12 +6,11 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -51,7 +50,7 @@ public class MapMaybe extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), inputList -> {
                 Term f = args.get(0);
-                List<Term> results = new ArrayList<>();
+                ConsList<Term> reversed = ConsList.empty();
                 for (Term item : inputList) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(f, item));
@@ -61,10 +60,10 @@ public class MapMaybe extends PrimitiveFunction {
                     if (maybeResult.isLeft()) return (Either) maybeResult;
                     Maybe<Term> maybe = ((Either.Right<Error_, Maybe<Term>>) maybeResult).value;
                     if (maybe.isJust()) {
-                        results.add(maybe.fromJust());
+                        reversed = ConsList.cons(maybe.fromJust(), reversed);
                     }
                 }
-                return Either.right(Terms.list(results));
+                return Either.right(Terms.list(reversed.reverse()));
             });
     }
 
@@ -88,13 +87,13 @@ public class MapMaybe extends PrimitiveFunction {
      * @return a list containing only the present values from applying the function
      */
     public static <X, Y> List<Y> apply(Function<X, Maybe<Y>> f, List<X> list) {
-        ArrayList<Y> result = new ArrayList<>();
+        ConsList<Y> reversed = ConsList.empty();
         for (X item : list) {
             Maybe<Y> maybe = f.apply(item);
             if (maybe.isJust()) {
-                result.add(maybe.fromJust());
+                reversed = ConsList.cons(maybe.fromJust(), reversed);
             }
         }
-        return result;
+        return reversed.reverse();
     }
 }

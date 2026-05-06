@@ -5,7 +5,7 @@ module Hydra.Sources.Cpp.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -1133,7 +1133,7 @@ findTypeDependencies = def "findTypeDependencies" $
     Lists.filter
       (lambda "n" $
         Logic.not (Equality.equal
-          (Maybes.map (unaryFunction Packaging.unNamespace) (Names.namespaceOf @@ var "n"))
+          (Maybes.map (reify Packaging.unNamespace) (Names.namespaceOf @@ var "n"))
           (just (Packaging.unNamespace (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $

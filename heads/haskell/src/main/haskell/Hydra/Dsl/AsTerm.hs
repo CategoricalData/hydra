@@ -32,3 +32,21 @@ instance AsTerm String String where
 
 instance AsTerm Int Int where
   asTerm i = TTerm $ TermLiteral $ LiteralInteger $ IntegerValueInt32 i
+
+
+-- | Type class for types from which a kernel-level 'Name' can be statically extracted.
+-- Used by Phantoms primitives like 'inject', 'match', 'project', 'record', 'unwrap', 'wrap'
+-- to accept either a bare 'Name' or any name-typed binding/definition where the 'Name'
+-- is known at construction time. Distinct from 'AsTerm' (which can lift arbitrary
+-- @TTerm Name@ values, but those don't yield a static 'Name').
+class AsName n where
+  asName :: n -> Name
+
+instance AsName Name where
+  asName = id
+
+instance AsName (TBinding Name) where
+  asName (TBinding name _) = name
+
+instance AsName (TTermDefinition Name) where
+  asName (TTermDefinition name _) = name

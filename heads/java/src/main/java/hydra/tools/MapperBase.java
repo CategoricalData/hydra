@@ -1,7 +1,7 @@
 package hydra.tools;
 
-import java.util.ArrayList;
 import java.util.List;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -161,19 +161,19 @@ public abstract class MapperBase {
      */
     protected static <C1, C2, T> List<T> list(C1 c1, Function<C1, List<C2>> accessor, Function<C2, T> constructor) {
         Maybe<List<T>> result = optional(c1, accessor, c2s -> {
-            List<T> ts = new ArrayList<>();
+            ConsList<T> reversed = ConsList.empty();
             for (C2 c2 : c2s) {
                 T t = constructor.apply(c2);
                 if (null == t) {
                     return invalidUnexpectedNull();
                 }
-                ts.add(t);
+                reversed = ConsList.cons(t, reversed);
             }
-            return ts;
+            return reversed.reverse();
         });
 
         // Always return a list, even if empty
-        return result.orElseGet(ArrayList::new);
+        return result.orElseGet(ConsList::empty);
     }
 
     /**

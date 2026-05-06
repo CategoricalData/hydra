@@ -8,7 +8,7 @@ import qualified Hydra.Show.Errors as ShowError
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Meta.Lib.Lists as Lists
-import Hydra.Dsl.Meta.Lib.Strings as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import Hydra.ExtGeneration

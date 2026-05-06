@@ -24,7 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -223,7 +223,7 @@ checkDuplicateBindings :: TTermDefinition (SubtermPath -> [Binding] -> Maybe Inv
 checkDuplicateBindings = define "checkDuplicateBindings" $
   doc "Check for duplicate binding names in a list of bindings" $
   "path" ~> "bindings" ~>
-  "names" <~ Lists.map (unaryFunction Core.bindingName) (var "bindings") $
+  "names" <~ Lists.map (reify Core.bindingName) (var "bindings") $
   "dup" <~ findDuplicate @@ var "names" $
   Maybes.map ("name" ~>
     inject _InvalidTermError _InvalidTermError_duplicateBinding $
@@ -239,7 +239,7 @@ checkDuplicateFieldTypes :: TTermDefinition ([FieldType] -> (Name -> Maybe Inval
 checkDuplicateFieldTypes = define "checkDuplicateFieldTypes" $
   doc "Check for duplicate field names in a list of field types" $
   "fields" ~> "mkError" ~>
-  "names" <~ Lists.map (unaryFunction Core.fieldTypeName) (var "fields") $
+  "names" <~ Lists.map (reify Core.fieldTypeName) (var "fields") $
   "dup" <~ findDuplicateFieldType @@ var "names" $
   Maybes.cases (var "dup")
     noTypeError
@@ -389,13 +389,13 @@ checkTerm = define "checkTerm" $
         -- T3. DuplicateRecordFieldNamesError (via DuplicateFieldError)
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_duplicateField
           (checkDuplicateFields @@ var "path" @@ (Lists.map
-            (unaryFunction Core.fieldName)
+            (reify Core.fieldName)
             (var "flds")))],
 
     -- T1/T2/T10/T11/T18: TermLet — empty bindings, duplicates, shadowing, naming, type var checks
     _Term_let>>: "lt" ~>
       "bindings" <~ Core.letBindings (var "lt") $
-      "names" <~ Lists.map (unaryFunction Core.bindingName) (var "bindings") $
+      "names" <~ Lists.map (reify Core.bindingName) (var "bindings") $
       firstFinding @@ list [
         -- T1. EmptyLetBindingsError
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_emptyLetBindings
@@ -519,7 +519,7 @@ checkTerm = define "checkTerm" $
         -- T4. DuplicateCaseStatementFieldNamesError (via DuplicateFieldError)
         guardedTermRule (var "p") _InvalidTermError _InvalidTermError_duplicateField
           (checkDuplicateFields @@ var "path" @@ (Lists.map
-            (unaryFunction Core.fieldName)
+            (reify Core.fieldName)
             (var "csCases")))],
 
     -- T9. UndefinedTypeVariableInTypeApplicationError (typed mode only)

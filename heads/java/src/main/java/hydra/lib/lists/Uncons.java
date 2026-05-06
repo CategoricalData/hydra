@@ -6,10 +6,10 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 import hydra.util.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -54,8 +54,8 @@ public class Uncons extends PrimitiveFunction {
     public static <X> Maybe<Pair<X, List<X>>> apply(List<X> list) {
         if (list.isEmpty()) {
             return Maybe.nothing();
-        } else {
-            return Maybe.just(new Pair<>(list.get(0), new ArrayList<>(list.subList(1, list.size()))));
         }
+        ConsList<X> cl = ConsList.fromList(list);
+        return Maybe.just(new Pair<>(cl.head(), cl.tail()));
     }
 }

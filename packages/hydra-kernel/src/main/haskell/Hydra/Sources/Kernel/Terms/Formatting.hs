@@ -27,7 +27,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -244,8 +244,8 @@ showList = define "showList" $
 stripLeadingAndTrailingWhitespace :: TTermDefinition (String -> String)
 stripLeadingAndTrailingWhitespace = define "stripLeadingAndTrailingWhitespace" $
   doc "Remove leading and trailing whitespace from a string" $
-  "s" ~> Strings.fromList $ Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $
-    Lists.dropWhile (unaryFunction Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
+  "s" ~> Strings.fromList $ Lists.dropWhile (reify Chars.isSpace) $ Lists.reverse $
+    Lists.dropWhile (reify Chars.isSpace) $ Lists.reverse $ Strings.toList $ var "s"
 
 withCharacterAliases :: TTermDefinition (String -> String)
 withCharacterAliases = define "withCharacterAliases" $
@@ -288,8 +288,8 @@ withCharacterAliases = define "withCharacterAliases" $
       pair (int32 126) (string "tilde")],
     "alias">: lambda "c" $ Maybes.fromMaybe
       (Lists.pure $ var "c")
-      (Maybes.map (unaryFunction Strings.toList) $ Maps.lookup (var "c") (var "aliases"))]
-    $ Strings.fromList $ Lists.filter (unaryFunction Chars.isAlphaNum) $ Lists.concat $
+      (Maybes.map (reify Strings.toList) $ Maps.lookup (var "c") (var "aliases"))]
+    $ Strings.fromList $ Lists.filter (reify Chars.isAlphaNum) $ Lists.concat $
       Lists.map (var "alias") $ Strings.toList $ var "original"
 
 wrapLine :: TTermDefinition (Int -> String -> String)

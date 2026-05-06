@@ -36,10 +36,11 @@ f <.> g = compose f g
 (@@) :: TTerm Term -> TTerm Term -> TTerm Term
 f @@ x = apply f x
 
--- | Attach an annotation to a term-encoded term
--- Example: annot (Phantoms.map M.empty) (int32 42)
-annot :: TTerm (M.Map Name Term) -> TTerm Term -> TTerm Term
-annot annMap term = Core.termAnnotated $ Core.annotatedTerm term annMap
+-- | Attach a map of annotations to a term-encoded term.
+-- Distinct from 'Phantoms.annot' (which attaches a single annotation by key).
+-- Example: annots (Phantoms.map M.empty) (int32 42)
+annots :: TTerm (M.Map Name Term) -> TTerm Term -> TTerm Term
+annots annMap term = Core.termAnnotated $ Core.annotatedTerm term annMap
 
 -- | Create a term-encoded annotated term (term with type annotations)
 -- Example: annotated (int32 42) (Phantoms.map M.empty)

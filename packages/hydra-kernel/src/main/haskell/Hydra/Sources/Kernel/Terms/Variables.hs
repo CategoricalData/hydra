@@ -39,7 +39,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -106,7 +106,7 @@ freeTypeVariablesInTerm = define "freeTypeVariablesInTerm" $
   doc ("Get the set of free type variables in a term (including schema names, where they appear in type annotations)."
     <> " In this context, only the type schemes of let bindings can bind type variables; type lambdas do not.") $
   "term0" ~>
-  "allOf" <~ ("sets" ~> Lists.foldl (binaryFunction Sets.union) Sets.empty $ var "sets") $
+  "allOf" <~ ("sets" ~> Lists.foldl (reify2 Sets.union) Sets.empty $ var "sets") $
   "tryType" <~ ("tvars" ~> "typ" ~> Sets.difference (freeVariablesInType @@ var "typ") (var "tvars")) $
   "getAll" <~ ("vars" ~> "term" ~>
     "recurse" <~ var "getAll" @@ var "vars" $
@@ -158,7 +158,7 @@ freeVariablesInTerm = define "freeVariablesInTerm" $
       (freeVariablesInTerm @@ (Core.lambdaBody $ var "l")),
     _Term_let>>: "l" ~> Sets.difference
       (var "dfltVars" @@ unit)
-      (Sets.fromList (Lists.map (unaryFunction Core.bindingName) (Core.letBindings $ var "l"))),
+      (Sets.fromList (Lists.map (reify Core.bindingName) (Core.letBindings $ var "l"))),
     _Term_variable>>: "v" ~> Sets.singleton $ var "v"]
 
 freeVariablesInType :: TTermDefinition (Type -> S.Set Name)

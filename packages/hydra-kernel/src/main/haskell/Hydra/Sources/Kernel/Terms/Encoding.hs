@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -56,7 +56,7 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Predicates as Predicates
-import qualified Hydra.Dsl.Meta.DeepCore as DC
+import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -185,12 +185,12 @@ encodeEitherType :: TTermDefinition (EitherType -> Term)
 encodeEitherType = define "encodeEitherType" $
   doc "Generate an encoder for an Either type" $
   "et" ~>
-    DC.lambda "e" $
-      DC.injection _Term (DC.field _Term_either
-        (DC.primitiveEncoded _eithers_bimap
+    DeepCore.lambda "e" $
+      DeepCore.injection _Term (DeepCore.field _Term_either
+        (DeepCore.primitiveEncoded _eithers_bimap
           @@@ (encodeType @@ Core.eitherTypeLeft (var "et"))
           @@@ (encodeType @@ Core.eitherTypeRight (var "et"))
-          @@@ DC.var "e"))
+          @@@ DeepCore.var "e"))
 
 -- | Generate an encoder for a polymorphic (forall) type
 -- For a type like `forall a. T[a]`, generates a lambda that takes an encoder for `a`
@@ -203,11 +203,11 @@ encodeFieldValue = define "encodeFieldValue" $
   "typeName" ~> "fieldName" ~> "fieldType" ~>
     -- Create a lambda that encodes the value and wraps in Term.union with injection
     -- Note: use "y" instead of "v" to avoid shadowing type variable parameters named "v"
-    DC.lambda "y" $
+    DeepCore.lambda "y" $
       -- Build Term.union containing an encoded Injection with the encoded value
-      DC.injection _Term (DC.field _Term_inject
+      DeepCore.injection _Term (DeepCore.field _Term_inject
         (encodeInjection @@ var "typeName" @@ var "fieldName"
-          @@ ((encodeType @@ var "fieldType") @@@ DC.var "y")))
+          @@ ((encodeType @@ var "fieldType") @@@ DeepCore.var "y")))
 
 -- | Encode an Injection as a Term (produces a Record of type hydra.core.Injection)
 -- | Encode a float value based on its float type
@@ -246,15 +246,15 @@ encodeForallType = define "encodeForallType" $
 encodeInjection :: TTermDefinition (Name -> Name -> Term -> Term)
 encodeInjection = define "encodeInjection" $
   doc "Encode an Injection as a term" $
-  "typeName" ~> "fieldName" ~> "fieldTerm" ~> DC.record _Injection [
-    DC.field _Injection_typeName (encodeName @@ var "typeName"),
-    DC.field _Injection_field (encodeField @@ var "fieldName" @@ var "fieldTerm")]
+  "typeName" ~> "fieldName" ~> "fieldTerm" ~> DeepCore.record _Injection [
+    DeepCore.field _Injection_typeName (encodeName @@ var "typeName"),
+    DeepCore.field _Injection_field (encodeField @@ var "fieldName" @@ var "fieldTerm")]
   where
     -- Encode a Field as a Term (produces a Record of type hydra.core.Field)
     encodeField :: TTerm (Name -> Term -> Term)
-    encodeField = "fname" ~> "fterm" ~> DC.record _Field [
-      DC.field _Field_name (encodeName @@ var "fname"),
-      DC.field _Field_term (var "fterm")]
+    encodeField = "fname" ~> "fterm" ~> DeepCore.record _Field [
+      DeepCore.field _Field_name (encodeName @@ var "fname"),
+      DeepCore.field _Field_term (var "fterm")]
 
 -- | Generate an encoder for a literal type
 -- For literals, the input is a native Haskell value (e.g., String, Int32).
@@ -289,9 +289,9 @@ encodeListType :: TTermDefinition (Type -> Term)
 encodeListType = define "encodeListType" $
   doc "Generate an encoder for a list type" $
   "elemType" ~>
-    DC.lambda "xs" $
-      DC.injection _Term (DC.field _Term_list
-        (DC.primitiveEncoded _lists_map @@@ (encodeType @@ var "elemType") @@@ DC.var "xs"))
+    DeepCore.lambda "xs" $
+      DeepCore.injection _Term (DeepCore.field _Term_list
+        (DeepCore.primitiveEncoded _lists_map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "xs"))
 
 -- | Generate an encoder for a map type
 -- Encodes each key/value pair and wraps in Term.map
@@ -304,26 +304,26 @@ encodeLiteralType = define "encodeLiteralType" $
   doc "Generate an encoder for a literal type" $
   match _LiteralType (Just identityEncoder) [
     _LiteralType_binary>>: constant $
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_binary (DC.var "x")),
+      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_binary (DeepCore.var "x")),
     _LiteralType_boolean>>: constant $
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_boolean (DC.var "x")),
+      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_boolean (DeepCore.var "x")),
     _LiteralType_decimal>>: constant $
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_decimal (DC.var "x")),
+      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_decimal (DeepCore.var "x")),
     _LiteralType_string>>: constant $
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal (DC.field _Literal_string (DC.var "x")),
+      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal (DeepCore.field _Literal_string (DeepCore.var "x")),
     -- For integer types, wrap in Term.literal.integer with the specific integer variant
     _LiteralType_integer>>: "intType" ~>
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal
-        (DC.field _Literal_integer (encodeIntegerValue @@ var "intType" @@ DC.var "x")),
+      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal
+        (DeepCore.field _Literal_integer (encodeIntegerValue @@ var "intType" @@ DeepCore.var "x")),
     -- For float types, wrap in Term.literal.float with the specific float variant
     _LiteralType_float>>: "floatType" ~>
-      DC.lambda "x" $ termLiteral $ DC.injection _Literal
-        (DC.field _Literal_float (encodeFloatValue @@ var "floatType" @@ DC.var "x"))]
+      DeepCore.lambda "x" $ termLiteral $ DeepCore.injection _Literal
+        (DeepCore.field _Literal_float (encodeFloatValue @@ var "floatType" @@ DeepCore.var "x"))]
   where
     -- Helper to wrap a Literal value in Term.literal
-    termLiteral lit = DC.injection _Term (DC.field _Term_literal lit)
+    termLiteral lit = DeepCore.injection _Term (DeepCore.field _Term_literal lit)
     -- Default: identity (should not be reached for well-formed types)
-    identityEncoder = DC.lambda "x" $ DC.var "x"
+    identityEncoder = DeepCore.lambda "x" $ DeepCore.var "x"
 
 -- | Transform a type module into an encoder module
 -- Returns Nothing if the module has no encodable type definitions
@@ -333,12 +333,12 @@ encodeMapType :: TTermDefinition (MapType -> Term)
 encodeMapType = define "encodeMapType" $
   doc "Generate an encoder for a map type" $
   "mt" ~>
-    DC.lambda "m" $
-      DC.injection _Term (DC.field _Term_map
-        (DC.primitiveEncoded _maps_bimap
+    DeepCore.lambda "m" $
+      DeepCore.injection _Term (DeepCore.field _Term_map
+        (DeepCore.primitiveEncoded _maps_bimap
           @@@ (encodeType @@ Core.mapTypeKeys (var "mt"))
           @@@ (encodeType @@ Core.mapTypeValues (var "mt"))
-          @@@ DC.var "m"))
+          @@@ DeepCore.var "m"))
 
 -- | Generate an encoder for an Either type
 -- Generates a case match over Left/Right variants
@@ -380,7 +380,7 @@ encodeModule = define "encodeModule" $
 encodeName :: TTermDefinition (Name -> Term)
 encodeName = define "encodeName" $
   doc "Encode a Name as a term" $
-  "n" ~> DC.wrap _Name (DC.string (Core.unName (var "n")))
+  "n" ~> DeepCore.wrap _Name (DeepCore.string (Core.unName (var "n")))
 
 -- | Generate an encoder module namespace from a source module namespace
 -- For example, "hydra.util" -> "hydra.encode.util"
@@ -409,9 +409,9 @@ encodeNamespace = define "encodeNamespace" $
 encodeOptionalType :: TTermDefinition (Type -> Term)
 encodeOptionalType = define "encodeOptionalType" $
   doc "Generate an encoder for a Maybe type" $
-  "elemType" ~> DC.lambda "opt" $
-    DC.injection _Term (DC.field _Term_maybe
-      (DC.primitiveEncoded _maybes_map @@@ (encodeType @@ var "elemType") @@@ DC.var "opt"))
+  "elemType" ~> DeepCore.lambda "opt" $
+    DeepCore.injection _Term (DeepCore.field _Term_maybe
+      (DeepCore.primitiveEncoded _maybes_map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "opt"))
 
 -- | Generate an encoder for a pair type
 -- Encodes both elements and wraps in Term.pair
@@ -420,10 +420,10 @@ encodeOptionalType = define "encodeOptionalType" $
 encodePairType :: TTermDefinition (PairType -> Term)
 encodePairType = define "encodePairType" $
   doc "Generate an encoder for a pair type" $
-  "pt" ~> DC.lambda "p" $ DC.injection _Term $ DC.field _Term_pair $ DC.primitiveEncoded _pairs_bimap
+  "pt" ~> DeepCore.lambda "p" $ DeepCore.injection _Term $ DeepCore.field _Term_pair $ DeepCore.primitiveEncoded _pairs_bimap
     @@@ (encodeType @@ Core.pairTypeFirst (var "pt"))
     @@@ (encodeType @@ Core.pairTypeSecond (var "pt"))
-    @@@ DC.var "p"
+    @@@ DeepCore.var "p"
 
 -- | Generate an encoder for a set type
 -- Encodes each element and wraps in Term.set
@@ -439,22 +439,22 @@ encodeRecordTypeNamed :: TTermDefinition (Name -> [FieldType] -> Term)
 encodeRecordTypeNamed = define "encodeRecordTypeNamed" $
   doc "Generate an encoder for a record type with the given element name" $
   "ename" ~> "rt" ~>
-    DC.lambda "x" $
-      DC.injection _Term (DC.field _Term_record
-        (DC.record _Record [
-          DC.field _Record_typeName (encodeName @@ var "ename"),
-          DC.field _Record_fields
-            (DC.list (primitive _lists_map @@ (encodeRecordFieldNamed @@ var "ename" @@ var "rt") @@ var "rt"))]))
+    DeepCore.lambda "x" $
+      DeepCore.injection _Term (DeepCore.field _Term_record
+        (DeepCore.record _Record [
+          DeepCore.field _Record_typeName (encodeName @@ var "ename"),
+          DeepCore.field _Record_fields
+            (DeepCore.list (primitive _lists_map @@ (encodeRecordFieldNamed @@ var "ename" @@ var "rt") @@ var "rt"))]))
   where
     encodeRecordFieldNamed :: TTerm (Name -> [FieldType] -> FieldType -> Term)
     encodeRecordFieldNamed =
       "tname" ~> "recType" ~> "ft" ~>
-        DC.record _Field [
-          DC.field _Field_name (encodeName @@ Core.fieldTypeName (var "ft")),
-          DC.field _Field_term
+        DeepCore.record _Field [
+          DeepCore.field _Field_name (encodeName @@ Core.fieldTypeName (var "ft")),
+          DeepCore.field _Field_term
             ((encodeType @@ Core.fieldTypeType (var "ft"))
               @@@ (projectField (var "tname") (Core.fieldTypeName (var "ft"))
-                    @@@ DC.var "x"))]
+                    @@@ DeepCore.var "x"))]
 
     projectField typeName fieldName =
       Core.termProject $ Core.projection typeName fieldName
@@ -463,9 +463,9 @@ encodeRecordTypeNamed = define "encodeRecordTypeNamed" $
 encodeSetType :: TTermDefinition (Type -> Term)
 encodeSetType = define "encodeSetType" $
   doc "Generate an encoder for a set type" $
-  "elemType" ~> DC.lambda "s" $
-    DC.injection _Term (DC.field _Term_set
-      (DC.primitiveEncoded _sets_map @@@ (encodeType @@ var "elemType") @@@ DC.var "s"))
+  "elemType" ~> DeepCore.lambda "s" $
+    DeepCore.injection _Term (DeepCore.field _Term_set
+      (DeepCore.primitiveEncoded _sets_map @@@ (encodeType @@ var "elemType") @@@ DeepCore.var "s"))
 
 -- | Generate an encoder term for a given Type (without element name context)
 encodeType :: TTermDefinition (Type -> Term)
@@ -501,13 +501,13 @@ encodeType = define "encodeType" $
     _Type_wrap>>: "wt" ~>
       encodeWrappedType @@ var "wt",
     _Type_unit>>: constant $
-      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+      DeepCore.lambda "_" $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
     _Type_void>>: constant $
-      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+      DeepCore.lambda "_" $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
     _Type_variable>>: "typeName" ~>
       Core.termVariable (encodeBindingName @@ var "typeName")]
   where
-    identityEncoder = DC.lambda "x" $ DC.var "x"
+    identityEncoder = DeepCore.lambda "x" $ DeepCore.var "x"
 
 -- | Generate an encoder for a union type with a given element name
 -- | Generate an encoder term for a given Type, using the element name for record/union/wrap
@@ -546,13 +546,13 @@ encodeTypeNamed = define "encodeTypeNamed" $
     _Type_wrap>>: "wt" ~>
       encodeWrappedTypeNamed @@ var "ename" @@ var "wt",
     _Type_unit>>: constant $
-      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+      DeepCore.lambda "_" $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
     _Type_void>>: constant $
-      DC.lambda "_" $ DC.injection _Term (DC.field _Term_unit DC.unit),
+      DeepCore.lambda "_" $ DeepCore.injection _Term (DeepCore.field _Term_unit DeepCore.unit),
     _Type_variable>>: "typeName" ~>
       Core.termVariable (encodeBindingName @@ var "typeName")]
   where
-    identityEncoder = DC.lambda "x" $ DC.var "x"
+    identityEncoder = DeepCore.lambda "x" $ DeepCore.var "x"
 
 -- | Generate an encoder term for a given Type (without element name context)
 -- | Generate an encoder for a union type (placeholder name)
@@ -593,13 +593,13 @@ encodeWrappedTypeNamed :: TTermDefinition (Name -> Type -> Term)
 encodeWrappedTypeNamed = define "encodeWrappedTypeNamed" $
   doc "Generate an encoder for a wrapped type with the given element name" $
   "ename" ~> "wt" ~>
-    DC.lambda "x" $
-      DC.injection _Term (DC.field _Term_wrap
-        (DC.record _WrappedTerm [
-          DC.field _WrappedTerm_typeName (encodeName @@ var "ename"),
-          DC.field _WrappedTerm_body
+    DeepCore.lambda "x" $
+      DeepCore.injection _Term (DeepCore.field _Term_wrap
+        (DeepCore.record _WrappedTerm [
+          DeepCore.field _WrappedTerm_typeName (encodeName @@ var "ename"),
+          DeepCore.field _WrappedTerm_body
             ((encodeType @@ var "wt")
-              @@@ (DC.unwrapDynamic (var "ename") @@@ DC.var "x"))]))
+              @@@ (DeepCore.unwrapDynamic (var "ename") @@@ DeepCore.var "x"))]))
 
 -- | Generate an encoder for a wrapped type (placeholder name)
 -- | Collect forall type variables from a type

@@ -38,7 +38,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -359,7 +359,7 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
   doc "Topological sort of connected components, in terms of dependencies between variable/term binding pairs" $
   "bindingMap" ~>
   "bindings" <~ Maps.toList (var "bindingMap") $
-  "keys" <~ Sets.fromList (Lists.map (unaryFunction Pairs.first) (var "bindings")) $
+  "keys" <~ Sets.fromList (Lists.map (reify Pairs.first) (var "bindings")) $
   -- TODO: this function currently serves no purpose; it always yields false
   "hasTypeAnnotation" <~ ("term" ~>
     cases _Term (var "term")
@@ -374,7 +374,7 @@ topologicalSortBindingMap = define "topologicalSortBindingMap" $
   "toPair" <~ ("name" ~> pair (var "name") $ Maybes.fromMaybe
     (Core.termLiteral $ Core.literalString $ string "Impossible!")
     (Maps.lookup (var "name") (var "bindingMap"))) $
-  Lists.map (unaryFunction $ Lists.map $ var "toPair") (Sorting.topologicalSortComponents @@ Lists.map (var "depsOf") (var "bindings"))
+  Lists.map (reify $ Lists.map $ var "toPair") (Sorting.topologicalSortComponents @@ Lists.map (var "depsOf") (var "bindings"))
 
 topologicalSortBindings :: TTermDefinition ([Binding] -> Either [[Name]] [Name])
 topologicalSortBindings = define "topologicalSortBindings" $
@@ -407,7 +407,7 @@ definitionsWithDependencies = define "definitionsWithDependencies" $
   "cx" ~> "graph" ~> "original" ~>
   "depNames" <~ ("el" ~> Sets.toList (termDependencyNames @@ true @@ false @@ false @@ (Core.bindingTerm (var "el")))) $
   "allDepNames" <~ Lists.nub (Lists.concat2
-    (Lists.map (unaryFunction Core.bindingName) (var "original"))
+    (Lists.map (reify Core.bindingName) (var "original"))
     (Lists.concat (Lists.map (var "depNames") (var "original")))) $
   Eithers.mapList ("name" ~> Lexical.requireBinding @@ var "graph" @@ var "name") (var "allDepNames")
 

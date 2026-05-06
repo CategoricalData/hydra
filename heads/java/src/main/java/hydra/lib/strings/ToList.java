@@ -7,7 +7,6 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,6 +17,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -48,12 +48,11 @@ public class ToList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<String, Term>) s -> {
-            List<Integer> list = apply(s);
-            List<Term> terms = new ArrayList<>(list.size());
-            for (Integer i : list) {
-                terms.add(Terms.int32(i));
+            ConsList<Term> reversed = ConsList.empty();
+            for (Integer i : apply(s)) {
+                reversed = ConsList.cons(Terms.int32(i), reversed);
             }
-            return Terms.list(terms);
+            return Terms.list(reversed.reverse());
         }, hydra.extract.Core.string(graph, args.get(0)));
     }
 
@@ -63,8 +62,14 @@ public class ToList extends PrimitiveFunction {
      * @return the list of character code points
      */
     public static List<Integer> apply(String s) {
-        ArrayList<Integer> list = new ArrayList<>(s.codePointCount(0, s.length()));
-        s.codePoints().forEach(list::add);
-        return list;
+        // Walk the string in reverse so we can prepend onto a ConsList in O(1) per char.
+        ConsList<Integer> result = ConsList.empty();
+        int i = s.length();
+        while (i > 0) {
+            int cp = s.codePointBefore(i);
+            result = ConsList.cons(cp, result);
+            i -= Character.charCount(cp);
+        }
+        return result;
     }
 }

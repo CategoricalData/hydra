@@ -17,13 +17,13 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.core.TypeVariableMetadata;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
+import hydra.util.PersistentMap;
+import hydra.util.PersistentSet;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,7 +47,7 @@ public interface Types {
      * @return the annotated type
      */
     static Type annot(Map<Name, Term> ann, Type base) {
-        return new Type.Annotated(new AnnotatedType(base, new HashMap<>(ann)));
+        return new Type.Annotated(new AnnotatedType(base, PersistentMap.<Name, Term>coerce(ann)));
     }
 
     /**
@@ -58,9 +58,7 @@ public interface Types {
      * @return the annotated type
      */
     static Type annot(Name key, Term value, Type base) {
-        Map<Name, Term> mp = new HashMap<>();
-        mp.put(key, value);
-        return annot(mp, base);
+        return annot(PersistentMap.singleton(key, value), base);
     }
 
     // ===== Type application =====
@@ -360,11 +358,10 @@ public interface Types {
         if (ts.size() < 2) {
             throw new IllegalArgumentException("functionMany requires at least 2 types");
         }
-        List<Type> reversed = new ArrayList<>(ts);
-        Collections.reverse(reversed);
-        Type result = reversed.get(0);
-        for (int i = 1; i < reversed.size(); i++) {
-            result = function(reversed.get(i), result);
+        ConsList<Type> reversed = ConsList.fromList(ts).reverse();
+        Type result = reversed.head();
+        for (Type t : reversed.tail()) {
+            result = function(t, result);
         }
         return result;
     }
@@ -440,11 +437,11 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme poly(List<String> vs, Type body) {
-        List<Name> names = new ArrayList<>();
+        ConsList<Name> reversed = ConsList.empty();
         for (String v : vs) {
-            names.add(name(v));
+            reversed = ConsList.cons(name(v), reversed);
         }
-        return new TypeScheme(names, body, Maybe.nothing());
+        return new TypeScheme(reversed.reverse(), body, Maybe.nothing());
     }
 
     /**
@@ -456,21 +453,21 @@ public interface Types {
      * @return the type scheme
      */
     static TypeScheme polyConstrained(Map<String, Set<Name>> vsWithConstraints, Type body) {
-        List<Name> vars = new ArrayList<>();
-        Map<Name, TypeVariableMetadata> constraintMap = new HashMap<>();
+        ConsList<Name> varsRev = ConsList.empty();
+        PersistentMap<Name, TypeVariableMetadata> constraintMap = PersistentMap.<Name, TypeVariableMetadata>empty();
         for (Map.Entry<String, Set<Name>> entry : vsWithConstraints.entrySet()) {
             Name varName = name(entry.getKey());
-            vars.add(varName);
+            varsRev = ConsList.cons(varName, varsRev);
             if (!entry.getValue().isEmpty()) {
-                constraintMap.put(varName, new TypeVariableMetadata(new HashSet<>(entry.getValue())));
+                constraintMap = constraintMap.insert(varName, new TypeVariableMetadata(PersistentSet.<Name>coerce(entry.getValue())));
             }
         }
-        return new TypeScheme(vars, body, Maybe.just(constraintMap));
+        return new TypeScheme(varsRev.reverse(), body, Maybe.just(constraintMap));
     }
 
-    Set<Name> ORD = new HashSet<>(Arrays.asList(name("ordering")));
-    Set<Name> EQ = new HashSet<>(Arrays.asList(name("equality")));
-    Set<Name> NONE = Collections.emptySet();
+    Set<Name> ORD = PersistentSet.singleton(name("ordering"));
+    Set<Name> EQ = PersistentSet.singleton(name("equality"));
+    Set<Name> NONE = PersistentSet.empty();
 
     /**
      * Create a type scheme with one Ord-constrained type variable.
@@ -490,30 +487,30 @@ public interface Types {
      * Create a constrained type scheme with one variable.
      */
     static TypeScheme constrained1(String v1, Set<Name> c1, Type body) {
-        Map<Name, TypeVariableMetadata> cm = new HashMap<>();
-        if (!c1.isEmpty()) cm.put(name(v1), new TypeVariableMetadata(new HashSet<>(c1)));
-        return new TypeScheme(Arrays.asList(name(v1)), body, Maybe.just(cm));
+        PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
+        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(PersistentSet.<Name>coerce(c1)));
+        return new TypeScheme(ConsList.of(name(v1)), body, Maybe.just(cm));
     }
 
     /**
      * Create a constrained type scheme with two ordered variables.
      */
     static TypeScheme constrained2(String v1, Set<Name> c1, String v2, Set<Name> c2, Type body) {
-        Map<Name, TypeVariableMetadata> cm = new HashMap<>();
-        if (!c1.isEmpty()) cm.put(name(v1), new TypeVariableMetadata(new HashSet<>(c1)));
-        if (!c2.isEmpty()) cm.put(name(v2), new TypeVariableMetadata(new HashSet<>(c2)));
-        return new TypeScheme(Arrays.asList(name(v1), name(v2)), body, Maybe.just(cm));
+        PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
+        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(PersistentSet.<Name>coerce(c1)));
+        if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableMetadata(PersistentSet.<Name>coerce(c2)));
+        return new TypeScheme(ConsList.of(name(v1), name(v2)), body, Maybe.just(cm));
     }
 
     /**
      * Create a constrained type scheme with three ordered variables.
      */
     static TypeScheme constrained3(String v1, Set<Name> c1, String v2, Set<Name> c2, String v3, Set<Name> c3, Type body) {
-        Map<Name, TypeVariableMetadata> cm = new HashMap<>();
-        if (!c1.isEmpty()) cm.put(name(v1), new TypeVariableMetadata(new HashSet<>(c1)));
-        if (!c2.isEmpty()) cm.put(name(v2), new TypeVariableMetadata(new HashSet<>(c2)));
-        if (!c3.isEmpty()) cm.put(name(v3), new TypeVariableMetadata(new HashSet<>(c3)));
-        return new TypeScheme(Arrays.asList(name(v1), name(v2), name(v3)), body, Maybe.just(cm));
+        PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
+        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(PersistentSet.<Name>coerce(c1)));
+        if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableMetadata(PersistentSet.<Name>coerce(c2)));
+        if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableMetadata(PersistentSet.<Name>coerce(c3)));
+        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3)), body, Maybe.just(cm));
     }
 
     /**
@@ -521,12 +518,12 @@ public interface Types {
      */
     static TypeScheme constrained4(String v1, Set<Name> c1, String v2, Set<Name> c2,
                                     String v3, Set<Name> c3, String v4, Set<Name> c4, Type body) {
-        Map<Name, TypeVariableMetadata> cm = new HashMap<>();
-        if (!c1.isEmpty()) cm.put(name(v1), new TypeVariableMetadata(new HashSet<>(c1)));
-        if (!c2.isEmpty()) cm.put(name(v2), new TypeVariableMetadata(new HashSet<>(c2)));
-        if (!c3.isEmpty()) cm.put(name(v3), new TypeVariableMetadata(new HashSet<>(c3)));
-        if (!c4.isEmpty()) cm.put(name(v4), new TypeVariableMetadata(new HashSet<>(c4)));
-        return new TypeScheme(Arrays.asList(name(v1), name(v2), name(v3), name(v4)), body, Maybe.just(cm));
+        PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
+        if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(PersistentSet.<Name>coerce(c1)));
+        if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableMetadata(PersistentSet.<Name>coerce(c2)));
+        if (!c3.isEmpty()) cm = cm.insert(name(v3), new TypeVariableMetadata(PersistentSet.<Name>coerce(c3)));
+        if (!c4.isEmpty()) cm = cm.insert(name(v4), new TypeVariableMetadata(PersistentSet.<Name>coerce(c4)));
+        return new TypeScheme(ConsList.of(name(v1), name(v2), name(v3), name(v4)), body, Maybe.just(cm));
     }
 
     /**
