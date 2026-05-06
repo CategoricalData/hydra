@@ -39,24 +39,24 @@ annotationToExpr ann =
       Syntax.AnnotationMarker v0 -> markerAnnotationToExpr v0
       Syntax.AnnotationSingleElement v0 -> singleElementAnnotationToExpr v0
 annotationTypeDeclarationToExpr :: t0 -> Ast.Expr
-annotationTypeDeclarationToExpr _ = Serialization.cst "STUB:AnnotationTypeDeclaration"
+annotationTypeDeclarationToExpr _ = Serialization.cst "STUB:AnnotationInterfaceDeclaration"
 arrayAccessToExpr :: t0 -> Ast.Expr
 arrayAccessToExpr _ = Serialization.cst "STUB:ArrayAccess"
 arrayCreationExpressionToExpr :: Syntax.ArrayCreationExpression -> Ast.Expr
 arrayCreationExpressionToExpr ace =
     case ace of
-      Syntax.ArrayCreationExpressionPrimitiveArray v0 ->
-        let pt = Syntax.arrayCreationExpression_PrimitiveArrayType v0
-            ai = Syntax.arrayCreationExpression_PrimitiveArrayArray v0
-        in (Serialization.spaceSep [
-          Serialization.cst "new",
-          (Serialization.noSep [
-            primitiveTypeWithAnnotationsToExpr pt,
-            (Serialization.cst "[]")]),
-          (arrayInitializerToExpr ai)])
-      Syntax.ArrayCreationExpressionClassOrInterfaceArray _ -> Serialization.cst "STUB:ArrayCreationExpression"
-      Syntax.ArrayCreationExpressionPrimitive _ -> Serialization.cst "STUB:ArrayCreationExpression"
-      Syntax.ArrayCreationExpressionClassOrInterface _ -> Serialization.cst "STUB:ArrayCreationExpression"
+      Syntax.ArrayCreationExpressionWithoutInitializer_ _ -> Serialization.cst "STUB:ArrayCreationExpression"
+      Syntax.ArrayCreationExpressionWithInitializer_ v0 -> case v0 of
+        Syntax.ArrayCreationExpressionWithInitializerPrimitive v1 ->
+          let pt = Syntax.arrayCreationExpressionWithInitializer_PrimitiveType v1
+              ai = Syntax.arrayCreationExpressionWithInitializer_PrimitiveArray v1
+          in (Serialization.spaceSep [
+            Serialization.cst "new",
+            (Serialization.noSep [
+              primitiveTypeWithAnnotationsToExpr pt,
+              (Serialization.cst "[]")]),
+            (arrayInitializerToExpr ai)])
+        Syntax.ArrayCreationExpressionWithInitializerClassOrInterface _ -> Serialization.cst "STUB:ArrayCreationExpression"
 arrayInitializerToExpr :: Syntax.ArrayInitializer -> Ast.Expr
 arrayInitializerToExpr ai =
 
@@ -110,7 +110,9 @@ blockStatementToExpr :: Syntax.BlockStatement -> Ast.Expr
 blockStatementToExpr s =
     case s of
       Syntax.BlockStatementLocalVariableDeclaration v0 -> localVariableDeclarationStatementToExpr v0
-      Syntax.BlockStatementClass v0 -> classDeclarationToExpr v0
+      Syntax.BlockStatementLocalClassOrInterface v0 -> case v0 of
+        Syntax.LocalClassOrInterfaceDeclarationClass v1 -> classDeclarationToExpr v1
+        Syntax.LocalClassOrInterfaceDeclarationNormalInterface v1 -> interfaceDeclarationToExpr (Syntax.InterfaceDeclarationNormalInterface v1)
       Syntax.BlockStatementStatement v0 -> statementToExpr v0
 blockToExpr :: Syntax.Block -> Ast.Expr
 blockToExpr b =
@@ -498,7 +500,7 @@ interfaceDeclarationToExpr :: Syntax.InterfaceDeclaration -> Ast.Expr
 interfaceDeclarationToExpr d =
     case d of
       Syntax.InterfaceDeclarationNormalInterface v0 -> normalInterfaceDeclarationToExpr v0
-      Syntax.InterfaceDeclarationAnnotationType v0 -> annotationTypeDeclarationToExpr v0
+      Syntax.InterfaceDeclarationAnnotationInterface v0 -> annotationTypeDeclarationToExpr v0
 interfaceMemberDeclarationToExpr :: Syntax.InterfaceMemberDeclaration -> Ast.Expr
 interfaceMemberDeclarationToExpr d =
     case d of
@@ -541,7 +543,7 @@ interfaceModifierToExpr m =
       Syntax.InterfaceModifierPrivate -> Serialization.cst "private"
       Syntax.InterfaceModifierAbstract -> Serialization.cst "abstract"
       Syntax.InterfaceModifierStatic -> Serialization.cst "static"
-      Syntax.InterfaceModifierStrictfb -> Serialization.cst "strictfb"
+      Syntax.InterfaceModifierStrictfp -> Serialization.cst "strictfp"
 interfaceTypeToExpr :: Syntax.InterfaceType -> Ast.Expr
 interfaceTypeToExpr it = classTypeToExpr (Syntax.unInterfaceType it)
 javaFloatLiteralText :: String -> String
@@ -698,7 +700,7 @@ methodModifierToExpr m =
       Syntax.MethodModifierFinal -> Serialization.cst "final"
       Syntax.MethodModifierSynchronized -> Serialization.cst "synchronized"
       Syntax.MethodModifierNative -> Serialization.cst "native"
-      Syntax.MethodModifierStrictfb -> Serialization.cst "strictfb"
+      Syntax.MethodModifierStrictfp -> Serialization.cst "strictfp"
 methodNameToExpr :: Syntax.MethodName -> Ast.Expr
 methodNameToExpr mn = identifierToExpr (Syntax.unMethodName mn)
 methodReferenceToExpr :: t0 -> Ast.Expr
@@ -856,9 +858,14 @@ relationalExpressionGreaterThanEqualToExpr gte =
 relationalExpressionGreaterThanToExpr :: Syntax.RelationalExpression_GreaterThan -> Ast.Expr
 relationalExpressionGreaterThanToExpr gt =
     Serialization.infixWs ">" (relationalExpressionToExpr (Syntax.relationalExpression_GreaterThanLhs gt)) (shiftExpressionToExpr (Syntax.relationalExpression_GreaterThanRhs gt))
-relationalExpressionInstanceOfToExpr :: Syntax.RelationalExpression_InstanceOf -> Ast.Expr
+relationalExpressionInstanceOfToExpr :: Syntax.InstanceofExpression -> Ast.Expr
 relationalExpressionInstanceOfToExpr io =
-    Serialization.infixWs "instanceof" (relationalExpressionToExpr (Syntax.relationalExpression_InstanceOfLhs io)) (referenceTypeToExpr (Syntax.relationalExpression_InstanceOfRhs io))
+
+      let rhsExpr =
+              case (Syntax.instanceofExpressionRhs io) of
+                Syntax.InstanceofExpression_RhsReferenceType v0 -> referenceTypeToExpr v0
+                Syntax.InstanceofExpression_RhsPattern _ -> Serialization.cst "STUB:Pattern"
+      in (Serialization.infixWs "instanceof" (relationalExpressionToExpr (Syntax.instanceofExpressionLhs io)) rhsExpr)
 relationalExpressionLessThanEqualToExpr :: Syntax.RelationalExpression_LessThanEqual -> Ast.Expr
 relationalExpressionLessThanEqualToExpr lte =
     Serialization.infixWs "<=" (relationalExpressionToExpr (Syntax.relationalExpression_LessThanEqualLhs lte)) (shiftExpressionToExpr (Syntax.relationalExpression_LessThanEqualRhs lte))
@@ -873,7 +880,7 @@ relationalExpressionToExpr e =
       Syntax.RelationalExpressionGreaterThan v0 -> relationalExpressionGreaterThanToExpr v0
       Syntax.RelationalExpressionLessThanEqual v0 -> relationalExpressionLessThanEqualToExpr v0
       Syntax.RelationalExpressionGreaterThanEqual v0 -> relationalExpressionGreaterThanEqualToExpr v0
-      Syntax.RelationalExpressionInstanceof v0 -> relationalExpressionInstanceOfToExpr v0
+      Syntax.RelationalExpressionInstanceofExpression v0 -> relationalExpressionInstanceOfToExpr v0
 resultToExpr :: Syntax.Result -> Ast.Expr
 resultToExpr r =
     case r of
@@ -986,17 +993,17 @@ typeBoundToExpr b =
         let cit = Syntax.typeBound_ClassOrInterfaceType v0
             additional = Syntax.typeBound_ClassOrInterfaceAdditional v0
         in (Logic.ifElse (Lists.null additional) (classOrInterfaceTypeToExpr cit) (Serialization.spaceSep (Lists.cons (classOrInterfaceTypeToExpr cit) (Lists.map additionalBoundToExpr additional))))
-typeDeclarationToExpr :: Syntax.TypeDeclaration -> Ast.Expr
+typeDeclarationToExpr :: Syntax.TopLevelClassOrInterfaceDeclaration -> Ast.Expr
 typeDeclarationToExpr d =
     case d of
-      Syntax.TypeDeclarationClass v0 -> classDeclarationToExpr v0
-      Syntax.TypeDeclarationInterface v0 -> interfaceDeclarationToExpr v0
-      Syntax.TypeDeclarationNone -> Serialization.cst ";"
-typeDeclarationWithCommentsToExpr :: Syntax.TypeDeclarationWithComments -> Ast.Expr
+      Syntax.TopLevelClassOrInterfaceDeclarationClass v0 -> classDeclarationToExpr v0
+      Syntax.TopLevelClassOrInterfaceDeclarationInterface v0 -> interfaceDeclarationToExpr v0
+      Syntax.TopLevelClassOrInterfaceDeclarationNone -> Serialization.cst ";"
+typeDeclarationWithCommentsToExpr :: Syntax.TopLevelClassOrInterfaceDeclarationWithComments -> Ast.Expr
 typeDeclarationWithCommentsToExpr tdwc =
 
-      let d = Syntax.typeDeclarationWithCommentsValue tdwc
-          mc = Syntax.typeDeclarationWithCommentsComments tdwc
+      let d = Syntax.topLevelClassOrInterfaceDeclarationWithCommentsValue tdwc
+          mc = Syntax.topLevelClassOrInterfaceDeclarationWithCommentsComments tdwc
       in (withComments mc (typeDeclarationToExpr d))
 typeIdentifierToExpr :: Syntax.TypeIdentifier -> Ast.Expr
 typeIdentifierToExpr tid = identifierToExpr (Syntax.unTypeIdentifier tid)
