@@ -1482,7 +1482,7 @@ declarationForRecordType' = def "declarationForRecordType'" $
     "memberVars" <<~ (Eithers.mapList (lambda "f" $ recordMemberVar @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
     "memberVars'" <<~ (Eithers.mapList (lambda "p" $ addComment @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p")) @@ var "cx" @@ var "g")
       (Lists.zip (var "memberVars") (var "fields"))) $
-    "elNameStr" <~ (unwrap _Name @@ var "elName") $
+    "elNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "elName")) $
     "withMethods" <<~ (Logic.ifElse (Equality.gt (Lists.length (var "fields")) (int32 1))
       (Eithers.mapList (lambda "f" $
           "decl" <<~ (recordWithMethod @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "f" @@ var "cx" @@ var "g") $
@@ -1583,14 +1583,14 @@ declarationForUnionType = def "declarationForUnionType" $
     "acceptDecl" <~ (JavaUtilsSource.toAcceptMethod @@ true @@ var "tparams") $
     -- Build visitor and partial visitor interfaces
     "vtparams" <~ Lists.concat2 (var "tparams") (list [JavaUtilsSource.javaTypeParameter @@ asTerm JavaNamesSource.visitorReturnParameter]) $
-    "elNameStr" <~ (unwrap _Name @@ var "elName") $
+    "elNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "elName")) $
     "visitorMethods" <~ Lists.map
       (lambda "ft" $
         "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
         "fnameStr" <~ (unwrap _Name @@ var "fname") $
         "typeArgs" <~ Lists.map (lambda "tp" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp") (var "tparams") $
         "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
-        "varNameStr" <~ (unwrap _Name @@ var "varName") $
+        "varNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "varName")) $
         "varRef" <~ (JavaUtilsSource.javaClassTypeToJavaType @@
           (JavaUtilsSource.nameToJavaClassType @@ var "aliases" @@ false @@ var "typeArgs"
             @@ var "varName" @@ nothing)) $
@@ -1640,7 +1640,7 @@ declarationForUnionType = def "declarationForUnionType" $
       (lambda "ft" $
         "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
         "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
-        "varNameStr" <~ (unwrap _Name @@ var "varName") $
+        "varNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "varName")) $
         "varRef" <~ (JavaUtilsSource.javaClassTypeToJavaType @@
           (JavaUtilsSource.nameToJavaClassType @@ var "aliases" @@ false @@ var "typeArgs"
             @@ var "varName" @@ nothing)) $

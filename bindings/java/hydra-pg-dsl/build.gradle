@@ -45,7 +45,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
     withSourcesJar()
-    // withJavadocJar() omitted — see bindings/java/hydra-rdf4j/build.gradle.
+    withJavadocJar()
 }
 
 repositories {
@@ -63,12 +63,6 @@ dependencies {
 // Skip tests for the standalone publish-focused build.
 tasks.matching { it.name in ['compileTestJava', 'test', 'processTestResources'] }.configureEach {
     enabled = false
-}
-
-// Make javadoc warnings non-fatal — see bindings/java/hydra-rdf4j/build.gradle.
-tasks.withType(Javadoc).configureEach {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    failOnError = false
 }
 
 // sourcesJar duplicate handling — see bindings/java/hydra-rdf4j/build.gradle.

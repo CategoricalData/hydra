@@ -34,10 +34,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
     withSourcesJar()
-    // withJavadocJar() is intentionally omitted: the in-tree dist/java/* generated
-    // sources have unresolved `{@link hydra.errors.Error}` references (the actual
-    // class is `Error_`), which makes javadoc fail. Enable for publish runs once
-    // the upstream generator's javadoc generation is fixed.
+    withJavadocJar()
 }
 
 repositories {
@@ -57,15 +54,6 @@ dependencies {
 // packages/hydra-java/build.gradle is where developer tests run.
 tasks.matching { it.name in ['compileTestJava', 'test', 'processTestResources'] }.configureEach {
     enabled = false
-}
-
-// Make javadoc warnings non-fatal — the in-tree dist/java/* generated sources
-// have unresolved doc references (`{@link hydra.errors.Error}` for `Error_`,
-// etc.) that javadoc can't tolerate by default. Failure here is upstream
-// generator output, not the binding's own code.
-tasks.withType(Javadoc).configureEach {
-    options.addStringOption('Xdoclint:none', '-quiet')
-    failOnError = false
 }
 
 // sourcesJar can see the same file via multiple sourceSet srcDirs (the
