@@ -705,7 +705,7 @@ public interface Terms {
      * @return the list term
      */
     static Term list(List<Term> elements) {
-        return new Term.List(elements);
+        return new Term.List(ConsList.fromList(elements));
     }
 
     /**

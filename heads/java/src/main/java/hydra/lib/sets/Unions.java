@@ -60,7 +60,6 @@ public class Unions extends PrimitiveFunction {
      * @return a new set containing all elements from all input sets
      */
     public static <X> Set<X> apply(List<Set<X>> sets) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentSet<X> result = PersistentSet.<X>empty();
         for (Set<X> s : sets) {
             result = result.union(PersistentSet.<X>coerce(s));

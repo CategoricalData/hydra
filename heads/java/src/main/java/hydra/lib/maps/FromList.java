@@ -62,29 +62,10 @@ public class FromList extends PrimitiveFunction {
      * @return a map constructed from the pairs
      */
     public static <K, V> Map<K, V> apply(List<Pair<K, V>> pairs) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentMap<K, V> result = PersistentMap.<K, V>empty();
         for (Pair<K, V> p : pairs) {
             result = result.insert(p.first, p.second);
         }
         return result;
-    }
-
-    /**
-     * Returns a PersistentMap with the same entries as the source. If the source is
-     * already a PersistentMap, returns it unchanged; otherwise builds one entry by
-     * entry. Replaces an earlier TreeMap-based helper.
-     */
-    static <K, V> Map<K, V> orderedMap(Map<K, V> source) {
-        return PersistentMap.coerce(source);
-    }
-
-    /**
-     * Creates an empty PersistentMap. The signature is retained for callers that
-     * previously consulted the source map's ordering strategy; PersistentMap is
-     * always Comparable-ordered so the source is unused.
-     */
-    static <K, V1, V2> Map<K, V2> emptyLike(Map<K, V1> source) {
-        return PersistentMap.empty();
     }
 }

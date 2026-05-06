@@ -50,7 +50,6 @@ public class MapKeys extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
-                @SuppressWarnings({"rawtypes", "unchecked"})
                 PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (java.util.Map.Entry<Term, Term> e : mp.entrySet()) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
@@ -84,7 +83,6 @@ public class MapKeys extends PrimitiveFunction {
      * @return the map with transformed keys
      */
     public static <K1, K2, V> java.util.Map<K2, V> apply(Function<K1, K2> mapping, java.util.Map<K1, V> arg) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentMap<K2, V> result = PersistentMap.<K2, V>empty();
         for (java.util.Map.Entry<K1, V> e : arg.entrySet()) {
             result = result.insert(mapping.apply(e.getKey()), e.getValue());

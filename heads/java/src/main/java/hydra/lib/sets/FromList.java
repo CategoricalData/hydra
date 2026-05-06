@@ -63,17 +63,4 @@ public class FromList extends PrimitiveFunction {
     public static <X> Set<X> apply(List<X> arg) {
         return PersistentSet.fromList(arg);
     }
-
-    /**
-     * Creates a set from elements as a PersistentSet. Replaces an earlier
-     * TreeSet-based helper.
-     */
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    static <X> Set<X> orderedSet(java.util.Collection<X> elements) {
-        PersistentSet result = PersistentSet.empty();
-        for (X x : elements) {
-            result = result.insert(x);
-        }
-        return result;
-    }
 }
