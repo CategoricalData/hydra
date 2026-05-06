@@ -21,10 +21,14 @@ set -euo pipefail
 # use bin/sync-default.sh, which is a thin wrapper around this script.
 #
 # Languages for --hosts / --targets:
-#   haskell, java, python, scala, clojure, scheme, common-lisp, emacs-lisp.
-#   Aliases: 'all' expands to all eight; 'lisp' expands to the four Lisp
+#   haskell, java, python, scala, go, clojure, scheme, common-lisp, emacs-lisp.
+#   Aliases: 'all' expands to all nine; 'lisp' expands to the four Lisp
 #   dialects (clojure,common-lisp,emacs-lisp,scheme). Aliases can mix
 #   with explicit names, e.g. 'java,lisp'.
+#
+# Go is a "head bud" today: it generates as a target (kernel only) but
+# cannot yet host generation of any coder package in Go (Phase 4 host=go
+# rows are skipped). See issue #289.
 #
 # Sync matrix (derived from hosts + targets):
 #
@@ -53,7 +57,7 @@ HYDRA_HASKELL_DIR="$HYDRA_ROOT/heads/haskell"
 
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
-ALL_LANGS="haskell java python scala clojure scheme common-lisp emacs-lisp"
+ALL_LANGS="haskell java python scala go clojure scheme common-lisp emacs-lisp"
 
 NO_TESTS=false
 HOSTS_ARG=""
@@ -296,7 +300,7 @@ for L in $LANG_UNION; do
     if [ "$L" = "haskell" ]; then continue; fi
     # Map language name to package name.
     case "$L" in
-        java|python|scala)  pkg="hydra-$L" ;;
+        java|python|scala|go)  pkg="hydra-$L" ;;
         clojure|scheme|common-lisp|emacs-lisp)  pkg="hydra-lisp" ;;
         *)                  die "Internal: no coder package for $L" ;;
     esac
@@ -325,6 +329,18 @@ banner1 "Phase 3: hydra-kernel + hydra-pg + hydra-rdf into each language"
 echo ""
 for L in $LANG_UNION; do
     if [ "$L" = "haskell" ]; then continue; fi
+    # The Go head is a "head bud": only hydra-kernel is meaningful for it
+    # today. Skip hydra-pg / hydra-rdf into Go until a corresponding Go
+    # runtime exists (issue #289 is the umbrella for promoting Go to a
+    # full-fledged head).
+    if [ "$L" = "go" ]; then
+        for pkg in hydra-kernel; do
+            echo ""
+            echo "--- $pkg -> $L ---"
+            "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" "$pkg"
+        done
+        continue
+    fi
     for pkg in hydra-kernel hydra-pg hydra-rdf; do
         echo ""
         echo "--- $pkg -> $L ---"
@@ -353,11 +369,15 @@ banner1 "Phase 4: Cross-host coders (hydra-<target> in host's language)"
 echo ""
 for H in $HOSTS; do
     if [ "$H" = "haskell" ]; then continue; fi
+    # The Go head is a "head bud": it cannot yet host generation of any
+    # coder package in Go's own language (no Go DSL infrastructure). Skip
+    # the host=go row of Phase 4 until promotion is complete.
+    if [ "$H" = "go" ]; then continue; fi
     for T in $TARGETS; do
         # Map target language to its coder package.
         case "$T" in
             haskell)             pkg="hydra-haskell" ;;
-            java|python|scala)   pkg="hydra-$T" ;;
+            java|python|scala|go)   pkg="hydra-$T" ;;
             clojure|scheme|common-lisp|emacs-lisp)  pkg="hydra-lisp" ;;
             *)                   die "Internal: no coder package for $T" ;;
         esac
