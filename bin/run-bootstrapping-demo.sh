@@ -21,6 +21,9 @@ set -euo pipefail
 #   --repeat N              Run tests N times (test/all modes)
 #   --run RUN               Use a specific run (test/dashboard modes)
 #   --paths p1,p2,...       Test only specific paths (test mode)
+#   --clean                 Force a fresh wipe + recopy of each target dir
+#                           (default is incremental; use --clean for cold-start
+#                           timing measurements).
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 REPO_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
@@ -28,7 +31,7 @@ RUNS_DIR="$REPO_ROOT/bootstrap/runs"
 DEMO_DIR="$REPO_ROOT/demos/bootstrapping/bin"
 
 if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
-    sed -n '4,21p' "$0" | sed 's/^# //; s/^#//'
+    sed -n '4,26p' "$0" | sed 's/^# //; s/^#//'
     exit 0
 fi
 
