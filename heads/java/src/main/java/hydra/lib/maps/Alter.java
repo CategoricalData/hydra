@@ -9,7 +9,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -21,6 +20,7 @@ import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.util.Either;
+import hydra.util.PersistentMap;
 
 
 /**
@@ -62,12 +62,10 @@ public class Alter extends PrimitiveFunction {
                     t -> Either.right(t), graph, ((Either.Right<Error_, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
                 Maybe<Term> newValue = ((Either.Right<Error_, Maybe<Term>>) maybeResult).value;
-                Map<Term, Term> result = new TreeMap<>(mp);
-                if (newValue.isJust()) {
-                    result.put(key, newValue.fromJust());
-                } else {
-                    result.remove(key);
-                }
+                PersistentMap<Term, Term> base = PersistentMap.coerce(mp);
+                PersistentMap<Term, Term> result = newValue.isJust()
+                    ? base.insert(key, newValue.fromJust())
+                    : base.delete(key);
                 return Either.right(Terms.map(result));
             });
     }
@@ -96,12 +94,7 @@ public class Alter extends PrimitiveFunction {
     public static <K, V> Map<K, V> apply(Function<Maybe<V>, Maybe<V>> f, K key, Map<K, V> mp) {
         Maybe<V> current = mp.containsKey(key) ? Maybe.just(mp.get(key)) : Maybe.nothing();
         Maybe<V> newValue = f.apply(current);
-        Map<K, V> result = new TreeMap<>(mp);
-        if (newValue.isJust()) {
-            result.put(key, newValue.fromJust());
-        } else {
-            result.remove(key);
-        }
-        return result;
+        PersistentMap<K, V> base = PersistentMap.coerce(mp);
+        return newValue.isJust() ? base.insert(key, newValue.fromJust()) : base.delete(key);
     }
 }

@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.TreeMap;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,6 +17,7 @@ import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.util.Either;
+import hydra.util.PersistentMap;
 
 
 /**
@@ -50,14 +50,14 @@ public class MapKeys extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
-                java.util.TreeMap<Term, Term> result = new java.util.TreeMap<>();
+                PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (java.util.Map.Entry<Term, Term> e : mp.entrySet()) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), e.getKey()));
                     if (r.isLeft()) return (Either) r;
-                    result.put(((Either.Right<Error_, Term>) r).value, e.getValue());
+                    result = result.insert(((Either.Right<Error_, Term>) r).value, e.getValue());
                 }
-                return Either.right(Terms.map(FromList.orderedMap(result)));
+                return Either.right(Terms.map(result));
             });
     }
 
@@ -83,9 +83,9 @@ public class MapKeys extends PrimitiveFunction {
      * @return the map with transformed keys
      */
     public static <K1, K2, V> java.util.Map<K2, V> apply(Function<K1, K2> mapping, java.util.Map<K1, V> arg) {
-        java.util.Map<K2, V> result = new TreeMap<>();
+        PersistentMap<K2, V> result = PersistentMap.<K2, V>empty();
         for (java.util.Map.Entry<K1, V> e : arg.entrySet()) {
-            result.put(mapping.apply(e.getKey()), e.getValue());
+            result = result.insert(mapping.apply(e.getKey()), e.getValue());
         }
         return result;
     }

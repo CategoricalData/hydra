@@ -6,9 +6,9 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -41,8 +41,8 @@ public class Partition extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), lst -> {
-                List<Term> yes = new ArrayList<>();
-                List<Term> no = new ArrayList<>();
+                ConsList<Term> yesRev = ConsList.empty();
+                ConsList<Term> noRev = ConsList.empty();
                 for (Term x : lst) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
@@ -51,12 +51,12 @@ public class Partition extends PrimitiveFunction {
                         ((Either.Right<Error_, Term>) r).value);
                     if (b.isLeft()) return (Either) b;
                     if (((Either.Right<Error_, Boolean>) b).value) {
-                        yes.add(x);
+                        yesRev = ConsList.cons(x, yesRev);
                     } else {
-                        no.add(x);
+                        noRev = ConsList.cons(x, noRev);
                     }
                 }
-                return Either.right(Terms.pair(Terms.list(yes), Terms.list(no)));
+                return Either.right(Terms.pair(Terms.list(yesRev.reverse()), Terms.list(noRev.reverse())));
             });
     }
 
@@ -79,15 +79,15 @@ public class Partition extends PrimitiveFunction {
      *         second contains elements not satisfying the predicate
      */
     public static <X> Pair<List<X>, List<X>> apply(Function<X, Boolean> pred, List<X> lst) {
-        ArrayList<X> yes = new ArrayList<>();
-        ArrayList<X> no = new ArrayList<>();
+        ConsList<X> yesRev = ConsList.empty();
+        ConsList<X> noRev = ConsList.empty();
         for (X x : lst) {
             if (pred.apply(x)) {
-                yes.add(x);
+                yesRev = ConsList.cons(x, yesRev);
             } else {
-                no.add(x);
+                noRev = ConsList.cons(x, noRev);
             }
         }
-        return new Pair<>(yes, no);
+        return new Pair<>(yesRev.reverse(), noRev.reverse());
     }
 }

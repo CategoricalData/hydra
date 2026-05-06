@@ -6,9 +6,9 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -58,10 +58,12 @@ public class Cat extends PrimitiveFunction {
      * @return a list containing only the present values
      */
     public static <X> List<X> apply(List<Maybe<X>> opt) {
-        ArrayList<X> result = new ArrayList<>();
+        ConsList<X> reversed = ConsList.empty();
         for (Maybe<X> x : opt) {
-            x.ifJust(result::add);
+            if (x.isJust()) {
+                reversed = ConsList.cons(x.fromJust(), reversed);
+            }
         }
-        return result;
+        return reversed.reverse();
     }
 }

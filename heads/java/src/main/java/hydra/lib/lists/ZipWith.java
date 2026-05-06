@@ -7,10 +7,11 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -43,17 +44,16 @@ public class ZipWith extends PrimitiveFunction {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), lst1 ->
                 hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(2)), lst2 -> {
                     Term f = args.get(0);
-                    ArrayList<Term> items1 = new ArrayList<>(lst1);
-                    ArrayList<Term> items2 = new ArrayList<>(lst2);
-                    List<Term> results = new ArrayList<>();
-                    int minSize = Math.min(items1.size(), items2.size());
-                    for (int i = 0; i < minSize; i++) {
+                    ConsList<Term> reversed = ConsList.empty();
+                    Iterator<Term> it1 = lst1.iterator();
+                    Iterator<Term> it2 = lst2.iterator();
+                    while (it1.hasNext() && it2.hasNext()) {
                         Either<Error_, Term> r = hydra.Reduction.reduceTerm(
-                            hydra.Lexical.emptyContext(), graph, true, Terms.apply(Terms.apply(f, items1.get(i)), items2.get(i)));
+                            hydra.Lexical.emptyContext(), graph, true, Terms.apply(Terms.apply(f, it1.next()), it2.next()));
                         if (r.isLeft()) return (Either) r;
-                        results.add(((Either.Right<Error_, Term>) r).value);
+                        reversed = ConsList.cons(((Either.Right<Error_, Term>) r).value, reversed);
                     }
-                    return Either.right(Terms.list(results));
+                    return Either.right(Terms.list(reversed.reverse()));
                 }));
     }
 
@@ -80,12 +80,13 @@ public class ZipWith extends PrimitiveFunction {
      * @return a list of elements created by applying the function to pairs
      */
     public static <X, Y, Z> List<Z> apply(BiFunction<X, Y, Z> f, List<X> lst1, List<Y> lst2) {
-        ArrayList<Z> result = new ArrayList<>();
-        int minSize = Math.min(lst1.size(), lst2.size());
-        for (int i = 0; i < minSize; i++) {
-            result.add(f.apply(lst1.get(i), lst2.get(i)));
+        ConsList<Z> reversed = ConsList.empty();
+        Iterator<X> it1 = lst1.iterator();
+        Iterator<Y> it2 = lst2.iterator();
+        while (it1.hasNext() && it2.hasNext()) {
+            reversed = ConsList.cons(f.apply(it1.next(), it2.next()), reversed);
         }
-        return result;
+        return reversed.reverse();
     }
 
     /**

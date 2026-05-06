@@ -7,7 +7,6 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,6 +17,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -38,24 +38,9 @@ public class Lefts extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((java.util.List<hydra.util.Either<Term, Term>> eithers) -> {
-                ArrayList<Term> lefts = new ArrayList<>();
-                for (hydra.util.Either<Term, Term> e : eithers) {
-                    e.accept(new hydra.util.Either.Visitor<Term, Term, Void>() {
-                        @Override
-                        public Void visit(hydra.util.Either.Left<Term, Term> left) {
-                            lefts.add(left.value);
-                            return null;
-                        }
-
-                        @Override
-                        public Void visit(hydra.util.Either.Right<Term, Term> right) {
-                            return null;
-                        }
-                    });
-                }
-                return new Term.List(lefts);
-            }, hydra.extract.Core.listOf(arg -> hydra.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((java.util.List<hydra.util.Either<Term, Term>> eithers) ->
+                new Term.List(apply(eithers)),
+            hydra.extract.Core.listOf(arg -> hydra.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
     }
 
     /**
@@ -67,12 +52,12 @@ public class Lefts extends PrimitiveFunction {
      * @return a list containing only the Left values
      */
     public static <A, B> List<A> apply(List<hydra.util.Either<A, B>> eithers) {
-        ArrayList<A> result = new ArrayList<>();
+        ConsList<A> reversed = ConsList.empty();
         for (hydra.util.Either<A, B> either : eithers) {
             if (either.isLeft()) {
-                result.add(((hydra.util.Either.Left<A, B>) either).value);
+                reversed = ConsList.cons(((hydra.util.Either.Left<A, B>) either).value, reversed);
             }
         }
-        return result;
+        return reversed.reverse();
     }
 }
