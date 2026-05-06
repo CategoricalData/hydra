@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
 # Exhaustive sync: every package × every target language, with tests.
 #
 # Where bin/sync.sh prepares the (host, target) matrix needed for
@@ -21,10 +19,18 @@ set -euo pipefail
 # "packages" array. To add or remove a package, edit hydra.json.
 #
 # Usage:
-#   bin/sync-all.sh           # exhaustive run with tests
-#   bin/sync-all.sh --no-tests   # skip target-language tests (still runs
-#                             # Phase 1's stack test)
+#   bin/sync-all.sh              # exhaustive run with tests
+#   bin/sync-all.sh --no-tests   # skip target-language tests
+#                                # (Phase 1's stack test still runs)
 #   bin/sync-all.sh --help
+#
+# For routine work, prefer one of the lighter-weight scripts:
+#   bin/sync.sh --hosts H,... --targets T,...      (matrix prep)
+#   bin/sync-default.sh                            (haskell,java,python)
+#   bin/sync-<lang>.sh                             (single language)
+#   bin/sync-packages.sh <pkg> [--targets L,...]   (per-package)
+
+set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
@@ -37,27 +43,7 @@ while [ $# -gt 0 ]; do
     case "$1" in
         --no-tests) NO_TESTS=true ;;
         --help|-h)
-            cat <<'EOF'
-Usage: bin/sync-all.sh [--no-tests] [--help]
-
-Exhaustive regeneration: every package in hydra.json × every target
-language, with tests. Fails fast on the first broken combination.
-
-Options:
-  --no-tests   Skip target-language test suites. Phase 1's 'stack test'
-            still runs.
-  --help    Show this help.
-
-Targets covered: every supported language.
-Packages covered: every entry in hydra.json's "packages" array.
-
-Use periodically to surface combinations that bin/sync.sh skips for
-the bootstrapping path. For routine work, prefer:
-  bin/sync.sh --hosts <H,...> --targets <T,...>      (matrix prep)
-  bin/sync-default.sh                                 (haskell,java,python)
-  bin/sync-<lang>.sh                                  (single language)
-  bin/sync-packages.sh <pkg> [--target <lang>]        (per-package)
-EOF
+            sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
             ;;
         *)
