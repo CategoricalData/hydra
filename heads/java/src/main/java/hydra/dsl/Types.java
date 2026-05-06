@@ -454,7 +454,6 @@ public interface Types {
      */
     static TypeScheme polyConstrained(Map<String, Set<Name>> vsWithConstraints, Type body) {
         ConsList<Name> varsRev = ConsList.empty();
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentMap<Name, TypeVariableMetadata> constraintMap = PersistentMap.<Name, TypeVariableMetadata>empty();
         for (Map.Entry<String, Set<Name>> entry : vsWithConstraints.entrySet()) {
             Name varName = name(entry.getKey());
@@ -488,7 +487,6 @@ public interface Types {
      * Create a constrained type scheme with one variable.
      */
     static TypeScheme constrained1(String v1, Set<Name> c1, Type body) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(PersistentSet.<Name>coerce(c1)));
         return new TypeScheme(ConsList.of(name(v1)), body, Maybe.just(cm));
@@ -498,7 +496,6 @@ public interface Types {
      * Create a constrained type scheme with two ordered variables.
      */
     static TypeScheme constrained2(String v1, Set<Name> c1, String v2, Set<Name> c2, Type body) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(PersistentSet.<Name>coerce(c1)));
         if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableMetadata(PersistentSet.<Name>coerce(c2)));
@@ -509,7 +506,6 @@ public interface Types {
      * Create a constrained type scheme with three ordered variables.
      */
     static TypeScheme constrained3(String v1, Set<Name> c1, String v2, Set<Name> c2, String v3, Set<Name> c3, Type body) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(PersistentSet.<Name>coerce(c1)));
         if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableMetadata(PersistentSet.<Name>coerce(c2)));
@@ -522,7 +518,6 @@ public interface Types {
      */
     static TypeScheme constrained4(String v1, Set<Name> c1, String v2, Set<Name> c2,
                                     String v3, Set<Name> c3, String v4, Set<Name> c4, Type body) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentMap<Name, TypeVariableMetadata> cm = PersistentMap.<Name, TypeVariableMetadata>empty();
         if (!c1.isEmpty()) cm = cm.insert(name(v1), new TypeVariableMetadata(PersistentSet.<Name>coerce(c1)));
         if (!c2.isEmpty()) cm = cm.insert(name(v2), new TypeVariableMetadata(PersistentSet.<Name>coerce(c2)));

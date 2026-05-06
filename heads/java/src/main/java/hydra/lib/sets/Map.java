@@ -52,7 +52,6 @@ public class Map extends PrimitiveFunction {
         return args -> cx -> graph -> {
             Term mapping = args.get(0);
             return hydra.lib.eithers.Map.apply(arg -> {
-                @SuppressWarnings({"rawtypes", "unchecked"})
                 PersistentSet<Term> result = PersistentSet.<Term>empty();
                 for (Term e : arg) {
                     result = result.insert(Terms.apply(mapping, e));
@@ -82,7 +81,6 @@ public class Map extends PrimitiveFunction {
      * @return a new set with the function applied to all elements
      */
     public static <X, Y> Set<Y> apply(Function<X, Y> mapping, Set<X> arg) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentSet<Y> result = PersistentSet.<Y>empty();
         for (X x : arg) {
             result = result.insert(mapping.apply(x));

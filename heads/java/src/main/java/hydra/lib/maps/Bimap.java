@@ -51,7 +51,6 @@ public class Bimap extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
-                @SuppressWarnings({"rawtypes", "unchecked"})
                 PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
                     Either<Error_, Term> kr = hydra.Reduction.reduceTerm(
@@ -94,7 +93,6 @@ public class Bimap extends PrimitiveFunction {
      */
     public static <K1, K2, V1, V2> Map<K2, V2> apply(
             Function<K1, K2> kf, Function<V1, V2> vf, Map<K1, V1> mp) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
         PersistentMap<K2, V2> result = PersistentMap.<K2, V2>empty();
         for (Map.Entry<K1, V1> e : mp.entrySet()) {
             result = result.insert(kf.apply(e.getKey()), vf.apply(e.getValue()));
