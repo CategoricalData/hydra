@@ -610,11 +610,6 @@ decodeCell = define "decodeCell" $
               match _FloatType (Just $ left $ Strings.cat $ list [
                 string "Unsupported float type for column ",
                 var "cname"]) [
-                _FloatType_bigfloat>>: constant $
-                  Maybes.maybe
-                    (left $ var "parseError")
-                    ("parsed" ~> right $ just $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $ var "parsed")
-                    (Literals.readBigfloat $ var "value"),
                 _FloatType_float32>>: constant $
                   Maybes.maybe
                     (left $ var "parseError")

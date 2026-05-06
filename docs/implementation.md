@@ -87,6 +87,21 @@ The implementation follows a layered architecture:
 3. **Self-hosting**: The Hydra kernel is defined in Hydra itself (using Haskell as the bootstrap language)
 4. **Type safety**: Multiple layers of static type checking (host language + Hydra type system)
 5. **Modularity**: Clean separation between kernel definition, language implementations, and cross-compilation
+6. **Metadata over file-system discovery**: The build pipeline operates on declared metadata
+   (`hydra.json`, per-package `package.json`, in-DSL module manifests) and reads or writes files at
+   *known paths* derived from that metadata. It does **not** scan the file system to discover what
+   to do. Tools that walk a directory looking for "whatever's there" invert the source-of-truth
+   relationship — the layout follows the tree instead of the tree following declarations — and
+   silently drift when files are added, renamed, or hand-edited. When a build script needs to know
+   which files to copy or process, the answer must come from a declaration, not a `find` walk.
+7. **Third-party integrations live in `bindings/`**: Handwritten host-language code that wraps
+   external libraries (rdf4j, ANTLR-generated parsers, TinkerPop, Apache Jena, etc.) belongs under
+   `bindings/<host>/<artifact>/`, not in `heads/<host>/`. Each binding is independently versioned
+   and publishable; it depends on exactly one Hydra package (e.g., `hydra-rdf4j` depends on `hydra-rdf`)
+   and on its third-party library. The binding tree is **not** part of the DSL pipeline — bindings
+   don't appear in `hydra.json`'s package list, aren't synced through `bin/sync.sh`, and aren't
+   consumed by the bootstrap demo. They sit at the leaves of the dependency graph. This rule keeps
+   `heads/<host>/` runtimes minimal: stdlib + build tooling only.
 
 ---
 
@@ -306,8 +321,9 @@ dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl/    # Generated DSLs (from 
 heads/haskell/src/main/haskell/Hydra/                    # Generation drivers and sources
 dist/haskell/hydra-<pkg>/src/main/haskell/Hydra/         # Generated per-package coder modules
                                                           #   (hydra-haskell, hydra-java, hydra-python,
-                                                          #    hydra-scala, hydra-lisp, hydra-pg, hydra-rdf,
-                                                          #    hydra-ext for the long-tail, hydra-coq, ...)
+                                                          #    hydra-scala, hydra-lisp, hydra-go (head bud),
+                                                          #    hydra-pg, hydra-rdf, hydra-ext for the long-tail,
+                                                          #    hydra-coq, ...)
 ```
 
 **See also:** [DSL guide](dsl-guide.md) - Comprehensive guide with examples and operator reference

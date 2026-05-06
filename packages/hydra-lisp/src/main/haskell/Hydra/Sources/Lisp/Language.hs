@@ -145,7 +145,6 @@ lispLanguage = define "lispLanguage" $
       Variants.literalVariantInteger, -- integers (all dialects have arbitrary-precision)
       Variants.literalVariantString], -- strings
     "floatTypes">: Sets.fromList $ list [
-      Core.floatTypeBigfloat, -- all dialects support arbitrary-precision floats via libraries
       Core.floatTypeFloat64], -- double-precision float (native in all dialects)
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination, -- case/cond dispatch, field projection

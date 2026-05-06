@@ -159,6 +159,28 @@ This generates code for all host/target combinations, compares the output
 against canonical baselines, and produces a summary matrix with timing and
 file counts.
 
+#### Cold-start vs. incremental runs
+
+By default the per-target setup scripts (`setup-<target>-target.sh`) are
+**incremental**: they hash the static source paths they would copy from
+and skip the wipe-and-overlay when those inputs are byte-identical to
+the last successful prep recorded under
+`<output-dir>/.bootstrap-prep-hash`. This makes routine bootstrapping
+runs (e.g. before pushing to integration) significantly faster.
+
+For benchmarking — when timing comparisons across hosts and targets need
+to reflect a cold start — pass `--clean` to force a full wipe + recopy
+on every cell:
+
+```bash
+./demos/bootstrapping/bin/bootstrap-all.sh --clean
+```
+
+The flag exports `HYDRA_BOOTSTRAP_CLEAN=1`, which the per-target setup
+scripts honor. You can also set the variable directly when invoking a
+single path. Cache invalidation is content-based (file content hashes),
+not mtime-based, so `touch` does not force a rerun; only real edits do.
+
 ### Run a single path
 
 Each path is a `<host>-to-<target>.sh` script under `demos/bootstrapping/bin/`:

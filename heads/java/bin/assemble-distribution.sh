@@ -11,7 +11,6 @@
 #      - hydra-kernel: copy hand-written Java runtime (util, lib, dsl, json,
 #        tools) into the dist tree so the published Maven artifact is
 #        self-contained.
-#      - hydra-lisp:   patch Coder.java (PartialVisitor type inference)
 #   4. Generating a per-package build.gradle + settings.gradle so each
 #      dist/java/<pkg>/ is a standalone, publishable Gradle build.
 #
@@ -61,6 +60,7 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 # dist/<lang>/<pkg>/src/<set>/digest.json) is the single source of
 # truth for "does this set need to regen?". Replaces the older split of
 # per-package digest.json + .{main,test}-input-hash.txt dotfiles.
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
 # Step 1: Main modules.
@@ -99,27 +99,11 @@ fi
 #   dist/java/hydra-kernel/src/main/java/ so the published Maven artifact is
 #   self-contained. Cypher/GQL/RDF native bindings are NOT copied (they belong
 #   in bindings/ once that subtree exists).
-# - hydra-lisp: patch Coder.java's PartialVisitor type inference.
 case "$PACKAGE" in
     hydra-kernel)
         echo ""
         echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
         "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
-        ;;
-    hydra-lisp)
-        # Patch Lisp Coder.java: fix PartialVisitor type inference in
-        # encodeTermDefinition.
-        LISPCODER="$OUT_DIR/src/main/java/hydra/lisp/Coder.java"
-        if [ -f "$LISPCODER" ]; then
-            echo ""
-            echo "Step 3: Patching Lisp Coder.java..."
-            sed -i.bak 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> otherwise/' "$LISPCODER"
-            sed -i.bak 's/Either<hydra.lisp.syntax.TopLevelFormWithComments, hydra.lisp.syntax.TopLevelFormWithComments> visit/Either<T2, hydra.lisp.syntax.TopLevelFormWithComments> visit/' "$LISPCODER"
-            rm -f "$LISPCODER.bak"
-        fi
-        ;;
-    *)
-        # No per-package post-processing for other packages today.
         ;;
 esac
 

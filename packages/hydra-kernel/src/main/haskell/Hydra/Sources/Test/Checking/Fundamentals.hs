@@ -606,7 +606,6 @@ integerLiteralsTests = define "integerLiteralsTests" $
 floatLiteralsTests :: TTermDefinition TestGroup
 floatLiteralsTests = define "floatLiteralsTests" $
   subgroup "Float literals" [
-  noChange "bigfloat" (bigfloat 3.14159) T.bigfloat,
   noChange "float32" (float32 2.71828) T.float32,
   noChange "float64" (float64 1.41421) T.float64]
 

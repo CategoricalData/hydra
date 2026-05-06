@@ -2383,11 +2383,6 @@ encodeLiteralType = def "encodeLiteralType" $
         @@ string "BigDecimal"),
     _LiteralType_float>>: lambda "ft" $
       cases _FloatType (var "ft") Nothing [
-        _FloatType_bigfloat>>: constant $
-          right (JavaUtilsSource.javaRefType
-            @@ list ([] :: [TTerm Java.ReferenceType])
-            @@ just (JavaNamesSource.javaPackageName @@ list [string "java", string "math"])
-            @@ string "BigDecimal"),
         _FloatType_float32>>: constant $
           encodeLiteralType_simple @@ string "Float" @@ var "cx" @@ var "g",
         _FloatType_float64>>: constant $
@@ -2436,12 +2431,6 @@ encodeLiteral_encodeFloat :: TTermDefinition (FloatValue -> Java.Expression)
 encodeLiteral_encodeFloat = def "encodeLiteral_encodeFloat" $
   lambda "f" $
     cases _FloatValue (var "f") Nothing [
-      _FloatValue_bigfloat>>: "v" ~>
-        JavaUtilsSource.javaConstructorCall @@
-          (JavaUtilsSource.javaConstructorName @@
-            (JavaDsl.identifier $ string "java.math.BigDecimal") @@ nothing) @@
-          list [encodeLiteral @@ inject _Literal _Literal_string (Literals.showBigfloat $ var "v")] @@
-          nothing,
       _FloatValue_float32>>: "v" ~>
         encodeLiteral_encodeFloat32 @@ var "v",
       _FloatValue_float64>>: "v" ~>
@@ -2462,10 +2451,10 @@ encodeLiteral_encodeFloat32 = def "encodeLiteral_encodeFloat32" $
       (JavaDsl.primitiveTypeNumeric $ JavaDsl.numericTypeFloatingPoint JavaDsl.floatingPointTypeFloat) @@
       (encodeLiteral_litExp @@
         (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
-          Literals.float32ToBigfloat (var "v")))
+          Literals.float32ToFloat64 (var "v")))
 
 -- | Encode a float64 value, handling NaN, Infinity, and negative zero specially.
--- BigDecimal (Java's bigfloat) cannot represent NaN, Infinity, or signed zero.
+-- The Java FloatingPointLiteral wrapper cannot represent NaN, Infinity, or signed zero.
 encodeLiteral_encodeFloat64 :: TTermDefinition (Double -> Java.Expression)
 encodeLiteral_encodeFloat64 = def "encodeLiteral_encodeFloat64" $
   lambda "v" $ lets [
@@ -2476,13 +2465,12 @@ encodeLiteral_encodeFloat64 = def "encodeLiteral_encodeFloat64" $
       (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "POSITIVE_INFINITY") $
     Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
       (encodeLiteral_javaSpecialFloatExpr @@ string "Double" @@ string "NEGATIVE_INFINITY") $
-    -- Negative zero must be emitted via Double.parseDouble("-0.0") because routing it
-    -- through Bigfloat (which on the Java host is BigDecimal) would strip the sign.
+    -- Negative zero must be emitted via Double.parseDouble("-0.0") to preserve the sign.
     Logic.ifElse (Equality.equal (var "s") (string "-0.0"))
       (encodeLiteral_javaParseDouble @@ string "-0.0") $
     encodeLiteral_litExp @@
       (JavaDsl.literalFloatingPoint $ JavaDsl.floatingPointLiteral $
-        Literals.float64ToBigfloat (var "v"))
+        var "v")
 
 -- | Encode an integer value to a Java expression
 encodeLiteral_encodeInteger :: TTermDefinition (IntegerValue -> Java.Expression)
@@ -2535,7 +2523,7 @@ encodeLiteral_encodeInteger = def "encodeLiteral_encodeInteger" $
           nothing]
 
 -- | Emit a Java method call expression Double.parseDouble("<value>"). Used for
--- float64 values that cannot round-trip through Bigfloat (e.g., negative zero).
+-- float64 values that cannot be represented as a FloatingPointLiteral (e.g., negative zero).
 encodeLiteral_javaParseDouble :: TTermDefinition (String -> Java.Expression)
 encodeLiteral_javaParseDouble = def "encodeLiteral_javaParseDouble" $
   lambda "value" $
@@ -4202,9 +4190,6 @@ isBigNumericType = def "isBigNumericType" $
     _Type_literal>>: lambda "lt" $
       cases _LiteralType (var "lt") (Just $ boolean False) [
         _LiteralType_decimal>>: constant $ boolean True,
-        _LiteralType_float>>: lambda "ft" $
-          cases _FloatType (var "ft") (Just $ boolean False) [
-            _FloatType_bigfloat>>: constant $ boolean True],
         _LiteralType_integer>>: lambda "it" $
           cases _IntegerType (var "it") (Just $ boolean False) [
             _IntegerType_bigint>>: constant $ boolean True]]]

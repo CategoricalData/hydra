@@ -131,7 +131,6 @@ encodeLiteralType lt =
         Core.LiteralTypeBinary -> xsd "base64Binary"
         Core.LiteralTypeBoolean -> xsd "boolean"
         Core.LiteralTypeFloat v0 -> case v0 of
-          Core.FloatTypeBigfloat -> xsd "decimal"
           Core.FloatTypeFloat32 -> xsd "float"
           Core.FloatTypeFloat64 -> xsd "double"
         Core.LiteralTypeInteger v0 -> case v0 of

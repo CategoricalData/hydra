@@ -304,7 +304,7 @@ fieldAccessToExpr d fa =
 formatLispFloat :: Syntax.Dialect -> Double -> String
 formatLispFloat d v =
 
-      let s = Literals.showBigfloat v
+      let s = Literals.showFloat64 v
       in (Logic.ifElse (Equality.equal s "NaN") (case d of
         Syntax.DialectClojure -> "Double/NaN"
         Syntax.DialectScheme -> "+nan.0"

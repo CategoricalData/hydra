@@ -25,17 +25,6 @@ import qualified Data.ByteString as B
 import qualified Data.Int as I
 import qualified Data.Map as M
 import qualified Data.Set as S
--- | Extract an arbitrary-precision floating-point value from a term
-bigfloat :: Graph.Graph -> Core.Term -> Either Errors.Error Double
-bigfloat graph t = Eithers.bind (literal graph t) (\l -> Eithers.bind (floatLiteral l) (\f -> bigfloatValue f))
--- | Extract a bigfloat value from a FloatValue
-bigfloatValue :: Core.FloatValue -> Either Errors.Error Double
-bigfloatValue v =
-    case v of
-      Core.FloatValueBigfloat v0 -> Right v0
-      _ -> Left (Errors.ErrorExtraction (Errors.ExtractionErrorUnexpectedShape (Errors.UnexpectedShapeError {
-        Errors.unexpectedShapeErrorExpected = "bigfloat",
-        Errors.unexpectedShapeErrorActual = (ShowCore.float v)})))
 -- | Extract an arbitrary-precision integer value from a term
 bigint :: Graph.Graph -> Core.Term -> Either Errors.Error Integer
 bigint graph t = Eithers.bind (literal graph t) (\l -> Eithers.bind (integerLiteral l) (\i -> bigintValue i))

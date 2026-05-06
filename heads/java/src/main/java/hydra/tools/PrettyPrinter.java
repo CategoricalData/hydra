@@ -70,11 +70,6 @@ public class PrettyPrinter {
     private static Consumer<StringBuilder> floatValue(FloatValue f) {
         return f.accept(new FloatValue.Visitor<Consumer<StringBuilder>>() {
             @Override
-            public Consumer<StringBuilder> visit(FloatValue.Bigfloat instance) {
-                return sb -> sb.append(instance.value);
-            }
-
-            @Override
             public Consumer<StringBuilder> visit(FloatValue.Float32 instance) {
                 return sb -> sb.append(instance.value);
             }

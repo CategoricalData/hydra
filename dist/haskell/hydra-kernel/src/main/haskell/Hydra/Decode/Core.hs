@@ -114,7 +114,6 @@ floatType cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (Core.Name "bigfloat", (\input -> Eithers.map (\t -> Core.FloatTypeBigfloat) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "float32", (\input -> Eithers.map (\t -> Core.FloatTypeFloat32) (ExtractCore.decodeUnit cx input))),
                       (Core.Name "float64", (\input -> Eithers.map (\t -> Core.FloatTypeFloat64) (ExtractCore.decodeUnit cx input)))]
         in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
@@ -132,15 +131,6 @@ floatValue cx raw =
             fterm = Core.fieldTerm field
             variantMap =
                     Maps.fromList [
-                      (
-                        Core.Name "bigfloat",
-                        (\input -> Eithers.map (\t -> Core.FloatValueBigfloat t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of
-                          Core.TermLiteral v1 -> case v1 of
-                            Core.LiteralFloat v2 -> case v2 of
-                              Core.FloatValueBigfloat v3 -> Right v3
-                              _ -> Left (Errors.DecodingError "expected bigfloat value")
-                            _ -> Left (Errors.DecodingError "expected bigfloat literal")
-                          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx input)))),
                       (
                         Core.Name "float32",
                         (\input -> Eithers.map (\t -> Core.FloatValueFloat32 t) (Eithers.either (\err -> Left err) (\stripped2 -> case stripped2 of

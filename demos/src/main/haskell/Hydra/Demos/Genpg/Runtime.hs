@@ -163,7 +163,6 @@ decodeTable (TableType _ colTypes) (Table mheader rows) = do
               TypeLiteral lt -> case lt of
                 LiteralTypeBoolean -> readValue Terms.boolean readBoolean value
                 LiteralTypeFloat ft -> case ft of
-                   FloatTypeBigfloat -> readValue Terms.bigfloat readFloat64 value
                    FloatTypeFloat32 -> readValue Terms.float32 readFloat32 value
                    FloatTypeFloat64 -> readValue Terms.float64 readFloat64 value
                 LiteralTypeInteger it -> case it of

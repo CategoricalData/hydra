@@ -247,7 +247,7 @@ writeScalar = define "writeScalar" $
   "s" ~> cases YM._Scalar (var "s") Nothing [
     YM._Scalar_bool>>: "b" ~> Logic.ifElse (var "b") (string "true") (string "false"),
     YM._Scalar_decimal>>: "d" ~> Literals.showDecimal (var "d"),
-    YM._Scalar_float>>: "f" ~> Literals.showBigfloat (var "f"),
+    YM._Scalar_float>>: "f" ~> Literals.showFloat64 (var "f"),
     YM._Scalar_int>>: "i" ~> Literals.showBigint (var "i"),
     YM._Scalar_null>>: constant (string "null"),
     YM._Scalar_str>>: "str" ~> writeString @@ var "str"]

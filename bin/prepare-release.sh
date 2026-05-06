@@ -1,29 +1,30 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
 # Pre-release preparation script for Hydra.
 #
 # Verifies that all implementations are consistent and passing, then
-# produces upload-ready release artifacts:
-#   1. Versions are synchronized across all implementation configs
-#   2. Haskell tests pass (the hydra-test Stack target covers hydra-kernel
-#      plus the hydra-ext content, since hydra-ext is a Hydra package
-#      shipped as part of the hydra Stack library after #290)
-#   3. Java tests pass
-#   4. Python tests pass
-#   5. Scala tests pass
-#   6. Lisp tests pass (Clojure, Common Lisp, Emacs Lisp, Scheme)
-#   7. JSON kernel is up to date and round-trips correctly
-#   8. Lexicon is up to date (docs/hydra-lexicon.txt matches the
-#      current Haskell kernel; release must not ship a stale lexicon)
-#   9. Hackage sdist assembles cleanly on a case-sensitive filesystem
-#      (catches case-clashes that macOS HFS+/APFS hides locally) and
-#      passes `cabal v2-build --dry-run`
-#  10. Haddock-for-Hackage docs build cleanly from the assembled sdist;
-#      produces hydra-<version>-docs.tar.gz ready for `cabal upload`
+# produces upload-ready release artifacts.
+#
+# Steps performed:
+#   1.  Version synchronization across all implementations
+#   2.  Haskell tests (the hydra-test Stack target covers hydra-kernel
+#       plus the hydra-ext content, since hydra-ext is a Hydra package
+#       shipped as part of the hydra Stack library after #290)
+#   3.  Java build and tests
+#   4.  Python tests and code quality
+#   5.  Scala build and tests
+#   6.  Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)
+#   7.  JSON kernel verification (round-trips correctly against the
+#       in-memory kernel)
+#   8.  Lexicon freshness (docs/hydra-lexicon.txt matches the current
+#       Haskell kernel; release must not ship a stale lexicon)
+#   9.  Hackage sdist case-sensitivity check (assembles cleanly on a
+#       case-sensitive filesystem — catches case-clashes that macOS
+#       HFS+/APFS hides locally — and passes `cabal v2-build --dry-run`)
+#   10. Haddock-for-Hackage docs build (produces
+#       hydra-<version>-docs.tar.gz ready for `cabal upload`)
 #
 # On success, the upload-ready artifacts (sdist + docs tarball) land in
-# release-artifacts/ at the repo root.
+# release-artifacts/ at the repo root. Logs land in verify-logs/.
 #
 # Prerequisites:
 #   - Stack, Java 11+, Python 3.12+, uv, sbt, Clojure, SBCL, Emacs, Guile,
@@ -31,44 +32,27 @@ set -euo pipefail
 #   - Run from the repository root directory
 #
 # Usage:
-#   ./bin/prepare-release.sh          # Full preparation
-#   ./bin/prepare-release.sh --help   # Show this help
+#   bin/prepare-release.sh          # Full preparation
+#   bin/prepare-release.sh --help   # Show this help
+
+set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
-for arg in "$@"; do
-    case $arg in
+while [ $# -gt 0 ]; do
+    case "$1" in
         --help|-h)
-            echo "Usage: $0 [OPTIONS]"
-            echo ""
-            echo "Pre-release preparation for all Hydra implementations."
-            echo ""
-            echo "Options:"
-            echo "  --help     Show this help message"
-            echo ""
-            echo "Steps performed:"
-            echo "  1.  Version synchronization across all implementations"
-            echo "  2.  Haskell tests"
-            echo "  3.  Java build and tests"
-            echo "  4.  Python tests and code quality"
-            echo "  5.  Scala build and tests"
-            echo "  6.  Lisp tests (Clojure, Common Lisp, Emacs Lisp, Scheme)"
-            echo "  7.  JSON kernel verification"
-            echo "  8.  Lexicon freshness"
-            echo "  9.  Hackage sdist case-sensitivity check"
-            echo "  10. Haddock-for-Hackage docs build"
-            echo ""
-            echo "Logs land in verify-logs/; upload-ready artifacts in"
-            echo "release-artifacts/."
+            sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
             ;;
         *)
-            die "Unknown argument: $arg (try --help)"
+            die "Unknown argument: $1 (try --help)"
             ;;
     esac
+    shift
 done
 
 cd "$HYDRA_ROOT"
