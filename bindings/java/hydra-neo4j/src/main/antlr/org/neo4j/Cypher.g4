@@ -27,6 +27,8 @@
  */
 grammar Cypher;
 
+@header { package org.neo4j; }
+
 oC_Cypher
       :  SP? oC_Statement ( SP? ';' )? SP? EOF ;
 
