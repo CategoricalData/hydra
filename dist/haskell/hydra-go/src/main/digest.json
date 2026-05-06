@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "generator": "v0-unstamped",
+  "inputs": {
+    "hydra.go.language": { "kind": "Other", "hash": "4df72bcc3a1f9bc22edc8ae52e062824a469baecc5c7a802ce1a1f3d58daa542" },
+    "hydra.go.syntax": { "kind": "Other", "hash": "cdfefec504c824609bcf2227b3fc2bc74d9519f8df7941ee36517e19d11e9ddc" }
+  },
+  "outputs": {
+    "Hydra/Dsl/Go/Syntax.hs": { "kind": "TargetFile", "hash": "7c5e9d63565113c4db4b3eedbb06344b130bbb9b71b0f6587f14e62bacd1fd98" },
+    "Hydra/Go/Language.hs": { "kind": "TargetFile", "hash": "1d4d6afceed3bb0ac68c60ec333fc111c4659acb5c185653483d1e4af2d6f4aa" },
+    "Hydra/Go/Syntax.hs": { "kind": "TargetFile", "hash": "bd813b72ea05baabee9a27d70d2192c8f4e1e66fefee5b4baef5e42da6d17603" }
+  }
+}

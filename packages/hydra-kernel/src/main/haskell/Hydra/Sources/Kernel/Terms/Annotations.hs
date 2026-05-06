@@ -36,7 +36,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -201,7 +201,7 @@ getDebugId = define "getDebugId" $
   "cx" ~>
   Maybes.maybe
     (right nothing)
-    ("term" ~> Eithers.map (unaryFunction just) (ExtractCore.string @@ Graph.emptyGraph @@ var "term"))
+    ("term" ~> Eithers.map (reify just) (ExtractCore.string @@ Graph.emptyGraph @@ var "term"))
     (getAttr @@ Constants.keyDebugId @@ var "cx")
 
 getDescription :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Prelude.Either Error (Maybe String))
@@ -210,7 +210,7 @@ getDescription = define "getDescription" $
   "cx" ~> "graph" ~> "anns" ~>
   Maybes.maybe
     (right nothing)
-    ("term" ~> Eithers.map (unaryFunction just) (ExtractCore.string @@ var "graph" @@ var "term"))
+    ("term" ~> Eithers.map (reify just) (ExtractCore.string @@ var "graph" @@ var "term"))
     (Maps.lookup (Core.nameLift keyDescription) (var "anns"))
 
 getTermAnnotation :: TTermDefinition (Name -> Term -> Maybe Term)
@@ -234,7 +234,7 @@ getType = define "getType" $
   "graph" ~> "anns" ~>
   Maybes.maybe
     (right nothing)
-    ("dat" ~> Eithers.map (unaryFunction just) (decoderFor _Type @@ var "graph" @@ var "dat"))
+    ("dat" ~> Eithers.map (reify just) (decoderFor _Type @@ var "graph" @@ var "dat"))
     (Maps.lookup (Constants.keyType) (var "anns"))
 
 getTypeAnnotation :: TTermDefinition (Name -> Type -> Maybe Term)
@@ -253,7 +253,7 @@ getTypeClasses = define "getTypeClasses" $
     "fn" <<~ ExtractCore.unitVariant @@ Core.nameLift _TypeClass @@ var "graph" @@ var "term" $
     Maybes.maybe
       (Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type class") (ShowCore.term @@ var "term")) (var "cx"))
-      (unaryFunction right)
+      (reify right)
       (Maps.lookup (var "fn") (var "byName"))) $
   Maybes.maybe
     (right Maps.empty)
@@ -360,7 +360,7 @@ setDescription = define "setDescription" $
   doc "Set description in annotations" $
   "d" ~> setAnnotation
     @@ Constants.keyDescription
-    @@ Maybes.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
+    @@ Maybes.map (reify Core.termLiteral <.> reify Core.literalString) (var "d")
 
 setTermAnnotation :: TTermDefinition (Name -> Maybe Term -> Term -> Term)
 setTermAnnotation = define "setTermAnnotation" $
@@ -418,7 +418,7 @@ setTypeDescription = define "setTypeDescription" $
   doc "Set type description" $
   "d" ~> setTypeAnnotation
     @@ Constants.keyDescription
-    @@ Maybes.map (unaryFunction Core.termLiteral <.> unaryFunction Core.literalString) (var "d")
+    @@ Maybes.map (reify Core.termLiteral <.> reify Core.literalString) (var "d")
 
 termAnnotationInternal :: TTermDefinition (Term -> M.Map Name Term)
 termAnnotationInternal = define "termAnnotationInternal" $

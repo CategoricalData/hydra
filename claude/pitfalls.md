@@ -53,17 +53,41 @@ shell's `ulimit` blocks.
 
 ### Stale `dist/haskell` artifacts after non-baseline edits
 
-`bin/sync-haskell.sh` regenerates the JSON and the *baseline* Haskell packages
-(`hydra-kernel`, `hydra-haskell`) but does not by default re-run the per-package
-`assemble-distribution.sh` for non-baseline packages like `hydra-pg`,
-`hydra-rdf`, `hydra-coq`, etc.
-If you've edited a DSL source under one of those packages and the corresponding
-`dist/haskell/<pkg>/` file hasn't picked up your change, run
-`heads/haskell/bin/assemble-distribution.sh <pkg>` directly
-(or use `bin/sync-packages.sh <pkg>`).
-Cache hits can also mask edits;
-deleting `dist/haskell/<pkg>/src/main/digest.json` and the relevant
-`dist/json/<pkg>/src/main/digest.json` forces a full regen.
+`bin/sync-haskell.sh` regenerates the JSON for every package and the
+*baseline* Haskell packages (`hydra-kernel`, `hydra-haskell`) but does not
+by default re-run the per-package `assemble-distribution.sh` for any other
+package. Every coder package is non-baseline: `hydra-java`, `hydra-python`,
+`hydra-scala`, `hydra-lisp`, `hydra-go`, `hydra-pg`, `hydra-rdf`, `hydra-coq`,
+`hydra-javascript`, `hydra-wasm`, `hydra-ext`.
+
+A common surprise: editing a Java-coder DSL source under
+`packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs` and running
+`sync-haskell.sh` regenerates the JSON correctly but leaves
+`dist/haskell/hydra-java/.../Coder.hs` at its old contents. The runtime Java
+codegen is loaded from `dist/haskell/hydra-java/`, so subsequent
+`bin/sync-packages.sh hydra-kernel --targets java` runs use the *old* coder
+and produce the *old* output. Symptom: source-level fix appears not to take
+effect.
+
+If you've edited a DSL source under any non-baseline package and the
+corresponding `dist/haskell/<pkg>/` file hasn't picked up your change, run
+`bin/sync-packages.sh <pkg> --targets haskell` (or
+`heads/haskell/bin/assemble-distribution.sh <pkg>` directly).
+
+Cache hits can also mask edits.
+A coarse "make me clean" sequence:
+
+```sh
+rm -f dist/haskell/<pkg>/src/main/digest.json
+rm -f dist/json/<pkg>/src/main/digest.json
+rm -f dist/json/digest.main.json
+rm -f heads/haskell/.stack-work/bootstrap-from-json-cache.txt
+rm -f heads/haskell/.stack-work/verify-json-kernel-cache.txt
+heads/haskell/bin/sync-haskell.sh --no-tests
+bin/sync-packages.sh <pkg> --targets haskell --no-tests
+```
+
+Then sync forward into whatever target language consumes the regenerated coder.
 
 ### Stale per-dialect Lisp `struct-compat.lisp`
 
@@ -74,3 +98,65 @@ re-run `heads/lisp/common-lisp/src/main/common-lisp/hydra/gen-compat.sh`,
 or the loader's `hydra-defstruct` macro will short-circuit on the old constructor's
 `fboundp` and skip defining the new accessor — leading to "function FOO undefined"
 errors at test time.
+
+### Emacs Lisp regex needs `case-fold-search` bound to nil
+
+Emacs' default `case-fold-search` is `t` in batch mode, which makes
+character classes like `[a-z]` case-insensitive — `[a-z]` then matches `H`.
+Hydra follows POSIX-ERE case-sensitive semantics. Every regex primitive
+in `heads/lisp/emacs-lisp/src/main/emacs-lisp/hydra/lib/regex.el` binds
+`case-fold-search` to `nil` in its `let*`. New EL regex primitives must
+do the same.
+
+### `bin/sync.sh` does not run target-language tests
+
+`bin/sync.sh` runs Phase 1 + 2 only (DSL → JSON → assemble). It exits 0
+even if a target's tests would fail. To run tests, use
+`bin/sync-packages.sh` (single target) or `bin/sync-all.sh` (everything).
+When asked "does sync pass?", check which entrypoint the user means.
+
+### Verify "pre-existing" claims against the fork point
+
+When a change surfaces a test failure, do not call it pre-existing
+without reproducing it on the fork point. The test for pre-existing
+is *can the unchanged baseline reproduce the failure?* — not *does
+the failure look unrelated to my changes?*. A change that exposes a
+previously-hidden failure (e.g. by loading tests that were silently
+skipped before) registers as a regression at the
+`bin/sync-packages.sh` exit-code level, even when the underlying bug
+is older.
+
+### Bootstrap "Could not find module" early in compile is usually transient
+
+When `/bootstrap()` reports a path failing at module 1-of-N with
+`Could not find module 'Hydra.Core'` or similar dep-not-built errors
+on generated files that clearly exist on disk, the cause is almost
+always transient: parallel stack lock contention or OOM from
+concurrent host syncs (Java/Python/Haskell building at once). Re-run
+that single path with
+`bin/run-bootstrapping-demo.sh --hosts <H> --targets <T> --tag retry`.
+Don't dig into the generated source first.
+
+### Adapter `cases` over a removed variant: keep remaining cases concrete
+
+When removing a variant from a union (e.g., dropping `bigfloat` from
+`FloatType`/`FloatValue`), an adapter like `prepareFloatType` that uses
+`prepareSame` as a default needs explicit concrete cases for the
+*remaining* variants — not `Nothing`. Without concrete arms, DSL
+inference makes the rep function polymorphic (`forall t. t -> t`),
+and Java codegen emits `Function<T0, T0>` which doesn't unify with
+concrete `FloatValue` callsites. Symptom:
+`incompatible types: Object cannot be converted to FloatValue` at the
+adapter callsite. Fix: list each remaining variant with an explicit
+`inject _Variant _variant_name` identity arm.
+
+### Digest conflicts on staging merges
+
+When merging staging into a feature branch, all `dist/**/digest.json`
+and `dist/json/digest.main.json` files conflict if both branches
+touched DSL sources. Both sides' hashes are wrong post-merge — the
+correct hashes depend on the merged source state. Resolution: take
+`--ours` to satisfy git, complete the merge commit, run `/sync()` to
+regenerate, then commit the digest deltas as a follow-up
+"Regenerate digests after staging merge" commit. Don't try to merge
+hash maps by hand.

@@ -61,19 +61,25 @@
           (setq i (1+ i))))))
     (concat (nreverse result))))
 
+;; All regex primitives bind case-fold-search to nil. POSIX ERE semantics
+;; (which the rest of Hydra follows) treat character classes like [a-z]
+;; as case-sensitive; Emacs' default case-fold-search of t would fold them.
+
 ;; matches :: String -> String -> Bool
 (defvar hydra_lib_regex_matches
   (lambda (pattern)
     (lambda (input)
       (let* ((emacs-pat (hydra--posix-to-emacs-regex pattern))
-             (full-pattern (concat "\\`\\(?:" emacs-pat "\\)\\'")))
+             (full-pattern (concat "\\`\\(?:" emacs-pat "\\)\\'"))
+             (case-fold-search nil))
         (if (string-match-p full-pattern input) t nil)))))
 
 ;; find :: String -> String -> Maybe String
 (defvar hydra_lib_regex_find
   (lambda (pattern)
     (lambda (input)
-      (let ((emacs-pat (hydra--posix-to-emacs-regex pattern)))
+      (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
+            (case-fold-search nil))
         (if (string-match emacs-pat input)
             (match-string 0 input)
           nil)))))
@@ -84,7 +90,8 @@
     (lambda (input)
       (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
             (start 0)
-            (results nil))
+            (results nil)
+            (case-fold-search nil))
         (while (string-match emacs-pat input start)
           (push (match-string 0 input) results)
           (setq start (match-end 0))
@@ -99,7 +106,8 @@
   (lambda (pattern)
     (lambda (replacement)
       (lambda (input)
-        (let ((emacs-pat (hydra--posix-to-emacs-regex pattern)))
+        (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
+              (case-fold-search nil))
           (if (string-match emacs-pat input)
               (concat (substring input 0 (match-beginning 0))
                       replacement
@@ -111,14 +119,16 @@
   (lambda (pattern)
     (lambda (replacement)
       (lambda (input)
-        (let ((emacs-pat (hydra--posix-to-emacs-regex pattern)))
+        (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
+              (case-fold-search nil))
           (replace-regexp-in-string emacs-pat replacement input t t))))))
 
 ;; split :: String -> String -> [String]
 (defvar hydra_lib_regex_split
   (lambda (pattern)
     (lambda (input)
-      (let ((emacs-pat (hydra--posix-to-emacs-regex pattern)))
+      (let ((emacs-pat (hydra--posix-to-emacs-regex pattern))
+            (case-fold-search nil))
         (split-string input emacs-pat)))))
 
 (provide 'hydra.lib.regex)

@@ -9,7 +9,7 @@ module Hydra.Sources.Lisp.Serde where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -681,12 +681,12 @@ listLiteralToExpr = define "listLiteralToExpr" $
         (list [Serialization.cst @@ (listKeyword @@ var "d")])
         (var "elems")))
 
--- | Format a bigfloat value as a dialect-specific literal string.
+-- | Format a float64 value as a dialect-specific literal string.
 -- Special values (NaN, ±Infinity) use dialect-specific syntax.
 formatLispFloat :: TTermDefinition (L.Dialect -> Double -> String)
 formatLispFloat = define "formatLispFloat" $
   lambda "d" $ lambda "v" $
-    "s" <~ Literals.showBigfloat (var "v") $
+    "s" <~ Literals.showFloat64 (var "v") $
     Logic.ifElse (Equality.equal (var "s") (string "NaN"))
       (cases L._Dialect (var "d") Nothing [
         L._Dialect_clojure>>: constant $ string "Double/NaN",

@@ -42,7 +42,7 @@ yamlToJson node =
       YamlModel.NodeScalar v0 -> case v0 of
         YamlModel.ScalarBool v1 -> Right (JsonModel.ValueBoolean v1)
         YamlModel.ScalarDecimal v1 -> Right (JsonModel.ValueNumber v1)
-        YamlModel.ScalarFloat v1 -> Right (JsonModel.ValueNumber (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v1)))
+        YamlModel.ScalarFloat v1 -> Right (JsonModel.ValueNumber (Literals.float64ToDecimal v1))
         YamlModel.ScalarInt v1 -> Right (JsonModel.ValueNumber (Literals.bigintToDecimal v1))
         YamlModel.ScalarNull -> Right JsonModel.ValueNull
         YamlModel.ScalarStr v1 -> Right (JsonModel.ValueString v1)

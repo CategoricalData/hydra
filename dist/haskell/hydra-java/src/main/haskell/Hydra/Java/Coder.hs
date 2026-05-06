@@ -700,7 +700,7 @@ declarationForRecordType isInner isSer aliases tparams elName fields cx g =
 declarationForRecordType_ :: Bool -> Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Maybe Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForRecordType_ isInner isSer aliases tparams elName parentName fields cx g =
     Eithers.bind (Eithers.mapList (\f -> recordMemberVar aliases f cx g) fields) (\memberVars -> Eithers.bind (Eithers.mapList (\p -> addComment (Pairs.first p) (Pairs.second p) cx g) (Lists.zip memberVars fields)) (\memberVars_ ->
-      let elNameStr = Core.unName elName
+      let elNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases elName)
       in (Eithers.bind (Logic.ifElse (Equality.gt (Lists.length fields) 1) (Eithers.mapList (\f -> Eithers.bind (recordWithMethod aliases elName fields f cx g) (\decl ->
         let fname = Core.unName (Core.fieldTypeName f)
             comment =
@@ -767,14 +767,14 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
             acceptDecl = Utils.toAcceptMethod True tparams
             vtparams = Lists.concat2 tparams [
                   Utils.javaTypeParameter JavaNames.visitorReturnParameter]
-            elNameStr = Core.unName elName
+            elNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases elName)
             visitorMethods =
                     Lists.map (\ft ->
                       let fname = Core.fieldTypeName ft
                           fnameStr = Core.unName fname
                           typeArgs = Lists.map (\tp -> Utils.typeParameterToTypeArgument tp) tparams
                           varName = Utils.variantClassName False elName fname
-                          varNameStr = Core.unName varName
+                          varNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases varName)
                           varRef = Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs varName Nothing)
                           param = Utils.javaTypeToJavaFormalParameter varRef (Core.Name "instance")
                           resultR = Utils.javaTypeToJavaResult (Syntax.TypeReference Utils.visitorTypeVariable)
@@ -819,7 +819,7 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
                     Lists.map (\ft ->
                       let fname = Core.fieldTypeName ft
                           varName = Utils.variantClassName False elName fname
-                          varNameStr = Core.unName varName
+                          varNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases varName)
                           varRef = Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs varName Nothing)
                           param = Utils.javaTypeToJavaFormalParameter varRef (Core.Name "instance")
                           mi =
@@ -1220,9 +1220,6 @@ encodeLiteralType lt cx g =
         "java",
         "math"])) "BigDecimal")
       Core.LiteralTypeFloat v0 -> case v0 of
-        Core.FloatTypeBigfloat -> Right (Utils.javaRefType [] (Just (JavaNames.javaPackageName [
-          "java",
-          "math"])) "BigDecimal")
         Core.FloatTypeFloat32 -> encodeLiteralType_simple "Float" cx g
         Core.FloatTypeFloat64 -> encodeLiteralType_simple "Double" cx g
       Core.LiteralTypeInteger v0 -> case v0 of
@@ -1245,20 +1242,18 @@ encodeLiteralType_simple n cx g = Right (Utils.javaRefType [] Nothing n)
 encodeLiteral_encodeFloat :: Core.FloatValue -> Syntax.Expression
 encodeLiteral_encodeFloat f =
     case f of
-      Core.FloatValueBigfloat v0 -> Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "java.math.BigDecimal") Nothing) [
-        encodeLiteral (Core.LiteralString (Literals.showBigfloat v0))] Nothing
       Core.FloatValueFloat32 v0 -> encodeLiteral_encodeFloat32 v0
       Core.FloatValueFloat64 v0 -> encodeLiteral_encodeFloat64 v0
 encodeLiteral_encodeFloat32 :: Float -> Syntax.Expression
 encodeLiteral_encodeFloat32 v =
 
       let s = Literals.showFloat32 v
-      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Float" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "NEGATIVE_INFINITY") (encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeFloatingPoint Syntax.FloatingPointTypeFloat)) (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float32ToBigfloat v))))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Float" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "NEGATIVE_INFINITY") (encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeFloatingPoint Syntax.FloatingPointTypeFloat)) (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float32ToFloat64 v))))))))
 encodeLiteral_encodeFloat64 :: Double -> Syntax.Expression
 encodeLiteral_encodeFloat64 v =
 
       let s = Literals.showFloat64 v
-      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Double" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "NEGATIVE_INFINITY") (Logic.ifElse (Equality.equal s "-0.0") (encodeLiteral_javaParseDouble "-0.0") (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float64ToBigfloat v))))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Double" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "NEGATIVE_INFINITY") (Logic.ifElse (Equality.equal s "-0.0") (encodeLiteral_javaParseDouble "-0.0") (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral v)))))))
 encodeLiteral_encodeInteger :: Core.IntegerValue -> Syntax.Expression
 encodeLiteral_encodeInteger i =
     case i of
@@ -2123,9 +2118,6 @@ isBigNumericType typ =
     case (Strip.deannotateType typ) of
       Core.TypeLiteral v0 -> case v0 of
         Core.LiteralTypeDecimal -> True
-        Core.LiteralTypeFloat v1 -> case v1 of
-          Core.FloatTypeBigfloat -> True
-          _ -> False
         Core.LiteralTypeInteger v1 -> case v1 of
           Core.IntegerTypeBigint -> True
           _ -> False

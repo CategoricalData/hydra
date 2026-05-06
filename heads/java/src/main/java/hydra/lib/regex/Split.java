@@ -6,7 +6,6 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -17,6 +16,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -48,10 +48,10 @@ public class Split extends PrimitiveFunction {
     public static List<String> apply(String pattern, String input) {
         // Java's split with -1 preserves trailing empty strings
         String[] parts = Pattern.compile(pattern).split(input, -1);
-        ArrayList<String> results = new ArrayList<>();
-        for (String part : parts) {
-            results.add(part);
+        ConsList<String> result = ConsList.empty();
+        for (int i = parts.length - 1; i >= 0; i--) {
+            result = ConsList.cons(parts[i], result);
         }
-        return results;
+        return result;
     }
 }

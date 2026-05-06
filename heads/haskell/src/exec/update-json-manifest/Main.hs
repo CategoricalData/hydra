@@ -11,7 +11,7 @@ import Hydra.Generation (writePerPackageManifestsJson)
 import Hydra.PackageRouting (defaultDistJsonRoot)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
-  hydraCoqModules, hydraJavaModules, hydraJavaScriptModules,
+  hydraCoqModules, hydraGoModules, hydraJavaModules, hydraJavaScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
@@ -48,6 +48,7 @@ main = do
         , defaultLibModules
         , dslSourceModules
         , hydraCoqModules
+        , hydraGoModules
         , hydraJavaModules
         , hydraJavaScriptModules
         , hydraPythonModules

@@ -21,36 +21,13 @@ HYDRA_EXT_DIR="$HYDRA_ROOT/heads/haskell"
 TARGET=""
 OUTPUT_BASE=""
 PASSTHROUGH_ARGS=()
-i=0
-while [ $i -lt $# ]; do
-    arg="${!i}"; i=$((i + 1))
-    # Bash arrays are 0-based but $@ is 1-based; shift through args instead
-    :
-done
-# Re-parse using positional params
-TARGET=""
-OUTPUT_BASE=""
-PASSTHROUGH_ARGS=()
-skip_next=false
-for ((i=1; i<=$#; i++)); do
-    if $skip_next; then
-        skip_next=false
-        continue
-    fi
-    arg="${!i}"
-    next_i=$((i + 1))
-    case "$arg" in
-        --target)
-            TARGET="${!next_i}"
-            skip_next=true
-            ;;
-        --output)
-            OUTPUT_BASE="${!next_i}"
-            skip_next=true
-            ;;
-        *)
-            PASSTHROUGH_ARGS+=("$arg")
-            ;;
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --target) TARGET="$2"; shift 2 ;;
+        --target=*) TARGET="${1#--target=}"; shift ;;
+        --output) OUTPUT_BASE="$2"; shift 2 ;;
+        --output=*) OUTPUT_BASE="${1#--output=}"; shift ;;
+        *) PASSTHROUGH_ARGS+=("$1"); shift ;;
     esac
 done
 

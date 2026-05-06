@@ -3,7 +3,7 @@ module Hydra.Sources.Scala.Prepare where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel hiding (prepareLiteralType, prepareFloatType, prepareIntegerType, prepareType)
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
@@ -42,14 +42,7 @@ module_ = Module {
 prepareFloatType :: TTermDefinition (FloatType -> (FloatType, FloatValue -> FloatValue, S.Set String))
 prepareFloatType = def "prepareFloatType" $
   doc "Prepare a float type for Scala" $
-  lambda "ft" $
-    (cases _FloatType (var "ft") (Just (same @@ var "ft")) [
-      _FloatType_bigfloat>>: (constant $
-        triple
-          Core.floatTypeFloat64
-          ("v" ~> cases _FloatValue (var "v") (Just (var "v")) [
-            _FloatValue_bigfloat>>: ("d" ~> inject _FloatValue _FloatValue_float64 (Literals.bigfloatToFloat64 (var "d")))])
-          (Sets.fromList $ list [string "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"]))])
+  lambda "ft" $ same @@ var "ft"
 
 prepareIntegerType :: TTermDefinition (IntegerType -> (IntegerType, IntegerValue -> IntegerValue, S.Set String))
 prepareIntegerType = def "prepareIntegerType" $

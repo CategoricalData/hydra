@@ -3,7 +3,7 @@ module Hydra.Sources.Graphviz.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -219,7 +219,6 @@ termLabel = define "termLabel" $
               @@ var "i",
           _Literal_float>>: "f" ~>
             match _FloatValue (Just $ string "?") [
-              _FloatValue_bigfloat>>: "v" ~> Literals.showBigfloat (var "v"),
               _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v"),
               _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v")]
               @@ var "f",

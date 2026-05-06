@@ -2,32 +2,6 @@
 
 (require 'cl-lib)
 
-;; bigfloat_to_bigint :: Double -> BigInteger
-(defvar hydra_lib_literals_bigfloat_to_bigint
-  (lambda (x)
-    (round x)))
-
-;; bigfloat_to_float :: Double -> Double  (identity)
-(defvar hydra_lib_literals_bigfloat_to_float
-  (lambda (x)
-    (float x)))
-
-;; bigfloat_to_float32 :: Double -> Float
-;; EL has only one float type; approximate float32 by rounding to 7 sig digits
-(defvar hydra_lib_literals_bigfloat_to_float32
-  (lambda (x)
-    (round-to-float32 (float x))))
-
-;; bigfloat_to_float64 :: Double -> Double
-(defvar hydra_lib_literals_bigfloat_to_float64
-  (lambda (x)
-    (float x)))
-
-;; bigint_to_bigfloat :: BigInteger -> Double
-(defvar hydra_lib_literals_bigint_to_bigfloat
-  (lambda (x)
-    (float x)))
-
 ;; bigint_to_decimal :: BigInteger -> Decimal
 ;; Emacs Lisp has no native decimal; adapter fallback uses float.
 (defvar hydra_lib_literals_bigint_to_decimal
@@ -120,18 +94,14 @@
     (lambda (x)
       (float x))))
 
-;; float32_to_bigfloat :: Float -> Double
-(defvar hydra_lib_literals_float32_to_bigfloat
-  (lambda (x)
-    (float x)))
-
 ;; float32_to_decimal :: Float -> Decimal
 (defvar hydra_lib_literals_float32_to_decimal
   (lambda (x)
     (float x)))
 
-;; float64_to_bigfloat :: Double -> Double
-(defvar hydra_lib_literals_float64_to_bigfloat
+;; float32_to_float64 :: Float -> Double
+;; EL has a single float type; widening is identity.
+(defvar hydra_lib_literals_float32_to_float64
   (lambda (x)
     (float x)))
 
@@ -139,6 +109,12 @@
 (defvar hydra_lib_literals_float64_to_decimal
   (lambda (x)
     (float x)))
+
+;; float64_to_float32 :: Double -> Float
+;; EL has only one float type; approximate float32 by rounding to single-precision.
+(defvar hydra_lib_literals_float64_to_float32
+  (lambda (x)
+    (round-to-float32 (float x))))
 
 ;; int :: IntPrecision -> Int -> Int
 (defvar hydra_lib_literals_int
@@ -160,18 +136,6 @@
 ;; int64_to_bigint :: Int64 -> BigInteger
 (defvar hydra_lib_literals_int64_to_bigint
   (lambda (x) x))
-
-;; read_bigfloat :: String -> Maybe Double
-(defvar hydra_lib_literals_read_bigfloat
-  (lambda (s)
-    (condition-case nil
-        (let ((n (string-to-number s)))
-          (if (and (numberp n) (not (= n 0)) (not (string= s "0")))
-              (list :just (float n))
-              (if (string= s "0")
-                  (list :just 0.0)
-                  (list :nothing))))
-      (error (list :nothing)))))
 
 ;; read_decimal :: String -> Maybe Decimal
 ;; Emacs Lisp has no native decimal; fallback uses float.
@@ -307,11 +271,6 @@
     (if (cl-search "." s)
         s
         (concat s ".0"))))
-
-;; show_bigfloat :: Double -> String
-(defvar hydra_lib_literals_show_bigfloat
-  (lambda (x)
-    (haskell-show-float (float x))))
 
 ;; show_decimal :: Decimal -> String
 ;; Emacs Lisp has no native decimal; formatted as float.

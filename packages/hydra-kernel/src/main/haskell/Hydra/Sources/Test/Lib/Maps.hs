@@ -2,13 +2,14 @@
 
 module Hydra.Sources.Test.Lib.Maps where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -41,9 +42,6 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 showInt32 :: TTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
@@ -55,19 +53,19 @@ showBool :: TTerm (Bool -> String)
 showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
 
 showIntStringMap :: TTerm (M.Map Int String -> String)
-showIntStringMap = Phantoms.lambda "m" $ ShowCore.map_ # showInt32 # showString' # Phantoms.var "m"
+showIntStringMap = Phantoms.lambda "m" $ ShowCore.map_ @@ showInt32 @@ showString' @@ Phantoms.var "m"
 
 showMaybeString :: TTerm (Maybe String -> String)
-showMaybeString = Phantoms.lambda "mx" $ ShowCore.maybe_ # showString' # Phantoms.var "mx"
+showMaybeString = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ showString' @@ Phantoms.var "mx"
 
 showIntList :: TTerm ([Int] -> String)
-showIntList = Phantoms.lambda "xs" $ ShowCore.list_ # showInt32 # Phantoms.var "xs"
+showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
 showStringList :: TTerm ([String] -> String)
-showStringList = Phantoms.lambda "xs" $ ShowCore.list_ # showString' # Phantoms.var "xs"
+showStringList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showString' @@ Phantoms.var "xs"
 
 showPairList :: TTerm ([(Int, String)] -> String)
-showPairList = Phantoms.lambda "xs" $ ShowCore.list_ # (Phantoms.lambda "p" $ ShowCore.pair_ # showInt32 # showString' # Phantoms.var "p") # Phantoms.var "xs"
+showPairList = Phantoms.lambda "xs" $ ShowCore.list_ @@ (Phantoms.lambda "p" $ ShowCore.pair_ @@ showInt32 @@ showString' @@ Phantoms.var "p") @@ Phantoms.var "xs"
 
 -- Phantom-typed map helper
 pMap :: [(Int, String)] -> TTerm (M.Map Int String)

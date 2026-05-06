@@ -52,12 +52,6 @@ object math:
     else BigDecimal(x).setScale(0, BigDecimal.RoundingMode.HALF_EVEN).toDouble
   // Round to n significant digits (not decimal places)
   // Returns NaN/Inf inputs unchanged (no rounding is possible).
-  def roundBigfloat(precision: Int)(x: BigDecimal): BigDecimal =
-    if x == 0 then BigDecimal(0.0)
-    else
-      val d = x.toDouble
-      val factor = scala.math.pow(10, precision - 1 - scala.math.floor(scala.math.log10(scala.math.abs(d))))
-      BigDecimal(scala.math.round(d * factor) / factor)
   def roundFloat(precision: Int)(x: Double): Double =
     if x.isNaN || x.isInfinite then x
     else if x == 0 then 0.0

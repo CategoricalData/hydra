@@ -24,7 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -170,7 +170,6 @@ floatValue :: TTermDefinition (FloatValue -> String)
 floatValue = define "float" $
   doc "Show a float value as a string" $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
-    _FloatValue_bigfloat>>: "v" ~> Literals.showBigfloat (var "v") ++ (string ":bigfloat"),
     _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v") ++ (string ":float32"),
     _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v") ++ (string ":float64")]
 
@@ -178,7 +177,6 @@ floatType :: TTermDefinition (FloatType -> String)
 floatType = define "floatType" $
   doc "Show a float type as a string" $
   "ft" ~> cases _FloatType (var "ft") Nothing [
-    _FloatType_bigfloat>>: constant $ string "bigfloat",
     _FloatType_float32>>: constant $ string "float32",
     _FloatType_float64>>: constant $ string "float64"]
 

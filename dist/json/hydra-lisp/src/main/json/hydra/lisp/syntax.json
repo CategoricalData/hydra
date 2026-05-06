@@ -1249,7 +1249,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The float value"}}}],
-                        "body": {"literal": {"float": {"bigfloat": {}}}}}}},
+                        "body": {"literal": {"float": {"float64": {}}}}}}},
                   {
                     "name": "precision",
                     "type": {

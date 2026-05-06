@@ -6,7 +6,6 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,6 +17,7 @@ import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.errors.OtherError;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -39,12 +39,11 @@ public class BinaryToBytes extends PrimitiveFunction {
                 hydra.core.Literal lit = ((Term.Literal) term).value;
                 if (lit instanceof hydra.core.Literal.Binary) {
                     byte[] bytes = ((hydra.core.Literal.Binary) lit).value;
-                    List<Integer> result = apply(bytes);
-                    List<Term> terms = new ArrayList<>();
-                    for (int v : result) {
-                        terms.add(Terms.int32(v));
+                    ConsList<Term> terms = ConsList.empty();
+                    for (int i = bytes.length - 1; i >= 0; i--) {
+                        terms = ConsList.cons(Terms.int32(bytes[i] & 0xFF), terms);
                     }
-                    return Either.right(Terms.list(terms.toArray(new Term[0])));
+                    return Either.right(Terms.list(terms));
                 }
             }
             return Either.left(new Error_.Other(new OtherError("expected binary literal")));
@@ -52,9 +51,9 @@ public class BinaryToBytes extends PrimitiveFunction {
     }
 
     public static List<Integer> apply(byte[] binary) {
-        List<Integer> result = new ArrayList<>(binary.length);
-        for (byte b : binary) {
-            result.add(b & 0xFF);
+        ConsList<Integer> result = ConsList.empty();
+        for (int i = binary.length - 1; i >= 0; i--) {
+            result = ConsList.cons(binary[i] & 0xFF, result);
         }
         return result;
     }

@@ -4,7 +4,7 @@ module Hydra.Sources.Json.Decode where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -110,26 +110,13 @@ module_ = Module {
       toDefinition parseSpecialFloat32]
 
 -- | Decode a JSON value to a float term
--- Float32, Float64, and Bigfloat all accept finite values as JSON numbers
+-- Float32 and Float64 accept finite values as JSON numbers
 -- Special values (NaN, Infinity, -Infinity, -0.0) are accepted as JSON string sentinels for all float types
 decodeFloat :: TTermDefinition (FloatType -> Value -> Either String Term)
 decodeFloat = define "decodeFloat" $
   doc "Decode a JSON value to a float term. Finite values arrive as JSON numbers; NaN/Inf/-0.0 arrive as JSON string sentinels. Float32 and Float64 are symmetric." $
   "ft" ~> "value" ~>
   cases _FloatType (var "ft") Nothing [
-    -- Bigfloat: JSON number (Scientific) -> decimal -> float64 -> bigfloat. NaN/Inf are not
-    -- representable in JSON's grammar, so they can only arrive via the string sentinel path below.
-    _FloatType_bigfloat>>: constant $
-      cases _Value (var "value")
-        (Just $ left $ string "expected number or special float string for bigfloat") [
-        _Value_number>>: "n" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $
-          Literals.float64ToBigfloat $ Literals.decimalToFloat64 $ var "n",
-        _Value_string>>: "s" ~>
-          Maybes.maybe
-            (left $ Strings.cat $ list [string "invalid bigfloat sentinel: ", var "s"])
-            ("v" ~> right $ Core.termLiteral $ Core.literalFloat $ Core.floatValueBigfloat $
-              Literals.float64ToBigfloat $ var "v")
-            (parseSpecialFloat @@ var "s")],
     -- Float32: JSON number (Scientific) -> float32, or special sentinel string
     _FloatType_float32>>: constant $
       cases _Value (var "value")
@@ -269,9 +256,6 @@ decodeLiteral = define "decodeLiteral" $
       "strResult" <~ (expectString @@ var "value") $
       Eithers.map ("s" ~> Core.termLiteral $ Core.literalString $ var "s") (var "strResult")]
 
--- | Decode a JSON value to a float term
--- Float32, Float64, and Bigfloat all accept finite values as JSON numbers
--- Special values (NaN, Infinity, -Infinity, -0.0) are accepted as JSON string sentinels for all float types
 -- | Extract an array from a JSON value
 expectArray :: TTermDefinition (Value -> Either String [Value])
 expectArray = define "expectArray" $

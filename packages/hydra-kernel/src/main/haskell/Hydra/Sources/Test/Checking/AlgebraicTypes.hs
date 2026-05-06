@@ -2,7 +2,7 @@
 -- | Algebraic type checking test cases: unit, pairs, eithers, optionals
 module Hydra.Sources.Test.Checking.AlgebraicTypes where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for term-encoded tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms

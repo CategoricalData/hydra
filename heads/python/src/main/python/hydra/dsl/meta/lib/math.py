@@ -183,11 +183,6 @@ def round_(x: TTerm) -> TTerm:
     return primitive1(x)
 
 
-def round_bigfloat(digits: TTerm, x: TTerm) -> TTerm:
-    """Round a bigfloat to n significant digits."""
-    return primitive2(digits, x)
-
-
 def round_float32(digits: TTerm, x: TTerm) -> TTerm:
     """Round a float32 to n significant digits."""
     return primitive2(digits, x)

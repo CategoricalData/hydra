@@ -795,7 +795,7 @@ floatLiteral = define "FloatLiteral" $
   T.record [
     "value">:
       doc "The float value" $
-      T.bigfloat,
+      T.float64,
     "precision">:
       doc "Optional precision hint (e.g. 3.14d0 vs 3.14f0 in Common Lisp)" $
       T.maybe T.string]

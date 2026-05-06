@@ -69,6 +69,7 @@ dist/clojure/
 dist/common-lisp/
 dist/coq/
 dist/emacs-lisp/
+dist/go/
 dist/java/
 dist/python/
 dist/scala/

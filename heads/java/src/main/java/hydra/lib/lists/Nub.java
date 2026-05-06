@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +19,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeEq;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -48,13 +48,12 @@ public class Nub extends PrimitiveFunction {
      */
     public static <X> List<X> apply(List<X> arg) {
         Set<X> visited = new HashSet<>();
-        ArrayList<X> result = new ArrayList<>(arg.size());
+        ConsList<X> reversed = ConsList.empty();
         for (X x : arg) {
-            if (!visited.contains(x)) {
-                visited.add(x);
-                result.add(x);
+            if (visited.add(x)) {
+                reversed = ConsList.cons(x, reversed);
             }
         }
-        return result;
+        return reversed.reverse();
     }
 }

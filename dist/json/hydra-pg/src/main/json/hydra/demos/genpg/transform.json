@@ -200,54 +200,6 @@
                                                                                   "cases": {
                                                                                     "cases": [
                                                                                       {
-                                                                                        "name": "bigfloat",
-                                                                                        "term": {
-                                                                                          "lambda": {
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "argument": {"application": {"argument": {"variable": "value"}, "function": {"variable": "hydra.lib.literals.readBigfloat"}}},
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "lambda": {
-                                                                                                        "body": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {
-                                                                                                                  "either": {
-                                                                                                                    "right": {
-                                                                                                                      "maybe": {
-                                                                                                                        "inject": {
-                                                                                                                          "field": {
-                                                                                                                            "name": "literal",
-                                                                                                                            "term": {
-                                                                                                                              "inject": {
-                                                                                                                                "field": {
-                                                                                                                                  "name": "float",
-                                                                                                                                  "term": {"inject": {"field": {"name": "bigfloat", "term": {"variable": "parsed"}}, "typeName": "hydra.core.FloatValue"}}},
-                                                                                                                                "typeName": "hydra.core.Literal"}}},
-                                                                                                                          "typeName": "hydra.core.Term"}}}}},
-                                                                                                                "type": {"literal": {"string": {}}}}},
-                                                                                                            "type": {"maybe": {"variable": "hydra.core.Term"}}}},
-                                                                                                        "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                                                                                        "parameter": "parsed"}},
-                                                                                                    "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"typeApplication": {"body": {"either": {"left": {"variable": "parseError"}}}, "type": {"literal": {"string": {}}}}},
-                                                                                                            "type": {"maybe": {"variable": "hydra.core.Term"}}}},
-                                                                                                        "function": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"variable": "hydra.lib.maybes.maybe"},
-                                                                                                                "type": {"either": {"left": {"literal": {"string": {}}}, "right": {"maybe": {"variable": "hydra.core.Term"}}}}}},
-                                                                                                            "type": {"literal": {"float": {"bigfloat": {}}}}}}}}}}}},
-                                                                                            "domain": {"unit": {}},
-                                                                                            "parameter": "_"}}},
-                                                                                      {
                                                                                         "name": "float32",
                                                                                         "term": {
                                                                                           "lambda": {

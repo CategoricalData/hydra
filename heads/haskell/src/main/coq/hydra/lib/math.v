@@ -22,7 +22,6 @@ Axiom logBase : Q -> Q -> Q.
 Axiom pi : Q.
 Axiom pow : Q -> Q -> Q.
 Axiom round : Q -> Q.
-Axiom roundBigfloat : Z -> Q -> Q.
 Axiom roundFloat32 : Z -> Q -> Q.
 Axiom roundFloat64 : Z -> Q -> Q.
 Axiom sin : Q -> Q.

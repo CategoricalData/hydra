@@ -5,7 +5,7 @@ module Hydra.Sources.Java.Serde where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -750,9 +750,9 @@ typeArgumentsOrDiamondToExpr = def "typeArgumentsOrDiamondToExpr" $
 floatingPointLiteralToExpr :: TTermDefinition (Java.FloatingPointLiteral -> Expr)
 floatingPointLiteralToExpr = def "floatingPointLiteralToExpr" $
   lambda "fl" $
-    Serialization.cst @@ (javaFloatLiteralText @@ LibLiterals.showBigfloat (unwrap Java._FloatingPointLiteral @@ var "fl"))
+    Serialization.cst @@ (javaFloatLiteralText @@ LibLiterals.showFloat64 (unwrap Java._FloatingPointLiteral @@ var "fl"))
 
--- | Convert a showBigfloat result into valid Java source syntax, mapping
+-- | Convert a showFloat64 result into valid Java source syntax, mapping
 -- NaN and ±Infinity to Double.NaN / Double.POSITIVE_INFINITY / Double.NEGATIVE_INFINITY.
 javaFloatLiteralText :: TTermDefinition (String -> String)
 javaFloatLiteralText = def "javaFloatLiteralText" $

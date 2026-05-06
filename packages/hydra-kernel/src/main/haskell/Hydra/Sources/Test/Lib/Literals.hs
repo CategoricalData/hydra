@@ -1,6 +1,6 @@
 module Hydra.Sources.Test.Lib.Literals where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for term-encoded tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
@@ -160,56 +160,21 @@ literalsBigintToUint64 = subgroup "bigintToUint64" [
 
 -- Float conversions
 
-literalsFloat32ToBigfloat :: TTerm TestGroup
-literalsFloat32ToBigfloat = subgroup "float32ToBigfloat" [
-  test "positive" 2.5 2.5,  -- use exact Float32 values
+literalsFloat32ToFloat64 :: TTerm TestGroup
+literalsFloat32ToFloat64 = subgroup "float32ToFloat64" [
+  test "positive" 2.5 2.5,  -- exact in float32 and float64
   test "negative" (-2.5) (-2.5),
   test "zero" 0.0 0.0]
   where
-    test name x result = primCase name _literals_float32ToBigfloat [float32 x] (bigfloat result)
+    test name x result = primCase name _literals_float32ToFloat64 [float32 x] (float64 result)
 
-literalsFloat64ToBigfloat :: TTerm TestGroup
-literalsFloat64ToBigfloat = subgroup "float64ToBigfloat" [
-  test "positive" 3.14159 3.14159,
-  test "negative" (-2.71828) (-2.71828),
-  test "zero" 0.0 0.0]
-  where
-    test name x result = primCase name _literals_float64ToBigfloat [float64 x] (bigfloat result)
-
-literalsBigfloatToFloat32 :: TTerm TestGroup
-literalsBigfloatToFloat32 = subgroup "bigfloatToFloat32" [
-  test "positive" 3.14 3.14,
+literalsFloat64ToFloat32 :: TTerm TestGroup
+literalsFloat64ToFloat32 = subgroup "float64ToFloat32" [
+  test "positive" 2.5 2.5,
   test "negative" (-2.5) (-2.5),
   test "zero" 0.0 0.0]
   where
-    test name x result = primCase name _literals_bigfloatToFloat32 [bigfloat x] (float32 result)
-
-literalsBigfloatToFloat64 :: TTerm TestGroup
-literalsBigfloatToFloat64 = subgroup "bigfloatToFloat64" [
-  test "positive" 3.14159 3.14159,
-  test "negative" (-2.71828) (-2.71828),
-  test "zero" 0.0 0.0]
-  where
-    test name x result = primCase name _literals_bigfloatToFloat64 [bigfloat x] (float64 result)
-
-literalsBigintToBigfloat :: TTerm TestGroup
-literalsBigintToBigfloat = subgroup "bigintToBigfloat" [
-  test "positive" 42 42.0,
-  test "negative" (-42) (-42.0),
-  test "zero" 0 0.0]
-  where
-    test name x result = primCase name _literals_bigintToBigfloat [bigint x] (bigfloat result)
-
-literalsBigfloatToBigint :: TTerm TestGroup
-literalsBigfloatToBigint = subgroup "bigfloatToBigint" [
-  test "positive" 42.7 43,  -- round uses banker's rounding
-  test "negative" (-42.7) (-43),
-  test "zero" 0.0 0,
-  test "round down" 42.3 42,
-  test "half even up" 42.5 42,  -- banker's rounding: 42.5 rounds to 42 (even)
-  test "half even down" 43.5 44]  -- banker's rounding: 43.5 rounds to 44 (even)
-  where
-    test name x result = primCase name _literals_bigfloatToBigint [bigfloat x] (bigint result)
+    test name x result = primCase name _literals_float64ToFloat32 [float64 x] (float32 result)
 
 -- Decimal conversions
 
@@ -373,17 +338,6 @@ literalsShowFloat64 = subgroup "showFloat64" [
   where
     test name x result = primCase name _literals_showFloat64 [float64 x] (string result)
 
-literalsShowBigfloat :: TTerm TestGroup
-literalsShowBigfloat = subgroup "showBigfloat" [
-  test "positive" 3.14 "3.14",
-  test "zero" 0.0 "0.0",
-  test "small positive" 0.05 "5.0e-2",
-  test "small positive 2" 0.03 "3.0e-2",
-  test "very small" 0.001 "1.0e-3",
-  test "normal decimal" 0.1 "0.1"]
-  where
-    test name x result = primCase name _literals_showBigfloat [bigfloat x] (string result)
-
 literalsShowBoolean :: TTerm TestGroup
 literalsShowBoolean = subgroup "showBoolean" [
   test "true" true "true",
@@ -473,14 +427,6 @@ literalsReadFloat64 = subgroup "readFloat64" [
   where
     testJust name x result = primCase name _literals_readFloat64 [string x] (Core.termMaybe $ just (float64 result))
     testNothing name x = primCase name _literals_readFloat64 [string x] (Core.termMaybe nothing)
-
-literalsReadBigfloat :: TTerm TestGroup
-literalsReadBigfloat = subgroup "readBigfloat" [
-  testJust "positive" "3.14" 3.14,
-  testNothing "invalid" "abc"]
-  where
-    testJust name x result = primCase name _literals_readBigfloat [string x] (Core.termMaybe $ just (bigfloat result))
-    testNothing name x = primCase name _literals_readBigfloat [string x] (Core.termMaybe nothing)
 
 literalsReadBoolean :: TTerm TestGroup
 literalsReadBoolean = subgroup "readBoolean" [
@@ -592,12 +538,8 @@ allTests = definitionInModule module_ "allTests" $
       literalsUint32ToBigint,
       literalsUint64ToBigint,
       -- Float conversions
-      literalsFloat32ToBigfloat,
-      literalsFloat64ToBigfloat,
-      literalsBigfloatToFloat32,
-      literalsBigfloatToFloat64,
-      literalsBigintToBigfloat,
-      literalsBigfloatToBigint,
+      literalsFloat32ToFloat64,
+      literalsFloat64ToFloat32,
       -- Decimal conversions
       literalsBigintToDecimal,
       literalsDecimalToBigint,
@@ -619,7 +561,6 @@ allTests = definitionInModule module_ "allTests" $
       literalsShowBigint,
       literalsShowFloat32,
       literalsShowFloat64,
-      literalsShowBigfloat,
       literalsShowBoolean,
       literalsShowString,
       -- Read functions
@@ -634,7 +575,6 @@ allTests = definitionInModule module_ "allTests" $
       literalsReadBigint,
       literalsReadFloat32,
       literalsReadFloat64,
-      literalsReadBigfloat,
       literalsReadBoolean,
       literalsReadString,
       -- Binary conversions

@@ -6,7 +6,7 @@ module Hydra.Sources.Scala.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -472,7 +472,6 @@ encodeLiteral = def "encodeLiteral" $
       _Literal_boolean>>: ("b" ~> right (inject _Lit _Lit_boolean (var "b"))),
       _Literal_decimal>>: ("d" ~> right (inject _Lit _Lit_string (Literals.showDecimal (var "d")))),
       _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected float value"))) [
-        _FloatValue_bigfloat>>: ("bf" ~> right (inject _Lit _Lit_double (Literals.bigfloatToFloat64 (var "bf")))),
         _FloatValue_float32>>: ("f" ~> right (inject _Lit _Lit_float (var "f"))),
         _FloatValue_float64>>: ("f" ~> right (inject _Lit _Lit_double (var "f")))]),
       _Literal_integer>>: ("iv" ~> cases _IntegerValue (var "iv") (Just $ left (Error.errorOther $ Error.otherError (string "unexpected integer value"))) [
@@ -685,9 +684,7 @@ encodeTerm = def "encodeTerm" $
               _Literal_decimal>>: (constant $ right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigDecimal") @@ list [var "litData"])),
               _Literal_integer>>: ("iv" ~> cases _IntegerValue (var "iv") (Just $ right (var "litData")) [
                 _IntegerValue_bigint>>: ("bi" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (var "bi")))])),
-                _IntegerValue_uint64>>: ("ui" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (Literals.uint64ToBigint (var "ui"))))]))]),
-              _Literal_float>>: ("fv" ~> cases _FloatValue (var "fv") (Just $ right (var "litData")) [
-                _FloatValue_bigfloat>>: (constant $ right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigDecimal") @@ list [var "litData"]))])])),
+                _IntegerValue_uint64>>: ("ui" ~> right (ScalaUtilsSource.sapply @@ (ScalaUtilsSource.sname @@ string "BigInt") @@ list [inject _Data _Data_lit (inject _Lit _Lit_string (Literals.showBigint (Literals.uint64ToBigint (var "ui"))))]))])])),
       _Term_map>>: ("m" ~>
         Eithers.bind
           (Eithers.mapList ("kv" ~>
@@ -813,7 +810,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname">: ScalaUtilsSource.scalaEscapeName @@ (Names.localNameOf @@ var "name"),
     "typ'">: Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (unaryFunction Core.typeSchemeBody)
+      (reify Core.typeSchemeBody)
       (project _TermDefinition _TermDefinition_typeScheme @@ var "td"),
     -- Check if the type is a function type (needs def) by looking at the stripped type
     "isFunctionType">: cases _Type (Strip.deannotateType @@ var "typ'")
@@ -887,7 +884,6 @@ encodeType = def "encodeType" $
         _LiteralType_boolean>>: (constant $ right (stref (string "Boolean"))),
         _LiteralType_decimal>>: (constant $ right (stref (string "BigDecimal"))),
         _LiteralType_float>>: ("ft" ~> cases _FloatType (var "ft") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported float type"))) [
-          _FloatType_bigfloat>>: (constant $ right (stref (string "BigDecimal"))),
           _FloatType_float32>>: (constant $ right (stref (string "Float"))),
           _FloatType_float64>>: (constant $ right (stref (string "Double")))]),
         _LiteralType_integer>>: ("it" ~> cases _IntegerType (var "it") (Just $ left (Error.errorOther $ Error.otherError (string "unsupported integer type"))) [

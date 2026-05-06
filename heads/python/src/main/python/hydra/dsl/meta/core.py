@@ -37,11 +37,6 @@ def let_(bindings: TTerm, body: TTerm) -> TTerm:
 # since the meta module historically defined them as functions.
 # ============================================================
 
-def float_type_bigfloat() -> TTerm:
-    """The bigfloat FloatType variant."""
-    return _Gen.float_type_bigfloat
-
-
 def float_type_float32() -> TTerm:
     """The float32 FloatType variant."""
     return _Gen.float_type_float32

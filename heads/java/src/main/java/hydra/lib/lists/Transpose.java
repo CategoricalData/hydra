@@ -17,6 +17,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -36,51 +37,21 @@ public class Transpose extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(0)), outerList -> {
-            // Parse each inner list
-            Either<Error_, List<List<Term>>> matrixFlow = Either.right(new ArrayList<>());
+            // Parse each inner list, accumulating into a ConsList in reverse, then reverse once.
+            ConsList<List<Term>> matrixRev = ConsList.empty();
             for (Term inner : outerList) {
-                matrixFlow = hydra.lib.eithers.Bind.apply(matrixFlow, acc ->
-                    hydra.lib.eithers.Map.apply(row -> {
-                        List<List<Term>> newAcc = new ArrayList<>(acc);
-                        newAcc.add(row);
-                        return newAcc;
-                    }, hydra.extract.Core.list(graph, inner)));
+                Either<Error_, List<Term>> rowE = hydra.extract.Core.list(graph, inner);
+                if (rowE.isLeft()) return (Either) rowE;
+                matrixRev = ConsList.cons(((Either.Right<Error_, List<Term>>) rowE).value, matrixRev);
             }
-            return hydra.lib.eithers.Map.apply(matrix -> {
-                List<List<Term>> transposed = transposeRaw(matrix);
-                List<Term> result = new ArrayList<>();
-                for (List<Term> row : transposed) {
-                    result.add(Terms.list(row));
-                }
-                return Terms.list(result);
-            }, matrixFlow);
+            List<List<Term>> matrix = matrixRev.reverse();
+            List<List<Term>> transposed = apply(matrix);
+            ConsList<Term> resultRev = ConsList.empty();
+            for (List<Term> row : transposed) {
+                resultRev = ConsList.cons(Terms.list(row), resultRev);
+            }
+            return Either.right(Terms.list(resultRev.reverse()));
         });
-    }
-
-    /**
-     * Internal helper for transposing raw lists (used by implementation()).
-     */
-    private static <X> List<List<X>> transposeRaw(List<List<X>> matrix) {
-        if (matrix.isEmpty()) {
-            return List.of();
-        }
-        int maxCols = 0;
-        for (List<X> row : matrix) {
-            maxCols = Math.max(maxCols, row.size());
-        }
-        List<List<X>> result = new ArrayList<>();
-        for (int col = 0; col < maxCols; col++) {
-            List<X> newRow = new ArrayList<>();
-            for (List<X> row : matrix) {
-                if (col < row.size()) {
-                    newRow.add(row.get(col));
-                }
-            }
-            if (!newRow.isEmpty()) {
-                result.add(newRow);
-            }
-        }
-        return result;
     }
 
     /**
@@ -91,24 +62,30 @@ public class Transpose extends PrimitiveFunction {
      */
     public static <X> List<List<X>> apply(List<List<X>> matrix) {
         if (matrix.isEmpty()) {
-            return new ArrayList<>();
+            return ConsList.empty();
         }
+        // Snapshot rows into ArrayList scratch buffers for fast random access during transposition.
+        ArrayList<ArrayList<X>> rows = new ArrayList<>(matrix.size());
         int maxCols = 0;
         for (List<X> row : matrix) {
-            maxCols = Math.max(maxCols, row.size());
+            ArrayList<X> snap = new ArrayList<>(row);
+            maxCols = Math.max(maxCols, snap.size());
+            rows.add(snap);
         }
-        ArrayList<List<X>> result = new ArrayList<>();
+        ConsList<List<X>> resultRev = ConsList.empty();
         for (int col = 0; col < maxCols; col++) {
-            ArrayList<X> newRow = new ArrayList<>();
-            for (List<X> row : matrix) {
+            ConsList<X> newRowRev = ConsList.empty();
+            boolean any = false;
+            for (ArrayList<X> row : rows) {
                 if (col < row.size()) {
-                    newRow.add(row.get(col));
+                    newRowRev = ConsList.cons(row.get(col), newRowRev);
+                    any = true;
                 }
             }
-            if (!newRow.isEmpty()) {
-                result.add(newRow);
+            if (any) {
+                resultRev = ConsList.cons(newRowRev.reverse(), resultRev);
             }
         }
-        return result;
+        return resultRev.reverse();
     }
 }

@@ -7,13 +7,14 @@
 -- 2. The encoder and decoder handle all supported term constructs correctly
 module Hydra.Sources.Test.Json.Roundtrip where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Meta.Types         as T
@@ -28,7 +29,7 @@ import qualified Data.Scientific              as Sci
 import Hydra.Testing
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Json.Encode as EncodeModule
-import qualified Hydra.Sources.Json.Decode as DecodeModule
+import qualified Hydra.Sources.Json.Decode as JsonDecode
 
 
 ns :: Namespace
@@ -48,9 +49,6 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Local alias for polymorphic application
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
@@ -71,10 +69,10 @@ roundtripTest testName typ term = universalCase testName
     (Phantoms.lambda "json" $
       Eithers.either_
         (Phantoms.lambda "e" $ Phantoms.var "e")
-        (Phantoms.lambda "decoded" $ ShowCore.term # Phantoms.var "decoded")
-        (DecodeModule.fromJson # Maps.empty # Core.name (Phantoms.string "test") # typ # Phantoms.var "json"))
-    (EncodeModule.toJson # Maps.empty # Core.name (Phantoms.string "test") # typ # term))
-  (ShowCore.term # term)
+        (Phantoms.lambda "decoded" $ ShowCore.term @@ Phantoms.var "decoded")
+        (JsonDecode.fromJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
+    (EncodeModule.toJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ term))
+  (ShowCore.term @@ term)
 
 ----------------------------------------
 -- Literal types
@@ -103,8 +101,6 @@ literalRoundtripGroup = subgroup "literal types" [
     roundtripTest "float64" T.float64 (float64 3.14159),
 
     -- Special floats (NaN, Infinity, -Infinity) encoded as JSON string sentinels.
-    -- Bigfloat is omitted because Java BigDecimal and Python Decimal cannot represent
-    -- IEEE 754 special values; float32 and float64 carry them natively.
     roundtripTest "float32 NaN" T.float32 (float32 (0/0)),
     roundtripTest "float32 positive infinity" T.float32 (float32 (1/0)),
     roundtripTest "float32 negative infinity" T.float32 (float32 (-1/0)),

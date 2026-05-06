@@ -8,7 +8,8 @@
 #   1. Calling Layer 1 transform-json-to-haskell.sh for main modules
 #   2. Calling Layer 1 transform-json-to-haskell.sh for test modules (if the
 #      package has any)
-#   3. Applying package-specific post-processing (kernel: TestGraph patch)
+#   (No package-specific post-processing today; the TestGraph patch was
+#    retired in #307 — the DSL emits TestEnv refs directly.)
 #
 # Assemblers do NOT run tests. Testing is Layer 2.5's job
 # (test-distribution.sh), invoked separately. See

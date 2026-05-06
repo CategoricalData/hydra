@@ -23,8 +23,6 @@
     "hydra.datalog.syntax",
     "hydra.delta.parquet",
     "hydra.geojson.model",
-    "hydra.go.language",
-    "hydra.go.syntax",
     "hydra.graphql.coder",
     "hydra.graphql.language",
     "hydra.graphql.serde",

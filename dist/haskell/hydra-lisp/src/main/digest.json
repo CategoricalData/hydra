@@ -2,16 +2,16 @@
   "version": 2,
   "generator": "v0-unstamped",
   "inputs": {
-    "hydra.lisp.coder": { "kind": "Other", "hash": "88b407c3f4a77f5d49cbfd954f8527dca1db9bddc6884ebfad606f454c5cadb1" },
-    "hydra.lisp.language": { "kind": "Other", "hash": "4bb5b959846bb81f2568e6849caa3de19f0a151153186d4fafe6ee466f12bc26" },
-    "hydra.lisp.serde": { "kind": "Other", "hash": "0096c5a533c26c6533243c2dc064613e07aaa4d3cb8b2d77ed7f3bd8d372dbc1" },
-    "hydra.lisp.syntax": { "kind": "Other", "hash": "90fb2608e2a76641ad986941d7aee3d6e4f6719fe2cdf8982f0bb82596265ceb" }
+    "hydra.lisp.coder": { "kind": "Other", "hash": "8c221addcaea55efd1f377c1fd5b9d36435e4168e7fbe57f388c1fa2ff59c5d2" },
+    "hydra.lisp.language": { "kind": "Other", "hash": "21d069b16ab367b1ff2b152414041cd6921a6a32fd83de570de77b254b046444" },
+    "hydra.lisp.serde": { "kind": "Other", "hash": "712986fba2b7f61e5281055d3057b77ce426b4b079f3b2e4f80069bd647576d5" },
+    "hydra.lisp.syntax": { "kind": "Other", "hash": "7c9b4c505164f2582894dddef8dc3839a7fbe1a254ec7d3ebe7604d489ef7dba" }
   },
   "outputs": {
     "Hydra/Dsl/Lisp/Syntax.hs": { "kind": "TargetFile", "hash": "3aa9be7f2edb9a87e73cd9f89851b54bc23df947603674cb033f1c24f131ddd8" },
-    "Hydra/Lisp/Coder.hs": { "kind": "TargetFile", "hash": "97474ce27d34f746fbe19394b3181ee7dee34f69ee87b1430be0d98d7a2ad975" },
-    "Hydra/Lisp/Language.hs": { "kind": "TargetFile", "hash": "ddb7474c5fd42993a749a3c99e5fc0bebfebd0743a2b50964d35cc7a28536c41" },
-    "Hydra/Lisp/Serde.hs": { "kind": "TargetFile", "hash": "7a2d943a4a58596509792403f0587574cca7e5a090c104540682d3ed55a37300" },
+    "Hydra/Lisp/Coder.hs": { "kind": "TargetFile", "hash": "3d923109781ec3ae0f416b7be0e4485734e3828fb1dfbb856350e35a7cc6cf83" },
+    "Hydra/Lisp/Language.hs": { "kind": "TargetFile", "hash": "e7602cf8d6a4cd85185bb1823d6e77dc3d13ae8ec756b14d13514e68fe0cb9e1" },
+    "Hydra/Lisp/Serde.hs": { "kind": "TargetFile", "hash": "92daca151d0b513c83fbd0281d03357398edcf64c5a81b44431dd3eecc1137d7" },
     "Hydra/Lisp/Syntax.hs": { "kind": "TargetFile", "hash": "39e6b1d906a987f1fa3a403c24f86a0788c2b02c6cb0d6e00fa69105dbb1f583" }
   }
 }
