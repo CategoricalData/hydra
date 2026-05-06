@@ -3,13 +3,35 @@
 # This is host-language-independent: the same static resources are needed
 # regardless of which host (Haskell, Java, Python) generated the code.
 #
-# Usage: ./setup-haskell-target.sh <output-dir>
+# Usage: ./setup-haskell-target.sh [--clean] <output-dir>
+#
+# By default the prep is incremental: if every input the script reads from is
+# byte-identical to the last successful prep recorded under
+# <output-dir>/.bootstrap-prep-hash, the script exits early and skips the
+# wipe-and-overlay. Pass --clean (or set HYDRA_BOOTSTRAP_CLEAN=1) to force a
+# full rm -rf + recopy — needed for cold-start timing measurements in
+# benchmark runs.
 
 set -e
 
-OUTPUT_DIR="$1"
+CLEAN=false
+if [ "${HYDRA_BOOTSTRAP_CLEAN:-}" = "1" ]; then
+    CLEAN=true
+fi
+
+OUTPUT_DIR=""
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --clean) CLEAN=true; shift ;;
+        --no-clean) CLEAN=false; shift ;;
+        --) shift; break ;;
+        --*) echo "Unknown flag: $1" >&2; exit 1 ;;
+        *)  OUTPUT_DIR="$1"; shift ;;
+    esac
+done
+
 if [ -z "$OUTPUT_DIR" ]; then
-    echo "Usage: $0 <output-dir>"
+    echo "Usage: $0 [--clean] <output-dir>"
     exit 1
 fi
 
@@ -19,6 +41,36 @@ HYDRA_HASKELL_DIR="$HYDRA_ROOT/packages/hydra-haskell"
 HYDRA_KERNEL_DIR="$HYDRA_ROOT/packages/hydra-kernel"
 HYDRA_HASKELL_HEAD_DIR="$HYDRA_ROOT/heads/haskell"
 HASKELL_RESOURCES="$SCRIPT_DIR/../resources/haskell"
+
+source "$HYDRA_ROOT/bin/lib/common.sh"
+
+# Compute a cache hash over every path the overlay sequence below reads from,
+# plus this script itself. A change to any of those invalidates the cache
+# and triggers a full wipe-and-overlay.
+PREP_HASH=$(
+    {
+        find "$HYDRA_HASKELL_HEAD_DIR/src/main/haskell/Hydra" \
+             "$HYDRA_KERNEL_DIR/src/main/haskell/Hydra" \
+             "$HYDRA_HASKELL_DIR/src/main/haskell/Hydra" \
+             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Decode" \
+             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Sources/Encode" \
+             "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsl" \
+             "$HYDRA_ROOT/dist/haskell/hydra-haskell/src/main/haskell/Hydra/Dsl" \
+             "$HYDRA_HASKELL_HEAD_DIR/src/test/haskell" \
+             "$HASKELL_RESOURCES" \
+             -type f 2>/dev/null
+        echo "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/main/haskell/Hydra/Dsls.hs"
+        echo "$HYDRA_ROOT/dist/haskell/hydra-kernel/src/test/haskell/Hydra/Test/TestEnv.hs"
+        echo "${BASH_SOURCE[0]}"
+    } | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null | shasum -a 256 | awk '{print $1}'
+)
+PREP_CACHE="$OUTPUT_DIR/.bootstrap-prep-hash"
+
+if [ "$CLEAN" = false ] && step_cache_hit "$PREP_CACHE" "$PREP_HASH"; then
+    echo "Output directory already prepared (cache hit): $OUTPUT_DIR"
+    echo "  Pass --clean (or HYDRA_BOOTSTRAP_CLEAN=1) to force a fresh wipe + recopy."
+    exit 0
+fi
 
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"
@@ -120,3 +172,7 @@ touch "$OUTPUT_DIR/LICENSE"
 STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.hs" 2>/dev/null | wc -l | tr -d ' ')
 echo "  Static resources: $STATIC_COUNT files"
 echo ""
+
+# Record the input hash so the next invocation can short-circuit when nothing
+# under the source paths above has changed.
+step_cache_record "$PREP_CACHE" "$PREP_HASH"

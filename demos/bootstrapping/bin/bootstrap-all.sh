@@ -24,6 +24,10 @@
 #   --repeat N              Run tests N times (default: 1)
 #   --run RUN               Use a specific run directory (test mode)
 #   --paths p1,p2,...       Test only specific paths (test mode)
+#   --clean                 Force a fresh wipe + recopy of each target dir.
+#                           Default is incremental: per-target setup scripts
+#                           skip the wipe when their inputs are unchanged.
+#                           Pass --clean for cold-start timing measurements.
 #
 # All generated code goes to /tmp/hydra-bootstrapping-demo with subdirectories:
 #   {host}-to-{target}/
@@ -74,6 +78,7 @@ while [ $# -gt 0 ]; do
         --run=*) RUN_SPEC="${1#--run=}" ;;
         --paths) PATH_FILTER="$2"; shift ;;
         --paths=*) PATH_FILTER="${1#--paths=}" ;;
+        --clean) export HYDRA_BOOTSTRAP_CLEAN=1 ;;
     esac
     shift
 done
