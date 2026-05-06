@@ -60,6 +60,7 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 # Per-source-set freshness check via digest-check. See
 # heads/java/bin/assemble-distribution.sh for the pattern; same shape
 # across every target language.
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
 # Step 1: Main modules.
@@ -117,9 +118,6 @@ case "$PACKAGE" in
         # wheel is self-contained.
         echo "Step 3b: Copying hand-written Python runtime into hydra-kernel dist..."
         "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
-        ;;
-    *)
-        # No per-package post-processing for other packages today.
         ;;
 esac
 
