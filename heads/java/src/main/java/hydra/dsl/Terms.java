@@ -20,16 +20,16 @@ import hydra.core.TypeApplicationTerm;
 import hydra.core.TypeLambda;
 import hydra.core.WrappedTerm;
 import hydra.util.Comparison;
+import hydra.util.ConsList;
 import hydra.util.Either;
 import hydra.util.Maybe;
 import hydra.util.Pair;
+import hydra.util.PersistentMap;
+import hydra.util.PersistentSet;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +63,7 @@ public interface Terms {
      * @return the annotated term
      */
     static Term annot(Map<Name, Term> ann, Term base) {
-        return new Term.Annotated(new AnnotatedTerm(base, new TreeMap<>(ann)));
+        return new Term.Annotated(new AnnotatedTerm(base, PersistentMap.<Name, Term>coerce(ann)));
     }
 
     /**
@@ -74,9 +74,7 @@ public interface Terms {
      * @return the annotated term
      */
     static Term annot(Name key, Term value, Term base) {
-        Map<Name, Term> mp = new TreeMap<>();
-        mp.put(key, value);
-        return annot(mp, base);
+        return annot(PersistentMap.singleton(key, value), base);
     }
 
     /**
@@ -628,9 +626,7 @@ public interface Terms {
      */
     static Term let_(String varName, Term defined, Term body) {
         Binding binding = new Binding(name(varName), defined, Maybe.nothing());
-        List<Binding> bindings = new ArrayList<>();
-        bindings.add(binding);
-        return new Term.Let(new Let(bindings, body));
+        return new Term.Let(new Let(ConsList.singleton(binding), body));
     }
 
     /**
@@ -641,11 +637,11 @@ public interface Terms {
      * @return the let term
      */
     static Term lets(List<Field> bindings, Term body) {
-        List<Binding> letBindings = new ArrayList<>();
+        ConsList<Binding> reversed = ConsList.empty();
         for (Field f : bindings) {
-            letBindings.add(new Binding(f.name, f.term, Maybe.nothing()));
+            reversed = ConsList.cons(new Binding(f.name, f.term, Maybe.nothing()), reversed);
         }
-        return new Term.Let(new Let(letBindings, body));
+        return new Term.Let(new Let(reversed.reverse(), body));
     }
 
     /**
@@ -700,7 +696,7 @@ public interface Terms {
      * @return the list term
      */
     static Term list(Term... elements) {
-        return new Term.List(Arrays.asList(elements));
+        return new Term.List(ConsList.of(elements));
     }
 
     /**
@@ -718,11 +714,11 @@ public interface Terms {
      * @return the list term
      */
     static Term listOfStrings(List<String> elements) {
-        List<Term> terms = new ArrayList<>();
+        ConsList<Term> reversed = ConsList.empty();
         for (String s : elements) {
-            terms.add(string(s));
+            reversed = ConsList.cons(string(s), reversed);
         }
-        return list(terms);
+        return list(reversed.reverse());
     }
 
     /**
@@ -732,7 +728,7 @@ public interface Terms {
      * @return the map term
      */
     static Term map(Map<Term, Term> value) {
-        return new Term.Map(new TreeMap<>(value));
+        return new Term.Map(PersistentMap.<Term, Term>coerce(value));
     }
 
     /**
@@ -742,7 +738,7 @@ public interface Terms {
      * @return the set term
      */
     static Term set(Set<Term> value) {
-        return new Term.Set(new TreeSet<>(value));
+        return new Term.Set(PersistentSet.<Term>coerce(value));
     }
 
     // ===== Optional terms =====

@@ -6,9 +6,9 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -49,7 +49,7 @@ public class MaybeTail extends PrimitiveFunction {
         if (list.isEmpty()) {
             return Maybe.nothing();
         } else {
-            return Maybe.just(new ArrayList<>(list.subList(1, list.size())));
+            return Maybe.just(ConsList.fromList(list).tail());
         }
     }
 }

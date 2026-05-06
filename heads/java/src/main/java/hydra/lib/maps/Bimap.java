@@ -9,7 +9,6 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -19,6 +18,7 @@ import static hydra.dsl.Types.map;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.util.Either;
+import hydra.util.PersistentMap;
 
 
 /**
@@ -51,7 +51,8 @@ public class Bimap extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
-                java.util.TreeMap<Term, Term> result = new java.util.TreeMap<>();
+                @SuppressWarnings({"rawtypes", "unchecked"})
+                PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
                     Either<Error_, Term> kr = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
@@ -59,10 +60,10 @@ public class Bimap extends PrimitiveFunction {
                     Either<Error_, Term> vr = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
                     if (vr.isLeft()) return (Either) vr;
-                    result.put(((Either.Right<Error_, Term>) kr).value,
-                               ((Either.Right<Error_, Term>) vr).value);
+                    result = result.insert(((Either.Right<Error_, Term>) kr).value,
+                                            ((Either.Right<Error_, Term>) vr).value);
                 }
-                return Either.right(Terms.map(FromList.orderedMap(result)));
+                return Either.right(Terms.map(result));
             });
     }
 
@@ -93,9 +94,10 @@ public class Bimap extends PrimitiveFunction {
      */
     public static <K1, K2, V1, V2> Map<K2, V2> apply(
             Function<K1, K2> kf, Function<V1, V2> vf, Map<K1, V1> mp) {
-        Map<K2, V2> result = new TreeMap<>();
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        PersistentMap<K2, V2> result = PersistentMap.<K2, V2>empty();
         for (Map.Entry<K1, V1> e : mp.entrySet()) {
-            result.put(kf.apply(e.getKey()), vf.apply(e.getValue()));
+            result = result.insert(kf.apply(e.getKey()), vf.apply(e.getValue()));
         }
         return result;
     }

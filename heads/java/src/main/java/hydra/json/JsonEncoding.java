@@ -4,7 +4,6 @@ import hydra.core.Name;
 import hydra.json.model.Value;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -379,7 +378,12 @@ public abstract class JsonEncoding {
      * @return this builder
      */
     public <L> ObjectBuilder putOptSet(String key, Maybe<Set<L>> values, Function<L, Value> mapping) {
-      return put(key, toJson(new ArrayList<>(values.orElse(Collections.emptySet())), mapping));
+      Set<L> s = values.orElse(Collections.emptySet());
+      ConsList<L> reversed = ConsList.empty();
+      for (L x : s) {
+        reversed = ConsList.cons(x, reversed);
+      }
+      return put(key, toJson(reversed.reverse(), mapping));
     }
 
     /**

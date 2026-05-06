@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.TreeSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -20,6 +19,7 @@ import static hydra.dsl.Types.set;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.util.Either;
+import hydra.util.PersistentSet;
 
 /**
  * Computes the set difference.
@@ -69,8 +69,6 @@ public class Difference extends PrimitiveFunction {
      * @return a new set containing elements in s1 but not in s2
      */
     public static <X> Set<X> apply(Set<X> s1, Set<X> s2) {
-        Set<X> result = new TreeSet<>(s1);
-        result.removeAll(s2);
-        return result;
+        return PersistentSet.<X>coerce(s1).difference(PersistentSet.<X>coerce(s2));
     }
 }

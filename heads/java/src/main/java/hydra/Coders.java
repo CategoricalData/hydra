@@ -3,11 +3,11 @@ package hydra;
 import hydra.coders.Coder;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
+import hydra.util.PersistentMap;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.function.Function;
 
 
@@ -79,9 +79,9 @@ public class Coders {
      */
     public static <V1, V2> Either<String, V1> roundTrip(Coder<V1, V2> coder, V1 initialValue) {
         Context cx = new Context(
-            new ArrayList<>(),
-            new ArrayList<>(),
-            new HashMap<>());
+            ConsList.empty(),
+            ConsList.empty(),
+            PersistentMap.empty());
         Either<Error_, V2> encResult = coder.encode.apply(cx).apply(initialValue);
         if (encResult.isLeft()) {
             return Either.left(hydra.show.Errors.error(((Either.Left<Error_, V2>) encResult).value));
