@@ -104,7 +104,7 @@ compactName = define "compactName" $
 localNameOf :: TTermDefinition (Name -> String)
 localNameOf = define "localNameOf" $
   doc "Extract the local part of a name" $
-  unaryFunction Packaging.qualifiedNameLocal <.> qualifyName
+  reify Packaging.qualifiedNameLocal <.> qualifyName
 
 nameToFilePath :: TTermDefinition (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
 nameToFilePath = define "nameToFilePath" $
@@ -126,7 +126,7 @@ nameToFilePath = define "nameToFilePath" $
 namespaceOf :: TTermDefinition (Name -> Maybe Namespace)
 namespaceOf = define "namespaceOf" $
   doc "Extract the namespace of a name, if any" $
-  unaryFunction Packaging.qualifiedNameNamespace <.> qualifyName
+  reify Packaging.qualifiedNameNamespace <.> qualifyName
 
 namespaceToFilePath :: TTermDefinition (CaseConvention -> FileExtension -> Namespace -> String)
 namespaceToFilePath = define "namespaceToFilePath" $

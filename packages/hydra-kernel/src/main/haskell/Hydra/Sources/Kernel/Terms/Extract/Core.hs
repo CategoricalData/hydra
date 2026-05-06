@@ -318,7 +318,7 @@ decodeMap = define "decodeMap" $
     ("stripped" ~> Phantoms.cases _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected map") [
       _Term_map>>: "m" ~>
-        Eithers.map (unaryFunction Maps.fromList)
+        Eithers.map (reify Maps.fromList)
           (Eithers.mapList
             ("kv" ~>
               Eithers.bind (var "keyDecoder" @@ var "g" @@ (Pairs.first $ var "kv"))
@@ -367,7 +367,7 @@ decodeSet = define "decodeSet" $
     ("stripped" ~> Phantoms.cases _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected set") [
       _Term_set>>: "s" ~>
-        Eithers.map (unaryFunction Sets.fromList)
+        Eithers.map (reify Sets.fromList)
           (Eithers.mapList (var "elemDecoder" @@ var "g") (Sets.toList $ var "s"))])
 
 -- | Decode a unit value
@@ -410,8 +410,8 @@ eitherTerm = define "eitherTerm" $
       (Phantoms.string "either value")
       (ShowCore.term @@ var "term"))) [
     _Term_either>>: "et" ~> Eithers.either_
-      ("l" ~> Eithers.map (unaryFunction left) (var "leftFun" @@ var "l"))
-      ("r" ~> Eithers.map (unaryFunction right) (var "rightFun" @@ var "r"))
+      ("l" ~> Eithers.map (reify left) (var "leftFun" @@ var "l"))
+      ("r" ~> Eithers.map (reify right) (var "rightFun" @@ var "r"))
       (var "et")]
 
 eitherType :: TTermDefinition (Type -> Prelude.Either Error EitherType)
@@ -599,7 +599,7 @@ lambda = define "lambda" $
 lambdaBody :: TTermDefinition (Graph -> Term -> Prelude.Either Error Term)
 lambdaBody = define "lambdaBody" $
   doc "Extract the body of a lambda term" $
-  "graph" ~> "term" ~> Eithers.map (unaryFunction Core.lambdaBody) (lambda @@ var "graph" @@ var "term")
+  "graph" ~> "term" ~> Eithers.map (reify Core.lambdaBody) (lambda @@ var "graph" @@ var "term")
 
 let_ :: TTermDefinition (Graph -> Term -> Prelude.Either Error Let)
 let_ = define "let" $
@@ -686,7 +686,7 @@ map = define "map" $
     (Just (unexpected
       (Phantoms.string "map")
       (ShowCore.term @@ var "term"))) [
-    _Term_map>>: "m" ~> Eithers.map (unaryFunction Maps.fromList) (Eithers.mapList (var "pair") (Maps.toList (var "m")))]
+    _Term_map>>: "m" ~> Eithers.map (reify Maps.fromList) (Eithers.mapList (var "pair") (Maps.toList (var "m")))]
 
 mapType :: TTermDefinition (Type -> Prelude.Either Error MapType)
 mapType = define "mapType" $
@@ -710,7 +710,7 @@ maybeTerm = define "maybeTerm" $
       (ShowCore.term @@ var "term"))) [
     _Term_maybe>>: "mt" ~> Maybes.maybe
       (right nothing)
-      ("t" ~> Eithers.map (unaryFunction just) (var "f" @@ var "t"))
+      ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))
       (var "mt")]
 
 maybeType :: TTermDefinition (Type -> Prelude.Either Error Type)

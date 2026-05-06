@@ -1133,7 +1133,7 @@ findTypeDependencies = def "findTypeDependencies" $
     Lists.filter
       (lambda "n" $
         Logic.not (Equality.equal
-          (Maybes.map (unaryFunction Packaging.unNamespace) (Names.namespaceOf @@ var "n"))
+          (Maybes.map (reify Packaging.unNamespace) (Names.namespaceOf @@ var "n"))
           (just (Packaging.unNamespace (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $

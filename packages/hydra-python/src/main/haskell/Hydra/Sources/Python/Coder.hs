@@ -706,7 +706,7 @@ encodeBindingAs = def "encodeBindingAs" $
               (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
                 ("stmts" ~> Maybes.maybe
                   (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements")
-                  (unaryFunction right)
+                  (reify right)
                   (Lists.maybeHead (var "stmts"))))
               -- Case elimination function - encode as function with match statement
           ("cs" ~>
@@ -752,7 +752,7 @@ encodeBindingAs = def "encodeBindingAs" $
               (Eithers.bind (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "term1")
                 ("stmts" ~> Maybes.maybe
                   (left $ Error.errorOther $ Error.otherError $ string "encodeTermMultiline returned no statements")
-                  (unaryFunction right)
+                  (reify right)
                   (Lists.maybeHead (var "stmts"))))
               ("cs" ~>
                 "tname" <~ (Core.caseStatementTypeName $ var "cs") $
@@ -2463,7 +2463,7 @@ gatherMetadata = def "gatherMetadata" $
           "term" <~ Packaging.termDefinitionTerm (var "termDef") $
           "typ" <~ Maybes.maybe
             (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-            (unaryFunction Core.typeSchemeBody)
+            (reify Core.typeSchemeBody)
             (Packaging.termDefinitionTypeScheme (var "termDef")) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $

@@ -3281,7 +3281,7 @@ encodeTermTCO = def "encodeTermTCO" $
             (Just false) [
             _Term_variable>>: "n" ~> Equality.equal (var "n") (Pairs.first (var "pair"))]))
           (Lists.zip (var "paramNames") (var "gatherArgs")) $
-        "changedParams" <~ Lists.map (unaryFunction Pairs.first) (var "changePairs") $
+        "changedParams" <~ Lists.map (reify Pairs.first) (var "changePairs") $
         "jChangedArgs" <<~ Eithers.mapList ("pair" ~> encodeTerm @@ var "env" @@ (Pairs.second (var "pair")) @@ var "cx" @@ var "g")
           (var "changePairs") $
         "assignments" <~ (Lists.map ("pair" ~>

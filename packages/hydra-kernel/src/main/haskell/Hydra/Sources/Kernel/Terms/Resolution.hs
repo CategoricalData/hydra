@@ -121,7 +121,7 @@ dereferenceType = define "dereferenceType" $
   "mel" <~ Lexical.lookupBinding @@ var "graph" @@ var "name" $
   optCases (var "mel")
     (right nothing)
-    ("el" ~> Eithers.map (unaryFunction just)
+    ("el" ~> Eithers.map (reify just)
       (Eithers.bimap ("_e" ~> Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError (string "type") (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
           (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))
 
@@ -228,7 +228,7 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
   "result" <~ Names.freshNames @@ Lists.length (var "oldVars") @@ var "cx" $
   "newVars" <~ Pairs.first (var "result") $
   "cx2" <~ Pairs.second (var "result") $
-  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "oldVars") (Lists.map (unaryFunction Core.typeVariable) $ var "newVars")) $
+  "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "oldVars") (Lists.map (reify Core.typeVariable) $ var "newVars")) $
   -- Build a name-to-name substitution for renaming constraint keys
   "nameSubst" <~ Maps.fromList (Lists.zip (var "oldVars") (var "newVars")) $
   -- Rename the keys in the constraints map using the name substitution
@@ -275,7 +275,7 @@ requireRowType = define "requireRowType" $
       (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorUnexpectedShape $ Error.unexpectedShapeError
         (Strings.cat2 (var "label") (string " type"))
         (Strings.cat2 (Core.unName (var "name")) (Strings.cat2 (string ": ") (ShowCore.type_ @@ var "t")))) (var "cx"))
-      (unaryFunction right)
+      (reify right)
       (var "getter" @@ (var "rawType" @@ var "t")))
 
 requireSchemaType :: TTermDefinition (Context -> M.Map Name TypeScheme -> Name -> Either Error (TypeScheme, Context))
