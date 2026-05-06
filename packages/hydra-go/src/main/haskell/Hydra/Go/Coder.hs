@@ -367,7 +367,6 @@ encodeLiteralType lt st = case lt of
 
 encodeFloatType :: Core.FloatType -> GoState -> GoResult Go.Type
 encodeFloatType ft st = case ft of
-  Core.FloatTypeBigfloat -> pure (goSimpleTypeName "float64", st)  -- Go has no bigfloat; use float64
   Core.FloatTypeFloat32 -> pure (goSimpleTypeName "float32", st)
   Core.FloatTypeFloat64 -> pure (goSimpleTypeName "float64", st)
 
@@ -468,7 +467,6 @@ encodeFloatValue :: Core.FloatValue -> GoState -> GoResult Go.Expression
 encodeFloatValue fv st = case fv of
   Core.FloatValueFloat32 f -> pure (goFloatLitExpr (realToFrac f), st)
   Core.FloatValueFloat64 f -> pure (goFloatLitExpr f, st)
-  Core.FloatValueBigfloat f -> pure (goFloatLitExpr f, st)
 
 encodeIntegerValue :: Core.IntegerValue -> GoState -> GoResult Go.Expression
 encodeIntegerValue iv st = case iv of
