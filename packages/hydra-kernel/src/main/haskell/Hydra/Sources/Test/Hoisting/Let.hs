@@ -23,7 +23,7 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Hoisting as HoistingModule
+import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
 
 
 ns :: Namespace
@@ -33,7 +33,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, HoistingModule.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Hoisting.ns] ++ kernelTypesNamespaces,
             moduleDescription = Just "Test cases for let-binding hoisting transformations"}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -58,13 +58,13 @@ showLet l = ShowCore.let_ @@ l
 -- | Local universal version of hoistLetBindingsCase (hoistAll=True)
 hoistLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
 hoistLetBindingsCase cname input output = universalCase cname
-  (showLet (HoistingModule.hoistAllLetBindings @@ input))
+  (showLet (Hoisting.hoistAllLetBindings @@ input))
   (showLet output)
 
 -- | Local universal version of hoistPolymorphicLetBindingsCase
 hoistPolymorphicLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
 hoistPolymorphicLetBindingsCase cname input output = universalCase cname
-  (showLet (HoistingModule.hoistPolymorphicLetBindings @@ Phantoms.lambda "b" (Phantoms.boolean True) @@ input))
+  (showLet (Hoisting.hoistPolymorphicLetBindings @@ Phantoms.lambda "b" (Phantoms.boolean True) @@ input))
   (showLet output)
 
 -- Helper for single-binding let
@@ -72,8 +72,6 @@ letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper for multi-binding let
-multiLet :: [(String, TTerm Term)] -> TTerm Term -> TTerm Term
-multiLet bindings body = lets ((\(n, v) -> (nm n, v)) <$> bindings) body
 
 -- | Convenience function for creating hoist let bindings test cases (hoistAll=True)
 hoistAllCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata

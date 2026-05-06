@@ -22,7 +22,7 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Strip as StripModule
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 
 
 ns :: Namespace
@@ -32,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, StripModule.ns, TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Strip.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for annotation and type stripping operations")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -58,10 +58,10 @@ typeCase cname func input output = universalCase cname (showType (func @@ input)
 
 -- | Convenience helpers for specific kernel functions
 deannotateTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-deannotateTermCase cname = termCase cname StripModule.deannotateTerm
+deannotateTermCase cname = termCase cname Strip.deannotateTerm
 
 deannotateTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-deannotateTypeCase cname = typeCase cname StripModule.deannotateType
+deannotateTypeCase cname = typeCase cname Strip.deannotateType
 
 -- Helper to build an empty annotation map
 emptyAnnMap :: TTerm (M.Map Name Term)
