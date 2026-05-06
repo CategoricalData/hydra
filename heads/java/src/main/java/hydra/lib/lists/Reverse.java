@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -18,6 +16,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 /**
@@ -47,8 +46,6 @@ public class Reverse extends PrimitiveFunction {
      * @return a new list with elements in reverse order
      */
     public static <X> List<X> apply(List<X> list) {
-        ArrayList<X> result = new ArrayList<>(list);
-        Collections.reverse(result);
-        return result;
+        return ConsList.fromList(list).reverse();
     }
 }
