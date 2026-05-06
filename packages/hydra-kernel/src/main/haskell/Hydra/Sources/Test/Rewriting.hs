@@ -3,13 +3,14 @@
 -- | Test cases for core rewrite/fold combinators (foldOverTerm, rewriteTerm, rewriteType, rewriteAndFoldTermWithPath)
 module Hydra.Sources.Test.Rewriting where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -48,10 +49,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- Field constructor for cases/match (uses Phantoms.>>: to create Field, since the unqualified >>: from Testing creates tuples)
 (~>:) :: AsTerm t a => Name -> t -> Field
@@ -60,11 +57,11 @@ infixr 0 ~>:
 
 -- | Show a term as a string using ShowCore.term
 showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term # t
+showTerm t = ShowCore.term @@ t
 
 -- | Show a type as a string using ShowCore.type_
 showType :: TTerm Type -> TTerm String
-showType t = ShowCore.type_ # t
+showType t = ShowCore.type_ @@ t
 
 -- | Core DSL Term-level constructors for building Term-typed values
 -- These produce values of Hydra type Term (not String, Int, etc.)
@@ -78,7 +75,7 @@ replaceFooWithBarFn = Phantoms.lambda "recurse" $ Phantoms.lambda "term" $
   Logic.ifElse
     (Equality.equal (Phantoms.var "term") (tStr "foo"))
     (tStr "bar")
-    (Phantoms.var "recurse" # Phantoms.var "term")
+    (Phantoms.var "recurse" @@ Phantoms.var "term")
 
 -- | The "replaceStringWithInt32" rewriter function for rewriteType tests
 -- \recurse typ -> if typ == TypeLiteral LiteralTypeString then TypeLiteral (LiteralTypeInteger IntegerTypeInt32) else recurse typ
@@ -87,7 +84,7 @@ replaceStringWithInt32Fn = Phantoms.lambda "recurse" $ Phantoms.lambda "typ" $
   Logic.ifElse
     (Equality.equal (Phantoms.var "typ") (Core.typeLiteral Core.literalTypeString))
     (Core.typeLiteral (Core.literalTypeInteger Core.integerTypeInt32))
-    (Phantoms.var "recurse" # Phantoms.var "typ")
+    (Phantoms.var "recurse" @@ Phantoms.var "typ")
 
 -- | Fold operation: sum int32 literals
 -- \acc term -> acc + (case term of TermLiteral (LiteralInteger (IntegerValueInt32 n)) -> n; _ -> 0)
@@ -144,26 +141,26 @@ foldOpCollectLabels = FoldOpCollectLabels
 applyFoldOp :: FoldOp -> TTerm TraversalOrder -> TTerm Term -> TTerm Term
 applyFoldOp FoldOpSumInt32 order input =
   Core.termLiteral (Core.literalInteger (Core.integerValueInt32
-    (RewritingModule.foldOverTerm # order # sumInt32LiteralsFoldFn # Phantoms.int32 0 # input)))
+    (RewritingModule.foldOverTerm @@ order @@ sumInt32LiteralsFoldFn @@ Phantoms.int32 0 @@ input)))
 applyFoldOp FoldOpCollectListLengths order input =
   Core.termList (Lists.map
     (Phantoms.lambda "n" $ Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Phantoms.var "n"))))
-    (RewritingModule.foldOverTerm # order # collectListLengthsFoldFn # Phantoms.list ([] :: [TTerm Int]) # input))
+    (RewritingModule.foldOverTerm @@ order @@ collectListLengthsFoldFn @@ Phantoms.list ([] :: [TTerm Int]) @@ input))
 applyFoldOp FoldOpCollectLabels order input =
   Core.termList (Lists.map
     (Phantoms.lambda "lit" $ Core.termLiteral (Phantoms.var "lit"))
-    (RewritingModule.foldOverTerm # order # collectLabelsFoldFn # Phantoms.list ([] :: [TTerm Literal]) # input))
+    (RewritingModule.foldOverTerm @@ order @@ collectLabelsFoldFn @@ Phantoms.list ([] :: [TTerm Literal]) @@ input))
 
 -- | Universal rewriteTerm test case: applies replaceFooWithBar rewriter
 rewriteTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 rewriteTermCase cname input output = universalCase cname
-  (showTerm (RewritingModule.rewriteTerm # replaceFooWithBarFn # input))
+  (showTerm (RewritingModule.rewriteTerm @@ replaceFooWithBarFn @@ input))
   (showTerm output)
 
 -- | Universal rewriteType test case: applies replaceStringWithInt32 rewriter
 rewriteTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
 rewriteTypeCase cname input output = universalCase cname
-  (showType (RewritingModule.rewriteType # replaceStringWithInt32Fn # input))
+  (showType (RewritingModule.rewriteType @@ replaceStringWithInt32Fn @@ input))
   (showType output)
 
 -- Helper to build names
@@ -475,8 +472,8 @@ rewriteTermGroup = subgroup "rewriteTerm" [
 
     -- Annotated terms
     rewriteTermCase "string in annotated term body"
-      (annot emptyAnnMap foo)
-      (annot emptyAnnMap bar),
+      (annots emptyAnnMap foo)
+      (annots emptyAnnMap bar),
 
     -- Multiple bindings in let
     rewriteTermCase "string in first of multiple let bindings"
@@ -518,8 +515,8 @@ rewriteTermGroup = subgroup "rewriteTerm" [
       (letExpr "handler" (match (nm "Result") nothing [(nm "ok", bar), (nm "err", baz)]) (var "handler")),
 
     rewriteTermCase "string in annotated wrapped record field"
-      (annot emptyAnnMap (wrap (nm "User") (record (nm "UserData") [(nm "name", foo)])))
-      (annot emptyAnnMap (wrap (nm "User") (record (nm "UserData") [(nm "name", bar)])))]
+      (annots emptyAnnMap (wrap (nm "User") (record (nm "UserData") [(nm "name", foo)])))
+      (annots emptyAnnMap (wrap (nm "User") (record (nm "UserData") [(nm "name", bar)])))]
 
 allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $

@@ -3,13 +3,14 @@
 -- | Test cases for dependency analysis and let-term transformations
 module Hydra.Sources.Test.Dependencies where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -42,18 +43,14 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- | Show a term as a string using ShowCore.term
 showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term # t
+showTerm t = ShowCore.term @@ t
 
 -- | Helper for Term -> Term kernel function test cases
 termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-termCase cname func input output = universalCase cname (showTerm (func # input)) (showTerm output)
+termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
 
 -- Helper to build names
 nm :: String -> TTerm Name
@@ -74,19 +71,19 @@ emptyAnnMap = Phantoms.map M.empty
 -- | Universal sortBindingsCase: applies topologicalSortBindingMap and shows result
 sortBindingsCase :: String -> TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TestCaseWithMetadata
 sortBindingsCase cname bindings expected = universalCase cname
-  (showBindingGroups (DependenciesModule.topologicalSortBindingMap # Maps.fromList bindings))
+  (showBindingGroups (DependenciesModule.topologicalSortBindingMap @@ Maps.fromList bindings))
   (showBindingGroups expected)
   where
     showBindingGroups :: TTerm [[(Name, Term)]] -> TTerm String
-    showBindingGroups groups = ShowCore.list_ # showGroupFn # groups
+    showBindingGroups groups = ShowCore.list_ @@ showGroupFn @@ groups
     showGroupFn :: TTerm ([(Name, Term)] -> String)
-    showGroupFn = Phantoms.lambda "group" $ ShowCore.list_ # showBindingFn # Phantoms.var "group"
+    showGroupFn = Phantoms.lambda "group" $ ShowCore.list_ @@ showBindingFn @@ Phantoms.var "group"
     showBindingFn :: TTerm ((Name, Term) -> String)
     showBindingFn = Phantoms.lambda "pair" $ Strings.cat (Phantoms.list [
       Phantoms.string "(",
       Core.unName (Pairs.first (Phantoms.var "pair")),
       Phantoms.string ", ",
-      ShowCore.term # Pairs.second (Phantoms.var "pair"),
+      ShowCore.term @@ Pairs.second (Phantoms.var "pair"),
       Phantoms.string ")"])
 
 -- | Convenience helpers for specific kernel functions
@@ -281,37 +278,37 @@ liftLambdaAboveLetGroup = subgroup "liftLambdaAboveLet" [
 
     -- Annotation cases
     liftLambdaCase "annotation above let containing lambda"
-      (annot emptyAnnMap
+      (annots emptyAnnMap
         (letExpr "x" (int32 42) (lambda "y" (var "x"))))
-      (annot emptyAnnMap
+      (annots emptyAnnMap
         (lambda "y" (letExpr "x" (int32 42) (var "x")))),
 
     liftLambdaCase "annotation above lambda in let body"
       (letExpr "x" (int32 42)
-        (annot emptyAnnMap (lambda "y" (var "x"))))
+        (annots emptyAnnMap (lambda "y" (var "x"))))
       (lambda "y"
-        (annot emptyAnnMap (letExpr "x" (int32 42) (var "x")))),
+        (annots emptyAnnMap (letExpr "x" (int32 42) (var "x")))),
 
     liftLambdaCase "annotation between two lambdas"
       (letExpr "x" (int32 42)
         (lambda "y"
-          (annot emptyAnnMap (lambda "z" (var "x")))))
+          (annots emptyAnnMap (lambda "z" (var "x")))))
       (lambda "y"
         (lambda "z"
-          (annot emptyAnnMap (letExpr "x" (int32 42) (var "x"))))),
+          (annots emptyAnnMap (letExpr "x" (int32 42) (var "x"))))),
 
     liftLambdaCase "annotation on the body of lambda in let"
       (letExpr "x" (int32 42)
         (lambda "y"
-          (annot emptyAnnMap (var "x"))))
+          (annots emptyAnnMap (var "x"))))
       (lambda "y"
         (letExpr "x" (int32 42)
-          (annot emptyAnnMap (var "x")))),
+          (annots emptyAnnMap (var "x")))),
 
     liftLambdaCase "annotation on lambda already above let"
-      (annot emptyAnnMap
+      (annots emptyAnnMap
         (lambda "y" (letExpr "x" (int32 42) (var "x"))))
-      (annot emptyAnnMap
+      (annots emptyAnnMap
         (lambda "y" (letExpr "x" (int32 42) (var "x")))),
 
     -- Recursive lifting in nested structures

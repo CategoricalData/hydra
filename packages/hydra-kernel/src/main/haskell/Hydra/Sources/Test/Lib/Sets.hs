@@ -2,13 +2,14 @@
 
 module Hydra.Sources.Test.Lib.Sets where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -37,9 +38,6 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 showInt32 :: TTerm (Int -> String)
 showInt32 = Phantoms.lambda "n" $ Literals.showInt32 (Phantoms.var "n")
@@ -48,10 +46,10 @@ showBool :: TTerm (Bool -> String)
 showBool = Phantoms.lambda "b" $ Literals.showBoolean (Phantoms.var "b")
 
 showIntSet :: TTerm (S.Set Int -> String)
-showIntSet = Phantoms.lambda "s" $ ShowCore.set_ # showInt32 # Phantoms.var "s"
+showIntSet = Phantoms.lambda "s" $ ShowCore.set_ @@ showInt32 @@ Phantoms.var "s"
 
 showIntList :: TTerm ([Int] -> String)
-showIntList = Phantoms.lambda "xs" $ ShowCore.list_ # showInt32 # Phantoms.var "xs"
+showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
 -- Phantom-typed helper for int sets
 pIntSet :: [Int] -> TTerm (S.Set Int)

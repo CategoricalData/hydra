@@ -3,13 +3,14 @@
 -- | Test cases for variable analysis and manipulation (free variables, unshadowing, normalization)
 module Hydra.Sources.Test.Variables where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -44,10 +45,6 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- Field constructor for cases/match (uses Phantoms.>>: to create Field, since the unqualified >>: from Testing creates tuples)
 (~>:) :: AsTerm t a => Name -> t -> Field
@@ -56,7 +53,7 @@ infixr 0 ~>:
 
 -- | Show a term as a string using ShowCore.term
 showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term # t
+showTerm t = ShowCore.term @@ t
 
 -- | Show a set of names as a sorted, comma-separated string: "{name1, name2, ...}"
 showNameSet :: TTerm (S.Set Name) -> TTerm String
@@ -69,7 +66,7 @@ showNameSet s = Strings.cat $ plist [
 
 -- | Helper for Term -> Term kernel function test cases
 termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-termCase cname func input output = universalCase cname (showTerm (func # input)) (showTerm output)
+termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
 
 -- Helper to build names
 nm :: String -> TTerm Name
@@ -96,7 +93,7 @@ normalizeTypeVarsCase cname = termCase cname VariablesModule.normalizeTypeVariab
 
 freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
 freeVarsCase cname input expected = universalCase cname
-  (showNameSet (VariablesModule.freeVariablesInTerm # input))
+  (showNameSet (VariablesModule.freeVariablesInTerm @@ input))
   (showNameSet expected)
 
 -- | Test cases for free variables computation
@@ -436,8 +433,8 @@ unshadowVariablesGroup = subgroup "unshadowVariables" [
     -- === Shadowing inside annotation ===
 
     unshadowCase "shadowed lambda inside annotated term"
-      (lambda "x" (annot emptyAnnMap (lambda "x" (var "x"))))
-      (lambda "x" (annot emptyAnnMap (lambda "x2" (var "x2")))),
+      (lambda "x" (annots emptyAnnMap (lambda "x" (var "x"))))
+      (lambda "x" (annots emptyAnnMap (lambda "x2" (var "x2")))),
 
     -- === Complex nesting ===
 
