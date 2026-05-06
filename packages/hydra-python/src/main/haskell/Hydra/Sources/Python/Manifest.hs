@@ -11,24 +11,24 @@ module Hydra.Sources.Python.Manifest (
 import Hydra.Kernel
 
 import qualified Hydra.Sources.Python.Coder as PythonCoder
-import qualified Hydra.Sources.Python.Environment as PythonEnvironment
-import qualified Hydra.Sources.Python.Language as PythonLanguage
-import qualified Hydra.Sources.Python.Names as PythonNames
-import qualified Hydra.Sources.Python.Serde as PythonSerde
-import qualified Hydra.Sources.Python.Syntax as PythonSyntax
+import qualified Hydra.Sources.Python.Environment as PyEnvironmentSource
+import qualified Hydra.Sources.Python.Language as PyLanguage
+import qualified Hydra.Sources.Python.Names as PyNames
+import qualified Hydra.Sources.Python.Serde as PySerde
+import qualified Hydra.Sources.Python.Syntax as PySyntax
 import qualified Hydra.Sources.Python.Testing as PythonTesting
-import qualified Hydra.Sources.Python.Utils as PythonUtils
+import qualified Hydra.Sources.Python.Utils as PyUtils
 
 mainModules :: [Module]
 mainModules = [
   PythonCoder.module_,
-  PythonEnvironment.module_,
-  PythonLanguage.module_,
-  PythonNames.module_,
-  PythonSerde.module_,
-  PythonSyntax.module_,
+  PyEnvironmentSource.module_,
+  PyLanguage.module_,
+  PyNames.module_,
+  PySerde.module_,
+  PySyntax.module_,
   PythonTesting.module_,
-  PythonUtils.module_]
+  PyUtils.module_]
 
 testModules :: [Module]
 testModules = []
