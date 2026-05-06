@@ -100,6 +100,7 @@ packagePrefixes =
   , ("hydra.lisp.",                 "hydra-lisp")
   , ("hydra.coq.",                  "hydra-coq")
   , ("hydra.javaScript.",           "hydra-javascript")
+  , ("hydra.go.",                   "hydra-go")
     -- DSL wrapper modules for coder packages
   , ("hydra.dsl.haskell.",          "hydra-haskell")
   , ("hydra.dsl.java.",             "hydra-java")
@@ -108,6 +109,7 @@ packagePrefixes =
   , ("hydra.dsl.lisp.",             "hydra-lisp")
   , ("hydra.dsl.coq.",              "hydra-coq")
   , ("hydra.dsl.javaScript.",       "hydra-javascript")
+  , ("hydra.dsl.go.",               "hydra-go")
     -- Synthesized decoder source modules for coder packages
   , ("hydra.sources.decode.haskell.",    "hydra-haskell")
   , ("hydra.sources.decode.java.",       "hydra-java")
@@ -168,7 +170,6 @@ packagePrefixes =
   , ("hydra.datalog.",              "hydra-ext")
   , ("hydra.delta.",                "hydra-ext")
   , ("hydra.geojson.",              "hydra-ext")
-  , ("hydra.go.",                   "hydra-ext")
   , ("hydra.graphql.",              "hydra-ext")
   , ("hydra.iana.",                 "hydra-ext")
   , ("hydra.json.schema",           "hydra-ext")
@@ -190,7 +191,6 @@ packagePrefixes =
   , ("hydra.dsl.datalog.",          "hydra-ext")
   , ("hydra.dsl.delta.",            "hydra-ext")
   , ("hydra.dsl.geojson.",          "hydra-ext")
-  , ("hydra.dsl.go.",               "hydra-ext")
   , ("hydra.dsl.graphql.",          "hydra-ext")
   , ("hydra.dsl.iana.",             "hydra-ext")
   , ("hydra.dsl.json.schema",       "hydra-ext")

@@ -15,6 +15,11 @@ into eight host languages spanning five implementation families:
 Haskell, Java, Python, Scala, and Lisp (Clojure, Common Lisp, Emacs Lisp, Scheme — sharing one coder).
 All eight pass the common test suite.
 
+A ninth target, Go (`hydra-go`, `heads/go/`), is a "head bud" — the kernel can be generated
+to Go via `bin/sync-go.sh`, but the Go coder still has emission bugs and the head's
+hand-written runtime is mostly placeholder. Go is not yet a complete implementation
+and does not (yet) host the test suite.
+
 Key use cases: graph construction (TinkerPop, RDF, SHACL, GQL), data integration
 (coders for Protobuf, Avro, JSON, YAML, GraphQL, PDL, CSV/TSV, RDF), and computational
 graphs with deep support for polymorphism.
@@ -25,10 +30,16 @@ graphs with deep support for polymorphism.
 - **`heads/`** holds per-host runtimes that run those modules after translation to a target language.
 - **`dist/`** holds generated and copied artifacts. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
+- **`bindings/`** holds host-specific third-party integrations — adapters that wire Hydra
+  packages to external libraries (e.g., `bindings/java/hydra-rdf4j/` connects `hydra-rdf` to
+  rdf4j; `bindings/java/hydra-neo4j/` provides Cypher and GQL parsers via ANTLR).
+  Each binding is a separately publishable artifact in its host language and is **not**
+  part of the DSL-driven sync pipeline.
 
 The test for `packages/` vs `heads/`: does this code describe (or help describe) Hydra modules,
 or does it run them after translation?
 Description goes in `packages/`; running goes in `heads/`.
+Bindings sit outside both: hand-written adapters between Hydra and an external system.
 
 Generated files have a header: "Note: this is an automatically generated file. Do not edit."
 
@@ -217,6 +228,7 @@ give the user a brief status update approximately every 10 minutes.
 | `/sync-java()` | Run `bin/sync-java.sh` (--hosts java --targets java). |
 | `/sync-python()` | Run `bin/sync-python.sh`. |
 | `/sync-scala()` | Run `bin/sync-scala.sh`. |
+| `/sync-go()` | Run `bin/sync-go.sh` — generates kernel into `dist/go/`. Go is a "head bud"; only `hydra-kernel` is targeted (no `hydra-pg`/`hydra-rdf`), and Phase 4 host=go rows are skipped. |
 | `/sync-clojure()` etc. | Run `bin/sync-<dialect>.sh` for clojure / common-lisp / emacs-lisp / scheme. |
 
 ## Coding style (read the full guide!)

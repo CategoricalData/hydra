@@ -108,7 +108,6 @@ javaLanguage = define "javaLanguage" $
     Variants.literalVariantInteger, -- (see integer types)
     Variants.literalVariantString], -- string
   "floatTypes">: Sets.fromList $ list [
-    Core.floatTypeBigfloat, -- java.math.Bigfloat
     Core.floatTypeFloat32, -- float
     Core.floatTypeFloat64], -- double
   "functionVariants">: Sets.fromList $ list [

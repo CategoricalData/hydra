@@ -1216,9 +1216,6 @@ encodeLiteralType lt cx g =
         "java",
         "math"])) "BigDecimal")
       Core.LiteralTypeFloat v0 -> case v0 of
-        Core.FloatTypeBigfloat -> Right (Utils.javaRefType [] (Just (JavaNames.javaPackageName [
-          "java",
-          "math"])) "BigDecimal")
         Core.FloatTypeFloat32 -> encodeLiteralType_simple "Float" cx g
         Core.FloatTypeFloat64 -> encodeLiteralType_simple "Double" cx g
       Core.LiteralTypeInteger v0 -> case v0 of
@@ -1241,20 +1238,18 @@ encodeLiteralType_simple n cx g = Right (Utils.javaRefType [] Nothing n)
 encodeLiteral_encodeFloat :: Core.FloatValue -> Syntax.Expression
 encodeLiteral_encodeFloat f =
     case f of
-      Core.FloatValueBigfloat v0 -> Utils.javaConstructorCall (Utils.javaConstructorName (Syntax.Identifier "java.math.BigDecimal") Nothing) [
-        encodeLiteral (Core.LiteralString (Literals.showBigfloat v0))] Nothing
       Core.FloatValueFloat32 v0 -> encodeLiteral_encodeFloat32 v0
       Core.FloatValueFloat64 v0 -> encodeLiteral_encodeFloat64 v0
 encodeLiteral_encodeFloat32 :: Float -> Syntax.Expression
 encodeLiteral_encodeFloat32 v =
 
       let s = Literals.showFloat32 v
-      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Float" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "NEGATIVE_INFINITY") (encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeFloatingPoint Syntax.FloatingPointTypeFloat)) (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float32ToBigfloat v))))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Float" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Float" "NEGATIVE_INFINITY") (encodeLiteral_primCast (Syntax.PrimitiveTypeNumeric (Syntax.NumericTypeFloatingPoint Syntax.FloatingPointTypeFloat)) (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float32ToFloat64 v))))))))
 encodeLiteral_encodeFloat64 :: Double -> Syntax.Expression
 encodeLiteral_encodeFloat64 v =
 
       let s = Literals.showFloat64 v
-      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Double" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "NEGATIVE_INFINITY") (Logic.ifElse (Equality.equal s "-0.0") (encodeLiteral_javaParseDouble "-0.0") (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral (Literals.float64ToBigfloat v))))))))
+      in (Logic.ifElse (Equality.equal s "NaN") (encodeLiteral_javaSpecialFloatExpr "Double" "NaN") (Logic.ifElse (Equality.equal s "Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "POSITIVE_INFINITY") (Logic.ifElse (Equality.equal s "-Infinity") (encodeLiteral_javaSpecialFloatExpr "Double" "NEGATIVE_INFINITY") (Logic.ifElse (Equality.equal s "-0.0") (encodeLiteral_javaParseDouble "-0.0") (encodeLiteral_litExp (Syntax.LiteralFloatingPoint (Syntax.FloatingPointLiteral v)))))))
 encodeLiteral_encodeInteger :: Core.IntegerValue -> Syntax.Expression
 encodeLiteral_encodeInteger i =
     case i of
@@ -2119,9 +2114,6 @@ isBigNumericType typ =
     case (Strip.deannotateType typ) of
       Core.TypeLiteral v0 -> case v0 of
         Core.LiteralTypeDecimal -> True
-        Core.LiteralTypeFloat v1 -> case v1 of
-          Core.FloatTypeBigfloat -> True
-          _ -> False
         Core.LiteralTypeInteger v1 -> case v1 of
           Core.IntegerTypeBigint -> True
           _ -> False

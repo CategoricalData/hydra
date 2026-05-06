@@ -1,10 +1,6 @@
 package hydra.dsl.prims;
 
 import hydra.core.Term;
-import hydra.lib.literals.BigfloatToBigint;
-import hydra.lib.literals.BigfloatToFloat32;
-import hydra.lib.literals.BigfloatToFloat64;
-import hydra.lib.literals.BigintToBigfloat;
 import hydra.lib.literals.BigintToInt16;
 import hydra.lib.literals.BigintToInt32;
 import hydra.lib.literals.BigintToInt64;
@@ -14,20 +10,18 @@ import hydra.lib.literals.BigintToUint32;
 import hydra.lib.literals.BigintToUint64;
 import hydra.lib.literals.BigintToUint8;
 import hydra.lib.literals.BinaryToString;
-import hydra.lib.literals.Float32ToBigfloat;
-import hydra.lib.literals.Float64ToBigfloat;
+import hydra.lib.literals.Float32ToFloat64;
+import hydra.lib.literals.Float64ToFloat32;
 import hydra.lib.literals.Int16ToBigint;
 import hydra.lib.literals.Int32ToBigint;
 import hydra.lib.literals.Int64ToBigint;
 import hydra.lib.literals.Int8ToBigint;
-import hydra.lib.literals.ReadBigfloat;
 import hydra.lib.literals.ReadBoolean;
 import hydra.lib.literals.ReadFloat32;
 import hydra.lib.literals.ReadFloat64;
 import hydra.lib.literals.ReadInt32;
 import hydra.lib.literals.ReadInt64;
 import hydra.lib.literals.ReadString;
-import hydra.lib.literals.ShowBigfloat;
 import hydra.lib.literals.ShowBigint;
 import hydra.lib.literals.ShowBoolean;
 import hydra.lib.literals.ShowFloat32;
@@ -51,42 +45,6 @@ import hydra.lib.literals.Uint8ToBigint;
  * DSL interface providing literal primitive operations for type conversions and parsing/showing values.
  */
 public interface Literals {
-    /**
-     * Returns a term representing the bigfloat-to-bigint conversion primitive.
-     *
-     * @return a term for converting a bigfloat to a bigint
-     */
-    static Term bigfloatToBigint() {
-        return new BigfloatToBigint().term();
-    }
-
-    /**
-     * Returns a term representing the bigfloat-to-float32 conversion primitive.
-     *
-     * @return a term for converting a bigfloat to a float32
-     */
-    static Term bigfloatToFloat32() {
-        return new BigfloatToFloat32().term();
-    }
-
-    /**
-     * Returns a term representing the bigfloat-to-float64 conversion primitive.
-     *
-     * @return a term for converting a bigfloat to a float64
-     */
-    static Term bigfloatToFloat64() {
-        return new BigfloatToFloat64().term();
-    }
-
-    /**
-     * Returns a term representing the bigint-to-bigfloat conversion primitive.
-     *
-     * @return a term for converting a bigint to a bigfloat
-     */
-    static Term bigintToBigfloat() {
-        return new BigintToBigfloat().term();
-    }
-
     /**
      * Returns a term representing the bigint-to-int8 conversion primitive.
      *
@@ -169,21 +127,21 @@ public interface Literals {
     }
 
     /**
-     * Returns a term representing the float32-to-bigfloat conversion primitive.
+     * Returns a term representing the float32-to-float64 conversion primitive.
      *
-     * @return a term for converting a float32 to a bigfloat
+     * @return a term for converting a float32 to a float64 (lossless widening)
      */
-    static Term float32ToBigfloat() {
-        return new Float32ToBigfloat().term();
+    static Term float32ToFloat64() {
+        return new Float32ToFloat64().term();
     }
 
     /**
-     * Returns a term representing the float64-to-bigfloat conversion primitive.
+     * Returns a term representing the float64-to-float32 conversion primitive.
      *
-     * @return a term for converting a float64 to a bigfloat
+     * @return a term for converting a float64 to a float32 (lossy narrowing)
      */
-    static Term float64ToBigfloat() {
-        return new Float64ToBigfloat().term();
+    static Term float64ToFloat32() {
+        return new Float64ToFloat32().term();
     }
 
     /**
@@ -220,15 +178,6 @@ public interface Literals {
      */
     static Term int64ToBigint() {
         return new Int64ToBigint().term();
-    }
-
-    /**
-     * Returns a term representing the read-bigfloat primitive.
-     *
-     * @return a term for parsing a string to a bigfloat
-     */
-    static Term readBigfloat() {
-        return new ReadBigfloat().term();
     }
 
     /**
@@ -283,15 +232,6 @@ public interface Literals {
      */
     static Term readString() {
         return new ReadString().term();
-    }
-
-    /**
-     * Returns a term representing the show-bigfloat primitive.
-     *
-     * @return a term for converting a bigfloat to a string
-     */
-    static Term showBigfloat() {
-        return new ShowBigfloat().term();
     }
 
     /**

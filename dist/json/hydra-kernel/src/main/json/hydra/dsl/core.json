@@ -4071,41 +4071,6 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.core.floatTypeBigfloat",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the bigfloat variant of hydra.core.FloatType"}}}],
-            "body": {
-              "wrap": {
-                "body": {
-                  "inject": {
-                    "field": {
-                      "name": "inject",
-                      "term": {
-                        "record": {
-                          "fields": [
-                            {
-                              "name": "typeName",
-                              "term": {"wrap": {"body": {"literal": {"string": "hydra.core.FloatType"}}, "typeName": "hydra.core.Name"}}},
-                            {
-                              "name": "field",
-                              "term": {
-                                "record": {
-                                  "fields": [
-                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "bigfloat"}}, "typeName": "hydra.core.Name"}}},
-                                    {"name": "term", "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}}}],
-                                  "typeName": "hydra.core.Field"}}}],
-                          "typeName": "hydra.core.Injection"}}},
-                    "typeName": "hydra.core.Term"}},
-                "typeName": "hydra.phantoms.TTerm"}}}},
-        "typeScheme": {
-          "body": {"application": {"argument": {"variable": "hydra.core.FloatType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
         "name": "hydra.dsl.core.floatTypeFloat32",
         "term": {
           "annotated": {
@@ -4173,62 +4138,6 @@
                 "typeName": "hydra.phantoms.TTerm"}}}},
         "typeScheme": {
           "body": {"application": {"argument": {"variable": "hydra.core.FloatType"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.dsl.core.floatValueBigfloat",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "DSL injection for the bigfloat variant of hydra.core.FloatValue"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "wrap": {
-                    "body": {
-                      "inject": {
-                        "field": {
-                          "name": "inject",
-                          "term": {
-                            "record": {
-                              "fields": [
-                                {
-                                  "name": "typeName",
-                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.core.FloatValue"}}, "typeName": "hydra.core.Name"}}},
-                                {
-                                  "name": "field",
-                                  "term": {
-                                    "record": {
-                                      "fields": [
-                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "bigfloat"}}, "typeName": "hydra.core.Name"}}},
-                                        {
-                                          "name": "term",
-                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
-                                      "typeName": "hydra.core.Field"}}}],
-                              "typeName": "hydra.core.Injection"}}},
-                        "typeName": "hydra.core.Term"}},
-                    "typeName": "hydra.phantoms.TTerm"}},
-                "domain": {
-                  "application": {
-                    "argument": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An arbitrary-precision floating-point value"}}}],
-                        "body": {"literal": {"float": {"bigfloat": {}}}}}},
-                    "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "x"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"application": {"argument": {"variable": "hydra.core.FloatValue"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
-              "domain": {
-                "application": {
-                  "argument": {
-                    "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "An arbitrary-precision floating-point value"}}}],
-                      "body": {"literal": {"float": {"bigfloat": {}}}}}},
-                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {

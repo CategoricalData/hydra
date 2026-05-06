@@ -1039,10 +1039,6 @@ encodeFloatValue = def "encodeFloatValue" $
   doc "Encode a float value to a Python expression" $
   "fv" ~>
     cases _FloatValue (var "fv") Nothing [
-      _FloatValue_bigfloat>>: "f" ~>
-        right $ PyUtils.functionCall @@
-          (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "Decimal")) @@
-          list [PyUtils.singleQuotedString @@ (Literals.showBigfloat $ var "f")],
       _FloatValue_float32>>: "f" ~>
         encodeFloatValue_encodeFloat32 @@ var "f",
       _FloatValue_float64>>: "f" ~>
@@ -1060,7 +1056,7 @@ encodeFloatValue_encodeFloat32 = def "encodeFloatValue_encodeFloat32" $
     Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
       (right $ encodeFloatValue_pySpecialFloat @@ string "-inf") $
     right $ PyUtils.pyAtomToPyExpression @@
-      (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float32ToBigfloat $ var "v")
+      (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float32ToFloat64 $ var "v")
 
 -- | Encode a float64 value, handling NaN and Infinity specially since BigDecimal cannot represent them.
 encodeFloatValue_encodeFloat64 :: TTermDefinition (Double -> Either Error Py.Expression)
@@ -1073,12 +1069,11 @@ encodeFloatValue_encodeFloat64 = def "encodeFloatValue_encodeFloat64" $
       (right $ encodeFloatValue_pySpecialFloat @@ string "inf") $
     Logic.ifElse (Equality.equal (var "s") (string "-Infinity"))
       (right $ encodeFloatValue_pySpecialFloat @@ string "-inf") $
-    -- Negative zero must be emitted via float('-0.0') because routing it through
-    -- Bigfloat (which on the Java host is BigDecimal) would strip the sign.
+    -- Negative zero must be emitted via float('-0.0') to preserve the sign.
     Logic.ifElse (Equality.equal (var "s") (string "-0.0"))
       (right $ encodeFloatValue_pySpecialFloat @@ string "-0.0") $
     right $ PyUtils.pyAtomToPyExpression @@
-      (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float64ToBigfloat $ var "v")
+      (PyDsl.atomNumber $ PyDsl.numberFloat $ var "v")
 
 -- | Emit a Python float('nan'), float('inf'), or float('-inf') expression.
 encodeFloatValue_pySpecialFloat :: TTermDefinition (String -> Py.Expression)
@@ -1287,7 +1282,6 @@ encodeLiteralType = def "encodeLiteralType" $
       _LiteralType_decimal>>: constant $ string "Decimal",
       _LiteralType_float>>: "ft" ~>
         cases _FloatType (var "ft") Nothing [
-          _FloatType_bigfloat>>: constant $ string "Decimal",
           _FloatType_float32>>: constant $ string "float",
           _FloatType_float64>>: constant $ string "float"],
       _LiteralType_integer>>: constant $ string "int",
@@ -2295,11 +2289,7 @@ extendMetaForTerm = def "extendMetaForTerm" $
         _Term_literal>>: "l" ~>
           cases _Literal (var "l") (Just $ var "meta") [
             _Literal_decimal>>: constant $
-              setMetaUsesDecimal @@ var "meta" @@ true,
-            _Literal_float>>: "fv" ~>
-              cases _FloatValue (var "fv") (Just $ var "meta") [
-                _FloatValue_bigfloat>>: constant $
-                  setMetaUsesDecimal @@ var "meta" @@ true]],
+              setMetaUsesDecimal @@ var "meta" @@ true],
         _Term_map>>: constant $
           setMetaUsesFrozenDict @@ var "meta" @@ true,
         _Term_maybe>>: "m" ~>
@@ -2353,16 +2343,11 @@ extendMetaForType = def "extendMetaForType" $
       -- Either type: need Either import
       _Type_either>>: constant $
         setMetaUsesEither @@ var "metaWithSubtypes" @@ true,
-      -- Literal type: check for Decimal (both the decimal literal type and bigfloat,
-      -- which is represented as Python's Decimal in the Python host).
+      -- Literal type: check for Decimal.
       _Type_literal>>: "lt" ~>
         cases _LiteralType (var "lt") (Just $ var "metaWithSubtypes") [
           _LiteralType_decimal>>: constant $
-            setMetaUsesDecimal @@ var "metaWithSubtypes" @@ true,
-          _LiteralType_float>>: "ft" ~>
-            cases _FloatType (var "ft") (Just $ var "metaWithSubtypes") [
-              _FloatType_bigfloat>>: constant $
-                setMetaUsesDecimal @@ var "metaWithSubtypes" @@ true]],
+            setMetaUsesDecimal @@ var "metaWithSubtypes" @@ true],
       -- Union type: need Enum or Node
       _Type_union>>: "rt" ~>
         Logic.ifElse (Predicates.isEnumRowType @@ var "rt")

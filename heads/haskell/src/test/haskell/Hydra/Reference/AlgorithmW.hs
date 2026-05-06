@@ -51,7 +51,6 @@ showPrim :: Prim -> String
 showPrim (PrimLiteral l) = case l of
   LiteralBoolean b -> show b
   LiteralFloat fv -> case fv of
-    FloatValueBigfloat f -> show f
     FloatValueFloat32 f -> show f
     _ -> show fv
   LiteralInteger iv -> case iv of

@@ -304,7 +304,6 @@
         (i32 (tc-int32))
         (f32 (tc-float32))
         (f64 (tc-float64))
-        (bf  (tc-bigfloat))
         (bi  (tc-bigint))
         (b   (tc-boolean)))
     (append
@@ -349,7 +348,6 @@
         (cons (qname ns_ "pi")       (prim0 (qname ns_ "pi")       (lambda () hydra_lib_math_pi)       nil f64))
         (cons (qname ns_ "pow")      (prim2 (qname ns_ "pow")      hydra_lib_math_pow      nil f64 f64 f64))
         (cons (qname ns_ "round")    (prim1 (qname ns_ "round")    hydra_lib_math_round    nil f64 f64))
-        (cons (qname ns_ "roundBigfloat") (prim2 (qname ns_ "roundBigfloat") hydra_lib_math_round_bigfloat nil i32 bf bf))
         (cons (qname ns_ "roundFloat32")  (prim2 (qname ns_ "roundFloat32")  hydra_lib_math_round_float32  nil i32 f32 f32))
         (cons (qname ns_ "roundFloat64")  (prim2 (qname ns_ "roundFloat64")  hydra_lib_math_round_float64  nil i32 f64 f64))
         (cons (qname ns_ "sin")      (prim1 (qname ns_ "sin")      hydra_lib_math_sin      nil f64 f64))
@@ -493,7 +491,6 @@
 
 (defun register-literals ()
   (let ((ns_ "hydra.lib.literals")
-        (bf  (tc-bigfloat))
         (bi  (tc-bigint))
         (dec (tc-decimal))
         (f32 (tc-float32))
@@ -512,10 +509,6 @@
     (append
       ;; Conversions
       (list
-        (cons (qname ns_ "bigfloatToBigint")   (prim1 (qname ns_ "bigfloatToBigint")   hydra_lib_literals_bigfloat_to_bigint   nil bf bi))
-        (cons (qname ns_ "bigfloatToFloat32")  (prim1 (qname ns_ "bigfloatToFloat32")  hydra_lib_literals_bigfloat_to_float32  nil bf f32))
-        (cons (qname ns_ "bigfloatToFloat64")  (prim1 (qname ns_ "bigfloatToFloat64")  hydra_lib_literals_bigfloat_to_float64  nil bf f64))
-        (cons (qname ns_ "bigintToBigfloat")   (prim1 (qname ns_ "bigintToBigfloat")   hydra_lib_literals_bigint_to_bigfloat   nil bi bf))
         (cons (qname ns_ "bigintToDecimal")    (prim1 (qname ns_ "bigintToDecimal")    hydra_lib_literals_bigint_to_decimal    nil bi dec))
         (cons (qname ns_ "bigintToInt8")       (prim1 (qname ns_ "bigintToInt8")       hydra_lib_literals_bigint_to_int8       nil bi i8))
         (cons (qname ns_ "bigintToInt16")      (prim1 (qname ns_ "bigintToInt16")      hydra_lib_literals_bigint_to_int16      nil bi i16))
@@ -530,10 +523,10 @@
         (cons (qname ns_ "decimalToBigint")    (prim1 (qname ns_ "decimalToBigint")    hydra_lib_literals_decimal_to_bigint    nil dec bi))
         (cons (qname ns_ "decimalToFloat32")   (prim1 (qname ns_ "decimalToFloat32")   hydra_lib_literals_decimal_to_float32   nil dec f32))
         (cons (qname ns_ "decimalToFloat64")   (prim1 (qname ns_ "decimalToFloat64")   hydra_lib_literals_decimal_to_float64   nil dec f64))
-        (cons (qname ns_ "float32ToBigfloat")  (prim1 (qname ns_ "float32ToBigfloat")  hydra_lib_literals_float32_to_bigfloat  nil f32 bf))
         (cons (qname ns_ "float32ToDecimal")   (prim1 (qname ns_ "float32ToDecimal")   hydra_lib_literals_float32_to_decimal   nil f32 dec))
-        (cons (qname ns_ "float64ToBigfloat")  (prim1 (qname ns_ "float64ToBigfloat")  hydra_lib_literals_float64_to_bigfloat  nil f64 bf))
+        (cons (qname ns_ "float32ToFloat64")   (prim1 (qname ns_ "float32ToFloat64")   hydra_lib_literals_float32_to_float64   nil f32 f64))
         (cons (qname ns_ "float64ToDecimal")   (prim1 (qname ns_ "float64ToDecimal")   hydra_lib_literals_float64_to_decimal   nil f64 dec))
+        (cons (qname ns_ "float64ToFloat32")   (prim1 (qname ns_ "float64ToFloat32")   hydra_lib_literals_float64_to_float32   nil f64 f32))
         (cons (qname ns_ "int8ToBigint")       (prim1 (qname ns_ "int8ToBigint")       hydra_lib_literals_int8_to_bigint       nil i8 bi))
         (cons (qname ns_ "int16ToBigint")      (prim1 (qname ns_ "int16ToBigint")      hydra_lib_literals_int16_to_bigint      nil i16 bi))
         (cons (qname ns_ "int32ToBigint")      (prim1 (qname ns_ "int32ToBigint")      hydra_lib_literals_int32_to_bigint      nil i32 bi))
@@ -545,7 +538,6 @@
         (cons (qname ns_ "stringToBinary")     (prim1 (qname ns_ "stringToBinary")     hydra_lib_literals_string_to_binary     nil s bin)))
       ;; Read primitives
       (list
-        (cons (qname ns_ "readBigfloat") (prim1 (qname ns_ "readBigfloat") hydra_lib_literals_read_bigfloat nil s (tc-optional bf)))
         (cons (qname ns_ "readBigint")   (prim1 (qname ns_ "readBigint")   hydra_lib_literals_read_bigint   nil s (tc-optional bi)))
         (cons (qname ns_ "readBoolean")  (prim1 (qname ns_ "readBoolean")  hydra_lib_literals_read_boolean  nil s (tc-optional b)))
         (cons (qname ns_ "readDecimal")  (prim1 (qname ns_ "readDecimal")  hydra_lib_literals_read_decimal  nil s (tc-optional dec)))
@@ -562,7 +554,6 @@
         (cons (qname ns_ "readUint64")   (prim1 (qname ns_ "readUint64")   hydra_lib_literals_read_uint64   nil s (tc-optional u64))))
       ;; Show primitives
       (list
-        (cons (qname ns_ "showBigfloat") (prim1 (qname ns_ "showBigfloat") hydra_lib_literals_show_bigfloat nil bf s))
         (cons (qname ns_ "showBigint")   (prim1 (qname ns_ "showBigint")   hydra_lib_literals_show_bigint   nil bi s))
         (cons (qname ns_ "showBoolean")  (prim1 (qname ns_ "showBoolean")  hydra_lib_literals_show_boolean  nil b s))
         (cons (qname ns_ "showDecimal")  (prim1 (qname ns_ "showDecimal")  hydra_lib_literals_show_decimal  nil dec s))

@@ -258,7 +258,7 @@ name = def "Name" $ T.wrap T.string -- NAME in the grammar
 number :: Binding
 number = def "Number" $ T.union [ -- NUMBER in the grammar
   "integer">: T.bigint,
-  "float">: T.bigfloat]
+  "float">: T.float64]
 
 string :: Binding
 string = def "String" $ T.record [ -- STRING in the grammar

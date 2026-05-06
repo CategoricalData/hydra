@@ -259,7 +259,6 @@ floatAdapter cx typ ft =
 floatValueToDouble :: Core.FloatValue -> Sci.Scientific
 floatValueToDouble fv =
     case fv of
-      Core.FloatValueBigfloat v0 -> Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)
       Core.FloatValueFloat32 v0 -> Literals.float32ToDecimal v0
       Core.FloatValueFloat64 v0 -> Literals.float64ToDecimal v0
 -- | Fold over field types, building adapters and threading the environment

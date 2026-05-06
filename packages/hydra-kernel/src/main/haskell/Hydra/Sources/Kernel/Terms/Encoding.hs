@@ -222,7 +222,6 @@ encodeFloatValue = define "encodeFloatValue" $
   where
     floatTypeToFieldName :: TTerm (FloatType -> Name)
     floatTypeToFieldName = match _FloatType Nothing [
-      _FloatType_bigfloat>>: constant $ Core.nameLift _FloatValue_bigfloat,
       _FloatType_float32>>:  constant $ Core.nameLift _FloatValue_float32,
       _FloatType_float64>>:  constant $ Core.nameLift _FloatValue_float64]
 

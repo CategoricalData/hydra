@@ -10,15 +10,8 @@ import qualified Data.ByteString as B
 import qualified Data.Scientific as Sci
 
 
--- Note: does not yet properly capture arbitrary-precision floating-point numbers,
---       because code generation does not.
-type Bigfloat = Double
-
 -- Binary is now properly represented as ByteString
 type Binary = B.ByteString
-
-bigfloat :: Bigfloat -> TTerm Bigfloat
-bigfloat = TTerm . Terms.bigfloat
 
 bigint :: Integer -> TTerm Integer
 bigint = TTerm . Terms.bigint
