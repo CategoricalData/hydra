@@ -27,8 +27,8 @@ module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = [Core.ns, Core.ns],
-            moduleDescription = Just ("A Java syntax module. Based on the Oracle Java SE 12 BNF:\n" ++
-      "  https://docs.oracle.com/javase/specs/jls/se12/html/jls-19.html\n" ++
+            moduleDescription = Just ("A Java syntax module. Tracks the Oracle Java SE 21 BNF:\n" ++
+      "  https://docs.oracle.com/javase/specs/jls/se21/html/jls-19.html\n" ++
       "Note: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments.")}
   where
     definitions = [
@@ -38,6 +38,7 @@ module_ = Module {
       integerLiteral,
       floatingPointLiteral,
       stringLiteral,
+      textBlock,
       type_,
       primitiveTypeWithAnnotations,
       primitiveType_,
@@ -78,8 +79,8 @@ module_ = Module {
       typeImportOnDemandDeclaration,
       singleStaticImportDeclaration,
       staticImportOnDemandDeclaration,
-      typeDeclaration,
-      typeDeclarationWithComments,
+      topLevelClassOrInterfaceDeclaration,
+      topLevelClassOrInterfaceDeclarationWithComments,
       moduleDeclaration,
       moduleDirective,
       moduleDirective_Requires,
@@ -127,6 +128,15 @@ module_ = Module {
       enumBody_Element,
       enumConstant,
       enumConstantModifier,
+      recordDeclaration,
+      recordHeader,
+      recordComponent,
+      recordComponent_Simple,
+      variableArityRecordComponent,
+      recordComponentModifier,
+      recordBody,
+      recordBodyDeclaration,
+      compactConstructorDeclaration,
       interfaceDeclaration,
       normalInterfaceDeclaration,
       interfaceModifier,
@@ -137,11 +147,11 @@ module_ = Module {
       constantModifier,
       interfaceMethodDeclaration,
       interfaceMethodModifier,
-      annotationTypeDeclaration,
-      annotationTypeBody,
-      annotationTypeMemberDeclaration,
-      annotationTypeElementDeclaration,
-      annotationTypeElementModifier,
+      annotationInterfaceDeclaration,
+      annotationInterfaceBody,
+      annotationInterfaceMemberDeclaration,
+      annotationInterfaceElementDeclaration,
+      annotationInterfaceElementModifier,
       defaultValue,
       annotation,
       normalAnnotation,
@@ -153,6 +163,7 @@ module_ = Module {
       arrayInitializer,
       block,
       blockStatement,
+      localClassOrInterfaceDeclaration,
       localVariableDeclarationStatement,
       localVariableDeclaration,
       localVariableType,
@@ -170,10 +181,17 @@ module_ = Module {
       assertStatement_Pair,
       switchStatement,
       switchBlock,
-      switchBlock_Pair,
+      switchBlock_Legacy,
+      switchRule,
+      switchRule_Body,
       switchBlockStatementGroup,
       switchLabel,
-      enumConstantName,
+      caseConstant,
+      casePattern,
+      guard,
+      pattern_,
+      typePattern,
+      recordPattern,
       whileStatement,
       whileStatementNoShortIf,
       doStatement,
@@ -188,6 +206,7 @@ module_ = Module {
       enhancedForCond,
       enhancedForStatementNoShortIf,
       breakStatement,
+      yieldStatement,
       continueStatement,
       returnStatement,
       throwStatement,
@@ -233,10 +252,12 @@ module_ = Module {
       methodReference_New,
       methodReference_Array,
       arrayCreationExpression,
-      arrayCreationExpression_Primitive,
-      arrayCreationExpression_ClassOrInterface,
-      arrayCreationExpression_PrimitiveArray,
-      arrayCreationExpression_ClassOrInterfaceArray,
+      arrayCreationExpressionWithoutInitializer,
+      arrayCreationExpressionWithoutInitializer_Primitive,
+      arrayCreationExpressionWithoutInitializer_ClassOrInterface,
+      arrayCreationExpressionWithInitializer,
+      arrayCreationExpressionWithInitializer_Primitive,
+      arrayCreationExpressionWithInitializer_ClassOrInterface,
       dimExpr,
       expression,
       lambdaExpression,
@@ -264,7 +285,8 @@ module_ = Module {
       relationalExpression_GreaterThan,
       relationalExpression_LessThanEqual,
       relationalExpression_GreaterThanEqual,
-      relationalExpression_InstanceOf,
+      instanceofExpression,
+      instanceofExpression_Rhs,
       shiftExpression,
       shiftExpression_Binary,
       additiveExpression,
@@ -283,6 +305,7 @@ module_ = Module {
       castExpression_NotPlusMinus,
       castExpression_Lambda,
       castExpression_RefAndBounds,
+      switchExpression,
       constantExpression]
 
 --Productions from §3 (Lexical Structure)
@@ -321,7 +344,9 @@ literal = def "Literal" $
 --  CharacterLiteral
     "character">: T.uint16,
 --  StringLiteral
-    "string">: java "StringLiteral"]
+    "string">: java "StringLiteral",
+--  TextBlock (JEP 378, Java SE 15)
+    "textBlock">: java "TextBlock"]
 
 integerLiteral :: Binding
 integerLiteral = def "IntegerLiteral" $
@@ -336,6 +361,13 @@ floatingPointLiteral = def "FloatingPointLiteral" $
 stringLiteral :: Binding
 stringLiteral = def "StringLiteral" $
   doc "Note: this is an approximation which ignores encoding" $
+  T.wrap T.string
+
+--TextBlock (JEP 378, Java SE 15):
+--  A multi-line string literal delimited by triple double-quotes (\"\"\"...\"\"\").
+textBlock :: Binding
+textBlock = def "TextBlock" $
+  doc "Note: this is an approximation which ignores encoding and incidental whitespace stripping" $
   T.wrap T.string
 
 --Productions from §4 (Types, Values, and Variables)
@@ -569,12 +601,12 @@ compilationUnit = def "CompilationUnit" $ T.union [
   "modular">: java "ModularCompilationUnit"]
 
 --OrdinaryCompilationUnit:
---  [PackageDeclaration] {ImportDeclaration} {TypeDeclaration}
+--  [PackageDeclaration] {ImportDeclaration} {TopLevelClassOrInterfaceDeclaration}
 ordinaryCompilationUnit :: Binding
 ordinaryCompilationUnit = def "OrdinaryCompilationUnit" $ T.record [
   "package">: T.maybe $ java "PackageDeclaration",
   "imports">: T.list $ java "ImportDeclaration",
-  "types">: T.list $ java "TypeDeclarationWithComments"]
+  "types">: T.list $ java "TopLevelClassOrInterfaceDeclarationWithComments"]
 
 --ModularCompilationUnit:
 --  {ImportDeclaration} ModuleDeclaration
@@ -629,9 +661,10 @@ singleStaticImportDeclaration = def "SingleStaticImportDeclaration" $ T.record [
 staticImportOnDemandDeclaration :: Binding
 staticImportOnDemandDeclaration = def "StaticImportOnDemandDeclaration" $ T.wrap $ java "TypeName"
 
---TypeDeclaration:
-typeDeclaration :: Binding
-typeDeclaration = def "TypeDeclaration" $ T.union [
+--TopLevelClassOrInterfaceDeclaration:
+--  (renamed from TypeDeclaration in SE 16)
+topLevelClassOrInterfaceDeclaration :: Binding
+topLevelClassOrInterfaceDeclaration = def "TopLevelClassOrInterfaceDeclaration" $ T.union [
 --  ClassDeclaration
   "class">: java "ClassDeclaration",
 --  InterfaceDeclaration
@@ -639,10 +672,10 @@ typeDeclaration = def "TypeDeclaration" $ T.union [
 --  ;
   "none">: T.unit]
 
-typeDeclarationWithComments :: Binding
-typeDeclarationWithComments = def "TypeDeclarationWithComments" $
+topLevelClassOrInterfaceDeclarationWithComments :: Binding
+topLevelClassOrInterfaceDeclarationWithComments = def "TopLevelClassOrInterfaceDeclarationWithComments" $
   T.record [
-    "value">: java "TypeDeclaration",
+    "value">: java "TopLevelClassOrInterfaceDeclaration",
     "comments">: T.maybe T.string]
 
 --ModuleDeclaration:
@@ -652,7 +685,7 @@ moduleDeclaration = def "ModuleDeclaration" $ T.record [
   "annotations">: T.list $ java "Annotation",
   "open">: T.boolean,
   "identifiers">: T.list $ java "Identifier",
-  "directives">: T.list $ T.list $ java "ModuleDirective"]
+  "directives">: T.list $ java "ModuleDirective"]
 
 --ModuleDirective:
 moduleDirective :: Binding
@@ -702,10 +735,12 @@ classDeclaration = def "ClassDeclaration" $ T.union [
 --  NormalClassDeclaration
   "normal">: java "NormalClassDeclaration",
 --  EnumDeclaration
-  "enum">: java "EnumDeclaration"]
+  "enum">: java "EnumDeclaration",
+--  RecordDeclaration (JEP 395, Java SE 16)
+  "record">: java "RecordDeclaration"]
 
 --NormalClassDeclaration:
---  {ClassModifier} class TypeIdentifier [TypeParameters] [Superclass] [Superinterfaces] ClassBody
+--  {ClassModifier} class TypeIdentifier [TypeParameters] [ClassExtends] [ClassImplements] [ClassPermits] ClassBody
 normalClassDeclaration :: Binding
 normalClassDeclaration = def "NormalClassDeclaration" $ T.record [
   "modifiers">: T.list $ java "ClassModifier",
@@ -713,6 +748,10 @@ normalClassDeclaration = def "NormalClassDeclaration" $ T.record [
   "parameters">: T.list $ java "TypeParameter",
   "extends">: T.maybe $ java "ClassType",
   "implements">: T.list $ java "InterfaceType",
+--  ClassPermits:
+--    permits TypeName {, TypeName}
+--  (JEP 409, Java SE 17. An empty list means absent.)
+  "permits">: T.list $ java "TypeName",
   "body">: java "ClassBody"]
 
 --ClassModifier:
@@ -720,7 +759,7 @@ classModifier :: Binding
 classModifier = def "ClassModifier" $ T.union [
 --  (one of)
 --  Annotation public protected private
---  abstract static final strictfp
+--  abstract static final sealed non-sealed strictfp
   "annotation">: java "Annotation",
   "public">: T.unit,
   "protected">: T.unit,
@@ -728,6 +767,9 @@ classModifier = def "ClassModifier" $ T.union [
   "abstract">: T.unit,
   "static">: T.unit,
   "final">: T.unit,
+--  sealed and non-sealed: JEP 409, Java SE 17
+  "sealed">: T.unit,
+  "nonSealed">: T.unit,
   "strictfp">: T.unit]
 
 --TypeParameters:
@@ -887,7 +929,7 @@ methodModifier = def "MethodModifier" $ T.union [
   "final">: T.unit,
   "synchronized">: T.unit,
   "native">: T.unit,
-  "strictfb">: T.unit]
+  "strictfp">: T.unit]
 
 --MethodHeader:
 --  Result MethodDeclarator [Throws]
@@ -943,7 +985,7 @@ formalParameter_Simple = def "FormalParameter_Simple" $ T.record [
 --  {VariableModifier} UnannType {Annotation} ... Identifier
 variableArityParameter :: Binding
 variableArityParameter = def "VariableArityParameter" $ T.record [
-  "modifiers">: java "VariableModifier",
+  "modifiers">: T.list $ java "VariableModifier",
   "type">: java "UnannType",
   "annotations">: T.list $ java "Annotation",
   "identifier">: java "Identifier"]
@@ -1073,7 +1115,7 @@ enumConstant :: Binding
 enumConstant = def "EnumConstant" $ T.record [
   "modifiers">: T.list $ java "EnumConstantModifier",
   "identifier">: java "Identifier",
-  "arguments">: T.list $ T.list $ java "Expression",
+  "arguments">: T.maybe $ T.list $ java "Expression",
   "body">: T.maybe $ java "ClassBody"]
 
 --EnumConstantModifier:
@@ -1084,6 +1126,75 @@ enumConstantModifier = def "EnumConstantModifier" $ T.wrap $ java "Annotation"
 --EnumBodyDeclarations:
 --  ; {ClassBodyDeclaration}
 
+-- Records (JEP 395, Java SE 16)
+
+--RecordDeclaration:
+--  {ClassModifier} record TypeIdentifier [TypeParameters] RecordHeader [ClassImplements] RecordBody
+recordDeclaration :: Binding
+recordDeclaration = def "RecordDeclaration" $ T.record [
+  "modifiers">: T.list $ java "ClassModifier",
+  "identifier">: java "TypeIdentifier",
+  "parameters">: T.list $ java "TypeParameter",
+  "header">: java "RecordHeader",
+  "implements">: T.list $ java "InterfaceType",
+  "body">: java "RecordBody"]
+
+--RecordHeader:
+--  ( [RecordComponentList] )
+--RecordComponentList:
+--  RecordComponent {, RecordComponent}
+recordHeader :: Binding
+recordHeader = def "RecordHeader" $ T.wrap $ T.list $ java "RecordComponent"
+
+--RecordComponent:
+recordComponent :: Binding
+recordComponent = def "RecordComponent" $ T.union [
+--  {RecordComponentModifier} UnannType Identifier
+  "simple">: java "RecordComponent_Simple",
+--  VariableArityRecordComponent
+  "variableArity">: java "VariableArityRecordComponent"]
+
+recordComponent_Simple :: Binding
+recordComponent_Simple = def "RecordComponent_Simple" $ T.record [
+  "modifiers">: T.list $ java "RecordComponentModifier",
+  "type">: java "UnannType",
+  "identifier">: java "Identifier"]
+
+--VariableArityRecordComponent:
+--  {RecordComponentModifier} UnannType {Annotation} ... Identifier
+variableArityRecordComponent :: Binding
+variableArityRecordComponent = def "VariableArityRecordComponent" $ T.record [
+  "modifiers">: T.list $ java "RecordComponentModifier",
+  "type">: java "UnannType",
+  "annotations">: T.list $ java "Annotation",
+  "identifier">: java "Identifier"]
+
+--RecordComponentModifier:
+--  Annotation
+recordComponentModifier :: Binding
+recordComponentModifier = def "RecordComponentModifier" $ T.wrap $ java "Annotation"
+
+--RecordBody:
+--  { {RecordBodyDeclaration} }
+recordBody :: Binding
+recordBody = def "RecordBody" $ T.wrap $ T.list $ java "RecordBodyDeclaration"
+
+--RecordBodyDeclaration:
+recordBodyDeclaration :: Binding
+recordBodyDeclaration = def "RecordBodyDeclaration" $ T.union [
+--  ClassBodyDeclaration
+  "classBody">: java "ClassBodyDeclaration",
+--  CompactConstructorDeclaration
+  "compactConstructor">: java "CompactConstructorDeclaration"]
+
+--CompactConstructorDeclaration:
+--  {ConstructorModifier} SimpleTypeName ConstructorBody
+compactConstructorDeclaration :: Binding
+compactConstructorDeclaration = def "CompactConstructorDeclaration" $ T.record [
+  "modifiers">: T.list $ java "ConstructorModifier",
+  "name">: java "SimpleTypeName",
+  "body">: java "ConstructorBody"]
+
 --Productions from §9 (Interfaces)
 
 --InterfaceDeclaration:
@@ -1091,17 +1202,21 @@ interfaceDeclaration :: Binding
 interfaceDeclaration = def "InterfaceDeclaration" $ T.union [
 --  NormalInterfaceDeclaration
   "normalInterface">: java "NormalInterfaceDeclaration",
---  AnnotationTypeDeclaration
-  "annotationType">: java "AnnotationTypeDeclaration"]
+--  AnnotationInterfaceDeclaration (renamed from AnnotationInterfaceDeclaration in SE 16)
+  "annotationInterface">: java "AnnotationInterfaceDeclaration"]
 
 --NormalInterfaceDeclaration:
---  {InterfaceModifier} interface TypeIdentifier [TypeParameters] [ExtendsInterfaces] InterfaceBody
+--  {InterfaceModifier} interface TypeIdentifier [TypeParameters] [InterfaceExtends] [InterfacePermits] InterfaceBody
 normalInterfaceDeclaration :: Binding
 normalInterfaceDeclaration = def "NormalInterfaceDeclaration" $ T.record [
   "modifiers">: T.list $ java "InterfaceModifier",
   "identifier">: java "TypeIdentifier",
   "parameters">: T.list $ java "TypeParameter",
   "extends">: T.list $ java "InterfaceType",
+--  InterfacePermits:
+--    permits TypeName {, TypeName}
+--  (JEP 409, Java SE 17. An empty list means absent.)
+  "permits">: T.list $ java "TypeName",
   "body">: java "InterfaceBody"]
 
 --InterfaceModifier:
@@ -1109,14 +1224,17 @@ normalInterfaceDeclaration = def "NormalInterfaceDeclaration" $ T.record [
 interfaceModifier :: Binding
 interfaceModifier = def "InterfaceModifier" $ T.union [
 --  Annotation public protected private
---  abstract static strictfp
+--  abstract static sealed non-sealed strictfp
   "annotation">: java "Annotation",
   "public">: T.unit,
   "protected">: T.unit,
   "private">: T.unit,
   "abstract">: T.unit,
   "static">: T.unit,
-  "strictfb">: T.unit]
+--  sealed and non-sealed: JEP 409, Java SE 17
+  "sealed">: T.unit,
+  "nonSealed">: T.unit,
+  "strictfp">: T.unit]
 
 --ExtendsInterfaces:
 --  extends InterfaceTypeList
@@ -1186,24 +1304,24 @@ interfaceMethodModifier = def "InterfaceMethodModifier" $ T.union [
   "static">: T.unit,
   "strictfp">: T.unit]
 
---AnnotationTypeDeclaration:
---  {InterfaceModifier} @ interface TypeIdentifier AnnotationTypeBody
-annotationTypeDeclaration :: Binding
-annotationTypeDeclaration = def "AnnotationTypeDeclaration" $ T.record [
+--AnnotationInterfaceDeclaration:
+--  {InterfaceModifier} @ interface TypeIdentifier AnnotationInterfaceBody
+annotationInterfaceDeclaration :: Binding
+annotationInterfaceDeclaration = def "AnnotationInterfaceDeclaration" $ T.record [
   "modifiers">: T.list $ java "InterfaceModifier",
   "identifier">: java "TypeIdentifier",
-  "body">: java "AnnotationTypeBody"]
+  "body">: java "AnnotationInterfaceBody"]
 
---AnnotationTypeBody:
---  { {AnnotationTypeMemberDeclaration} }
-annotationTypeBody :: Binding
-annotationTypeBody = def "AnnotationTypeBody" $ T.wrap $ T.list $ T.list $ java "AnnotationTypeMemberDeclaration"
+--AnnotationInterfaceBody:
+--  { {AnnotationInterfaceMemberDeclaration} }
+annotationInterfaceBody :: Binding
+annotationInterfaceBody = def "AnnotationInterfaceBody" $ T.wrap $ T.list $ java "AnnotationInterfaceMemberDeclaration"
 
---AnnotationTypeMemberDeclaration:
-annotationTypeMemberDeclaration :: Binding
-annotationTypeMemberDeclaration = def "AnnotationTypeMemberDeclaration" $ T.union [
---  AnnotationTypeElementDeclaration
-  "annotationType">: java "AnnotationTypeElementDeclaration",
+--AnnotationInterfaceMemberDeclaration:
+annotationInterfaceMemberDeclaration :: Binding
+annotationInterfaceMemberDeclaration = def "AnnotationInterfaceMemberDeclaration" $ T.union [
+--  AnnotationInterfaceElementDeclaration
+  "annotationInterface">: java "AnnotationInterfaceElementDeclaration",
 --  ConstantDeclaration
   "constant">: java "ConstantDeclaration",
 --  ClassDeclaration
@@ -1212,22 +1330,24 @@ annotationTypeMemberDeclaration = def "AnnotationTypeMemberDeclaration" $ T.unio
   "interface">: java "InterfaceDeclaration"]
 --  ;
 
---AnnotationTypeElementDeclaration:
---  {AnnotationTypeElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
-annotationTypeElementDeclaration :: Binding
-annotationTypeElementDeclaration = def "AnnotationTypeElementDeclaration" $ T.record [
-  "modifiers">: T.list $ java "AnnotationTypeElementModifier",
+--AnnotationInterfaceElementDeclaration:
+--  {AnnotationInterfaceElementModifier} UnannType Identifier ( ) [Dims] [DefaultValue] ;
+annotationInterfaceElementDeclaration :: Binding
+annotationInterfaceElementDeclaration = def "AnnotationInterfaceElementDeclaration" $ T.record [
+  "modifiers">: T.list $ java "AnnotationInterfaceElementModifier",
   "type">: java "UnannType",
   "identifier">: java "Identifier",
   "dims">: T.maybe $ java "Dims",
   "default">: T.maybe $ java "DefaultValue"]
 
---AnnotationTypeElementModifier:
+--AnnotationInterfaceElementModifier:
 --  (one of)
-annotationTypeElementModifier :: Binding
-annotationTypeElementModifier = def "AnnotationTypeElementModifier" $ T.union [
---  Annotation public
-  "public">: java "Annotation",
+annotationInterfaceElementModifier :: Binding
+annotationInterfaceElementModifier = def "AnnotationInterfaceElementModifier" $ T.union [
+--  Annotation
+  "annotation">: java "Annotation",
+--  public
+  "public">: T.unit,
 --  abstract
   "abstract">: T.unit]
 
@@ -1316,10 +1436,18 @@ blockStatement :: Binding
 blockStatement = def "BlockStatement" $ T.union [
 --  LocalVariableDeclarationStatement
   "localVariableDeclaration">: java "LocalVariableDeclarationStatement",
---  ClassDeclaration
-  "class">: java "ClassDeclaration",
+--  LocalClassOrInterfaceDeclaration (broadened from ClassDeclaration in SE 16)
+  "localClassOrInterface">: java "LocalClassOrInterfaceDeclaration",
 --  Statement
   "statement">: java "Statement"]
+
+--LocalClassOrInterfaceDeclaration:
+localClassOrInterfaceDeclaration :: Binding
+localClassOrInterfaceDeclaration = def "LocalClassOrInterfaceDeclaration" $ T.union [
+--  ClassDeclaration
+  "class">: java "ClassDeclaration",
+--  NormalInterfaceDeclaration
+  "normalInterface">: java "NormalInterfaceDeclaration"]
 
 --LocalVariableDeclarationStatement:
 --  LocalVariableDeclaration ;
@@ -1398,7 +1526,9 @@ statementWithoutTrailingSubstatement = def "StatementWithoutTrailingSubstatement
 --  ThrowStatement
   "throw">: java "ThrowStatement",
 --  TryStatement
-  "try">: java "TryStatement"]
+  "try">: java "TryStatement",
+--  YieldStatement (JEP 361, Java SE 14)
+  "yield">: java "YieldStatement"]
 
 --EmptyStatement:
 --  ;
@@ -1483,38 +1613,99 @@ switchStatement = def "SwitchStatement" $ T.record [
   "block">: java "SwitchBlock"]
 
 --SwitchBlock:
---  { {SwitchBlockStatementGroup} {SwitchLabel} }
+--  { SwitchRule {SwitchRule} }
+--  { {SwitchBlockStatementGroup} {SwitchLabel :} }
+-- (Reshape: JEP 361, Java SE 14 introduced arrow-style switch rules.)
 switchBlock :: Binding
-switchBlock = def "SwitchBlock" $ T.wrap $ T.list $ java "SwitchBlock_Pair"
+switchBlock = def "SwitchBlock" $ T.union [
+--  Arrow-style: nonempty list of SwitchRule
+  "rules">: nonemptyList $ java "SwitchRule",
+--  Legacy colon-style
+  "legacy">: java "SwitchBlock_Legacy"]
 
-switchBlock_Pair :: Binding
-switchBlock_Pair = def "SwitchBlock_Pair" $ T.record [
-  "statements">: T.list $ java "SwitchBlockStatementGroup",
-  "labels">: T.list $ java "SwitchLabel"]
+switchBlock_Legacy :: Binding
+switchBlock_Legacy = def "SwitchBlock_Legacy" $ T.record [
+  "groups">: T.list $ java "SwitchBlockStatementGroup",
+  "trailingLabels">: T.list $ java "SwitchLabel"]
+
+--SwitchRule (JEP 361, Java SE 14):
+--  SwitchLabel -> Expression ;
+--  SwitchLabel -> Block
+--  SwitchLabel -> ThrowStatement
+switchRule :: Binding
+switchRule = def "SwitchRule" $ T.record [
+  "label">: java "SwitchLabel",
+  "body">: java "SwitchRule_Body"]
+
+switchRule_Body :: Binding
+switchRule_Body = def "SwitchRule_Body" $ T.union [
+  "expression">: java "Expression",
+  "block">: java "Block",
+  "throw">: java "ThrowStatement"]
 
 --SwitchBlockStatementGroup:
---  SwitchLabels BlockStatements
+--  SwitchLabel : {SwitchLabel :} BlockStatements
 switchBlockStatementGroup :: Binding
 switchBlockStatementGroup = def "SwitchBlockStatementGroup" $ T.record [
   "labels">: nonemptyList $ java "SwitchLabel",
   "statements">: nonemptyList $ java "BlockStatement"]
 
---SwitchLabels:
---  SwitchLabel {SwitchLabel}
 --SwitchLabel:
+--  case CaseConstant {, CaseConstant}
+--  case null [, default]
+--  case CasePattern [Guard]
+--  default
 switchLabel :: Binding
 switchLabel = def "SwitchLabel" $ T.union [
---  case ConstantExpression :
-  "constant">: java "ConstantExpression",
---  case EnumConstantName :
-  "enumConstant">: java "EnumConstantName",
---  default :
+--  case CaseConstant {, CaseConstant}
+  "case">: nonemptyList $ java "CaseConstant",
+--  case null [, default]   -- the boolean indicates whether ", default" is present
+  "null">: T.boolean,
+--  case CasePattern (JEP 441, SE 21)
+  "casePattern">: java "CasePattern",
+--  default
   "default">: T.unit]
 
---EnumConstantName:
---  Identifier
-enumConstantName :: Binding
-enumConstantName = def "EnumConstantName" $ T.wrap $ java "Identifier"
+--CaseConstant:
+--  ConditionalExpression
+caseConstant :: Binding
+caseConstant = def "CaseConstant" $ T.wrap $ java "ConditionalExpression"
+
+-- Pattern matching (JEPs 440 record patterns, 441 sealed switch / SE 21)
+
+--CasePattern:
+--  Pattern [Guard]
+casePattern :: Binding
+casePattern = def "CasePattern" $ T.record [
+  "pattern">: java "Pattern",
+  "guard">: T.maybe $ java "Guard"]
+
+--Guard:
+--  when Expression
+guard :: Binding
+guard = def "Guard" $ T.wrap $ java "Expression"
+
+--Pattern:
+pattern_ :: Binding
+pattern_ = def "Pattern" $ T.union [
+--  TypePattern
+  "type">: java "TypePattern",
+--  RecordPattern
+  "record">: java "RecordPattern"]
+
+--TypePattern:
+--  LocalVariableDeclaration
+typePattern :: Binding
+typePattern = def "TypePattern" $ T.wrap $ java "LocalVariableDeclaration"
+
+--RecordPattern:
+--  ReferenceType ( [PatternList] )
+--PatternList:
+--  Pattern {, Pattern}
+recordPattern :: Binding
+recordPattern = def "RecordPattern" $ T.record [
+  "type">: java "ReferenceType",
+  "patterns">: T.list $ java "Pattern"]
 
 --WhileStatement:
 --  while ( Expression ) Statement
@@ -1535,7 +1726,7 @@ whileStatementNoShortIf = def "WhileStatementNoShortIf" $ T.record [
 doStatement :: Binding
 doStatement = def "DoStatement" $ T.record [
   "body">: java "Statement",
-  "conde">: T.maybe $ java "Expression"]
+  "cond">: java "Expression"]
 
 --ForStatement:
 forStatement :: Binding
@@ -1590,21 +1781,20 @@ forUpdate = def "ForUpdate" $ T.wrap $ nonemptyList $ java "StatementExpression"
 --  StatementExpression {, StatementExpression}
 
 --EnhancedForStatement:
+--  for ( LocalVariableDeclaration : Expression ) Statement
+-- (Reshape: SE 16 simplified the production by reusing LocalVariableDeclaration.)
 enhancedForStatement :: Binding
 enhancedForStatement = def "EnhancedForStatement" $ T.record [
---  for ( {VariableModifier} LocalVariableType VariableDeclaratorId : Expression ) Statement
   "cond">: java "EnhancedForCond",
   "body">: java "Statement"]
 
 enhancedForCond :: Binding
 enhancedForCond = def "EnhancedForCond" $ T.record [
-  "modifiers">: T.list $ java "VariableModifier",
-  "type">: java "LocalVariableType",
-  "id">: java "VariableDeclaratorId",
+  "declaration">: java "LocalVariableDeclaration",
   "expression">: java "Expression"]
 
 --EnhancedForStatementNoShortIf:
---  for ( {VariableModifier} LocalVariableType VariableDeclaratorId : Expression ) StatementNoShortIf
+--  for ( LocalVariableDeclaration : Expression ) StatementNoShortIf
 enhancedForStatementNoShortIf :: Binding
 enhancedForStatementNoShortIf = def "EnhancedForStatementNoShortIf" $ T.record [
   "cond">: java "EnhancedForCond",
@@ -1614,6 +1804,11 @@ enhancedForStatementNoShortIf = def "EnhancedForStatementNoShortIf" $ T.record [
 --  break [Identifier] ;
 breakStatement :: Binding
 breakStatement = def "BreakStatement" $ T.wrap $ T.maybe $ java "Identifier"
+
+--YieldStatement (JEP 361, Java SE 14):
+--  yield Expression ;
+yieldStatement :: Binding
+yieldStatement = def "YieldStatement" $ T.wrap $ java "Expression"
 
 --ContinueStatement:
 --  continue [Identifier] ;
@@ -1859,7 +2054,9 @@ arrayAccess_Variant = def "ArrayAccess_Variant" $ T.union [
 --  ExpressionName [ Expression ]
   "name">: java "ExpressionName",
 --  PrimaryNoNewArray [ Expression ]
-  "primary">: java "PrimaryNoNewArrayExpression"]
+  "primary">: java "PrimaryNoNewArrayExpression",
+--  ArrayCreationExpressionWithInitializer [ Expression ]  (added in SE 21)
+  "arrayCreationWithInitializer">: java "ArrayCreationExpressionWithInitializer"]
 
 --MethodInvocation:
 methodInvocation :: Binding
@@ -1945,37 +2142,50 @@ methodReference_Array :: Binding
 methodReference_Array = def "MethodReference_Array" $ T.wrap $ java "ArrayType"
 
 --ArrayCreationExpression:
+--  (SE 21 splits this into two intermediate productions)
 arrayCreationExpression :: Binding
 arrayCreationExpression = def "ArrayCreationExpression" $ T.union [
---  new PrimitiveType DimExprs [Dims]
-  "primitive">: java "ArrayCreationExpression_Primitive",
---  new ClassOrInterfaceType DimExprs [Dims]
-  "classOrInterface">: java "ArrayCreationExpression_ClassOrInterface",
---  new PrimitiveType Dims ArrayInitializer
-  "primitiveArray">: java "ArrayCreationExpression_PrimitiveArray",
---  new ClassOrInterfaceType Dims ArrayInitializer
-  "classOrInterfaceArray">: java "ArrayCreationExpression_ClassOrInterfaceArray"]
+--  ArrayCreationExpressionWithoutInitializer
+  "withoutInitializer">: java "ArrayCreationExpressionWithoutInitializer",
+--  ArrayCreationExpressionWithInitializer
+  "withInitializer">: java "ArrayCreationExpressionWithInitializer"]
 
-arrayCreationExpression_Primitive :: Binding
-arrayCreationExpression_Primitive = def "ArrayCreationExpression_Primitive" $ T.record [
+--ArrayCreationExpressionWithoutInitializer:
+arrayCreationExpressionWithoutInitializer :: Binding
+arrayCreationExpressionWithoutInitializer = def "ArrayCreationExpressionWithoutInitializer" $ T.union [
+--  new PrimitiveType DimExprs [Dims]
+  "primitive">: java "ArrayCreationExpressionWithoutInitializer_Primitive",
+--  new ClassOrInterfaceType DimExprs [Dims]
+  "classOrInterface">: java "ArrayCreationExpressionWithoutInitializer_ClassOrInterface"]
+
+arrayCreationExpressionWithoutInitializer_Primitive :: Binding
+arrayCreationExpressionWithoutInitializer_Primitive = def "ArrayCreationExpressionWithoutInitializer_Primitive" $ T.record [
   "type">: java "PrimitiveTypeWithAnnotations",
   "dimExprs">: nonemptyList $ java "DimExpr",
   "dims">: T.maybe $ java "Dims"]
 
-arrayCreationExpression_ClassOrInterface :: Binding
-arrayCreationExpression_ClassOrInterface = def "ArrayCreationExpression_ClassOrInterface" $ T.record [
+arrayCreationExpressionWithoutInitializer_ClassOrInterface :: Binding
+arrayCreationExpressionWithoutInitializer_ClassOrInterface = def "ArrayCreationExpressionWithoutInitializer_ClassOrInterface" $ T.record [
   "type">: java "ClassOrInterfaceType",
   "dimExprs">: nonemptyList $ java "DimExpr",
   "dims">: T.maybe $ java "Dims"]
 
-arrayCreationExpression_PrimitiveArray :: Binding
-arrayCreationExpression_PrimitiveArray = def "ArrayCreationExpression_PrimitiveArray" $ T.record [
+--ArrayCreationExpressionWithInitializer:
+arrayCreationExpressionWithInitializer :: Binding
+arrayCreationExpressionWithInitializer = def "ArrayCreationExpressionWithInitializer" $ T.union [
+--  new PrimitiveType Dims ArrayInitializer
+  "primitive">: java "ArrayCreationExpressionWithInitializer_Primitive",
+--  new ClassOrInterfaceType Dims ArrayInitializer
+  "classOrInterface">: java "ArrayCreationExpressionWithInitializer_ClassOrInterface"]
+
+arrayCreationExpressionWithInitializer_Primitive :: Binding
+arrayCreationExpressionWithInitializer_Primitive = def "ArrayCreationExpressionWithInitializer_Primitive" $ T.record [
   "type">: java "PrimitiveTypeWithAnnotations",
   "dims">: nonemptyList $ java "Dims",
   "array">: java "ArrayInitializer"]
 
-arrayCreationExpression_ClassOrInterfaceArray :: Binding
-arrayCreationExpression_ClassOrInterfaceArray = def "ArrayCreationExpression_ClassOrInterfaceArray" $ T.record [
+arrayCreationExpressionWithInitializer_ClassOrInterface :: Binding
+arrayCreationExpressionWithInitializer_ClassOrInterface = def "ArrayCreationExpressionWithInitializer_ClassOrInterface" $ T.record [
   "type">: java "ClassOrInterfaceType",
   "dims">: nonemptyList $ java "Dims",
   "array">: java "ArrayInitializer"]
@@ -2159,8 +2369,8 @@ relationalExpression = def "RelationalExpression" $ T.union [
   "lessThanEqual">: java "RelationalExpression_LessThanEqual",
 --  RelationalExpression >= ShiftExpression
   "greaterThanEqual">: java "RelationalExpression_GreaterThanEqual",
---  RelationalExpression instanceof ReferenceType
-  "instanceof">: java "RelationalExpression_InstanceOf"]
+--  InstanceofExpression  (extracted from RelationalExpression in SE 16)
+  "instanceofExpression">: java "InstanceofExpression"]
 
 relationalExpression_LessThan :: Binding
 relationalExpression_LessThan = def "RelationalExpression_LessThan" $ T.record [
@@ -2182,10 +2392,19 @@ relationalExpression_GreaterThanEqual = def "RelationalExpression_GreaterThanEqu
   "lhs">: java "RelationalExpression",
   "rhs">: java "ShiftExpression"]
 
-relationalExpression_InstanceOf :: Binding
-relationalExpression_InstanceOf = def "RelationalExpression_InstanceOf" $ T.record [
+--InstanceofExpression (extracted from RelationalExpression in SE 16; pattern arm SE 21):
+--  RelationalExpression instanceof ReferenceType
+--  RelationalExpression instanceof Pattern
+instanceofExpression :: Binding
+instanceofExpression = def "InstanceofExpression" $ T.record [
   "lhs">: java "RelationalExpression",
-  "rhs">: java "ReferenceType"]
+  "rhs">: java "InstanceofExpression_Rhs"]
+
+instanceofExpression_Rhs :: Binding
+instanceofExpression_Rhs = def "InstanceofExpression_Rhs" $ T.union [
+  "referenceType">: java "ReferenceType",
+--  Pattern (JEP 441, Java SE 21)
+  "pattern">: java "Pattern"]
 
 --ShiftExpression:
 shiftExpression :: Binding
@@ -2270,7 +2489,9 @@ unaryExpressionNotPlusMinus = def "UnaryExpressionNotPlusMinus" $ T.union [
 --  ! UnaryExpression
   "not">: java "UnaryExpression",
 --  CastExpression
-  "cast">: java "CastExpression"]
+  "cast">: java "CastExpression",
+--  SwitchExpression (JEP 361, Java SE 14)
+  "switchExpression">: java "SwitchExpression"]
 
 --PostfixExpression:
 postfixExpression :: Binding
@@ -2323,6 +2544,13 @@ castExpression_RefAndBounds :: Binding
 castExpression_RefAndBounds = def "CastExpression_RefAndBounds" $ T.record [
   "type">: java "ReferenceType",
   "bounds">: T.list $ java "AdditionalBound"]
+
+--SwitchExpression (JEP 361, Java SE 14):
+--  switch ( Expression ) SwitchBlock
+switchExpression :: Binding
+switchExpression = def "SwitchExpression" $ T.record [
+  "cond">: java "Expression",
+  "block">: java "SwitchBlock"]
 
 --ConstantExpression:
 --  Expression

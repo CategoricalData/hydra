@@ -316,11 +316,11 @@ stmtExprClassInstance = inject Java._StatementExpression Java._StatementExpressi
 
 -- Custom helpers: other constructors
 
-arrayCreationExpressionPrimitiveArray_ :: TTerm Java.PrimitiveTypeWithAnnotations -> TTerm Java.Dims -> TTerm Java.ArrayInitializer -> TTerm Java.ArrayCreationExpression_PrimitiveArray
-arrayCreationExpressionPrimitiveArray_ pt dims_ arr = record Java._ArrayCreationExpression_PrimitiveArray [
-  Java._ArrayCreationExpression_PrimitiveArray_type>>: pt,
-  Java._ArrayCreationExpression_PrimitiveArray_dims>>: dims_,
-  Java._ArrayCreationExpression_PrimitiveArray_array>>: arr]
+arrayCreationExpressionPrimitiveArray_ :: TTerm Java.PrimitiveTypeWithAnnotations -> TTerm [Java.Dims] -> TTerm Java.ArrayInitializer -> TTerm Java.ArrayCreationExpressionWithInitializer_Primitive
+arrayCreationExpressionPrimitiveArray_ pt dims_ arr = record Java._ArrayCreationExpressionWithInitializer_Primitive [
+  Java._ArrayCreationExpressionWithInitializer_Primitive_type>>: pt,
+  Java._ArrayCreationExpressionWithInitializer_Primitive_dims>>: dims_,
+  Java._ArrayCreationExpressionWithInitializer_Primitive_array>>: arr]
 
 arrayTypeVariantPrimitive :: TTerm Java.PrimitiveTypeWithAnnotations -> TTerm Java.ArrayType_Variant
 arrayTypeVariantPrimitive = inject Java._ArrayType_Variant Java._ArrayType_Variant_primitive
@@ -343,13 +343,13 @@ castExpressionRefAndBounds rt bounds = record Java._CastExpression_RefAndBounds 
 fieldAccessQualifierPrimary :: TTerm Java.Primary -> TTerm Java.FieldAccess_Qualifier
 fieldAccessQualifierPrimary = inject Java._FieldAccess_Qualifier Java._FieldAccess_Qualifier_primary
 
-relationalExpressionInstanceOf :: TTerm Java.RelationalExpression_InstanceOf -> TTerm Java.RelationalExpression
-relationalExpressionInstanceOf = inject Java._RelationalExpression Java._RelationalExpression_instanceof
+relationalExpressionInstanceOf :: TTerm Java.InstanceofExpression -> TTerm Java.RelationalExpression
+relationalExpressionInstanceOf = inject Java._RelationalExpression Java._RelationalExpression_instanceofExpression
 
-relationalExpressionInstanceOf_ :: TTerm Java.RelationalExpression -> TTerm Java.ReferenceType -> TTerm Java.RelationalExpression_InstanceOf
-relationalExpressionInstanceOf_ expr rt = record Java._RelationalExpression_InstanceOf [
-  Java._RelationalExpression_InstanceOf_lhs>>: expr,
-  Java._RelationalExpression_InstanceOf_rhs>>: rt]
+relationalExpressionInstanceOf_ :: TTerm Java.RelationalExpression -> TTerm Java.ReferenceType -> TTerm Java.InstanceofExpression
+relationalExpressionInstanceOf_ expr rt = record Java._InstanceofExpression [
+  Java._InstanceofExpression_lhs>>: expr,
+  Java._InstanceofExpression_rhs>>: inject Java._InstanceofExpression_Rhs Java._InstanceofExpression_Rhs_referenceType rt]
 
 methodInvocation_ :: TTerm Java.MethodInvocation_Header -> TTerm [Java.Expression] -> TTerm Java.MethodInvocation
 methodInvocation_ header args = record Java._MethodInvocation [
