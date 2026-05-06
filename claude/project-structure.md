@@ -50,11 +50,37 @@ worktrees/<branch>/
     go/               # NOT checked in. Regenerate via bin/sync-go.sh (kernel only; head bud)
     coq/              # NOT checked in. Regenerate via generate-coq + generate-coq-tests
   demos/              # Example applications (not published)
-  bindings/           # Host-specific third-party integrations (future)
+  bindings/           # Host-specific third-party integrations
+    java/
+      hydra-rdf4j/    # Wraps hydra.rdf.syntax.* against eclipse rdf4j (rdf4j-rio-ntriples, etc.)
+      hydra-neo4j/    # Cypher (and GQL) parsers via ANTLR; consumes hydra.pg.{model,query}
+    # Future bindings: hydra-tinkerpop, hydra-jena, etc., plus
+    # bindings/python/ and bindings/scala/ as native bindings appear.
   docs/               # Documentation, recipes, guides
   claude/             # Claude-specific protocol and workflow notes (this directory's parent)
   <branch>-plan.md    # Untracked branch plan (see CLAUDE.md "Session procedures")
 ```
+
+### About `bindings/`
+
+`bindings/` is the third structural category alongside `packages/` and `heads/`,
+introduced after the rollup-everything-into-`hydra-java` design proved unworkable.
+The rules:
+
+- Each binding is a **handwritten** Maven/PyPI/etc. artifact (no DSL definition,
+  no JSON pipeline, not in `hydra.json`'s package list).
+- Each binding **depends on exactly one Hydra package** (e.g., `hydra-rdf4j` depends
+  on `hydra-rdf`) and on the third-party library it wraps.
+- Bindings are independently versioned and publishable. In a multi-project Gradle
+  build they participate as `project(':hydra-rdf4j')` references; downstream
+  consumers pull the published artifact.
+- Bindings are **not** consumed by the bootstrap demo or by any Hydra package.
+  They sit at the leaves of the dependency graph, not in the spine.
+
+If handwritten host-language code wants to depend on a third-party library
+(rdf4j, ANTLR, Neo4j, Apache Jena, TinkerPop, etc.), that code belongs in a binding,
+not in a `heads/<lang>/` runtime. The runtime stays third-party-free except for
+host stdlib + minimal build tooling.
 
 For the corresponding human-facing architecture, see the
 [Code organization](https://github.com/CategoricalData/hydra/wiki/Code-organization) wiki page
