@@ -115,6 +115,12 @@ jobs:
           name: dist-scheme
           path: dist/scheme/
           retention-days: 1
+      - name: Upload dist/emacs-lisp
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-emacs-lisp
+          path: dist/emacs-lisp/
+          retention-days: 1
 
   java:
     name: Java tests
@@ -278,3 +284,20 @@ jobs:
           name: dist-scheme
           path: dist/scheme/
       - run: packages/hydra-lisp/bin/run-tests.sh scheme
+
+  emacs-lisp:
+    name: Emacs Lisp tests
+    needs: haskell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Emacs
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y emacs-nox
+      - name: Download dist/emacs-lisp built by Haskell job
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-emacs-lisp
+          path: dist/emacs-lisp/
+      - run: packages/hydra-lisp/bin/run-tests.sh emacs-lisp
