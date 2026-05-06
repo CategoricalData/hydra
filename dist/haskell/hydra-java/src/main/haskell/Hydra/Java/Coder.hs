@@ -698,7 +698,7 @@ declarationForRecordType isInner isSer aliases tparams elName fields cx g =
 declarationForRecordType_ :: Bool -> Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Maybe Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForRecordType_ isInner isSer aliases tparams elName parentName fields cx g =
     Eithers.bind (Eithers.mapList (\f -> recordMemberVar aliases f cx g) fields) (\memberVars -> Eithers.bind (Eithers.mapList (\p -> addComment (Pairs.first p) (Pairs.second p) cx g) (Lists.zip memberVars fields)) (\memberVars_ ->
-      let elNameStr = Core.unName elName
+      let elNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases elName)
       in (Eithers.bind (Logic.ifElse (Equality.gt (Lists.length fields) 1) (Eithers.mapList (\f -> Eithers.bind (recordWithMethod aliases elName fields f cx g) (\decl ->
         let fname = Core.unName (Core.fieldTypeName f)
             comment =
@@ -765,14 +765,14 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
             acceptDecl = Utils.toAcceptMethod True tparams
             vtparams = Lists.concat2 tparams [
                   Utils.javaTypeParameter JavaNames.visitorReturnParameter]
-            elNameStr = Core.unName elName
+            elNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases elName)
             visitorMethods =
                     Lists.map (\ft ->
                       let fname = Core.fieldTypeName ft
                           fnameStr = Core.unName fname
                           typeArgs = Lists.map (\tp -> Utils.typeParameterToTypeArgument tp) tparams
                           varName = Utils.variantClassName False elName fname
-                          varNameStr = Core.unName varName
+                          varNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases varName)
                           varRef = Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs varName Nothing)
                           param = Utils.javaTypeToJavaFormalParameter varRef (Core.Name "instance")
                           resultR = Utils.javaTypeToJavaResult (Syntax.TypeReference Utils.visitorTypeVariable)
@@ -816,7 +816,7 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
                     Lists.map (\ft ->
                       let fname = Core.fieldTypeName ft
                           varName = Utils.variantClassName False elName fname
-                          varNameStr = Core.unName varName
+                          varNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases varName)
                           varRef = Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs varName Nothing)
                           param = Utils.javaTypeToJavaFormalParameter varRef (Core.Name "instance")
                           mi =
