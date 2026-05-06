@@ -4,13 +4,14 @@
 
 module Hydra.Sources.Test.Hoisting.Let where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -49,25 +50,21 @@ allTests = definitionInModule module_ "allTests" $
 nm :: String -> TTerm Name
 nm s = Core.name $ Phantoms.string s
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- | Show a Let as a string using ShowCore.let_
 showLet :: TTerm Let -> TTerm String
-showLet l = ShowCore.let_ # l
+showLet l = ShowCore.let_ @@ l
 
 -- | Local universal version of hoistLetBindingsCase (hoistAll=True)
 hoistLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
 hoistLetBindingsCase cname input output = universalCase cname
-  (showLet (HoistingModule.hoistAllLetBindings # input))
+  (showLet (HoistingModule.hoistAllLetBindings @@ input))
   (showLet output)
 
 -- | Local universal version of hoistPolymorphicLetBindingsCase
 hoistPolymorphicLetBindingsCase :: String -> TTerm Let -> TTerm Let -> TTerm TestCaseWithMetadata
 hoistPolymorphicLetBindingsCase cname input output = universalCase cname
-  (showLet (HoistingModule.hoistPolymorphicLetBindings # Phantoms.lambda "b" (Phantoms.boolean True) # input))
+  (showLet (HoistingModule.hoistPolymorphicLetBindings @@ Phantoms.lambda "b" (Phantoms.boolean True) @@ input))
   (showLet output)
 
 -- Helper for single-binding let

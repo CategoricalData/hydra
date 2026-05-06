@@ -2,13 +2,14 @@
 
 module Hydra.Sources.Test.Json.Writer where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -53,14 +54,11 @@ allTests = define "allTests" $
       nestedGroup]
 
 -- Local alias for polymorphic application
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- Helper for creating JSON writer test cases (universal)
 writerCase :: String -> TTerm Value -> String -> TTerm TestCaseWithMetadata
 writerCase name jsonValue expectedStr = universalCase name
-  (WriterModule.printJson # jsonValue)
+  (WriterModule.printJson @@ jsonValue)
   (Phantoms.string expectedStr)
 
 primitivesGroup :: TTerm TestGroup
