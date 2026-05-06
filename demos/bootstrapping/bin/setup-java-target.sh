@@ -71,27 +71,13 @@ if [ -f "$HYDRA_JAVA_DIR/src/test/java/hydra/test/TestEnv.java" ]; then
     cp "$HYDRA_JAVA_DIR/src/test/java/hydra/test/TestEnv.java" "$OUTPUT_DIR/src/test/java/hydra/test/"
 fi
 
-# Ensure every coder package Generation.java references has a Java distribution.
-# Generation.java imports hydra.{java,python,haskell,lisp,scala}.{Coder,Language,Syntax};
-# its writeLispDialect references require hydra-lisp's Java output, and its
-# scala dispatch references require hydra-scala's Java output. sync-default()
-# does not generate these (since lisp/scala aren't in its target set), so on a
-# clean checkout they can be missing. Assemble them on demand — warm-cache
-# short-circuits in seconds.
-echo "  Ensuring Java coder packages are present (warm cache: seconds)..."
-# Redirect assembler output to a log file: it prints its own "Done: N main..."
-# line per package, which would otherwise pollute the bootstrap-all log
-# parser (which extracts host fileCount/timing from "Done:" lines).
-ASSEMBLE_LOG="$OUTPUT_DIR/.coder-assembly.log"
-mkdir -p "$OUTPUT_DIR"
-: > "$ASSEMBLE_LOG"
-for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
-    coder_base="$HYDRA_ROOT/dist/java/$coder_pkg/src/main/java"
-    if [ ! -d "$coder_base/hydra" ]; then
-        echo "    $coder_pkg not present; generating into Java (see $ASSEMBLE_LOG)..."
-        (cd "$HYDRA_ROOT" && heads/java/bin/assemble-distribution.sh "$coder_pkg") >> "$ASSEMBLE_LOG" 2>&1
-    fi
-done
+# On-demand assembly of missing coder packages used to live here (and again
+# in invoke-java-host.sh). Both loops were eliminated in #309 by hoisting
+# the work into bootstrap-all.sh's pre-sync step, which calls
+# bin/sync.sh --hosts $HOSTS --targets $TARGETS once. Per-package digest
+# caching makes warm runs near-instant; sync.sh handles the (host, target)
+# matrix declaratively rather than re-discovering missing dirs at the
+# per-cell level. (Audit flaw F8.)
 
 # Copy coder packages from baseline.
 # Generation.java imports hydra.{java,python,haskell,lisp,scala}.{Coder,Language,Syntax}

@@ -1,0 +1,125 @@
+// Hydra Java DSL helpers for the hydra-pg package: handwritten fluent
+// builders and static factories for constructing hydra.pg.{model,query}
+// values from Java code. Pure Hydra code — no third-party imports.
+//
+// This binding's category note: most bindings/java/hydra-* packages wrap a
+// third-party library (e.g. hydra-rdf4j wraps rdf4j). hydra-pg-dsl is
+// different — it doesn't wrap anything external, it provides Java-side DSL
+// surface for a Hydra package. It lives under bindings/ because:
+//   1. It's handwritten host-language code, so it doesn't belong in packages/
+//      (which holds DSL-based module definitions, not host-language code).
+//   2. It depends on a specific Hydra package (hydra-pg) and isn't part of
+//      the per-host-language Hydra runtime, so it doesn't belong in heads/
+//      (which holds the language-independent runtime support).
+//   3. Like the other bindings, it's independently versioned and publishable.
+//
+// Depends on hydra-pg.
+
+// nmcp publish plugins (Sonatype Central Portal) require Java 17 to load.
+// We apply them conditionally so the build still loads under Java 11 (for
+// compile/test). When running on Java 17+, publish tasks become available.
+buildscript {
+    repositories { mavenCentral() }
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+        dependencies {
+            classpath 'com.gradleup.nmcp:nmcp:1.4.4'
+        }
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+    apply plugin: 'com.gradleup.nmcp'
+    apply plugin: 'com.gradleup.nmcp.aggregation'
+}
+
+group = 'net.fortytwo.hydra'
+version = '0.16.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    withSourcesJar()
+    // withJavadocJar() omitted — see bindings/java/hydra-rdf4j/build.gradle.
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    api 'net.fortytwo.hydra:hydra-pg:0.16.0'
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+        nmcpAggregation project
+    }
+}
+
+// Skip tests for the standalone publish-focused build.
+tasks.matching { it.name in ['compileTestJava', 'test', 'processTestResources'] }.configureEach {
+    enabled = false
+}
+
+// Make javadoc warnings non-fatal — see bindings/java/hydra-rdf4j/build.gradle.
+tasks.withType(Javadoc).configureEach {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    failOnError = false
+}
+
+// sourcesJar duplicate handling — see bindings/java/hydra-rdf4j/build.gradle.
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'hydra-pg-dsl'
+            pom {
+                name = 'hydra-pg-dsl'
+                description = 'Java DSL helpers for Hydra property graphs: fluent builders and static factories for hydra.pg.{model,query} values.'
+                url = 'https://github.com/CategoricalData/hydra'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'joshsh'
+                        name = 'Joshua Shinavier'
+                        email = 'josh@fortytwo.net'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/CategoricalData/hydra'
+                    connection = 'scm:git://github.com/CategoricalData/hydra.git'
+                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    required { gradle.taskGraph.hasTask('publishAggregationToCentralPortal') ||
+                gradle.taskGraph.hasTask('publishToCentralPortal') }
+    sign publishing.publications.mavenJava
+}
+
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+    nmcpAggregation {
+        centralPortal {
+            username.set(providers.gradleProperty('sonatypeUsername'))
+            password.set(providers.gradleProperty('sonatypePassword'))
+            publishingType = 'USER_MANAGED'
+        }
+    }
+}
