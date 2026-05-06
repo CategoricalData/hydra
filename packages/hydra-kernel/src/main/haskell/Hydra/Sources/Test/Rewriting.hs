@@ -23,7 +23,7 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Coders        as Coders
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Rewriting as RewritingModule
+import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 import qualified Hydra.Dsl.Meta.Lib.Equality as Equality
 import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
@@ -41,7 +41,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, RewritingModule.ns, TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Rewriting.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for core rewrite/fold combinators")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -141,26 +141,26 @@ foldOpCollectLabels = FoldOpCollectLabels
 applyFoldOp :: FoldOp -> TTerm TraversalOrder -> TTerm Term -> TTerm Term
 applyFoldOp FoldOpSumInt32 order input =
   Core.termLiteral (Core.literalInteger (Core.integerValueInt32
-    (RewritingModule.foldOverTerm @@ order @@ sumInt32LiteralsFoldFn @@ Phantoms.int32 0 @@ input)))
+    (Rewriting.foldOverTerm @@ order @@ sumInt32LiteralsFoldFn @@ Phantoms.int32 0 @@ input)))
 applyFoldOp FoldOpCollectListLengths order input =
   Core.termList (Lists.map
     (Phantoms.lambda "n" $ Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (Phantoms.var "n"))))
-    (RewritingModule.foldOverTerm @@ order @@ collectListLengthsFoldFn @@ Phantoms.list ([] :: [TTerm Int]) @@ input))
+    (Rewriting.foldOverTerm @@ order @@ collectListLengthsFoldFn @@ Phantoms.list ([] :: [TTerm Int]) @@ input))
 applyFoldOp FoldOpCollectLabels order input =
   Core.termList (Lists.map
     (Phantoms.lambda "lit" $ Core.termLiteral (Phantoms.var "lit"))
-    (RewritingModule.foldOverTerm @@ order @@ collectLabelsFoldFn @@ Phantoms.list ([] :: [TTerm Literal]) @@ input))
+    (Rewriting.foldOverTerm @@ order @@ collectLabelsFoldFn @@ Phantoms.list ([] :: [TTerm Literal]) @@ input))
 
 -- | Universal rewriteTerm test case: applies replaceFooWithBar rewriter
 rewriteTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 rewriteTermCase cname input output = universalCase cname
-  (showTerm (RewritingModule.rewriteTerm @@ replaceFooWithBarFn @@ input))
+  (showTerm (Rewriting.rewriteTerm @@ replaceFooWithBarFn @@ input))
   (showTerm output)
 
 -- | Universal rewriteType test case: applies replaceStringWithInt32 rewriter
 rewriteTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
 rewriteTypeCase cname input output = universalCase cname
-  (showType (RewritingModule.rewriteType @@ replaceStringWithInt32Fn @@ input))
+  (showType (Rewriting.rewriteType @@ replaceStringWithInt32Fn @@ input))
   (showType output)
 
 -- Helper to build names
@@ -172,8 +172,6 @@ letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper for multi-binding let
-multiLet :: [(String, TTerm Term)] -> TTerm Term -> TTerm Term
-multiLet bindings body = lets ((\(n, v) -> (nm n, v)) <$> bindings) body
 
 -- Helper to build an empty annotation map
 emptyAnnMap :: TTerm (M.Map Name Term)
@@ -477,16 +475,16 @@ rewriteTermGroup = subgroup "rewriteTerm" [
 
     -- Multiple bindings in let
     rewriteTermCase "string in first of multiple let bindings"
-      (multiLet [("x", foo), ("y", baz)] (var "x"))
-      (multiLet [("x", bar), ("y", baz)] (var "x")),
+      (lets [(nm "x", foo), (nm "y", baz)] (var "x"))
+      (lets [(nm "x", bar), (nm "y", baz)] (var "x")),
 
     rewriteTermCase "string in second of multiple let bindings"
-      (multiLet [("x", baz), ("y", foo)] (var "y"))
-      (multiLet [("x", baz), ("y", bar)] (var "y")),
+      (lets [(nm "x", baz), (nm "y", foo)] (var "y"))
+      (lets [(nm "x", baz), (nm "y", bar)] (var "y")),
 
     rewriteTermCase "string in all let bindings and body"
-      (multiLet [("x", foo), ("y", foo)] foo)
-      (multiLet [("x", bar), ("y", bar)] bar),
+      (lets [(nm "x", foo), (nm "y", foo)] foo)
+      (lets [(nm "x", bar), (nm "y", bar)] bar),
 
     -- Sets
     rewriteTermCase "string in set"

@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
-import qualified Hydra.Sources.Kernel.Terms.Lexical as LexicalModule
+import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
@@ -39,7 +39,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [UnificationModule.ns, LexicalModule.ns, ShowCore.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [UnificationModule.ns, Lexical.ns, ShowCore.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for type unification operations")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -99,7 +99,7 @@ unifyTypesCase cname schemaTypes left right substPairs = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
-    (UnificationModule.unifyTypes @@ LexicalModule.emptyContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
+    (UnificationModule.unifyTypes @@ Lexical.emptyContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
   (showTypeSubst (Phantoms.wrap _TypeSubst (Phantoms.map (M.fromList substPairs))))
 
 -- | Universal unifyTypes test case (expecting failure)
@@ -108,7 +108,7 @@ unifyTypesFailCase cname schemaTypes left right _errSubstring = universalCase cn
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "ts" $ showTypeSubst (Phantoms.var "ts"))
-    (UnificationModule.unifyTypes @@ LexicalModule.emptyContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
+    (UnificationModule.unifyTypes @@ Lexical.emptyContext @@ buildSchemaMap schemaTypes @@ left @@ right @@ Phantoms.string "test"))
   (Phantoms.string "failure")
 
 -- | Universal joinTypes test case (expecting success)
@@ -117,7 +117,7 @@ joinTypesCase cname left right constraints = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
-    (UnificationModule.joinTypes @@ LexicalModule.emptyContext @@ left @@ right @@ Phantoms.string "test"))
+    (UnificationModule.joinTypes @@ Lexical.emptyContext @@ left @@ right @@ Phantoms.string "test"))
   (showConstraints constraints)
 
 -- | Universal joinTypes test case (expecting failure)
@@ -126,7 +126,7 @@ joinTypesFailCase cname left right = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "failure")
     (Phantoms.lambda "cs" $ showConstraints (Phantoms.var "cs"))
-    (UnificationModule.joinTypes @@ LexicalModule.emptyContext @@ left @@ right @@ Phantoms.string "test"))
+    (UnificationModule.joinTypes @@ Lexical.emptyContext @@ left @@ right @@ Phantoms.string "test"))
   (Phantoms.string "failure")
 
 -- ============================================================

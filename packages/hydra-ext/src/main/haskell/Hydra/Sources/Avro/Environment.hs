@@ -8,13 +8,13 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
-import qualified Hydra.Sources.Kernel.Types.Coders as CodersTypes
+import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 
 ns :: Namespace
 ns = Namespace "hydra.avro.environment"
 
 computeType :: String -> Type
-computeType = typeref CodersTypes.ns
+computeType = typeref Coders.ns
 
 avroSchemaType :: Type
 avroSchemaType = typeref (Namespace "hydra.avro.schema") "Schema"
@@ -43,7 +43,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [CoreTypes.ns, CodersTypes.ns, Namespace "hydra.avro.schema", Namespace "hydra.json.model"],
+            moduleDependencies = [CoreTypes.ns, Coders.ns, Namespace "hydra.avro.schema", Namespace "hydra.json.model"],
             moduleDescription = Just "Type definitions for the Avro code generation environment"}
   where
     definitions = [

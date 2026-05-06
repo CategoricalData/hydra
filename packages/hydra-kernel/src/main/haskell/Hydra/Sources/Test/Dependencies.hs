@@ -22,7 +22,7 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Dependencies as DependenciesModule
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
@@ -35,7 +35,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, DependenciesModule.ns, TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Dependencies.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for dependency analysis and let-term transformations")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -61,8 +61,6 @@ letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper for multi-binding let
-multiLet :: [(String, TTerm Term)] -> TTerm Term -> TTerm Term
-multiLet bindings body = lets ((\(n, v) -> (nm n, v)) <$> bindings) body
 
 -- Helper to build an empty annotation map
 emptyAnnMap :: TTerm (M.Map Name Term)
@@ -71,7 +69,7 @@ emptyAnnMap = Phantoms.map M.empty
 -- | Universal sortBindingsCase: applies topologicalSortBindingMap and shows result
 sortBindingsCase :: String -> TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TestCaseWithMetadata
 sortBindingsCase cname bindings expected = universalCase cname
-  (showBindingGroups (DependenciesModule.topologicalSortBindingMap @@ Maps.fromList bindings))
+  (showBindingGroups (Dependencies.topologicalSortBindingMap @@ Maps.fromList bindings))
   (showBindingGroups expected)
   where
     showBindingGroups :: TTerm [[(Name, Term)]] -> TTerm String
@@ -88,13 +86,13 @@ sortBindingsCase cname bindings expected = universalCase cname
 
 -- | Convenience helpers for specific kernel functions
 flattenCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-flattenCase cname = termCase cname DependenciesModule.flattenLetTerms
+flattenCase cname = termCase cname Dependencies.flattenLetTerms
 
 liftLambdaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-liftLambdaCase cname = termCase cname DependenciesModule.liftLambdaAboveLet
+liftLambdaCase cname = termCase cname Dependencies.liftLambdaAboveLet
 
 simplifyCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-simplifyCase cname = termCase cname DependenciesModule.simplifyTerm
+simplifyCase cname = termCase cname Dependencies.simplifyTerm
 
 -- | Test cases for term simplification (beta reduction)
 simplifyTermGroup :: TTerm TestGroup
@@ -138,50 +136,50 @@ flattenLetTermsGroup = subgroup "flattenLetTerms" [
       (letExpr "x" (int32 1)
         (letExpr "y" (int32 2)
           (list [var "x", var "y"])))
-      (multiLet [("x", int32 1), ("y", int32 2)]
+      (lets [(nm "x", int32 1), (nm "y", int32 2)]
         (list [var "x", var "y"])),
 
     -- Nested bindings are flattened with prefix renaming
     -- Dependencies come BEFORE bindings that use them (important for hoisting)
     flattenCase "nested binding in let value is flattened"
       -- let a = 1; b = (let x = 1; y = 2 in [x, y]) in [a, b]
-      (multiLet [
-        ("a", int32 1),
-        ("b", multiLet [("x", int32 1), ("y", int32 2)]
+      (lets [
+        (nm "a", int32 1),
+        (nm "b", lets [(nm "x", int32 1), (nm "y", int32 2)]
                 (list [var "x", var "y"]))]
         (list [var "a", var "b"]))
       -- let a = 1; b_x = 1; b_y = 2; b = [b_x, b_y] in [a, b]
       -- Note: dependencies (b_x, b_y) come before b
-      (multiLet [
-        ("a", int32 1),
-        ("b_x", int32 1),
-        ("b_y", int32 2),
-        ("b", list [var "b_x", var "b_y"])]
+      (lets [
+        (nm "a", int32 1),
+        (nm "b_x", int32 1),
+        (nm "b_y", int32 2),
+        (nm "b", list [var "b_x", var "b_y"])]
         (list [var "a", var "b"])),
 
     -- Multiple levels of nesting
     -- Dependencies come BEFORE bindings that use them (important for hoisting)
     flattenCase "multiple levels of nesting are flattened"
       -- let a = 1; b = (let x = 1; y = (let p = 137; q = [x, 5] in [a, q]) in [x, y]) in [a, b]
-      (multiLet [
-        ("a", int32 1),
-        ("b", multiLet [
-          ("x", int32 1),
-          ("y", multiLet [
-            ("p", int32 137),
-            ("q", list [var "x", int32 5])]
+      (lets [
+        (nm "a", int32 1),
+        (nm "b", lets [
+          (nm "x", int32 1),
+          (nm "y", lets [
+            (nm "p", int32 137),
+            (nm "q", list [var "x", int32 5])]
             (list [var "a", var "q"]))]
           (list [var "x", var "y"]))]
         (list [var "a", var "b"]))
       -- Flattened with proper prefixes
       -- Order: a, then b's deps (b_x, b_y's deps (b_y_p, b_y_q), b_y), then b
-      (multiLet [
-        ("a", int32 1),
-        ("b_x", int32 1),
-        ("b_y_p", int32 137),
-        ("b_y_q", list [var "b_x", int32 5]),
-        ("b_y", list [var "a", var "b_y_q"]),
-        ("b", list [var "b_x", var "b_y"])]
+      (lets [
+        (nm "a", int32 1),
+        (nm "b_x", int32 1),
+        (nm "b_y_p", int32 137),
+        (nm "b_y_q", list [var "b_x", int32 5]),
+        (nm "b_y", list [var "a", var "b_y_q"]),
+        (nm "b", list [var "b_x", var "b_y"])]
         (list [var "a", var "b"]))]
 
 -- | Test cases for lifting lambda above let
@@ -223,16 +221,16 @@ liftLambdaAboveLetGroup = subgroup "liftLambdaAboveLet" [
 
     -- Multiple bindings and nested lets
     liftLambdaCase "let without lambda in body unchanged"
-      (multiLet [("x", int32 42), ("y", string "hello")]
+      (lets [(nm "x", int32 42), (nm "y", string "hello")]
         (pair (var "x") (var "y")))
-      (multiLet [("x", int32 42), ("y", string "hello")]
+      (lets [(nm "x", int32 42), (nm "y", string "hello")]
         (pair (var "x") (var "y"))),
 
     liftLambdaCase "multiple let bindings with lambda"
-      (multiLet [("x", int32 42), ("y", string "hello")]
+      (lets [(nm "x", int32 42), (nm "y", string "hello")]
         (lambda "z" (var "x")))
       (lambda "z"
-        (multiLet [("x", int32 42), ("y", string "hello")]
+        (lets [(nm "x", int32 42), (nm "y", string "hello")]
           (var "x"))),
 
     liftLambdaCase "nested lets with lambda at innermost level"

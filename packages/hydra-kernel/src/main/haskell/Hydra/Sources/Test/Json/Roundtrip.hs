@@ -29,7 +29,7 @@ import qualified Data.Scientific              as Sci
 import Hydra.Testing
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Json.Encode as EncodeModule
-import qualified Hydra.Sources.Json.Decode as DecodeModule
+import qualified Hydra.Sources.Json.Decode as JsonDecode
 
 
 ns :: Namespace
@@ -70,7 +70,7 @@ roundtripTest testName typ term = universalCase testName
       Eithers.either_
         (Phantoms.lambda "e" $ Phantoms.var "e")
         (Phantoms.lambda "decoded" $ ShowCore.term @@ Phantoms.var "decoded")
-        (DecodeModule.fromJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
+        (JsonDecode.fromJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ Phantoms.var "json"))
     (EncodeModule.toJson @@ Maps.empty @@ Core.name (Phantoms.string "test") @@ typ @@ term))
   (ShowCore.term @@ term)
 

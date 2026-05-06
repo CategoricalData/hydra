@@ -83,7 +83,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Dsl.Errors as Errors
+import qualified Hydra.Dsl.Errors as Error
 import qualified Hydra.Json.Schema as JS
 import qualified Hydra.Json.Model as JM
 import qualified Hydra.Sources.Json.Schema as JsonSchema
@@ -375,7 +375,7 @@ typeToExpr = define "typeToExpr" $
   doc "Encode a Hydra type as a list of JSON Schema restrictions" $
   lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "typ" $
     cases _Type (var "typ")
-      (Just (left (Errors.errorOther (Errors.otherError
+      (Just (left (Error.errorOther (Error.otherError
         (Strings.cat2 (string "JSON Schema: unsupported type variant: ")
           (ShowVariants.typeVariant @@ (Reflect.typeVariant @@ var "typ"))))))) [
 
