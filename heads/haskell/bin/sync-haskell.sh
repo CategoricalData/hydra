@@ -100,26 +100,19 @@ echo ""
 # inputs and the verifier binary. Per-module caching is the proper fix
 # (see follow-up task) — this is the coarse interim.
 VERIFY_CACHE="$HYDRA_HASKELL_DIR/.stack-work/verify-json-kernel-cache.txt"
-compute_verify_hash() {
+VERIFY_HASH=$(
     {
         find "$HYDRA_ROOT_DIR/dist/json/hydra-kernel" -type f -name '*.json' 2>/dev/null
         # Include the exec source so a verifier change re-triggers verification.
         find "$HYDRA_ROOT_DIR/heads/haskell/src/exec/verify-json-kernel" -type f 2>/dev/null
     } | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null | shasum -a 256 | awk '{print $1}'
-}
+)
 
-CURRENT_VERIFY_HASH=$(compute_verify_hash)
-RECORDED_VERIFY_HASH=""
-if [ -f "$VERIFY_CACHE" ]; then
-    RECORDED_VERIFY_HASH=$(cat "$VERIFY_CACHE")
-fi
-
-if [ -n "$RECORDED_VERIFY_HASH" ] && [ "$CURRENT_VERIFY_HASH" = "$RECORDED_VERIFY_HASH" ]; then
+if step_cache_hit "$VERIFY_CACHE" "$VERIFY_HASH"; then
     echo "  JSON kernel inputs unchanged since last green verify; skipping."
 else
     stack exec verify-json-kernel -- $RTS_FLAGS
-    mkdir -p "$(dirname "$VERIFY_CACHE")"
-    echo "$CURRENT_VERIFY_HASH" > "$VERIFY_CACHE"
+    step_cache_record "$VERIFY_CACHE" "$VERIFY_HASH"
 fi
 stack exec update-json-manifest
 
@@ -133,20 +126,14 @@ echo ""
 # hit guarantees the Haskell output on disk is identical to what would
 # be regenerated.
 BFJ_CACHE="$HYDRA_HASKELL_DIR/.stack-work/bootstrap-from-json-cache.txt"
-compute_bfj_hash() {
+BFJ_HASH=$(
     {
         find "$HYDRA_ROOT_DIR/dist/json" -type f -name '*.json' 2>/dev/null
         find "$HYDRA_ROOT_DIR/heads/haskell/src/exec/bootstrap-from-json" -type f 2>/dev/null
     } | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null | shasum -a 256 | awk '{print $1}'
-}
+)
 
-CURRENT_BFJ_HASH=$(compute_bfj_hash)
-RECORDED_BFJ_HASH=""
-if [ -f "$BFJ_CACHE" ]; then
-    RECORDED_BFJ_HASH=$(cat "$BFJ_CACHE")
-fi
-
-if [ -n "$RECORDED_BFJ_HASH" ] && [ "$CURRENT_BFJ_HASH" = "$RECORDED_BFJ_HASH" ]; then
+if step_cache_hit "$BFJ_CACHE" "$BFJ_HASH"; then
     echo "  JSON inputs + bootstrap-from-json unchanged since last run; skipping."
 else
     stack exec bootstrap-from-json -- \
@@ -157,8 +144,7 @@ else
         --include-tests \
         --synthesize-sources \
         $RTS_FLAGS
-    mkdir -p "$(dirname "$BFJ_CACHE")"
-    echo "$CURRENT_BFJ_HASH" > "$BFJ_CACHE"
+    step_cache_record "$BFJ_CACHE" "$BFJ_HASH"
 fi
 
 step 5 $TOTAL_STEPS "Post-processing generated files"
@@ -189,16 +175,13 @@ if [ "$NO_TESTS" = false ]; then
     #   - heads/haskell/src/main/haskell/**.hs (hand-written runtime)
     #   - heads/haskell/src/test/haskell/**.hs (hand-written test infra)
     #   - heads/haskell/{package.yaml,stack.yaml} (build config)
+    #
+    # $SCRIPT_DIR is absolute (captured before any cd); using
+    # ${BASH_SOURCE[0]} relative would fail to resolve after the
+    # script has cd'd into $HYDRA_HASKELL_DIR. Diagnosed by
+    # feature_343_json on 2026-04-26.
     HASKELL_TEST_CACHE="$HYDRA_HASKELL_DIR/.stack-work/haskell-test-cache.txt"
-    compute_haskell_test_hash() {
-        # Use $SCRIPT_DIR (absolute, captured before any cd) instead of
-        # ${BASH_SOURCE[0]} which may be relative and fail to resolve
-        # after the script has already cd'd into $HYDRA_HASKELL_DIR.
-        # When BASH_SOURCE[0] is "heads/haskell/bin/sync-haskell.sh" and
-        # CWD is heads/haskell, the relative resolves to a non-existent
-        # path; shasum fails, xargs propagates non-zero, pipefail aborts
-        # the whole script before stack test runs (diagnosed by
-        # feature_343_json on 2026-04-26).
+    HASKELL_TEST_HASH=$(
         {
             find "$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/main/haskell" \
                  "$HYDRA_ROOT_DIR/dist/haskell/hydra-kernel/src/test/haskell" \
@@ -209,15 +192,9 @@ if [ "$NO_TESTS" = false ]; then
             echo "$HYDRA_HASKELL_DIR/stack.yaml"
             echo "$SCRIPT_DIR/sync-haskell.sh"
         } | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null | shasum -a 256 | awk '{print $1}'
-    }
+    )
 
-    CURRENT_TEST_HASH=$(compute_haskell_test_hash)
-    RECORDED_TEST_HASH=""
-    if [ -f "$HASKELL_TEST_CACHE" ]; then
-        RECORDED_TEST_HASH=$(cat "$HASKELL_TEST_CACHE")
-    fi
-
-    if [ -n "$RECORDED_TEST_HASH" ] && [ "$CURRENT_TEST_HASH" = "$RECORDED_TEST_HASH" ]; then
+    if step_cache_hit "$HASKELL_TEST_CACHE" "$HASKELL_TEST_HASH"; then
         echo "  Test inputs unchanged since last green run; skipping stack test."
     else
         TEST_LOG="$HYDRA_HASKELL_DIR/test-output.log"
@@ -227,8 +204,7 @@ if [ "$NO_TESTS" = false ]; then
         if [ $TEST_RESULT -eq 0 ]; then
             echo ""
             echo "All tests passed!"
-            mkdir -p "$(dirname "$HASKELL_TEST_CACHE")"
-            echo "$CURRENT_TEST_HASH" > "$HASKELL_TEST_CACHE"
+            step_cache_record "$HASKELL_TEST_CACHE" "$HASKELL_TEST_HASH"
         else
             echo ""
             echo "ERROR: stack test exited $TEST_RESULT. See $TEST_LOG" >&2
