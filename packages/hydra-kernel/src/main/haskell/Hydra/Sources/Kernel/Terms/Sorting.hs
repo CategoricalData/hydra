@@ -95,7 +95,7 @@ adjacencyListsToGraph = define "adjacencyListsToGraph" $
     <> " construct a graph along with a function mapping each vertex (an Int)"
     <> " back to its original key (Nothing for unknown vertices).") $
   "edges0" ~>
-  "sortedEdges" <~ Lists.sortOn (unaryFunction Pairs.first) (var "edges0") $
+  "sortedEdges" <~ Lists.sortOn (reify Pairs.first) (var "edges0") $
   "indexedEdges" <~ Lists.zip (Math.range (int32 0) (Lists.length (var "sortedEdges"))) (var "sortedEdges") $
   "keyToVertex" <~ Maps.fromList (Lists.map
     ("vkNeighbors" ~>
@@ -129,7 +129,7 @@ adjacencyListToMap = define "adjacencyListToMap" $
     ("mp" ~> "p" ~>
       "k" <~ Pairs.first (var "p") $
       "vs" <~ Pairs.second (var "p") $
-      "existing" <~ Maybes.maybe (list ([] :: [TTerm a])) (unaryFunction Equality.identity) (Maps.lookup (var "k") (var "mp")) $
+      "existing" <~ Maybes.maybe (list ([] :: [TTerm a])) (reify Equality.identity) (Maps.lookup (var "k") (var "mp")) $
       Maps.insert (var "k") (Lists.concat2 (var "existing") (var "vs")) (var "mp"))
     Maps.empty
     (var "pairs")
@@ -196,18 +196,18 @@ propagateTags = define "propagateTags" $
   -- Build adjacency map
   "adjMap" <~ adjacencyListToMap @@ var "edges" $
   -- Build initial tag map: convert each [t] to Set t
-  "tagMap" <~ Maps.map (unaryFunction Sets.fromList) (adjacencyListToMap @@ var "nodeTags") $
+  "tagMap" <~ Maps.map (reify Sets.fromList) (adjacencyListToMap @@ var "nodeTags") $
   -- Collect all nodes
   "allNodes" <~ Sets.toList (Sets.fromList $ Lists.concat2
-    (Lists.map (unaryFunction Pairs.first) (var "edges"))
-    (Lists.map (unaryFunction Pairs.first) (var "nodeTags"))) $
+    (Lists.map (reify Pairs.first) (var "edges"))
+    (Lists.map (reify Pairs.first) (var "nodeTags"))) $
   -- For each node, find all reachable nodes and collect their tags
   "getTagsForNode" <~ ("node" ~>
     "reachable" <~ findReachableNodes
-      @@ ("n" ~> Sets.fromList $ Maybes.maybe (list ([] :: [TTerm a])) (unaryFunction Equality.identity) (Maps.lookup (var "n") (var "adjMap")))
+      @@ ("n" ~> Sets.fromList $ Maybes.maybe (list ([] :: [TTerm a])) (reify Equality.identity) (Maps.lookup (var "n") (var "adjMap")))
       @@ var "node" $
     Sets.unions $ Lists.map
-      ("n" ~> Maybes.maybe Sets.empty (unaryFunction Equality.identity) (Maps.lookup (var "n") (var "tagMap")))
+      ("n" ~> Maybes.maybe Sets.empty (reify Equality.identity) (Maps.lookup (var "n") (var "tagMap")))
       (Sets.toList $ var "reachable")) $
   Lists.map ("n" ~> pair (var "n") (var "getTagsForNode" @@ var "n")) (var "allNodes")
 
@@ -260,7 +260,7 @@ stronglyConnectedComponents = define "stronglyConnectedComponents" $
       (strongConnect @@ var "graph" @@ var "v" @@ var "st"))
     (asTerm initialState)
     (var "verts") $
-  Lists.reverse (Lists.map (unaryFunction Lists.sort) (Topology.tarjanStateSccs (var "finalState")))
+  Lists.reverse (Lists.map (reify Lists.sort) (Topology.tarjanStateSccs (var "finalState")))
 
 topologicalSort :: TTermDefinition ([(a, [a])] -> Either [[a]] [a])
 topologicalSort = define "topologicalSort" $

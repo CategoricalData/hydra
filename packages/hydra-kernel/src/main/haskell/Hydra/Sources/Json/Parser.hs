@@ -178,7 +178,7 @@ digit = define "digit" $
 digits :: TTermDefinition (Parser String)
 digits = define "digits" $
   doc "Parse one or more digits as a string" $
-  Parsers.map @@ (unaryFunction Strings.fromList) @@
+  Parsers.map @@ (reify Strings.fromList) @@
     (Parsers.some @@ digit)
 
 -- | Parse the integer part of a JSON number
@@ -186,7 +186,7 @@ digits = define "digits" $
 jsonArray :: TTermDefinition (Parser J.Value)
 jsonArray = define "jsonArray" $
   doc "Parse a JSON array" $
-  Parsers.map @@ (unaryFunction Json.valueArray) @@
+  Parsers.map @@ (reify Json.valueArray) @@
     (Parsers.between
       @@ (token @@ (Parsers.char @@ bracketOpenCode))
       @@ (token @@ (Parsers.char @@ bracketCloseCode))
@@ -241,7 +241,7 @@ jsonExponentPart = define "jsonExponentPart" $
             Parsers.map @@
               ("digits" ~>
                 string "e" ++
-                Maybes.maybe (string "") (unaryFunction Strings.fromList <.> unaryFunction Lists.pure) (var "sign") ++
+                Maybes.maybe (string "") (reify Strings.fromList <.> reify Lists.pure) (var "sign") ++
                 var "digits") @@
               digits)))
 
@@ -303,17 +303,17 @@ jsonNumber = define "jsonNumber" $
         Parsers.bind @@ jsonExponentPart @@ ("expPart" ~>
           "numStr" <~
             (var "intPart" ++
-             Maybes.maybe (string "") (unaryFunction Equality.identity) (var "fracPart") ++
-             Maybes.maybe (string "") (unaryFunction Equality.identity) (var "expPart")) $
+             Maybes.maybe (string "") (reify Equality.identity) (var "fracPart") ++
+             Maybes.maybe (string "") (reify Equality.identity) (var "expPart")) $
           Parsers.pure @@
-            (Json.valueNumber (Maybes.maybe (decimal 0) (unaryFunction Equality.identity) (Literals.readDecimal (var "numStr"))))))))
+            (Json.valueNumber (Maybes.maybe (decimal 0) (reify Equality.identity) (Literals.readDecimal (var "numStr"))))))))
 
 -- | Parse a JSON escape character
 -- | Parse a JSON object
 jsonObject :: TTermDefinition (Parser J.Value)
 jsonObject = define "jsonObject" $
   doc "Parse a JSON object" $
-  Parsers.map @@ (unaryFunction Json.valueObject <.> unaryFunction Maps.fromList) @@
+  Parsers.map @@ (reify Json.valueObject <.> reify Maps.fromList) @@
     (Parsers.between
       @@ (token @@ (Parsers.char @@ braceOpenCode))
       @@ (token @@ (Parsers.char @@ braceCloseCode))

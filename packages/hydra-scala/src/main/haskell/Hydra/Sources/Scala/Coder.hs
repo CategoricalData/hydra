@@ -813,7 +813,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname">: ScalaUtilsSource.scalaEscapeName @@ (Names.localNameOf @@ var "name"),
     "typ'">: Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (unaryFunction Core.typeSchemeBody)
+      (reify Core.typeSchemeBody)
       (project _TermDefinition _TermDefinition_typeScheme @@ var "td"),
     -- Check if the type is a function type (needs def) by looking at the stripped type
     "isFunctionType">: cases _Type (Strip.deannotateType @@ var "typ'")

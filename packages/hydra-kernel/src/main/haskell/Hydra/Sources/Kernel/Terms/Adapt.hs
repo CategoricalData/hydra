@@ -319,12 +319,12 @@ adaptLiteralType = define "adaptLiteralType" $
   "forUnsupported" <~ ("lt" ~> cases _LiteralType (var "lt")
     (Just nothing) [
     _LiteralType_binary>>: constant $ just Core.literalTypeString,
-    _LiteralType_boolean>>: constant $ Maybes.map (unaryFunction Core.literalTypeInteger) $
+    _LiteralType_boolean>>: constant $ Maybes.map (reify Core.literalTypeInteger) $
       adaptIntegerType @@ var "constraints" @@ Core.integerTypeInt8,
     _LiteralType_decimal>>: constant $ just $ Core.literalTypeFloat Core.floatTypeFloat64,
-    _LiteralType_float>>: "ft" ~> Maybes.map (unaryFunction Core.literalTypeFloat) $
+    _LiteralType_float>>: "ft" ~> Maybes.map (reify Core.literalTypeFloat) $
       adaptFloatType @@ var "constraints" @@ var "ft",
-    _LiteralType_integer>>: "it" ~> Maybes.map (unaryFunction Core.literalTypeInteger) $
+    _LiteralType_integer>>: "it" ~> Maybes.map (reify Core.literalTypeInteger) $
       adaptIntegerType @@ var "constraints" @@ var "it"]) $
   Logic.ifElse (literalTypeSupported @@ var "constraints" @@ var "lt")
     nothing
@@ -685,14 +685,14 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       optCases (Names.namespaceOf @@ (Core.bindingName $ var "el"))
         (var "acc")
         ("ns" ~>
-          "existing" <~ Maybes.maybe (list ([] :: [TTerm Binding])) (unaryFunction Equality.identity) (Maps.lookup (var "ns") (var "acc")) $
+          "existing" <~ Maybes.maybe (list ([] :: [TTerm Binding])) (reify Equality.identity) (Maps.lookup (var "ns") (var "acc")) $
           Maps.insert (var "ns") (Lists.concat2 (var "existing") (list [var "el"])) (var "acc")))
     Maps.empty
     (var "selectedElements") $
   -- Produce definitions in the order of the input namespaces
   "defsGrouped" <~ Lists.map
     ("ns" ~>
-      "elsForNs" <~ Maybes.maybe (list ([] :: [TTerm Binding])) (unaryFunction Equality.identity) (Maps.lookup (var "ns") (var "elementsByNamespace")) $
+      "elsForNs" <~ Maybes.maybe (list ([] :: [TTerm Binding])) (reify Equality.identity) (Maps.lookup (var "ns") (var "elementsByNamespace")) $
       Maybes.cat (Lists.map (var "toDef") (var "elsForNs")))
     (var "namespaces") $
 

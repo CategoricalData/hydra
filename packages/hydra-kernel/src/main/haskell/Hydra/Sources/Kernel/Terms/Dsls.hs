@@ -637,7 +637,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
   "ns" <~ (Names.namespaceOf @@ Core.bindingName (var "b")) $
-  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (unaryFunction Packaging.unNamespace) (var "ns")) (string "hydra.phantoms"))
+  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (reify Packaging.unNamespace) (var "ns")) (string "hydra.phantoms"))
     (right nothing)
     (right (just (var "b")))
 

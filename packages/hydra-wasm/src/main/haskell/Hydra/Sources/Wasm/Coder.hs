@@ -916,7 +916,7 @@ encodeProjection = def "encodeProjection" $
         "matching" <~ Lists.filter
           (lambda "p" $ Equality.equal (Pairs.first (var "p")) (var "fieldName"))
           (var "pairs") $
-        Maybes.map (unaryFunction Pairs.second) (Lists.maybeHead (var "matching")))) $
+        Maybes.map (reify Pairs.second) (Lists.maybeHead (var "matching")))) $
     Maybes.cases (var "mOffset")
       -- Unknown: fall back to placeholder (drop scrutinee if any, push i32.const 0).
       (right (Lists.concat (list [
@@ -1016,7 +1016,7 @@ encodeCases = def "encodeCases" $
     "explicitLabelForName" <~ (lambda "fname" $
       Maybes.fromMaybe (var "defaultArmLabel")
         (Maybes.map
-          (unaryFunction Pairs.first)
+          (reify Pairs.first)
           (Lists.find
             (lambda "arm" $ Equality.equal (Pairs.first (var "arm")) (var "fname"))
             (var "explicitArms")))) $
@@ -1026,10 +1026,10 @@ encodeCases = def "encodeCases" $
       -- Fallback: no variant info for this type. Use the explicit-arm labels
       -- at positions 0..len-1 (preserving pre-fix behavior); tags beyond the
       -- explicit arms hit the default.
-      (Lists.map (unaryFunction Pairs.first) (var "explicitArms"))
+      (Lists.map (reify Pairs.first) (var "explicitArms"))
       (lambda "variantPairs" $
         -- variantPairs :: [(Name, Int)]. Sort by index, emit label per index.
-        "sorted" <~ Lists.sortOn (unaryFunction Pairs.second) (var "variantPairs") $
+        "sorted" <~ Lists.sortOn (reify Pairs.second) (var "variantPairs") $
         Lists.map
           (lambda "np" $
             "fieldName" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Pairs.first (var "np"))) $
@@ -1280,7 +1280,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (var "name")) $
     "typ" <~ Maybes.maybe
       (Core.typeUnit)
-      (unaryFunction Core.typeSchemeBody)
+      (reify Core.typeSchemeBody)
       (Packaging.termDefinitionTypeScheme (var "tdef")) $
     -- Extract lambda parameters and inner body
     "extracted" <~ (extractLambdaParams @@ var "term") $
@@ -1548,7 +1548,7 @@ stringDataSegment :: TTermDefinition (M.Map String Int -> W.ModuleField)
 stringDataSegment = def "stringDataSegment" $
   lambda "offsets" $
     -- Sort (string, offset) pairs by offset so the data segment packs contiguously
-    "entries" <~ Lists.sortOn (unaryFunction Pairs.second) (Maps.toList (var "offsets")) $
+    "entries" <~ Lists.sortOn (reify Pairs.second) (Maps.toList (var "offsets")) $
     -- For each string: emit 4 length-prefix bytes (little-endian) followed by content bytes,
     -- every byte as a hex escape.
     "bytesForEntry" <~ (lambda "entry" $

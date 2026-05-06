@@ -245,7 +245,7 @@ constructModule = haskellCoderDefinition "constructModule" $
         record H._Import [
           H._Import_qualified>>: Maybes.isJust $ var "malias",
           H._Import_module>>: wrap H._ModuleName $ var "name",
-          H._Import_as>>: Maybes.map (unaryFunction $ wrap H._ModuleName) (var "malias"),
+          H._Import_as>>: Maybes.map (reify $ wrap H._ModuleName) (var "malias"),
           H._Import_spec>>: var "spec"]] $
       Lists.map (var "toImport") $ Lists.concat $ list [
         -- Prelude is always imported (hides names that conflict with Hydra)
@@ -321,7 +321,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
                   (Just $ right $ var "singleArg") [
                   _Type_unit>>: constant $ right $ var "noArgs"]) $ lets [
           "lhs">: HaskellUtils.applicationPattern @@ var "hname" @@ var "args"] $
-          "rhs" <<~ Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ (Math.add (var "depth") (int32 1)) @@ var "namespaces" @@ var "rhsTerm" @@ var "cx" @@ var "g") $
+          "rhs" <<~ Eithers.map (reify $ wrap H._CaseRhs) (encodeTerm @@ (Math.add (var "depth") (int32 1)) @@ var "namespaces" @@ var "rhsTerm" @@ var "cx" @@ var "g") $
           right $ record H._Alternative [
             H._Alternative_pattern>>: var "lhs",
             H._Alternative_rhs>>: var "rhs",
@@ -334,7 +334,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
     "dcases" <<~ (Maybes.cases (var "def")
       (right $ list ([] :: [TTerm H.CaseRhs])) $
       "d" ~>
-        "cs" <<~ Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ var "depth" @@ var "namespaces" @@ var "d" @@ var "cx" @@ var "g") $ lets [
+        "cs" <<~ Eithers.map (reify $ wrap H._CaseRhs) (encodeTerm @@ var "depth" @@ var "namespaces" @@ var "d" @@ var "cx" @@ var "g") $ lets [
         "lhs">: inject H._Pattern H._Pattern_name $ HaskellUtils.rawName @@ (Constants.ignoredVariable),
         "alt">: record H._Alternative [
           H._Alternative_pattern>>: var "lhs",
@@ -440,7 +440,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "hv" <<~ var "encode" @@ var "v" $
         right $ inject H._Expression H._Expression_tuple $ list [var "hk", var "hv"]] $
       "rhs" <<~ Eithers.map
-        (unaryFunction $ inject H._Expression H._Expression_list)
+        (reify $ inject H._Expression H._Expression_list)
         (Eithers.mapList (var "encodePair") $ Maps.toList (var "m")) $
       right $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs") $
     "nonemptySet" <~ ("s" ~> lets [
@@ -934,7 +934,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
           "toTermDefinition">: "hname''" ~> "hterm'" ~>
             inject H._LocalBinding H._LocalBinding_value $ HaskellUtils.simpleValueBinding @@ var "hname''" @@ var "hterm'" @@ nothing,
           "hnames">: Lists.map ("binding" ~> HaskellUtils.simpleName @@ (Core.unName $ Core.bindingName $ var "binding")) (var "lbindings"),
-          "terms">: Lists.map (unaryFunction $ Core.bindingTerm) (var "lbindings")] $
+          "terms">: Lists.map (reify $ Core.bindingTerm) (var "lbindings")] $
           "hterms" <<~ Eithers.mapList ("t" ~> encodeTerm @@ int32 0 @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") (var "terms") $ lets [
           "hbindings">: Lists.zipWith (var "toTermDefinition") (var "hnames") (var "hterms"),
           -- Merge new bindings with any previously accumulated bindings from outer lets
@@ -1090,7 +1090,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
       "decodeName">: "term" ~> (cases _Term (Strip.deannotateTerm @@ var "term")
         (Just nothing) [
         _Term_wrap>>: "wt" ~> Logic.ifElse (Equality.equal (Core.wrappedTermTypeName $ var "wt") (Core.nameLift _Name))
-          (Maybes.map (unaryFunction Core.name) $ var "decodeString" @@ (Core.wrappedTermBody $ var "wt"))
+          (Maybes.map (reify Core.name) $ var "decodeString" @@ (Core.wrappedTermBody $ var "wt"))
           nothing]),
       "forType">: "field" ~> lets [
         "fname">: Core.fieldName $ var "field",

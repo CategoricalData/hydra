@@ -100,11 +100,11 @@ joinTypes = define "joinTypes" $
     (var "cannotUnify")) $
   "joinRowTypes" <~ ("left" ~> "right" ~> Logic.ifElse
     (Core.equalNameList_
-      (Lists.map (unaryFunction Core.fieldTypeName) (var "left"))
-      (Lists.map (unaryFunction Core.fieldTypeName) (var "right")))
+      (Lists.map (reify Core.fieldTypeName) (var "left"))
+      (Lists.map (reify Core.fieldTypeName) (var "right")))
     (var "joinList"
-      @@ (Lists.map (unaryFunction Core.fieldTypeType) (var "left"))
-      @@ (Lists.map (unaryFunction Core.fieldTypeType) (var "right")))
+      @@ (Lists.map (reify Core.fieldTypeType) (var "left"))
+      @@ (Lists.map (reify Core.fieldTypeType) (var "right")))
     (var "cannotUnify")) $
   cases _Type (var "sleft") (Just (var "cannotUnify")) [
     _Type_application>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
