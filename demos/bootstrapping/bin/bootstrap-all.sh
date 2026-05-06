@@ -80,7 +80,7 @@ while [ $# -gt 0 ]; do
         --paths=*) PATH_FILTER="${1#--paths=}" ;;
         --clean) export HYDRA_BOOTSTRAP_CLEAN=1 ;;
         --help|-h)
-            sed -n '2,/^$/p' "$0" | sed 's/^# //;s/^#$//'
+            sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
             ;;
         --*)

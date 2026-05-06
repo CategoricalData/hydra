@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
-# Script to regenerate all Haskell artifacts for hydra-kernel and hydra-haskell
-# from Hydra sources, via the two-stage DSL → JSON → Haskell pipeline.
+# Regenerate all Haskell artifacts for hydra-kernel and hydra-haskell from
+# Hydra sources, via the two-stage DSL → JSON → Haskell pipeline.
 #
 # Stage 1 — DSL → JSON:
 #   Runs the kernel DSL through the Haskell head and exports the universe
@@ -21,13 +19,26 @@ set -euo pipefail
 # update-kernel-tests → update-haskell-default-lib → update-haskell-sources →
 # update-haskell-kernel again) with a single JSON-reading generator call.
 #
+# Steps performed:
+#   1. Build required executables
+#   2. Export kernel + test modules to JSON (DSL → JSON)
+#   3. Verify JSON kernel + write manifest
+#   4. Generate Haskell from JSON (JSON → Haskell)
+#   5. Post-process generated files (no-op since #307)
+#   6. Run tests (unless --no-tests)
+#
+# The lexicon (docs/hydra-lexicon.txt) is no longer regenerated here;
+# refresh it on demand with bin/regenerate-lexicon.sh (or /lexicon()).
+#
 # Prerequisites:
 #   - Stack is installed and configured
 #
 # Usage:
-#   ./bin/sync-haskell.sh             # Full sync (all steps including tests)
-#   ./bin/sync-haskell.sh --no-tests  # Skip tests (for faster iteration)
-#   ./bin/sync-haskell.sh --help      # Show this help
+#   heads/haskell/bin/sync-haskell.sh             # Full sync (all steps including tests)
+#   heads/haskell/bin/sync-haskell.sh --no-tests  # Skip tests (for faster iteration)
+#   heads/haskell/bin/sync-haskell.sh --help      # Show this help
+
+set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
@@ -43,22 +54,7 @@ while [ $# -gt 0 ]; do
             NO_TESTS=true
             ;;
         --help|-h)
-            echo "Usage: $0 [OPTIONS]"
-            echo ""
-            echo "Regenerate hydra-kernel and hydra-haskell Haskell dist via DSL → JSON → Haskell."
-            echo ""
-            echo "Options:"
-            echo "  --no-tests  Skip running tests after generation"
-            echo "  --help      Show this help message"
-            echo ""
-            echo "Steps performed:"
-            echo "  1. Build required executables"
-            echo "  2. Export kernel + test modules to JSON (DSL → JSON)"
-            echo "  3. Verify JSON kernel + write manifest"
-            echo "  4. Generate Haskell from JSON (JSON → Haskell)"
-            echo "  5. Post-process generated files (no-op since #307)"
-            echo "  6. Run tests (unless --no-tests)"
-            echo "  7. Regenerate the lexicon"
+            sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
             ;;
         *)
