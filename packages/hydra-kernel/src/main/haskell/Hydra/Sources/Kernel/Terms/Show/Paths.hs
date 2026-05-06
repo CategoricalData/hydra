@@ -122,7 +122,7 @@ termToSubtermGraph = define "termToSubtermGraph" $
         _Term_let>>: lambda "letExpr" $ lets [
           "bindings">: Core.letBindings $ var "letExpr",
           "env">: Core.letBody $ var "letExpr",
-          "bindingNames">: Lists.map (unaryFunction Core.bindingName) (var "bindings"),
+          "bindingNames">: Lists.map (reify Core.bindingName) (var "bindings"),
           -- First fold: build nodes and update ids for each binding name
           "addBindingName">: lambdas ["nodesVisitedIds", "name"] $ lets [
             "currentNodesVisited">: Pairs.first $ var "nodesVisitedIds",

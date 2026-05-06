@@ -779,7 +779,7 @@ reduceTerm = define "reduceTerm" $
     Maybes.maybe
       (Maybes.maybe
         (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.fieldName $ var "field")) (var "cx"))
-        (unaryFunction right)
+        (reify right)
         (Core.caseStatementDefault $ var "cs"))
       ("mf" ~> right $ Core.termApplication $ Core.application
         (Core.fieldTerm $ var "mf")

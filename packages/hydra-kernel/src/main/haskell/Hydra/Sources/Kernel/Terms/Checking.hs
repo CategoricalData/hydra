@@ -205,7 +205,7 @@ applyTypeArgumentsToType = define "applyTypeArgumentsToType" $
           string " type args: ",
           Formatting.showList @@ ShowCore.type_ @@ var "typeArgs",
           string ". Context has vars: {",
-          Strings.intercalate (string ", ") (Lists.map (unaryFunction $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
+          Strings.intercalate (string ", ") (Lists.map (reify $ Core.unName) $ Maps.keys $ Graph.graphBoundTypes $ var "tx"),
           string "}"])) (var "cx")) [
         _Type_forall>>: "ft" ~>
           "v" <~ Core.forallTypeParameter (var "ft") $
@@ -364,7 +364,7 @@ typeListsEffectivelyEqual = define "typeListsEffectivelyEqual" $
   doc "Check whether two lists of types are effectively equal, disregarding type aliases" $
   "tx" ~> "tlist1" ~> "tlist2" ~>
   Logic.ifElse (Equality.equal (Lists.length (var "tlist1")) (Lists.length (var "tlist2")))
-    (Lists.foldl (binaryFunction Logic.and) true $
+    (Lists.foldl (reify2 Logic.and) true $
       Lists.zipWith (typesEffectivelyEqual @@ var "tx") (var "tlist1") (var "tlist2"))
     false
 
@@ -443,12 +443,12 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
   "tname" <~ Core.caseStatementTypeName (var "cs") $
   "dflt" <~ Core.caseStatementDefault (var "cs") $
   "cases" <~ Core.caseStatementCases (var "cs") $
-  "cterms" <~ Lists.map (unaryFunction Core.fieldTerm) (var "cases") $
+  "cterms" <~ Lists.map (reify Core.fieldTerm) (var "cases") $
   -- Type the default case if present
   "dfltResult" <<~ Eithers.mapMaybe ("e" ~> typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "e") (var "dflt") $
   -- dfltResult :: Maybe (Type, Context)
-  "tdflt" <~ Maybes.map (unaryFunction Pairs.first) (var "dfltResult") $
-  "cx2" <~ Maybes.maybe (var "cx") (unaryFunction Pairs.second) (var "dfltResult") $
+  "tdflt" <~ Maybes.map (reify Pairs.first) (var "dfltResult") $
+  "cx2" <~ Maybes.maybe (var "cx") (reify Pairs.second) (var "dfltResult") $
   -- Type all case terms, threading context through the list
   "foldResult" <~ Lists.foldl
     ("acc" ~> "term" ~>
@@ -476,7 +476,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
     (var "tcterms") $
   "fcodsR" <<~ var "fcodsResult" $
   "fcods" <~ Pairs.first (var "fcodsR") $
-  "cods" <~ Maybes.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Maybes.pure) (var "fcods")) $
+  "cods" <~ Maybes.cat (Lists.cons (var "tdflt") $ Lists.map (reify Maybes.pure) (var "fcods")) $
   "cod" <<~ checkSameType @@ var "cx3" @@ var "tx" @@ (string "case branches") @@ var "cods" $
   right $ pair (Core.typeFunction $ Core.functionType
     (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs")
@@ -554,7 +554,7 @@ typeOfLet = define "typeOfLet" $
   "cx" ~> "tx" ~> "typeArgs" ~> "letTerm" ~>
   "bs" <~ Core.letBindings (var "letTerm") $
   "body" <~ Core.letBody (var "letTerm") $
-  "bnames" <~ Lists.map (unaryFunction Core.bindingName) (var "bs") $
+  "bnames" <~ Lists.map (reify Core.bindingName) (var "bs") $
   "bindingType" <~ ("b" ~>
     Maybes.maybe
       (Ctx.failInContext (Error.errorChecking $ ErrorsChecking.checkingErrorUntypedLetBinding $ ErrorsChecking.untypedLetBindingError (var "b")) (var "cx"))
@@ -767,7 +767,7 @@ typeOfRecord = define "typeOfRecord" $
       "cxB" <~ Pairs.second (var "tResult") $
       right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
     (right $ pair (list ([] :: [TTerm Type])) (var "cx"))
-    (Lists.map (unaryFunction Core.fieldTerm) (var "fields")) $
+    (Lists.map (reify Core.fieldTerm) (var "fields")) $
   "foldR" <<~ var "foldResult" $
   "cx2" <~ Pairs.second (var "foldR") $
   right $ pair (Resolution.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")

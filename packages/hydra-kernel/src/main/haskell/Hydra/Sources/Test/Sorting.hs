@@ -57,11 +57,11 @@ allTests = define "allTests" $
 
 -- | Show a list of Int32 as a string like "[1, 2, 3]"
 showIntList :: TTerm [Int] -> TTerm String
-showIntList xs = ShowCore.list_ @@ unaryFunction Literals.showInt32 @@ xs
+showIntList xs = ShowCore.list_ @@ reify Literals.showInt32 @@ xs
 
 -- | Show a list of lists of Int32 as a string like "[[1, 2], [3]]"
 showIntListList :: TTerm [[Int]] -> TTerm String
-showIntListList xs = ShowCore.list_ @@ unaryFunction showIntList @@ xs
+showIntListList xs = ShowCore.list_ @@ reify showIntList @@ xs
 
 -- | Show Either [[Int]] [Int] as "left([[1, 2]])" or "right([1, 2, 3])"
 showEitherResult :: TTerm (Either [[Int]] [Int]) -> TTerm String

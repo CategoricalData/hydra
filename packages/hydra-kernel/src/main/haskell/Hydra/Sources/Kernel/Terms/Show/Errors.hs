@@ -223,7 +223,7 @@ unboundTypeVariablesError = define "unboundTypeVariablesError" $
   "typ" <~ project _UnboundTypeVariablesError _UnboundTypeVariablesError_type @@ var "e" $
   Strings.cat $ list [
     string "unbound type variables: {",
-    Strings.intercalate (string ", ") (Lists.map (unaryFunction Core.unName) $ Sets.toList $ var "vars"),
+    Strings.intercalate (string ", ") (Lists.map (reify Core.unName) $ Sets.toList $ var "vars"),
     string "} in type ",
     ShowCore.type_ @@ var "typ"]
 

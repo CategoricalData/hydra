@@ -218,7 +218,7 @@ optional = define "optional" $
   doc "Optionally parse something, returning Nothing if it fails" $
   "p" ~>
     alt
-      @@ (map @@ (unaryFunction just) @@ var "p")
+      @@ (map @@ (reify just) @@ var "p")
       @@ (pure @@ nothing)
 
 -- | A parser that always succeeds with the given value

@@ -415,7 +415,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
     "typ" <~ Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (unaryFunction Core.typeSchemeBody)
+      (reify Core.typeSchemeBody)
       (Packaging.termDefinitionTypeScheme (var "tdef")) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $

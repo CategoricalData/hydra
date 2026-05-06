@@ -324,11 +324,11 @@ requireBinding = define "requireBinding" $
   "errMsg" <~ (
     (string "no such element: ") ++ (Core.unName (var "name")) ++
     (string ". Available elements: {") ++
-    (Strings.intercalate (string ", ") (var "ellipsis" @@ (Lists.map (unaryFunction Core.unName) (Maps.keys (Graph.graphBoundTerms (var "graph")))))) ++
+    (Strings.intercalate (string ", ") (var "ellipsis" @@ (Lists.map (reify Core.unName) (Maps.keys (Graph.graphBoundTerms (var "graph")))))) ++
     (string "}")) $
   Maybes.maybe
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorOther $ Error.otherResolutionError (var "errMsg")) (var "cx"))
-    (unaryFunction right)
+    (reify right)
     (lookupBinding @@ var "graph" @@ var "name")
 
 requirePrimitive :: TTermDefinition (Graph -> Name -> Either Error Primitive)
@@ -337,7 +337,7 @@ requirePrimitive = define "requirePrimitive" $
   "graph" ~> "name" ~>
   Maybes.maybe
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchPrimitive $ Error.noSuchPrimitiveError (var "name")) (var "cx"))
-    (unaryFunction right)
+    (reify right)
     (lookupPrimitive @@ var "graph" @@ var "name")
 
 requirePrimitiveType :: TTermDefinition (Graph -> Name -> Either Error TypeScheme)
@@ -357,7 +357,7 @@ requireTerm = define "requireTerm" $
   "graph" ~> "name" ~>
   Maybes.maybe
     (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoSuchBinding $ Error.noSuchBindingError (var "name")) (var "cx"))
-    (unaryFunction right)
+    (reify right)
     (resolveTerm @@ var "graph" @@ var "name")
 
 resolveTerm :: TTermDefinition (Graph -> Name -> Maybe Term)

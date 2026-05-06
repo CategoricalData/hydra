@@ -286,7 +286,7 @@ tableForEdge = define "tableForEdge" $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
       (Maybes.maybe
         (left $ string "unreachable: empty tables set")
-        (unaryFunction right)
+        (reify right)
         (Lists.maybeHead $ Sets.toList $ var "tables"))
       (left $ Strings.cat $ list [
         string "Specification for ",
@@ -305,7 +305,7 @@ tableForVertex = define "tableForVertex" $
     Logic.ifElse (Equality.equal (Sets.size $ var "tables") (int32 1))
       (Maybes.maybe
         (left $ string "unreachable: empty tables set")
-        (unaryFunction right)
+        (reify right)
         (Lists.maybeHead $ Sets.toList $ var "tables"))
       (left $ Strings.cat $ list [
         string "Specification for ",

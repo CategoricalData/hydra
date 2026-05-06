@@ -218,8 +218,8 @@ literalTypes = define "literalTypes" $
       Core.literalTypeBinary,
       Core.literalTypeBoolean,
       Core.literalTypeDecimal],
-    Lists.map (unaryFunction Core.literalTypeFloat) (floatTypes),
-    Lists.map (unaryFunction Core.literalTypeInteger) (integerTypes),
+    Lists.map (reify Core.literalTypeFloat) (floatTypes),
+    Lists.map (reify Core.literalTypeInteger) (integerTypes),
     list [
       Core.literalTypeString]]
 
