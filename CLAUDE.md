@@ -15,6 +15,11 @@ into eight host languages spanning five implementation families:
 Haskell, Java, Python, Scala, and Lisp (Clojure, Common Lisp, Emacs Lisp, Scheme — sharing one coder).
 All eight pass the common test suite.
 
+A ninth target, Go (`hydra-go`, `heads/go/`), is a "head bud" — the kernel can be generated
+to Go via `bin/sync-go.sh`, but the Go coder still has emission bugs and the head's
+hand-written runtime is mostly placeholder. Go is not yet a complete implementation
+and does not (yet) host the test suite.
+
 Key use cases: graph construction (TinkerPop, RDF, SHACL, GQL), data integration
 (coders for Protobuf, Avro, JSON, YAML, GraphQL, PDL, CSV/TSV, RDF), and computational
 graphs with deep support for polymorphism.
@@ -217,6 +222,7 @@ give the user a brief status update approximately every 10 minutes.
 | `/sync-java()` | Run `bin/sync-java.sh` (--hosts java --targets java). |
 | `/sync-python()` | Run `bin/sync-python.sh`. |
 | `/sync-scala()` | Run `bin/sync-scala.sh`. |
+| `/sync-go()` | Run `bin/sync-go.sh` — generates kernel into `dist/go/`. Go is a "head bud"; only `hydra-kernel` is targeted (no `hydra-pg`/`hydra-rdf`), and Phase 4 host=go rows are skipped. |
 | `/sync-clojure()` etc. | Run `bin/sync-<dialect>.sh` for clojure / common-lisp / emacs-lisp / scheme. |
 
 ## Coding style (read the full guide!)
