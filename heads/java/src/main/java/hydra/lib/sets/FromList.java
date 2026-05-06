@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.TreeSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -21,6 +20,8 @@ import static hydra.dsl.Types.set;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.util.Either;
+import hydra.util.PersistentMap;
+import hydra.util.PersistentSet;
 
 
 /**
@@ -60,13 +61,19 @@ public class FromList extends PrimitiveFunction {
      * @return a set containing all unique elements from the list
      */
     public static <X> Set<X> apply(List<X> arg) {
-        return new TreeSet<>(arg);
+        return PersistentSet.fromList(arg);
     }
 
     /**
-     * Creates a set from elements, preserving a consistent iteration order where possible.
+     * Creates a set from elements as a PersistentSet. Replaces an earlier
+     * TreeSet-based helper.
      */
+    @SuppressWarnings({"rawtypes", "unchecked"})
     static <X> Set<X> orderedSet(java.util.Collection<X> elements) {
-        return new TreeSet<>(elements);
+        PersistentSet result = PersistentSet.empty();
+        for (X x : elements) {
+            result = result.insert(x);
+        }
+        return result;
     }
 }
