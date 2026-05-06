@@ -579,6 +579,8 @@ augmentVariantClass = def "augmentVariantClass" $
           Java._NormalClassDeclaration_extends>>: just (var "extendsPart"),
           Java._NormalClassDeclaration_implements>>:
             project Java._NormalClassDeclaration Java._NormalClassDeclaration_implements @@ var "ncd",
+          Java._NormalClassDeclaration_permits>>:
+            project Java._NormalClassDeclaration Java._NormalClassDeclaration_permits @@ var "ncd",
           Java._NormalClassDeclaration_body>>: var "newBody"])]
 
 -- | Check if a Binding has function type.
@@ -1347,7 +1349,7 @@ constructElementsInterface = def "constructElementsInterface" $
     "className">: elementsClassName @@ var "ns",
     "elName">: elementsQualifiedName @@ var "ns",
     "body">: wrap Java._InterfaceBody (var "members"),
-    "itf">: inject Java._TypeDeclaration Java._TypeDeclaration_interface
+    "itf">: inject Java._TopLevelClassOrInterfaceDeclaration Java._TopLevelClassOrInterfaceDeclaration_interface
       (inject Java._InterfaceDeclaration Java._InterfaceDeclaration_normalInterface
         (record Java._NormalInterfaceDeclaration [
           Java._NormalInterfaceDeclaration_modifiers>>: var "mods",
@@ -1357,10 +1359,12 @@ constructElementsInterface = def "constructElementsInterface" $
             list ([] :: [TTerm Java.TypeParameter]),
           Java._NormalInterfaceDeclaration_extends>>:
             list ([] :: [TTerm Java.InterfaceType]),
+          Java._NormalInterfaceDeclaration_permits>>:
+            list ([] :: [TTerm Java.TypeName]),
           Java._NormalInterfaceDeclaration_body>>: var "body"])),
-    "decl">: record Java._TypeDeclarationWithComments [
-      Java._TypeDeclarationWithComments_value>>: var "itf",
-      Java._TypeDeclarationWithComments_comments>>: Packaging.moduleDescription (var "mod")]] $
+    "decl">: record Java._TopLevelClassOrInterfaceDeclarationWithComments [
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_value>>: var "itf",
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: Packaging.moduleDescription (var "mod")]] $
     pair (var "elName")
       (inject Java._CompilationUnit Java._CompilationUnit_ordinary
         (record Java._OrdinaryCompilationUnit [
@@ -1612,6 +1616,7 @@ declarationForUnionType = def "declarationForUnionType" $
         Java._NormalInterfaceDeclaration_identifier>>: wrap Java._TypeIdentifier (JavaDsl.identifier (asTerm JavaNamesSource.visitorName)),
         Java._NormalInterfaceDeclaration_parameters>>: var "vtparams",
         Java._NormalInterfaceDeclaration_extends>>: list ([] :: [TTerm Java.InterfaceType]),
+        Java._NormalInterfaceDeclaration_permits>>: list ([] :: [TTerm Java.TypeName]),
         Java._NormalInterfaceDeclaration_body>>: var "visitorBody"])) $
     -- Partial visitor: extends Visitor, has default otherwise() and override visit methods
     "typeArgs" <~ Lists.map (lambda "tp" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp") (var "tparams") $
@@ -1670,6 +1675,7 @@ declarationForUnionType = def "declarationForUnionType" $
         Java._NormalInterfaceDeclaration_identifier>>: wrap Java._TypeIdentifier (JavaDsl.identifier (asTerm JavaNamesSource.partialVisitorName)),
         Java._NormalInterfaceDeclaration_parameters>>: var "vtparams",
         Java._NormalInterfaceDeclaration_extends>>: list [wrap Java._InterfaceType (var "visitorClassType")],
+        Java._NormalInterfaceDeclaration_permits>>: list ([] :: [TTerm Java.TypeName]),
         Java._NormalInterfaceDeclaration_body>>: var "pvBody"])) $
     -- Build constant declarations
     "tn0" <<~ (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
@@ -3551,9 +3557,9 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "decl" <<~ (toClassDecl @@ false @@ var "serializable" @@ var "aliases"
       @@ (list ([] :: [TTerm Java.TypeParameter])) @@ var "name" @@ var "typ" @@ var "cx" @@ var "g") $
     "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
-    "tdecl" <~ record Java._TypeDeclarationWithComments [
-      Java._TypeDeclarationWithComments_value>>: inject Java._TypeDeclaration Java._TypeDeclaration_class (var "decl"),
-      Java._TypeDeclarationWithComments_comments>>: var "comment"] $
+    "tdecl" <~ record Java._TopLevelClassOrInterfaceDeclarationWithComments [
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_value>>: inject Java._TopLevelClassOrInterfaceDeclaration Java._TopLevelClassOrInterfaceDeclaration_class (var "decl"),
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: var "comment"] $
     right (pair (var "name")
       (inject Java._CompilationUnit Java._CompilationUnit_ordinary (record Java._OrdinaryCompilationUnit [
         Java._OrdinaryCompilationUnit_package>>: just (var "pkg"),

@@ -385,12 +385,13 @@ javaArrayCreation = def "javaArrayCreation" $
       (lambda "i" $ var "i")] $
     javaPrimaryToJavaExpression @@
       (JavaDsl.primaryArrayCreation
-        (JavaDsl.arrayCreationExpressionPrimitiveArray
-          (record Java._ArrayCreationExpression_PrimitiveArray [
-            Java._ArrayCreationExpression_PrimitiveArray_type>>: var "primType",
-            Java._ArrayCreationExpression_PrimitiveArray_dims>>:
-              list ([] :: [TTerm Java.Dims]),
-            Java._ArrayCreationExpression_PrimitiveArray_array>>: var "init_"])))
+        (JavaDsl.arrayCreationExpressionWithInitializer
+          (JavaDsl.arrayCreationExpressionWithInitializerPrimitive
+            (record Java._ArrayCreationExpressionWithInitializer_Primitive [
+              Java._ArrayCreationExpressionWithInitializer_Primitive_type>>: var "primType",
+              Java._ArrayCreationExpressionWithInitializer_Primitive_dims>>:
+                list ([] :: [TTerm Java.Dims]),
+              Java._ArrayCreationExpressionWithInitializer_Primitive_array>>: var "init_"]))))
 
 -- | Create an array initializer from a list of expressions
 javaArrayInitializer :: TTermDefinition ([Java.Expression] -> Java.ArrayInitializer)
@@ -462,6 +463,7 @@ javaClassDeclaration = def "javaClassDeclaration" $
         Java._NormalClassDeclaration_parameters>>: var "tparams",
         Java._NormalClassDeclaration_extends>>: var "extends_",
         Java._NormalClassDeclaration_implements>>: var "impls",
+        Java._NormalClassDeclaration_permits>>: list ([] :: [TTerm Java.TypeName]),
         Java._NormalClassDeclaration_body>>: JavaDsl.classBody (var "bodyDecls")])
 
 javaClassType :: TTermDefinition ([Java.ReferenceType] -> Maybe Java.PackageName -> String -> Java.ClassType)

@@ -1084,14 +1084,19 @@
                               "term": {
                                 "inject": {
                                   "field": {
-                                    "name": "primitiveArray",
+                                    "name": "withInitializer",
                                     "term": {
-                                      "record": {
-                                        "fields": [
-                                          {"name": "type", "term": {"variable": "primType"}},
-                                          {"name": "dims", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Dims"}}}},
-                                          {"name": "array", "term": {"variable": "init_"}}],
-                                        "typeName": "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"}}},
+                                      "inject": {
+                                        "field": {
+                                          "name": "primitive",
+                                          "term": {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "type", "term": {"variable": "primType"}},
+                                                {"name": "dims", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.Dims"}}}},
+                                                {"name": "array", "term": {"variable": "init_"}}],
+                                              "typeName": "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"}}},
+                                        "typeName": "hydra.java.syntax.ArrayCreationExpressionWithInitializer"}}},
                                   "typeName": "hydra.java.syntax.ArrayCreationExpression"}}},
                             "typeName": "hydra.java.syntax.Primary"}},
                         "function": {"variable": "hydra.java.utils.javaPrimaryToJavaExpression"}}}}},
@@ -1472,6 +1477,9 @@
                                                     {"name": "parameters", "term": {"variable": "tparams"}},
                                                     {"name": "extends", "term": {"variable": "extends_"}},
                                                     {"name": "implements", "term": {"variable": "impls"}},
+                                                    {
+                                                      "name": "permits",
+                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.java.syntax.TypeName"}}}},
                                                     {"name": "body", "term": {"wrap": {"body": {"variable": "bodyDecls"}, "typeName": "hydra.java.syntax.ClassBody"}}}],
                                                   "typeName": "hydra.java.syntax.NormalClassDeclaration"}}},
                                             "typeName": "hydra.java.syntax.ClassDeclaration"}}}},
@@ -2815,11 +2823,18 @@
                 "body": {
                   "inject": {
                     "field": {
-                      "name": "instanceof",
+                      "name": "instanceofExpression",
                       "term": {
                         "record": {
-                          "fields": [{"name": "lhs", "term": {"variable": "lhs"}}, {"name": "rhs", "term": {"variable": "rhs"}}],
-                          "typeName": "hydra.java.syntax.RelationalExpression_InstanceOf"}}},
+                          "fields": [
+                            {"name": "lhs", "term": {"variable": "lhs"}},
+                            {
+                              "name": "rhs",
+                              "term": {
+                                "inject": {
+                                  "field": {"name": "referenceType", "term": {"variable": "rhs"}},
+                                  "typeName": "hydra.java.syntax.InstanceofExpression_Rhs"}}}],
+                          "typeName": "hydra.java.syntax.InstanceofExpression"}}},
                     "typeName": "hydra.java.syntax.RelationalExpression"}},
                 "domain": {"variable": "hydra.java.syntax.ReferenceType"},
                 "parameter": "rhs"}},
