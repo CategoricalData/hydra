@@ -30,10 +30,16 @@ graphs with deep support for polymorphism.
 - **`heads/`** holds per-host runtimes that run those modules after translation to a target language.
 - **`dist/`** holds generated and copied artifacts. **Never manually edit**
   (unless doing a bootstrap patch, which must be overwritten by regeneration afterward).
+- **`bindings/`** holds host-specific third-party integrations — adapters that wire Hydra
+  packages to external libraries (e.g., `bindings/java/hydra-rdf4j/` connects `hydra-rdf` to
+  rdf4j; `bindings/java/hydra-neo4j/` provides Cypher and GQL parsers via ANTLR).
+  Each binding is a separately publishable artifact in its host language and is **not**
+  part of the DSL-driven sync pipeline.
 
 The test for `packages/` vs `heads/`: does this code describe (or help describe) Hydra modules,
 or does it run them after translation?
 Description goes in `packages/`; running goes in `heads/`.
+Bindings sit outside both: hand-written adapters between Hydra and an external system.
 
 Generated files have a header: "Note: this is an automatically generated file. Do not edit."
 

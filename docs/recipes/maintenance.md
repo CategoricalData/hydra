@@ -322,9 +322,13 @@ The core principles (see CLAUDE.md and the
    generated artifacts (because tests import it from that location), write it
    under `heads/` and copy it in from a sync script.
 3. **No host-specific code under `packages/`.** Packages hold DSL-based module
-   definitions plus source-language helpers for writing them. Host-specific
-   runtimes and utilities belong in `heads/`, except for `bindings/` which is
-   explicitly for host-specific third-party integrations.
+   definitions plus source-language helpers for writing them. The Hydra runtime
+   (primitives, DSL helpers, generation drivers, test infrastructure) lives in
+   `heads/<host>/`. Adapters between Hydra packages and *external* libraries
+   (rdf4j, ANTLR-generated parsers, TinkerPop, etc.) live in
+   `bindings/<host>/<artifact>/` — see [implementation.md, principle 7](../implementation.md#key-design-principles).
+   The split keeps `heads/<host>/` free of third-party deps so the runtime
+   stays minimal and portable.
 4. **Generated files have the "do not edit" header.** If you see a file under
    `dist/` without the header, it is either hand-written (violation) or the
    generator is missing the header (bug in the generator).
