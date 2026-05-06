@@ -219,7 +219,6 @@ termLabel = define "termLabel" $
               @@ var "i",
           _Literal_float>>: "f" ~>
             match _FloatValue (Just $ string "?") [
-              _FloatValue_bigfloat>>: "v" ~> Literals.showBigfloat (var "v"),
               _FloatValue_float32>>: "v" ~> Literals.showFloat32 (var "v"),
               _FloatValue_float64>>: "v" ~> Literals.showFloat64 (var "v")]
               @@ var "f",

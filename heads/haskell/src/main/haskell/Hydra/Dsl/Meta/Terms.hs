@@ -57,15 +57,6 @@ annotatedTerm body ann = inject (Core.nameLift _Term) "annotated" $ record (Core
 apply :: TTerm Term -> TTerm Term -> TTerm Term
 apply func arg = Core.termApplication $ Core.application func arg
 
--- | Create a term-encoded unlimited precision floating point literal
--- Example: bigfloat 3.14159
-bigfloat :: Double -> TTerm Term
-bigfloat = bigfloatLift . TTerm . Terms.bigfloat
-
--- | Lift a TTerm Double to a term-encoded bigfloat literal
-bigfloatLift :: TTerm Double -> TTerm Term
-bigfloatLift = Core.termLiteral . Core.literalFloat . Core.floatValueBigfloat
-
 -- | Create a term-encoded unlimited precision integer
 -- Example: bigint 42
 bigint :: Integer -> TTerm Term

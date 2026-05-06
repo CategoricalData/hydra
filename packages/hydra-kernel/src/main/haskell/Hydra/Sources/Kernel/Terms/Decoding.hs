@@ -409,7 +409,6 @@ decodeLiteralType = define "decodeLiteralType" $
 
     -- Decode float: Term -> Either DecodingError <specific float type>
     decodeFloat ft = cases _FloatType ft Nothing [
-        _FloatType_bigfloat>>: constant $ decodeFloatVariant _FloatValue_bigfloat (string "bigfloat"),
         _FloatType_float32>>: constant $ decodeFloatVariant _FloatValue_float32 (string "float32"),
         _FloatType_float64>>: constant $ decodeFloatVariant _FloatValue_float64 (string "float64")]
 

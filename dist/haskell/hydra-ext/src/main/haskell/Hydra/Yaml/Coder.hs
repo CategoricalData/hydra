@@ -81,14 +81,14 @@ literalYamlCoder lt =
           decodeDecimal =
                   \cx -> \s -> case s of
                     Model.ScalarDecimal v0 -> Right (Core.LiteralDecimal v0)
-                    Model.ScalarFloat v0 -> Right (Core.LiteralDecimal (Literals.float64ToDecimal (Literals.bigfloatToFloat64 v0)))
+                    Model.ScalarFloat v0 -> Right (Core.LiteralDecimal (Literals.float64ToDecimal v0))
                     Model.ScalarInt v0 -> Right (Core.LiteralDecimal (Literals.bigintToDecimal v0))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "expected decimal, found scalar"])))
           decodeFloat =
                   \cx -> \s -> case s of
-                    Model.ScalarDecimal v0 -> Right (Core.LiteralFloat (Core.FloatValueBigfloat (Literals.float64ToBigfloat (Literals.decimalToFloat64 v0))))
-                    Model.ScalarFloat v0 -> Right (Core.LiteralFloat (Core.FloatValueBigfloat v0))
+                    Model.ScalarDecimal v0 -> Right (Core.LiteralFloat (Core.FloatValueFloat64 (Literals.decimalToFloat64 v0)))
+                    Model.ScalarFloat v0 -> Right (Core.LiteralFloat (Core.FloatValueFloat64 v0))
                     _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
                       "expected float, found scalar"])))
           decodeInteger =
@@ -110,11 +110,14 @@ literalYamlCoder lt =
                       Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.decimalLiteral lit) (\d -> Right (Model.ScalarDecimal d))),
                       Coders.coderDecode = decodeDecimal}
                     Core.LiteralTypeFloat _ -> Coders.Coder {
-                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.floatLiteral lit) (\f -> Eithers.bind (ExtractCore.bigfloatValue f) (\bf ->
-                        let shown = Literals.showBigfloat bf
+                      Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.floatLiteral lit) (\f ->
+                        let bf = case f of
+                              Core.FloatValueFloat32 v -> Literals.float32ToFloat64 v
+                              Core.FloatValueFloat64 v -> v
+                            shown = Literals.showFloat64 bf
                         in (Logic.ifElse (requiresYamlStringSentinel shown) (Left (Errors.ErrorOther (Errors.OtherError (Strings.cat [
-                          "YAML cannot represent bigfloat value: ",
-                          shown])))) (Right (Model.ScalarFloat bf)))))),
+                          "YAML cannot represent float value: ",
+                          shown])))) (Right (Model.ScalarFloat bf))))),
                       Coders.coderDecode = decodeFloat}
                     Core.LiteralTypeInteger _ -> Coders.Coder {
                       Coders.coderEncode = (\cx -> \lit -> Eithers.bind (ExtractCore.integerLiteral lit) (\i -> Eithers.bind (ExtractCore.bigintValue i) (\bi -> Right (Model.ScalarInt bi)))),

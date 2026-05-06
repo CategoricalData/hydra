@@ -112,7 +112,6 @@ floatTypePrecision :: TTermDefinition (FloatType -> Precision)
 floatTypePrecision = define "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
   match _FloatType Nothing [
-    _FloatType_bigfloat>>: constant Util.precisionArbitrary,
     _FloatType_float32>>: constant $ Util.precisionBits $ int32 32,
     _FloatType_float64>>: constant $ Util.precisionBits $ int32 64]
 
@@ -120,7 +119,6 @@ floatTypes :: TTermDefinition [FloatType]
 floatTypes = define "floatTypes" $
   doc "All floating-point types in a canonical order" $
   list $ injectUnit _FloatType <$> [
-    _FloatType_bigfloat,
     _FloatType_float32,
     _FloatType_float64]
 
@@ -128,7 +126,6 @@ floatValueType :: TTermDefinition (FloatValue -> FloatType)
 floatValueType = define "floatValueType" $
   doc "Find the float type for a given floating-point value" $
   match _FloatValue Nothing [
-    _FloatValue_bigfloat>>: constant Core.floatTypeBigfloat,
     _FloatValue_float32>>: constant Core.floatTypeFloat32,
     _FloatValue_float64>>: constant Core.floatTypeFloat64]
 

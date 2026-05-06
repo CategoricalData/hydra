@@ -317,7 +317,4 @@
     (lambda (x)
       (snap-to-float32 (funcall (funcall hydra_lib_math_round_float64 n) x)))))
 
-;; roundBigfloat :: Int -> Double -> Double  (alias for roundFloat64)
-(defvar hydra_lib_math_round_bigfloat hydra_lib_math_round_float64)
-
 (provide 'hydra.lib.math)

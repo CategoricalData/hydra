@@ -308,7 +308,7 @@ encodeAxiomDefinitionPair = define "encodeAxiomDefinitionPair" $
             C._AxiomDeclaration_name>>: coqIdent @@ Pairs.first (var "nt"),
             C._AxiomDeclaration_type>>: coqTypeTerm @@ (encodeType @@ var "env" @@ Pairs.second (var "nt"))]]
 
--- | Translate a float string (produced by `showBigfloat`) to a Coq Term.
+-- | Translate a float string (produced by `showFloat64`) to a Coq Term.
 -- Ordinary values become parenthesised `Q`-scope literals. IEEE 754 special
 -- values (`Infinity`, `-Infinity`, `NaN`) have no representation in Coq's
 -- exact rationals, so they are emitted as references to the corresponding
@@ -354,9 +354,8 @@ encodeLiteral = define "encodeLiteral" $
     _Literal_decimal>>: "d" ~> coqTermQualid @@ Strings.cat (list [
       string "(", Literals.showDecimal (var "d"), string ")"]),
     _Literal_float>>: "fv" ~> cases _FloatValue (var "fv") Nothing [
-      _FloatValue_bigfloat>>: "v" ~> encodeFloatLiteral @@ Literals.showBigfloat (var "v"),
-      _FloatValue_float32>>: "v" ~> encodeFloatLiteral @@ Literals.showBigfloat (Literals.float32ToBigfloat $ var "v"),
-      _FloatValue_float64>>: "v" ~> encodeFloatLiteral @@ Literals.showBigfloat (Literals.float64ToBigfloat $ var "v")],
+      _FloatValue_float32>>: "v" ~> encodeFloatLiteral @@ Literals.showFloat64 (Literals.float32ToFloat64 $ var "v"),
+      _FloatValue_float64>>: "v" ~> encodeFloatLiteral @@ Literals.showFloat64 (var "v")],
     _Literal_integer>>: "iv" ~> cases _IntegerValue (var "iv") Nothing [
       _IntegerValue_bigint>>: "v" ~> coqTermQualid @@ Strings.cat (list [
         string "(", Literals.showBigint (var "v"), string ")%Z"]),

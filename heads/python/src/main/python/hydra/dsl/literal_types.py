@@ -48,11 +48,6 @@ def float64() -> LiteralType:
     return float_(FloatType.FLOAT64)
 
 
-def bigfloat() -> LiteralType:
-    """Construct a bigfloat literal type."""
-    return float_(FloatType.BIGFLOAT)
-
-
 def integer(itype: IntegerType) -> LiteralType:
     """Construct an integer literal type."""
     return LiteralTypeInteger(itype)
@@ -112,8 +107,6 @@ def show_literal_type(ltype: LiteralType) -> str:
             return "boolean"
         case LiteralTypeFloat(value):
             match value:
-                case FloatType.BIGFLOAT:
-                    return "float:bigfloat"
                 case FloatType.FLOAT32:
                     return "float:float32"
                 case FloatType.FLOAT64:

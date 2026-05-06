@@ -813,7 +813,7 @@ numberToExpr = def "numberToExpr" $
   lambda "num" $
     cases Py._Number (var "num") Nothing [
       Py._Number_float>>: lambda "f" $
-        Serialization.cst @@ (pythonFloatLiteralText @@ Literals.showBigfloat (var "f")),
+        Serialization.cst @@ (pythonFloatLiteralText @@ Literals.showFloat64 (var "f")),
       Py._Number_integer>>: lambda "i" $ Serialization.cst @@ Literals.showBigint (var "i")]
 
 orPatternToExpr :: TTermDefinition (Py.OrPattern -> Expr)
@@ -1282,7 +1282,7 @@ escapePythonString = def "escapePythonString" $
     "quote">: Logic.ifElse (var "doubleQuoted") (string "\"") (string "'")] $
     Strings.cat2 (var "quote") (Strings.cat2 (var "escaped") (var "quote"))
 
--- | Convert a showBigfloat result into valid Python source syntax, mapping
+-- | Convert a showFloat64 result into valid Python source syntax, mapping
 -- NaN and ±Infinity to float() constructor calls.
 pythonFloatLiteralText :: TTermDefinition (String -> String)
 pythonFloatLiteralText = def "pythonFloatLiteralText" $

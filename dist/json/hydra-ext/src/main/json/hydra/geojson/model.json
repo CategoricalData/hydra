@@ -20,8 +20,8 @@
         "typeScheme": {
           "body": {
             "record": [
-              {"name": "min", "type": {"literal": {"float": {"bigfloat": {}}}}},
-              {"name": "max", "type": {"literal": {"float": {"bigfloat": {}}}}}]},
+              {"name": "min", "type": {"literal": {"float": {"float64": {}}}}},
+              {"name": "max", "type": {"literal": {"float": {"float64": {}}}}}]},
           "variables": []}}},
     {
       "type": {
@@ -134,7 +134,7 @@
         "typeScheme": {
           "body": {
             "union": [
-              {"name": "number", "type": {"literal": {"float": {"bigfloat": {}}}}},
+              {"name": "number", "type": {"literal": {"float": {"float64": {}}}}},
               {"name": "string", "type": {"literal": {"string": {}}}}]},
           "variables": []}}},
     {
@@ -261,9 +261,9 @@
                       "string": "A position is an array of numbers.  There MUST be two or more elements.  The first two elements are longitude and latitude, or easting and northing, precisely in that order and using decimal numbers.  Altitude or elevation MAY be included as an optional third element."}}}],
               "body": {
                 "record": [
-                  {"name": "latitude", "type": {"literal": {"float": {"bigfloat": {}}}}},
-                  {"name": "longitude", "type": {"literal": {"float": {"bigfloat": {}}}}},
-                  {"name": "altitude", "type": {"maybe": {"literal": {"float": {"bigfloat": {}}}}}}]}}},
+                  {"name": "latitude", "type": {"literal": {"float": {"float64": {}}}}},
+                  {"name": "longitude", "type": {"literal": {"float": {"float64": {}}}}},
+                  {"name": "altitude", "type": {"maybe": {"literal": {"float": {"float64": {}}}}}}]}}},
           "variables": []}}}],
   "dependencies": ["hydra.json.model"],
   "description": "A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. This model provides some additional structure beyond the JSON encoding described in the specification; For example, it provides MultiPoint not as an object with an array of coordinates which encode points, but as an array of Points. A BoundingBox is not simply an list of numbers, but a list of CoordinateRanges.",

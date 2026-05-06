@@ -14,16 +14,6 @@ import java.math.BigInteger;
 public interface Literals {
 
     /**
-     * Create a bigfloat literal from a BigDecimal value.
-     *
-     * @param value the BigDecimal value
-     * @return a bigfloat literal
-     */
-    static Literal bigfloat(final BigDecimal value) {
-        return float_(new FloatValue.Bigfloat(value));
-    }
-
-    /**
      * Create a bigint literal from a BigInteger value.
      *
      * @param value the BigInteger value
@@ -228,11 +218,6 @@ public interface Literals {
             @Override
             public String visit(Literal.Float_ instance) {
                 return "float:" + instance.value.accept(new FloatValue.Visitor<String>() {
-                    @Override
-                    public String visit(FloatValue.Bigfloat instance) {
-                        return "bigfloat:" + instance.value;
-                    }
-
                     @Override
                     public String visit(FloatValue.Float32 instance) {
                         return "float32:" + instance.value;

@@ -535,13 +535,6 @@
                                                                       "cases": {
                                                                         "cases": [
                                                                           {
-                                                                            "name": "bigfloat",
-                                                                            "term": {
-                                                                              "lambda": {
-                                                                                "body": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
-                                                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                                                                "parameter": "v"}}},
-                                                                          {
                                                                             "name": "float32",
                                                                             "term": {
                                                                               "lambda": {

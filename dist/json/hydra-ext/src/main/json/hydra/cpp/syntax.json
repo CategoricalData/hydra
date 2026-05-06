@@ -1136,7 +1136,7 @@
     {
       "type": {
         "name": "hydra.cpp.syntax.FloatingLiteral",
-        "typeScheme": {"body": {"wrap": {"literal": {"float": {"bigfloat": {}}}}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"float": {"float64": {}}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.cpp.syntax.CharacterLiteral",

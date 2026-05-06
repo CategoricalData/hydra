@@ -152,7 +152,7 @@ writeScalar s =
     case s of
       Model.ScalarBool v0 -> Logic.ifElse v0 "true" "false"
       Model.ScalarDecimal v0 -> Literals.showDecimal v0
-      Model.ScalarFloat v0 -> Literals.showBigfloat v0
+      Model.ScalarFloat v0 -> Literals.showFloat64 v0
       Model.ScalarInt v0 -> Literals.showBigint v0
       Model.ScalarNull -> "null"
       Model.ScalarStr v0 -> writeString v0

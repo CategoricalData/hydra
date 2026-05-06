@@ -750,9 +750,9 @@ typeArgumentsOrDiamondToExpr = def "typeArgumentsOrDiamondToExpr" $
 floatingPointLiteralToExpr :: TTermDefinition (Java.FloatingPointLiteral -> Expr)
 floatingPointLiteralToExpr = def "floatingPointLiteralToExpr" $
   lambda "fl" $
-    Serialization.cst @@ (javaFloatLiteralText @@ LibLiterals.showBigfloat (unwrap Java._FloatingPointLiteral @@ var "fl"))
+    Serialization.cst @@ (javaFloatLiteralText @@ LibLiterals.showFloat64 (unwrap Java._FloatingPointLiteral @@ var "fl"))
 
--- | Convert a showBigfloat result into valid Java source syntax, mapping
+-- | Convert a showFloat64 result into valid Java source syntax, mapping
 -- NaN and ±Infinity to Double.NaN / Double.POSITIVE_INFINITY / Double.NEGATIVE_INFINITY.
 javaFloatLiteralText :: TTermDefinition (String -> String)
 javaFloatLiteralText = def "javaFloatLiteralText" $

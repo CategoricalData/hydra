@@ -375,14 +375,11 @@
                                                               "inject": {
                                                                 "field": {
                                                                   "name": "number",
-                                                                  "term": {
-                                                                    "application": {
-                                                                      "argument": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.bigfloatToFloat64"}}},
-                                                                      "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
+                                                                  "term": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.float64ToDecimal"}}}},
                                                                 "typeName": "hydra.json.model.Value"}}}},
                                                         "type": {"literal": {"string": {}}}}},
                                                     "type": {"variable": "hydra.json.model.Value"}}},
-                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
+                                                "domain": {"literal": {"float": {"float64": {}}}},
                                                 "parameter": "f"}}},
                                           {
                                             "name": "int",

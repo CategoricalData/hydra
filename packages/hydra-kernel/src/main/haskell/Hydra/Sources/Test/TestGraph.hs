@@ -65,10 +65,10 @@ testNamespace :: TTermDefinition Namespace
 testNamespace = define "testNamespace" $ DPackaging.namespace $ Phantoms.string "testGraph"
 
 -- | The test graph. Emits a call to the hand-written
--- Hydra.Test.TestEnv.testGraph (applied to testTypes).
+-- Hydra.Test.TestEnv.testGraph (applied to testTypes and testTerms).
 testGraph :: TTermDefinition Graph
 testGraph = define "testGraph" $
-  TestEnv.testGraph @@ testTypes
+  TestEnv.testGraph @@ testTypes @@ testTerms
 
 -- | The test context. Emits a reference to the hand-written
 -- Hydra.Test.TestEnv.testContext.

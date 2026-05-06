@@ -346,15 +346,6 @@ public interface Terms {
         return literal(Literals.float64(value));
     }
 
-    /**
-     * Create a bigfloat literal (Java double → Hydra bigfloat).
-     * @param value the BigDecimal value
-     * @return the bigfloat literal term
-     */
-    static Term bigfloat(BigDecimal value) {
-        return literal(Literals.bigfloat(value));
-    }
-
     // ===== Character and comparison =====
 
     /**

@@ -105,22 +105,13 @@ module_ = Module {
       toDefinition toJsonUntyped]
 
 -- | Encode a float value to JSON.
--- Bigfloat uses native JSON numbers (lossless for finite values via Scientific). Bigfloat
--- rejects every IEEE value that cannot be represented by its target types (Java BigDecimal,
--- Python Decimal cannot hold NaN, ±Infinity, or -0.0 at all), so those produce an error.
--- Float32 always uses a JSON string to preserve exact source precision. Float64 encodes via
--- a JSON number for finite, non-negative-zero values and via a JSON string for the values
--- that the JSON grammar cannot express (NaN, ±Infinity, -0.0) — keeping those IEEE values
--- round-trippable through JSON.
+-- Float32 and Float64 encode finite, non-negative-zero values as JSON numbers; values the
+-- JSON grammar cannot express (NaN, ±Infinity, -0.0) are encoded as JSON string sentinels
+-- to keep those IEEE values round-trippable through JSON.
 encodeFloat :: TTermDefinition (FloatValue -> Either String Value)
 encodeFloat = define "encodeFloat" $
-  doc "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode. Bigfloat rejects anything the decimal space can't hold." $
+  doc "Encode a float value to JSON. Finite values become JSON numbers (shortest round-trip); IEEE specials (NaN/Inf/-0.0) become JSON strings. Float32 and Float64 are symmetric; the schema disambiguates precision on decode." $
   "fv" ~> cases _FloatValue (var "fv") Nothing [
-    _FloatValue_bigfloat>>: "bf" ~>
-      "s" <~ (Literals.showBigfloat $ var "bf") $
-      Logic.ifElse (requiresJsonStringSentinel @@ var "s")
-        (left $ Strings.cat $ list [string "JSON cannot represent bigfloat value: ", var "s"])
-        (right $ Json.valueNumber $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "bf"),
     _FloatValue_float32>>: "f" ~>
       "s" <~ (Literals.showFloat32 $ var "f") $
       Logic.ifElse (requiresJsonStringSentinel @@ var "s")
@@ -165,13 +156,9 @@ encodeLiteral = define "encodeLiteral" $
     _Literal_string>>: "s" ~> right $ Json.valueString $ var "s"]
 
 -- | Encode a float value to JSON.
--- Bigfloat uses native JSON numbers (lossless for finite values via Scientific). Bigfloat
--- rejects every IEEE value that cannot be represented by its target types (Java BigDecimal,
--- Python Decimal cannot hold NaN, ±Infinity, or -0.0 at all), so those produce an error.
--- Float32 always uses a JSON string to preserve exact source precision. Float64 encodes via
--- a JSON number for finite, non-negative-zero values and via a JSON string for the values
--- that the JSON grammar cannot express (NaN, ±Infinity, -0.0) — keeping those IEEE values
--- round-trippable through JSON.
+-- Float32 and Float64 encode finite, non-negative-zero values as JSON numbers; values the
+-- JSON grammar cannot express (NaN, ±Infinity, -0.0) are encoded as JSON string sentinels
+-- to keep those IEEE values round-trippable through JSON.
 -- | Check whether a float's string form is an IEEE value that the JSON number grammar or
 -- Scientific-backed decoding cannot round-trip: NaN, Infinity, -Infinity, or -0.0.
 requiresJsonStringSentinel :: TTermDefinition (String -> Bool)

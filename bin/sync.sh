@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
-
 # Top-level synchronization script for Hydra.
 #
 # Computes the (package, target) sync matrix needed to bootstrap from a
@@ -14,17 +12,21 @@ set -euo pipefail
 #   bin/sync.sh --hosts H1,H2 --targets T1,T2    # Cartesian subset
 #   bin/sync.sh --hosts H1,H2                    # targets mirror hosts
 #   bin/sync.sh --targets T1,T2                  # hosts mirror targets
-#   bin/sync.sh --no-tests                          # skip target-lang tests
+#   bin/sync.sh --no-tests                       # skip target-lang tests
 #   bin/sync.sh --help
 #
 # For the common "bootstrapping triad" default (haskell, java, python),
 # use bin/sync-default.sh, which is a thin wrapper around this script.
 #
 # Languages for --hosts / --targets:
-#   haskell, java, python, scala, clojure, scheme, common-lisp, emacs-lisp.
-#   Aliases: 'all' expands to all eight; 'lisp' expands to the four Lisp
+#   haskell, java, python, scala, go, clojure, scheme, common-lisp, emacs-lisp.
+#   Aliases: 'all' expands to all nine; 'lisp' expands to the four Lisp
 #   dialects (clojure,common-lisp,emacs-lisp,scheme). Aliases can mix
 #   with explicit names, e.g. 'java,lisp'.
+#
+# Go is a "head bud" today: it generates as a target (kernel only) but
+# cannot yet host generation of any coder package in Go (Phase 4 host=go
+# rows are skipped). See issue #289.
 #
 # Sync matrix (derived from hosts + targets):
 #
@@ -42,10 +44,12 @@ set -euo pipefail
 #
 # Packages NOT in the matrix: hydra-coq, hydra-javascript, hydra-wasm,
 # hydra-ext, hydra-pg, hydra-rdf. These are extensions, not bootstrapping
-# dependencies. Generate them on demand:
+# dependencies. Generate them on demand via bin/sync-packages.sh:
 #
-#   bin/sync.sh hydra-pg                       # pg into every target
-#   bin/sync.sh hydra-pg --target haskell      # pg into haskell only
+#   bin/sync-packages.sh hydra-pg                       # pg into every target
+#   bin/sync-packages.sh hydra-pg --targets haskell     # pg into haskell only
+
+set -euo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
@@ -53,7 +57,7 @@ HYDRA_HASKELL_DIR="$HYDRA_ROOT/heads/haskell"
 
 source "$HYDRA_ROOT/bin/lib/common.sh"
 
-ALL_LANGS="haskell java python scala clojure scheme common-lisp emacs-lisp"
+ALL_LANGS="haskell java python scala go clojure scheme common-lisp emacs-lisp"
 
 NO_TESTS=false
 HOSTS_ARG=""
@@ -68,48 +72,18 @@ while [ $# -gt 0 ]; do
             HOSTS_ARG="$2"
             shift
             ;;
+        --hosts=*)
+            HOSTS_ARG="${1#--hosts=}"
+            ;;
         --targets)
             TARGETS_ARG="$2"
             shift
             ;;
+        --targets=*)
+            TARGETS_ARG="${1#--targets=}"
+            ;;
         --help|-h)
-            cat <<'EOF'
-Usage: bin/sync.sh [--hosts H1,H2,...] [--targets T1,T2,...] [--no-tests]
-
-Regenerate the (package, target) sync matrix needed to bootstrap from
-the given hosts into the given targets. Mirrors the --hosts/--targets
-semantics of run-bootstrapping-demo.sh.
-
-Options:
-  --hosts LANGS       Comma-separated languages, or 'all'. Defaults mirror
-                      --targets; if both omitted, defaults to 'all'.
-  --targets LANGS     Comma-separated languages, or 'all'. Defaults mirror
-                      --hosts; if both omitted, defaults to 'all'.
-  --no-tests             Skip target-language test suites after each target sync.
-                      Phase 1's 'stack test' still runs.
-  --help              Show this help.
-
-For the 'haskell,java,python' bootstrapping triad, use bin/sync-default.sh.
-
-Languages: haskell, java, python, scala, clojure, scheme, common-lisp,
-           emacs-lisp.
-Aliases:   'all'  expands to every supported language.
-           'lisp' expands to clojure,common-lisp,emacs-lisp,scheme.
-           Aliases can mix with explicit names, e.g. 'java,lisp'.
-
-Derived matrix:
-  - hydra-kernel is regenerated into every language in (hosts ∪ targets).
-  - Each hydra-<L> coder (for L in hosts ∪ targets) is regenerated into
-    Haskell (the mother host).
-  - Each (host, target) pair with host ≠ haskell produces
-    (hydra-<target>, host), so the host can emit target code.
-
-Packages outside the matrix (invoke explicitly when needed):
-  hydra-coq, hydra-javascript, hydra-wasm, hydra-ext, hydra-pg, hydra-rdf
-  → bin/sync.sh <pkg> [--target <lang>]
-
-Stops at the first error. Reports total elapsed time.
-EOF
+            sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
             exit 0
             ;;
         *)
@@ -296,7 +270,7 @@ for L in $LANG_UNION; do
     if [ "$L" = "haskell" ]; then continue; fi
     # Map language name to package name.
     case "$L" in
-        java|python|scala)  pkg="hydra-$L" ;;
+        java|python|scala|go)  pkg="hydra-$L" ;;
         clojure|scheme|common-lisp|emacs-lisp)  pkg="hydra-lisp" ;;
         *)                  die "Internal: no coder package for $L" ;;
     esac
@@ -325,6 +299,18 @@ banner1 "Phase 3: hydra-kernel + hydra-pg + hydra-rdf into each language"
 echo ""
 for L in $LANG_UNION; do
     if [ "$L" = "haskell" ]; then continue; fi
+    # The Go head is a "head bud": only hydra-kernel is meaningful for it
+    # today. Skip hydra-pg / hydra-rdf into Go until a corresponding Go
+    # runtime exists (issue #289 is the umbrella for promoting Go to a
+    # full-fledged head).
+    if [ "$L" = "go" ]; then
+        for pkg in hydra-kernel; do
+            echo ""
+            echo "--- $pkg -> $L ---"
+            "$HYDRA_ROOT/heads/$L/bin/assemble-distribution.sh" "$pkg"
+        done
+        continue
+    fi
     for pkg in hydra-kernel hydra-pg hydra-rdf; do
         echo ""
         echo "--- $pkg -> $L ---"
@@ -353,11 +339,15 @@ banner1 "Phase 4: Cross-host coders (hydra-<target> in host's language)"
 echo ""
 for H in $HOSTS; do
     if [ "$H" = "haskell" ]; then continue; fi
+    # The Go head is a "head bud": it cannot yet host generation of any
+    # coder package in Go's own language (no Go DSL infrastructure). Skip
+    # the host=go row of Phase 4 until promotion is complete.
+    if [ "$H" = "go" ]; then continue; fi
     for T in $TARGETS; do
         # Map target language to its coder package.
         case "$T" in
             haskell)             pkg="hydra-haskell" ;;
-            java|python|scala)   pkg="hydra-$T" ;;
+            java|python|scala|go)   pkg="hydra-$T" ;;
             clojure|scheme|common-lisp|emacs-lisp)  pkg="hydra-lisp" ;;
             *)                   die "Internal: no coder package for $T" ;;
         esac

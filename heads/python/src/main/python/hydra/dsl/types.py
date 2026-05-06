@@ -195,11 +195,6 @@ def poly_constrained(vs_with_constraints: Sequence[tuple[str, list[Name]]], t: T
     return TypeScheme(vars, t, Just(constraint_map) if constraint_map else Nothing())
 
 
-def bigfloat() -> Type:
-    """Arbitrary-precision floating point type."""
-    return literal(lt.bigfloat())
-
-
 def bigint() -> Type:
     """Arbitrary-precision integer type."""
     return literal(lt.bigint())

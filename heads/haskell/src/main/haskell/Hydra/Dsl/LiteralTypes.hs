@@ -5,11 +5,6 @@ module Hydra.Dsl.LiteralTypes where
 import Hydra.Core
 
 
--- | Arbitrary-precision floating point type
--- Example: bigfloat
-bigfloat :: LiteralType
-bigfloat = float FloatTypeBigfloat
-
 -- | Arbitrary-precision integer type
 -- Example: bigint
 bigint :: LiteralType
