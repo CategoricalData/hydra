@@ -992,13 +992,6 @@
                                           "cases": {
                                             "cases": [
                                               {
-                                                "name": "bigfloat",
-                                                "term": {
-                                                  "lambda": {
-                                                    "body": {"application": {"argument": {"literal": {"string": "decimal"}}, "function": {"variable": "xsd"}}},
-                                                    "domain": {"unit": {}},
-                                                    "parameter": "_"}}},
-                                              {
                                                 "name": "float32",
                                                 "term": {
                                                   "lambda": {

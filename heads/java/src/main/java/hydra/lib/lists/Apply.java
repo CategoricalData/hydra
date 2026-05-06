@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -17,6 +16,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -38,16 +38,16 @@ public class Apply extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(0)), functions ->
                 hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), arguments -> {
-                    List<Term> results = new LinkedList<>();
+                    ConsList<Term> reversed = ConsList.empty();
                     for (Term f : functions) {
                         for (Term a : arguments) {
                             Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                                 hydra.Lexical.emptyContext(), graph, true, Terms.apply(f, a));
                             if (r.isLeft()) return (Either) r;
-                            results.add(((Either.Right<Error_, Term>) r).value);
+                            reversed = ConsList.cons(((Either.Right<Error_, Term>) r).value, reversed);
                         }
                     }
-                    return Either.right(Terms.list(results));
+                    return Either.right(Terms.list(reversed.reverse()));
                 }));
     }
 
@@ -71,12 +71,12 @@ public class Apply extends PrimitiveFunction {
      * @return the list of results from applying each function to each argument
      */
     public static <X, Y> List<Y> apply(List<Function<X, Y>> functions, List<X> args) {
-        LinkedList<Y> results = new LinkedList<>();
+        ConsList<Y> reversed = ConsList.empty();
         for (Function<X, Y> f : functions) {
             for (X a : args) {
-                results.add(f.apply(a));
+                reversed = ConsList.cons(f.apply(a), reversed);
             }
         }
-        return results;
+        return reversed.reverse();
     }
 }

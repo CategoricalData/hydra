@@ -58,4 +58,3 @@ object equality:
   private def floatToBigDecimal(v: hydra.core.FloatValue): BigDecimal = v match
     case hydra.core.FloatValue.float32(n) => BigDecimal(n.toDouble)
     case hydra.core.FloatValue.float64(n) => BigDecimal(n)
-    case hydra.core.FloatValue.bigfloat(n) => n

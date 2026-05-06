@@ -166,10 +166,6 @@ round x
   | Prelude.isNaN x Prelude.|| Prelude.isInfinite x = x
   | Prelude.otherwise = Prelude.fromIntegral (Prelude.round x :: Integer)
 
--- | Round a bigfloat to n significant digits.
-roundBigfloat :: Int -> Double -> Double
-roundBigfloat = roundFloat64
-
 -- | Round a float32 to n significant digits.
 -- Returns NaN/Inf inputs unchanged (no rounding is possible).
 roundFloat32 :: Int -> Float -> Float

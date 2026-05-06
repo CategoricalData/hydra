@@ -24,6 +24,10 @@
 #   --repeat N              Run tests N times (default: 1)
 #   --run RUN               Use a specific run directory (test mode)
 #   --paths p1,p2,...       Test only specific paths (test mode)
+#   --clean                 Force a fresh wipe + recopy of each target dir.
+#                           Default is incremental: per-target setup scripts
+#                           skip the wipe when their inputs are unchanged.
+#                           Pass --clean for cold-start timing measurements.
 #
 # All generated code goes to /tmp/hydra-bootstrapping-demo with subdirectories:
 #   {host}-to-{target}/
@@ -57,9 +61,9 @@ PATH_FILTER=""
 while [ $# -gt 0 ]; do
     case "$1" in
         --hosts) HOSTS="$2"; shift ;;
-        --hosts=*) HOSTS="${1#--hosts=}" ;;  # legacy
+        --hosts=*) HOSTS="${1#--hosts=}" ;;
         --targets) TARGETS="$2"; shift ;;
-        --targets=*) TARGETS="${1#--targets=}" ;;  # legacy
+        --targets=*) TARGETS="${1#--targets=}" ;;
         --types-only) EXTRA_FLAGS="$EXTRA_FLAGS --types-only" ;;
         --kernel-only) EXTRA_FLAGS="$EXTRA_FLAGS --kernel-only" ;;
         --tag) TAG="$2"; shift ;;
@@ -74,6 +78,16 @@ while [ $# -gt 0 ]; do
         --run=*) RUN_SPEC="${1#--run=}" ;;
         --paths) PATH_FILTER="$2"; shift ;;
         --paths=*) PATH_FILTER="${1#--paths=}" ;;
+        --clean) export HYDRA_BOOTSTRAP_CLEAN=1 ;;
+        --help|-h)
+            sed -n '2,/^$/p' "$0" | sed 's/^# \{0,1\}//'
+            exit 0
+            ;;
+        --*)
+            echo "Error: unknown flag '$1'" >&2
+            echo "Try: $0 --help" >&2
+            exit 1
+            ;;
     esac
     shift
 done
@@ -115,6 +129,27 @@ for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
         exit 1
     fi
 done
+
+# ============================================================
+# Pre-sync: ensure dist/<lang>/ has every package the demo will need
+# ============================================================
+#
+# Each per-cell setup script (setup-<target>-target.sh) and host invoker
+# (invoke-<host>-host.sh) used to do its own on-demand assembly via 5-7
+# duplicated bash loops calling heads/<lang>/bin/assemble-distribution.sh
+# (audit flaw F8). That logic is now centralized here: one bin/sync.sh call
+# covers the (host, target) matrix from --hosts/--targets, and per-package
+# digest caching makes warm runs near-instant.
+#
+# The sync invocation derives package×target combinations from --hosts and
+# --targets (see bin/sync.sh's docstring for the matrix definition). For
+# the bootstrap demo's own logic, only the kernel + per-target coders are
+# needed; pg/rdf/ext are no longer in scope (the rollup-everything design
+# in hydra-java's build was retired in #309's bindings refactor).
+echo ""
+echo "[Pre-sync] Ensuring dist/ is fresh for the selected hosts × targets..."
+"$HYDRA_ROOT/bin/sync.sh" --hosts "$HOSTS" --targets "$TARGETS" --no-tests
+echo ""
 
 # ============================================================
 # Environment checks
@@ -547,6 +582,49 @@ write_metadata() {
 ENDJSON
 }
 
+# Invoke the target language's test runner inside <demo_dir>, with
+# HYDRA_BENCHMARK_OUTPUT pointing at <bench_file>. Returns the test runner's
+# exit code; the caller is responsible for set +e / set -e around the call
+# if it needs to inspect a non-zero exit without aborting under `set -e`.
+#
+# A single source of truth for the per-target test invocation. Two callers:
+# run_tests_for_path (first run per path) and the --repeat loop in
+# do_generate (additional runs).
+_invoke_target_tests() {
+    local target=$1
+    local demo_dir=$2
+    local bench_file=$3
+
+    cd "$demo_dir"
+    case "$target" in
+        haskell)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" stack test 2>&1
+            ;;
+        java)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" ./gradlew test 2>&1
+            ;;
+        python)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
+            ;;
+        clojure)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" clojure -M -m run-tests 2>&1
+            ;;
+        scheme)
+            if command -v guile > /dev/null 2>&1; then
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" guile -L src/main/scheme -L src/test/scheme -L src/main/scheme -s run-tests.scm 2>&1
+            else
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" chibi-scheme -I src/main/scheme -I src/test/scheme -I src/main/scheme run-tests.scm 2>&1
+            fi
+            ;;
+        common-lisp)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
+            ;;
+        emacs-lisp)
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" emacs --batch --load run-tests.el 2>&1
+            ;;
+    esac
+}
+
 # Run tests for a single path, writing benchmark JSON to run_dir
 run_tests_for_path() {
     local path_key=$1
@@ -570,47 +648,8 @@ run_tests_for_path() {
 
         local test_exit=0
         set +e
-        case "$target" in
-            haskell)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" stack test 2>&1
-                test_exit=$?
-                ;;
-            java)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" ./gradlew test 2>&1
-                test_exit=$?
-                ;;
-            python)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
-                test_exit=$?
-                ;;
-            clojure)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" clojure -M -m run-tests 2>&1
-                test_exit=$?
-                ;;
-            scheme)
-                cd "$demo_dir"
-                if command -v guile > /dev/null 2>&1; then
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" guile -L src/main/scheme -L src/test/scheme -L src/main/scheme -s run-tests.scm 2>&1
-                else
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" chibi-scheme -I src/main/scheme -I src/test/scheme -I src/main/scheme run-tests.scm 2>&1
-                fi
-                test_exit=$?
-                ;;
-            common-lisp)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
-                test_exit=$?
-                ;;
-            emacs-lisp)
-                cd "$demo_dir"
-                HYDRA_BENCHMARK_OUTPUT="$bench_file" emacs --batch --load run-tests.el 2>&1
-                test_exit=$?
-                ;;
-        esac
+        _invoke_target_tests "$target" "$demo_dir" "$bench_file"
+        test_exit=$?
         set -e
 
         if [ "$test_exit" -ne 0 ]; then
@@ -759,47 +798,8 @@ ENDJSON
                         local extra_bench="$RUN_DIR/${path_key}_${ri}.benchmark.json"
                         local test_exit=0
                         set +e
-                        case "$target" in
-                            haskell)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" stack test 2>&1
-                                test_exit=$?
-                                ;;
-                            java)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" ./gradlew test 2>&1
-                                test_exit=$?
-                                ;;
-                            python)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" HYDRA_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json" pytest src/test/ 2>&1
-                                test_exit=$?
-                                ;;
-                            clojure)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" clojure -M -m run-tests 2>&1
-                                test_exit=$?
-                                ;;
-                            scheme)
-                                cd "$demo_dir"
-                                if command -v guile > /dev/null 2>&1; then
-                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" guile -L src/main/scheme -L src/test/scheme -L src/main/scheme -s run-tests.scm 2>&1
-                                else
-                                    HYDRA_BENCHMARK_OUTPUT="$extra_bench" chibi-scheme -I src/main/scheme -I src/test/scheme -I src/main/scheme run-tests.scm 2>&1
-                                fi
-                                test_exit=$?
-                                ;;
-                            common-lisp)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
-                                test_exit=$?
-                                ;;
-                            emacs-lisp)
-                                cd "$demo_dir"
-                                HYDRA_BENCHMARK_OUTPUT="$extra_bench" emacs --batch --load run-tests.el 2>&1
-                                test_exit=$?
-                                ;;
-                        esac
+                        _invoke_target_tests "$target" "$demo_dir" "$extra_bench"
+                        test_exit=$?
                         set -e
                         if [ "$test_exit" -ne 0 ]; then
                             echo "    Tests FAILED on repeat $ri"
@@ -916,174 +916,12 @@ do_test() {
 
 display_matrix() {
     local run_dir=$1
-
-    python3 - "$run_dir" <<'PYEOF'
-import json, sys, os, glob, statistics
-
-run_dir = sys.argv[1]
-
-meta_path = os.path.join(run_dir, "metadata.json")
-meta = json.load(open(meta_path)) if os.path.exists(meta_path) else {}
-
-hosts = meta.get("hosts", ["haskell", "java", "python"])
-targets = meta.get("targets", ["haskell", "java", "python"])
-
-def capitalize(s):
-    return s[0].upper() + s[1:]
-
-def fmt_time(secs):
-    if secs is None: return "?"
-    return f"{secs:.1f}s" if secs < 60 else f"{int(secs)//60}m {secs%60:.0f}s"
-
-def load_benchmark_counts(path_key):
-    """Load test passed/skipped counts from benchmark JSON."""
-    single = os.path.join(run_dir, f"{path_key}.benchmark.json")
-    if os.path.exists(single):
-        try:
-            d = json.load(open(single))
-            s = d.get("summary") or {}
-            passed = s.get("totalPassed")
-            skipped = s.get("totalSkipped", 0)
-            if passed is not None:
-                return (passed, skipped)
-        except: pass
-    # Try numbered files (take first)
-    files = sorted(glob.glob(os.path.join(run_dir, f"{path_key}_*.benchmark.json")))
-    if files:
-        try:
-            d = json.load(open(files[0]))
-            s = d.get("summary") or {}
-            passed = s.get("totalPassed")
-            skipped = s.get("totalSkipped", 0)
-            if passed is not None:
-                return (passed, skipped)
-        except: pass
-    return (None, None)
-
-def load_benchmark_timing(path_key):
-    """Load test run time from benchmark JSON files, or fall back to testRunTimeSeconds."""
-    single = os.path.join(run_dir, f"{path_key}.benchmark.json")
-    if os.path.exists(single):
-        try:
-            d = json.load(open(single))
-            tms = (d.get("summary") or {}).get("totalTimeMs")
-            return fmt_time(tms / 1000.0) if tms else "?"
-        except: return "?"
-
-    files = sorted(glob.glob(os.path.join(run_dir, f"{path_key}_*.benchmark.json")))
-    if files:
-        times = []
-        for fp in files:
-            try:
-                d = json.load(open(fp))
-                tms = (d.get("summary") or {}).get("totalTimeMs")
-                if tms is not None: times.append(tms)
-            except: pass
-        if times:
-            med = statistics.median(times)
-            result = fmt_time(med / 1000.0)
-            if len(times) > 1:
-                sd = statistics.stdev(times)
-                result += f" +/-{fmt_time(sd / 1000.0)}"
-            return result
-
-    # Fall back to testRunTimeSeconds from per-path JSON
-    pj = os.path.join(run_dir, f"{path_key}.json")
-    if os.path.exists(pj):
-        try:
-            d = json.load(open(pj))
-            trs = d.get("testRunTimeSeconds")
-            if trs is not None:
-                return fmt_time(trs)
-        except: pass
-
-    return "\u2014"
-
-data = {}
-for h in hosts:
-    for t in targets:
-        key = f"{h}-to-{t}"
-        path = os.path.join(run_dir, f"{key}.json")
-        if os.path.exists(path):
-            with open(path) as f:
-                data[key] = json.load(f)
-
-header = ["Host \\ Target"] + [capitalize(t) for t in targets]
-rows = [header]
-for h in hosts:
-    r1 = [capitalize(h)]
-    r2 = [""]
-    r3 = [""]
-    r4 = [""]
-    for t in targets:
-        key = f"{h}-to-{t}"
-        d = data.get(key)
-        if d is None:
-            r1.append("(not run)")
-            r2.append("")
-            r3.append("")
-            r4.append("")
-        elif d.get("status") == "fail":
-            r1.append("FAILED")
-            r2.append("")
-            r3.append("")
-            r4.append("")
-        else:
-            gen = d.get("generation", {})
-            m = gen.get("main", {})
-            te = gen.get("test", {})
-            mf = m.get("fileCount", "?")
-            mt = fmt_time(m.get("timeSeconds"))
-            tf = te.get("fileCount", "?")
-            tt = fmt_time(te.get("timeSeconds"))
-            r1.append(f"{mf} files ({tf} test)")
-            r2.append(f"gen: {mt} ({tt})")
-            r3.append(f"test: {load_benchmark_timing(key)}")
-            passed, skipped = load_benchmark_counts(key)
-            if passed is not None:
-                count_str = f"{passed} pass"
-                if skipped and skipped > 0:
-                    count_str += f", {skipped} skip"
-                r4.append(count_str)
-            else:
-                r4.append("")
-    rows.append(r1)
-    rows.append(r2)
-    rows.append(r3)
-    rows.append(r4)
-
-num_cols = len(header)
-widths = [max(len(row[c]) if c < len(row) else 0 for row in rows) + 2 for c in range(num_cols)]
-
-def rule(left, mid, right):
-    parts = [f"  {left}"]
-    for c in range(num_cols):
-        if c > 0: parts.append(mid)
-        parts.append("\u2500" * widths[c])
-    parts.append(right)
-    print("".join(parts))
-
-def draw_row(row):
-    parts = ["  \u2502"]
-    for c in range(num_cols):
-        val = row[c] if c < len(row) else ""
-        parts.append(f" {val:<{widths[c]-1}}\u2502")
-    print("".join(parts))
-
-print()
-print("  Each cell: main files (test files) / gen: main time (test time) / test: run time / pass, skip")
-print()
-
-rule("\u250c", "\u252c", "\u2510")
-draw_row(rows[0])
-rule("\u251c", "\u253c", "\u2524")
-for i in range(1, len(rows)):
-    if i > 1 and (i - 1) % 4 == 0:
-        rule("\u251c", "\u253c", "\u2524")
-    draw_row(rows[i])
-rule("\u2514", "\u2534", "\u2518")
-print()
-PYEOF
+    # Delegate to the standalone dashboard renderer, which is also used by
+    # bin/run-bootstrapping-demo.sh dashboard. It accepts a parent runs dir
+    # plus a specific run name.
+    python3 "$HYDRA_ROOT/bin/bootstrapping-dashboard.py" \
+        --dir "$(dirname "$run_dir")" \
+        --run "$(basename "$run_dir")"
 }
 
 # ============================================================

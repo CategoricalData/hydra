@@ -1,15 +1,12 @@
 -- | Package manifest for hydra-ext.
 --
 -- Owns DSL sources for the "truly-ext" coders and formats: Avro, Protobuf,
--- GraphQL, Pegasus/PDL, Yaml, Atlas, Cpp, Csharp, Go, Json Schema, Rust,
+-- GraphQL, Pegasus/PDL, Yaml, Atlas, Cpp, Csharp, Json Schema, Rust,
 -- TypeScript, and various miscellaneous domain modules. See
 -- feature_290_packaging-plan.md, "Sync system redesign / Package manifests".
 --
--- Note: The following files exist in packages/hydra-ext/ but are intentionally
--- excluded from mainModules, preserving the exclusions from
--- heads/haskell/Sources/Ext.hs:
---
---   * Go.Serde — WIP, incomplete module
+-- Note: Go DSL sources moved out of hydra-ext into the hydra-go package
+-- as part of issue #289 (Go head).
 
 module Hydra.Sources.Ext.Manifest (
   mainModules,
@@ -27,7 +24,7 @@ import qualified Hydra.Sources.Avro.SchemaJson as AvroSchemaJson
 import qualified Hydra.Sources.Avro.Testing as AvroTesting
 import qualified Hydra.Sources.Cpp.Coder as CppCoder
 import qualified Hydra.Sources.Cpp.Environment as CppEnvironment
-import qualified Hydra.Sources.Cpp.Language as CppLanguage
+import qualified Hydra.Sources.Cpp.Language as CppLanguageSource
 import qualified Hydra.Sources.Cpp.Names as CppNames
 import qualified Hydra.Sources.Cpp.Serde as CppSerde
 import qualified Hydra.Sources.Cpp.Syntax as CppSyntax
@@ -35,8 +32,6 @@ import qualified Hydra.Sources.Cpp.Utils as CppUtils
 import qualified Hydra.Sources.Csharp.Language as CsharpLanguage
 import qualified Hydra.Sources.Csharp.Syntax as CsharpSyntax
 import qualified Hydra.Sources.Delta.Parquet as DeltaParquet
-import qualified Hydra.Sources.Go.Language as GoLanguage
-import qualified Hydra.Sources.Go.Syntax as GoSyntax
 import qualified Hydra.Sources.Graphql.Coder as GraphqlCoder
 import qualified Hydra.Sources.Graphql.Language as GraphqlLanguage
 import qualified Hydra.Sources.Graphql.Serde as GraphqlSerde
@@ -55,20 +50,20 @@ import qualified Hydra.Sources.Other.Osv as Osv
 import qualified Hydra.Sources.Other.StacItems as StacItems
 import qualified Hydra.Sources.Parquet.Format as ParquetFormat
 import qualified Hydra.Sources.Pegasus.Coder as PegasusCoder
-import qualified Hydra.Sources.Pegasus.Language as PegasusLanguage
-import qualified Hydra.Sources.Pegasus.Pdl as Pdl
-import qualified Hydra.Sources.Pegasus.Serde as PegasusSerde
+import qualified Hydra.Sources.Pegasus.Language as PegasusLanguageSource
+import qualified Hydra.Sources.Pegasus.Pdl as PdlSyntax
+import qualified Hydra.Sources.Pegasus.Serde as PegasusSerdeSource
 import qualified Hydra.Sources.Protobuf.Any as ProtobufAny
 import qualified Hydra.Sources.Protobuf.Coder as ProtobufCoder
 import qualified Hydra.Sources.Protobuf.Environment as ProtobufEnvironment
-import qualified Hydra.Sources.Protobuf.Language as ProtobufLanguage
-import qualified Hydra.Sources.Protobuf.Proto3 as Proto3
-import qualified Hydra.Sources.Protobuf.Serde as ProtobufSerde
+import qualified Hydra.Sources.Protobuf.Language as ProtobufLanguageSource
+import qualified Hydra.Sources.Protobuf.Proto3 as Proto3Syntax
+import qualified Hydra.Sources.Protobuf.Serde as ProtobufSerdeSource
 import qualified Hydra.Sources.Protobuf.SourceContext as ProtobufSourceContext
 import qualified Hydra.Sources.Rust.Coder as RustCoder
-import qualified Hydra.Sources.Rust.Language as RustLanguage
+import qualified Hydra.Sources.Rust.Language as RustLanguageSource
 import qualified Hydra.Sources.Rust.Operators as RustOperators
-import qualified Hydra.Sources.Rust.Serde as RustSerde
+import qualified Hydra.Sources.Rust.Serde as RustSerdeSource
 import qualified Hydra.Sources.Rust.Syntax as RustSyntax
 import qualified Hydra.Sources.Sql.Ansi as SqlAnsi
 import qualified Hydra.Sources.TypeScript.Language as TypeScriptLanguage
@@ -91,7 +86,7 @@ mainModules = [
   AzureDtld.module_,
   CppCoder.module_,
   CppEnvironment.module_,
-  CppLanguage.module_,
+  CppLanguageSource.module_,
   CppNames.module_,
   CppSerde.module_,
   CppSyntax.module_,
@@ -101,8 +96,6 @@ mainModules = [
   Datalog.module_,
   DeltaParquet.module_,
   GeoJson.module_,
-  GoLanguage.module_,
-  GoSyntax.module_,
   GraphqlCoder.module_,
   GraphqlLanguage.module_,
   GraphqlSerde.module_,
@@ -115,21 +108,21 @@ mainModules = [
   Kql.module_,
   Osv.module_,
   ParquetFormat.module_,
-  Pdl.module_,
+  PdlSyntax.module_,
   PegasusCoder.module_,
-  PegasusLanguage.module_,
-  PegasusSerde.module_,
-  Proto3.module_,
+  PegasusLanguageSource.module_,
+  PegasusSerdeSource.module_,
+  Proto3Syntax.module_,
   ProtobufAny.module_,
   ProtobufCoder.module_,
   ProtobufEnvironment.module_,
-  ProtobufLanguage.module_,
-  ProtobufSerde.module_,
+  ProtobufLanguageSource.module_,
+  ProtobufSerdeSource.module_,
   ProtobufSourceContext.module_,
   RustCoder.module_,
-  RustLanguage.module_,
+  RustLanguageSource.module_,
   RustOperators.module_,
-  RustSerde.module_,
+  RustSerdeSource.module_,
   RustSyntax.module_,
   SqlAnsi.module_,
   StacItems.module_,

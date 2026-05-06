@@ -29,7 +29,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -112,7 +112,6 @@ floatTypePrecision :: TTermDefinition (FloatType -> Precision)
 floatTypePrecision = define "floatTypePrecision" $
   doc "Find the precision of a given floating-point type" $
   match _FloatType Nothing [
-    _FloatType_bigfloat>>: constant Util.precisionArbitrary,
     _FloatType_float32>>: constant $ Util.precisionBits $ int32 32,
     _FloatType_float64>>: constant $ Util.precisionBits $ int32 64]
 
@@ -120,7 +119,6 @@ floatTypes :: TTermDefinition [FloatType]
 floatTypes = define "floatTypes" $
   doc "All floating-point types in a canonical order" $
   list $ injectUnit _FloatType <$> [
-    _FloatType_bigfloat,
     _FloatType_float32,
     _FloatType_float64]
 
@@ -128,7 +126,6 @@ floatValueType :: TTermDefinition (FloatValue -> FloatType)
 floatValueType = define "floatValueType" $
   doc "Find the float type for a given floating-point value" $
   match _FloatValue Nothing [
-    _FloatValue_bigfloat>>: constant Core.floatTypeBigfloat,
     _FloatValue_float32>>: constant Core.floatTypeFloat32,
     _FloatValue_float64>>: constant Core.floatTypeFloat64]
 
@@ -218,8 +215,8 @@ literalTypes = define "literalTypes" $
       Core.literalTypeBinary,
       Core.literalTypeBoolean,
       Core.literalTypeDecimal],
-    Lists.map (unaryFunction Core.literalTypeFloat) (floatTypes),
-    Lists.map (unaryFunction Core.literalTypeInteger) (integerTypes),
+    Lists.map (reify Core.literalTypeFloat) (floatTypes),
+    Lists.map (reify Core.literalTypeInteger) (integerTypes),
     list [
       Core.literalTypeString]]
 

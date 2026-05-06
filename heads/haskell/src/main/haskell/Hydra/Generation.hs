@@ -67,7 +67,27 @@ generateSources
   -> [Module]  -- ^ Universe
   -> [Module]  -- ^ Modules to generate
   -> IO Int  -- ^ Number of files written
-generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
+generateSources = generateSourcesWithTransform id
+
+-- | Like 'generateSources' but applies a 'String -> String' transform to
+-- each generated file's content before writing. The transform is part of
+-- the generation pipeline (not a post-pass that reads back from disk),
+-- which is the appropriate place for whole-file textual passes such as
+-- the Scala line-wrap that 'writeScala' uses to keep individual lines
+-- within scalac's stack-friendly threshold.
+generateSourcesWithTransform
+  :: (String -> String)  -- ^ Per-file content transform (id for no-op)
+  -> (Module -> [Definition] -> Context.Context -> Graph -> Either Error.Error (M.Map FilePath String))
+  -> Language
+  -> Bool
+  -> Bool
+  -> Bool
+  -> Bool
+  -> FilePath
+  -> [Module]
+  -> [Module]
+  -> IO Int
+generateSourcesWithTransform transform printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
     let cx = Context.Context [] [] M.empty
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
       Left err -> fail $ "Failed to generate source files: " ++ showError err
@@ -75,7 +95,7 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
         mapM_ writePair files
         return $ length files
   where
-    writePair (path, s) = do
+    writePair (path, raw) = do
         let fullPath = FP.combine basePath path
         SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
         -- Skip writes when content is byte-identical. Rewriting the file with
@@ -95,6 +115,7 @@ generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doH
                   else return False
         CM.unless skip $ writeFile fullPath withNewline
       where
+        s = transform raw
         -- Trailing whitespace is the coder's responsibility. The Hydra
         -- serialization layer in `hydra.serialization` and per-coder
         -- writers (e.g. the Haskell `toHaskellComments` formatter)

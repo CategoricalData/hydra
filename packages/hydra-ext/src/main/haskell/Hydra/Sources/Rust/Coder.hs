@@ -7,7 +7,7 @@ module Hydra.Sources.Rust.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -141,19 +141,13 @@ encodeLiteral = def "encodeLiteral" $
           inject R._Expression R._Expression_literal $
             inject R._Literal R._Literal_float $
               record R._FloatLiteral [
-                R._FloatLiteral_value>>: Literals.bigfloatToFloat64 (Literals.float32ToBigfloat (var "f")),
+                R._FloatLiteral_value>>: Literals.float32ToFloat64 (var "f"),
                 R._FloatLiteral_suffix>>: just (string "f32")],
         _FloatValue_float64>>: lambda "f" $
           inject R._Expression R._Expression_literal $
             inject R._Literal R._Literal_float $
               record R._FloatLiteral [
                 R._FloatLiteral_value>>: var "f",
-                R._FloatLiteral_suffix>>: nothing],
-        _FloatValue_bigfloat>>: lambda "f" $
-          inject R._Expression R._Expression_literal $
-            inject R._Literal R._Literal_float $
-              record R._FloatLiteral [
-                R._FloatLiteral_value>>: Literals.bigfloatToFloat64 (var "f"),
                 R._FloatLiteral_suffix>>: nothing]],
     _Literal_integer>>: lambda "iv" $
       cases _IntegerValue (var "iv") Nothing [
@@ -226,7 +220,6 @@ encodeLiteralType = def "encodeLiteralType" $
       rustPath @@ string "bool",
     _LiteralType_float>>: lambda "ft" $
       cases _FloatType (var "ft") Nothing [
-        _FloatType_bigfloat>>: constant $ rustPath @@ string "f64",
         _FloatType_float32>>: constant $ rustPath @@ string "f32",
         _FloatType_float64>>: constant $ rustPath @@ string "f64"],
     _LiteralType_integer>>: lambda "it" $
@@ -415,7 +408,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
     "typ" <~ Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
-      (unaryFunction Core.typeSchemeBody)
+      (reify Core.typeSchemeBody)
       (Packaging.termDefinitionTypeScheme (var "tdef")) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $

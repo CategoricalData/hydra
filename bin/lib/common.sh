@@ -166,6 +166,58 @@ now_ms() {
 }
 
 # ---------------------------------------------------------------------------
+# Coarse step caches
+#
+# Used by sync-haskell.sh to skip whole steps (verify-json-kernel,
+# bootstrap-from-json, stack test) when their input set is byte-identical
+# to the last successful run. Each step owns a cache file under
+# .stack-work/ holding a single hash line; if the recomputed hash matches,
+# the step is skipped.
+#
+# These caches are coarse: any input change rehashes everything and
+# triggers a full re-run of the step. Per-input incremental caching is a
+# follow-up (see #247-style work).
+#
+# Each call site computes its own hash via a `find ... | shasum` pipeline
+# tailored to the inputs that step depends on (typically a name filter on
+# .json or .hs files). The shared helpers below handle the read/compare/
+# record bookkeeping; the input set and hash function stay per-step.
+#
+# Usage:
+#   HASH=$(find ... | shasum ... | awk ...)
+#   if step_cache_hit "$CACHE_FILE" "$HASH"; then
+#       echo "  Inputs unchanged; skipping."
+#   else
+#       run_the_step
+#       step_cache_record "$CACHE_FILE" "$HASH"
+#   fi
+# ---------------------------------------------------------------------------
+
+# Return 0 if the cache file holds the given hash (cache hit, step can
+# be skipped); 1 otherwise (cache miss, step must run).
+#
+# Usage:
+#   if step_cache_hit "$CACHE_FILE" "$HASH"; then ... fi
+step_cache_hit() {
+    local cache_file="$1"
+    local hash="$2"
+    [ -n "$hash" ] || return 1
+    [ -f "$cache_file" ] || return 1
+    [ "$(cat "$cache_file")" = "$hash" ]
+}
+
+# Record a hash to the cache file. Call this after the step has succeeded.
+#
+# Usage:
+#   step_cache_record "$CACHE_FILE" "$HASH"
+step_cache_record() {
+    local cache_file="$1"
+    local hash="$2"
+    mkdir -p "$(dirname "$cache_file")"
+    echo "$hash" > "$cache_file"
+}
+
+# ---------------------------------------------------------------------------
 # Stack/build helpers
 # ---------------------------------------------------------------------------
 

@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -96,7 +96,6 @@ instantiateTemplate = define "instantiateTemplate" $
   "noPoly" <~ Ctx.failInContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "non-polymorphic type") (string "polymorphic or function type")) (var "cx") $
   "forFloat" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
-    _FloatType_bigfloat>>: constant (Core.floatValueBigfloat (bigfloat 0.0)),
     _FloatType_float32>>: constant (Core.floatValueFloat32 (float32 0.0)),
     _FloatType_float64>>: constant (Core.floatValueFloat64 (float64 0.0))]) $
   "forInteger" <~ ("it" ~> cases _IntegerType (var "it")

@@ -36,7 +36,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -504,7 +504,7 @@ inferModulesGiven = define "inferModulesGiven" $
     (var "universeMods")) $
   -- Transitive closure of term-deps for the target set (self-inclusive).
   "closureMods" <~ moduleDepsTransitive @@ var "nsMap" @@ var "targetMods" $
-  "targetNamespaces" <~ Sets.fromList (Lists.map (unaryFunction Packaging.moduleNamespace) (var "targetMods")) $
+  "targetNamespaces" <~ Sets.fromList (Lists.map (reify Packaging.moduleNamespace) (var "targetMods")) $
   -- Walk each closure module, deciding per-module whether to re-infer all its bindings
   -- (if it's a target) or only its untyped bindings (if it's a transitive dep). Bindings of
   -- non-target closure modules that already carry a scheme are kept verbatim; their schemes

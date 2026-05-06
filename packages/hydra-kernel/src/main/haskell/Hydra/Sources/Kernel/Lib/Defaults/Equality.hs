@@ -24,7 +24,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math      as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes    as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs     as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
-import           Hydra.Dsl.Meta.Lib.Strings   as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings   as Strings
 import qualified Hydra.Dsl.Literals      as Literals
 import qualified Hydra.Dsl.LiteralTypes  as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base     as MetaBase

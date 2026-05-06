@@ -8,8 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.Collections;
-import java.util.TreeSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -21,6 +19,7 @@ import static hydra.dsl.Types.set;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.util.Either;
+import hydra.util.PersistentSet;
 
 
 /**
@@ -60,8 +59,6 @@ public class Singleton extends PrimitiveFunction {
      * @return a new set containing only the specified element
      */
     public static <X> Set<X> apply(X elem) {
-        Set<X> result = new TreeSet<>();
-        result.add(elem);
-        return result;
+        return PersistentSet.singleton(elem);
     }
 }

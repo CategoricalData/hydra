@@ -716,29 +716,6 @@
                                                       "cases": {
                                                         "cases": [
                                                           {
-                                                            "name": "bigfloat",
-                                                            "term": {
-                                                              "lambda": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "either": {
-                                                                            "right": {
-                                                                              "inject": {
-                                                                                "field": {
-                                                                                  "name": "bigDecimal",
-                                                                                  "term": {
-                                                                                    "wrap": {
-                                                                                      "body": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
-                                                                                      "typeName": "hydra.pg.graphson.syntax.BigDecimalValue"}}},
-                                                                                "typeName": "hydra.pg.graphson.syntax.Value"}}}},
-                                                                        "type": {"variable": "hydra.errors.Error"}}},
-                                                                    "type": {"variable": "hydra.pg.graphson.syntax.Value"}}},
-                                                                "domain": {"literal": {"float": {"bigfloat": {}}}},
-                                                                "parameter": "f"}}},
-                                                          {
                                                             "name": "float32",
                                                             "term": {
                                                               "lambda": {

@@ -10,15 +10,6 @@ import hydra.core.LiteralType;
  */
 public interface LiteralTypes {
     /**
-     * Create a bigfloat literal type.
-     *
-     * @return a bigfloat literal type
-     */
-    static LiteralType bigfloat() {
-        return float_(new FloatType.Bigfloat());
-    }
-
-    /**
      * Create a bigint literal type.
      *
      * @return a bigint literal type
@@ -198,11 +189,6 @@ public interface LiteralTypes {
             @Override
             public String visit(LiteralType.Float_ instance) {
                 return "float:" + instance.value.accept(new FloatType.Visitor<String>() {
-                    @Override
-                    public String visit(FloatType.Bigfloat instance) {
-                        return "bigfloat";
-                    }
-
                     @Override
                     public String visit(FloatType.Float32 instance) {
                         return "float32";

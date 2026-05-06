@@ -2,7 +2,7 @@
 -- | Advanced type checking test cases: annotated terms and flows
 module Hydra.Sources.Test.Checking.Advanced where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for term-encoded tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms

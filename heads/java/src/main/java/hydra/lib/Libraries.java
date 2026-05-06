@@ -17,9 +17,10 @@ import hydra.lib.maps.Elems;
 import hydra.lib.sets.Delete;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import hydra.util.ConsList;
 
 
 /**
@@ -35,22 +36,26 @@ public class Libraries {
      * @return a list containing all standard primitive functions from all categories
      */
     public static List<PrimitiveFunction> standardPrimitives() {
-        List<PrimitiveFunction> prims = new ArrayList<>();
-        prims.addAll(charsPrimitives());
-        prims.addAll(eithersPrimitives());
-        prims.addAll(equalityPrimitives());
-        prims.addAll(listsPrimitives());
-        prims.addAll(literalsPrimitives());
-        prims.addAll(logicPrimitives());
-        prims.addAll(mapsPrimitives());
-        prims.addAll(mathPrimitives());
-        prims.addAll(maybesPrimitives());
-        prims.addAll(pairsPrimitives());
-        prims.addAll(regexPrimitives());
-        prims.addAll(setsPrimitives());
-        prims.addAll(stringsPrimitives());
-
-        return prims;
+        ConsList<PrimitiveFunction> reversed = ConsList.empty();
+        for (List<PrimitiveFunction> group : Arrays.asList(
+                charsPrimitives(),
+                eithersPrimitives(),
+                equalityPrimitives(),
+                listsPrimitives(),
+                literalsPrimitives(),
+                logicPrimitives(),
+                mapsPrimitives(),
+                mathPrimitives(),
+                maybesPrimitives(),
+                pairsPrimitives(),
+                regexPrimitives(),
+                setsPrimitives(),
+                stringsPrimitives())) {
+            for (PrimitiveFunction p : group) {
+                reversed = ConsList.cons(p, reversed);
+            }
+        }
+        return reversed.reverse();
     }
 
     private static List<PrimitiveFunction> charsPrimitives() {
@@ -138,10 +143,6 @@ public class Libraries {
 
     private static List<PrimitiveFunction> literalsPrimitives() {
         return Arrays.asList(
-                new hydra.lib.literals.BigfloatToBigint(),
-                new hydra.lib.literals.BigfloatToFloat32(),
-                new hydra.lib.literals.BigfloatToFloat64(),
-                new hydra.lib.literals.BigintToBigfloat(),
                 new hydra.lib.literals.BigintToDecimal(),
                 new hydra.lib.literals.BigintToInt16(),
                 new hydra.lib.literals.BigintToInt32(),
@@ -156,15 +157,14 @@ public class Libraries {
                 new hydra.lib.literals.DecimalToBigint(),
                 new hydra.lib.literals.DecimalToFloat32(),
                 new hydra.lib.literals.DecimalToFloat64(),
-                new hydra.lib.literals.Float32ToBigfloat(),
                 new hydra.lib.literals.Float32ToDecimal(),
-                new hydra.lib.literals.Float64ToBigfloat(),
+                new hydra.lib.literals.Float32ToFloat64(),
                 new hydra.lib.literals.Float64ToDecimal(),
+                new hydra.lib.literals.Float64ToFloat32(),
                 new hydra.lib.literals.Int16ToBigint(),
                 new hydra.lib.literals.Int32ToBigint(),
                 new hydra.lib.literals.Int64ToBigint(),
                 new hydra.lib.literals.Int8ToBigint(),
-                new hydra.lib.literals.ReadBigfloat(),
                 new hydra.lib.literals.ReadBigint(),
                 new hydra.lib.literals.ReadBoolean(),
                 new hydra.lib.literals.ReadDecimal(),
@@ -179,7 +179,6 @@ public class Libraries {
                 new hydra.lib.literals.ReadUint32(),
                 new hydra.lib.literals.ReadUint64(),
                 new hydra.lib.literals.ReadUint8(),
-                new hydra.lib.literals.ShowBigfloat(),
                 new hydra.lib.literals.ShowBigint(),
                 new hydra.lib.literals.ShowBoolean(),
                 new hydra.lib.literals.ShowDecimal(),
@@ -270,7 +269,6 @@ public class Libraries {
                 new hydra.lib.math.Pow(),
                 new hydra.lib.math.Range(),
                 new hydra.lib.math.Round(),
-                new hydra.lib.math.RoundBigfloat(),
                 new hydra.lib.math.RoundFloat32(),
                 new hydra.lib.math.RoundFloat64(),
                 new hydra.lib.math.Signum(),

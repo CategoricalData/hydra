@@ -3086,7 +3086,7 @@
                     "argument": {
                       "application": {
                         "argument": {"application": {"argument": {"variable": "fl"}, "function": {"unwrap": "hydra.java.syntax.FloatingPointLiteral"}}},
-                        "function": {"variable": "hydra.lib.literals.showBigfloat"}}},
+                        "function": {"variable": "hydra.lib.literals.showFloat64"}}},
                     "function": {"variable": "hydra.java.serde.javaFloatLiteralText"}}},
                 "function": {"variable": "hydra.serialization.cst"}}},
             "domain": {"variable": "hydra.java.syntax.FloatingPointLiteral"},

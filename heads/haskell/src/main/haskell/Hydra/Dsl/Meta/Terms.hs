@@ -36,10 +36,11 @@ f <.> g = compose f g
 (@@) :: TTerm Term -> TTerm Term -> TTerm Term
 f @@ x = apply f x
 
--- | Attach an annotation to a term-encoded term
--- Example: annot (Phantoms.map M.empty) (int32 42)
-annot :: TTerm (M.Map Name Term) -> TTerm Term -> TTerm Term
-annot annMap term = Core.termAnnotated $ Core.annotatedTerm term annMap
+-- | Attach a map of annotations to a term-encoded term.
+-- Distinct from 'Phantoms.annot' (which attaches a single annotation by key).
+-- Example: annots (Phantoms.map M.empty) (int32 42)
+annots :: TTerm (M.Map Name Term) -> TTerm Term -> TTerm Term
+annots annMap term = Core.termAnnotated $ Core.annotatedTerm term annMap
 
 -- | Create a term-encoded annotated term (term with type annotations)
 -- Example: annotated (int32 42) (Phantoms.map M.empty)
@@ -55,15 +56,6 @@ annotatedTerm body ann = inject (Core.nameLift _Term) "annotated" $ record (Core
 -- Example: apply (var "add") (int32 1)
 apply :: TTerm Term -> TTerm Term -> TTerm Term
 apply func arg = Core.termApplication $ Core.application func arg
-
--- | Create a term-encoded unlimited precision floating point literal
--- Example: bigfloat 3.14159
-bigfloat :: Double -> TTerm Term
-bigfloat = bigfloatLift . TTerm . Terms.bigfloat
-
--- | Lift a TTerm Double to a term-encoded bigfloat literal
-bigfloatLift :: TTerm Double -> TTerm Term
-bigfloatLift = Core.termLiteral . Core.literalFloat . Core.floatValueBigfloat
 
 -- | Create a term-encoded unlimited precision integer
 -- Example: bigint 42

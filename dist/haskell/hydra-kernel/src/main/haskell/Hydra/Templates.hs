@@ -36,7 +36,6 @@ instantiateTemplate cx minimal schema tname t =
                     Errors.unexpectedShapeErrorActual = "polymorphic or function type"})))
           forFloat =
                   \ft -> case ft of
-                    Core.FloatTypeBigfloat -> Core.FloatValueBigfloat 0.0
                     Core.FloatTypeFloat32 -> Core.FloatValueFloat32 0.0
                     Core.FloatTypeFloat64 -> Core.FloatValueFloat64 0.0
           forInteger =

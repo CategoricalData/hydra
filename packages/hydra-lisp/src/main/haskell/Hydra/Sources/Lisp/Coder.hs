@@ -10,7 +10,7 @@ module Hydra.Sources.Lisp.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -360,7 +360,7 @@ encodeLiteral = def "encodeLiteral" $
       inject L._Expression L._Expression_literal $
         inject L._Literal L._Literal_float $
           record L._FloatLiteral [
-            L._FloatLiteral_value>>: Literals.float64ToBigfloat (Literals.decimalToFloat64 (var "d")),
+            L._FloatLiteral_value>>: Literals.decimalToFloat64 (var "d"),
             L._FloatLiteral_precision>>: nothing],
     _Literal_string>>: lambda "s" $
       inject L._Expression L._Expression_literal $
@@ -371,15 +371,9 @@ encodeLiteral = def "encodeLiteral" $
           inject L._Expression L._Expression_literal $
             inject L._Literal L._Literal_float $
               record L._FloatLiteral [
-                L._FloatLiteral_value>>: Literals.float32ToBigfloat (var "f"),
+                L._FloatLiteral_value>>: Literals.float32ToFloat64 (var "f"),
                 L._FloatLiteral_precision>>: nothing],
         _FloatValue_float64>>: lambda "f" $
-          inject L._Expression L._Expression_literal $
-            inject L._Literal L._Literal_float $
-              record L._FloatLiteral [
-                L._FloatLiteral_value>>: Literals.float64ToBigfloat (var "f"),
-                L._FloatLiteral_precision>>: nothing],
-        _FloatValue_bigfloat>>: lambda "f" $
           inject L._Expression L._Expression_literal $
             inject L._Literal L._Literal_float $
               record L._FloatLiteral [

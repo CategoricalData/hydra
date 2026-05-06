@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -34,7 +34,7 @@ import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Packaging       as Packaging
 import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms hiding (
-  bigfloat, bigint, binary, boolean, cases, decimal, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
+  bigint, binary, boolean, cases, decimal, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
   integerValue, lambda, list, literal, map, pair, set, record, string, unit, wrap, uint8, uint16, uint32, uint64)
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
@@ -59,7 +59,7 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Dsl.Errors       as Error
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
-import qualified Hydra.Dsl.Meta.DeepCore as DC
+import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
@@ -87,8 +87,6 @@ module_ = Module {
             moduleDescription = Just ("Extraction and validation for hydra.core types")}
   where
    definitions = [
-     toDefinition bigfloat,
-     toDefinition bigfloatValue,
      toDefinition bigint,
      toDefinition bigintValue,
      toDefinition binary,
@@ -170,21 +168,6 @@ module_ = Module {
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
-
-bigfloat :: TTermDefinition (Graph -> Term -> Prelude.Either Error Double)
-bigfloat = define "bigfloat" $
-  doc "Extract an arbitrary-precision floating-point value from a term" $
-  "graph" ~> "t" ~>
-  "l" <<~ literal @@ var "graph" @@ var "t" $
-  "f" <<~ floatLiteral @@ var "l" $
-  bigfloatValue @@ var "f"
-
-bigfloatValue :: TTermDefinition (FloatValue -> Prelude.Either Error Double)
-bigfloatValue = define "bigfloatValue" $
-  doc "Extract a bigfloat value from a FloatValue" $
-  "v" ~> Phantoms.cases _FloatValue (var "v")
-    (Just (unexpected(Phantoms.string "bigfloat") (ShowCore.floatValue @@ var "v"))) [
-    _FloatValue_bigfloat>>: "f" ~> right (var "f")]
 
 bigint :: TTermDefinition (Graph -> Term -> Prelude.Either Error Integer)
 bigint = define "bigint" $
@@ -318,7 +301,7 @@ decodeMap = define "decodeMap" $
     ("stripped" ~> Phantoms.cases _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected map") [
       _Term_map>>: "m" ~>
-        Eithers.map (unaryFunction Maps.fromList)
+        Eithers.map (reify Maps.fromList)
           (Eithers.mapList
             ("kv" ~>
               Eithers.bind (var "keyDecoder" @@ var "g" @@ (Pairs.first $ var "kv"))
@@ -367,7 +350,7 @@ decodeSet = define "decodeSet" $
     ("stripped" ~> Phantoms.cases _Term (var "stripped")
       (Just $ left $ Error.decodingError $ Phantoms.string "expected set") [
       _Term_set>>: "s" ~>
-        Eithers.map (unaryFunction Sets.fromList)
+        Eithers.map (reify Sets.fromList)
           (Eithers.mapList (var "elemDecoder" @@ var "g") (Sets.toList $ var "s"))])
 
 -- | Decode a unit value
@@ -410,8 +393,8 @@ eitherTerm = define "eitherTerm" $
       (Phantoms.string "either value")
       (ShowCore.term @@ var "term"))) [
     _Term_either>>: "et" ~> Eithers.either_
-      ("l" ~> Eithers.map (unaryFunction left) (var "leftFun" @@ var "l"))
-      ("r" ~> Eithers.map (unaryFunction right) (var "rightFun" @@ var "r"))
+      ("l" ~> Eithers.map (reify left) (var "leftFun" @@ var "l"))
+      ("r" ~> Eithers.map (reify right) (var "rightFun" @@ var "r"))
       (var "et")]
 
 eitherType :: TTermDefinition (Type -> Prelude.Either Error EitherType)
@@ -599,7 +582,7 @@ lambda = define "lambda" $
 lambdaBody :: TTermDefinition (Graph -> Term -> Prelude.Either Error Term)
 lambdaBody = define "lambdaBody" $
   doc "Extract the body of a lambda term" $
-  "graph" ~> "term" ~> Eithers.map (unaryFunction Core.lambdaBody) (lambda @@ var "graph" @@ var "term")
+  "graph" ~> "term" ~> Eithers.map (reify Core.lambdaBody) (lambda @@ var "graph" @@ var "term")
 
 let_ :: TTermDefinition (Graph -> Term -> Prelude.Either Error Let)
 let_ = define "let" $
@@ -686,7 +669,7 @@ map = define "map" $
     (Just (unexpected
       (Phantoms.string "map")
       (ShowCore.term @@ var "term"))) [
-    _Term_map>>: "m" ~> Eithers.map (unaryFunction Maps.fromList) (Eithers.mapList (var "pair") (Maps.toList (var "m")))]
+    _Term_map>>: "m" ~> Eithers.map (reify Maps.fromList) (Eithers.mapList (var "pair") (Maps.toList (var "m")))]
 
 mapType :: TTermDefinition (Type -> Prelude.Either Error MapType)
 mapType = define "mapType" $
@@ -710,7 +693,7 @@ maybeTerm = define "maybeTerm" $
       (ShowCore.term @@ var "term"))) [
     _Term_maybe>>: "mt" ~> Maybes.maybe
       (right nothing)
-      ("t" ~> Eithers.map (unaryFunction just) (var "f" @@ var "t"))
+      ("t" ~> Eithers.map (reify just) (var "f" @@ var "t"))
       (var "mt")]
 
 maybeType :: TTermDefinition (Type -> Prelude.Either Error Type)

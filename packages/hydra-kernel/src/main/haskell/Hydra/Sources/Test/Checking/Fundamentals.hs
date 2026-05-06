@@ -2,7 +2,7 @@
 -- | Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives
 module Hydra.Sources.Test.Checking.Fundamentals where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for term-encoded tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
@@ -606,7 +606,6 @@ integerLiteralsTests = define "integerLiteralsTests" $
 floatLiteralsTests :: TTermDefinition TestGroup
 floatLiteralsTests = define "floatLiteralsTests" $
   subgroup "Float literals" [
-  noChange "bigfloat" (bigfloat 3.14159) T.bigfloat,
   noChange "float32" (float32 2.71828) T.float32,
   noChange "float64" (float64 1.41421) T.float64]
 

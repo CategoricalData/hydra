@@ -47,31 +47,6 @@ def _format_float_like_haskell(x: float) -> str:
         return result
 
 
-def bigfloat_to_bigint(x: Decimal) -> int:
-    """Convert a bigfloat (Double) to a bigint (Integer)."""
-    return round(x)
-
-
-def bigfloat_to_float32(x: Decimal) -> float:
-    """Convert a bigfloat (Double) to a float32 (Float)."""
-    import struct
-    # Pack as float32, unpack as float32 to get proper rounding
-    f64 = float(x)
-    f32_bytes = struct.pack('f', f64)
-    f32 = struct.unpack('f', f32_bytes)[0]
-    return f32
-
-
-def bigfloat_to_float64(x: Decimal) -> float:
-    """Convert a bigfloat (Double) to a float64 (Double)."""
-    return float(x)
-
-
-def bigint_to_bigfloat(x: int) -> Decimal:
-    """Convert a bigint (Integer) to a bigfloat (Double)."""
-    return Decimal(x)
-
-
 def bigint_to_decimal(x: int) -> Decimal:
     """Convert a bigint (Integer) to a decimal (arbitrary-precision exact decimal)."""
     return Decimal(x)
@@ -148,24 +123,25 @@ def decimal_to_float64(x: Decimal) -> float:
     return float(x)
 
 
-def float32_to_bigfloat(x: float) -> Decimal:
-    """Convert a float32 (Float) to a bigfloat (Double)."""
-    return Decimal(str(x))
-
-
 def float32_to_decimal(x: float) -> Decimal:
     """Convert a float32 (Float) to a decimal."""
     return Decimal(str(x))
 
 
-def float64_to_bigfloat(x: float) -> Decimal:
-    """Convert a float64 (Double) to a bigfloat (Double)."""
-    return Decimal(str(x))
+def float32_to_float64(x: float) -> float:
+    """Convert a float32 to a float64 (lossless widening; Python floats are 64-bit, so this is identity)."""
+    return x
 
 
 def float64_to_decimal(x: float) -> Decimal:
     """Convert a float64 (Double) to a decimal."""
     return Decimal(str(x))
+
+
+def float64_to_float32(x: float) -> float:
+    """Convert a float64 to a float32 (lossy narrowing). Round-trips through 4-byte IEEE 754 single."""
+    import struct
+    return struct.unpack('f', struct.pack('f', x))[0]
 
 
 def int8_to_bigint(x: int) -> int:
@@ -186,14 +162,6 @@ def int32_to_bigint(x: int) -> int:
 def int64_to_bigint(x: int) -> int:
     """Convert an int64 to a bigint (Integer)."""
     return x
-
-
-def read_bigfloat(s: str) -> Maybe[Decimal]:
-    """Parse a string to a bigfloat (Double)."""
-    try:
-        return Just(Decimal(s))
-    except:
-        return NOTHING
 
 
 def read_bigint(s: str) -> Maybe[int]:
@@ -352,11 +320,6 @@ def read_uint64(s: str) -> Maybe[int]:
             return NOTHING
     except:
         return NOTHING
-
-
-def show_bigfloat(x: Decimal) -> str:
-    """Convert a bigfloat (Double) to string."""
-    return _format_float_like_haskell(float(x))
 
 
 def show_bigint(x: int) -> str:

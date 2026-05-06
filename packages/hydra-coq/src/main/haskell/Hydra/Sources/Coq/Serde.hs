@@ -7,7 +7,7 @@ module Hydra.Sources.Coq.Serde where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -326,7 +326,7 @@ term0ToExpr = define "term0ToExpr" $
       cases C._PrimitiveNotations (var "pn") Nothing [
         C._PrimitiveNotations_number>>: lambda "n" $ lets [
           "v">: unwrap C._Number @@ var "n"] $
-          Serialization.cst @@ (Literals.showBigfloat (var "v")),
+          Serialization.cst @@ (Literals.showFloat64 (var "v")),
         C._PrimitiveNotations_string>>: lambda "s2" $
           sp [kw "\"", Serialization.cst @@ (unwrap C._String @@ var "s2"), kw "\""]],
     C._Term0_evar>>: lambda "ev" $ kw "?evar",
@@ -385,7 +385,7 @@ pattern0ToExpr = define "pattern0ToExpr" $
         Lists.map (lambda "p2" $ patternToExpr @@ var "p2") (var "ps")),
     C._Pattern0_number>>: lambda "n" $ lets [
       "v">: unwrap C._Number @@ var "n"] $
-      Serialization.cst @@ (Literals.showBigfloat (var "v")),
+      Serialization.cst @@ (Literals.showFloat64 (var "v")),
     C._Pattern0_string>>: lambda "s" $ sp [
       kw "\"", Serialization.cst @@ (unwrap C._String @@ var "s"), kw "\""]]
 

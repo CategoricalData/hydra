@@ -17,6 +17,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import hydra.context.Context;
 import hydra.errors.Error_;
+import hydra.util.ConsList;
 import hydra.util.Either;
 
 
@@ -38,22 +39,22 @@ public class SortOn extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.Core.list(graph, args.get(1)), lst -> {
-                // Pre-compute all keys so we can short-circuit on error
+                // Pre-compute all keys so we can short-circuit on error.
+                // ArrayList scratch is used here because sorting requires random access.
                 ArrayList<Term> indexed = new ArrayList<>(lst);
-                List<Term> keys = new ArrayList<>();
+                ArrayList<Term> keys = new ArrayList<>(indexed.size());
                 for (Term x : indexed) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
                     keys.add(((Either.Right<Error_, Term>) r).value);
                 }
-                // Build index pairs and sort by pre-computed key
-                List<Integer> indices = new ArrayList<>();
-                for (int i = 0; i < indexed.size(); i++) indices.add(i);
-                indices.sort(Comparator.comparing(i -> (Comparable) keys.get(i)));
-                List<Term> sorted = new ArrayList<>();
-                for (int i : indices) sorted.add(indexed.get(i));
-                return Either.right(Terms.list(sorted));
+                Integer[] indices = new Integer[indexed.size()];
+                for (int i = 0; i < indices.length; i++) indices[i] = i;
+                java.util.Arrays.sort(indices, Comparator.comparing(i -> (Comparable) keys.get(i)));
+                ConsList<Term> reversed = ConsList.empty();
+                for (int i : indices) reversed = ConsList.cons(indexed.get(i), reversed);
+                return Either.right(Terms.list(reversed.reverse()));
             });
     }
 
@@ -79,8 +80,8 @@ public class SortOn extends PrimitiveFunction {
      */
     @SuppressWarnings("unchecked")
     public static <X, Y> List<X> apply(Function<X, Y> f, List<X> lst) {
-        ArrayList<X> result = new ArrayList<>(lst);
-        result.sort(Comparator.comparing(x -> (Comparable) f.apply(x)));
-        return result;
+        ArrayList<X> scratch = new ArrayList<>(lst);
+        scratch.sort(Comparator.comparing(x -> (Comparable) f.apply(x)));
+        return ConsList.fromList(scratch);
     }
 }

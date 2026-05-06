@@ -14,6 +14,9 @@ and Lisp ([Hydra-Lisp](https://github.com/CategoricalData/hydra/tree/main/packag
 with four dialects: Clojure, Scheme, Common Lisp, and Emacs Lisp).
 All five implementations are complete and pass the
 [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
+A Go port ([Hydra-Go](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-go))
+is in early development; the kernel can be generated to Go, but the implementation is
+not yet complete and does not yet pass the test suite.
 Hydra is used for data modeling, validation, and transforms at Microsoft,
 while its closed-source predecessor
 [Dragon](https://www.uber.com/blog/dragon-schema-integration-at-uber-scale/) was used
@@ -100,6 +103,7 @@ The current release is **0.16.0**; see the [CHANGELOG](CHANGELOG.md) for details
 | Python | [conda-forge](https://github.com/conda-forge/staged-recipes/pull/30887) (in progress) | Coming soon |
 | Scala | Not yet published | Build locally with `sbt compile` in `packages/hydra-scala/` |
 | Lisp | Not yet published | See dialect-specific instructions in `packages/hydra-lisp/` |
+| Go | In development (not a complete implementation) | Generate the kernel via `bin/sync-go.sh`; output lands in `dist/go/`. |
 
 See the [release process](https://github.com/CategoricalData/hydra/wiki/Release-process)
 for how releases are built and published.

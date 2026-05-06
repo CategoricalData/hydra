@@ -8,7 +8,6 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -20,6 +19,7 @@ import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.errors.Error_;
 import hydra.util.Either;
+import hydra.util.PersistentMap;
 
 
 /**
@@ -52,7 +52,7 @@ public class FilterWithKey extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.Core.map(t -> Either.right(t), t -> Either.right(t), graph, args.get(1)), mp -> {
                 Term pred = args.get(0);
-                Map<Term, Term> result = FromList.emptyLike(mp);
+                PersistentMap<Term, Term> result = PersistentMap.<Term, Term>empty();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
                     Either<Error_, Term> r = hydra.Reduction.reduceTerm(
                         hydra.Lexical.emptyContext(), graph, true, Terms.apply(Terms.apply(pred, entry.getKey()), entry.getValue()));
@@ -61,7 +61,7 @@ public class FilterWithKey extends PrimitiveFunction {
                         ((Either.Right<Error_, Term>) r).value);
                     if (b.isLeft()) return (Either) b;
                     if (((Either.Right<Error_, Boolean>) b).value) {
-                        result.put(entry.getKey(), entry.getValue());
+                        result = result.insert(entry.getKey(), entry.getValue());
                     }
                 }
                 return Either.right(Terms.map(result));
@@ -88,10 +88,10 @@ public class FilterWithKey extends PrimitiveFunction {
      * @return the filtered map
      */
     public static <K, V> Map<K, V> apply(Function<K, Function<V, Boolean>> pred, Map<K, V> mp) {
-        Map<K, V> result = new TreeMap<>();
+        PersistentMap<K, V> result = PersistentMap.<K, V>empty();
         for (Map.Entry<K, V> e : mp.entrySet()) {
             if (pred.apply(e.getKey()).apply(e.getValue())) {
-                result.put(e.getKey(), e.getValue());
+                result = result.insert(e.getKey(), e.getValue());
             }
         }
         return result;

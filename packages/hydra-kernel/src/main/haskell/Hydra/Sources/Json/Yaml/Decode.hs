@@ -4,7 +4,7 @@ module Hydra.Sources.Json.Yaml.Decode where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -148,7 +148,7 @@ yamlToJson = define "yamlToJson" $
         Nothing [
         YM._Scalar_bool>>: "b" ~> right $ Json.valueBoolean $ var "b",
         YM._Scalar_decimal>>: "d" ~> right $ Json.valueNumber $ var "d",
-        YM._Scalar_float>>: "f" ~> right $ Json.valueNumber $ Literals.float64ToDecimal $ Literals.bigfloatToFloat64 $ var "f",
+        YM._Scalar_float>>: "f" ~> right $ Json.valueNumber $ Literals.float64ToDecimal $ var "f",
         YM._Scalar_int>>: "i" ~> right $ Json.valueNumber $ Literals.bigintToDecimal $ var "i",
         YM._Scalar_null>>: constant $ right Json.valueNull,
         YM._Scalar_str>>: "str" ~> right $ Json.valueString $ var "str"],

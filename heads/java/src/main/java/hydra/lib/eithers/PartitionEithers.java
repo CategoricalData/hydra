@@ -6,9 +6,9 @@ import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Pair;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -41,24 +41,8 @@ public class PartitionEithers extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<Error_, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply((java.util.List<hydra.util.Either<Term, Term>> eithers) -> {
-                ArrayList<Term> lefts = new ArrayList<>();
-                ArrayList<Term> rights = new ArrayList<>();
-                for (hydra.util.Either<Term, Term> e : eithers) {
-                    e.accept(new hydra.util.Either.Visitor<Term, Term, Void>() {
-                        @Override
-                        public Void visit(hydra.util.Either.Left<Term, Term> left) {
-                            lefts.add(left.value);
-                            return null;
-                        }
-
-                        @Override
-                        public Void visit(hydra.util.Either.Right<Term, Term> right) {
-                            rights.add(right.value);
-                            return null;
-                        }
-                    });
-                }
-                return Terms.pair(new Term.List(lefts), new Term.List(rights));
+                Pair<List<Term>, List<Term>> p = apply(eithers);
+                return Terms.pair(new Term.List(p.first), new Term.List(p.second));
             }, hydra.extract.Core.listOf(arg -> hydra.extract.Core.eitherTerm(t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
     }
 
@@ -71,15 +55,15 @@ public class PartitionEithers extends PrimitiveFunction {
      * @return a tuple containing the list of Left values and the list of Right values
      */
     public static <A, B> Pair<List<A>, List<B>> apply(List<hydra.util.Either<A, B>> eithers) {
-        ArrayList<A> lefts = new ArrayList<>();
-        ArrayList<B> rights = new ArrayList<>();
+        ConsList<A> leftsRev = ConsList.empty();
+        ConsList<B> rightsRev = ConsList.empty();
         for (hydra.util.Either<A, B> either : eithers) {
             if (either.isLeft()) {
-                lefts.add(((hydra.util.Either.Left<A, B>) either).value);
+                leftsRev = ConsList.cons(((hydra.util.Either.Left<A, B>) either).value, leftsRev);
             } else {
-                rights.add(((hydra.util.Either.Right<A, B>) either).value);
+                rightsRev = ConsList.cons(((hydra.util.Either.Right<A, B>) either).value, rightsRev);
             }
         }
-        return new Pair<>(lefts, rights);
+        return new Pair<>(leftsRev.reverse(), rightsRev.reverse());
     }
 }

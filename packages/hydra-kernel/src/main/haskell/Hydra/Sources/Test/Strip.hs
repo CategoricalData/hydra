@@ -3,13 +3,14 @@
 -- | Test cases for annotation and type stripping operations
 module Hydra.Sources.Test.Strip where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -21,7 +22,7 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Strip as StripModule
+import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 
 
 ns :: Namespace
@@ -31,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, StripModule.ns, TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Strip.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for annotation and type stripping operations")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -39,33 +40,28 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
-
 -- | Show a term as a string using ShowCore.term
 showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term # t
+showTerm t = ShowCore.term @@ t
 
 -- | Show a type as a string using ShowCore.type_
 showType :: TTerm Type -> TTerm String
-showType t = ShowCore.type_ # t
+showType t = ShowCore.type_ @@ t
 
 -- | Helper for Term -> Term kernel function test cases
 termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-termCase cname func input output = universalCase cname (showTerm (func # input)) (showTerm output)
+termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
 
 -- | Helper for Type -> Type kernel function test cases
 typeCase :: String -> TTermDefinition (Type -> Type) -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-typeCase cname func input output = universalCase cname (showType (func # input)) (showType output)
+typeCase cname func input output = universalCase cname (showType (func @@ input)) (showType output)
 
 -- | Convenience helpers for specific kernel functions
 deannotateTermCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-deannotateTermCase cname = termCase cname StripModule.deannotateTerm
+deannotateTermCase cname = termCase cname Strip.deannotateTerm
 
 deannotateTypeCase :: String -> TTerm Type -> TTerm Type -> TTerm TestCaseWithMetadata
-deannotateTypeCase cname = typeCase cname StripModule.deannotateType
+deannotateTypeCase cname = typeCase cname Strip.deannotateType
 
 -- Helper to build an empty annotation map
 emptyAnnMap :: TTerm (M.Map Name Term)
@@ -88,19 +84,19 @@ deannotateTermGroup = subgroup "deannotateTerm" [
       (lambda "x" (var "x")),
 
     deannotateTermCase "single annotation stripped"
-      (annot emptyAnnMap (int32 42))
+      (annots emptyAnnMap (int32 42))
       (int32 42),
 
     deannotateTermCase "nested annotations stripped"
-      (annot emptyAnnMap (annot emptyAnnMap (int32 42)))
+      (annots emptyAnnMap (annots emptyAnnMap (int32 42)))
       (int32 42),
 
     deannotateTermCase "annotated lambda stripped"
-      (annot emptyAnnMap (lambda "x" (var "x")))
+      (annots emptyAnnMap (lambda "x" (var "x")))
       (lambda "x" (var "x")),
 
     deannotateTermCase "annotated application stripped"
-      (annot emptyAnnMap (apply (var "f") (var "x")))
+      (annots emptyAnnMap (apply (var "f") (var "x")))
       (apply (var "f") (var "x"))]
 
 -- | Test cases for deannotating types (stripping top-level annotations)

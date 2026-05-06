@@ -81,12 +81,6 @@ buildTypeScheme vars typ =
 
 instance IsString (TermCoder Term) where fromString = variable
 
-bigfloat :: TermCoder Double
-bigfloat = TermCoder Types.bigfloat encode decode
-  where
-    encode _cx g = ExtractCore.bigfloat g
-    decode _cx = Right . Terms.bigfloat
-
 bigint :: TermCoder Integer
 bigint = TermCoder Types.bigint encode decode
   where
