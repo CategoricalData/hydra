@@ -38,7 +38,7 @@ import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Strip           as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Paths      as ShowPaths
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Show.Errors      as ShowErrors
+import qualified Hydra.Sources.Kernel.Terms.Show.Errors      as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Error.Core as ShowErrorCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Error.Packaging as ShowErrorPackaging
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph      as ShowGraph
@@ -140,7 +140,7 @@ kernelPrimaryTermsModules = [
   Strip.module_,
   ShowPaths.module_,
   ShowCore.module_,
-  ShowErrors.module_,
+  ShowError.module_,
   ShowErrorCore.module_,
   ShowErrorPackaging.module_,
   ShowGraph.module_,

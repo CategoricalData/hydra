@@ -23,7 +23,7 @@ import Hydra.Json.Model (Value)
 import Hydra.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Json.Model as Json
-import qualified Hydra.Sources.Json.Writer as WriterModule
+import qualified Hydra.Sources.Json.Writer as JsonWriter
 
 
 ns :: Namespace
@@ -58,7 +58,7 @@ allTests = define "allTests" $
 -- Helper for creating JSON writer test cases (universal)
 writerCase :: String -> TTerm Value -> String -> TTerm TestCaseWithMetadata
 writerCase name jsonValue expectedStr = universalCase name
-  (WriterModule.printJson @@ jsonValue)
+  (JsonWriter.printJson @@ jsonValue)
   (Phantoms.string expectedStr)
 
 primitivesGroup :: TTerm TestGroup

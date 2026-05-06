@@ -21,7 +21,7 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Reduction as ReductionModule
+import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 
@@ -352,7 +352,7 @@ etaCase cname input output = universalCase cname
   (Eithers.either_
     (Phantoms.lambda "_" $ Phantoms.string "eta expansion failed")
     (Phantoms.lambda "t" $ ShowCore.term # Phantoms.var "t")
-    (ReductionModule.etaExpandTypedTerm # TestGraph.testContext # TestGraph.testGraph # input))
+    (Reduction.etaExpandTypedTerm # TestGraph.testContext # TestGraph.testGraph # input))
   (showTerm output)
 
 -- | Test cases for eta expansion of terms

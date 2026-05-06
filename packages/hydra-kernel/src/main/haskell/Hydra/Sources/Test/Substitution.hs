@@ -17,7 +17,7 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Substitution as SubstitutionModule
+import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
 ns :: Namespace
@@ -27,7 +27,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, SubstitutionModule.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Substitution.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for type and term substitution operations")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -46,7 +46,7 @@ subst pairs = list [pair (nm n) t | (n, t) <- pairs]
 -- | Apply substInType and show the result as a string
 showSubstInType :: [(String, TTerm Type)] -> TTerm Type -> TTerm String
 showSubstInType pairs inputType =
-  ShowCore.type_ @@ (SubstitutionModule.substInType @@
+  ShowCore.type_ @@ (Substitution.substInType @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputType)
 
 -- | Universal substInType test case
@@ -63,7 +63,7 @@ scheme vars body = Core.typeScheme (list [nm v | v <- vars]) body nothing
 -- preserved unchanged so we test it separately via showSubstInTypeSchemeVars.
 showSubstInTypeSchemeBody :: [(String, TTerm Type)] -> TTerm TypeScheme -> TTerm String
 showSubstInTypeSchemeBody pairs inputScheme =
-  ShowCore.type_ @@ (Core.typeSchemeBody $ SubstitutionModule.substInTypeScheme @@
+  ShowCore.type_ @@ (Core.typeSchemeBody $ Substitution.substInTypeScheme @@
     (wrap _TypeSubst (Maps.fromList (subst pairs))) @@ inputScheme)
 
 substInTypeSchemeBodyCase :: String -> [(String, TTerm Type)] -> TTerm TypeScheme -> TTerm Type -> TTerm TestCaseWithMetadata

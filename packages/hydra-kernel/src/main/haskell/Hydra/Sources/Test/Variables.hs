@@ -22,7 +22,7 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Variables as VariablesModule
+import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
 import qualified Hydra.Dsl.Meta.Lib.Lists as Lists
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
@@ -37,7 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, VariablesModule.ns, TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Variables.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for variable analysis and manipulation")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -81,19 +81,17 @@ letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper for multi-binding let
-multiLet :: [(String, TTerm Term)] -> TTerm Term -> TTerm Term
-multiLet bindings body = lets ((\(n, v) -> (nm n, v)) <$> bindings) body
 
 -- | Convenience helpers for specific kernel functions
 unshadowCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-unshadowCase cname = termCase cname VariablesModule.unshadowVariables
+unshadowCase cname = termCase cname Variables.unshadowVariables
 
 normalizeTypeVarsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-normalizeTypeVarsCase cname = termCase cname VariablesModule.normalizeTypeVariablesInTerm
+normalizeTypeVarsCase cname = termCase cname Variables.normalizeTypeVariablesInTerm
 
 freeVarsCase :: String -> TTerm Term -> TTerm (S.Set Name) -> TTerm TestCaseWithMetadata
 freeVarsCase cname input expected = universalCase cname
-  (showNameSet (VariablesModule.freeVariablesInTerm @@ input))
+  (showNameSet (Variables.freeVariablesInTerm @@ input))
   (showNameSet expected)
 
 -- | Test cases for free variables computation
@@ -331,9 +329,9 @@ unshadowVariablesGroup = subgroup "unshadowVariables" [
       (letExpr "x" (int32 1) (lambda "x2" (var "x2"))),
 
     unshadowCase "lambda shadows one of multiple let bindings"
-      (multiLet [("x", int32 1), ("y", int32 2)]
+      (lets [(nm "x", int32 1), (nm "y", int32 2)]
         (lambda "x" (list [var "x", var "y"])))
-      (multiLet [("x", int32 1), ("y", int32 2)]
+      (lets [(nm "x", int32 1), (nm "y", int32 2)]
         (lambda "x2" (list [var "x2", var "y"]))),
 
     -- === Nested lets ===
