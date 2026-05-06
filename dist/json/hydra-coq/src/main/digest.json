@@ -2,12 +2,12 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.coq.coder": "7e098fc90e6d6f603178cc2826751ffcb2521518b3d9f701b94ea146e48437c2",
+    "hydra.coq.coder": "63ddde4edbc0814768319ae04e5a82524cb8c5283325ec2eefcdf934d012ce1a",
     "hydra.coq.environment": "7137f85cad1acf4f1036dcb5e899357b706561829cafe331dc513f3379039d08",
-    "hydra.coq.generate": "9fa7f088f4efb93b7b653464ae2079e982a0e45ff8ea4e8bb24e63eaf35a7e99",
-    "hydra.coq.language": "7f5733d0bcaebcfa2cd9c97baec372bac0e6d77483ebf1419ea828c33768ae9f",
-    "hydra.coq.serde": "6b0353d68b795db6e17e652c2a3fcb4fe9edceecee9df74e97ce7f2ac3454176",
+    "hydra.coq.generate": "9b23865d9d7d14b192dcac9c97589d633c15bd439a62879a91f49831fa31e5bd",
+    "hydra.coq.language": "dbaab95dc6accb5f7434e4b89ea6f118b8cac899333f2ffa7ea67c3710b74112",
+    "hydra.coq.serde": "351e919ac1bfd059c9a4e9747d45631df3d7ba7ea05de742a43d6658f9d15e44",
     "hydra.coq.syntax": "a80ac0906eab7b8fffb5625bc876df7c349cfe290b9debebf3467bc500138289",
-    "hydra.coq.utils": "8bfd15086a4f823e55f382bf8d63ef38441d1a985dfd3e78ff6dfa2f3cf3cce6"
+    "hydra.coq.utils": "f8f43e7728691a1a517efec39284f99e1e13476b8f61696c48f9689227ef5c62"
   }
 }
