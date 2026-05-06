@@ -324,11 +324,13 @@ The core principles (see CLAUDE.md and the
 3. **No host-specific code under `packages/`.** Packages hold DSL-based module
    definitions plus source-language helpers for writing them. The Hydra runtime
    (primitives, DSL helpers, generation drivers, test infrastructure) lives in
-   `heads/<host>/`. Adapters between Hydra packages and *external* libraries
-   (rdf4j, ANTLR-generated parsers, TinkerPop, etc.) live in
-   `bindings/<host>/<artifact>/` — see [implementation.md, principle 7](../implementation.md#key-design-principles).
-   The split keeps `heads/<host>/` free of third-party deps so the runtime
-   stays minimal and portable.
+   `heads/<host>/`. Per-package host code — both third-party adapters
+   (rdf4j, ANTLR-generated parsers, TinkerPop, etc.) and pure host-language
+   DSL helpers tied to a single Hydra package (e.g., Java fluent builders for
+   `hydra-pg`) — lives in `bindings/<host>/<artifact>/`. See
+   [implementation.md, principle 7](../implementation.md#key-design-principles).
+   The split keeps `heads/<host>/` minimal: language-independent Hydra runtime
+   + stdlib + build tooling, with no per-package host code.
 4. **Generated files have the "do not edit" header.** If you see a file under
    `dist/` without the header, it is either hand-written (violation) or the
    generator is missing the header (bug in the generator).
