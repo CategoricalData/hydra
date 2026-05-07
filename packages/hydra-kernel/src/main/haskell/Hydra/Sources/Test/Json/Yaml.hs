@@ -6,13 +6,14 @@
 -- YAML via the dedicated decimal scalar variant in Hydra YAML.
 module Hydra.Sources.Test.Json.Yaml where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Lib.Eithers   as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Maps      as Maps
 import qualified Hydra.Dsl.Meta.Types         as T
@@ -49,9 +50,6 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- Local alias for polymorphic application
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
@@ -65,9 +63,9 @@ yamlBridgeCase :: String -> TTerm Value -> TTerm TestCaseWithMetadata
 yamlBridgeCase testName jsonValue = universalCase testName
   (Eithers.either_
     (Phantoms.lambda "e" $ Phantoms.var "e")
-    (Phantoms.lambda "back" $ JsonWriter.printJson # Phantoms.var "back")
-    (JsonYamlDecode.yamlToJson # (JsonYamlEncode.jsonToYaml # jsonValue)))
-  (JsonWriter.printJson # jsonValue)
+    (Phantoms.lambda "back" $ JsonWriter.printJson @@ Phantoms.var "back")
+    (JsonYamlDecode.yamlToJson @@ (JsonYamlEncode.jsonToYaml @@ jsonValue)))
+  (JsonWriter.printJson @@ jsonValue)
 
 decimalBridgeGroup :: TTerm TestGroup
 decimalBridgeGroup = subgroup "decimal round-trip" [

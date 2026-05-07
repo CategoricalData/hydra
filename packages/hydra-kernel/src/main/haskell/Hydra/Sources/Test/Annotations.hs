@@ -1,7 +1,7 @@
 -- | Test cases for hydra.annotations functions
 module Hydra.Sources.Test.Annotations where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for term-encoded tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms

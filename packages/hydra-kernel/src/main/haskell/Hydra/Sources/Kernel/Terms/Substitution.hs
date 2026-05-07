@@ -27,7 +27,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -294,7 +294,7 @@ substituteInTerm = define "substituteInTerm" $
           Core.lambda (var "v") (Core.lambdaDomain $ var "l") (substituteInTerm @@ var "subst2" @@ (Core.lambdaBody $ var "l")),
       "withLet">: lambda "lt" $ lets [
         "bindings">: Core.letBindings $ var "lt",
-        "names">: Sets.fromList $ Lists.map (unaryFunction Core.bindingName) (var "bindings"),
+        "names">: Sets.fromList $ Lists.map (reify Core.bindingName) (var "bindings"),
         "subst2">: Typing.termSubst $ Maps.filterWithKey (lambdas ["k", "v"] $ Logic.not $ Sets.member (var "k") (var "names")) (var "s"),
         "rewriteBinding">: lambda "b" $ Core.binding
           (Core.bindingName $ var "b")

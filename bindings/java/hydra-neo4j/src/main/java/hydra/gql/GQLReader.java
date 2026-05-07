@@ -11,8 +11,8 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
-import org.neo4j.GQLLexer;
-import org.neo4j.GQLParser;
+import net.fortytwo.hydra.gql.parser.GQLLexer;
+import net.fortytwo.hydra.gql.parser.GQLParser;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 
 

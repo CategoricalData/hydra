@@ -196,16 +196,16 @@ annotationSingleElement x =
         Core.fieldName = (Core.Name "singleElement"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationTypeBody :: Phantoms.TTerm [[Syntax.AnnotationTypeMemberDeclaration]] -> Phantoms.TTerm Syntax.AnnotationTypeBody
+annotationTypeBody :: Phantoms.TTerm [[Syntax.AnnotationInterfaceMemberDeclaration]] -> Phantoms.TTerm Syntax.AnnotationInterfaceBody
 annotationTypeBody x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeBody"),
+      Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceBody"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-annotationTypeDeclaration :: Phantoms.TTerm [Syntax.InterfaceModifier] -> Phantoms.TTerm Syntax.TypeIdentifier -> Phantoms.TTerm Syntax.AnnotationTypeBody -> Phantoms.TTerm Syntax.AnnotationTypeDeclaration
+annotationTypeDeclaration :: Phantoms.TTerm [Syntax.InterfaceModifier] -> Phantoms.TTerm Syntax.TypeIdentifier -> Phantoms.TTerm Syntax.AnnotationInterfaceBody -> Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration
 annotationTypeDeclaration modifiers identifier body =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
@@ -217,63 +217,63 @@ annotationTypeDeclaration modifiers identifier body =
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Phantoms.unTTerm body)}]}))
 
-annotationTypeDeclarationBody :: Phantoms.TTerm Syntax.AnnotationTypeDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeBody
+annotationTypeDeclarationBody :: Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration -> Phantoms.TTerm Syntax.AnnotationInterfaceBody
 annotationTypeDeclarationBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
         Core.projectionField = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationTypeDeclarationIdentifier :: Phantoms.TTerm Syntax.AnnotationTypeDeclaration -> Phantoms.TTerm Syntax.TypeIdentifier
+annotationTypeDeclarationIdentifier :: Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration -> Phantoms.TTerm Syntax.TypeIdentifier
 annotationTypeDeclarationIdentifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
         Core.projectionField = (Core.Name "identifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationTypeDeclarationModifiers :: Phantoms.TTerm Syntax.AnnotationTypeDeclaration -> Phantoms.TTerm [Syntax.InterfaceModifier]
+annotationTypeDeclarationModifiers :: Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration -> Phantoms.TTerm [Syntax.InterfaceModifier]
 annotationTypeDeclarationModifiers x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
         Core.projectionField = (Core.Name "modifiers")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationTypeDeclarationWithBody :: Phantoms.TTerm Syntax.AnnotationTypeDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeBody -> Phantoms.TTerm Syntax.AnnotationTypeDeclaration
+annotationTypeDeclarationWithBody :: Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration -> Phantoms.TTerm Syntax.AnnotationInterfaceBody -> Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration
 annotationTypeDeclarationWithBody original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
               Core.projectionField = (Core.Name "modifiers")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
               Core.projectionField = (Core.Name "identifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-annotationTypeDeclarationWithIdentifier :: Phantoms.TTerm Syntax.AnnotationTypeDeclaration -> Phantoms.TTerm Syntax.TypeIdentifier -> Phantoms.TTerm Syntax.AnnotationTypeDeclaration
+annotationTypeDeclarationWithIdentifier :: Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration -> Phantoms.TTerm Syntax.TypeIdentifier -> Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration
 annotationTypeDeclarationWithIdentifier original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
               Core.projectionField = (Core.Name "modifiers")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -283,14 +283,14 @@ annotationTypeDeclarationWithIdentifier original newVal =
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
               Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationTypeDeclarationWithModifiers :: Phantoms.TTerm Syntax.AnnotationTypeDeclaration -> Phantoms.TTerm [Syntax.InterfaceModifier] -> Phantoms.TTerm Syntax.AnnotationTypeDeclaration
+annotationTypeDeclarationWithModifiers :: Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration -> Phantoms.TTerm [Syntax.InterfaceModifier] -> Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration
 annotationTypeDeclarationWithModifiers original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
@@ -299,21 +299,21 @@ annotationTypeDeclarationWithModifiers original newVal =
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
               Core.projectionField = (Core.Name "identifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceDeclaration"),
               Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationTypeElementDeclaration :: Phantoms.TTerm [Syntax.AnnotationTypeElementModifier] -> Phantoms.TTerm Syntax.UnannType -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm (Maybe Syntax.DefaultValue) -> Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration
+annotationTypeElementDeclaration :: Phantoms.TTerm [Syntax.AnnotationInterfaceElementModifier] -> Phantoms.TTerm Syntax.UnannType -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm (Maybe Syntax.DefaultValue) -> Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration
 annotationTypeElementDeclaration modifiers type_ identifier dims default_ =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
@@ -331,107 +331,107 @@ annotationTypeElementDeclaration modifiers type_ identifier dims default_ =
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Phantoms.unTTerm default_)}]}))
 
-annotationTypeElementDeclarationDefault :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm (Maybe Syntax.DefaultValue)
+annotationTypeElementDeclarationDefault :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm (Maybe Syntax.DefaultValue)
 annotationTypeElementDeclarationDefault x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
         Core.projectionField = (Core.Name "default")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationTypeElementDeclarationDims :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm (Maybe Syntax.Dims)
+annotationTypeElementDeclarationDims :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm (Maybe Syntax.Dims)
 annotationTypeElementDeclarationDims x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
         Core.projectionField = (Core.Name "dims")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationTypeElementDeclarationIdentifier :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm Syntax.Identifier
+annotationTypeElementDeclarationIdentifier :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm Syntax.Identifier
 annotationTypeElementDeclarationIdentifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
         Core.projectionField = (Core.Name "identifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationTypeElementDeclarationModifiers :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm [Syntax.AnnotationTypeElementModifier]
+annotationTypeElementDeclarationModifiers :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm [Syntax.AnnotationInterfaceElementModifier]
 annotationTypeElementDeclarationModifiers x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
         Core.projectionField = (Core.Name "modifiers")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationTypeElementDeclarationType :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm Syntax.UnannType
+annotationTypeElementDeclarationType :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm Syntax.UnannType
 annotationTypeElementDeclarationType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
         Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-annotationTypeElementDeclarationWithDefault :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm (Maybe Syntax.DefaultValue) -> Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration
+annotationTypeElementDeclarationWithDefault :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm (Maybe Syntax.DefaultValue) -> Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration
 annotationTypeElementDeclarationWithDefault original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "modifiers")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "identifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-annotationTypeElementDeclarationWithDims :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration
+annotationTypeElementDeclarationWithDims :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration
 annotationTypeElementDeclarationWithDims original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "modifiers")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "identifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -441,27 +441,27 @@ annotationTypeElementDeclarationWithDims original newVal =
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationTypeElementDeclarationWithIdentifier :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration
+annotationTypeElementDeclarationWithIdentifier :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration
 annotationTypeElementDeclarationWithIdentifier original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "modifiers")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -471,21 +471,21 @@ annotationTypeElementDeclarationWithIdentifier original newVal =
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationTypeElementDeclarationWithModifiers :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm [Syntax.AnnotationTypeElementModifier] -> Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration
+annotationTypeElementDeclarationWithModifiers :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm [Syntax.AnnotationInterfaceElementModifier] -> Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration
 annotationTypeElementDeclarationWithModifiers original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
@@ -494,41 +494,41 @@ annotationTypeElementDeclarationWithModifiers original newVal =
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "identifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationTypeElementDeclarationWithType :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm Syntax.UnannType -> Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration
+annotationTypeElementDeclarationWithType :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm Syntax.UnannType -> Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration
 annotationTypeElementDeclarationWithType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "modifiers"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "modifiers")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -538,68 +538,68 @@ annotationTypeElementDeclarationWithType original newVal =
           Core.fieldName = (Core.Name "identifier"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "identifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementDeclaration"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementDeclaration"),
               Core.projectionField = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-annotationTypeElementModifierAbstract :: Phantoms.TTerm Syntax.AnnotationTypeElementModifier
+annotationTypeElementModifierAbstract :: Phantoms.TTerm Syntax.AnnotationInterfaceElementModifier
 annotationTypeElementModifierAbstract =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementModifier"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "abstract"),
         Core.fieldTerm = Core.TermUnit}}))
 
-annotationTypeElementModifierPublic :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.AnnotationTypeElementModifier
+annotationTypeElementModifierPublic :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.AnnotationInterfaceElementModifier
 annotationTypeElementModifierPublic x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeElementModifier"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceElementModifier"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "public"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationTypeMemberDeclarationAnnotationType :: Phantoms.TTerm Syntax.AnnotationTypeElementDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeMemberDeclaration
+annotationTypeMemberDeclarationAnnotationType :: Phantoms.TTerm Syntax.AnnotationInterfaceElementDeclaration -> Phantoms.TTerm Syntax.AnnotationInterfaceMemberDeclaration
 annotationTypeMemberDeclarationAnnotationType x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeMemberDeclaration"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceMemberDeclaration"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "annotationType"),
+        Core.fieldName = (Core.Name "annotationInterface"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationTypeMemberDeclarationClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeMemberDeclaration
+annotationTypeMemberDeclarationClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.AnnotationInterfaceMemberDeclaration
 annotationTypeMemberDeclarationClass x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeMemberDeclaration"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationTypeMemberDeclarationConstant :: Phantoms.TTerm Syntax.ConstantDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeMemberDeclaration
+annotationTypeMemberDeclarationConstant :: Phantoms.TTerm Syntax.ConstantDeclaration -> Phantoms.TTerm Syntax.AnnotationInterfaceMemberDeclaration
 annotationTypeMemberDeclarationConstant x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeMemberDeclaration"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "constant"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-annotationTypeMemberDeclarationInterface :: Phantoms.TTerm Syntax.InterfaceDeclaration -> Phantoms.TTerm Syntax.AnnotationTypeMemberDeclaration
+annotationTypeMemberDeclarationInterface :: Phantoms.TTerm Syntax.InterfaceDeclaration -> Phantoms.TTerm Syntax.AnnotationInterfaceMemberDeclaration
 annotationTypeMemberDeclarationInterface x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationTypeMemberDeclaration"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.AnnotationInterfaceMemberDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
@@ -680,42 +680,58 @@ arrayAccess_VariantPrimary x =
         Core.fieldName = (Core.Name "primary"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-arrayCreationExpressionClassOrInterface :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface -> Phantoms.TTerm Syntax.ArrayCreationExpression
-arrayCreationExpressionClassOrInterface x =
+arrayCreationExpressionWithoutInitializer :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpression
+arrayCreationExpressionWithoutInitializer x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "classOrInterface"),
+        Core.fieldName = (Core.Name "withoutInitializer"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-arrayCreationExpressionClassOrInterfaceArray :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray -> Phantoms.TTerm Syntax.ArrayCreationExpression
-arrayCreationExpressionClassOrInterfaceArray x =
+arrayCreationExpressionWithInitializer :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpression
+arrayCreationExpressionWithInitializer x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "classOrInterfaceArray"),
+        Core.fieldName = (Core.Name "withInitializer"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-arrayCreationExpressionPrimitive :: Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive -> Phantoms.TTerm Syntax.ArrayCreationExpression
-arrayCreationExpressionPrimitive x =
+arrayCreationExpressionWithoutInitializerPrimitive :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer
+arrayCreationExpressionWithoutInitializerPrimitive x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "primitive"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-arrayCreationExpressionPrimitiveArray :: Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray -> Phantoms.TTerm Syntax.ArrayCreationExpression
-arrayCreationExpressionPrimitiveArray x =
+arrayCreationExpressionWithoutInitializerClassOrInterface :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer
+arrayCreationExpressionWithoutInitializerClassOrInterface x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "primitiveArray"),
+        Core.fieldName = (Core.Name "classOrInterface"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-arrayCreationExpression_ClassOrInterface :: Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm [Syntax.DimExpr] -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface
+arrayCreationExpressionWithInitializerPrimitive :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer
+arrayCreationExpressionWithInitializerPrimitive x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "primitive"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+arrayCreationExpressionWithInitializerClassOrInterface :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer
+arrayCreationExpressionWithInitializerClassOrInterface x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "classOrInterface"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+arrayCreationExpression_ClassOrInterface :: Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm [Syntax.DimExpr] -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface
 arrayCreationExpression_ClassOrInterface type_ dimExprs dims =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -727,10 +743,10 @@ arrayCreationExpression_ClassOrInterface type_ dimExprs dims =
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Phantoms.unTTerm dims)}]}))
 
-arrayCreationExpression_ClassOrInterfaceArray :: Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm [Syntax.Dims] -> Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray
+arrayCreationExpression_ClassOrInterfaceArray :: Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm [Syntax.Dims] -> Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface
 arrayCreationExpression_ClassOrInterfaceArray type_ dims array =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -742,63 +758,63 @@ arrayCreationExpression_ClassOrInterfaceArray type_ dims array =
           Core.fieldName = (Core.Name "array"),
           Core.fieldTerm = (Phantoms.unTTerm array)}]}))
 
-arrayCreationExpression_ClassOrInterfaceArrayArray :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray -> Phantoms.TTerm Syntax.ArrayInitializer
+arrayCreationExpression_ClassOrInterfaceArrayArray :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface -> Phantoms.TTerm Syntax.ArrayInitializer
 arrayCreationExpression_ClassOrInterfaceArrayArray x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
         Core.projectionField = (Core.Name "array")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_ClassOrInterfaceArrayDims :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray -> Phantoms.TTerm [Syntax.Dims]
+arrayCreationExpression_ClassOrInterfaceArrayDims :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface -> Phantoms.TTerm [Syntax.Dims]
 arrayCreationExpression_ClassOrInterfaceArrayDims x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
         Core.projectionField = (Core.Name "dims")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_ClassOrInterfaceArrayType :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray -> Phantoms.TTerm Syntax.ClassOrInterfaceType
+arrayCreationExpression_ClassOrInterfaceArrayType :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface -> Phantoms.TTerm Syntax.ClassOrInterfaceType
 arrayCreationExpression_ClassOrInterfaceArrayType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
         Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_ClassOrInterfaceArrayWithArray :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray -> Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray
+arrayCreationExpression_ClassOrInterfaceArrayWithArray :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface -> Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface
 arrayCreationExpression_ClassOrInterfaceArrayWithArray original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "array"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-arrayCreationExpression_ClassOrInterfaceArrayWithDims :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray -> Phantoms.TTerm [Syntax.Dims] -> Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray
+arrayCreationExpression_ClassOrInterfaceArrayWithDims :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface -> Phantoms.TTerm [Syntax.Dims] -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface
 arrayCreationExpression_ClassOrInterfaceArrayWithDims original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -808,14 +824,14 @@ arrayCreationExpression_ClassOrInterfaceArrayWithDims original newVal =
           Core.fieldName = (Core.Name "array"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "array")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-arrayCreationExpression_ClassOrInterfaceArrayWithType :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray -> Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterfaceArray
+arrayCreationExpression_ClassOrInterfaceArrayWithType :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface -> Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface
 arrayCreationExpression_ClassOrInterfaceArrayWithType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -824,51 +840,51 @@ arrayCreationExpression_ClassOrInterfaceArrayWithType original newVal =
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "array"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterfaceArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "array")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-arrayCreationExpression_ClassOrInterfaceDimExprs :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface -> Phantoms.TTerm [Syntax.DimExpr]
+arrayCreationExpression_ClassOrInterfaceDimExprs :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface -> Phantoms.TTerm [Syntax.DimExpr]
 arrayCreationExpression_ClassOrInterfaceDimExprs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
         Core.projectionField = (Core.Name "dimExprs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_ClassOrInterfaceDims :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface -> Phantoms.TTerm (Maybe Syntax.Dims)
+arrayCreationExpression_ClassOrInterfaceDims :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface -> Phantoms.TTerm (Maybe Syntax.Dims)
 arrayCreationExpression_ClassOrInterfaceDims x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
         Core.projectionField = (Core.Name "dims")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_ClassOrInterfaceType :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface -> Phantoms.TTerm Syntax.ClassOrInterfaceType
+arrayCreationExpression_ClassOrInterfaceType :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface -> Phantoms.TTerm Syntax.ClassOrInterfaceType
 arrayCreationExpression_ClassOrInterfaceType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
         Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_ClassOrInterfaceWithDimExprs :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface -> Phantoms.TTerm [Syntax.DimExpr] -> Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface
+arrayCreationExpression_ClassOrInterfaceWithDimExprs :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface -> Phantoms.TTerm [Syntax.DimExpr] -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface
 arrayCreationExpression_ClassOrInterfaceWithDimExprs original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -878,37 +894,37 @@ arrayCreationExpression_ClassOrInterfaceWithDimExprs original newVal =
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-arrayCreationExpression_ClassOrInterfaceWithDims :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface
+arrayCreationExpression_ClassOrInterfaceWithDims :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface
 arrayCreationExpression_ClassOrInterfaceWithDims original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dimExprs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "dimExprs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-arrayCreationExpression_ClassOrInterfaceWithType :: Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface -> Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm Syntax.ArrayCreationExpression_ClassOrInterface
+arrayCreationExpression_ClassOrInterfaceWithType :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface -> Phantoms.TTerm Syntax.ClassOrInterfaceType -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface
 arrayCreationExpression_ClassOrInterfaceWithType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -917,21 +933,21 @@ arrayCreationExpression_ClassOrInterfaceWithType original newVal =
           Core.fieldName = (Core.Name "dimExprs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "dimExprs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_ClassOrInterface"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_ClassOrInterface"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-arrayCreationExpression_Primitive :: Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm [Syntax.DimExpr] -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive
+arrayCreationExpression_Primitive :: Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm [Syntax.DimExpr] -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive
 arrayCreationExpression_Primitive type_ dimExprs dims =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -943,10 +959,10 @@ arrayCreationExpression_Primitive type_ dimExprs dims =
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Phantoms.unTTerm dims)}]}))
 
-arrayCreationExpression_PrimitiveArray :: Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm [Syntax.Dims] -> Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray
+arrayCreationExpression_PrimitiveArray :: Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm [Syntax.Dims] -> Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive
 arrayCreationExpression_PrimitiveArray type_ dims array =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -958,63 +974,63 @@ arrayCreationExpression_PrimitiveArray type_ dims array =
           Core.fieldName = (Core.Name "array"),
           Core.fieldTerm = (Phantoms.unTTerm array)}]}))
 
-arrayCreationExpression_PrimitiveArrayArray :: Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray -> Phantoms.TTerm Syntax.ArrayInitializer
+arrayCreationExpression_PrimitiveArrayArray :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive -> Phantoms.TTerm Syntax.ArrayInitializer
 arrayCreationExpression_PrimitiveArrayArray x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
         Core.projectionField = (Core.Name "array")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_PrimitiveArrayDims :: Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray -> Phantoms.TTerm [Syntax.Dims]
+arrayCreationExpression_PrimitiveArrayDims :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive -> Phantoms.TTerm [Syntax.Dims]
 arrayCreationExpression_PrimitiveArrayDims x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
         Core.projectionField = (Core.Name "dims")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_PrimitiveArrayType :: Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray -> Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations
+arrayCreationExpression_PrimitiveArrayType :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive -> Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations
 arrayCreationExpression_PrimitiveArrayType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
         Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_PrimitiveArrayWithArray :: Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray -> Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray
+arrayCreationExpression_PrimitiveArrayWithArray :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive -> Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive
 arrayCreationExpression_PrimitiveArrayWithArray original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "array"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-arrayCreationExpression_PrimitiveArrayWithDims :: Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray -> Phantoms.TTerm [Syntax.Dims] -> Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray
+arrayCreationExpression_PrimitiveArrayWithDims :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive -> Phantoms.TTerm [Syntax.Dims] -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive
 arrayCreationExpression_PrimitiveArrayWithDims original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -1024,14 +1040,14 @@ arrayCreationExpression_PrimitiveArrayWithDims original newVal =
           Core.fieldName = (Core.Name "array"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
               Core.projectionField = (Core.Name "array")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-arrayCreationExpression_PrimitiveArrayWithType :: Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray -> Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm Syntax.ArrayCreationExpression_PrimitiveArray
+arrayCreationExpression_PrimitiveArrayWithType :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive -> Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithInitializer_Primitive
 arrayCreationExpression_PrimitiveArrayWithType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1040,51 +1056,51 @@ arrayCreationExpression_PrimitiveArrayWithType original newVal =
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "array"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_PrimitiveArray"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithInitializer_Primitive"),
               Core.projectionField = (Core.Name "array")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-arrayCreationExpression_PrimitiveDimExprs :: Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive -> Phantoms.TTerm [Syntax.DimExpr]
+arrayCreationExpression_PrimitiveDimExprs :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive -> Phantoms.TTerm [Syntax.DimExpr]
 arrayCreationExpression_PrimitiveDimExprs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
         Core.projectionField = (Core.Name "dimExprs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_PrimitiveDims :: Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive -> Phantoms.TTerm (Maybe Syntax.Dims)
+arrayCreationExpression_PrimitiveDims :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive -> Phantoms.TTerm (Maybe Syntax.Dims)
 arrayCreationExpression_PrimitiveDims x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
         Core.projectionField = (Core.Name "dims")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_PrimitiveType :: Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive -> Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations
+arrayCreationExpression_PrimitiveType :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive -> Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations
 arrayCreationExpression_PrimitiveType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
         Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-arrayCreationExpression_PrimitiveWithDimExprs :: Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive -> Phantoms.TTerm [Syntax.DimExpr] -> Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive
+arrayCreationExpression_PrimitiveWithDimExprs :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive -> Phantoms.TTerm [Syntax.DimExpr] -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive
 arrayCreationExpression_PrimitiveWithDimExprs original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -1094,37 +1110,37 @@ arrayCreationExpression_PrimitiveWithDimExprs original newVal =
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-arrayCreationExpression_PrimitiveWithDims :: Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive
+arrayCreationExpression_PrimitiveWithDims :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive -> Phantoms.TTerm (Maybe Syntax.Dims) -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive
 arrayCreationExpression_PrimitiveWithDims original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
               Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dimExprs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
               Core.projectionField = (Core.Name "dimExprs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-arrayCreationExpression_PrimitiveWithType :: Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive -> Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm Syntax.ArrayCreationExpression_Primitive
+arrayCreationExpression_PrimitiveWithType :: Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive -> Phantoms.TTerm Syntax.PrimitiveTypeWithAnnotations -> Phantoms.TTerm Syntax.ArrayCreationExpressionWithoutInitializer_Primitive
 arrayCreationExpression_PrimitiveWithType original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1133,14 +1149,14 @@ arrayCreationExpression_PrimitiveWithType original newVal =
           Core.fieldName = (Core.Name "dimExprs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
               Core.projectionField = (Core.Name "dimExprs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dims"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpression_Primitive"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.ArrayCreationExpressionWithoutInitializer_Primitive"),
               Core.projectionField = (Core.Name "dims")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
@@ -1656,12 +1672,12 @@ block x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.Block"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-blockStatementClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.BlockStatement
+blockStatementClass :: Phantoms.TTerm Syntax.LocalClassOrInterfaceDeclaration -> Phantoms.TTerm Syntax.BlockStatement
 blockStatementClass x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.BlockStatement"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "class"),
+        Core.fieldName = (Core.Name "localClassOrInterface"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 blockStatementLocalVariableDeclaration :: Phantoms.TTerm Syntax.LocalVariableDeclarationStatement -> Phantoms.TTerm Syntax.BlockStatement
@@ -3870,23 +3886,25 @@ elementValuePairWithValue original newVal =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-enhancedForCond :: Phantoms.TTerm [Syntax.VariableModifier] -> Phantoms.TTerm Syntax.LocalVariableType -> Phantoms.TTerm Syntax.VariableDeclaratorId -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.EnhancedForCond
-enhancedForCond modifiers type_ id expression =
+enhancedForCond :: Phantoms.TTerm Syntax.LocalVariableDeclaration -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.EnhancedForCond
+enhancedForCond declaration expression =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "modifiers"),
-          Core.fieldTerm = (Phantoms.unTTerm modifiers)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm id)},
+          Core.fieldName = (Core.Name "declaration"),
+          Core.fieldTerm = (Phantoms.unTTerm declaration)},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Phantoms.unTTerm expression)}]}))
+
+enhancedForCondDeclaration :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm Syntax.LocalVariableDeclaration
+enhancedForCondDeclaration x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
+        Core.projectionField = (Core.Name "declaration")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enhancedForCondExpression :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm Syntax.Expression
 enhancedForCondExpression x =
@@ -3896,29 +3914,21 @@ enhancedForCondExpression x =
         Core.projectionField = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-enhancedForCondId :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm Syntax.VariableDeclaratorId
-enhancedForCondId x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-        Core.projectionField = (Core.Name "id")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-enhancedForCondModifiers :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm [Syntax.VariableModifier]
-enhancedForCondModifiers x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-        Core.projectionField = (Core.Name "modifiers")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-enhancedForCondType :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm Syntax.LocalVariableType
-enhancedForCondType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-        Core.projectionField = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
+enhancedForCondWithDeclaration :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm Syntax.LocalVariableDeclaration -> Phantoms.TTerm Syntax.EnhancedForCond
+enhancedForCondWithDeclaration original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "declaration"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
+              Core.projectionField = (Core.Name "expression")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 enhancedForCondWithExpression :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.EnhancedForCond
 enhancedForCondWithExpression original newVal =
@@ -3926,119 +3936,15 @@ enhancedForCondWithExpression original newVal =
       Core.recordTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "modifiers"),
+          Core.fieldName = (Core.Name "declaration"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "modifiers")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionField = (Core.Name "declaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-enhancedForCondWithId :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm Syntax.VariableDeclaratorId -> Phantoms.TTerm Syntax.EnhancedForCond
-enhancedForCondWithId original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "modifiers"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "modifiers")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-enhancedForCondWithModifiers :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm [Syntax.VariableModifier] -> Phantoms.TTerm Syntax.EnhancedForCond
-enhancedForCondWithModifiers original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "modifiers"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-enhancedForCondWithType :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm Syntax.LocalVariableType -> Phantoms.TTerm Syntax.EnhancedForCond
-enhancedForCondWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "modifiers"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "modifiers")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "id"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "id")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "expression"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnhancedForCond"),
-              Core.projectionField = (Core.Name "expression")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 enhancedForStatement :: Phantoms.TTerm Syntax.EnhancedForCond -> Phantoms.TTerm Syntax.Statement -> Phantoms.TTerm Syntax.EnhancedForStatement
 enhancedForStatement cond body =
@@ -4281,12 +4187,6 @@ enumConstantModifiers x =
         Core.projectionTypeName = (Core.Name "hydra.java.syntax.EnumConstant"),
         Core.projectionField = (Core.Name "modifiers")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-enumConstantName :: Phantoms.TTerm Syntax.Identifier -> Phantoms.TTerm Syntax.EnumConstantName
-enumConstantName x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.EnumConstantName"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
 enumConstantWithArguments :: Phantoms.TTerm Syntax.EnumConstant -> Phantoms.TTerm [[Syntax.Expression]] -> Phantoms.TTerm Syntax.EnumConstant
 enumConstantWithArguments original newVal =
@@ -5846,12 +5746,12 @@ interfaceBody x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.InterfaceBody"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-interfaceDeclarationAnnotationType :: Phantoms.TTerm Syntax.AnnotationTypeDeclaration -> Phantoms.TTerm Syntax.InterfaceDeclaration
+interfaceDeclarationAnnotationType :: Phantoms.TTerm Syntax.AnnotationInterfaceDeclaration -> Phantoms.TTerm Syntax.InterfaceDeclaration
 interfaceDeclarationAnnotationType x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceDeclaration"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "annotationType"),
+        Core.fieldName = (Core.Name "annotationInterface"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 interfaceDeclarationNormalInterface :: Phantoms.TTerm Syntax.NormalInterfaceDeclaration -> Phantoms.TTerm Syntax.InterfaceDeclaration
@@ -6134,12 +6034,12 @@ interfaceModifierStatic =
         Core.fieldName = (Core.Name "static"),
         Core.fieldTerm = Core.TermUnit}}))
 
-interfaceModifierStrictfb :: Phantoms.TTerm Syntax.InterfaceModifier
-interfaceModifierStrictfb =
+interfaceModifierStrictfp :: Phantoms.TTerm Syntax.InterfaceModifier
+interfaceModifierStrictfp =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.InterfaceModifier"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "strictfb"),
+        Core.fieldName = (Core.Name "strictfp"),
         Core.fieldTerm = Core.TermUnit}}))
 
 interfaceType :: Phantoms.TTerm Syntax.ClassType -> Phantoms.TTerm Syntax.InterfaceType
@@ -7460,12 +7360,12 @@ methodModifierStatic =
         Core.fieldName = (Core.Name "static"),
         Core.fieldTerm = Core.TermUnit}}))
 
-methodModifierStrictfb :: Phantoms.TTerm Syntax.MethodModifier
-methodModifierStrictfb =
+methodModifierStrictfp :: Phantoms.TTerm Syntax.MethodModifier
+methodModifierStrictfp =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.MethodModifier"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "strictfb"),
+        Core.fieldName = (Core.Name "strictfp"),
         Core.fieldTerm = Core.TermUnit}}))
 
 methodModifierSynchronized :: Phantoms.TTerm Syntax.MethodModifier
@@ -8690,8 +8590,8 @@ normalAnnotationWithTypeName original newVal =
               Core.projectionField = (Core.Name "pairs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-normalClassDeclaration :: Phantoms.TTerm [Syntax.ClassModifier] -> Phantoms.TTerm Syntax.TypeIdentifier -> Phantoms.TTerm [Syntax.TypeParameter] -> Phantoms.TTerm (Maybe Syntax.ClassType) -> Phantoms.TTerm [Syntax.InterfaceType] -> Phantoms.TTerm Syntax.ClassBody -> Phantoms.TTerm Syntax.NormalClassDeclaration
-normalClassDeclaration modifiers identifier parameters extends implements body =
+normalClassDeclaration :: Phantoms.TTerm [Syntax.ClassModifier] -> Phantoms.TTerm Syntax.TypeIdentifier -> Phantoms.TTerm [Syntax.TypeParameter] -> Phantoms.TTerm (Maybe Syntax.ClassType) -> Phantoms.TTerm [Syntax.InterfaceType] -> Phantoms.TTerm [Syntax.TypeName] -> Phantoms.TTerm Syntax.ClassBody -> Phantoms.TTerm Syntax.NormalClassDeclaration
+normalClassDeclaration modifiers identifier parameters extends implements permits body =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.syntax.NormalClassDeclaration"),
       Core.recordFields = [
@@ -8710,6 +8610,9 @@ normalClassDeclaration modifiers identifier parameters extends implements body =
         Core.Field {
           Core.fieldName = (Core.Name "implements"),
           Core.fieldTerm = (Phantoms.unTTerm implements)},
+        Core.Field {
+          Core.fieldName = (Core.Name "permits"),
+          Core.fieldTerm = (Phantoms.unTTerm permits)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Phantoms.unTTerm body)}]}))
@@ -9026,8 +8929,8 @@ normalClassDeclarationWithParameters original newVal =
               Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-normalInterfaceDeclaration :: Phantoms.TTerm [Syntax.InterfaceModifier] -> Phantoms.TTerm Syntax.TypeIdentifier -> Phantoms.TTerm [Syntax.TypeParameter] -> Phantoms.TTerm [Syntax.InterfaceType] -> Phantoms.TTerm Syntax.InterfaceBody -> Phantoms.TTerm Syntax.NormalInterfaceDeclaration
-normalInterfaceDeclaration modifiers identifier parameters extends body =
+normalInterfaceDeclaration :: Phantoms.TTerm [Syntax.InterfaceModifier] -> Phantoms.TTerm Syntax.TypeIdentifier -> Phantoms.TTerm [Syntax.TypeParameter] -> Phantoms.TTerm [Syntax.InterfaceType] -> Phantoms.TTerm [Syntax.TypeName] -> Phantoms.TTerm Syntax.InterfaceBody -> Phantoms.TTerm Syntax.NormalInterfaceDeclaration
+normalInterfaceDeclaration modifiers identifier parameters extends permits body =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.syntax.NormalInterfaceDeclaration"),
       Core.recordFields = [
@@ -9043,6 +8946,9 @@ normalInterfaceDeclaration modifiers identifier parameters extends body =
         Core.Field {
           Core.fieldName = (Core.Name "extends"),
           Core.fieldTerm = (Phantoms.unTTerm extends)},
+        Core.Field {
+          Core.fieldName = (Core.Name "permits"),
+          Core.fieldTerm = (Phantoms.unTTerm permits)},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Phantoms.unTTerm body)}]}))
@@ -9304,7 +9210,7 @@ numericTypeIntegral x =
         Core.fieldName = (Core.Name "integral"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-ordinaryCompilationUnit :: Phantoms.TTerm (Maybe Syntax.PackageDeclaration) -> Phantoms.TTerm [Syntax.ImportDeclaration] -> Phantoms.TTerm [Syntax.TypeDeclarationWithComments] -> Phantoms.TTerm Syntax.OrdinaryCompilationUnit
+ordinaryCompilationUnit :: Phantoms.TTerm (Maybe Syntax.PackageDeclaration) -> Phantoms.TTerm [Syntax.ImportDeclaration] -> Phantoms.TTerm [Syntax.TopLevelClassOrInterfaceDeclarationWithComments] -> Phantoms.TTerm Syntax.OrdinaryCompilationUnit
 ordinaryCompilationUnit package imports types =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.syntax.OrdinaryCompilationUnit"),
@@ -9335,7 +9241,7 @@ ordinaryCompilationUnitPackage x =
         Core.projectionField = (Core.Name "package")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-ordinaryCompilationUnitTypes :: Phantoms.TTerm Syntax.OrdinaryCompilationUnit -> Phantoms.TTerm [Syntax.TypeDeclarationWithComments]
+ordinaryCompilationUnitTypes :: Phantoms.TTerm Syntax.OrdinaryCompilationUnit -> Phantoms.TTerm [Syntax.TopLevelClassOrInterfaceDeclarationWithComments]
 ordinaryCompilationUnitTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -9389,7 +9295,7 @@ ordinaryCompilationUnitWithPackage original newVal =
               Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-ordinaryCompilationUnitWithTypes :: Phantoms.TTerm Syntax.OrdinaryCompilationUnit -> Phantoms.TTerm [Syntax.TypeDeclarationWithComments] -> Phantoms.TTerm Syntax.OrdinaryCompilationUnit
+ordinaryCompilationUnitWithTypes :: Phantoms.TTerm Syntax.OrdinaryCompilationUnit -> Phantoms.TTerm [Syntax.TopLevelClassOrInterfaceDeclarationWithComments] -> Phantoms.TTerm Syntax.OrdinaryCompilationUnit
 ordinaryCompilationUnitWithTypes original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.java.syntax.OrdinaryCompilationUnit"),
@@ -9866,12 +9772,12 @@ relationalExpressionGreaterThanEqual x =
         Core.fieldName = (Core.Name "greaterThanEqual"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-relationalExpressionInstanceof :: Phantoms.TTerm Syntax.RelationalExpression_InstanceOf -> Phantoms.TTerm Syntax.RelationalExpression
+relationalExpressionInstanceof :: Phantoms.TTerm Syntax.InstanceofExpression -> Phantoms.TTerm Syntax.RelationalExpression
 relationalExpressionInstanceof x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "instanceof"),
+        Core.fieldName = (Core.Name "instanceofExpression"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 relationalExpressionLessThan :: Phantoms.TTerm Syntax.RelationalExpression_LessThan -> Phantoms.TTerm Syntax.RelationalExpression
@@ -10018,10 +9924,10 @@ relationalExpression_GreaterThanWithRhs original newVal =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-relationalExpression_InstanceOf :: Phantoms.TTerm Syntax.RelationalExpression -> Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Syntax.RelationalExpression_InstanceOf
+relationalExpression_InstanceOf :: Phantoms.TTerm Syntax.RelationalExpression -> Phantoms.TTerm Syntax.InstanceofExpression_Rhs -> Phantoms.TTerm Syntax.InstanceofExpression
 relationalExpression_InstanceOf lhs rhs =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.RelationalExpression_InstanceOf"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.InstanceofExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
@@ -10030,26 +9936,26 @@ relationalExpression_InstanceOf lhs rhs =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Phantoms.unTTerm rhs)}]}))
 
-relationalExpression_InstanceOfLhs :: Phantoms.TTerm Syntax.RelationalExpression_InstanceOf -> Phantoms.TTerm Syntax.RelationalExpression
+relationalExpression_InstanceOfLhs :: Phantoms.TTerm Syntax.InstanceofExpression -> Phantoms.TTerm Syntax.RelationalExpression
 relationalExpression_InstanceOfLhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression_InstanceOf"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.InstanceofExpression"),
         Core.projectionField = (Core.Name "lhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-relationalExpression_InstanceOfRhs :: Phantoms.TTerm Syntax.RelationalExpression_InstanceOf -> Phantoms.TTerm Syntax.ReferenceType
+relationalExpression_InstanceOfRhs :: Phantoms.TTerm Syntax.InstanceofExpression -> Phantoms.TTerm Syntax.InstanceofExpression_Rhs
 relationalExpression_InstanceOfRhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression_InstanceOf"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.InstanceofExpression"),
         Core.projectionField = (Core.Name "rhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-relationalExpression_InstanceOfWithLhs :: Phantoms.TTerm Syntax.RelationalExpression_InstanceOf -> Phantoms.TTerm Syntax.RelationalExpression -> Phantoms.TTerm Syntax.RelationalExpression_InstanceOf
+relationalExpression_InstanceOfWithLhs :: Phantoms.TTerm Syntax.InstanceofExpression -> Phantoms.TTerm Syntax.RelationalExpression -> Phantoms.TTerm Syntax.InstanceofExpression
 relationalExpression_InstanceOfWithLhs original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.RelationalExpression_InstanceOf"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.InstanceofExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
@@ -10058,20 +9964,20 @@ relationalExpression_InstanceOfWithLhs original newVal =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression_InstanceOf"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.InstanceofExpression"),
               Core.projectionField = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-relationalExpression_InstanceOfWithRhs :: Phantoms.TTerm Syntax.RelationalExpression_InstanceOf -> Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Syntax.RelationalExpression_InstanceOf
+relationalExpression_InstanceOfWithRhs :: Phantoms.TTerm Syntax.InstanceofExpression -> Phantoms.TTerm Syntax.InstanceofExpression_Rhs -> Phantoms.TTerm Syntax.InstanceofExpression
 relationalExpression_InstanceOfWithRhs original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.RelationalExpression_InstanceOf"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.InstanceofExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.RelationalExpression_InstanceOf"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.InstanceofExpression"),
               Core.projectionField = (Core.Name "lhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -10910,10 +10816,74 @@ stringLiteral x =
       Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.StringLiteral"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
-switchBlock :: Phantoms.TTerm [Syntax.SwitchBlock_Pair] -> Phantoms.TTerm Syntax.SwitchBlock
-switchBlock x =
+switchBlockRules :: Phantoms.TTerm [Syntax.SwitchRule] -> Phantoms.TTerm Syntax.SwitchBlock
+switchBlockRules x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchBlock"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "rules"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+switchBlockLegacy :: Phantoms.TTerm Syntax.SwitchBlock_Legacy -> Phantoms.TTerm Syntax.SwitchBlock
+switchBlockLegacy x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchBlock"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "legacy"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+switchBlock_Legacy :: Phantoms.TTerm [Syntax.SwitchBlockStatementGroup] -> Phantoms.TTerm [Syntax.SwitchLabel] -> Phantoms.TTerm Syntax.SwitchBlock_Legacy
+switchBlock_Legacy groups trailingLabels =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.SwitchBlock_Legacy"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "groups"),
+          Core.fieldTerm = (Phantoms.unTTerm groups)},
+        Core.Field {
+          Core.fieldName = (Core.Name "trailingLabels"),
+          Core.fieldTerm = (Phantoms.unTTerm trailingLabels)}]}))
+
+switchRule :: Phantoms.TTerm Syntax.SwitchLabel -> Phantoms.TTerm Syntax.SwitchRule_Body -> Phantoms.TTerm Syntax.SwitchRule
+switchRule label body =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.SwitchRule"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "label"),
+          Core.fieldTerm = (Phantoms.unTTerm label)},
+        Core.Field {
+          Core.fieldName = (Core.Name "body"),
+          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
+
+switchRule_BodyExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.SwitchRule_Body
+switchRule_BodyExpression x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchRule_Body"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "expression"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+switchRule_BodyBlock :: Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.SwitchRule_Body
+switchRule_BodyBlock x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchRule_Body"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "block"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+switchRule_BodyThrow :: Phantoms.TTerm Syntax.ThrowStatement -> Phantoms.TTerm Syntax.SwitchRule_Body
+switchRule_BodyThrow x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchRule_Body"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "throw"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+caseConstant :: Phantoms.TTerm Syntax.ConditionalExpression -> Phantoms.TTerm Syntax.CaseConstant
+caseConstant x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.SwitchBlock"),
+      Core.wrappedTermTypeName = (Core.Name "hydra.java.syntax.CaseConstant"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
 switchBlockStatementGroup :: Phantoms.TTerm [Syntax.SwitchLabel] -> Phantoms.TTerm [Syntax.BlockStatement] -> Phantoms.TTerm Syntax.SwitchBlockStatementGroup
@@ -10976,72 +10946,20 @@ switchBlockStatementGroupWithStatements original newVal =
           Core.fieldName = (Core.Name "statements"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-switchBlock_Pair :: Phantoms.TTerm [Syntax.SwitchBlockStatementGroup] -> Phantoms.TTerm [Syntax.SwitchLabel] -> Phantoms.TTerm Syntax.SwitchBlock_Pair
-switchBlock_Pair statements labels =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.SwitchBlock_Pair"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "statements"),
-          Core.fieldTerm = (Phantoms.unTTerm statements)},
-        Core.Field {
-          Core.fieldName = (Core.Name "labels"),
-          Core.fieldTerm = (Phantoms.unTTerm labels)}]}))
-
-switchBlock_PairLabels :: Phantoms.TTerm Syntax.SwitchBlock_Pair -> Phantoms.TTerm [Syntax.SwitchLabel]
-switchBlock_PairLabels x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.SwitchBlock_Pair"),
-        Core.projectionField = (Core.Name "labels")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-switchBlock_PairStatements :: Phantoms.TTerm Syntax.SwitchBlock_Pair -> Phantoms.TTerm [Syntax.SwitchBlockStatementGroup]
-switchBlock_PairStatements x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.SwitchBlock_Pair"),
-        Core.projectionField = (Core.Name "statements")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-switchBlock_PairWithLabels :: Phantoms.TTerm Syntax.SwitchBlock_Pair -> Phantoms.TTerm [Syntax.SwitchLabel] -> Phantoms.TTerm Syntax.SwitchBlock_Pair
-switchBlock_PairWithLabels original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.SwitchBlock_Pair"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "statements"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.SwitchBlock_Pair"),
-              Core.projectionField = (Core.Name "statements")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "labels"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-switchBlock_PairWithStatements :: Phantoms.TTerm Syntax.SwitchBlock_Pair -> Phantoms.TTerm [Syntax.SwitchBlockStatementGroup] -> Phantoms.TTerm Syntax.SwitchBlock_Pair
-switchBlock_PairWithStatements original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.SwitchBlock_Pair"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "statements"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "labels"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.SwitchBlock_Pair"),
-              Core.projectionField = (Core.Name "labels")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-switchLabelConstant :: Phantoms.TTerm Syntax.ConstantExpression -> Phantoms.TTerm Syntax.SwitchLabel
-switchLabelConstant x =
+switchLabelCase :: Phantoms.TTerm [Syntax.CaseConstant] -> Phantoms.TTerm Syntax.SwitchLabel
+switchLabelCase x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchLabel"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "constant"),
+        Core.fieldName = (Core.Name "case"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+switchLabelNull :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.SwitchLabel
+switchLabelNull x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchLabel"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "null"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 switchLabelDefault :: Phantoms.TTerm Syntax.SwitchLabel
@@ -11051,14 +10969,6 @@ switchLabelDefault =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "default"),
         Core.fieldTerm = Core.TermUnit}}))
-
-switchLabelEnumConstant :: Phantoms.TTerm Syntax.EnumConstantName -> Phantoms.TTerm Syntax.SwitchLabel
-switchLabelEnumConstant x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.SwitchLabel"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "enumConstant"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 switchStatement :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.SwitchBlock -> Phantoms.TTerm Syntax.SwitchStatement
 switchStatement cond block =
@@ -11662,34 +11572,34 @@ typeBound_ClassOrInterfaceWithType original newVal =
               Core.projectionField = (Core.Name "additional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-typeDeclarationClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.TypeDeclaration
+typeDeclarationClass :: Phantoms.TTerm Syntax.ClassDeclaration -> Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclaration
 typeDeclarationClass x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclaration"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "class"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-typeDeclarationInterface :: Phantoms.TTerm Syntax.InterfaceDeclaration -> Phantoms.TTerm Syntax.TypeDeclaration
+typeDeclarationInterface :: Phantoms.TTerm Syntax.InterfaceDeclaration -> Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclaration
 typeDeclarationInterface x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclaration"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "interface"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-typeDeclarationNone :: Phantoms.TTerm Syntax.TypeDeclaration
+typeDeclarationNone :: Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclaration
 typeDeclarationNone =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclaration"),
+      Core.injectionTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclaration"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "none"),
         Core.fieldTerm = Core.TermUnit}}))
 
-typeDeclarationWithComments :: Phantoms.TTerm Syntax.TypeDeclaration -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TypeDeclarationWithComments
+typeDeclarationWithComments :: Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclaration -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclarationWithComments
 typeDeclarationWithComments value comments =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.TypeDeclarationWithComments"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -11698,42 +11608,42 @@ typeDeclarationWithComments value comments =
           Core.fieldName = (Core.Name "comments"),
           Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
 
-typeDeclarationWithCommentsComments :: Phantoms.TTerm Syntax.TypeDeclarationWithComments -> Phantoms.TTerm (Maybe String)
+typeDeclarationWithCommentsComments :: Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclarationWithComments -> Phantoms.TTerm (Maybe String)
 typeDeclarationWithCommentsComments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclarationWithComments"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"),
         Core.projectionField = (Core.Name "comments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-typeDeclarationWithCommentsValue :: Phantoms.TTerm Syntax.TypeDeclarationWithComments -> Phantoms.TTerm Syntax.TypeDeclaration
+typeDeclarationWithCommentsValue :: Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclarationWithComments -> Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclaration
 typeDeclarationWithCommentsValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclarationWithComments"),
+        Core.projectionTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"),
         Core.projectionField = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-typeDeclarationWithCommentsWithComments :: Phantoms.TTerm Syntax.TypeDeclarationWithComments -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TypeDeclarationWithComments
+typeDeclarationWithCommentsWithComments :: Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclarationWithComments -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclarationWithComments
 typeDeclarationWithCommentsWithComments original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.TypeDeclarationWithComments"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclarationWithComments"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"),
               Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "comments"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
-typeDeclarationWithCommentsWithValue :: Phantoms.TTerm Syntax.TypeDeclarationWithComments -> Phantoms.TTerm Syntax.TypeDeclaration -> Phantoms.TTerm Syntax.TypeDeclarationWithComments
+typeDeclarationWithCommentsWithValue :: Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclarationWithComments -> Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclaration -> Phantoms.TTerm Syntax.TopLevelClassOrInterfaceDeclarationWithComments
 typeDeclarationWithCommentsWithValue original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.java.syntax.TypeDeclarationWithComments"),
+      Core.recordTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -11742,7 +11652,7 @@ typeDeclarationWithCommentsWithValue original newVal =
           Core.fieldName = (Core.Name "comments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.java.syntax.TypeDeclarationWithComments"),
+              Core.projectionTypeName = (Core.Name "hydra.java.syntax.TopLevelClassOrInterfaceDeclarationWithComments"),
               Core.projectionField = (Core.Name "comments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
@@ -12042,10 +11952,10 @@ unAndExpression x =
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.java.syntax.AndExpression")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unAnnotationTypeBody :: Phantoms.TTerm Syntax.AnnotationTypeBody -> Phantoms.TTerm [[Syntax.AnnotationTypeMemberDeclaration]]
+unAnnotationTypeBody :: Phantoms.TTerm Syntax.AnnotationInterfaceBody -> Phantoms.TTerm [[Syntax.AnnotationInterfaceMemberDeclaration]]
 unAnnotationTypeBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.java.syntax.AnnotationTypeBody")),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.java.syntax.AnnotationInterfaceBody")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unArrayInitializer :: Phantoms.TTerm Syntax.ArrayInitializer -> Phantoms.TTerm [[Syntax.VariableInitializer]]
@@ -12132,11 +12042,6 @@ unEnumConstantModifier x =
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.java.syntax.EnumConstantModifier")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unEnumConstantName :: Phantoms.TTerm Syntax.EnumConstantName -> Phantoms.TTerm Syntax.Identifier
-unEnumConstantName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.java.syntax.EnumConstantName")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unExclusiveOrExpression :: Phantoms.TTerm Syntax.ExclusiveOrExpression -> Phantoms.TTerm [Syntax.AndExpression]
 unExclusiveOrExpression x =
@@ -12312,11 +12217,6 @@ unStringLiteral x =
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.java.syntax.StringLiteral")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
-unSwitchBlock :: Phantoms.TTerm Syntax.SwitchBlock -> Phantoms.TTerm [Syntax.SwitchBlock_Pair]
-unSwitchBlock x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.java.syntax.SwitchBlock")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unThrowStatement :: Phantoms.TTerm Syntax.ThrowStatement -> Phantoms.TTerm Syntax.Expression
 unThrowStatement x =

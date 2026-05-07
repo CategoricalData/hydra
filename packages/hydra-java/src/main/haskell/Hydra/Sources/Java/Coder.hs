@@ -6,7 +6,7 @@ module Hydra.Sources.Java.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -579,6 +579,8 @@ augmentVariantClass = def "augmentVariantClass" $
           Java._NormalClassDeclaration_extends>>: just (var "extendsPart"),
           Java._NormalClassDeclaration_implements>>:
             project Java._NormalClassDeclaration Java._NormalClassDeclaration_implements @@ var "ncd",
+          Java._NormalClassDeclaration_permits>>:
+            project Java._NormalClassDeclaration Java._NormalClassDeclaration_permits @@ var "ncd",
           Java._NormalClassDeclaration_body>>: var "newBody"])]
 
 -- | Check if a Binding has function type.
@@ -1347,7 +1349,7 @@ constructElementsInterface = def "constructElementsInterface" $
     "className">: elementsClassName @@ var "ns",
     "elName">: elementsQualifiedName @@ var "ns",
     "body">: wrap Java._InterfaceBody (var "members"),
-    "itf">: inject Java._TypeDeclaration Java._TypeDeclaration_interface
+    "itf">: inject Java._TopLevelClassOrInterfaceDeclaration Java._TopLevelClassOrInterfaceDeclaration_interface
       (inject Java._InterfaceDeclaration Java._InterfaceDeclaration_normalInterface
         (record Java._NormalInterfaceDeclaration [
           Java._NormalInterfaceDeclaration_modifiers>>: var "mods",
@@ -1357,10 +1359,12 @@ constructElementsInterface = def "constructElementsInterface" $
             list ([] :: [TTerm Java.TypeParameter]),
           Java._NormalInterfaceDeclaration_extends>>:
             list ([] :: [TTerm Java.InterfaceType]),
+          Java._NormalInterfaceDeclaration_permits>>:
+            list ([] :: [TTerm Java.TypeName]),
           Java._NormalInterfaceDeclaration_body>>: var "body"])),
-    "decl">: record Java._TypeDeclarationWithComments [
-      Java._TypeDeclarationWithComments_value>>: var "itf",
-      Java._TypeDeclarationWithComments_comments>>: Packaging.moduleDescription (var "mod")]] $
+    "decl">: record Java._TopLevelClassOrInterfaceDeclarationWithComments [
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_value>>: var "itf",
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: Packaging.moduleDescription (var "mod")]] $
     pair (var "elName")
       (inject Java._CompilationUnit Java._CompilationUnit_ordinary
         (record Java._OrdinaryCompilationUnit [
@@ -1482,7 +1486,7 @@ declarationForRecordType' = def "declarationForRecordType'" $
     "memberVars" <<~ (Eithers.mapList (lambda "f" $ recordMemberVar @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
     "memberVars'" <<~ (Eithers.mapList (lambda "p" $ addComment @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p")) @@ var "cx" @@ var "g")
       (Lists.zip (var "memberVars") (var "fields"))) $
-    "elNameStr" <~ (unwrap _Name @@ var "elName") $
+    "elNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "elName")) $
     "withMethods" <<~ (Logic.ifElse (Equality.gt (Lists.length (var "fields")) (int32 1))
       (Eithers.mapList (lambda "f" $
           "decl" <<~ (recordWithMethod @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "f" @@ var "cx" @@ var "g") $
@@ -1583,14 +1587,14 @@ declarationForUnionType = def "declarationForUnionType" $
     "acceptDecl" <~ (JavaUtilsSource.toAcceptMethod @@ true @@ var "tparams") $
     -- Build visitor and partial visitor interfaces
     "vtparams" <~ Lists.concat2 (var "tparams") (list [JavaUtilsSource.javaTypeParameter @@ asTerm JavaNamesSource.visitorReturnParameter]) $
-    "elNameStr" <~ (unwrap _Name @@ var "elName") $
+    "elNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "elName")) $
     "visitorMethods" <~ Lists.map
       (lambda "ft" $
         "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
         "fnameStr" <~ (unwrap _Name @@ var "fname") $
         "typeArgs" <~ Lists.map (lambda "tp" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp") (var "tparams") $
         "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
-        "varNameStr" <~ (unwrap _Name @@ var "varName") $
+        "varNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "varName")) $
         "varRef" <~ (JavaUtilsSource.javaClassTypeToJavaType @@
           (JavaUtilsSource.nameToJavaClassType @@ var "aliases" @@ false @@ var "typeArgs"
             @@ var "varName" @@ nothing)) $
@@ -1612,6 +1616,7 @@ declarationForUnionType = def "declarationForUnionType" $
         Java._NormalInterfaceDeclaration_identifier>>: wrap Java._TypeIdentifier (JavaDsl.identifier (asTerm JavaNamesSource.visitorName)),
         Java._NormalInterfaceDeclaration_parameters>>: var "vtparams",
         Java._NormalInterfaceDeclaration_extends>>: list ([] :: [TTerm Java.InterfaceType]),
+        Java._NormalInterfaceDeclaration_permits>>: list ([] :: [TTerm Java.TypeName]),
         Java._NormalInterfaceDeclaration_body>>: var "visitorBody"])) $
     -- Partial visitor: extends Visitor, has default otherwise() and override visit methods
     "typeArgs" <~ Lists.map (lambda "tp" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp") (var "tparams") $
@@ -1640,7 +1645,7 @@ declarationForUnionType = def "declarationForUnionType" $
       (lambda "ft" $
         "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
         "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
-        "varNameStr" <~ (unwrap _Name @@ var "varName") $
+        "varNameStr" <~ (unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "varName")) $
         "varRef" <~ (JavaUtilsSource.javaClassTypeToJavaType @@
           (JavaUtilsSource.nameToJavaClassType @@ var "aliases" @@ false @@ var "typeArgs"
             @@ var "varName" @@ nothing)) $
@@ -1670,6 +1675,7 @@ declarationForUnionType = def "declarationForUnionType" $
         Java._NormalInterfaceDeclaration_identifier>>: wrap Java._TypeIdentifier (JavaDsl.identifier (asTerm JavaNamesSource.partialVisitorName)),
         Java._NormalInterfaceDeclaration_parameters>>: var "vtparams",
         Java._NormalInterfaceDeclaration_extends>>: list [wrap Java._InterfaceType (var "visitorClassType")],
+        Java._NormalInterfaceDeclaration_permits>>: list ([] :: [TTerm Java.TypeName]),
         Java._NormalInterfaceDeclaration_body>>: var "pvBody"])) $
     -- Build constant declarations
     "tn0" <<~ (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
@@ -3269,7 +3275,7 @@ encodeTermTCO = def "encodeTermTCO" $
             (Just false) [
             _Term_variable>>: "n" ~> Equality.equal (var "n") (Pairs.first (var "pair"))]))
           (Lists.zip (var "paramNames") (var "gatherArgs")) $
-        "changedParams" <~ Lists.map (unaryFunction Pairs.first) (var "changePairs") $
+        "changedParams" <~ Lists.map (reify Pairs.first) (var "changePairs") $
         "jChangedArgs" <<~ Eithers.mapList ("pair" ~> encodeTerm @@ var "env" @@ (Pairs.second (var "pair")) @@ var "cx" @@ var "g")
           (var "changePairs") $
         "assignments" <~ (Lists.map ("pair" ~>
@@ -3551,9 +3557,9 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "decl" <<~ (toClassDecl @@ false @@ var "serializable" @@ var "aliases"
       @@ (list ([] :: [TTerm Java.TypeParameter])) @@ var "name" @@ var "typ" @@ var "cx" @@ var "g") $
     "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
-    "tdecl" <~ record Java._TypeDeclarationWithComments [
-      Java._TypeDeclarationWithComments_value>>: inject Java._TypeDeclaration Java._TypeDeclaration_class (var "decl"),
-      Java._TypeDeclarationWithComments_comments>>: var "comment"] $
+    "tdecl" <~ record Java._TopLevelClassOrInterfaceDeclarationWithComments [
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_value>>: inject Java._TopLevelClassOrInterfaceDeclaration Java._TopLevelClassOrInterfaceDeclaration_class (var "decl"),
+      Java._TopLevelClassOrInterfaceDeclarationWithComments_comments>>: var "comment"] $
     right (pair (var "name")
       (inject Java._CompilationUnit Java._CompilationUnit_ordinary (record Java._OrdinaryCompilationUnit [
         Java._OrdinaryCompilationUnit_package>>: just (var "pkg"),

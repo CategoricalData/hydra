@@ -86,17 +86,27 @@ tasks.matching { it.name in ['compileTestJava', 'test', 'processTestResources'] 
 // from this directory, `gradle build` produces a tested jar and
 // `gradle publishAggregationToCentralPortal` uploads to Sonatype Central Portal.
 
+// nmcp publish plugins (Sonatype Central Portal) require Java 17 to load.
+// Apply them conditionally so the build still loads under Java 11 (for
+// compile/test). When running on Java 17+, publish tasks become available.
+buildscript {{
+    repositories {{ mavenCentral() }}
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {{
+        dependencies {{
+            classpath 'com.gradleup.nmcp:nmcp:1.4.4'
+        }}
+    }}
+}}
+
 plugins {{
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    // nmcp emits the publication's outgoing variant; the aggregation plugin
-    // bundles it into a zip and uploads to the Central Portal publisher API.
-    // Both plugins are applied here so a per-package dist is fully standalone.
-    // (Sonatype has no official Gradle plugin for the Central Portal as of
-    // 2026-04; nmcp is the GradleUp community plugin.)
-    id 'com.gradleup.nmcp' version '1.4.4'
-    id 'com.gradleup.nmcp.aggregation' version '1.4.4'
+}}
+
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {{
+    apply plugin: 'com.gradleup.nmcp'
+    apply plugin: 'com.gradleup.nmcp.aggregation'
 }}
 
 group = '{GROUP_ID}'
@@ -119,7 +129,9 @@ dependencies {{
     // The aggregation plugin needs an explicit list of projects whose
     // publications it should bundle. For a standalone per-package build the
     // only project is the root project itself.
-    nmcpAggregation project
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {{
+        nmcpAggregation project
+    }}
 }}{compile_block}{test_task_block}
 
 publishing {{
@@ -160,6 +172,12 @@ signing {{
     sign publishing.publications.mavenJava
 }}
 
+// sourcesJar may see a file via multiple sourceSet srcDirs. Skip duplicates;
+// the source content is identical, the path collision is just a Gradle quirk.
+tasks.named('sourcesJar') {{
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}}
+
 // Sonatype Central Portal credentials are read from gradle.properties /
 // environment. Set sonatypeUsername + sonatypePassword (token-based) in
 // ~/.gradle/gradle.properties, or via -Psonatype{{Username,Password}}=...
@@ -169,14 +187,16 @@ signing {{
 // `=`, because Groovy's `=` on a Property field accepts a String but not
 // a Provider — the Provider would silently be coerced to its toString().
 // The .set() form is explicit and matches nmcp's lazy-evaluation model.
-nmcpAggregation {{
-    centralPortal {{
-        username.set(providers.gradleProperty('sonatypeUsername'))
-        password.set(providers.gradleProperty('sonatypePassword'))
-        // USER_MANAGED leaves the deployment in the Central Portal UI for
-        // manual review-and-publish before promotion. Switch to AUTOMATIC
-        // once the workflow is trusted end-to-end.
-        publishingType = 'USER_MANAGED'
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {{
+    nmcpAggregation {{
+        centralPortal {{
+            username.set(providers.gradleProperty('sonatypeUsername'))
+            password.set(providers.gradleProperty('sonatypePassword'))
+            // USER_MANAGED leaves the deployment in the Central Portal UI for
+            // manual review-and-publish before promotion. Switch to AUTOMATIC
+            // once the workflow is trusted end-to-end.
+            publishingType = 'USER_MANAGED'
+        }}
     }}
 }}
 """

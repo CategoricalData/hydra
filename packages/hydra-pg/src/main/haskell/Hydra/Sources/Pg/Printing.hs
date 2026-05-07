@@ -4,7 +4,7 @@ module Hydra.Sources.Pg.Printing where
 import Hydra.Kernel hiding (
   printEdge, printGraph, printLazyGraph, printProperty, printVertex)
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap

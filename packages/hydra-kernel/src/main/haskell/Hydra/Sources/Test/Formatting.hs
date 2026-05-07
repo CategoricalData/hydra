@@ -15,7 +15,7 @@ import qualified Data.Map                     as M
 
 import qualified Hydra.Dsl.Util as Util
 import qualified Hydra.Show.Util as ShowUtil
-import qualified Hydra.Sources.Kernel.Terms.Formatting as FormattingModule
+import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 import Hydra.Testing
 
@@ -27,7 +27,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, FormattingModule.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [TestGraph.ns, Formatting.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for string formatting and case conversion")}
   where
     definitions = [
@@ -81,7 +81,7 @@ testCase :: Int -> CaseConvention -> CaseConvention -> String -> String -> TTerm
 testCase i fromConvention toConvention fromString toString =
     universalCase name actual expected
   where
-    actual = FormattingModule.convertCase @@ metaConv fromConvention
+    actual = Formatting.convertCase @@ metaConv fromConvention
       @@ metaConv toConvention @@ string fromString
     expected = string toString
     name = "#" ++ show i ++ " (" ++ ShowUtil.caseConvention fromConvention ++ " -> " ++ ShowUtil.caseConvention toConvention ++ ")"
