@@ -104,10 +104,14 @@ main = do
 
   putStrLn ""
   putStrLn "Generating DSL wrapper modules to JSON..."
-  -- The DSL generator runs over the kernel-side type universe (kernel + json +
-  -- other + haskell coder). This matches the old behavior of update-json-main:
-  -- DSL modules are produced for every type in that universe.
-  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules ++ hydraPythonModules
+  -- The DSL generator runs over every package whose syntax model defines types
+  -- (kernel + json + other + haskell coder, plus each coder package). DSL
+  -- wrappers are routed to their owning package's dist/json/<pkg>/.../hydra/dsl/<lang>/
+  -- via PackageRouting, so the resulting Hydra/Dsl/<lang>/Syntax.hs phantom
+  -- helpers regenerate whenever the corresponding syntax model changes.
+  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
+                  ++ hydraJavaModules ++ hydraPythonModules ++ hydraScalaModules
+                  ++ hydraLispModules ++ hydraGoModules
   dslResult <- catch
     (writeDslJsonPackageSplit distRoot universe dslInputMods >> return True)
     (\e -> do

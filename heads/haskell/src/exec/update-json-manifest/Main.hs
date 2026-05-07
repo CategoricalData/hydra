@@ -62,8 +62,11 @@ main = do
         , hydraExtEncodingModules
         , [GenPGTransform.module_]
         ]
-  -- DSL generator input: the kernel-side type universe. Matches update-json-main.
-  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules ++ hydraPythonModules
+  -- DSL generator input: every package whose syntax model defines types.
+  -- Matches update-json-main; keep these two lists in sync.
+  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
+                  ++ hydraJavaModules ++ hydraPythonModules ++ hydraScalaModules
+                  ++ hydraLispModules ++ hydraGoModules
 
   writePerPackageManifestsJson defaultDistJsonRoot mainUniverse dslInputMods mainUniverse testModules
   putStrLn ""
