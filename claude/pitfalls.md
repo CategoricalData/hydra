@@ -89,6 +89,22 @@ bin/sync-packages.sh <pkg> --targets haskell --no-tests
 
 Then sync forward into whatever target language consumes the regenerated coder.
 
+### `gradle :hydra-java:test` needs all coder language packages in `dist/java/`
+
+The `hydra-java` Gradle build has two main source sets: `main` (the
+generated kernel + every coder package's generated Java) and `headsExtras`
+(developer drivers like `Generation.java` plus demos). `headsExtras` imports
+`hydra.haskell.*`, `hydra.python.*`, `hydra.scala.*`, `hydra.lisp.*` directly,
+so its compile fails with "package does not exist" if those `dist/java/<pkg>/`
+trees are missing.
+
+`bin/sync.sh --hosts java --targets java` only populates
+`dist/java/{hydra-kernel, hydra-java, hydra-pg, hydra-rdf}`. To run
+`gradle :hydra-java:test` after a fresh dist, populate the rest with a wider
+sync first — typically `bin/sync.sh --hosts all --targets all`. Symptom:
+`compileHeadsExtrasJava FAILED` with many "package hydra.lisp.syntax does not
+exist" errors.
+
 ### Stale per-dialect Lisp `struct-compat.lisp`
 
 `heads/lisp/common-lisp/src/main/common-lisp/hydra/struct-compat.lisp` is
