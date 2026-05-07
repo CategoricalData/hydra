@@ -66,6 +66,35 @@ In 0.15, Hydra's Scala code is split across three locations
 - **Generated Scala kernel** ([`dist/scala/hydra-kernel/src/main/scala/`](https://github.com/CategoricalData/hydra/tree/main/dist/scala/hydra-kernel/src/main/scala))
   - `hydra/core.scala`, `hydra/graph.scala`, `hydra/packaging.scala`, ... — generated kernel modules
 
+## Design notes
+
+### Collections
+
+Hydra-Java ships custom `ConsList` / `PersistentMap` / `PersistentSet`
+helpers to match Haskell's `[a]` / `Data.Map` / `Data.Set` semantics — see
+the [Collection classes](../hydra-java/README.md#collection-classes) section
+in the hydra-java README and issue #359. Hydra-Scala does **not** need
+equivalent helpers: Scala 3's `Predef.{Seq, Map, Set}` already resolve to
+`scala.collection.immutable.{List, Map, Set}`, all persistent and
+structurally shared:
+
+- `x +: xs` (cons) is O(1).
+- `m.updated(k, v)` and `m.removed(k)` are effectively O(1) (HAMT, branching
+  factor 32 ≈ `log₃₂ n`).
+- `s + x` and `s - x` are likewise effectively O(1) via HAMT.
+- `m1 ++ m2` (union) is O(n + m).
+
+`hydra.lib.{lists, maps, sets}` are thin wrappers over these immutable
+collections — no custom collection classes needed. The `keys`, `elems`,
+`toList` functions sort their output to match Haskell's `Data.Map` /
+`Data.Set` ordered-iteration semantics, which is required for cross-host
+test parity but is not on a hot path during inference. Adding sorted-by-key
+custom maps would not help: it would either duplicate Scala's HAMT (no win)
+or replace it with a red-black tree (slower in practice — `log₂` vs `log₃₂`).
+
+If asked again whether Scala needs persistent-collection helpers like the
+Java head's: no.
+
 ## Contributing
 
 Hydra is an open-source project and welcomes contributors. Resources:
