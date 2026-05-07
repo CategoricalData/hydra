@@ -304,22 +304,20 @@ and calls `reduceTerm` on each application.
 
 ### 2. Register in Libraries
 
-Update `/heads/java/src/main/java/hydra/lib/Libraries.java`:
+Update `/heads/java/src/main/java/hydra/lib/Libraries.java`. Add the new
+primitive to its category's list, and ensure the category is included in
+`standardPrimitives()`. Per the Java head's collection conventions
+(see [Java collection conventions](#java-collection-conventions) below),
+new code should return `ConsList`/`PersistentMap`/`PersistentSet`
+typed as `List`/`Map`/`Set` rather than building via `ArrayList`/`HashMap`/`HashSet`.
 
 ```java
 // Add import
 import hydra.lib.chars.IsAlphaNum;
 import hydra.lib.chars.ToLower;
 
-// In standardPrimitives(), ensure library is included
-public static List<PrimitiveFunction> standardPrimitives() {
-    List<PrimitiveFunction> prims = new ArrayList<>();
-    prims.addAll(charsPrimitives());  // Add if new library
-    // ... other libraries
-    return prims;
-}
-
-// Create or update library's primitive list
+// Create or update library's primitive list. Arrays.asList is fine here:
+// this is a static catalog, not a value built incrementally inside a primitive body.
 private static List<PrimitiveFunction> charsPrimitives() {
     return Arrays.asList(
             new IsAlphaNum(),
@@ -332,6 +330,43 @@ private static List<PrimitiveFunction> charsPrimitives() {
 2. The library is included in `standardPrimitives()`
 
 If the library's primitives method doesn't exist, you'll need to create it and add it to `standardPrimitives()`.
+
+### Java collection conventions
+
+The Java head defines three persistent (immutable, structurally-shared)
+collection helpers in `hydra.util`:
+
+- `ConsList<T>` — singly-linked list with O(1) `cons` and tail sharing,
+  matching Haskell's `[a]`.
+- `PersistentMap<K, V>` — ordered red-black tree map with O(log n) insert/delete
+  and structural sharing, matching `Data.Map`.
+- `PersistentSet<T>` — wrapper over `PersistentMap`, matching `Data.Set`.
+
+When implementing a primitive `apply` body in `heads/java/src/main/java/hydra/lib/`:
+
+- **API surfaces stay JDK** — declare parameters and return types as
+  `java.util.List<X>` / `Map<K, V>` / `Set<X>`. Per #359, the persistent classes
+  do not appear in primitive signatures.
+- **Implementation bodies use the persistent helpers** — return
+  `ConsList`/`PersistentMap`/`PersistentSet` instances (typed as the JDK
+  interfaces). Build via `ConsList.empty()` + `cons` (then `reverse()` once
+  at the end if you accumulated in reverse), or `PersistentMap.empty()` + `insert`,
+  etc. Use `ConsList.fromList(input)`, `PersistentMap.coerce(input)`,
+  `PersistentSet.coerce(input)` to convert at boundaries — these are O(1) when
+  the input is already persistent.
+- **Sort scratch buffers may use ArrayList** — when an algorithm genuinely
+  needs O(1) random access (e.g. `Sort`, `SortOn`, `Transpose`), use
+  `ArrayList` as a scratch buffer and `ConsList.fromList(scratch)` for the
+  return value. Add a code comment noting the buffer's role.
+- **Ephemeral lookup-only `HashSet` is fine** — when a function uses a Set
+  purely for O(1) `contains` checks during iteration and never returns it
+  (e.g. `Nub`'s visited set), `HashSet` beats `PersistentSet`'s O(log n)
+  lookup. Local use only.
+
+The Java coder also emits these helpers automatically when lowering Hydra term-level
+list/map/set literals (see `_Term_list`/`_Term_map`/`_Term_set` rules in
+`packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs`), so
+generated code in `dist/java/` follows the same conventions.
 
 
 ## Adding a primitive to Python
