@@ -23,6 +23,19 @@ packages/hydra-lisp/bin/run-tests.sh common-lisp
 
 Set `HYDRA_BENCHMARK_OUTPUT` to a file path to produce benchmark JSON output.
 
+## Collections — known performance limitation
+
+Hydra-Common-Lisp's `lib/maps.lisp` represents maps as **alists** and
+`lib/sets.lisp` as **sorted lists**. Both give O(n) `insert`/`lookup`/
+`delete`, which makes inference-style workloads (lots of incremental
+inserts into the same map) quadratic in the map size. SBCL has native
+`hash-table` (and `make-hash-table :test 'equalp` works for the structural
+keys Hydra uses), so a CL persistent or amortized-O(1) map/set is
+straightforward — it has just not been done yet. The
+[Hydra-Java collection classes](../../hydra-java/README.md#collection-classes)
+section describes the analogous fix landed for Java in #359; the same
+principle applies here.
+
 ## See also
 
 - [Hydra-Lisp README](../README.md) — overview of all four Lisp dialects

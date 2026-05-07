@@ -23,6 +23,15 @@ packages/hydra-lisp/bin/run-tests.sh clojure
 
 Set `HYDRA_BENCHMARK_OUTPUT` to a file path to produce benchmark JSON output.
 
+## Collections
+
+Clojure's standard `cons`, hash-maps (`{}`), and hash-sets (`#{}`) are
+already persistent and structurally shared (HAMT-based for maps and sets,
+linked lists for sequences), so no custom collection helpers are needed —
+unlike Hydra-Java, which ships
+[`ConsList`/`PersistentMap`/`PersistentSet`](../../hydra-java/README.md#collection-classes)
+to recover those semantics from the JDK.
+
 ## See also
 
 - [Hydra-Lisp README](../README.md) — overview of all four Lisp dialects
