@@ -130,7 +130,9 @@ In 0.15, Hydra's Java code is split across three locations
   — hand-written Java runtime
   - `hydra/lib/` — primitive function implementations
   - `hydra/dsl/` — Java DSL (Terms, Types, Expect, ...)
-  - `hydra/util/` — core utilities (Either, Maybe, Pair, Lazy) and internal collection classes
+  - `hydra/util/` — core utilities (Either, Maybe, Pair, Lazy) plus the
+    persistent collection helpers `ConsList` / `PersistentMap` / `PersistentSet`
+    (see [Collection classes](#collection-classes) under design notes)
   - `hydra/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
 
 - **Generated Java kernel** ([`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java))
@@ -235,6 +237,42 @@ for the complete class, as well as the `Vertex` type in
 for comparison.
 Both files were generated from the property graph model defined
 [here](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-pg/src/main/haskell/Hydra/Sources/Pg/Model.hs).
+
+### Collection classes
+
+Hydra's term-level lists, maps, and sets get persistent (immutable,
+structurally-shared) implementations under `hydra.util`:
+
+- `ConsList<T>` — singly-linked list with O(1) `cons` and tail sharing,
+  matching Haskell's `[a]`.
+- `PersistentMap<K, V>` — ordered red-black tree map with O(log n) insert,
+  delete, and union, matching `Data.Map` in Haskell. Iteration is sorted by
+  key. Keys must be `Comparable` at runtime.
+- `PersistentSet<T>` — wrapper over `PersistentMap`, matching `Data.Set`.
+
+These are the concrete instances behind the standard `java.util.List`,
+`java.util.Map`, and `java.util.Set` interfaces in generated kernel code:
+the kernel's API surfaces (POJO fields, primitive `apply` signatures, accessors)
+all expose the JDK interfaces, but the values flowing through them are persistent.
+This matches the Haskell semantics — every "incremental" operation
+(`cons`, `insert`, `delete`, `union`) returns a new collection that shares
+structure with the original instead of copying — so an O(n) Haskell algorithm
+runs in O(n) on the JVM instead of O(n²) (which is what naive
+`new ArrayList<>(old); old.add(x)` would yield).
+
+Two boundaries exist where plain JDK collections still appear:
+- **Internal sort scratch buffers** in algorithms that need O(1) random access
+  (e.g. `Sort`, `SortOn`, `Transpose`). These never escape the function and
+  return a `ConsList` to the caller.
+- **`LinkedHashMap` in JSON output** (`hydra.json.JsonEncoding.ObjectBuilder`),
+  to preserve insertion-order key emission. This is a deliberate user-visible
+  ordering choice, not a bug.
+
+The Java coder also emits these helpers automatically when lowering Hydra
+term-level list/map/set literals, so generated code in `dist/java/` is
+consistent with the runtime's choice. See `_Term_list`, `_Term_map`, and
+`_Term_set` in
+[Coder.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs).
 
 ### Union Types and Visitors
 
