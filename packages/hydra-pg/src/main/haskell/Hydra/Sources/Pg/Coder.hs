@@ -11,7 +11,7 @@ import Hydra.Kernel hiding (
   projectionAdapter, propertyAdapter, propertyTypes, selectEdgeId,
   selectVertexId, traverseToSingleTerm, vertexCoder, vertexIdAdapter)
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -677,7 +677,7 @@ traverseToSingleTerm = define "traverseToSingleTerm" $
           (Logic.ifElse (Equality.equal (Lists.length $ var "terms") (int32 1))
             (Maybes.maybe
               (err (var "cx") (var "desc" ++ string " resolved to multiple terms"))
-              (unaryFunction right)
+              (reify right)
               (Lists.maybeHead $ var "terms"))
             (err (var "cx") (var "desc" ++ string " resolved to multiple terms"))))
 

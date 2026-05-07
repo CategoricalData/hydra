@@ -1420,12 +1420,11 @@ safeDivide = "x" ~> "y" ~>
 
 ## Import conventions
 
-For the full import conventions (including the distinction between type modules, term modules,
-and test group modules), see the
-[Coding style](https://github.com/CategoricalData/hydra/wiki/Coding-style#import-conventions)
-wiki page. Each class of kernel module has a conventional import block that is copied verbatim
-into every source file of that class. When creating a new module, copy the import block from
-an existing module of the same kind.
+For the full import conventions — eight categories of source module, each with a canonical
+import block — see [docs/import-conventions.md](import-conventions.md). Each class of source
+module has a conventional import block that is copied verbatim into every source file of that
+class. When creating a new module, copy the import block from an existing module of the same
+kind.
 
 ## Application styles
 

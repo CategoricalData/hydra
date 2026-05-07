@@ -3,13 +3,14 @@
 -- | Test cases for dependency analysis and let-term transformations
 module Hydra.Sources.Test.Dependencies where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -21,7 +22,7 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Dependencies as DependenciesModule
+import qualified Hydra.Sources.Kernel.Terms.Dependencies as Dependencies
 import qualified Hydra.Dsl.Meta.Lib.Maps as Maps
 import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
@@ -34,7 +35,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, DependenciesModule.ns, TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Dependencies.ns, TestGraph.ns] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for dependency analysis and let-term transformations")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -42,18 +43,14 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- | Show a term as a string using ShowCore.term
 showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term # t
+showTerm t = ShowCore.term @@ t
 
 -- | Helper for Term -> Term kernel function test cases
 termCase :: String -> TTermDefinition (Term -> Term) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-termCase cname func input output = universalCase cname (showTerm (func # input)) (showTerm output)
+termCase cname func input output = universalCase cname (showTerm (func @@ input)) (showTerm output)
 
 -- Helper to build names
 nm :: String -> TTerm Name
@@ -64,8 +61,6 @@ letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper for multi-binding let
-multiLet :: [(String, TTerm Term)] -> TTerm Term -> TTerm Term
-multiLet bindings body = lets ((\(n, v) -> (nm n, v)) <$> bindings) body
 
 -- Helper to build an empty annotation map
 emptyAnnMap :: TTerm (M.Map Name Term)
@@ -74,30 +69,30 @@ emptyAnnMap = Phantoms.map M.empty
 -- | Universal sortBindingsCase: applies topologicalSortBindingMap and shows result
 sortBindingsCase :: String -> TTerm [(Name, Term)] -> TTerm [[(Name, Term)]] -> TTerm TestCaseWithMetadata
 sortBindingsCase cname bindings expected = universalCase cname
-  (showBindingGroups (DependenciesModule.topologicalSortBindingMap # Maps.fromList bindings))
+  (showBindingGroups (Dependencies.topologicalSortBindingMap @@ Maps.fromList bindings))
   (showBindingGroups expected)
   where
     showBindingGroups :: TTerm [[(Name, Term)]] -> TTerm String
-    showBindingGroups groups = ShowCore.list_ # showGroupFn # groups
+    showBindingGroups groups = ShowCore.list_ @@ showGroupFn @@ groups
     showGroupFn :: TTerm ([(Name, Term)] -> String)
-    showGroupFn = Phantoms.lambda "group" $ ShowCore.list_ # showBindingFn # Phantoms.var "group"
+    showGroupFn = Phantoms.lambda "group" $ ShowCore.list_ @@ showBindingFn @@ Phantoms.var "group"
     showBindingFn :: TTerm ((Name, Term) -> String)
     showBindingFn = Phantoms.lambda "pair" $ Strings.cat (Phantoms.list [
       Phantoms.string "(",
       Core.unName (Pairs.first (Phantoms.var "pair")),
       Phantoms.string ", ",
-      ShowCore.term # Pairs.second (Phantoms.var "pair"),
+      ShowCore.term @@ Pairs.second (Phantoms.var "pair"),
       Phantoms.string ")"])
 
 -- | Convenience helpers for specific kernel functions
 flattenCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-flattenCase cname = termCase cname DependenciesModule.flattenLetTerms
+flattenCase cname = termCase cname Dependencies.flattenLetTerms
 
 liftLambdaCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-liftLambdaCase cname = termCase cname DependenciesModule.liftLambdaAboveLet
+liftLambdaCase cname = termCase cname Dependencies.liftLambdaAboveLet
 
 simplifyCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-simplifyCase cname = termCase cname DependenciesModule.simplifyTerm
+simplifyCase cname = termCase cname Dependencies.simplifyTerm
 
 -- | Test cases for term simplification (beta reduction)
 simplifyTermGroup :: TTerm TestGroup
@@ -141,50 +136,50 @@ flattenLetTermsGroup = subgroup "flattenLetTerms" [
       (letExpr "x" (int32 1)
         (letExpr "y" (int32 2)
           (list [var "x", var "y"])))
-      (multiLet [("x", int32 1), ("y", int32 2)]
+      (lets [(nm "x", int32 1), (nm "y", int32 2)]
         (list [var "x", var "y"])),
 
     -- Nested bindings are flattened with prefix renaming
     -- Dependencies come BEFORE bindings that use them (important for hoisting)
     flattenCase "nested binding in let value is flattened"
       -- let a = 1; b = (let x = 1; y = 2 in [x, y]) in [a, b]
-      (multiLet [
-        ("a", int32 1),
-        ("b", multiLet [("x", int32 1), ("y", int32 2)]
+      (lets [
+        (nm "a", int32 1),
+        (nm "b", lets [(nm "x", int32 1), (nm "y", int32 2)]
                 (list [var "x", var "y"]))]
         (list [var "a", var "b"]))
       -- let a = 1; b_x = 1; b_y = 2; b = [b_x, b_y] in [a, b]
       -- Note: dependencies (b_x, b_y) come before b
-      (multiLet [
-        ("a", int32 1),
-        ("b_x", int32 1),
-        ("b_y", int32 2),
-        ("b", list [var "b_x", var "b_y"])]
+      (lets [
+        (nm "a", int32 1),
+        (nm "b_x", int32 1),
+        (nm "b_y", int32 2),
+        (nm "b", list [var "b_x", var "b_y"])]
         (list [var "a", var "b"])),
 
     -- Multiple levels of nesting
     -- Dependencies come BEFORE bindings that use them (important for hoisting)
     flattenCase "multiple levels of nesting are flattened"
       -- let a = 1; b = (let x = 1; y = (let p = 137; q = [x, 5] in [a, q]) in [x, y]) in [a, b]
-      (multiLet [
-        ("a", int32 1),
-        ("b", multiLet [
-          ("x", int32 1),
-          ("y", multiLet [
-            ("p", int32 137),
-            ("q", list [var "x", int32 5])]
+      (lets [
+        (nm "a", int32 1),
+        (nm "b", lets [
+          (nm "x", int32 1),
+          (nm "y", lets [
+            (nm "p", int32 137),
+            (nm "q", list [var "x", int32 5])]
             (list [var "a", var "q"]))]
           (list [var "x", var "y"]))]
         (list [var "a", var "b"]))
       -- Flattened with proper prefixes
       -- Order: a, then b's deps (b_x, b_y's deps (b_y_p, b_y_q), b_y), then b
-      (multiLet [
-        ("a", int32 1),
-        ("b_x", int32 1),
-        ("b_y_p", int32 137),
-        ("b_y_q", list [var "b_x", int32 5]),
-        ("b_y", list [var "a", var "b_y_q"]),
-        ("b", list [var "b_x", var "b_y"])]
+      (lets [
+        (nm "a", int32 1),
+        (nm "b_x", int32 1),
+        (nm "b_y_p", int32 137),
+        (nm "b_y_q", list [var "b_x", int32 5]),
+        (nm "b_y", list [var "a", var "b_y_q"]),
+        (nm "b", list [var "b_x", var "b_y"])]
         (list [var "a", var "b"]))]
 
 -- | Test cases for lifting lambda above let
@@ -226,16 +221,16 @@ liftLambdaAboveLetGroup = subgroup "liftLambdaAboveLet" [
 
     -- Multiple bindings and nested lets
     liftLambdaCase "let without lambda in body unchanged"
-      (multiLet [("x", int32 42), ("y", string "hello")]
+      (lets [(nm "x", int32 42), (nm "y", string "hello")]
         (pair (var "x") (var "y")))
-      (multiLet [("x", int32 42), ("y", string "hello")]
+      (lets [(nm "x", int32 42), (nm "y", string "hello")]
         (pair (var "x") (var "y"))),
 
     liftLambdaCase "multiple let bindings with lambda"
-      (multiLet [("x", int32 42), ("y", string "hello")]
+      (lets [(nm "x", int32 42), (nm "y", string "hello")]
         (lambda "z" (var "x")))
       (lambda "z"
-        (multiLet [("x", int32 42), ("y", string "hello")]
+        (lets [(nm "x", int32 42), (nm "y", string "hello")]
           (var "x"))),
 
     liftLambdaCase "nested lets with lambda at innermost level"
@@ -281,37 +276,37 @@ liftLambdaAboveLetGroup = subgroup "liftLambdaAboveLet" [
 
     -- Annotation cases
     liftLambdaCase "annotation above let containing lambda"
-      (annot emptyAnnMap
+      (annots emptyAnnMap
         (letExpr "x" (int32 42) (lambda "y" (var "x"))))
-      (annot emptyAnnMap
+      (annots emptyAnnMap
         (lambda "y" (letExpr "x" (int32 42) (var "x")))),
 
     liftLambdaCase "annotation above lambda in let body"
       (letExpr "x" (int32 42)
-        (annot emptyAnnMap (lambda "y" (var "x"))))
+        (annots emptyAnnMap (lambda "y" (var "x"))))
       (lambda "y"
-        (annot emptyAnnMap (letExpr "x" (int32 42) (var "x")))),
+        (annots emptyAnnMap (letExpr "x" (int32 42) (var "x")))),
 
     liftLambdaCase "annotation between two lambdas"
       (letExpr "x" (int32 42)
         (lambda "y"
-          (annot emptyAnnMap (lambda "z" (var "x")))))
+          (annots emptyAnnMap (lambda "z" (var "x")))))
       (lambda "y"
         (lambda "z"
-          (annot emptyAnnMap (letExpr "x" (int32 42) (var "x"))))),
+          (annots emptyAnnMap (letExpr "x" (int32 42) (var "x"))))),
 
     liftLambdaCase "annotation on the body of lambda in let"
       (letExpr "x" (int32 42)
         (lambda "y"
-          (annot emptyAnnMap (var "x"))))
+          (annots emptyAnnMap (var "x"))))
       (lambda "y"
         (letExpr "x" (int32 42)
-          (annot emptyAnnMap (var "x")))),
+          (annots emptyAnnMap (var "x")))),
 
     liftLambdaCase "annotation on lambda already above let"
-      (annot emptyAnnMap
+      (annots emptyAnnMap
         (lambda "y" (letExpr "x" (int32 42) (var "x"))))
-      (annot emptyAnnMap
+      (annots emptyAnnMap
         (lambda "y" (letExpr "x" (int32 42) (var "x")))),
 
     -- Recursive lifting in nested structures

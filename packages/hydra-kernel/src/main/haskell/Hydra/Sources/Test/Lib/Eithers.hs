@@ -2,13 +2,14 @@
 
 module Hydra.Sources.Test.Lib.Eithers where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -41,9 +42,6 @@ module_ = Module {
   where
     definitions = [Phantoms.toDefinition allTests]
 
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- Show functions
 
@@ -57,28 +55,28 @@ showStr :: TTerm (String -> String)
 showStr = Phantoms.lambda "s" $ Literals.showString (Phantoms.var "s")
 
 showIntList :: TTerm ([Int] -> String)
-showIntList = Phantoms.lambda "xs" $ ShowCore.list_ # showInt32 # Phantoms.var "xs"
+showIntList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showInt32 @@ Phantoms.var "xs"
 
 showStrList :: TTerm ([String] -> String)
-showStrList = Phantoms.lambda "xs" $ ShowCore.list_ # showStr # Phantoms.var "xs"
+showStrList = Phantoms.lambda "xs" $ ShowCore.list_ @@ showStr @@ Phantoms.var "xs"
 
 showEitherIntString :: TTerm (Either Int String -> String)
-showEitherIntString = Phantoms.lambda "e" $ ShowCore.either_ # showInt32 # showStr # Phantoms.var "e"
+showEitherIntString = Phantoms.lambda "e" $ ShowCore.either_ @@ showInt32 @@ showStr @@ Phantoms.var "e"
 
 showEitherIntInt :: TTerm (Either Int Int -> String)
-showEitherIntInt = Phantoms.lambda "e" $ ShowCore.either_ # showInt32 # showInt32 # Phantoms.var "e"
+showEitherIntInt = Phantoms.lambda "e" $ ShowCore.either_ @@ showInt32 @@ showInt32 @@ Phantoms.var "e"
 
 showEitherStringIntList :: TTerm (Either String [Int] -> String)
-showEitherStringIntList = Phantoms.lambda "e" $ ShowCore.either_ # showStr # showIntList # Phantoms.var "e"
+showEitherStringIntList = Phantoms.lambda "e" $ ShowCore.either_ @@ showStr @@ showIntList @@ Phantoms.var "e"
 
 showEitherStringMaybeInt :: TTerm (Either String (Maybe Int) -> String)
-showEitherStringMaybeInt = Phantoms.lambda "e" $ ShowCore.either_ # showStr # showMaybeInt # Phantoms.var "e"
+showEitherStringMaybeInt = Phantoms.lambda "e" $ ShowCore.either_ @@ showStr @@ showMaybeInt @@ Phantoms.var "e"
 
 showMaybeInt :: TTerm (Maybe Int -> String)
-showMaybeInt = Phantoms.lambda "mx" $ ShowCore.maybe_ # showInt32 # Phantoms.var "mx"
+showMaybeInt = Phantoms.lambda "mx" $ ShowCore.maybe_ @@ showInt32 @@ Phantoms.var "mx"
 
 showPairIntListStringList :: TTerm (([Int], [String]) -> String)
-showPairIntListStringList = Phantoms.lambda "p" $ ShowCore.pair_ # showIntList # showStrList # Phantoms.var "p"
+showPairIntListStringList = Phantoms.lambda "p" $ ShowCore.pair_ @@ showIntList @@ showStrList @@ Phantoms.var "p"
 
 -- Phantom-typed helpers
 

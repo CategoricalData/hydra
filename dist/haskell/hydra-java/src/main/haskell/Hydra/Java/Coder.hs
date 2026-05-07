@@ -229,6 +229,7 @@ augmentVariantClass aliases tparams elName cd =
           Syntax.normalClassDeclarationParameters = tparams,
           Syntax.normalClassDeclarationExtends = (Just extendsPart),
           Syntax.normalClassDeclarationImplements = (Syntax.normalClassDeclarationImplements v0),
+          Syntax.normalClassDeclarationPermits = (Syntax.normalClassDeclarationPermits v0),
           Syntax.normalClassDeclarationBody = newBody}))
       _ -> cd
 bindingIsFunctionType :: Core.Binding -> Bool
@@ -629,16 +630,17 @@ constructElementsInterface mod members =
           elName = elementsQualifiedName ns
           body = Syntax.InterfaceBody members
           itf =
-                  Syntax.TypeDeclarationInterface (Syntax.InterfaceDeclarationNormalInterface (Syntax.NormalInterfaceDeclaration {
+                  Syntax.TopLevelClassOrInterfaceDeclarationInterface (Syntax.InterfaceDeclarationNormalInterface (Syntax.NormalInterfaceDeclaration {
                     Syntax.normalInterfaceDeclarationModifiers = mods,
                     Syntax.normalInterfaceDeclarationIdentifier = (Utils.javaTypeIdentifier className),
                     Syntax.normalInterfaceDeclarationParameters = [],
                     Syntax.normalInterfaceDeclarationExtends = [],
+                    Syntax.normalInterfaceDeclarationPermits = [],
                     Syntax.normalInterfaceDeclarationBody = body}))
           decl =
-                  Syntax.TypeDeclarationWithComments {
-                    Syntax.typeDeclarationWithCommentsValue = itf,
-                    Syntax.typeDeclarationWithCommentsComments = (Packaging.moduleDescription mod)}
+                  Syntax.TopLevelClassOrInterfaceDeclarationWithComments {
+                    Syntax.topLevelClassOrInterfaceDeclarationWithCommentsValue = itf,
+                    Syntax.topLevelClassOrInterfaceDeclarationWithCommentsComments = (Packaging.moduleDescription mod)}
       in (
         elName,
         (Syntax.CompilationUnitOrdinary (Syntax.OrdinaryCompilationUnit {
@@ -698,7 +700,7 @@ declarationForRecordType isInner isSer aliases tparams elName fields cx g =
 declarationForRecordType_ :: Bool -> Bool -> JavaEnvironment.Aliases -> [Syntax.TypeParameter] -> Core.Name -> Maybe Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.ClassDeclaration
 declarationForRecordType_ isInner isSer aliases tparams elName parentName fields cx g =
     Eithers.bind (Eithers.mapList (\f -> recordMemberVar aliases f cx g) fields) (\memberVars -> Eithers.bind (Eithers.mapList (\p -> addComment (Pairs.first p) (Pairs.second p) cx g) (Lists.zip memberVars fields)) (\memberVars_ ->
-      let elNameStr = Core.unName elName
+      let elNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases elName)
       in (Eithers.bind (Logic.ifElse (Equality.gt (Lists.length fields) 1) (Eithers.mapList (\f -> Eithers.bind (recordWithMethod aliases elName fields f cx g) (\decl ->
         let fname = Core.unName (Core.fieldTypeName f)
             comment =
@@ -765,14 +767,14 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
             acceptDecl = Utils.toAcceptMethod True tparams
             vtparams = Lists.concat2 tparams [
                   Utils.javaTypeParameter JavaNames.visitorReturnParameter]
-            elNameStr = Core.unName elName
+            elNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases elName)
             visitorMethods =
                     Lists.map (\ft ->
                       let fname = Core.fieldTypeName ft
                           fnameStr = Core.unName fname
                           typeArgs = Lists.map (\tp -> Utils.typeParameterToTypeArgument tp) tparams
                           varName = Utils.variantClassName False elName fname
-                          varNameStr = Core.unName varName
+                          varNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases varName)
                           varRef = Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs varName Nothing)
                           param = Utils.javaTypeToJavaFormalParameter varRef (Core.Name "instance")
                           resultR = Utils.javaTypeToJavaResult (Syntax.TypeReference Utils.visitorTypeVariable)
@@ -792,6 +794,7 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
                       Syntax.normalInterfaceDeclarationIdentifier = (Syntax.TypeIdentifier (Syntax.Identifier JavaNames.visitorName)),
                       Syntax.normalInterfaceDeclarationParameters = vtparams,
                       Syntax.normalInterfaceDeclarationExtends = [],
+                      Syntax.normalInterfaceDeclarationPermits = [],
                       Syntax.normalInterfaceDeclarationBody = visitorBody})
             typeArgs = Lists.map (\tp -> Utils.typeParameterToTypeArgument tp) tparams
             visitorClassType =
@@ -816,7 +819,7 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
                     Lists.map (\ft ->
                       let fname = Core.fieldTypeName ft
                           varName = Utils.variantClassName False elName fname
-                          varNameStr = Core.unName varName
+                          varNameStr = Syntax.unIdentifier (Utils.nameToJavaName aliases varName)
                           varRef = Utils.javaClassTypeToJavaType (Utils.nameToJavaClassType aliases False typeArgs varName Nothing)
                           param = Utils.javaTypeToJavaFormalParameter varRef (Core.Name "instance")
                           mi =
@@ -844,6 +847,7 @@ declarationForUnionType isSer aliases tparams elName fields cx g =
                       Syntax.normalInterfaceDeclarationParameters = vtparams,
                       Syntax.normalInterfaceDeclarationExtends = [
                         Syntax.InterfaceType visitorClassType],
+                      Syntax.normalInterfaceDeclarationPermits = [],
                       Syntax.normalInterfaceDeclarationBody = pvBody})
         in (Eithers.bind (constantDeclForTypeName aliases elName cx g) (\tn0 -> Eithers.bind (Eithers.mapList (\ft -> constantDeclForFieldType elName aliases ft cx g) fields) (\tn1 ->
           let tn = Lists.concat2 [
@@ -1745,9 +1749,9 @@ encodeTypeDefinition pkg aliases tdef cx g =
                     Syntax.ImportDeclarationSingleType (Syntax.SingleTypeImportDeclaration (Utils.javaTypeName (Syntax.Identifier "java.io.Serializable")))] []
       in (Eithers.bind (toClassDecl False serializable aliases [] name typ cx g) (\decl -> Eithers.bind (Annotations.getTypeDescription cx g typ) (\comment ->
         let tdecl =
-                Syntax.TypeDeclarationWithComments {
-                  Syntax.typeDeclarationWithCommentsValue = (Syntax.TypeDeclarationClass decl),
-                  Syntax.typeDeclarationWithCommentsComments = comment}
+                Syntax.TopLevelClassOrInterfaceDeclarationWithComments {
+                  Syntax.topLevelClassOrInterfaceDeclarationWithCommentsValue = (Syntax.TopLevelClassOrInterfaceDeclarationClass decl),
+                  Syntax.topLevelClassOrInterfaceDeclarationWithCommentsComments = comment}
         in (Right (
           name,
           (Syntax.CompilationUnitOrdinary (Syntax.OrdinaryCompilationUnit {

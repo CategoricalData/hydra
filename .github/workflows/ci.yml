@@ -63,7 +63,7 @@ jobs:
         run: |
           for pkg in hydra-pg hydra-rdf hydra-ext; do
             for tgt in java python; do
-              bin/sync-packages.sh "$pkg" --target "$tgt" --no-tests
+              bin/sync-packages.sh "$pkg" --targets "$tgt" --no-tests
             done
           done
       - name: Fail if committed dist/json or dist/haskell differs from regenerated

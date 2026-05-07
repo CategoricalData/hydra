@@ -23,7 +23,7 @@ import qualified Hydra.Dsl.Meta.Lib.Math     as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs    as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets     as Sets
-import           Hydra.Dsl.Meta.Lib.Strings  as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings  as Strings
 import qualified Hydra.Dsl.Literals          as Literals
 import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
@@ -122,7 +122,7 @@ termToSubtermGraph = define "termToSubtermGraph" $
         _Term_let>>: lambda "letExpr" $ lets [
           "bindings">: Core.letBindings $ var "letExpr",
           "env">: Core.letBody $ var "letExpr",
-          "bindingNames">: Lists.map (unaryFunction Core.bindingName) (var "bindings"),
+          "bindingNames">: Lists.map (reify Core.bindingName) (var "bindings"),
           -- First fold: build nodes and update ids for each binding name
           "addBindingName">: lambdas ["nodesVisitedIds", "name"] $ lets [
             "currentNodesVisited">: Pairs.first $ var "nodesVisitedIds",

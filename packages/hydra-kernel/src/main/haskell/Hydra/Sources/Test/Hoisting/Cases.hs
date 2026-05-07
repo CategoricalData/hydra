@@ -4,14 +4,15 @@
 
 module Hydra.Sources.Test.Hoisting.Cases where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing hiding (
   hoistPredicateNothing, hoistPredicateLists, hoistPredicateApplications, hoistPredicateCaseStatements)
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestGraph as TestGraph
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
@@ -24,7 +25,7 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
 
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
-import qualified Hydra.Sources.Kernel.Terms.Hoisting as HoistingModule
+import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 
@@ -35,7 +36,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, HoistingModule.ns, Lexical.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [ShowCore.ns, Hoisting.ns, Lexical.ns] ++ kernelTypesNamespaces,
             moduleDescription = Just "Test cases for subterm hoisting and case statement hoisting"}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -55,14 +56,10 @@ nm s = Core.name $ Phantoms.string s
 emptyAnnMap :: TTerm (M.Map Name Term)
 emptyAnnMap = Phantoms.map M.empty
 
--- Local alias for polymorphic application (Phantoms.@@ applies TBindings; Terms.@@ only works on TTerm Term)
-(#) :: (AsTerm f (a -> b), AsTerm g a) => f -> g -> TTerm b
-(#) = (Phantoms.@@)
-infixl 1 #
 
 -- | Show a term as a string using ShowCore.term
 showTerm :: TTerm Term -> TTerm String
-showTerm t = ShowCore.term # t
+showTerm t = ShowCore.term @@ t
 
 -- Field constructor for cases/match (Phantoms.>>: creates Field; unqualified >>: from Testing creates tuples)
 (~>:) :: AsTerm t a => Name -> t -> Field
@@ -94,13 +91,13 @@ hoistPredicateCaseStatements = Phantoms.lambda "pt" $
 -- | Universal hoistSubterms test case
 hoistCase :: String -> TTerm (([SubtermStep], Term) -> Bool) -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 hoistCase cname predicate input output = universalCase cname
-  (showTerm (HoistingModule.hoistSubterms # predicate # Lexical.emptyGraph # input))
+  (showTerm (Hoisting.hoistSubterms @@ predicate @@ Lexical.emptyGraph @@ input))
   (showTerm output)
 
 -- | Local universal version of hoistCaseStatementsCase
 hoistCaseStatementsCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
 hoistCaseStatementsCase cname input output = universalCase cname
-  (showTerm (HoistingModule.hoistCaseStatements # Lexical.emptyGraph # input))
+  (showTerm (Hoisting.hoistCaseStatements @@ Lexical.emptyGraph @@ input))
   (showTerm output)
 
 -- Helper for single-binding let
@@ -108,8 +105,6 @@ letExpr :: String -> TTerm Term -> TTerm Term -> TTerm Term
 letExpr varName value body = lets [(nm varName, value)] body
 
 -- Helper for multi-binding let
-multiLet :: [(String, TTerm Term)] -> TTerm Term -> TTerm Term
-multiLet bindings body = lets ((\(n, v) -> (nm n, v)) <$> bindings) body
 
 -- | Test cases for hoistSubterms
 -- This function hoists subterms matching a predicate into local let bindings.
@@ -168,9 +163,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
                                          (list [int32 3, int32 4])))
       -- Output: body is wrapped in local let with both hoisted lists
       (letExpr "x" (int32 1)
-        (multiLet [
-          ("_hoist_x_body_1", list [int32 1, int32 2]),
-          ("_hoist_x_body_2", list [int32 3, int32 4])]
+        (lets [
+          (nm "_hoist_x_body_1", list [int32 1, int32 2]),
+          (nm "_hoist_x_body_2", list [int32 3, int32 4])]
           (apply (apply (var "pair") (var "_hoist_x_body_1")) (var "_hoist_x_body_2")))),
 
     hoistCase "hoistLists: list in binding value is hoisted into local let"
@@ -190,9 +185,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (apply (var "f") (list [list [int32 1, int32 2], int32 3])))
       -- Output: inner list hoisted first, then outer list
       (letExpr "x" (int32 1)
-        (multiLet [
-          ("_hoist_x_body_1", list [int32 1, int32 2]),
-          ("_hoist_x_body_2", list [var "_hoist_x_body_1", int32 3])]
+        (lets [
+          (nm "_hoist_x_body_1", list [int32 1, int32 2]),
+          (nm "_hoist_x_body_2", list [var "_hoist_x_body_1", int32 3])]
           (apply (var "f") (var "_hoist_x_body_2")))),
 
     -- ============================================================
@@ -227,9 +222,9 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
         (list [apply (var "f") (apply (var "g") (var "x"))]))
       -- Output: inner application hoisted first, then outer
       (letExpr "x" (int32 1)
-        (multiLet [
-          ("_hoist_x_body_1", apply (var "g") (var "x")),
-          ("_hoist_x_body_2", apply (var "f") (var "_hoist_x_body_1"))]
+        (lets [
+          (nm "_hoist_x_body_1", apply (var "g") (var "x")),
+          (nm "_hoist_x_body_2", apply (var "f") (var "_hoist_x_body_1"))]
           (list [var "_hoist_x_body_2"]))),
 
     -- ============================================================
@@ -400,15 +395,15 @@ hoistSubtermsGroup = subgroup "hoistSubterms" [
     hoistCase "hoistLists: stable naming for multiple bindings"
       hoistPredicateLists
       -- Input: let x = f [1]; y = g [2] in x
-      (multiLet [
-        ("x", apply (var "f") (list [int32 1])),
-        ("y", apply (var "g") (list [int32 2]))]
+      (lets [
+        (nm "x", apply (var "f") (list [int32 1])),
+        (nm "y", apply (var "g") (list [int32 2]))]
         (var "x"))
       -- Output: each binding uses its own name as prefix (_hoist_x_1, _hoist_y_1)
-      (multiLet [
-        ("x", letExpr "_hoist_x_1" (list [int32 1])
+      (lets [
+        (nm "x", letExpr "_hoist_x_1" (list [int32 1])
                 (apply (var "f") (var "_hoist_x_1"))),
-        ("y", letExpr "_hoist_y_1" (list [int32 2])
+        (nm "y", letExpr "_hoist_y_1" (list [int32 2])
                 (apply (var "g") (var "_hoist_y_1")))]
         (var "x")),
 
@@ -536,14 +531,14 @@ hoistCaseStatementsGroup = subgroup "hoistCaseStatements" [
       -- Input: let f = @ann (match Optional with ...) in f
       -- The case is wrapped in annotation - annotations are transparent
       (letExpr "f"
-        (annot emptyAnnMap
+        (annots emptyAnnMap
           (match (nm "Optional") nothing
             [(nm "just", lambda "y" (var "y")),
              (nm "nothing", int32 0)]))
         (var "f"))
       -- Output: unchanged - case is at top level (through annotation)
       (letExpr "f"
-        (annot emptyAnnMap
+        (annots emptyAnnMap
           (match (nm "Optional") nothing
             [(nm "just", lambda "y" (var "y")),
              (nm "nothing", int32 0)]))

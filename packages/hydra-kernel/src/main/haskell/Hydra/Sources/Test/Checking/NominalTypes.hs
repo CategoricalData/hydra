@@ -2,7 +2,7 @@
 -- | Nominal type checking test cases: records, unions, wrapped terms, and eliminations (projections, case statements, unwrapping)
 module Hydra.Sources.Test.Checking.NominalTypes where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for term-encoded tests
 import Hydra.Kernel
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms

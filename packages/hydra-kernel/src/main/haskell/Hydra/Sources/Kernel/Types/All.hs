@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Types.Core        as Core
 import qualified Hydra.Sources.Kernel.Types.Error.Checking as ErrorChecking
 import qualified Hydra.Sources.Kernel.Types.Error.Core     as ErrorCore
 import qualified Hydra.Sources.Kernel.Types.Error.Packaging as ErrorPackaging
-import qualified Hydra.Sources.Kernel.Types.Errors      as Errors
+import qualified Hydra.Sources.Kernel.Types.Errors     as Error
 import qualified Hydra.Sources.Kernel.Types.Graph       as Graph
 import qualified Hydra.Sources.Json.Model               as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Variants    as Variants
@@ -40,7 +40,7 @@ kernelTypesModules = [
   ErrorChecking.module_,
   ErrorCore.module_,
   ErrorPackaging.module_,
-  Errors.module_,
+  Error.module_,
   Graph.module_,
   JsonModel.module_,
   Packaging.module_,
