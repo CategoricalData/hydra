@@ -34,7 +34,8 @@ keys Hydra uses), so a CL persistent or amortized-O(1) map/set is
 straightforward — it has just not been done yet. The
 [Hydra-Java collection classes](../../hydra-java/README.md#collection-classes)
 section describes the analogous fix landed for Java in #359; the same
-principle applies here.
+principle applies here. This will be tracked in a follow-up issue, and
+this section will be updated when the work lands.
 
 ## See also
 

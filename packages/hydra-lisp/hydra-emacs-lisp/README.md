@@ -72,7 +72,8 @@ equality (`make-hash-table :test 'equal`), so a hash-table-based map/set
 would be straightforward. Not done yet. The
 [Hydra-Java collection classes](../../hydra-java/README.md#collection-classes)
 section describes the analogous fix landed for Java in #359; the same
-principle applies here.
+principle applies here. This will be tracked in a follow-up issue, and
+this section will be updated when the work lands.
 
 ### Hand-written files (in `heads/lisp/emacs-lisp/`)
 
