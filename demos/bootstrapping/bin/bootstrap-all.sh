@@ -131,6 +131,27 @@ for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
 done
 
 # ============================================================
+# Pre-sync: ensure dist/<lang>/ has every package the demo will need
+# ============================================================
+#
+# Each per-cell setup script (setup-<target>-target.sh) and host invoker
+# (invoke-<host>-host.sh) used to do its own on-demand assembly via 5-7
+# duplicated bash loops calling heads/<lang>/bin/assemble-distribution.sh
+# (audit flaw F8). That logic is now centralized here: one bin/sync.sh call
+# covers the (host, target) matrix from --hosts/--targets, and per-package
+# digest caching makes warm runs near-instant.
+#
+# The sync invocation derives package×target combinations from --hosts and
+# --targets (see bin/sync.sh's docstring for the matrix definition). For
+# the bootstrap demo's own logic, only the kernel + per-target coders are
+# needed; pg/rdf/ext are no longer in scope (the rollup-everything design
+# in hydra-java's build was retired in #309's bindings refactor).
+echo ""
+echo "[Pre-sync] Ensuring dist/ is fresh for the selected hosts × targets..."
+"$HYDRA_ROOT/bin/sync.sh" --hosts "$HOSTS" --targets "$TARGETS" --no-tests
+echo ""
+
+# ============================================================
 # Environment checks
 # ============================================================
 

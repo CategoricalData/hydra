@@ -1,0 +1,146 @@
+// Hydra binding for Neo4j openCypher and GQL: provides ANTLR-based parsers for
+// Cypher and GQL queries, plus utilities to convert parsed Cypher to Hydra's
+// pg.query model. Pure handwritten Java; not part of the DSL pipeline.
+//
+// The ANTLR plugin generates lexers/parsers from the .g4 grammars at build time:
+//   src/main/antlr/org/neo4j/Cypher.g4 → org.neo4j.{CypherLexer, CypherParser}
+//   src/main/antlr/org/neo4j/GQL.g4    → org.neo4j.{GQLLexer, GQLParser}
+//
+// Depends on hydra-pg (consumed by FromCypher to build pg.query values).
+
+// nmcp publish plugins (Sonatype Central Portal) require Java 17 to load.
+// We apply them conditionally so the build still loads under Java 11 (for
+// compile/test). When running on Java 17+, publish tasks become available.
+buildscript {
+    repositories { mavenCentral() }
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+        dependencies {
+            classpath 'com.gradleup.nmcp:nmcp:1.4.4'
+        }
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'antlr'
+    id 'maven-publish'
+    id 'signing'
+}
+
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+    apply plugin: 'com.gradleup.nmcp'
+    apply plugin: 'com.gradleup.nmcp.aggregation'
+}
+
+group = 'net.fortytwo.hydra'
+version = '0.16.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    withSourcesJar()
+    withJavadocJar()
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+// Wire ANTLR-generated sources into the main Java source set. The plugin
+// emits to build/generated-src/antlr/main but doesn't always wire that into
+// sourceSets.main.java automatically depending on the plugin/Gradle version.
+sourceSets {
+    main {
+        java {
+            srcDir file("${buildDir}/generated-src/antlr/main")
+        }
+    }
+}
+
+compileJava.dependsOn generateGrammarSource
+
+dependencies {
+    // hydra-pg-dsl provides the static helpers (hydra.pg.dsl.Queries.{apply, query})
+    // that FromCypher uses to build hydra.pg.query values from parsed Cypher.
+    // It transitively pulls hydra-pg → hydra-kernel.
+    api 'net.fortytwo.hydra:hydra-pg-dsl:0.16.0'
+    api 'org.apache.commons:commons-text:1.10.0'
+    // ANTLR runtime is needed at compile + runtime; the antlr-tool dep is only
+    // used at build time to generate lexer/parser sources from the .g4 files.
+    api 'org.antlr:antlr4-runtime:4.13.2'
+    antlr 'org.antlr:antlr4:4.13.2'
+    if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+        nmcpAggregation project
+    }
+}
+
+// Generate ANTLR sources. Each grammar declares its own Java package via an
+// `@header { package ...; }` directive:
+//   src/main/antlr/org/neo4j/Cypher.g4 → org.neo4j.{CypherLexer, CypherParser}
+//   src/main/antlr/net/fortytwo/hydra/gql/parser/GQL.g4
+//     → net.fortytwo.hydra.gql.parser.{GQLLexer, GQLParser}
+// Cypher stays in org.neo4j (Neo4j is the openCypher project). GQL uses a
+// neutral Hydra-scoped namespace (GQL is ISO/IEC 39075:2024, not Neo4j-owned).
+generateGrammarSource {
+    arguments += ['-visitor']
+    outputDirectory = file("${buildDir}/generated-src/antlr/main")
+}
+
+// Skip tests for the standalone publish-focused build.
+tasks.matching { it.name in ['compileTestJava', 'test', 'processTestResources'] }.configureEach {
+    enabled = false
+}
+
+// sourcesJar duplicate handling — see bindings/java/hydra-rdf4j/build.gradle.
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'hydra-neo4j'
+            pom {
+                name = 'hydra-neo4j'
+                description = 'Hydra ↔ Neo4j openCypher / GQL binding: ANTLR-based parsers for Cypher and GQL, plus Cypher → hydra.pg.query conversion.'
+                url = 'https://github.com/CategoricalData/hydra'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'joshsh'
+                        name = 'Joshua Shinavier'
+                        email = 'josh@fortytwo.net'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/CategoricalData/hydra'
+                    connection = 'scm:git://github.com/CategoricalData/hydra.git'
+                    developerConnection = 'scm:git://github.com/CategoricalData/hydra.git'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    required { gradle.taskGraph.hasTask('publishAggregationToCentralPortal') ||
+                gradle.taskGraph.hasTask('publishToCentralPortal') }
+    sign publishing.publications.mavenJava
+}
+
+if (JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+    nmcpAggregation {
+        centralPortal {
+            username.set(providers.gradleProperty('sonatypeUsername'))
+            password.set(providers.gradleProperty('sonatypePassword'))
+            publishingType = 'USER_MANAGED'
+        }
+    }
+}

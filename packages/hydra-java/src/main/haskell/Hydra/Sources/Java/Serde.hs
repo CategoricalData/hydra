@@ -5,7 +5,7 @@ module Hydra.Sources.Java.Serde where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -417,9 +417,9 @@ typeParameterModifierToExpr = def "typeParameterModifierToExpr" $
     annotationToExpr @@ (unwrap Java._TypeParameterModifier @@ var "tpm")
 
 
-annotationTypeDeclarationToExpr :: TTermDefinition (Java.AnnotationTypeDeclaration -> Expr)
+annotationTypeDeclarationToExpr :: TTermDefinition (Java.AnnotationInterfaceDeclaration -> Expr)
 annotationTypeDeclarationToExpr = def "annotationTypeDeclarationToExpr" $
-  lambda "_" $ Serialization.cst @@ string "STUB:AnnotationTypeDeclaration"
+  lambda "_" $ Serialization.cst @@ string "STUB:AnnotationInterfaceDeclaration"
 
 arrayAccessToExpr :: TTermDefinition (Java.ArrayAccess -> Expr)
 arrayAccessToExpr = def "arrayAccessToExpr" $
@@ -649,7 +649,7 @@ interfaceDeclarationToExpr = def "interfaceDeclarationToExpr" $
   lambda "d" $
     cases Java._InterfaceDeclaration (var "d") Nothing [
       Java._InterfaceDeclaration_normalInterface>>: lambda "n" $ normalInterfaceDeclarationToExpr @@ var "n",
-      Java._InterfaceDeclaration_annotationType>>: lambda "a" $ annotationTypeDeclarationToExpr @@ var "a"]
+      Java._InterfaceDeclaration_annotationInterface>>: lambda "a" $ annotationTypeDeclarationToExpr @@ var "a"]
 
 castExpressionToExpr :: TTermDefinition (Java.CastExpression -> Expr)
 castExpressionToExpr = def "castExpressionToExpr" $
@@ -716,13 +716,13 @@ typeArgumentToExpr = def "typeArgumentToExpr" $
       Java._TypeArgument_reference>>: lambda "rt" $ referenceTypeToExpr @@ var "rt",
       Java._TypeArgument_wildcard>>: lambda "w" $ wildcardToExpr @@ var "w"]
 
-typeDeclarationToExpr :: TTermDefinition (Java.TypeDeclaration -> Expr)
+typeDeclarationToExpr :: TTermDefinition (Java.TopLevelClassOrInterfaceDeclaration -> Expr)
 typeDeclarationToExpr = def "typeDeclarationToExpr" $
   lambda "d" $
-    cases Java._TypeDeclaration (var "d") Nothing [
-      Java._TypeDeclaration_class>>: lambda "d" $ classDeclarationToExpr @@ var "d",
-      Java._TypeDeclaration_interface>>: lambda "d" $ interfaceDeclarationToExpr @@ var "d",
-      Java._TypeDeclaration_none>>: constant $ Serialization.cst @@ string ";"]
+    cases Java._TopLevelClassOrInterfaceDeclaration (var "d") Nothing [
+      Java._TopLevelClassOrInterfaceDeclaration_class>>: lambda "d" $ classDeclarationToExpr @@ var "d",
+      Java._TopLevelClassOrInterfaceDeclaration_interface>>: lambda "d" $ interfaceDeclarationToExpr @@ var "d",
+      Java._TopLevelClassOrInterfaceDeclaration_none>>: constant $ Serialization.cst @@ string ";"]
 
 primaryToExpr :: TTermDefinition (Java.Primary -> Expr)
 primaryToExpr = def "primaryToExpr" $
@@ -900,7 +900,7 @@ methodModifierToExpr = def "methodModifierToExpr" $
       Java._MethodModifier_final>>: constant $ Serialization.cst @@ string "final",
       Java._MethodModifier_synchronized>>: constant $ Serialization.cst @@ string "synchronized",
       Java._MethodModifier_native>>: constant $ Serialization.cst @@ string "native",
-      Java._MethodModifier_strictfb>>: constant $ Serialization.cst @@ string "strictfb"]
+      Java._MethodModifier_strictfp>>: constant $ Serialization.cst @@ string "strictfp"]
 
 constructorModifierToExpr :: TTermDefinition (Java.ConstructorModifier -> Expr)
 constructorModifierToExpr = def "constructorModifierToExpr" $
@@ -921,7 +921,7 @@ interfaceModifierToExpr = def "interfaceModifierToExpr" $
       Java._InterfaceModifier_private>>: constant $ Serialization.cst @@ string "private",
       Java._InterfaceModifier_abstract>>: constant $ Serialization.cst @@ string "abstract",
       Java._InterfaceModifier_static>>: constant $ Serialization.cst @@ string "static",
-      Java._InterfaceModifier_strictfb>>: constant $ Serialization.cst @@ string "strictfb"]
+      Java._InterfaceModifier_strictfp>>: constant $ Serialization.cst @@ string "strictfp"]
 
 interfaceMethodModifierToExpr :: TTermDefinition (Java.InterfaceMethodModifier -> Expr)
 interfaceMethodModifierToExpr = def "interfaceMethodModifierToExpr" $
@@ -1049,7 +1049,7 @@ relationalExpressionToExpr = def "relationalExpressionToExpr" $
       Java._RelationalExpression_greaterThan>>: lambda "gt" $ relationalExpressionGreaterThanToExpr @@ var "gt",
       Java._RelationalExpression_lessThanEqual>>: lambda "lte" $ relationalExpressionLessThanEqualToExpr @@ var "lte",
       Java._RelationalExpression_greaterThanEqual>>: lambda "gte" $ relationalExpressionGreaterThanEqualToExpr @@ var "gte",
-      Java._RelationalExpression_instanceof>>: lambda "i" $ relationalExpressionInstanceOfToExpr @@ var "i"]
+      Java._RelationalExpression_instanceofExpression>>: lambda "i" $ relationalExpressionInstanceOfToExpr @@ var "i"]
 
 relationalExpressionLessThanToExpr :: TTermDefinition (Java.RelationalExpression_LessThan -> Expr)
 relationalExpressionLessThanToExpr = def "relationalExpressionLessThanToExpr" $
@@ -1079,12 +1079,15 @@ relationalExpressionGreaterThanEqualToExpr = def "relationalExpressionGreaterTha
       (relationalExpressionToExpr @@ (project Java._RelationalExpression_GreaterThanEqual Java._RelationalExpression_GreaterThanEqual_lhs @@ var "gte")) @@
       (shiftExpressionToExpr @@ (project Java._RelationalExpression_GreaterThanEqual Java._RelationalExpression_GreaterThanEqual_rhs @@ var "gte"))
 
-relationalExpressionInstanceOfToExpr :: TTermDefinition (Java.RelationalExpression_InstanceOf -> Expr)
+relationalExpressionInstanceOfToExpr :: TTermDefinition (Java.InstanceofExpression -> Expr)
 relationalExpressionInstanceOfToExpr = def "relationalExpressionInstanceOfToExpr" $
   lambda "io" $
+    "rhsExpr" <~ (cases Java._InstanceofExpression_Rhs (project Java._InstanceofExpression Java._InstanceofExpression_rhs @@ var "io") Nothing [
+      Java._InstanceofExpression_Rhs_referenceType>>: lambda "rt" $ referenceTypeToExpr @@ var "rt",
+      Java._InstanceofExpression_Rhs_pattern>>: lambda "_" $ Serialization.cst @@ string "STUB:Pattern"]) $
     Serialization.infixWs @@ string "instanceof" @@
-      (relationalExpressionToExpr @@ (project Java._RelationalExpression_InstanceOf Java._RelationalExpression_InstanceOf_lhs @@ var "io")) @@
-      (referenceTypeToExpr @@ (project Java._RelationalExpression_InstanceOf Java._RelationalExpression_InstanceOf_rhs @@ var "io"))
+      (relationalExpressionToExpr @@ (project Java._InstanceofExpression Java._InstanceofExpression_lhs @@ var "io")) @@
+      (var "rhsExpr")
 
 shiftExpressionToExpr :: TTermDefinition (Java.ShiftExpression -> Expr)
 shiftExpressionToExpr = def "shiftExpressionToExpr" $
@@ -1188,7 +1191,11 @@ blockStatementToExpr = def "blockStatementToExpr" $
   lambda "s" $
     cases Java._BlockStatement (var "s") Nothing [
       Java._BlockStatement_localVariableDeclaration>>: lambda "d" $ localVariableDeclarationStatementToExpr @@ var "d",
-      Java._BlockStatement_class>>: lambda "cd" $ classDeclarationToExpr @@ var "cd",
+      Java._BlockStatement_localClassOrInterface>>: lambda "lcid" $
+        cases Java._LocalClassOrInterfaceDeclaration (var "lcid") Nothing [
+          Java._LocalClassOrInterfaceDeclaration_class>>: lambda "cd" $ classDeclarationToExpr @@ var "cd",
+          Java._LocalClassOrInterfaceDeclaration_normalInterface>>: lambda "nid" $
+            interfaceDeclarationToExpr @@ (inject Java._InterfaceDeclaration Java._InterfaceDeclaration_normalInterface (var "nid"))],
       Java._BlockStatement_statement>>: lambda "s" $ statementToExpr @@ var "s"]
 
 localVariableDeclarationStatementToExpr :: TTermDefinition (Java.LocalVariableDeclarationStatement -> Expr)
@@ -1621,11 +1628,11 @@ normalInterfaceDeclarationToExpr = def "normalInterfaceDeclarationToExpr" $
         (just $ Serialization.spaceSep @@ list [Serialization.cst @@ string "extends", Serialization.commaSep @@ Serialization.inlineStyle @@ Lists.map interfaceTypeToExpr (var "extends")]),
       just $ interfaceBodyToExpr @@ var "body"])
 
-typeDeclarationWithCommentsToExpr :: TTermDefinition (Java.TypeDeclarationWithComments -> Expr)
+typeDeclarationWithCommentsToExpr :: TTermDefinition (Java.TopLevelClassOrInterfaceDeclarationWithComments -> Expr)
 typeDeclarationWithCommentsToExpr = def "typeDeclarationWithCommentsToExpr" $
   lambda "tdwc" $ lets [
-    "d">: project Java._TypeDeclarationWithComments Java._TypeDeclarationWithComments_value @@ var "tdwc",
-    "mc">: project Java._TypeDeclarationWithComments Java._TypeDeclarationWithComments_comments @@ var "tdwc"] $
+    "d">: project Java._TopLevelClassOrInterfaceDeclarationWithComments Java._TopLevelClassOrInterfaceDeclarationWithComments_value @@ var "tdwc",
+    "mc">: project Java._TopLevelClassOrInterfaceDeclarationWithComments Java._TopLevelClassOrInterfaceDeclarationWithComments_comments @@ var "tdwc"] $
     withComments @@ var "mc" @@ (typeDeclarationToExpr @@ var "d")
 
 
@@ -1764,16 +1771,19 @@ arrayCreationExpressionToExpr :: TTermDefinition (Java.ArrayCreationExpression -
 arrayCreationExpressionToExpr = def "arrayCreationExpressionToExpr" $
   lambda "ace" $
     cases Java._ArrayCreationExpression (var "ace") Nothing [
-      Java._ArrayCreationExpression_primitiveArray>>: lambda "pa" $ lets [
-        "pt">: project Java._ArrayCreationExpression_PrimitiveArray Java._ArrayCreationExpression_PrimitiveArray_type @@ var "pa",
-        "ai">: project Java._ArrayCreationExpression_PrimitiveArray Java._ArrayCreationExpression_PrimitiveArray_array @@ var "pa"] $
-        Serialization.spaceSep @@ list [
-          Serialization.cst @@ string "new",
-          Serialization.noSep @@ list [primitiveTypeWithAnnotationsToExpr @@ var "pt", Serialization.cst @@ string "[]"],
-          arrayInitializerToExpr @@ var "ai"],
-      Java._ArrayCreationExpression_classOrInterfaceArray>>: lambda "_" $ Serialization.cst @@ string "STUB:ArrayCreationExpression",
-      Java._ArrayCreationExpression_primitive>>: lambda "_" $ Serialization.cst @@ string "STUB:ArrayCreationExpression",
-      Java._ArrayCreationExpression_classOrInterface>>: lambda "_" $ Serialization.cst @@ string "STUB:ArrayCreationExpression"]
+      -- new T[expr][expr]...  (no initializer)
+      Java._ArrayCreationExpression_withoutInitializer>>: lambda "_" $ Serialization.cst @@ string "STUB:ArrayCreationExpression",
+      -- new T[]...{...}  (with initializer)
+      Java._ArrayCreationExpression_withInitializer>>: lambda "wi" $
+        cases Java._ArrayCreationExpressionWithInitializer (var "wi") Nothing [
+          Java._ArrayCreationExpressionWithInitializer_primitive>>: lambda "pa" $ lets [
+            "pt">: project Java._ArrayCreationExpressionWithInitializer_Primitive Java._ArrayCreationExpressionWithInitializer_Primitive_type @@ var "pa",
+            "ai">: project Java._ArrayCreationExpressionWithInitializer_Primitive Java._ArrayCreationExpressionWithInitializer_Primitive_array @@ var "pa"] $
+            Serialization.spaceSep @@ list [
+              Serialization.cst @@ string "new",
+              Serialization.noSep @@ list [primitiveTypeWithAnnotationsToExpr @@ var "pt", Serialization.cst @@ string "[]"],
+              arrayInitializerToExpr @@ var "ai"],
+          Java._ArrayCreationExpressionWithInitializer_classOrInterface>>: lambda "_" $ Serialization.cst @@ string "STUB:ArrayCreationExpression"]]
 
 arrayInitializerToExpr :: TTermDefinition (Java.ArrayInitializer -> Expr)
 arrayInitializerToExpr = def "arrayInitializerToExpr" $

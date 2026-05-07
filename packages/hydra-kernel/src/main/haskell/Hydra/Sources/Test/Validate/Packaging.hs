@@ -2,17 +2,18 @@
 -- | Test cases for module and package validation (hydra.validate.packaging).
 module Hydra.Sources.Test.Validate.Packaging where
 
--- Standard imports for shallow DSL tests
+-- Standard imports for tests
 import Hydra.Kernel
 import Hydra.Error.Packaging
 import Hydra.Dsl.Meta.Testing                 as Testing
-import Hydra.Dsl.Meta.Terms                   as Terms
+import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
 import qualified Hydra.Dsl.Meta.Lib.Maps       as Maps
 import qualified Hydra.Dsl.Meta.Lib.Sets      as Sets
 import qualified Hydra.Dsl.Meta.Phantoms      as Phantoms
+import           Hydra.Dsl.Meta.Phantoms                ((@@))
 import qualified Hydra.Dsl.Packaging          as Packaging
 import qualified Hydra.Dsl.Util               as Util
 import qualified Hydra.Dsl.Validation         as Validation
@@ -547,9 +548,9 @@ profileBehaviourTests = define "profileBehaviourTests" $
     universalCase "multi-error accumulation: two distinct rules produce two findings"
       (showValidationResultModule
         (((validatePackagingModuleProfiledRef
-          Phantoms.@@ profileWith [missingDocumentationRule, duplicateDefinitionNameRule] [] 5 5)
-          Phantoms.@@ emptyVR)
-          Phantoms.@@ twoRuleViolationModule))
+          @@ profileWith [missingDocumentationRule, duplicateDefinitionNameRule] [] 5 5)
+          @@ emptyVR)
+          @@ twoRuleViolationModule))
       (showValidationResultModule $ resultWithModule
         [missingDocErrAt "hydra.foo" "hydra.foo.aaa",
          duplicateDefErrAt "hydra.foo" "hydra.foo.aaa"]
@@ -559,9 +560,9 @@ profileBehaviourTests = define "profileBehaviourTests" $
     universalCase "warning classification: both rules demoted to warnings"
       (showValidationResultModule
         (((validatePackagingModuleProfiledRef
-          Phantoms.@@ profileWith [] [missingDocumentationRule, duplicateDefinitionNameRule] 5 5)
-          Phantoms.@@ emptyVR)
-          Phantoms.@@ twoRuleViolationModule))
+          @@ profileWith [] [missingDocumentationRule, duplicateDefinitionNameRule] 5 5)
+          @@ emptyVR)
+          @@ twoRuleViolationModule))
       (showValidationResultModule $ resultWithModule
         []
         [missingDocErrAt "hydra.foo" "hydra.foo.aaa",
@@ -573,9 +574,9 @@ profileBehaviourTests = define "profileBehaviourTests" $
     universalCase "rule disabling: duplicate-name rule omitted from profile"
       (showValidationResultModule
         (((validatePackagingModuleProfiledRef
-          Phantoms.@@ profileWith [missingDocumentationRule] [] 5 5)
-          Phantoms.@@ emptyVR)
-          Phantoms.@@ twoRuleViolationModule))
+          @@ profileWith [missingDocumentationRule] [] 5 5)
+          @@ emptyVR)
+          @@ twoRuleViolationModule))
       (showValidationResultModule $ resultWithModule
         [missingDocErrAt "hydra.foo" "hydra.foo.aaa"]
         []),
@@ -586,9 +587,9 @@ profileBehaviourTests = define "profileBehaviourTests" $
     universalCase "maxErrors bound: only first rule collected when maxErrors=1"
       (showValidationResultModule
         (((validatePackagingModuleProfiledRef
-          Phantoms.@@ profileWith [missingDocumentationRule, duplicateDefinitionNameRule] [] 1 5)
-          Phantoms.@@ emptyVR)
-          Phantoms.@@ twoRuleViolationModule))
+          @@ profileWith [missingDocumentationRule, duplicateDefinitionNameRule] [] 1 5)
+          @@ emptyVR)
+          @@ twoRuleViolationModule))
       (showValidationResultModule $ resultWithModule
         [missingDocErrAt "hydra.foo" "hydra.foo.aaa"]
         [])]

@@ -3,7 +3,7 @@ module Hydra.Sources.Json.Schema.Coder where
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import           Hydra.Dsl.Meta.Lib.Strings                as Strings
+import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
 import qualified Hydra.Dsl.Annotations                     as Annotations
 import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
@@ -83,7 +83,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Dsl.Errors as Errors
+import qualified Hydra.Dsl.Errors as Error
 import qualified Hydra.Json.Schema as JS
 import qualified Hydra.Json.Model as JM
 import qualified Hydra.Sources.Json.Schema as JsonSchema
@@ -375,7 +375,7 @@ typeToExpr = define "typeToExpr" $
   doc "Encode a Hydra type as a list of JSON Schema restrictions" $
   lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "typ" $
     cases _Type (var "typ")
-      (Just (left (Errors.errorOther (Errors.otherError
+      (Just (left (Error.errorOther (Error.otherError
         (Strings.cat2 (string "JSON Schema: unsupported type variant: ")
           (ShowVariants.typeVariant @@ (Reflect.typeVariant @@ var "typ"))))))) [
 
