@@ -233,3 +233,22 @@ before performing arithmetic.
 This differs from Haskell `Scientific` and Java `BigDecimal`
 (which are effectively unbounded for exact operations)
 but matches Python's standard decimal behavior.
+
+## Collections — known performance limitation
+
+Hydra-Python uses Python's built-in immutable collections everywhere
+(`tuple` for lists, `frozenset` for sets, a `FrozenDict` wrapper for maps),
+but none of these are *structurally shared* — every "incremental update" is
+O(n):
+
+- `lists.cons(x, xs)` does `(x, *xs)`, copying the whole tuple.
+- `maps.insert(k, v, m)` copies the underlying dict on every call.
+- `sets.insert(x, s)` rebuilds the underlying hash set.
+
+That makes inference-style workloads (many incremental inserts into the same
+map or set) quadratic in the collection size. The intended fix is to
+introduce persistent helpers analogous to Java's `ConsList`, `PersistentMap`,
+and `PersistentSet` — see the
+[Hydra-Java collection classes](../hydra-java/README.md#collection-classes)
+section for the model. This will be tracked in a follow-up issue, and this
+section will be updated when the work lands.
