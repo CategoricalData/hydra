@@ -59,6 +59,21 @@ find dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp -name '*.el' \
   | xargs -P4 -I{} $EMACS --batch -f batch-native-compile {}
 ```
 
+### Performance: collections — known limitation
+
+`lib/maps.el` represents maps as **sorted alists** and `lib/sets.el` as
+**sorted lists**. Both give O(n) `insert`/`lookup`/`delete`, which makes
+inference-style workloads (many incremental inserts into the same map)
+quadratic in the map size. Combined with Emacs Lisp's already-slow curried
+calls, this is a major contributor to the dialect's overall performance
+profile and is part of why Hydra-Emacs-Lisp is not yet treated as a fully
+supported implementation. Emacs 27+ has native `hash-table` with structural
+equality (`make-hash-table :test 'equal`), so a hash-table-based map/set
+would be straightforward. Not done yet. The
+[Hydra-Java collection classes](../../hydra-java/README.md#collection-classes)
+section describes the analogous fix landed for Java in #359; the same
+principle applies here.
+
 ### Hand-written files (in `heads/lisp/emacs-lisp/`)
 
 - `src/main/emacs-lisp/hydra/lib/` — native library implementations

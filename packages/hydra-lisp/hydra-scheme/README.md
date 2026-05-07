@@ -77,6 +77,15 @@ conformance check.
 - `src/main/scheme/hydra/` — kernel modules as R7RS libraries (`.sld` + `.scm`)
 - `src/test/scheme/hydra/test/` — generated test modules
 
+### Collections
+
+Hydra-Scheme uses Guile's `vhash` (functional hash table) for both
+maps and sets. This gives O(1) amortized lookup/insert/delete with
+structural sharing — equivalent to the persistent collection helpers
+that [Hydra-Java](../../hydra-java/README.md#collection-classes) had to
+add, but available as a built-in. An earlier alist-based implementation
+was replaced because it was quadratic in inference workloads.
+
 ### Compatibility shims
 
 Two small shim files in `heads/lisp/scheme/src/main/scheme/` provide libraries
