@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions
 
 module Hydra.Shacl.Coder where
-
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
@@ -30,7 +28,6 @@ import qualified Hydra.Shacl.Model as Model
 import qualified Hydra.Strip as Strip
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Construct CommonProperties from a list of constraints, using defaults for other fields
 common :: [Model.CommonConstraint] -> Model.CommonProperties
 common constraints =
@@ -43,15 +40,12 @@ common constraints =
       Model.commonPropertiesTargetNode = Sets.empty,
       Model.commonPropertiesTargetObjectsOf = Sets.empty,
       Model.commonPropertiesTargetSubjectsOf = Sets.empty}
-
 -- | Default CommonProperties with empty constraints and default severity
 defaultCommonProperties :: Model.CommonProperties
 defaultCommonProperties = common []
-
 -- | Convert a binding's name to an RDF IRI
 elementIri :: Core.Binding -> Syntax.Iri
 elementIri el = Utils.nameToIri (Core.bindingName el)
-
 -- | Encode a record field as RDF triples with a given subject
 encodeField :: Core.Name -> Syntax.Resource -> Core.Field -> Context.Context -> Graph.Graph -> Either Errors.Error ([Syntax.Triple], Context.Context)
 encodeField rname subject field cx g =
@@ -62,8 +56,9 @@ encodeField rname subject field cx g =
       in (Eithers.bind (encodeTerm node (Core.fieldTerm field) cx1 g) (\_r1 ->
         let descs = Pairs.first _r1
             cx2 = Pairs.second _r1
-        in (Right (Lists.concat2 (Utils.triplesOf descs) (Utils.forObjects subject (Utils.propertyIri rname (Core.fieldName field)) (Utils.subjectsOf descs)), cx2))))
-
+        in (Right (
+          Lists.concat2 (Utils.triplesOf descs) (Utils.forObjects subject (Utils.propertyIri rname (Core.fieldName field)) (Utils.subjectsOf descs)),
+          cx2))))
 -- | Encode a FieldType as a SHACL property shape Definition
 encodeFieldType :: Core.Name -> Maybe Integer -> Core.FieldType -> t0 -> Either Errors.Error (Model.Definition Model.PropertyShape)
 encodeFieldType rname order ft cx =
@@ -94,14 +89,15 @@ encodeFieldType rname order ft cx =
                         Model.propertyShapeOrder = order,
                         Model.propertyShapePath = iri}}) (encodeType rname t cx)
       in (forType (Just 1) (Just 1) ftype)
-
 -- | Encode a list of terms as RDF list structure
 encodeList :: Syntax.Resource -> [Core.Term] -> Context.Context -> Graph.Graph -> Either Errors.Error ([Syntax.Description], Context.Context)
 encodeList subj terms cx0 g =
-    Logic.ifElse (Lists.null terms) (Right ([
-      Syntax.Description {
-        Syntax.descriptionSubject = (Syntax.NodeIri (Syntax.Iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
-        Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}], cx0)) (Maybes.maybe (Right ([], cx0)) (\p ->
+    Logic.ifElse (Lists.null terms) (Right (
+      [
+        Syntax.Description {
+          Syntax.descriptionSubject = (Syntax.NodeIri (Syntax.Iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
+          Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}],
+      cx0)) (Maybes.maybe (Right ([], cx0)) (\p ->
       let pair1 = Utils.nextBlankNode cx0
           node1 = Pairs.first pair1
           cx1 = Pairs.second pair1
@@ -116,11 +112,12 @@ encodeList subj terms cx0 g =
           let rdescs = Pairs.first _r2
               cx4 = Pairs.second _r2
               restTriples = Lists.concat2 (Utils.triplesOf rdescs) (Utils.forObjects subj (Utils.rdfIri "rest") (Utils.subjectsOf rdescs))
-          in ([
-            Syntax.Description {
-              Syntax.descriptionSubject = (Utils.resourceToNode subj),
-              Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat2 firstTriples restTriples)))}], cx4)) (encodeList next (Pairs.second p) cx3 g))))) (Lists.uncons terms))
-
+          in (
+            [
+              Syntax.Description {
+                Syntax.descriptionSubject = (Utils.resourceToNode subj),
+                Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat2 firstTriples restTriples)))}],
+            cx4)) (encodeList next (Pairs.second p) cx3 g))))) (Lists.uncons terms))
 -- | Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint
 encodeLiteralType :: Core.LiteralType -> Model.CommonProperties
 encodeLiteralType lt =
@@ -144,37 +141,46 @@ encodeLiteralType lt =
           Core.IntegerTypeUint32 -> xsd "unsignedInt"
           Core.IntegerTypeUint64 -> xsd "unsignedLong"
         Core.LiteralTypeString -> xsd "string"
-
 -- | Encode a Hydra term as a list of RDF Descriptions
 encodeTerm :: Syntax.Resource -> Core.Term -> Context.Context -> Graph.Graph -> Either Errors.Error ([Syntax.Description], Context.Context)
 encodeTerm subject term cx g =
     case term of
       Core.TermAnnotated v0 -> encodeTerm subject (Core.annotatedTermBody v0) cx g
       Core.TermList v0 -> encodeList subject v0 cx g
-      Core.TermLiteral v0 -> Right ([
-        Syntax.Description {
-          Syntax.descriptionSubject = (Syntax.NodeLiteral (Utils.encodeLiteral v0)),
-          Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}], cx)
-      Core.TermMap v0 -> Eithers.map (\_r -> ([
-        Syntax.Description {
-          Syntax.descriptionSubject = (Utils.resourceToNode subject),
-          Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (ExtractCore.string g (Strip.deannotateTerm (Pairs.first kv))) (\_ks ->
+      Core.TermLiteral v0 -> Right (
+        [
+          Syntax.Description {
+            Syntax.descriptionSubject = (Syntax.NodeLiteral (Utils.encodeLiteral v0)),
+            Syntax.descriptionGraph = (Syntax.Graph Sets.empty)}],
+        cx)
+      Core.TermMap v0 -> Eithers.map (\_r -> (
+        [
+          Syntax.Description {
+            Syntax.descriptionSubject = (Utils.resourceToNode subject),
+            Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))}],
+        (Pairs.second _r))) (foldAccumResult (\_cx0 -> \kv -> Eithers.bind (ExtractCore.string g (Strip.deannotateTerm (Pairs.first kv))) (\_ks ->
         let pair2 = Utils.nextBlankNode _cx0
             node2 = Pairs.first pair2
             cx2 = Pairs.second pair2
-        in (Eithers.map (\_dr -> (Lists.concat2 (Utils.forObjects subject (Utils.keyIri _ks) (Utils.subjectsOf (Pairs.first _dr))) (Utils.triplesOf (Pairs.first _dr)), (Pairs.second _dr))) (encodeTerm node2 (Pairs.second kv) cx2 g)))) cx (Maps.toList v0))
+        in (Eithers.map (\_dr -> (
+          Lists.concat2 (Utils.forObjects subject (Utils.keyIri _ks) (Utils.subjectsOf (Pairs.first _dr))) (Utils.triplesOf (Pairs.first _dr)),
+          (Pairs.second _dr))) (encodeTerm node2 (Pairs.second kv) cx2 g)))) cx (Maps.toList v0))
       Core.TermWrap v0 -> Eithers.map (\_dr ->
         let descs = Pairs.first _dr
             cx1 = Pairs.second _dr
-        in (Maybes.fromMaybe descs (Maybes.map (\p -> Lists.cons (withType (Core.wrappedTermTypeName v0) (Pairs.first p)) (Pairs.second p)) (Lists.uncons descs)), cx1)) (encodeTerm subject (Core.wrappedTermBody v0) cx g)
+        in (
+          Maybes.fromMaybe descs (Maybes.map (\p -> Lists.cons (withType (Core.wrappedTermTypeName v0) (Pairs.first p)) (Pairs.second p)) (Lists.uncons descs)),
+          cx1)) (encodeTerm subject (Core.wrappedTermBody v0) cx g)
       Core.TermMaybe v0 -> Maybes.maybe (Right ([], cx)) (\_inner -> encodeTerm subject _inner cx g) v0
       Core.TermRecord v0 ->
         let rname = Core.recordTypeName v0
             fields = Core.recordFields v0
-        in (Eithers.map (\_r -> ([
-          withType rname (Syntax.Description {
-            Syntax.descriptionSubject = (Utils.resourceToNode subject),
-            Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))})], (Pairs.second _r))) (foldAccumResult (\_cx0 -> \field -> encodeField rname subject field _cx0 g) cx fields))
+        in (Eithers.map (\_r -> (
+          [
+            withType rname (Syntax.Description {
+              Syntax.descriptionSubject = (Utils.resourceToNode subject),
+              Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Lists.concat (Pairs.first _r))))})],
+          (Pairs.second _r))) (foldAccumResult (\_cx0 -> \field -> encodeField rname subject field _cx0 g) cx fields))
       Core.TermSet v0 -> Eithers.map (\_r -> (Lists.concat (Pairs.first _r), (Pairs.second _r))) (foldAccumResult (\_cx0 -> \t ->
         let pair3 = Utils.nextBlankNode _cx0
             node3 = Pairs.first pair3
@@ -183,12 +189,13 @@ encodeTerm subject term cx g =
       Core.TermInject v0 ->
         let rname = Core.injectionTypeName v0
             field = Core.injectionField v0
-        in (Eithers.map (\_r -> ([
-          withType rname (Syntax.Description {
-            Syntax.descriptionSubject = (Utils.resourceToNode subject),
-            Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Pairs.first _r)))})], (Pairs.second _r))) (encodeField rname subject field cx g))
+        in (Eithers.map (\_r -> (
+          [
+            withType rname (Syntax.Description {
+              Syntax.descriptionSubject = (Utils.resourceToNode subject),
+              Syntax.descriptionGraph = (Syntax.Graph (Sets.fromList (Pairs.first _r)))})],
+          (Pairs.second _r))) (encodeField rname subject field cx g))
       _ -> unexpectedE cx "RDF-compatible term" "unsupported term variant"
-
 -- | Encode a Hydra type as SHACL CommonProperties
 encodeType :: Core.Name -> Core.Type -> t0 -> Either Errors.Error Model.CommonProperties
 encodeType tname typ cx =
@@ -213,21 +220,17 @@ encodeType tname typ cx =
           Model.CommonConstraintNode (Sets.fromList [
             Model.ReferenceNamed (Utils.nameToIri v0)])])
         _ -> unexpectedE cx "type" "unsupported type variant"
-
 -- | Construct an error result with a context and message
 err :: t0 -> String -> Either Errors.Error t1
 err cx msg = Left (Errors.ErrorOther (Errors.OtherError msg))
-
 -- | Fold over a list, accumulating results and threading context through each step
 foldAccumResult :: (t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 ([t3], t0)
 foldAccumResult f cx xs =
     Maybes.maybe (Right ([], cx)) (\p -> Eithers.bind (f cx (Pairs.first p)) (\_r -> Eithers.map (\_rest -> (Lists.cons (Pairs.first _r) (Pairs.first _rest), (Pairs.second _rest))) (foldAccumResult f (Pairs.second _r) (Pairs.second p)))) (Lists.uncons xs)
-
 -- | Construct a SHACL node shape from a list of common constraints
 node :: [Model.CommonConstraint] -> Model.Shape
 node constraints = Model.ShapeNode (Model.NodeShape {
   Model.nodeShapeCommon = (common constraints)})
-
 -- | Construct a default property shape with the given IRI as its path
 property :: Syntax.Iri -> Model.PropertyShape
 property iri =
@@ -239,7 +242,6 @@ property iri =
       Model.propertyShapeName = (Syntax.LangStrings Maps.empty),
       Model.propertyShapeOrder = Nothing,
       Model.propertyShapePath = iri}
-
 -- | Encode a module's type elements as a SHACL ShapesGraph
 shaclCoder :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Error (Model.ShapesGraph, t0)
 shaclCoder mod cx g =
@@ -267,7 +269,6 @@ shaclCoder mod cx g =
                     Model.definitionTarget = (Model.ShapeNode (Model.NodeShape {
                       Model.nodeShapeCommon = _cp}))}) (encodeType (Core.bindingName el) _typ cx))
       in (Eithers.map (\_shapes -> (Model.ShapesGraph (Sets.fromList _shapes), cx)) (Eithers.mapList toShape typeEls))
-
 -- | Construct an error for unexpected input, given expected and found descriptions
 unexpectedE :: t0 -> String -> String -> Either Errors.Error t1
 unexpectedE cx expected found =
@@ -276,7 +277,6 @@ unexpectedE cx expected found =
       expected,
       ", found: ",
       found])
-
 -- | Add an rdf:type triple to an RDF Description
 withType :: Core.Name -> Syntax.Description -> Syntax.Description
 withType name desc =

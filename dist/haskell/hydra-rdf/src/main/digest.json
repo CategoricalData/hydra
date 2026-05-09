@@ -1,0 +1,31 @@
+{
+  "version": 2,
+  "generator": "v0-unstamped",
+  "inputs": {
+    "hydra.owl.syntax": { "kind": "Other", "hash": "0db0a5421ac331e83da18f38b6b55ba2d98fcdaf01f4b49ff276fe4df4cfccee" },
+    "hydra.rdf.serde": { "kind": "Other", "hash": "0586a3bf9d312f0ac5875d26dc7251b25a6240679769fac0d2ceef817ee035af" },
+    "hydra.rdf.syntax": { "kind": "Other", "hash": "91fea50adfd68b6514e898c799f9e51a862efbb048395853222dc53e428adba4" },
+    "hydra.rdf.utils": { "kind": "Other", "hash": "6e7308ac461998f7aec8459a1d6dc6a01f5edd2b7992895ba8fef16721686763" },
+    "hydra.shacl.coder": { "kind": "Other", "hash": "621c72b14060930e3a2280b632e0034c2bac8981880521bc94bcc19a1dd8976e" },
+    "hydra.shacl.language": { "kind": "Other", "hash": "bfd0d4f73f9aa0219b12ea9bc5c05a47568d695b73988298e8913c7263ee7168" },
+    "hydra.shacl.model": { "kind": "Other", "hash": "1f9a96d68c8f0cb34275e57866b7f3d6c3e33aa2652eb461c118319da82e42a6" },
+    "hydra.shex.syntax": { "kind": "Other", "hash": "134e737cc774752ccdd476c04f2341158c299b603397e7ad4928e6a9f80cb9e2" },
+    "hydra.xml.schema": { "kind": "Other", "hash": "a50cdff17e93cf43477f517f27a5d7668a86f005cfbe7504db793b254c4ed643" }
+  },
+  "outputs": {
+    "Hydra/Dsl/Owl/Syntax.hs": { "kind": "TargetFile", "hash": "e64232ae1c130229883ee02bc85cad07dfe654695e37d5183bf86851bddce992" },
+    "Hydra/Dsl/Rdf/Syntax.hs": { "kind": "TargetFile", "hash": "88f6a1d96b86f05c412edde6e6bda5d2b75764e68fbfd91b9d043a9aaadf3608" },
+    "Hydra/Dsl/Shacl/Model.hs": { "kind": "TargetFile", "hash": "62627c6cca4bf88353f5e34a4cc80502a2f059b30e0bb6b874b6a6e33bde1c23" },
+    "Hydra/Dsl/Shex/Syntax.hs": { "kind": "TargetFile", "hash": "6a1e581c3fbfe814cd4d1716851eca03b5bfdcb7ce284e21c547cf09dd9c5e2a" },
+    "Hydra/Dsl/Xml/Schema.hs": { "kind": "TargetFile", "hash": "91019cf64507d197a9882bdfd1fad718b0608fb5f3100101c93954ad739dab10" },
+    "Hydra/Owl/Syntax.hs": { "kind": "TargetFile", "hash": "3849d904e7bf83474dd9dcf7fbf0376651e652359fe653762555646f697735d2" },
+    "Hydra/Rdf/Serde.hs": { "kind": "TargetFile", "hash": "72b462ab7cb532d23806065227bc94188c42f81386b9e1759eb347d049a9b6d8" },
+    "Hydra/Rdf/Syntax.hs": { "kind": "TargetFile", "hash": "6333199fe7c6162d18d42e8b71fcdc8aa36847786731fc52676751ebf06fc048" },
+    "Hydra/Rdf/Utils.hs": { "kind": "TargetFile", "hash": "78831a4150311ddd928dbfd04b3566b5ed06d7768ef5eb7d53438b49054a3d61" },
+    "Hydra/Shacl/Coder.hs": { "kind": "TargetFile", "hash": "cf3c35b8ed72d35621533ed406d943f496c6849b7b6da2d5cb925a2192f96973" },
+    "Hydra/Shacl/Language.hs": { "kind": "TargetFile", "hash": "8064db48d656a263fbac4a607a8dd60327c80a569a30a1e660c677f100e11805" },
+    "Hydra/Shacl/Model.hs": { "kind": "TargetFile", "hash": "406248f93b1f110e9a55affa78e27ebd7f548f5d08afadb6a01e44d2345ef401" },
+    "Hydra/Shex/Syntax.hs": { "kind": "TargetFile", "hash": "273750f4315b8245dd5898786809fee20e8ed23235eeb8ecfa30db40fcf3a0ad" },
+    "Hydra/Xml/Schema.hs": { "kind": "TargetFile", "hash": "f55a6768d3b43184881ef9b904c48b6204e8d6808eb0cd700fdb15adf360ee4e" }
+  }
+}
