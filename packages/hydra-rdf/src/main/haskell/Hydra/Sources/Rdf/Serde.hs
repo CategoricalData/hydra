@@ -101,7 +101,9 @@ module_ = Module {
       toDefinition escapeIriStr,
       toDefinition escapeLiteralChar,
       toDefinition escapeLiteralString,
+      toDefinition hexDigit,
       toDefinition rdfGraphToNtriples,
+      toDefinition uchar4,
       toDefinition blankNodeToExpr,
       toDefinition graphToExpr,
       toDefinition iriToExpr,
@@ -112,15 +114,16 @@ module_ = Module {
       toDefinition tripleToExpr]
 
 
--- | Escape a single IRI character (as char code). Characters outside printable ASCII or in the
---   set <>"{}|^`\ are replaced with "?"
+-- | Escape a single IRI character (as code point). The N-Triples IRIREF
+--   production excludes #x00-#x20 and <>"{}|^`\\; those characters are emitted
+--   as UCHAR (\\u00XX). All other code points (including all of Unicode >= 0x80)
+--   pass through verbatim.
 escapeIriChar :: TTermDefinition (Int -> String)
 escapeIriChar = define "escapeIriChar" $
   doc "Escape a single IRI character code to a string" $
   lambda "c" $
     Logic.ifElse
-      (Logic.or (Equality.gte (var "c") (int32 128)) $
-        Logic.or (Equality.lte (var "c") (int32 32)) $
+      (Logic.or (Equality.lte (var "c") (int32 32)) $
           Logic.or (Equality.equal (var "c") (int32 60))   -- '<'
           $ Logic.or (Equality.equal (var "c") (int32 62))   -- '>'
           $ Logic.or (Equality.equal (var "c") (int32 34))   -- '"'
@@ -130,31 +133,30 @@ escapeIriChar = define "escapeIriChar" $
           $ Logic.or (Equality.equal (var "c") (int32 94))   -- '^'
           $ Logic.or (Equality.equal (var "c") (int32 96))   -- '`'
           $ Equality.equal (var "c") (int32 92))             -- '\\'
-      (string "?")
+      (uchar4 @@ var "c")
       (Strings.fromList $ list [var "c"])
 
 escapeIriStr :: TTermDefinition (String -> String)
 escapeIriStr = define "escapeIriStr" $
-  doc "Escape a string for use in an IRI. Non-printable and special characters are replaced with ?" $
+  doc "Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as UCHAR (\\uXXXX)." $
   lambda "s" $
     Strings.cat (Lists.map escapeIriChar (Strings.toList (var "s")))
 
--- | Escape a single literal character. Handles \", \\, \n, \r, and non-ASCII
+-- | Escape a single literal character. Handles \", \\, \n, \r;
+--   non-ASCII code points pass through (N-Triples allows any Unicode code point in literals).
 escapeLiteralChar :: TTermDefinition (Int -> String)
 escapeLiteralChar = define "escapeLiteralChar" $
   doc "Escape a single literal character code to a string" $
   lambda "c" $
-    Logic.ifElse (Equality.gte (var "c") (int32 128))
-      (string "?")
-      (Logic.ifElse (Equality.equal (var "c") (int32 34))   -- '"'
-        (string "\\\"")
-        (Logic.ifElse (Equality.equal (var "c") (int32 92))  -- '\\'
-          (string "\\\\")
-          (Logic.ifElse (Equality.equal (var "c") (int32 10))  -- '\n'
-            (string "\\n")
-            (Logic.ifElse (Equality.equal (var "c") (int32 13))  -- '\r'
-              (string "\\r")
-              (Strings.fromList $ list [var "c"])))))
+    Logic.ifElse (Equality.equal (var "c") (int32 34))   -- '"'
+      (string "\\\"")
+      (Logic.ifElse (Equality.equal (var "c") (int32 92))  -- '\\'
+        (string "\\\\")
+        (Logic.ifElse (Equality.equal (var "c") (int32 10))  -- '\n'
+          (string "\\n")
+          (Logic.ifElse (Equality.equal (var "c") (int32 13))  -- '\r'
+            (string "\\r")
+            (Strings.fromList $ list [var "c"]))))
 
 escapeLiteralString :: TTermDefinition (String -> String)
 escapeLiteralString = define "escapeLiteralString" $
@@ -162,12 +164,38 @@ escapeLiteralString = define "escapeLiteralString" $
   lambda "s" $
     Strings.cat (Lists.map escapeLiteralChar (Strings.toList (var "s")))
 
+-- | Convert a value 0-15 to an uppercase hex digit code point ('0'-'9' or 'A'-'F').
+hexDigit :: TTermDefinition (Int -> Int)
+hexDigit = define "hexDigit" $
+  doc "Convert a value 0-15 to an uppercase hex digit code point" $
+  lambda "n" $
+    Logic.ifElse (Equality.lt (var "n") (int32 10))
+      (Math.add (var "n") (int32 48))                        -- '0'
+      (Math.add (Math.sub (var "n") (int32 10)) (int32 65))  -- 'A'
+
 -- | Convert an RDF graph to an N-Triples string
 rdfGraphToNtriples :: TTermDefinition (Rdf.Graph -> String)
 rdfGraphToNtriples = define "rdfGraphToNtriples" $
   doc "Convert an RDF graph to an N-Triples string" $
   lambda "g" $
     Serialization.printExpr @@ (graphToExpr @@ var "g")
+
+-- | Encode a code point in the range 0..0xFFFF as a 4-digit UCHAR (\\uXXXX).
+--   Inputs above 0xFFFF would need the 8-digit \\U form; this helper is used only
+--   for the IRIREF disallowed set, which is entirely <= 0x7F.
+uchar4 :: TTermDefinition (Int -> String)
+uchar4 = define "uchar4" $
+  doc "Format a code point as a 4-digit UCHAR escape sequence" $
+  lambda "c" $
+    "d3" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "c") (int32 4096)) $    -- c / 16^3
+    "r3" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "c") (int32 4096)) $
+    "d2" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r3") (int32 256)) $    -- r3 / 16^2
+    "r2" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r3") (int32 256)) $
+    "d1" <~ Maybes.fromMaybe (int32 0) (Math.maybeDiv (var "r2") (int32 16)) $     -- r2 / 16
+    "d0" <~ Maybes.fromMaybe (int32 0) (Math.maybeMod (var "r2") (int32 16)) $
+    Strings.cat2 (string "\\u")
+      (Strings.fromList $ list [hexDigit @@ var "d3", hexDigit @@ var "d2",
+                                hexDigit @@ var "d1", hexDigit @@ var "d0"])
 
 blankNodeToExpr :: TTermDefinition (Rdf.BlankNode -> Expr)
 blankNodeToExpr = define "blankNodeToExpr" $
