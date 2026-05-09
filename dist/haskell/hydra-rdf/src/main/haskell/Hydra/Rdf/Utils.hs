@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Utility functions for working with RDF graphs and descriptions
 
 module Hydra.Rdf.Utils where
-
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
@@ -21,26 +19,21 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Rdf.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Convert a list of descriptions to an RDF graph
 descriptionsToGraph :: [Syntax.Description] -> Syntax.Graph
 descriptionsToGraph ds = Syntax.Graph (Sets.fromList (triplesOf ds))
-
 -- | Create an empty description with a given node
 emptyDescription :: Syntax.Node -> Syntax.Description
 emptyDescription node =
     Syntax.Description {
       Syntax.descriptionSubject = node,
       Syntax.descriptionGraph = emptyRdfGraph}
-
 -- | An empty LangStrings value
 emptyLangStrings :: Syntax.LangStrings
 emptyLangStrings = Syntax.LangStrings Maps.empty
-
 -- | An empty RDF graph
 emptyRdfGraph :: Syntax.Graph
 emptyRdfGraph = Syntax.Graph Sets.empty
-
 -- | Encode a Hydra literal as an RDF literal
 encodeLiteral :: Core.Literal -> Syntax.Literal
 encodeLiteral lit =
@@ -103,7 +96,6 @@ encodeLiteral lit =
         Syntax.literalLexicalForm = v0,
         Syntax.literalDatatypeIri = (xmlSchemaDatatypeIri "string"),
         Syntax.literalLanguageTag = Nothing}
-
 -- | Create triples from a subject, predicate, and list of object nodes
 forObjects :: Syntax.Resource -> Syntax.Iri -> [Syntax.Node] -> [Syntax.Triple]
 forObjects subj pred objs =
@@ -111,27 +103,21 @@ forObjects subj pred objs =
       Syntax.tripleSubject = subj,
       Syntax.triplePredicate = pred,
       Syntax.tripleObject = obj}) objs
-
 -- | Construct an IRI from a namespace and local name
 iri :: String -> String -> Syntax.Iri
 iri ns local = Syntax.Iri (Strings.cat2 ns local)
-
 -- | Construct a key IRI from a local name
 keyIri :: String -> Syntax.Iri
 keyIri local = iri "urn:key:" local
-
 -- | The key used for tracking blank node counters
 key_rdfBlankNodeCounter :: Core.Name
 key_rdfBlankNodeCounter = Core.Name "rdfBlankNodeCounter"
-
 -- | Merge a list of RDF graphs into a single graph
 mergeGraphs :: [Syntax.Graph] -> Syntax.Graph
 mergeGraphs graphs = Syntax.Graph (Sets.unions (Lists.map Syntax.unGraph graphs))
-
 -- | Convert a Hydra name to an RDF IRI
 nameToIri :: Core.Name -> Syntax.Iri
 nameToIri name = Syntax.Iri (Strings.cat2 "urn:" (Core.unName name))
-
 -- | Generate the next blank node and an updated context
 nextBlankNode :: Context.Context -> (Syntax.Resource, Context.Context)
 nextBlankNode cx =
@@ -140,7 +126,6 @@ nextBlankNode cx =
           count = Pairs.first result
           cx_ = Pairs.second result
       in (Syntax.ResourceBnode (Syntax.BlankNode (Strings.cat2 "b" (Literals.showInt32 count))), cx_)
-
 -- | Construct a property IRI from a record name and field name
 propertyIri :: Core.Name -> Core.Name -> Syntax.Iri
 propertyIri rname fname =
@@ -154,26 +139,21 @@ propertyIri rname fname =
         "#",
         (Formatting.decapitalize local_),
         (Formatting.capitalize (Core.unName fname))]))
-
 -- | Construct an RDF namespace IRI
 rdfIri :: String -> Syntax.Iri
 rdfIri local = iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#" local
-
 -- | Convert a resource to a node
 resourceToNode :: Syntax.Resource -> Syntax.Node
 resourceToNode r =
     case r of
       Syntax.ResourceIri v0 -> Syntax.NodeIri v0
       Syntax.ResourceBnode v0 -> Syntax.NodeBnode v0
-
 -- | Extract subjects from a list of descriptions
 subjectsOf :: [Syntax.Description] -> [Syntax.Node]
 subjectsOf descs = Lists.map Syntax.descriptionSubject descs
-
 -- | Extract all triples from a list of descriptions
 triplesOf :: [Syntax.Description] -> [Syntax.Triple]
 triplesOf descs = Lists.concat (Lists.map (\d -> Sets.toList (Syntax.unGraph (Syntax.descriptionGraph d))) descs)
-
 -- | Construct an XML Schema datatype IRI
 xmlSchemaDatatypeIri :: String -> Syntax.Iri
 xmlSchemaDatatypeIri local = iri "http://www.w3.org/2001/XMLSchema#" local

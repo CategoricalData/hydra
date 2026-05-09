@@ -169,7 +169,7 @@
     "hydra.python.testing": "07e63e583c705cdc7cc6d58ec8859e019d8bcb2e65f0fa952fa7ef3f6797e64c",
     "hydra.python.utils": "9adeefca16a4efe6954213c544578873edd51bcfb2e342835083e2d1723e13d6",
     "hydra.query": "c410a6faaebfe0e4126a758d0d670813ebfee92b757e59c7f76778e8e6d22153",
-    "hydra.rdf.serde": "89361d8c337fb1d49f5aa7c15b7cb9c4eff7fb139965c1ed57774077c70a3295",
+    "hydra.rdf.serde": "0586a3bf9d312f0ac5875d26dc7251b25a6240679769fac0d2ceef817ee035af",
     "hydra.rdf.syntax": "91fea50adfd68b6514e898c799f9e51a862efbb048395853222dc53e428adba4",
     "hydra.rdf.utils": "6e7308ac461998f7aec8459a1d6dc6a01f5edd2b7992895ba8fef16721686763",
     "hydra.reduction": "d8f5a62fbf0db0cda89236a372072c79db9b51b53478ea56370f03ee009c94e9",
