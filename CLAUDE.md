@@ -191,6 +191,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Build/test commands per language | per-package READMEs under `packages/hydra-<lang>/README.md` |
 | Concepts (System F, design) | [Concepts wiki](https://github.com/CategoricalData/hydra/wiki/Concepts) |
 | Property graphs | [Property graphs wiki](https://github.com/CategoricalData/hydra/wiki/Property-graphs) |
+| RDF / SHACL | [RDF wiki](https://github.com/CategoricalData/hydra/wiki/RDF) / [hydra-rdf README](packages/hydra-rdf/README.md) |
 | Release process | [Release process wiki](https://github.com/CategoricalData/hydra/wiki/Release-process) |
 | Demos | [docs/demos.md](docs/demos.md) |
 | Recipes index (full list) | [docs/recipes/index.md](docs/recipes/index.md) |
