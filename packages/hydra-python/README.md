@@ -119,6 +119,7 @@ In 0.15, Hydra's Python code is split across three locations
   — hand-written Python runtime
   - `hydra/lib/` — primitive function implementations
   - `hydra/dsl/` — DSL utilities (FrozenDict, Maybe, ...)
+  - `hydra/python/util/` — `ConsList`, `Lazy`, `PersistentMap`, `PersistentSet`
   - `hydra/sources/libraries.py` — primitive registration
   - `pyproject.toml` lives in `heads/python/`
 
@@ -234,21 +235,68 @@ This differs from Haskell `Scientific` and Java `BigDecimal`
 (which are effectively unbounded for exact operations)
 but matches Python's standard decimal behavior.
 
-## Collections — known performance limitation
+## Collections
 
-Hydra-Python uses Python's built-in immutable collections everywhere
-(`tuple` for lists, `frozenset` for sets, a `FrozenDict` wrapper for maps),
-but none of these are *structurally shared* — every "incremental update" is
-O(n):
+Hydra-Python uses an API/implementation split for list, map, and set values,
+mirroring [Hydra-Java](../hydra-java/README.md):
 
-- `lists.cons(x, xs)` does `(x, *xs)`, copying the whole tuple.
-- `maps.insert(k, v, m)` copies the underlying dict on every call.
-- `sets.insert(x, s)` rebuilds the underlying hash set.
+- **At the type level**, generated Python uses the standard
+  [`collections.abc`](https://docs.python.org/3/library/collections.abc.html)
+  abstract base classes — `Sequence[E]` for lists, `Mapping[K, V]` for maps,
+  and `Set[E]` for sets. Public function signatures stay generic and
+  dependency-free; callers can pass any compatible collection.
+- **At the implementation level**, generated term-level literals construct
+  immutable collection classes from
+  [`hydra.python.util`](../../heads/python/src/main/python/hydra/python/util/):
+  `ConsList` (a frozen sequence), `PersistentMap` (a frozen map), and
+  `PersistentSet` (a frozen set). Each implements the corresponding
+  `collections.abc` ABC, so `ConsList` IS a `Sequence`, `PersistentMap` IS
+  a `Mapping`, and `PersistentSet` IS a `Set`.
 
-That makes inference-style workloads (many incremental inserts into the same
-map or set) quadratic in the collection size. The intended fix is to
-introduce persistent helpers analogous to Java's `ConsList`, `PersistentMap`,
-and `PersistentSet` — see the
-[Hydra-Java collection classes](../hydra-java/README.md#collection-classes)
-section for the model. This will be tracked in a follow-up issue, and this
-section will be updated when the work lands.
+These classes are thin facades over native `tuple`, `dict`, and `frozenset`.
+All mutations build a fresh native container via `{**self, **other}`,
+`tuple(...)`, or `frozenset(...)` and freeze it under the immutable wrapper.
+The cost is full O(n) copy on every update (no structural sharing); the
+benefit is C-speed inner loops. Hydra-Python has **no third-party runtime
+dependencies** beyond the standard library.
+
+Where ordered iteration matters (`hydra.lib.maps.{keys, elems, to_list}`, the
+various `*_list()` extraction helpers, `PersistentSet.__iter__`), elements
+are sorted at extraction time via a fall-through comparator: natural `<`
+where it works, structural comparison for Hydra `Term`/`Type` and other
+complex values that don't define ordering in Python.
+
+The classes live under `hydra.python.util` rather than `hydra.util` because the
+latter is already a kernel-generated module (containing `Comparison`,
+`CaseConvention`, etc.) shared across all Hydra implementations. Putting the
+Python-runtime helpers under `hydra.python.util` keeps the kernel namespace
+intact while making the host/kernel separation explicit. `hydra.python` itself
+is a `pkgutil`-style namespace package so heads-side helpers and the
+kernel-generated `hydra.python.{coder,environment,...}` modules coexist
+cleanly.
+
+## CPython vs PyPy
+
+The bootstrap demo and `bin/run-bootstrapping-demo.sh` prefer `pypy3` when
+available and fall back to CPython 3.12+. Both interpreters pass the full
+test suite. For most real workloads, **PyPy is the better choice** — its JIT
+makes term-level transformation (the dominant Python-host cost) several times
+faster than CPython.
+
+Rough guide:
+
+| Workload | Faster on |
+|---|---|
+| `bin/run-bootstrapping-demo.sh` codegen | CPython by ~5% |
+| Type inference on large modules (`hydra.codegen.infer_modules_given`) | PyPy by ~4× |
+| `hydra.lib.*` primitive microbenchmarks | CPython by ~2.5× |
+
+The microbench gap reflects CPython's C-level `dict`/`frozenset`/`tuple`
+operations beating PyPy's pure-Python equivalents. The inference gap reflects
+PyPy's JIT amortizing per-call dispatch overhead in long-running term
+walks. For day-to-day development you can pick whichever is convenient
+(CPython is usually already installed); PyPy becomes worthwhile when you
+hit term-level workloads measured in seconds or minutes.
+
+Set `HYDRA_PYTHON_INTERPRETER=pypy3` (or any path/name) in the environment
+to force a specific interpreter for the bootstrap demo.

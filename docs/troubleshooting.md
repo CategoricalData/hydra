@@ -157,6 +157,37 @@ Python implementations use trailing underscores on reserved words: `T.list_()`,
 
 See [Python DSL guide](dsl-guide-python.md) for details.
 
+### Slow term-level workflows
+
+If generated-Python codegen, inference, or term rewriting is unexpectedly slow,
+profile before guessing. The codegen pipeline in particular allocates millions
+of small persistent containers; an O(n) operation in `hydra.python.util.{ConsList,
+PersistentMap, PersistentSet}` will dominate everything else.
+
+```bash
+python -m cProfile -o /tmp/codegen.prof your_script.py
+python -c "import pstats; pstats.Stats('/tmp/codegen.prof').sort_stats('tottime').print_stats(40)"
+```
+
+Look for any single function consuming >5% of `tottime`. The persistent
+collections in `hydra.python.util/` are thin facades over native `dict`/
+`frozenset`/`tuple`; if you're hot-spotting in one of their methods, the fix is
+usually to delegate to a native operation rather than to loop in Python.
+
+Also: for long-running workloads (anything >1s), use `pypy3` rather than
+CPython. PyPy's JIT is several times faster on term walks; CPython only wins on
+short microbenchmarks. See the [Python README CPython vs PyPy
+section](../packages/hydra-python/README.md#cpython-vs-pypy).
+
+### Inline `cases _Enum` dispatches in let bindings
+
+The Python coder's `encodeUnionEliminationInline` (used when a `cases _Enum`
+expression appears inside a let binding rather than at top level) emits
+`arg == EnumType.VARIANT` checks. The serialization of `==` lives in
+`Sources/Python/Serde.hs::comparisonToExpr`. If that function ever drops the
+RHS again, every inline enum dispatch silently picks the first branch — see
+the entry in `docs/history/python-host-perf-investigation.md` for the full story.
+
 ## Bootstrap problems
 
 When extending core types, you face a circular dependency: the code generator must

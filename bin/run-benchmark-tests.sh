@@ -117,8 +117,8 @@ run_lang() {
             ;;
         python)
             echo "=== Running Python benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/packages/hydra-python"
-            local py="${REPO_ROOT}/packages/hydra-python/.venv/bin/python"
+            cd "$REPO_ROOT/heads/python"
+            local py="${REPO_ROOT}/heads/python/.venv/bin/python"
             if [ ! -x "$py" ]; then
                 py="python3"
             fi

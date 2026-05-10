@@ -63,7 +63,7 @@ main = do
         , [GenPGTransform.module_]
         ]
   -- DSL generator input: the kernel-side type universe. Matches update-json-main.
-  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
+  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules ++ hydraPythonModules
 
   writePerPackageManifestsJson defaultDistJsonRoot mainUniverse dslInputMods mainUniverse testModules
   putStrLn ""

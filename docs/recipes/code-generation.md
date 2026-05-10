@@ -235,6 +235,26 @@ Module lists are Haskell values from `Hydra.Sources.All`:
 | `testModules` | Common test suite modules |
 | `hydraExtModules` | All ext modules (coders, domain models) |
 
+### Adding DSL wrapper generation for a new package
+
+`update-json-main` and `update-json-manifest` produce per-package
+`hydra.dsl.*` JSON wrappers from a list of "DSL input modules". By
+default the list covers `hydra-kernel` and `hydra-haskell`. To enable
+wrappers for an additional package (e.g., enabling `hydra-python` so
+its source-DSL modules can resolve fully-qualified DSL accessors):
+
+1. Add the package's module list to `dslInputMods` in
+   `heads/haskell/src/exec/update-json-main/Main.hs` and
+   `heads/haskell/src/exec/update-json-manifest/Main.hs`.
+2. Extend the `packageDslInputModules` dispatch in
+   `heads/haskell/src/exec/transform-haskell-dsl-to-json/Main.hs` so
+   the per-package split routes the package's modules into
+   `dist/json/<pkg>/src/main/json/hydra/dsl/...`.
+3. Bust caches once: delete `heads/haskell/.cache/phase1-input-cache.txt`
+   and `dist/json/digest.main.json` before the next sync, since these
+   exec edits don't otherwise invalidate Phase 1 (see "Phase 1 cache
+   doesn't hash `src/exec`" below).
+
 ### Coq
 
 Coq output is generated via dedicated executables rather than GHCi.
@@ -422,6 +442,24 @@ This is a known limitation of the current cache key, which hashes the
 once the cache key incorporates a hash of the synthesizer binary
 itself, edits to the synthesizer will invalidate downstream outputs
 correctly and a single sync will suffice.
+
+### Phase 1 cache doesn't hash `src/exec`
+
+`bin/lib/check-phase1-fresh.py` hashes the contents of
+`heads/haskell/src/main/haskell` and `heads/haskell/src/test/haskell`,
+but not `heads/haskell/src/exec`. Edits to executables under `src/exec/`
+(e.g., `update-json-main/Main.hs`, `transform-haskell-dsl-to-json/Main.hs`,
+`update-json-manifest/Main.hs`) do not invalidate Phase 1, so a sync
+after such an edit will reuse cached JSON outputs even though the
+producer has changed.
+
+To force a Phase 1 rebuild, delete `heads/haskell/.cache/phase1-input-cache.txt`
+before running sync. The Stack build itself will pick up the exec
+changes; only the freshness gate is fooled. Likewise, when the change
+adds new JSON outputs (e.g., new `hydra.dsl.*` wrappers for a newly
+enabled package), delete `dist/json/digest.main.json` and the
+per-package digests under `dist/json/*/digest.json` to force downstream
+regeneration.
 
 ### Renaming a generated namespace leaves orphan files in `dist/`
 
