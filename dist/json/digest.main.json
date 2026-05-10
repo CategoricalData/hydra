@@ -160,7 +160,7 @@
     "hydra.protobuf.proto3": "c6d51f380e72c07826cfebfea12ed08a86d189ef01804d5e2df47cf85700ccc4",
     "hydra.protobuf.serde": "56aa1a46bf422196c0b07a77fa67c3b3a6e9d08206dbfa31646e4d506f8db302",
     "hydra.protobuf.sourceContext": "af0aacae8397e31e9040a601c643b5ef2117d76b29f322be5a971e2a602e4117",
-    "hydra.python.coder": "72d3daa761945c0cd7623f5851c3ab3d1cc342bf522751827ce2edd325bf8de0",
+    "hydra.python.coder": "c533f55d32fb12a2ebd1f68ca0b6e64a4f74c89abfb7f5710c6faf09ad81a4e7",
     "hydra.python.environment": "1c53ca97ea8db80915325c65254b92861f3bff5567dd7c6d45c11492a9fafeb3",
     "hydra.python.language": "8eb40ea75c86925ceb107f9337c72a5e1e521d2ee7706e1de51916cc257fc109",
     "hydra.python.names": "529c095b8ef6ba9f69cdbfe9614731b00438551bc68051b988abe548267c1114",
