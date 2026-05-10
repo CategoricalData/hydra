@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | DSL functions for hydra.python.environment
 
 module Hydra.Dsl.Python.Environment where
-
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Packaging as Packaging
@@ -14,7 +12,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
+-- | DSL constructor for hydra.python.environment.PyGraph
 pyGraph :: Phantoms.TTerm Graph.Graph -> Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Environment.PyGraph
 pyGraph graph metadata =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -26,7 +24,7 @@ pyGraph graph metadata =
         Core.Field {
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Phantoms.unTTerm metadata)}]}))
-
+-- | DSL accessor for the graph field of hydra.python.environment.PyGraph
 pyGraphGraph :: Phantoms.TTerm Environment.PyGraph -> Phantoms.TTerm Graph.Graph
 pyGraphGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -34,7 +32,7 @@ pyGraphGraph x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
         Core.projectionField = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the metadata field of hydra.python.environment.PyGraph
 pyGraphMetadata :: Phantoms.TTerm Environment.PyGraph -> Phantoms.TTerm Environment.PythonModuleMetadata
 pyGraphMetadata x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -42,7 +40,7 @@ pyGraphMetadata x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
         Core.projectionField = (Core.Name "metadata")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL updater for the graph field of hydra.python.environment.PyGraph
 pyGraphWithGraph :: Phantoms.TTerm Environment.PyGraph -> Phantoms.TTerm Graph.Graph -> Phantoms.TTerm Environment.PyGraph
 pyGraphWithGraph original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -58,7 +56,7 @@ pyGraphWithGraph original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PyGraph"),
               Core.projectionField = (Core.Name "metadata")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the metadata field of hydra.python.environment.PyGraph
 pyGraphWithMetadata :: Phantoms.TTerm Environment.PyGraph -> Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Environment.PyGraph
 pyGraphWithMetadata original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -74,7 +72,7 @@ pyGraphWithMetadata original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
+-- | DSL constructor for hydra.python.environment.PythonEnvironment
 pythonEnvironment :: Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name Syntax.Name)) -> Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonVersion -> Phantoms.TTerm Bool -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironment namespaces boundTypeVariables graph nullaryBindings version skipCasts inlineVariables =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -101,7 +99,7 @@ pythonEnvironment namespaces boundTypeVariables graph nullaryBindings version sk
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Phantoms.unTTerm inlineVariables)}]}))
-
+-- | DSL accessor for the boundTypeVariables field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentBoundTypeVariables :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name Syntax.Name))
 pythonEnvironmentBoundTypeVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -109,7 +107,7 @@ pythonEnvironmentBoundTypeVariables x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionField = (Core.Name "boundTypeVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the graph field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentGraph :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Graph.Graph
 pythonEnvironmentGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -117,7 +115,7 @@ pythonEnvironmentGraph x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionField = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the inlineVariables field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentInlineVariables :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (S.Set Core.Name)
 pythonEnvironmentInlineVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -125,7 +123,7 @@ pythonEnvironmentInlineVariables x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionField = (Core.Name "inlineVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the namespaces field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentNamespaces :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName)
 pythonEnvironmentNamespaces x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -133,7 +131,7 @@ pythonEnvironmentNamespaces x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionField = (Core.Name "namespaces")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the nullaryBindings field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentNullaryBindings :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (S.Set Core.Name)
 pythonEnvironmentNullaryBindings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -141,7 +139,7 @@ pythonEnvironmentNullaryBindings x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionField = (Core.Name "nullaryBindings")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the skipCasts field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentSkipCasts :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Bool
 pythonEnvironmentSkipCasts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -149,7 +147,7 @@ pythonEnvironmentSkipCasts x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionField = (Core.Name "skipCasts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the version field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentVersion :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Environment.PythonVersion
 pythonEnvironmentVersion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -157,7 +155,7 @@ pythonEnvironmentVersion x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
         Core.projectionField = (Core.Name "version")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL updater for the boundTypeVariables field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithBoundTypeVariables :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name Syntax.Name)) -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironmentWithBoundTypeVariables original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -208,7 +206,7 @@ pythonEnvironmentWithBoundTypeVariables original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the graph field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithGraph :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Graph.Graph -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironmentWithGraph original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -259,7 +257,7 @@ pythonEnvironmentWithGraph original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the inlineVariables field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithInlineVariables :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironmentWithInlineVariables original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -310,7 +308,7 @@ pythonEnvironmentWithInlineVariables original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
+-- | DSL updater for the namespaces field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithNamespaces :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironmentWithNamespaces original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -361,7 +359,7 @@ pythonEnvironmentWithNamespaces original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the nullaryBindings field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithNullaryBindings :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironmentWithNullaryBindings original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -412,7 +410,7 @@ pythonEnvironmentWithNullaryBindings original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the skipCasts field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithSkipCasts :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironmentWithSkipCasts original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -463,7 +461,7 @@ pythonEnvironmentWithSkipCasts original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the version field of hydra.python.environment.PythonEnvironment
 pythonEnvironmentWithVersion :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm Environment.PythonVersion -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironmentWithVersion original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -514,9 +512,9 @@ pythonEnvironmentWithVersion original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
               Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-pythonModuleMetadata :: Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
-pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCast usesLruCache usesTypeAlias usesDataclass usesDecimal usesEither usesEnum usesFrozenDict usesFrozenList usesGeneric usesJust usesLeft usesMaybe usesName usesNode usesNothing usesRight usesTypeVar =
+-- | DSL constructor for hydra.python.environment.PythonModuleMetadata
+pythonModuleMetadata :: Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
+pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCast usesLruCache usesTypeAlias usesDataclass usesDecimal usesEither usesEnum usesFrozenDict usesFrozenList usesFrozenSet usesGeneric usesJust usesLeft usesMaybe usesName usesNode usesNothing usesRight usesTypeVar =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
       Core.recordFields = [
@@ -560,6 +558,9 @@ pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCas
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Phantoms.unTTerm usesFrozenList)},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Phantoms.unTTerm usesFrozenSet)},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Phantoms.unTTerm usesGeneric)},
         Core.Field {
@@ -586,7 +587,7 @@ pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCas
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Phantoms.unTTerm usesTypeVar)}]}))
-
+-- | DSL accessor for the namespaces field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataNamespaces :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName)
 pythonModuleMetadataNamespaces x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -594,7 +595,7 @@ pythonModuleMetadataNamespaces x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "namespaces")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the typeVariables field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataTypeVariables :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (S.Set Core.Name)
 pythonModuleMetadataTypeVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -602,7 +603,7 @@ pythonModuleMetadataTypeVariables x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "typeVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesAnnotated field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesAnnotated :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesAnnotated x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -610,7 +611,7 @@ pythonModuleMetadataUsesAnnotated x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesAnnotated")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesCallable field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesCallable :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesCallable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -618,7 +619,7 @@ pythonModuleMetadataUsesCallable x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesCallable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesCast field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesCast :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesCast x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -626,7 +627,7 @@ pythonModuleMetadataUsesCast x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesCast")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesDataclass field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesDataclass :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesDataclass x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -634,7 +635,7 @@ pythonModuleMetadataUsesDataclass x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesDataclass")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesDecimal field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesDecimal :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesDecimal x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -642,7 +643,7 @@ pythonModuleMetadataUsesDecimal x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesDecimal")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesEither field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesEither :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesEither x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -650,7 +651,7 @@ pythonModuleMetadataUsesEither x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesEither")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesEnum field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesEnum :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesEnum x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -658,7 +659,7 @@ pythonModuleMetadataUsesEnum x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesEnum")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesFrozenDict field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesFrozenDict :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesFrozenDict x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -666,7 +667,7 @@ pythonModuleMetadataUsesFrozenDict x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesFrozenDict")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesFrozenList field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesFrozenList :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesFrozenList x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -674,7 +675,15 @@ pythonModuleMetadataUsesFrozenList x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesFrozenList")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesFrozenSet field of hydra.python.environment.PythonModuleMetadata
+pythonModuleMetadataUsesFrozenSet :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
+pythonModuleMetadataUsesFrozenSet x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+        Core.projectionField = (Core.Name "usesFrozenSet")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the usesGeneric field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesGeneric :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesGeneric x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -682,7 +691,7 @@ pythonModuleMetadataUsesGeneric x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesGeneric")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesJust field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesJust :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesJust x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -690,7 +699,7 @@ pythonModuleMetadataUsesJust x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesJust")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesLeft field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesLeft :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -698,7 +707,7 @@ pythonModuleMetadataUsesLeft x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesLeft")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesLruCache field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesLruCache :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesLruCache x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -706,7 +715,7 @@ pythonModuleMetadataUsesLruCache x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesLruCache")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesMaybe field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesMaybe :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesMaybe x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -714,7 +723,7 @@ pythonModuleMetadataUsesMaybe x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesMaybe")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesName field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesName :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -722,7 +731,7 @@ pythonModuleMetadataUsesName x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesNode field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesNode :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesNode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -730,7 +739,7 @@ pythonModuleMetadataUsesNode x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesNode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesNothing field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesNothing :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesNothing x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -738,7 +747,7 @@ pythonModuleMetadataUsesNothing x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesNothing")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesRight field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesRight :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -746,7 +755,7 @@ pythonModuleMetadataUsesRight x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesRight")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesTypeAlias field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesTypeAlias :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesTypeAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -754,7 +763,7 @@ pythonModuleMetadataUsesTypeAlias x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesTypeAlias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL accessor for the usesTypeVar field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataUsesTypeVar :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool
 pythonModuleMetadataUsesTypeVar x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
@@ -762,7 +771,7 @@ pythonModuleMetadataUsesTypeVar x =
         Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
         Core.projectionField = (Core.Name "usesTypeVar")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
+-- | DSL updater for the namespaces field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithNamespaces :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithNamespaces original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -856,6 +865,13 @@ pythonModuleMetadataWithNamespaces original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -918,7 +934,7 @@ pythonModuleMetadataWithNamespaces original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the typeVariables field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithTypeVariables :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithTypeVariables original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1012,6 +1028,13 @@ pythonModuleMetadataWithTypeVariables original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1074,7 +1097,7 @@ pythonModuleMetadataWithTypeVariables original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesAnnotated field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesAnnotated :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesAnnotated original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1168,6 +1191,13 @@ pythonModuleMetadataWithUsesAnnotated original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1230,7 +1260,7 @@ pythonModuleMetadataWithUsesAnnotated original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesCallable field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesCallable :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesCallable original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1324,6 +1354,13 @@ pythonModuleMetadataWithUsesCallable original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1386,7 +1423,7 @@ pythonModuleMetadataWithUsesCallable original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesCast field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesCast :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesCast original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1480,6 +1517,13 @@ pythonModuleMetadataWithUsesCast original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1542,7 +1586,7 @@ pythonModuleMetadataWithUsesCast original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesDataclass field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesDataclass :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesDataclass original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1636,6 +1680,13 @@ pythonModuleMetadataWithUsesDataclass original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1698,7 +1749,7 @@ pythonModuleMetadataWithUsesDataclass original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesDecimal field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesDecimal :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesDecimal original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1792,6 +1843,13 @@ pythonModuleMetadataWithUsesDecimal original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -1854,7 +1912,7 @@ pythonModuleMetadataWithUsesDecimal original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesEither field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesEither :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesEither original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -1948,6 +2006,13 @@ pythonModuleMetadataWithUsesEither original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2010,7 +2075,7 @@ pythonModuleMetadataWithUsesEither original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesEnum field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesEnum :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesEnum original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -2104,6 +2169,13 @@ pythonModuleMetadataWithUsesEnum original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2166,7 +2238,7 @@ pythonModuleMetadataWithUsesEnum original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesFrozenDict field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenDict :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenDict original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -2260,6 +2332,13 @@ pythonModuleMetadataWithUsesFrozenDict original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2322,7 +2401,7 @@ pythonModuleMetadataWithUsesFrozenDict original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesFrozenList field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenList :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesFrozenList original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -2416,6 +2495,13 @@ pythonModuleMetadataWithUsesFrozenList original newVal =
           Core.fieldName = (Core.Name "usesFrozenList"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2478,7 +2564,170 @@ pythonModuleMetadataWithUsesFrozenList original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesFrozenSet field of hydra.python.environment.PythonModuleMetadata
+pythonModuleMetadataWithUsesFrozenSet :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
+pythonModuleMetadataWithUsesFrozenSet original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespaces"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "namespaces")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "typeVariables"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "typeVariables")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesAnnotated"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesAnnotated")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesCallable"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesCallable")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesCast"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesCast")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesLruCache"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesLruCache")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesTypeAlias"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesTypeAlias")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesDataclass"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesDataclass")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesDecimal"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesDecimal")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesEither"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesEither")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesEnum"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesEnum")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenDict"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenDict")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenList"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenList")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesGeneric"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesGeneric")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesJust"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesJust")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesLeft"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesLeft")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesMaybe"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesMaybe")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesName"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesName")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesNode"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesNode")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesNothing"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesNothing")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesRight"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesRight")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "usesTypeVar"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesTypeVar")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the usesGeneric field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesGeneric :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesGeneric original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -2576,6 +2825,13 @@ pythonModuleMetadataWithUsesGeneric original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
@@ -2634,7 +2890,7 @@ pythonModuleMetadataWithUsesGeneric original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesJust field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesJust :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesJust original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -2732,6 +2988,13 @@ pythonModuleMetadataWithUsesJust original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2790,7 +3053,7 @@ pythonModuleMetadataWithUsesJust original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesLeft field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesLeft :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesLeft original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -2888,6 +3151,13 @@ pythonModuleMetadataWithUsesLeft original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2946,7 +3216,7 @@ pythonModuleMetadataWithUsesLeft original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesLruCache field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesLruCache :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesLruCache original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -3040,6 +3310,13 @@ pythonModuleMetadataWithUsesLruCache original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3102,7 +3379,7 @@ pythonModuleMetadataWithUsesLruCache original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesMaybe field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesMaybe :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesMaybe original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -3200,6 +3477,13 @@ pythonModuleMetadataWithUsesMaybe original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3258,7 +3542,7 @@ pythonModuleMetadataWithUsesMaybe original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesName field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesName :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesName original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -3356,6 +3640,13 @@ pythonModuleMetadataWithUsesName original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3414,7 +3705,7 @@ pythonModuleMetadataWithUsesName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesNode field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesNode :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesNode original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -3512,6 +3803,13 @@ pythonModuleMetadataWithUsesNode original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3570,7 +3868,7 @@ pythonModuleMetadataWithUsesNode original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesNothing field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesNothing :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesNothing original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -3668,6 +3966,13 @@ pythonModuleMetadataWithUsesNothing original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3726,7 +4031,7 @@ pythonModuleMetadataWithUsesNothing original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesRight field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesRight :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesRight original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -3824,6 +4129,13 @@ pythonModuleMetadataWithUsesRight original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -3882,7 +4194,7 @@ pythonModuleMetadataWithUsesRight original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesTypeAlias field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesTypeAlias :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesTypeAlias original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -3976,6 +4288,13 @@ pythonModuleMetadataWithUsesTypeAlias original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4038,7 +4357,7 @@ pythonModuleMetadataWithUsesTypeAlias original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
               Core.projectionField = (Core.Name "usesTypeVar")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
+-- | DSL updater for the usesTypeVar field of hydra.python.environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesTypeVar :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithUsesTypeVar original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -4136,6 +4455,13 @@ pythonModuleMetadataWithUsesTypeVar original newVal =
               Core.projectionField = (Core.Name "usesFrozenList")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "usesFrozenSet"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
+              Core.projectionField = (Core.Name "usesFrozenSet")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "usesGeneric"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -4194,7 +4520,7 @@ pythonModuleMetadataWithUsesTypeVar original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
+-- | DSL injection for the python310 variant of hydra.python.environment.PythonVersion
 pythonVersionPython310 :: Phantoms.TTerm Environment.PythonVersion
 pythonVersionPython310 =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -4202,7 +4528,7 @@ pythonVersionPython310 =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "python310"),
         Core.fieldTerm = Core.TermUnit}}))
-
+-- | DSL injection for the python312 variant of hydra.python.environment.PythonVersion
 pythonVersionPython312 :: Phantoms.TTerm Environment.PythonVersion
 pythonVersionPython312 =
     Phantoms.TTerm (Core.TermInject (Core.Injection {

@@ -104,6 +104,7 @@
                   {"name": "usesEnum", "type": {"literal": {"boolean": {}}}},
                   {"name": "usesFrozenDict", "type": {"literal": {"boolean": {}}}},
                   {"name": "usesFrozenList", "type": {"literal": {"boolean": {}}}},
+                  {"name": "usesFrozenSet", "type": {"literal": {"boolean": {}}}},
                   {"name": "usesGeneric", "type": {"literal": {"boolean": {}}}},
                   {"name": "usesJust", "type": {"literal": {"boolean": {}}}},
                   {"name": "usesLeft", "type": {"literal": {"boolean": {}}}},

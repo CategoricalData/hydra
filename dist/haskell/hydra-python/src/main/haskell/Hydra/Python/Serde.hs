@@ -201,9 +201,33 @@ closedPatternToExpr cp =
       Syntax.ClosedPatternSequence _ -> Serialization.cst "[...]"
       Syntax.ClosedPatternMapping _ -> Serialization.cst "{...}"
       Syntax.ClosedPatternClass v0 -> classPatternToExpr v0
--- | Serialize a comparison expression
+-- | Serialize a (compare-op, bitwise-or) pair as `<op> <rhs>`
+compareOpBitwiseOrPairToExpr :: Syntax.CompareOpBitwiseOrPair -> Ast.Expr
+compareOpBitwiseOrPairToExpr pair =
+    Serialization.spaceSep [
+      Serialization.cst (compareOpToString (Syntax.compareOpBitwiseOrPairOperator pair)),
+      (bitwiseOrToExpr (Syntax.compareOpBitwiseOrPairRhs pair))]
+-- | Render a Python comparison operator to its source-code form
+compareOpToString :: Syntax.CompareOp -> String
+compareOpToString op =
+    case op of
+      Syntax.CompareOpEq -> "=="
+      Syntax.CompareOpNoteq -> "!="
+      Syntax.CompareOpLte -> "<="
+      Syntax.CompareOpLt -> "<"
+      Syntax.CompareOpGte -> ">="
+      Syntax.CompareOpGt -> ">"
+      Syntax.CompareOpNotin -> "not in"
+      Syntax.CompareOpIn -> "in"
+      Syntax.CompareOpIsnot -> "is not"
+      Syntax.CompareOpIs -> "is"
+-- | Serialize a comparison expression: `<lhs>` if rhs is empty, otherwise `<lhs> <op1> <rhs1> <op2> <rhs2> ...`
 comparisonToExpr :: Syntax.Comparison -> Ast.Expr
-comparisonToExpr cmp = bitwiseOrToExpr (Syntax.comparisonLhs cmp)
+comparisonToExpr cmp =
+
+      let lhs = Syntax.comparisonLhs cmp
+          rhs = Syntax.comparisonRhs cmp
+      in (Logic.ifElse (Lists.null rhs) (bitwiseOrToExpr lhs) (Serialization.spaceSep (Lists.cons (bitwiseOrToExpr lhs) (Lists.map compareOpBitwiseOrPairToExpr rhs))))
 -- | Serialize a compound (multi-line) Python statement
 compoundStatementToExpr :: Syntax.CompoundStatement -> Ast.Expr
 compoundStatementToExpr cs =
