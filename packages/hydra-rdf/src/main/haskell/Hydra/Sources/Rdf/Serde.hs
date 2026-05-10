@@ -138,7 +138,7 @@ escapeIriChar = define "escapeIriChar" $
 
 escapeIriStr :: TTermDefinition (String -> String)
 escapeIriStr = define "escapeIriStr" $
-  doc "Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as UCHAR (\\uXXXX)." $
+  doc "Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as 4-digit UCHAR escapes." $
   lambda "s" $
     Strings.cat (Lists.map escapeIriChar (Strings.toList (var "s")))
 
