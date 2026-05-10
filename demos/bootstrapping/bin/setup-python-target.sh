@@ -41,7 +41,7 @@ for f in __init__.py tools.py py.typed generation.py bootstrap.py; do
     cp "$PY_SRC/$f" "$PY_DST/" 2>/dev/null || true
 done
 
-for d in lib dsl sources; do
+for d in lib dsl sources python; do
     if [ -d "$PY_SRC/$d" ]; then
         cp -r "$PY_SRC/$d" "$PY_DST/"
         find "$PY_DST/$d" -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true

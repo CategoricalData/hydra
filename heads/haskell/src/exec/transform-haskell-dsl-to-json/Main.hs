@@ -169,6 +169,7 @@ packageTestModules _              = []
 packageDslInputModules :: String -> [Kernel.Module]
 packageDslInputModules "hydra-kernel"  = kernelModules ++ jsonModules ++ otherModules
 packageDslInputModules "hydra-haskell" = haskellModules
+packageDslInputModules "hydra-python"  = hydraPythonModules
 packageDslInputModules _               = []
 
 

@@ -105,6 +105,7 @@ extraPaths = [
 [tool.pytest.ini_options]
 pythonpath = [
     "src/main/python",
+    "../../packages/hydra-python/src/main/python",
     "../../dist/python/hydra-kernel/src/main/python",
     "../../dist/python/hydra-haskell/src/main/python",
     "../../dist/python/hydra-java/src/main/python",
