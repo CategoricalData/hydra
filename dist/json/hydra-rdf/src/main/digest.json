@@ -3,7 +3,7 @@
   "version": 1,
   "hashes": {
     "hydra.owl.syntax": "0db0a5421ac331e83da18f38b6b55ba2d98fcdaf01f4b49ff276fe4df4cfccee",
-    "hydra.rdf.serde": "0586a3bf9d312f0ac5875d26dc7251b25a6240679769fac0d2ceef817ee035af",
+    "hydra.rdf.serde": "7edee0edf8eb4444d0e55cd154c87914bb2e8165ad24557df7f6a4a28df1e2c4",
     "hydra.rdf.syntax": "91fea50adfd68b6514e898c799f9e51a862efbb048395853222dc53e428adba4",
     "hydra.rdf.utils": "6e7308ac461998f7aec8459a1d6dc6a01f5edd2b7992895ba8fef16721686763",
     "hydra.shacl.coder": "621c72b14060930e3a2280b632e0034c2bac8981880521bc94bcc19a1dd8976e",
