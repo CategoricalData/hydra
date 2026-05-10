@@ -1090,19 +1090,138 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.python.serde.comparisonToExpr",
+        "name": "hydra.python.serde.compareOpBitwiseOrPairToExpr",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a comparison expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Serialize a (compare-op, bitwise-or) pair as `<op> <rhs>`"}}}],
             "body": {
               "lambda": {
                 "body": {
                   "application": {
                     "argument": {
+                      "list": [
+                        {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "pair"},
+                                    "function": {"project": {"field": "operator", "typeName": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}},
+                                "function": {"variable": "hydra.python.serde.compareOpToString"}}},
+                            "function": {"variable": "hydra.serialization.cst"}}},
+                        {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "pair"},
+                                "function": {"project": {"field": "rhs", "typeName": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}},
+                            "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}}]},
+                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                "domain": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"},
+                "parameter": "pair"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.python.serde.compareOpToString",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {"key": "description", "value": {"literal": {"string": "Render a Python comparison operator to its source-code form"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "op"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {"name": "eq", "term": {"lambda": {"body": {"literal": {"string": "=="}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {"name": "noteq", "term": {"lambda": {"body": {"literal": {"string": "!="}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {"name": "lte", "term": {"lambda": {"body": {"literal": {"string": "<="}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {"name": "lt", "term": {"lambda": {"body": {"literal": {"string": "<"}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {"name": "gte", "term": {"lambda": {"body": {"literal": {"string": ">="}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {"name": "gt", "term": {"lambda": {"body": {"literal": {"string": ">"}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {
+                            "name": "notin",
+                            "term": {"lambda": {"body": {"literal": {"string": "not in"}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {"name": "in", "term": {"lambda": {"body": {"literal": {"string": "in"}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {
+                            "name": "isnot",
+                            "term": {"lambda": {"body": {"literal": {"string": "is not"}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {"name": "is", "term": {"lambda": {"body": {"literal": {"string": "is"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
+                        "typeName": "hydra.python.syntax.CompareOp"}}}},
+                "domain": {"variable": "hydra.python.syntax.CompareOp"},
+                "parameter": "op"}}}},
+        "typeScheme": {
+          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.python.syntax.CompareOp"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.python.serde.comparisonToExpr",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {
+                  "literal": {
+                    "string": "Serialize a comparison expression: `<lhs>` if rhs is empty, otherwise `<lhs> <op1> <rhs1> <op2> <rhs2> ...`"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "lhs",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "cmp"},
+                            "function": {"project": {"field": "lhs", "typeName": "hydra.python.syntax.Comparison"}}}},
+                        "typeScheme": {"body": {"variable": "hydra.python.syntax.BitwiseOr"}, "variables": []}},
+                      {
+                        "name": "rhs",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "cmp"},
+                            "function": {"project": {"field": "rhs", "typeName": "hydra.python.syntax.Comparison"}}}},
+                        "typeScheme": {"body": {"list": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}, "variables": []}}],
+                    "body": {
                       "application": {
-                        "argument": {"variable": "cmp"},
-                        "function": {"project": {"field": "lhs", "typeName": "hydra.python.syntax.Comparison"}}}},
-                    "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}},
+                        "argument": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "rhs"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "hydra.python.serde.compareOpBitwiseOrPairToExpr"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}},
+                                            "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"application": {"argument": {"variable": "lhs"}, "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                        "function": {
+                          "application": {
+                            "argument": {"application": {"argument": {"variable": "lhs"}, "function": {"variable": "hydra.python.serde.bitwiseOrToExpr"}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "rhs"},
+                                    "function": {
+                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"variable": "hydra.python.syntax.CompareOpBitwiseOrPair"}}}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": {"variable": "hydra.python.syntax.Comparison"},
                 "parameter": "cmp"}}}},
         "typeScheme": {

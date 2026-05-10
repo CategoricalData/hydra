@@ -118,6 +118,8 @@ module_ = Module {
       toDefinition classDefinitionToExpr,
       toDefinition classPatternToExpr,
       toDefinition closedPatternToExpr,
+      toDefinition compareOpBitwiseOrPairToExpr,
+      toDefinition compareOpToString,
       toDefinition comparisonToExpr,
       toDefinition compoundStatementToExpr,
       toDefinition conditionalToExpr,
@@ -426,12 +428,41 @@ closedPatternToExpr = def "closedPatternToExpr" $
       Py._ClosedPattern_mapping>>: lambda "_" $ Serialization.cst @@ string "{...}",
       Py._ClosedPattern_class>>: lambda "c" $ classPatternToExpr @@ var "c"]
 
+compareOpBitwiseOrPairToExpr :: TTermDefinition (Py.CompareOpBitwiseOrPair -> Expr)
+compareOpBitwiseOrPairToExpr = def "compareOpBitwiseOrPairToExpr" $
+  doc "Serialize a (compare-op, bitwise-or) pair as `<op> <rhs>`" $
+  lambda "pair" $
+    Serialization.spaceSep @@ list [
+      Serialization.cst @@ (compareOpToString @@ (project Py._CompareOpBitwiseOrPair Py._CompareOpBitwiseOrPair_operator @@ var "pair")),
+      bitwiseOrToExpr @@ (project Py._CompareOpBitwiseOrPair Py._CompareOpBitwiseOrPair_rhs @@ var "pair")]
+
+compareOpToString :: TTermDefinition (Py.CompareOp -> String)
+compareOpToString = def "compareOpToString" $
+  doc "Render a Python comparison operator to its source-code form" $
+  lambda "op" $
+    cases Py._CompareOp (var "op") Nothing [
+      Py._CompareOp_eq>>: constant $ string "==",
+      Py._CompareOp_noteq>>: constant $ string "!=",
+      Py._CompareOp_lte>>: constant $ string "<=",
+      Py._CompareOp_lt>>: constant $ string "<",
+      Py._CompareOp_gte>>: constant $ string ">=",
+      Py._CompareOp_gt>>: constant $ string ">",
+      Py._CompareOp_notin>>: constant $ string "not in",
+      Py._CompareOp_in>>: constant $ string "in",
+      Py._CompareOp_isnot>>: constant $ string "is not",
+      Py._CompareOp_is>>: constant $ string "is"]
+
 comparisonToExpr :: TTermDefinition (Py.Comparison -> Expr)
 comparisonToExpr = def "comparisonToExpr" $
-  doc "Serialize a comparison expression" $
-  lambda "cmp" $
-    -- For now, just encode the LHS bitwise or; comparison operators are rarely used in generated code
-    bitwiseOrToExpr @@ (project Py._Comparison Py._Comparison_lhs @@ var "cmp")
+  doc "Serialize a comparison expression: `<lhs>` if rhs is empty, otherwise `<lhs> <op1> <rhs1> <op2> <rhs2> ...`" $
+  lambda "cmp" $ lets [
+    "lhs">: project Py._Comparison Py._Comparison_lhs @@ var "cmp",
+    "rhs">: project Py._Comparison Py._Comparison_rhs @@ var "cmp"]
+    $ Logic.ifElse (Lists.null $ var "rhs")
+        (bitwiseOrToExpr @@ var "lhs")
+        (Serialization.spaceSep @@ Lists.cons
+          (bitwiseOrToExpr @@ var "lhs")
+          (Lists.map compareOpBitwiseOrPairToExpr (var "rhs")))
 
 compoundStatementToExpr :: TTermDefinition (Py.CompoundStatement -> Expr)
 compoundStatementToExpr = def "compoundStatementToExpr" $

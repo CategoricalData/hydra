@@ -188,8 +188,10 @@ module_ = Module {
       toDefinition isTypeModuleCheck,
       toDefinition isTypeVariableName,
       toDefinition isVariantUnitType,
+      toDefinition lazyDotGet,
       toDefinition lruCacheDecorator,
       toDefinition makeCurriedLambda,
+      toDefinition makeLazy,
       toDefinition makePyGraph,
       toDefinition makeSimpleLambda,
       toDefinition makeThunk,
@@ -215,6 +217,7 @@ module_ = Module {
       toDefinition setMetaUsesEnum,
       toDefinition setMetaUsesFrozenDict,
       toDefinition setMetaUsesFrozenList,
+      toDefinition setMetaUsesFrozenSet,
       toDefinition setMetaUsesGeneric,
       toDefinition setMetaUsesJust,
       toDefinition setMetaUsesLeft,
@@ -512,6 +515,7 @@ emptyMetadata = def "emptyMetadata" $
       PyHelpers._PythonModuleMetadata_usesEnum>>: false,
       PyHelpers._PythonModuleMetadata_usesFrozenDict>>: false,
       PyHelpers._PythonModuleMetadata_usesFrozenList>>: false,
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>: false,
       PyHelpers._PythonModuleMetadata_usesGeneric>>: false,
       PyHelpers._PythonModuleMetadata_usesJust>>: false,
       PyHelpers._PythonModuleMetadata_usesLeft>>: false,
@@ -605,6 +609,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
       _Term_variable>>: "name" ~>
         "g" <~ (pythonEnvironmentGetGraph @@ var "env") $
         "allArgs" <~ (Lists.concat2 (var "hargs") (var "rargs")) $
+        "inlineVars" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "env") $
         Maybes.cases (Maps.lookup (var "name") (Graph.graphPrimitives (var "g")))
           -- Not a primitive: use original logic
           (Maybes.maybe
@@ -626,9 +631,17 @@ encodeApplicationInner = def "encodeApplicationInner" $
                   Logic.ifElse (Lists.null $ var "consumedArgs")
                     ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TTerm Py.Expression]))) $
                       right $ pair (var "expr") (var "rargs"))
-                    (right $ pair
-                      (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
-                      (var "remainingArgs")))
+                    -- Lazy-aware: if the binding is an inline let (Lazy-wrapped), call .get() before applying.
+                    (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
+                      (right $ pair
+                        (PyUtils.functionCall
+                          @@ (PyUtils.pyExpressionToPyPrimary
+                            @@ (lazyDotGet @@ (PyNames.termVariableReference @@ var "env" @@ var "name")))
+                          @@ var "consumedArgs")
+                        (var "remainingArgs"))
+                      (right $ pair
+                        (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
+                        (var "remainingArgs"))))
                 (Core.bindingTypeScheme $ var "el"))
             (Lexical.lookupBinding @@ var "g" @@ var "name"))
           -- Is a primitive: wrap lazy arguments and encode
@@ -843,11 +856,13 @@ encodeBindingAs = def "encodeBindingAs" $
               Phantoms.field Py._FunctionDefRaw_block (var "body")]) $
             right $ PyDsl.statementCompound (PyDsl.compoundStatementFunction $ PyDsl.functionDefinition nothing (var "funcDefRaw"))))
           (var "mcsa"))
-      -- Binding with type scheme - use encodeTermAssignment
+      -- Binding with type scheme - use encodeTermAssignment with topLevel=false
+      -- (inner binding; arity-0 complex thunks emit `name = Lazy(lambda: ...)`.
+      -- Use-site `name()` dispatches via Lazy.__call__ to get()).
       ("ts" ~>
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term1") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
-        encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name1" @@ var "term1" @@ var "ts" @@ var "normComment")
+        encodeTermAssignment @@ var "cx" @@ var "env" @@ false @@ var "name1" @@ var "term1" @@ var "ts" @@ var "normComment")
       (var "mts")
 
 -- | Encode a binding as a walrus operator assignment (for inline let expressions).
@@ -880,7 +895,11 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
         ("ts" ~> Logic.and (var "allowThunking")
           (Logic.and (Equality.equal (Arity.typeSchemeArity @@ var "ts") (Phantoms.int 0))
                      (Logic.or (var "isComplexVar") (var "termIsComplex"))))) $
-    "pterm" <~ (Logic.ifElse (var "needsThunk") (makeThunk @@ var "pbody") (var "pbody")) $
+    -- Always wrap walrus values in Lazy(...) so the evaluation is deferred
+    -- until forced by .get() at use sites. This matches Java's hydra.util.Lazy<>
+    -- and prevents exponential re-evaluation when bindings appear in conditional
+    -- positions (e.g. inside a maybes.maybe branch).
+    "pterm" <~ (makeLazy @@ var "pbody") $
     right $ PyDsl.namedExpressionAssignment $ PyDsl.assignmentExpression (var "pyName") (var "pterm")
 
 -- | Encode bindings as function definitions
@@ -982,7 +1001,9 @@ encodeDefinition = def "encodeDefinition" $
           (project _TermDefinition _TermDefinition_typeScheme @@ var "td") $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
-        "stmt" <<~ (encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
+        -- topLevel=true: keep public API stable (`@lru_cache(1) def name():` form
+        -- so external Python code calling `module.thunk()` continues to work).
+        "stmt" <<~ (encodeTermAssignment @@ var "cx" @@ var "env" @@ true @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
         right $ list [list [var "stmt"]],
       _Definition_type>>: "td" ~>
         "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "td") $
@@ -1385,14 +1406,20 @@ encodeRecordType = def "encodeRecordType" $
         Phantoms.field Py._ClassDefinition_arguments (var "args"),
         Phantoms.field Py._ClassDefinition_body (var "body")]
 
--- | Encode a term assignment (top-level binding) to a Python statement.
---   This dispatches to either a simple assignment or a function definition depending on complexity.
+-- | Encode a term assignment to a Python statement.
+--   `topLevel`: True for module-level bindings (preserves @lru_cache(1) def
+--   form so external Python callers using `module.thunk()` keep working).
+--   False for inner bindings emitted via encodeBindingAs (zero-arg complex
+--   thunks become `name = Lazy(lambda: e)` to avoid functools.update_wrapper
+--   overhead — cProfile showed this is 58% of bootstrap codegen time).
+--   Use sites at the Python level continue to emit `name()`; Lazy.__call__
+--   delegates to .get() so callers don't need rewriting.
 encodeTermAssignment :: TTermDefinition (Context -> PyHelpers.PythonEnvironment
-  -> Name -> TTerm Term -> TypeScheme -> Maybe String
+  -> Bool -> Name -> TTerm Term -> TypeScheme -> Maybe String
   -> Either Error Py.Statement)
 encodeTermAssignment = def "encodeTermAssignment" $
   doc "Encode a term assignment to a Python statement" $
-  "cx" ~> "env" ~> "name" ~> "term" ~> "ts" ~> "comment" ~>
+  "cx" ~> "env" ~> "topLevel" ~> "name" ~> "term" ~> "ts" ~> "comment" ~>
     "fs" <<~ (analyzePythonFunction @@ var "cx" @@ var "env" @@ var "term") $
     "tparams" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_typeParams @@ var "fs") $
     "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
@@ -1406,9 +1433,17 @@ encodeTermAssignment = def "encodeTermAssignment" $
     "isComplex" <~ (Predicates.isComplexBinding @@ var "tc" @@ var "binding") $
     "isTrivial" <~ (Predicates.isTrivialTerm @@ var "term") $
     Logic.ifElse (Logic.and (var "isComplex") (Logic.not (var "isTrivial")))
-      -- Complex binding (non-trivial): use function definition
-      ("bindingStmts" <<~ (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
-        functionDefinitionToExpr @@ var "cx" @@ var "env2" @@ var "name" @@ var "tparams" @@ var "params" @@ var "body" @@ var "doms" @@ var "mcod" @@ var "comment" @@ var "bindingStmts")
+      -- Complex non-trivial binding
+      (Logic.ifElse (Logic.and (Logic.not (var "topLevel")) (Lists.null (var "params")))
+        -- Inner zero-arg thunk: emit `name = Lazy(lambda: <body>)`. Use sites
+        -- emit `name()` which dispatches to Lazy.get() via __call__.
+        ("bodyExpr" <<~ (encodeTermInline @@ var "cx" @@ var "env2" @@ false @@ var "term") $
+          "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env2" @@ var "name") $
+          "lazyExpr" <~ (makeLazy @@ var "bodyExpr") $
+          right $ PyUtils.annotatedStatement @@ var "comment" @@ (PyUtils.assignmentStatement @@ var "pyName" @@ var "lazyExpr"))
+        -- Top-level OR has args: emit normal def via functionDefinitionToExpr
+        ("bindingStmts" <<~ (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
+          functionDefinitionToExpr @@ var "cx" @@ var "env2" @@ var "name" @@ var "tparams" @@ var "params" @@ var "body" @@ var "doms" @@ var "mcod" @@ var "comment" @@ var "bindingStmts"))
       -- Simple binding: use assignment
       ("bodyExpr" <<~ (encodeTermInline @@ var "cx" @@ var "env2" @@ false @@ var "body") $
         "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env2" @@ var "name") $
@@ -1539,27 +1574,40 @@ encodeTermInline = def "encodeTermInline" $
               "indexedExpr" <~ (PyUtils.primaryWithExpressionSlices @@ (PyUtils.pyExpressionToPyPrimary @@ var "tupleExpr") @@ list [var "indexValue"]) $
               right $ PyUtils.pyPrimaryToPyExpression @@ var "indexedExpr")),
 
-      -- TermList - encode as tuple
+      -- TermList - encode as ConsList.of(...). Public types stay Sequence[E];
+      -- ConsList implements Sequence so callers see the abstract type but get
+      -- the structurally-shared persistent value.
       _Term_list>>: "terms" ~>
         "pyExprs" <<~ (Eithers.mapList (var "encode") (var "terms")) $
-        right $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTuple (PyDsl.tuple (Lists.map PyUtils.pyExpressionToPyStarNamedExpression (var "pyExprs"))),
+        "consListOf" <~ (PyUtils.projectFromExpression
+          @@ (PyUtils.pyNameToPyExpression @@ PyDsl.name (string "ConsList"))
+          @@ PyDsl.name (string "of")) $
+        right $ PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "consListOf")
+          @@ var "pyExprs",
 
       -- TermLiteral
       _Term_literal>>: "lit" ~>
         encodeLiteral @@ var "lit",
 
-      -- TermMap - encode as FrozenDict
+      -- TermMap - encode as PersistentMap.of_entries((k, v), ...). Public types
+      -- stay Mapping[K, V]; PersistentMap is a Mapping so callers see the abstract
+      -- type but get the structurally-shared persistent value.
       _Term_map>>: "m" ~>
-        "pairs" <<~ (Eithers.mapList
+        "tuplePairs" <<~ (Eithers.mapList
           ("kv" ~>
             "k" <~ (Pairs.first $ var "kv") $
             "v" <~ (Pairs.second $ var "kv") $
             "pyK" <<~ (var "encode" @@ var "k") $
             "pyV" <<~ (var "encode" @@ var "v") $
-            right $ PyDsl.doubleStarredKvpairPair (PyDsl.kvpair (var "pyK") (var "pyV")))
+            right $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTuple (PyDsl.tuple (list [
+              PyUtils.pyExpressionToPyStarNamedExpression @@ var "pyK",
+              PyUtils.pyExpressionToPyStarNamedExpression @@ var "pyV"])))
           (Maps.toList $ var "m")) $
-        right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "FrozenDict"))
-          @@ list [PyUtils.pyAtomToPyExpression @@ PyDsl.atomDict (PyDsl.dict (var "pairs"))],
+        "pmapOfEntries" <~ (PyUtils.projectFromExpression
+          @@ (PyUtils.pyNameToPyExpression @@ PyDsl.name (string "PersistentMap"))
+          @@ PyDsl.name (string "of_entries")) $
+        right $ PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pmapOfEntries")
+          @@ var "tuplePairs",
 
       -- TermMaybe - encode as Nothing() or Just(value)
       _Term_maybe>>: "mt" ~>
@@ -1586,11 +1634,16 @@ encodeTermInline = def "encodeTermInline" $
         "pargs" <<~ (Eithers.mapList ("fld" ~> var "encode" @@ Core.fieldTerm (var "fld")) (var "fields")) $
         right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeNameQualified @@ var "env" @@ var "tname")) @@ var "pargs",
 
-      -- TermSet - encode as frozenset
+      -- TermSet - encode as PersistentSet.of(...). Public types stay
+      -- AbstractSet[E]; PersistentSet implements Set so callers see the
+      -- abstract type but get the structurally-shared persistent value.
       _Term_set>>: "s" ~>
         "pyEls" <<~ (Eithers.mapList (var "encode") (Sets.toList $ var "s")) $
-        right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "frozenset"))
-          @@ list [PyUtils.pyAtomToPyExpression @@ PyDsl.atomSet (PyDsl.set (Lists.map PyUtils.pyExpressionToPyStarNamedExpression (var "pyEls")))],
+        "psetOf" <~ (PyUtils.projectFromExpression
+          @@ (PyUtils.pyNameToPyExpression @@ PyDsl.name (string "PersistentSet"))
+          @@ PyDsl.name (string "of")) $
+        right $ PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "psetOf")
+          @@ var "pyEls",
 
       -- TermTypeApplication - strip type applications and potentially cast
       _Term_typeApplication>>: "ta" ~>
@@ -1781,11 +1834,11 @@ encodeType = def "encodeType" $
       _Type_forall>>: "lt" ~> encodeForallType @@ var "env" @@ var "lt",
       _Type_list>>: "et" ~>
         "pyet" <<~ encodeType @@ var "env" @@ var "et" $
-        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "frozenlist") @@ list [var "pyet"],
+        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "Sequence") @@ list [var "pyet"],
       _Type_map>>: "mt" ~>
         "pykt" <<~ encodeType @@ var "env" @@ (project _MapType _MapType_keys @@ var "mt") $
         "pyvt" <<~ encodeType @@ var "env" @@ (project _MapType _MapType_values @@ var "mt") $
-        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "FrozenDict") @@ list [var "pykt", var "pyvt"],
+        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "Mapping") @@ list [var "pykt", var "pyvt"],
       _Type_literal>>: "lt" ~> encodeLiteralType @@ var "lt",
       _Type_maybe>>: "et" ~>
         "ptype" <<~ encodeType @@ var "env" @@ var "et" $
@@ -1807,7 +1860,7 @@ encodeType = def "encodeType" $
       _Type_record>>: constant $ var "dflt",
       _Type_set>>: "et" ~>
         "pyet" <<~ encodeType @@ var "env" @@ var "et" $
-        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "frozenset") @@ list [var "pyet"],
+        right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "Set") @@ list [var "pyet"],
       _Type_union>>: constant $ var "dflt",
       _Type_unit>>: constant $ right $ PyUtils.pyNameToPyExpression @@ PyUtils.pyNone,
       _Type_void>>: constant $ right $ PyUtils.pyNameToPyExpression @@ PyUtils.pyNone,
@@ -1914,15 +1967,22 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
         "isUnitVariant" <~ (isVariantUnitType @@ var "rt" @@ var "fname") $
         -- Get the Python variant class name (deconflicted to avoid collisions)
         "pyVariantName" <~ (deconflictVariantName @@ true @@ var "env" @@ var "tname" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env")) $
+        -- For enum types, build the expression `EnumType.VARIANT_UPPER` instead of using the Python class-style variant name
+        "pyTypeName" <~ (PyNames.encodeName @@ true @@ Util.caseConventionPascal @@ var "env" @@ var "tname") $
+        "pyEnumValue" <~ (PyNames.encodeEnumValue @@ var "env" @@ var "fname") $
+        "enumMemberExpr" <~ (PyUtils.pyPrimaryToPyExpression @@
+          (PyDsl.primaryCompound $ PyDsl.primaryWithRhs
+            (PyUtils.pyNameToPyPrimary @@ var "pyTypeName")
+            (PyDsl.primaryRhsProject $ var "pyEnumValue"))) $
         -- Create the check expression:
         --   Enum types: arg == EnumType.VARIANT (using comparison operator)
         --   Non-enum types: isinstance(arg, VariantType) (using function call)
         "isinstanceCheck" <~ (Logic.ifElse (var "isEnum")
-          -- Enum: arg == EnumType.VARIANT (e.g. AssignmentOperator.SIMPLE)
+          -- Enum: arg == EnumType.VARIANT (e.g. CaseConvention.CAMEL)
           (PyDsl.pyComparisonToPyExpression $ PyDsl.comparison
             (PyUtils.pyExpressionToBitwiseOr @@ var "pyArg")
             (list [PyDsl.compPairEq
-              (PyUtils.pyExpressionToBitwiseOr @@ (PyUtils.pyNameToPyExpression @@ var "pyVariantName"))]))
+              (PyUtils.pyExpressionToBitwiseOr @@ var "enumMemberExpr")]))
           -- Non-enum: isinstance(arg, VariantType)
           (PyUtils.functionCall @@ var "isinstancePrimary"
             @@ list [var "pyArg", PyUtils.pyNameToPyExpression @@ var "pyVariantName"])) $
@@ -2050,9 +2110,13 @@ encodeVariable = def "encodeVariable" $
     "mTyp" <~ (Maybes.map ("ts_" ~> Core.typeSchemeBody (var "ts_")) (var "mTypScheme")) $
     "asVariable" <~ (PyNames.termVariableReference @@ var "env" @@ var "name") $
     "asFunctionCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "args") $
+    -- Lazy-aware function call for inline-var references: name.get()(args)
+    "asLazyCall" <~ (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ (lazyDotGet @@ var "asVariable")) @@ var "args") $
     Logic.ifElse (Logic.not $ Lists.null (var "args"))
-      -- Non-empty args: check for primitives first
-      (Maybes.maybe
+      -- Non-empty args: inline-var calls need .get(); otherwise check primitives
+      (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
+        (right $ var "asLazyCall")
+        (Maybes.maybe
         -- No primitive found: use regular function call
         (right $ var "asFunctionCall")
         -- Primitive found: check if full or partial application
@@ -2068,7 +2132,7 @@ encodeVariable = def "encodeVariable" $
               "allArgs" <~ (Lists.concat2 (var "args") (var "remainingExprs")) $
               "fullCall" <~ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "allArgs") $
               right $ makeUncurriedLambda @@ var "remainingParams" @@ var "fullCall"))
-        (Lexical.lookupPrimitive @@ var "g" @@ var "name"))
+        (Lexical.lookupPrimitive @@ var "g" @@ var "name")))
       -- Empty args: check various contexts
       (Maybes.maybe
         -- Name not in graphBoundTypes
@@ -2077,8 +2141,8 @@ encodeVariable = def "encodeVariable" $
           (right $ var "asVariable")
           -- Not a lambda var - check inline vars first
           (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
-            -- Untyped inline variable (e.g. from hoisting with no type annotation)
-            (right $ var "asVariable")
+            -- Untyped inline variable (Lazy-wrapped at definition; force via .get())
+            (right $ lazyDotGet @@ var "asVariable")
             -- Not inline - check primitives
             (Maybes.maybe
               -- Not a primitive - check graph elements
@@ -2124,10 +2188,11 @@ encodeVariable = def "encodeVariable" $
             (right $ var "asVariable")
             -- Not a lambda variable
             (Logic.ifElse (Sets.member (var "name") (var "inlineVars"))
-              -- Inline variable: function reference
-              ("asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
-                  (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "asVariable")
-                  (var "asVariable")) $
+              -- Inline variable (Lazy-wrapped at definition; force via .get())
+              ("unwrapped" <~ (lazyDotGet @@ var "asVariable") $
+                "asFunctionRef" <~ (Logic.ifElse (Logic.not $ Sets.null (Variables.freeVariablesInType @@ var "typ"))
+                  (makeSimpleLambda @@ (Arity.typeArity @@ var "typ") @@ var "unwrapped")
+                  (var "unwrapped")) $
                 right $ var "asFunctionRef")
               -- Not inline variable
               (Logic.ifElse (Logic.not $ Maps.member (var "name") (var "tcMetadata"))
@@ -2290,8 +2355,12 @@ extendMetaForTerm = def "extendMetaForTerm" $
           cases _Literal (var "l") (Just $ var "meta") [
             _Literal_decimal>>: constant $
               setMetaUsesDecimal @@ var "meta" @@ true],
+        _Term_list>>: constant $
+          setMetaUsesFrozenList @@ var "meta" @@ true,
         _Term_map>>: constant $
           setMetaUsesFrozenDict @@ var "meta" @@ true,
+        _Term_set>>: constant $
+          setMetaUsesFrozenSet @@ var "meta" @@ true,
         _Term_maybe>>: "m" ~>
           Maybes.maybe
             (setMetaUsesNothing @@ var "meta" @@ true)
@@ -2331,12 +2400,15 @@ extendMetaForType = def "extendMetaForType" $
         Logic.ifElse (Logic.and (var "isTermAnnot") (var "topLevel"))
           (var "meta3")  -- Top-level function type on term: no Callable needed (def syntax)
           (setMetaUsesCallable @@ var "meta3" @@ true),  -- Otherwise need Callable
-      -- List type: need frozenlist import
+      -- List type: need Sequence (collections.abc) and ConsList (hydra.python.util)
       _Type_list>>: constant $
         setMetaUsesFrozenList @@ var "metaWithSubtypes" @@ true,
-      -- Map type: need FrozenDict import
+      -- Map type: need Mapping (collections.abc) and PersistentMap (hydra.python.util)
       _Type_map>>: constant $
         setMetaUsesFrozenDict @@ var "metaWithSubtypes" @@ true,
+      -- Set type: need AbstractSet (collections.abc) and PersistentSet (hydra.python.util)
+      _Type_set>>: constant $
+        setMetaUsesFrozenSet @@ var "metaWithSubtypes" @@ true,
       -- Maybe type: need Maybe import
       _Type_maybe>>: constant $
         setMetaUsesMaybe @@ var "metaWithSubtypes" @@ true,
@@ -2517,6 +2589,7 @@ initialMetadata = def "initialMetadata" $
       PyHelpers._PythonModuleMetadata_usesEnum>>: false,
       PyHelpers._PythonModuleMetadata_usesFrozenDict>>: false,
       PyHelpers._PythonModuleMetadata_usesFrozenList>>: false,
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>: false,
       PyHelpers._PythonModuleMetadata_usesGeneric>>: false,
       PyHelpers._PythonModuleMetadata_usesJust>>: false,
       PyHelpers._PythonModuleMetadata_usesLeft>>: false,
@@ -2589,6 +2662,16 @@ isVariantUnitType = def "isVariantUnitType" $
         ("ft" ~> Predicates.isUnitType @@ (Strip.deannotateType @@ Core.fieldTypeType (var "ft")))
         (var "mfield")
 
+-- | Wrap an expression in a `.get()` method call (Lazy unwrap at use sites).
+lazyDotGet :: TTermDefinition (Py.Expression -> Py.Expression)
+lazyDotGet = def "lazyDotGet" $
+  doc "Wrap an expression in a .get() method call (for Lazy unwrap at use sites)" $
+  "expr" ~>
+    PyUtils.functionCall @@
+      (PyUtils.pyExpressionToPyPrimary @@
+        (PyUtils.projectFromExpression @@ var "expr" @@ (PyDsl.name $ string "get"))) @@
+      list ([] :: [TTerm Py.Expression])
+
 -- | Decorator for @lru_cache(1) to memoize zero-argument function results
 lruCacheDecorator :: TTermDefinition Py.NamedExpression
 lruCacheDecorator = def "lruCacheDecorator" $
@@ -2610,6 +2693,16 @@ makeCurriedLambda = def "makeCurriedLambda" $
           (var "acc"))
       (var "body")
       (Lists.reverse (var "params"))
+
+-- | Wrap an expression in `Lazy(lambda: ...)` for one-shot lazy memoization.
+--   Mirrors hydra.util.Lazy<> in Hydra-Java. Use sites force evaluation via .get().
+makeLazy :: TTermDefinition (Py.Expression -> Py.Expression)
+makeLazy = def "makeLazy" $
+  doc "Wrap an expression in Lazy(lambda: ...) for one-shot lazy memoization" $
+  "pbody" ~>
+    PyUtils.functionCall @@
+      (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Lazy") @@
+      list [wrapInNullaryLambda @@ var "pbody"]
 
 -- | Constructor for PyGraph record
 makePyGraph :: TTermDefinition (Graph -> PyHelpers.PythonModuleMetadata -> PyHelpers.PyGraph)
@@ -2698,7 +2791,13 @@ moduleStandardImports = def "moduleStandardImports" $
         condImportSymbol @@ string "annotations" @@ PyNames.useFutureAnnotations]),
       pair (string "collections.abc") (list [
         condImportSymbol @@ string "Callable" @@
-          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "meta")]),
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "meta"),
+        condImportSymbol @@ string "Mapping" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "meta"),
+        condImportSymbol @@ string "Sequence" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "meta"),
+        condImportSymbol @@ string "Set" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "meta")]),
       pair (string "dataclasses") (list [
         condImportSymbol @@ string "dataclass" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "meta")]),
@@ -2714,8 +2813,6 @@ moduleStandardImports = def "moduleStandardImports" $
       pair (string "hydra.dsl.python") (list [
         condImportSymbol @@ string "Either" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "meta"),
-        condImportSymbol @@ string "FrozenDict" @@
-          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "meta"),
         condImportSymbol @@ string "Just" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "meta"),
         condImportSymbol @@ string "Left" @@
@@ -2727,9 +2824,17 @@ moduleStandardImports = def "moduleStandardImports" $
         condImportSymbol @@ string "Nothing" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "meta"),
         condImportSymbol @@ string "Right" @@
-          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "meta"),
-        condImportSymbol @@ string "frozenlist" @@
-          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "meta")]),
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "meta")]),
+      pair (string "hydra.python.util") (list [
+        condImportSymbol @@ string "ConsList" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "meta"),
+        -- Lazy is unconditionally imported: every module with let-bindings
+        -- needs it, and the cost of an unused import is negligible.
+        condImportSymbol @@ string "Lazy" @@ (boolean True),
+        condImportSymbol @@ string "PersistentMap" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "meta"),
+        condImportSymbol @@ string "PersistentSet" @@
+          (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "meta")]),
       pair (string "typing") (list [
         condImportSymbol @@ string "Annotated" @@
           (project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "meta"),
@@ -2846,6 +2951,8 @@ setMetaNamespaces = def "setMetaNamespaces" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -2895,6 +3002,8 @@ setMetaTypeVariables = def "setMetaTypeVariables" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -2945,6 +3054,8 @@ setMetaUsesAnnotated = def "setMetaUsesAnnotated" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -2993,6 +3104,8 @@ setMetaUsesCallable = def "setMetaUsesCallable" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3042,6 +3155,8 @@ setMetaUsesCast = def "setMetaUsesCast" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3092,6 +3207,8 @@ setMetaUsesDataclass = def "setMetaUsesDataclass" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3142,6 +3259,8 @@ setMetaUsesDecimal = def "setMetaUsesDecimal" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3190,6 +3309,8 @@ setMetaUsesEither = def "setMetaUsesEither" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3238,6 +3359,8 @@ setMetaUsesEnum = def "setMetaUsesEnum" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3288,6 +3411,8 @@ setMetaUsesFrozenDict = def "setMetaUsesFrozenDict" $
       PyHelpers._PythonModuleMetadata_usesFrozenDict>>: var "b",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3336,6 +3461,58 @@ setMetaUsesFrozenList = def "setMetaUsesFrozenList" $
       PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>: var "b",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesGeneric>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesJust>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLeft>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLeft @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesMaybe>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesMaybe @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesName>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesName @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNode>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNode @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesNothing>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesNothing @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesRight>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesRight @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeVar>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeVar @@ var "m"]
+
+setMetaUsesFrozenSet :: TTermDefinition (PyHelpers.PythonModuleMetadata -> Bool -> PyHelpers.PythonModuleMetadata)
+setMetaUsesFrozenSet = def "setMetaUsesFrozenSet" $
+  "m" ~> "b" ~>
+    record PyHelpers._PythonModuleMetadata [
+      PyHelpers._PythonModuleMetadata_namespaces>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_namespaces @@ var "m",
+      PyHelpers._PythonModuleMetadata_typeVariables>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_typeVariables @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesAnnotated>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesAnnotated @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCallable>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCallable @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesCast>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesCast @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesLruCache>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesLruCache @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesTypeAlias>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesTypeAlias @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDataclass>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDataclass @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesDecimal>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesDecimal @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEither>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEither @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesEnum>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesEnum @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenDict>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenList>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>: var "b",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3385,6 +3562,8 @@ setMetaUsesGeneric = def "setMetaUsesGeneric" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>: var "b",
       PyHelpers._PythonModuleMetadata_usesJust>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesJust @@ var "m",
@@ -3433,6 +3612,8 @@ setMetaUsesJust = def "setMetaUsesJust" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>: var "b",
@@ -3481,6 +3662,8 @@ setMetaUsesLeft = def "setMetaUsesLeft" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3529,6 +3712,8 @@ setMetaUsesLruCache = def "setMetaUsesLruCache" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3578,6 +3763,8 @@ setMetaUsesMaybe = def "setMetaUsesMaybe" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3627,6 +3814,8 @@ setMetaUsesName = def "setMetaUsesName" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3677,6 +3866,8 @@ setMetaUsesNode = def "setMetaUsesNode" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3725,6 +3916,8 @@ setMetaUsesNothing = def "setMetaUsesNothing" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3773,6 +3966,8 @@ setMetaUsesRight = def "setMetaUsesRight" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3821,6 +4016,8 @@ setMetaUsesTypeAlias = def "setMetaUsesTypeAlias" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:
@@ -3871,6 +4068,8 @@ setMetaUsesTypeVar = def "setMetaUsesTypeVar" $
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenDict @@ var "m",
       PyHelpers._PythonModuleMetadata_usesFrozenList>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenList @@ var "m",
+      PyHelpers._PythonModuleMetadata_usesFrozenSet>>:
+        project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesFrozenSet @@ var "m",
       PyHelpers._PythonModuleMetadata_usesGeneric>>:
         project PyHelpers._PythonModuleMetadata PyHelpers._PythonModuleMetadata_usesGeneric @@ var "m",
       PyHelpers._PythonModuleMetadata_usesJust>>:

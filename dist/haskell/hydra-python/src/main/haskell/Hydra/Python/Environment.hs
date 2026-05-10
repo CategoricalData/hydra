@@ -61,6 +61,7 @@ data PythonModuleMetadata =
     pythonModuleMetadataUsesEnum :: Bool,
     pythonModuleMetadataUsesFrozenDict :: Bool,
     pythonModuleMetadataUsesFrozenList :: Bool,
+    pythonModuleMetadataUsesFrozenSet :: Bool,
     pythonModuleMetadataUsesGeneric :: Bool,
     pythonModuleMetadataUsesJust :: Bool,
     pythonModuleMetadataUsesLeft :: Bool,
@@ -85,6 +86,7 @@ _PythonModuleMetadata_usesEither = Core.Name "usesEither"
 _PythonModuleMetadata_usesEnum = Core.Name "usesEnum"
 _PythonModuleMetadata_usesFrozenDict = Core.Name "usesFrozenDict"
 _PythonModuleMetadata_usesFrozenList = Core.Name "usesFrozenList"
+_PythonModuleMetadata_usesFrozenSet = Core.Name "usesFrozenSet"
 _PythonModuleMetadata_usesGeneric = Core.Name "usesGeneric"
 _PythonModuleMetadata_usesJust = Core.Name "usesJust"
 _PythonModuleMetadata_usesLeft = Core.Name "usesLeft"
