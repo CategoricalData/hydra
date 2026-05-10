@@ -18920,74 +18920,25 @@
                                                         "term": {
                                                           "lambda": {
                                                             "body": {
-                                                              "let": {
-                                                                "bindings": [
-                                                                  {
-                                                                    "name": "cod",
-                                                                    "term": {
-                                                                      "application": {"argument": {"variable": "ft"}, "function": {"project": {"field": "codomain", "typeName": "hydra.core.FunctionType"}}}},
-                                                                    "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
-                                                                "body": {
-                                                                  "let": {
-                                                                    "bindings": [
-                                                                      {
-                                                                        "name": "dom",
-                                                                        "term": {
-                                                                          "application": {"argument": {"variable": "ft"}, "function": {"project": {"field": "domain", "typeName": "hydra.core.FunctionType"}}}},
-                                                                        "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
-                                                                    "body": {
-                                                                      "let": {
-                                                                        "bindings": [
-                                                                          {
-                                                                            "name": "meta2",
-                                                                            "term": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "metaWithSubtypes"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "cod"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "isTermAnnot"},
-                                                                                        "function": {
-                                                                                          "application": {"argument": {"variable": "topLevel"}, "function": {"variable": "hydra.python.coder.extendMetaForType"}}}}}}}}},
-                                                                            "typeScheme": {"body": {"variable": "hydra.python.environment.PythonModuleMetadata"}, "variables": []}}],
-                                                                        "body": {
-                                                                          "let": {
-                                                                            "bindings": [
-                                                                              {
-                                                                                "name": "meta3",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "meta2"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "dom"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "isTermAnnot"},
-                                                                                            "function": {
-                                                                                              "application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.python.coder.extendMetaForType"}}}}}}}}},
-                                                                                "typeScheme": {"body": {"variable": "hydra.python.environment.PythonModuleMetadata"}, "variables": []}}],
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"literal": {"boolean": true}},
-                                                                                    "function": {"application": {"argument": {"variable": "meta3"}, "function": {"variable": "hydra.python.coder.setMetaUsesCallable"}}}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "meta3"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "topLevel"},
-                                                                                            "function": {"application": {"argument": {"variable": "isTermAnnot"}, "function": {"variable": "hydra.lib.logic.and"}}}}},
-                                                                                        "function": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.environment.PythonModuleMetadata"}}}}}}}}}}}}}}}}},
+                                                              "application": {
+                                                                "argument": {
+                                                                  "application": {
+                                                                    "argument": {"literal": {"boolean": true}},
+                                                                    "function": {
+                                                                      "application": {"argument": {"variable": "metaWithSubtypes"}, "function": {"variable": "hydra.python.coder.setMetaUsesCallable"}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "metaWithSubtypes"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "topLevel"},
+                                                                            "function": {"application": {"argument": {"variable": "isTermAnnot"}, "function": {"variable": "hydra.lib.logic.and"}}}}},
+                                                                        "function": {
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.python.environment.PythonModuleMetadata"}}}}}}}}},
                                                             "domain": {"variable": "hydra.core.FunctionType"},
-                                                            "parameter": "ft"}}},
+                                                            "parameter": "_"}}},
                                                       {
                                                         "name": "list",
                                                         "term": {
