@@ -67,3 +67,8 @@ def maybe(default: TTerm, f: TTerm, x: TTerm) -> TTerm:
 def pure(x: TTerm) -> TTerm:
     """Lift a value into the Maybe type."""
     return primitive1(x)
+
+
+def to_list(x: TTerm) -> TTerm:
+    """Convert a Maybe to a list: Just x becomes [x], Nothing becomes []."""
+    return primitive1(x)

@@ -48,11 +48,14 @@ from hydra.dsl.meta.phantom_literals import (
     bigint,
     binary,
     boolean,
+    char,
+    decimal,
     double,
     false,
     float_,
     float32,
     float64,
+    int_,
     int8,
     int16,
     int32,
@@ -60,6 +63,10 @@ from hydra.dsl.meta.phantom_literals import (
     integer,
     string,
     true,
+    uint8,
+    uint16,
+    uint32,
+    uint64,
 )
 
 A = TypeVar("A")
@@ -165,6 +172,20 @@ def to_binding(tb: TBinding[A]) -> Binding:
     This mirrors Haskell's toBinding and Java's Phantoms.toBinding().
     """
     return Binding(tb.name, tb.term.value, Nothing())
+
+
+def to_definition(tb: TBinding[A]):
+    """Convert a TBinding to a term Definition for use in Module.definitions.
+
+    Mirrors Haskell's Hydra.Dsl.Meta.Phantoms.toDefinition.
+    """
+    from hydra.packaging import DefinitionTerm, TermDefinition
+    return DefinitionTerm(TermDefinition(tb.name, tb.term.value, Nothing()))
+
+
+def to_term_definition(tb: TBinding[A]):
+    """Convert a TBinding to a term Definition (alias for to_definition)."""
+    return to_definition(tb)
 
 
 def derive_primitive_name() -> Name:
@@ -287,6 +308,36 @@ def just_() -> TTerm[A]:
 def lambdas(params: Sequence[str], body: TTerm[X]) -> TTerm[A]:
     """Create a multi-parameter lambda function."""
     return TTerm[A](terms.lambdas(params, un_tterm(body)))
+
+
+def left(term: TTerm[A]) -> TTerm[A]:
+    """Create a 'Left' either value."""
+    return TTerm[A](terms.left(un_tterm(term)))
+
+
+def left_() -> TTerm[A]:
+    """Function that wraps a value in 'Left'."""
+    return TTerm[A](terms.lambda_("left_", terms.left(terms.var("left_"))))
+
+
+def right(term: TTerm[A]) -> TTerm[A]:
+    """Create a 'Right' either value."""
+    return TTerm[A](terms.right(un_tterm(term)))
+
+
+def right_() -> TTerm[A]:
+    """Function that wraps a value in 'Right'."""
+    return TTerm[A](terms.lambda_("right_", terms.right(terms.var("right_"))))
+
+
+def let1(name: str, value: TTerm[A], env: TTerm[B]) -> TTerm[B]:
+    """Create a let expression with a single binding (alias for let with explicit args)."""
+    return TTerm[B](terms.let_term(Name(name), un_tterm(value), un_tterm(env)))
+
+
+def unsafe_cast(t: TTerm[A]) -> TTerm[B]:
+    """Cast a TTerm to a different phantom type. Used to bridge type inference gaps."""
+    return TTerm[B](un_tterm(t))
 
 
 def _build_term(intros: list[tuple[str, str, TTerm | None]], body: TTerm[B]) -> TTerm[B]:
