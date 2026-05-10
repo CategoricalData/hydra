@@ -1452,12 +1452,7 @@ extendMetaForType topLevel isTermAnnot typ meta =
           metaWithTvars = setMetaTypeVariables meta newTvars
           metaWithSubtypes = Lists.foldl (\m -> \t -> extendMetaForType False isTermAnnot t m) metaWithTvars (Rewriting.subtypes typ)
       in case (Strip.deannotateType typ) of
-        Core.TypeFunction v0 ->
-          let cod = Core.functionTypeCodomain v0
-              dom = Core.functionTypeDomain v0
-              meta2 = extendMetaForType topLevel isTermAnnot cod metaWithSubtypes
-              meta3 = extendMetaForType False isTermAnnot dom meta2
-          in (Logic.ifElse (Logic.and isTermAnnot topLevel) meta3 (setMetaUsesCallable meta3 True))
+        Core.TypeFunction _ -> Logic.ifElse (Logic.and isTermAnnot topLevel) metaWithSubtypes (setMetaUsesCallable metaWithSubtypes True)
         Core.TypeList _ -> setMetaUsesFrozenList metaWithSubtypes True
         Core.TypeMap _ -> setMetaUsesFrozenDict metaWithSubtypes True
         Core.TypeSet _ -> setMetaUsesFrozenSet metaWithSubtypes True
