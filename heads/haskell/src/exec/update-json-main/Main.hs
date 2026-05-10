@@ -107,7 +107,7 @@ main = do
   -- The DSL generator runs over the kernel-side type universe (kernel + json +
   -- other + haskell coder). This matches the old behavior of update-json-main:
   -- DSL modules are produced for every type in that universe.
-  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
+  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules ++ hydraPythonModules
   dslResult <- catch
     (writeDslJsonPackageSplit distRoot universe dslInputMods >> return True)
     (\e -> do

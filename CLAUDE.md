@@ -196,6 +196,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Demos | [docs/demos.md](docs/demos.md) |
 | Recipes index (full list) | [docs/recipes/index.md](docs/recipes/index.md) |
 | Wiki index | [github.com/CategoricalData/hydra/wiki](https://github.com/CategoricalData/hydra/wiki) |
+| Python-host perf history | [docs/history/python-host-perf-investigation.md](docs/history/python-host-perf-investigation.md) |
 
 ---
 

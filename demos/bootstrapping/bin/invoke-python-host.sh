@@ -17,7 +17,10 @@ HYDRA_PYTHON_DIR="$HYDRA_ROOT/heads/python"
 # Locate Python interpreter
 # PyPy3 is strongly recommended for term-level generation (CPython is too slow).
 # For type-only generation, CPython works fine.
-if command -v pypy3 >/dev/null 2>&1; then
+# HYDRA_PYTHON_INTERPRETER override (for benchmarking CPython vs PyPy explicitly).
+if [ -n "${HYDRA_PYTHON_INTERPRETER:-}" ]; then
+    PYTHON="$HYDRA_PYTHON_INTERPRETER"
+elif command -v pypy3 >/dev/null 2>&1; then
     PYTHON="pypy3"
 elif [ -f "$HYDRA_PYTHON_DIR/.venv-pypy/bin/pypy3" ]; then
     PYTHON="$HYDRA_PYTHON_DIR/.venv-pypy/bin/pypy3"
