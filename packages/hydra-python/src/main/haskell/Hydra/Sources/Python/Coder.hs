@@ -2391,15 +2391,17 @@ extendMetaForType = def "extendMetaForType" $
       (Rewriting.subtypes @@ var "typ")) $
     -- Finally process this type for imports
     cases _Type (Strip.deannotateType @@ var "typ") (Just $ var "metaWithSubtypes") [
-      -- Function type: may need Callable import
-      _Type_function>>: "ft" ~>
-        "cod" <~ Core.functionTypeCodomain (var "ft") $
-        "dom" <~ Core.functionTypeDomain (var "ft") $
-        "meta2" <~ (extendMetaForType @@ var "topLevel" @@ var "isTermAnnot" @@ var "cod" @@ var "metaWithSubtypes") $
-        "meta3" <~ (extendMetaForType @@ false @@ var "isTermAnnot" @@ var "dom" @@ var "meta2") $
+      -- Function type: may need Callable import. Subtypes (cod, dom) were
+      -- already walked by the Lists.foldl above; recursing again here would
+      -- be exponential — for an N-deep curried function type, doubling at
+      -- each level gives O(2^N) recursive calls. Bug surfaced as a 269s
+      -- per-binding regen for hydra.dsl.python.environment.pythonModuleMetadata
+      -- (a 24-deep lambda chain). Just add the Callable flag based on
+      -- isTermAnnot/topLevel.
+      _Type_function>>: constant $
         Logic.ifElse (Logic.and (var "isTermAnnot") (var "topLevel"))
-          (var "meta3")  -- Top-level function type on term: no Callable needed (def syntax)
-          (setMetaUsesCallable @@ var "meta3" @@ true),  -- Otherwise need Callable
+          (var "metaWithSubtypes")  -- Top-level function type on term: no Callable needed (def syntax)
+          (setMetaUsesCallable @@ var "metaWithSubtypes" @@ true),  -- Otherwise need Callable
       -- List type: need Sequence (collections.abc) and ConsList (hydra.python.util)
       _Type_list>>: constant $
         setMetaUsesFrozenList @@ var "metaWithSubtypes" @@ true,
