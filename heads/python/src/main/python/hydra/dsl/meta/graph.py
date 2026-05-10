@@ -8,12 +8,16 @@ adds custom helpers for Comparison and TypeClass union constructors.
 """
 
 import hydra.dsl.meta.phantoms as Phantoms
+import hydra.dsl.meta.lib.lists as Lists
+import hydra.dsl.meta.lib.maps as Maps
+import hydra.dsl.meta.lib.sets as Sets
 from hydra.classes import TypeClass
 from hydra.core import Name
 from hydra.phantoms import TTerm
 
 # Re-export everything from the generated DSL module.
 from hydra.dsl.graph import *  # noqa: F401, F403
+import hydra.dsl.graph as _Gen
 
 
 # ============================================================
@@ -53,3 +57,35 @@ def type_class_equality() -> TTerm:
 def type_class_ordering() -> TTerm:
     """The ordering TypeClass variant."""
     return Phantoms.inject_unit(TypeClass.TYPE_, TypeClass.ORDERING.value)
+
+
+# ============================================================
+# Graph helpers (custom)
+# ============================================================
+
+def empty_graph() -> TTerm:
+    """An empty graph: no terms, types, primitives, or schema."""
+    return _Gen.graph(
+        Maps.empty(),  # boundTerms
+        Maps.empty(),  # boundTypes
+        Maps.empty(),  # classConstraints
+        Sets.empty(),  # lambdaVariables
+        Maps.empty(),  # metadata
+        Maps.empty(),  # primitives
+        Maps.empty(),  # schemaTypes
+        Sets.empty(),  # typeVariables
+    )
+
+
+def graph_primitive_types(g: TTerm) -> TTerm:
+    """Extract a Map from primitive name to TypeScheme from a graph."""
+    return Maps.from_list(Lists.map(
+        Phantoms.lam(
+            "_gpt_p",
+            Phantoms.pair(
+                _Gen.primitive_name(Phantoms.var("_gpt_p")),
+                _Gen.primitive_type_scheme(Phantoms.var("_gpt_p")),
+            ),
+        ),
+        Maps.elems(_Gen.graph_primitives(g)),
+    ))

@@ -151,20 +151,19 @@ def two_or_more_list(et: Type) -> Type:
     return bounded_list(Just(2), Nothing(), et)
 
 
-# Core annotation functions - these need to be implemented based on Hydra's annotation system
+# Core annotation functions - delegate to the generated hydra.annotations module
+# (which is itself defined as a Hydra source module).
 
 def set_term_annotation(key: Name, mvalue: Maybe[Term], term: Term) -> Term:
     """Set an annotation on a term."""
-    # TODO: This needs to interact with Hydra's annotation system
-    # For now, this is a placeholder that returns the term unchanged
-    return term
+    import hydra.annotations as _ann
+    return _ann.set_term_annotation(key, mvalue, term)
 
 
 def set_type_annotation(key: Name, mvalue: Maybe[Term], typ: Type) -> Type:
     """Set an annotation on a type."""
-    # TODO: This needs to interact with Hydra's annotation system
-    # For now, this is a placeholder that returns the type unchanged
-    return typ
+    import hydra.annotations as _ann
+    return _ann.set_type_annotation(key, mvalue, typ)
 
 
 def set_term_description(desc: Maybe[str], term: Term) -> Term:
