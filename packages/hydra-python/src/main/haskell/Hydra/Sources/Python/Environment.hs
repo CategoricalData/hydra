@@ -112,6 +112,7 @@ pythonModuleMetadata = def "PythonModuleMetadata" $
     "usesEnum">: T.boolean,
     "usesFrozenDict">: T.boolean,
     "usesFrozenList">: T.boolean,
+    "usesFrozenSet">: T.boolean,
     "usesGeneric">: T.boolean,
     "usesJust">: T.boolean,
     "usesLeft">: T.boolean,
