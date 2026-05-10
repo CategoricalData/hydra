@@ -51,8 +51,13 @@ find :: (a -> Bool) -> [a] -> Maybe a
 find = L.find
 
 -- | Fold a list from the left.
+-- Strict left fold. Lazy foldl can pile up thunks for accumulator types
+-- that are field-update records (e.g. PythonModuleMetadata in
+-- Hydra.Python.Coder.extendMetaForTerm), causing pathological wallclock
+-- in the Python coder's gatherMetadata pass. Use foldl' to evaluate
+-- each accumulator step strictly.
 foldl :: (b -> a -> b) -> b -> [a] -> b
-foldl = L.foldl
+foldl = L.foldl'
 
 -- | Fold a list from the right.
 foldr :: (a -> b -> b) -> b -> [a] -> b
