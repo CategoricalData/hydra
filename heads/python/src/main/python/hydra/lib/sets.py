@@ -1,90 +1,93 @@
-"""Python implementations of hydra.lib.sets primitives."""
+"""Python implementations of hydra.lib.sets primitives.
+
+Inputs accept any ``AbstractSet``; outputs are ``PersistentSet`` instances
+(returned as ``AbstractSet[A]``). ``PersistentSet`` is structurally shared
+through its underlying ``PersistentMap``, so chained primitives get O(log n)
+updates instead of the O(n) full-rebuild that ``frozenset`` imposed.
+"""
 
 from __future__ import annotations
 from collections.abc import Callable, Sequence
-from functools import cmp_to_key
+from collections.abc import Set as AbstractSet
 from typing import Any, TypeVar
 
-from hydra.dsl.python import frozenlist
+from hydra.python.util import ConsList, PersistentSet
 
 A = TypeVar('A')
 B = TypeVar('B')
 
 
-def delete(x: A, s: frozenset[A]) -> frozenset[A]:
+def _to_pset(s: AbstractSet[A]) -> PersistentSet[A]:
+    if isinstance(s, PersistentSet):
+        return s
+    return PersistentSet.from_iterable(s)
+
+
+def delete(x: A, s: AbstractSet[A]) -> AbstractSet[A]:
     """Delete an element from a set."""
-    return s - {x}
+    return _to_pset(s).delete(x)
 
 
-def difference(s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
+def difference(s1: AbstractSet[A], s2: AbstractSet[A]) -> AbstractSet[A]:
     """Compute the difference of two sets."""
-    return s1 - s2
+    return _to_pset(s1).difference(_to_pset(s2))
 
 
-def empty() -> frozenset[Any]:
+def empty() -> AbstractSet[Any]:
     """Create an empty set."""
-    return frozenset()
+    return PersistentSet.empty()
 
 
-def from_list(xs: Sequence[A]) -> frozenset[A]:
+def from_list(xs: Sequence[A]) -> AbstractSet[A]:
     """Create a set from a list."""
-    return frozenset(xs)
+    return PersistentSet.from_iterable(xs)
 
 
-def insert(x: A, s: frozenset[A]) -> frozenset[A]:
-    """Insert an element into a set."""
-    return s | {x}
+def insert(x: A, s: AbstractSet[A]) -> AbstractSet[A]:
+    """Insert an element into a set. O(log n)."""
+    return _to_pset(s).insert(x)
 
 
-def intersection(s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
+def intersection(s1: AbstractSet[A], s2: AbstractSet[A]) -> AbstractSet[A]:
     """Compute the intersection of two sets."""
-    return s1 & s2
+    return _to_pset(s1).intersection(_to_pset(s2))
 
 
-def map(f: Callable[[A], B], s: frozenset[A]) -> frozenset[B]:
+def map(f: Callable[[A], B], s: AbstractSet[A]) -> AbstractSet[B]:
     """Map a function over a set."""
-    return frozenset(f(x) for x in s)
+    return PersistentSet.from_iterable(f(x) for x in s)
 
 
-def member(x: A, s: frozenset[A]) -> bool:
+def member(x: A, s: AbstractSet[A]) -> bool:
     """Check if an element is in a set."""
     return x in s
 
 
-def null(s: frozenset[Any]) -> bool:
+def null(s: AbstractSet[Any]) -> bool:
     """Check if a set is empty."""
     return len(s) == 0
 
 
-def singleton(x: A) -> frozenset[A]:
+def singleton(x: A) -> AbstractSet[A]:
     """Create a singleton set."""
-    return frozenset({x})
+    return PersistentSet.singleton(x)
 
 
-def size(s: frozenset[Any]) -> int:
+def size(s: AbstractSet[Any]) -> int:
     """Get the size of a set."""
     return len(s)
 
 
-# TODO: ensure that Hydra's native comparison primitives are used for sorting
-def to_list(s: frozenset[A]) -> frozenlist[A]:
-    """Convert a set to a list."""
-    try:
-        return tuple(sorted(s))  # type: ignore[type-var]
-    except TypeError:
-        from hydra.lib.maps import _structural_compare
-        return tuple(sorted(s, key=cmp_to_key(_structural_compare)))
+def to_list(s: AbstractSet[A]) -> Sequence[A]:
+    """Convert a set to a list, in element order."""
+    return ConsList.from_iterable(_to_pset(s).to_list())
 
 
-def union(s1: frozenset[A], s2: frozenset[A]) -> frozenset[A]:
+def union(s1: AbstractSet[A], s2: AbstractSet[A]) -> AbstractSet[A]:
     """Compute the union of two sets."""
-    return s1 | s2
+    return _to_pset(s1).union(_to_pset(s2))
 
 
-def unions(sets: Sequence[frozenset[A]]) -> frozenset[A]:
+def unions(sets: Sequence[AbstractSet[A]]) -> AbstractSet[A]:
     """Compute the union of multiple sets."""
-    result = frozenset[A]()
-    for s in sets:
-        result = result | s
-    return result
-
+    return PersistentSet.unions(_to_pset(s) for s in sets)

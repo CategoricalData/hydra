@@ -1,11 +1,18 @@
-"""Python implementations of hydra.lib.maps primitives."""
+"""Python implementations of hydra.lib.maps primitives.
+
+Inputs accept any ``Mapping``; outputs are ``PersistentMap`` instances
+(returned as ``Mapping[K, V]``). ``PersistentMap`` is a structurally-shared
+red-black tree, so chained primitives — typical of inference-style workloads —
+get O(log n) updates instead of the O(n) full-dict-copy that ``FrozenDict``
+imposed.
+"""
 
 from __future__ import annotations
 from collections.abc import Callable, Mapping, Sequence
-from functools import cmp_to_key
 from typing import Any, TypeVar
 
-from hydra.dsl.python import FrozenDict, frozenlist, Maybe, Just, Nothing, NOTHING
+from hydra.dsl.python import Maybe, Just, Nothing, NOTHING
+from hydra.python.util import ConsList, PersistentMap
 
 K = TypeVar('K')
 K1 = TypeVar('K1')
@@ -15,177 +22,102 @@ V1 = TypeVar('V1')
 V2 = TypeVar('V2')
 
 
-def _structural_compare(x: Any, y: Any) -> int:
-    """Compare two values structurally, like Haskell's derived Ord.
-
-    Returns -1 if x < y, 0 if x == y, 1 if x > y.
-    This provides a total ordering for complex types like Term.
-    """
-    # Try native comparison first (for simple types like int, str, etc.)
-    try:
-        if x < y:
-            return -1
-        elif x > y:
-            return 1
-        else:
-            return 0
-    except TypeError:
-        pass
-
-    # For complex types, compare structurally
-    tx, ty = type(x), type(y)
-
-    # Different types: compare by type name
-    if tx != ty:
-        return -1 if tx.__name__ < ty.__name__ else 1
-
-    # Same type: compare by structure
-    # Handle dataclasses and similar objects with __dict__
-    if hasattr(x, '__dict__'):
-        x_items = sorted(x.__dict__.items())
-        y_items = sorted(y.__dict__.items())
-        for (kx, vx), (ky, vy) in zip(x_items, y_items):
-            if kx != ky:
-                return -1 if kx < ky else 1
-            result = _structural_compare(vx, vy)
-            if result != 0:
-                return result
-        return _structural_compare(len(x_items), len(y_items))
-
-    # Handle tuples and lists
-    if isinstance(x, (tuple, list)):
-        for xi, yi in zip(x, y):
-            result = _structural_compare(xi, yi)
-            if result != 0:
-                return result
-        return _structural_compare(len(x), len(y))
-
-    # Handle dicts/mappings
-    if isinstance(x, Mapping):
-        x_items = sorted(x.items(), key=cmp_to_key(lambda a, b: _structural_compare(a, b)))
-        y_items = sorted(y.items(), key=cmp_to_key(lambda a, b: _structural_compare(a, b)))
-        for (kx, vx), (ky, vy) in zip(x_items, y_items):
-            result = _structural_compare(kx, ky)
-            if result != 0:
-                return result
-            result = _structural_compare(vx, vy)
-            if result != 0:
-                return result
-        return _structural_compare(len(x_items), len(y_items))
-
-    # Fallback: compare by repr
-    rx, ry = repr(x), repr(y)
-    if rx < ry:
-        return -1
-    elif rx > ry:
-        return 1
-    return 0
-
-
-def _sorted_by_key(items: Any) -> list[Any]:
-    """Sort items using structural comparison."""
-    item_list = list(items)
-    if not item_list:
-        return item_list
-    # Fast path: if keys support native comparison (Name, str, int, etc.), use it directly
-    try:
-        item_list.sort(key=lambda a: a[0])
-        return item_list
-    except TypeError:
-        return sorted(item_list, key=cmp_to_key(lambda a, b: _structural_compare(a[0], b[0])))
+def _to_pmap(mapping: Mapping[K, V]) -> PersistentMap[K, V]:
+    if isinstance(mapping, PersistentMap):
+        return mapping
+    return PersistentMap.from_mapping(mapping)
 
 
 def alter(
-    f: Callable[[Maybe[V]], Maybe[V]], key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
+    f: Callable[[Maybe[V]], Maybe[V]], key: K, mapping: Mapping[K, V]
+) -> Mapping[K, V]:
     """Alter a value at a key using a function."""
     current_value = lookup(key, mapping)
     new_value = f(current_value)
-    match new_value:
-        case Nothing():
-            return delete(key, mapping)
-        case Just(v):
-            return insert(key, v, mapping)
+    if isinstance(new_value, Just):
+        return insert(key, new_value.value, mapping)
+    return delete(key, mapping)
 
 
 def bimap(
-    f: Callable[[K1], K2], g: Callable[[V1], V2], mapping: Mapping[K1, V1]) -> FrozenDict[K2, V2]:
+    f: Callable[[K1], K2], g: Callable[[V1], V2], mapping: Mapping[K1, V1]
+) -> Mapping[K2, V2]:
     """Map a function over the keys and values of a map."""
-    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
-    return FrozenDict({f(k): g(v) for k, v in items}, _trusted=True)
+    return PersistentMap.from_pairs((f(k), g(v)) for k, v in mapping.items())
 
 
-def delete(key: K, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
+def delete(key: K, mapping: Mapping[K, V]) -> Mapping[K, V]:
     """Remove a key from a map."""
-    if isinstance(mapping, FrozenDict):
-        new = {k: v for k, v in mapping._data.items() if k != key}  # type: ignore[attr-defined]
-        return FrozenDict(new, _trusted=True)
-    return FrozenDict({k: v for k, v in mapping.items() if k != key})
+    return _to_pmap(mapping).delete(key)
 
 
-def elems(mapping: Mapping[Any, V]) -> frozenlist[V]:
-    """Get the values of a map."""
-    return tuple(v for _, v in _sorted_by_key(mapping.items()))
+def elems(mapping: Mapping[Any, V]) -> Sequence[V]:
+    """Get the values of a map, in key order."""
+    return ConsList.from_iterable(_to_pmap(mapping).values_list())
 
 
-def empty() -> FrozenDict[Any, Any]:
+def empty() -> Mapping[Any, Any]:
     """Create an empty map."""
-    return FrozenDict()
+    return PersistentMap.empty()
 
 
-def filter(predicate: Callable[[V], bool], mapping: Mapping[K, V]) -> FrozenDict[K, V]:
+def filter(predicate: Callable[[V], bool], mapping: Mapping[K, V]) -> Mapping[K, V]:
     """Filter a map based on values."""
-    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
-    return FrozenDict({k: v for k, v in items if predicate(v)}, _trusted=True)
+    return _to_pmap(mapping).filter(predicate)
 
 
 def filter_with_key(
-    predicate: Callable[[K, V], bool], mapping: Mapping[K, V]) -> FrozenDict[K, V]:
+    predicate: Callable[[K, V], bool], mapping: Mapping[K, V]
+) -> Mapping[K, V]:
     """Filter a map based on key-value pairs."""
-    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
-    return FrozenDict({k: v for k, v in items if predicate(k, v)}, _trusted=True)
+    return _to_pmap(mapping).filter_with_key(predicate)
 
 
 def find_with_default(default: V, key: K, mapping: Mapping[K, V]) -> V:
     """Lookup a value with a default."""
+    if isinstance(mapping, PersistentMap):
+        if mapping.contains_key(key):
+            return mapping[key]
+        return default
     return mapping.get(key, default)
 
 
-def from_list(pairs: Sequence[tuple[K, V]]) -> FrozenDict[K, V]:
+def from_list(pairs: Sequence[tuple[K, V]]) -> Mapping[K, V]:
     """Create a map from a list of key-value pairs."""
-    return FrozenDict(dict(pairs), _trusted=True)
+    return PersistentMap.from_pairs(pairs)
 
 
-def insert(key: K, value: V, mapping: Mapping[K, V]) -> FrozenDict[K, V]:
-    """Insert a key-value pair into a map."""
-    if isinstance(mapping, FrozenDict):
-        return mapping._insert(key, value)
-    return FrozenDict({**mapping, key: value})
+def insert(key: K, value: V, mapping: Mapping[K, V]) -> Mapping[K, V]:
+    """Insert a key-value pair into a map. O(log n)."""
+    return _to_pmap(mapping).insert(key, value)
 
 
-def keys(mapping: Mapping[K, Any]) -> frozenlist[K]:
-    """Get the keys of a map."""
-    return tuple(k for k, _ in _sorted_by_key((k, None) for k in mapping.keys()))
+def keys(mapping: Mapping[K, Any]) -> Sequence[K]:
+    """Get the keys of a map, in sorted order."""
+    return ConsList.from_iterable(_to_pmap(mapping).keys_list())
 
 
 def lookup(key: K, mapping: Mapping[K, V]) -> Maybe[V]:
     """Lookup a value in a map."""
+    if isinstance(mapping, PersistentMap):
+        if mapping.contains_key(key):
+            return Just(mapping[key])
+        return NOTHING
     if key in mapping:
         return Just(mapping[key])
-    else:
-        return NOTHING
+    return NOTHING
 
 
-def map(f: Callable[[V1], V2], mapping: Mapping[K, V1]) -> FrozenDict[K, V2]:
-    """Map a function over a map."""
-    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
-    return FrozenDict({k: f(v) for k, v in items}, _trusted=True)
+def map(f: Callable[[V1], V2], mapping: Mapping[K, V1]) -> Mapping[K, V2]:
+    """Map a function over the values of a map."""
+    return _to_pmap(mapping).map_values(f)
 
 
 def map_keys(
-    f: Callable[[K1], K2], mapping: Mapping[K1, V]) -> FrozenDict[K2, V]:
+    f: Callable[[K1], K2], mapping: Mapping[K1, V]
+) -> Mapping[K2, V]:
     """Map a function over the keys of a map."""
-    items = mapping._data.items() if isinstance(mapping, FrozenDict) else mapping.items()  # type: ignore[attr-defined]
-    return FrozenDict({f(k): v for k, v in items}, _trusted=True)
+    return _to_pmap(mapping).map_keys(f)
 
 
 def member(key: K, mapping: Mapping[K, Any]) -> bool:
@@ -198,9 +130,9 @@ def null(mapping: Mapping[Any, Any]) -> bool:
     return len(mapping) == 0
 
 
-def singleton(key: K, value: V) -> FrozenDict[K, V]:
+def singleton(key: K, value: V) -> Mapping[K, V]:
     """Create a map with a single key-value pair."""
-    return FrozenDict({key: value}, _trusted=True)
+    return PersistentMap.singleton(key, value)
 
 
 def size(mapping: Mapping[Any, Any]) -> int:
@@ -208,14 +140,11 @@ def size(mapping: Mapping[Any, Any]) -> int:
     return len(mapping)
 
 
-def to_list(mapping: Mapping[K, V]) -> frozenlist[tuple[K, V]]:
-    """Convert a map to a list of key-value pairs."""
-    return tuple(_sorted_by_key(mapping.items()))
+def to_list(mapping: Mapping[K, V]) -> Sequence[tuple[K, V]]:
+    """Convert a map to a list of key-value pairs, in sorted-key order."""
+    return ConsList.from_iterable(_to_pmap(mapping).to_list())
 
 
-def union(map1: Mapping[K, V], map2: Mapping[K, V]) -> FrozenDict[K, V]:
-    """Union two maps, with the first taking precedence."""
-    if isinstance(map1, FrozenDict) and isinstance(map2, FrozenDict):
-        new = {**map2._data, **map1._data}  # type: ignore[attr-defined]
-        return FrozenDict(new, _trusted=True)
-    return FrozenDict({**map2, **map1})
+def union(map1: Mapping[K, V], map2: Mapping[K, V]) -> Mapping[K, V]:
+    """Union two maps, with the first taking precedence. O(m * log(m + n))."""
+    return _to_pmap(map1).union(_to_pmap(map2))
