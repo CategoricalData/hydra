@@ -39,6 +39,7 @@ from hydra.core import (
     TypeUnit,
     TypeVariable,
     TypeVariableMetadata,
+    TypeVoid,
     TypeWrap,
 )
 from hydra.dsl.python import FrozenDict, Just, Nothing
@@ -127,6 +128,11 @@ def variable(name: str) -> Type:
     Example: variable("a")
     """
     return TypeVariable(Name(name))
+
+
+def void() -> Type:
+    """Void type (uninhabited type, dual of unit)."""
+    return TypeVoid()
 
 
 def function(dom: Typeable, cod: Typeable) -> Type:
@@ -353,12 +359,11 @@ def field(fn: str, t: Typeable) -> FieldType:
 
 
 def record(fields: Sequence[FieldType]) -> Type:
-    """Create a record type with the given fields and the default type name.
+    """Create a record type with the given fields.
 
     Example: record([field("name", string()), field("age", int32())])
-    Use 'record_with_name' to specify a custom type name.
     """
-    return record_with_name(hydra.constants.placeholder_name, fields)
+    return TypeRecord(tuple(fields))
 
 
 def record_with_name(tname: Name, fields: Sequence[FieldType]) -> Type:
@@ -384,12 +389,11 @@ def union(fields: Sequence[FieldType]) -> Type:
 
 
 def wrap(t: Typeable) -> Type:
-    """Create a wrapped type (newtype) with a provided base type and the default type name.
+    """Create a wrapped type (newtype) over a base type.
 
     Example: wrap(string())
-    Creates a newtype with placeholder name; use 'wrap_with_name' for custom names.
     """
-    return wrap_with_name(hydra.constants.placeholder_name, _as_type(t))
+    return TypeWrap(_as_type(t))
 
 
 def wrap_with_name(name: Name, t: Type) -> Type:

@@ -69,6 +69,19 @@ def build_type_scheme(vars: list[TypeVar_], typ: Type):
         return types.poly_constrained([(tv.name, tv.classes) for tv in vars], typ)
 
 
+def type_var_names(vars: list[TypeVar_]) -> list[str]:
+    """Get just the variable names from a list of TypeVars."""
+    return [tv.name for tv in vars]
+
+
+def type_vars_to_constraints(vars: list[TypeVar_]) -> list[tuple[str, list[Name]]]:
+    """Convert a list of TypeVars to (name, classes) pairs.
+
+    Filters out variables with no constraints.
+    """
+    return [(tv.name, tv.classes) for tv in vars if tv.classes]
+
+
 # Basic numeric types
 
 def bigint() -> TermCoder[int]:

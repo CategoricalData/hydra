@@ -1,6 +1,13 @@
-"""A collection of foundational typing constructs specific to Hydra-Python."""
+"""A collection of foundational typing constructs specific to Hydra-Python.
+
+Also a namespace package so generated DSL modules under hydra.dsl.python.*
+(syntax, environment) coexist with these hand-written helpers across multiple
+sys.path entries (e.g. dist/python/hydra-kernel and dist/python/hydra-python).
+"""
 
 from __future__ import annotations
+from pkgutil import extend_path
+__path__ = extend_path(__path__, __name__)
 from collections.abc import Iterator, Mapping
 from dataclasses import dataclass, field
 from typing import Any, Generic, TypeVar, cast, final, TypeAlias
