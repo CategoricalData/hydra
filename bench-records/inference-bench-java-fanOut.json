@@ -1,0 +1,50 @@
+[
+  {
+    "host": "java",
+    "namespace": "hydra.bench.fanOut",
+    "n": 0,
+    "elapsed_seconds": 0.073524,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.fanOut",
+    "n": 25,
+    "elapsed_seconds": 2.631869,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.fanOut",
+    "n": 50,
+    "elapsed_seconds": 5.113565,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.fanOut",
+    "n": 100,
+    "elapsed_seconds": 10.513404,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.fanOut",
+    "n": 200,
+    "elapsed_seconds": 22.122931,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.fanOut",
+    "n": 400,
+    "elapsed_seconds": 47.873672,
+    "ok": true,
+    "error": null
+  }
+]

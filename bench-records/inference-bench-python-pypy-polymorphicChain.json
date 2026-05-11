@@ -1,0 +1,42 @@
+[
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 0,
+    "elapsed_seconds": 0.4061062503606081,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 25,
+    "elapsed_seconds": 3.597018917091191,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 50,
+    "elapsed_seconds": 5.3070232081227005,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 100,
+    "elapsed_seconds": 14.218252667225897,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 200,
+    "elapsed_seconds": 21.728255667258054,
+    "ok": true,
+    "error": null
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.fanOut",
+    "n": 0,
+    "elapsed_seconds": 7.106279,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.fanOut",
+    "n": 25,
+    "elapsed_seconds": 7.913046,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.fanOut",
+    "n": 50,
+    "elapsed_seconds": 7.633389,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.fanOut",
+    "n": 100,
+    "elapsed_seconds": 7.919763,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.fanOut",
+    "n": 200,
+    "elapsed_seconds": 9.909201,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.fanOut",
+    "n": 400,
+    "elapsed_seconds": 16.514179,
+    "ok": true,
+    "error": null
+  }
+]
