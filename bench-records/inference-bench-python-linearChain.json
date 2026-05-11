@@ -1,0 +1,42 @@
+[
+  {
+    "host": "python-cpython",
+    "namespace": "hydra.bench.linearChain",
+    "n": 0,
+    "elapsed_seconds": 0.29946266720071435,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-cpython",
+    "namespace": "hydra.bench.linearChain",
+    "n": 25,
+    "elapsed_seconds": 35.617441083304584,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-cpython",
+    "namespace": "hydra.bench.linearChain",
+    "n": 50,
+    "elapsed_seconds": 73.09619645774364,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-cpython",
+    "namespace": "hydra.bench.linearChain",
+    "n": 100,
+    "elapsed_seconds": 143.0761689171195,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-cpython",
+    "namespace": "hydra.bench.linearChain",
+    "n": 200,
+    "elapsed_seconds": 281.6337866666727,
+    "ok": true,
+    "error": null
+  }
+]

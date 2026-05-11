@@ -1,0 +1,50 @@
+[
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 0,
+    "elapsed_seconds": 2.025894,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 25,
+    "elapsed_seconds": 1.843300,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 50,
+    "elapsed_seconds": 1.918861,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 100,
+    "elapsed_seconds": 2.594167,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 200,
+    "elapsed_seconds": 2.932443,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 400,
+    "elapsed_seconds": 4.889953,
+    "ok": true,
+    "error": null
+  }
+]

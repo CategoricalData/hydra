@@ -1,0 +1,50 @@
+[
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.linearChain",
+    "n": 0,
+    "elapsed_seconds": 16.386485,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.linearChain",
+    "n": 50,
+    "elapsed_seconds": 16.686241,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.linearChain",
+    "n": 100,
+    "elapsed_seconds": 16.596122,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.linearChain",
+    "n": 200,
+    "elapsed_seconds": 20.537766,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.linearChain",
+    "n": 400,
+    "elapsed_seconds": 26.948920,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "haskell",
+    "namespace": "hydra.bench.linearChain",
+    "n": 800,
+    "elapsed_seconds": 47.349579,
+    "ok": true,
+    "error": null
+  }
+]

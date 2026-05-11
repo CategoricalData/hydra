@@ -197,6 +197,8 @@ Primary entry point — the doc most likely to answer the question by task:
 | Recipes index (full list) | [docs/recipes/index.md](docs/recipes/index.md) |
 | Wiki index | [github.com/CategoricalData/hydra/wiki](https://github.com/CategoricalData/hydra/wiki) |
 | Python-host perf history | [docs/history/python-host-perf-investigation.md](docs/history/python-host-perf-investigation.md) |
+| Running benchmarks (kernel + inference) | [docs/recipes/running-benchmarks.md](docs/recipes/running-benchmarks.md) |
+| Inference scaling analysis | [docs/history/inference-bench-complexity-analysis.md](docs/history/inference-bench-complexity-analysis.md) |
 
 ---
 

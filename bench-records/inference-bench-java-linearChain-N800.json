@@ -1,0 +1,42 @@
+[
+  {
+    "host": "java",
+    "namespace": "hydra.bench.linearChain",
+    "n": 0,
+    "elapsed_seconds": 0.084824,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.linearChain",
+    "n": 100,
+    "elapsed_seconds": 11.371660,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.linearChain",
+    "n": 200,
+    "elapsed_seconds": 22.717588,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.linearChain",
+    "n": 400,
+    "elapsed_seconds": 45.683461,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.linearChain",
+    "n": 800,
+    "elapsed_seconds": 114.616191,
+    "ok": true,
+    "error": null
+  }
+]
