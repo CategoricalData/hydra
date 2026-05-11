@@ -49,6 +49,11 @@ def bigint_to_uint64(x: TTerm) -> TTerm:
     return primitive1(x)
 
 
+def binary_to_bytes(x: TTerm) -> TTerm:
+    """Convert binary data to a list of byte values (0-255)."""
+    return primitive1(x)
+
+
 def binary_to_string(s: TTerm) -> TTerm:
     """Convert binary to string by decoding bytes to UTF-8."""
     return primitive1(s)

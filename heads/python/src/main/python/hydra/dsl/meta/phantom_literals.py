@@ -1,5 +1,7 @@
 """A DSL for constructing literal terms using Python's built-in datatypes."""
 
+from decimal import Decimal
+
 import hydra.dsl.terms as terms
 from hydra.phantoms import TTerm
 
@@ -7,6 +9,41 @@ from hydra.phantoms import TTerm
 def string(value: str) -> TTerm[str]:
     """Construct a string term."""
     return TTerm[str](terms.string(value))
+
+
+def char(value: str) -> TTerm[int]:
+    """Construct a character term (represented as int32 code point)."""
+    return TTerm[int](terms.char(value))
+
+
+def decimal(value: Decimal) -> TTerm[Decimal]:
+    """Construct a decimal (arbitrary-precision) term."""
+    return TTerm[Decimal](terms.decimal(value))
+
+
+def int_(value: int) -> TTerm[int]:
+    """Construct a default-width integer term (alias for int32)."""
+    return int32(value)
+
+
+def uint8(value: int) -> TTerm[int]:
+    """Construct a uint8 term."""
+    return TTerm[int](terms.uint8(value))
+
+
+def uint16(value: int) -> TTerm[int]:
+    """Construct a uint16 term."""
+    return TTerm[int](terms.uint16(value))
+
+
+def uint32(value: int) -> TTerm[int]:
+    """Construct a uint32 term."""
+    return TTerm[int](terms.uint32(value))
+
+
+def uint64(value: int) -> TTerm[int]:
+    """Construct a uint64 term."""
+    return TTerm[int](terms.uint64(value))
 
 
 def boolean(value: bool) -> TTerm[bool]:

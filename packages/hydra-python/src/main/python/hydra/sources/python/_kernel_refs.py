@@ -34,6 +34,7 @@ utils_project_from_expression = _P.var("hydra.python.utils.projectFromExpression
 utils_py_atom_to_py_expression = _P.var("hydra.python.utils.pyAtomToPyExpression")
 utils_py_closed_pattern_to_py_patterns = _P.var("hydra.python.utils.pyClosedPatternToPyPatterns")
 utils_py_expression_to_py_primary = _P.var("hydra.python.utils.pyExpressionToPyPrimary")
+utils_py_expression_to_py_star_named_expression = _P.var("hydra.python.utils.pyExpressionToPyStarNamedExpression")
 utils_py_expressions_to_py_args = _P.var("hydra.python.utils.pyExpressionsToPyArgs")
 utils_py_name_to_py_expression = _P.var("hydra.python.utils.pyNameToPyExpression")
 utils_py_name_to_py_type_parameter = _P.var("hydra.python.utils.pyNameToPyTypeParameter")
