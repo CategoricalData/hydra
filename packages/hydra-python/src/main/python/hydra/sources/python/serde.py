@@ -51,7 +51,7 @@ KERNEL_TYPES_NAMESPACES = [
         "hydra.error.packaging", "hydra.errors", "hydra.graph", "hydra.json.model",
         "hydra.packaging", "hydra.parsing", "hydra.phantoms", "hydra.query",
         "hydra.relational", "hydra.tabular", "hydra.testing", "hydra.topology",
-        "hydra.typing", "hydra.util", "hydra.variants",
+        "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants",
     ]
 ]
 
@@ -88,10 +88,9 @@ def _ap(fun, *args):
 
 
 def _let_chain(bindings, body):
-    out = body
-    for name, val in reversed(bindings):
-        out = Phantoms.let1(name, val, out)
-    return out
+    # Emit a single flat `let` with multiple bindings (matches Haskell `lets`).
+    fields = [Phantoms.field_op(name, val) for name, val in bindings]
+    return Phantoms.lets(fields, body)
 
 
 def _proj(type_name: str, field_name: str, var_name: str):
@@ -1442,7 +1441,7 @@ def _number_to_expr():
                 Name("float"),
                 Phantoms.lam("f", _ap(serialization_cst,
                     _ap(_local("pythonFloatLiteralText"),
-                        _ap(Phantoms.var("hydra.lib.literals.showBigfloat"), Phantoms.var("f"))))),
+                        _ap(Phantoms.var("hydra.lib.literals.showFloat64"), Phantoms.var("f"))))),
             ),
             Phantoms.field(
                 Name("integer"),
