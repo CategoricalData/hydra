@@ -45,7 +45,7 @@ KERNEL_TYPES_NAMESPACES = [
         "hydra.error.packaging", "hydra.errors", "hydra.graph", "hydra.json.model",
         "hydra.packaging", "hydra.parsing", "hydra.phantoms", "hydra.query",
         "hydra.relational", "hydra.tabular", "hydra.testing", "hydra.topology",
-        "hydra.typing", "hydra.util", "hydra.variants",
+        "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants",
     ]
 ]
 
@@ -106,10 +106,19 @@ def _ap(fun, *args):
 
 
 def _let_chain(bindings, body):
+    # Emit nested singleton lets (matches Haskell's `<~` chaining operator).
+    # For Haskell's `lets [...]` (flat let with multiple bindings), use
+    # _lets_flat instead.
     out = body
     for name, val in reversed(bindings):
         out = Phantoms.let1(name, val, out)
     return out
+
+
+def _lets_flat(bindings, body):
+    # Emit a single flat `let` with multiple bindings (matches Haskell `lets [...]`).
+    fields = [Phantoms.field_op(name, val) for name, val in bindings]
+    return Phantoms.lets(fields, body)
 
 
 def _proj(type_fq: str, field_name: str, var_name: str):
@@ -1488,24 +1497,49 @@ def _encode_application_inner():
                         ),
                     ),
                 ),
-                Phantoms.right(
-                    Phantoms.pair(
-                        _ap(
-                            _kref.utils_function_call,
+                # Lazy-aware: if the binding is an inline let (Lazy-wrapped),
+                # call .get() before applying.
+                Logic.if_else(
+                    Sets.member(Phantoms.var("name"), Phantoms.var("inlineVars")),
+                    Phantoms.right(
+                        Phantoms.pair(
                             _ap(
-                                _kref.utils_py_name_to_py_primary,
+                                _kref.utils_function_call,
                                 _ap(
-                                    _kref.names_encode_name,
-                                    Phantoms.true(),
-                                    _kref.util_case_convention_lower_snake,
-                                    Phantoms.var("env"),
-                                    Phantoms.var("name"),
+                                    _kref.utils_py_expression_to_py_primary,
+                                    _ap(
+                                        _local("lazyDotGet"),
+                                        _ap(
+                                            _kref.names_term_variable_reference,
+                                            Phantoms.var("env"),
+                                            Phantoms.var("name"),
+                                        ),
+                                    ),
                                 ),
+                                Phantoms.var("consumedArgs"),
                             ),
-                            Phantoms.var("consumedArgs"),
-                        ),
-                        Phantoms.var("remainingArgs"),
-                    )
+                            Phantoms.var("remainingArgs"),
+                        )
+                    ),
+                    Phantoms.right(
+                        Phantoms.pair(
+                            _ap(
+                                _kref.utils_function_call,
+                                _ap(
+                                    _kref.utils_py_name_to_py_primary,
+                                    _ap(
+                                        _kref.names_encode_name,
+                                        Phantoms.true(),
+                                        _kref.util_case_convention_lower_snake,
+                                        Phantoms.var("env"),
+                                        Phantoms.var("name"),
+                                    ),
+                                ),
+                                Phantoms.var("consumedArgs"),
+                            ),
+                            Phantoms.var("remainingArgs"),
+                        )
+                    ),
                 ),
             ),
         ),
@@ -1585,6 +1619,7 @@ def _encode_application_inner():
                     "allArgs",
                     Lists.concat2(Phantoms.var("hargs"), Phantoms.var("rargs")),
                 ),
+                ("inlineVars", _env("inlineVariables", "env")),
             ],
             Maybes.cases(
                 Maps.lookup(
@@ -2388,6 +2423,7 @@ def _encode_binding_as():
                         _local("encodeTermAssignment"),
                         Phantoms.var("cx"),
                         Phantoms.var("env"),
+                        Phantoms.false(),
                         Phantoms.var("name1"),
                         Phantoms.var("term1"),
                         Phantoms.var("ts"),
@@ -2519,13 +2555,12 @@ def _encode_binding_as_assignment():
                                     ),
                                 ),
                             ),
+                            # Always wrap walrus values in Lazy(...) so the
+                            # evaluation is deferred until forced by .get()
+                            # at use sites.
                             (
                                 "pterm",
-                                Logic.if_else(
-                                    Phantoms.var("needsThunk"),
-                                    _ap(_local("makeThunk"), Phantoms.var("pbody")),
-                                    Phantoms.var("pbody"),
-                                ),
+                                _ap(_local("makeLazy"), Phantoms.var("pbody")),
                             ),
                         ],
                         Phantoms.right(
@@ -2692,6 +2727,7 @@ def _encode_definition():
                             _local("encodeTermAssignment"),
                             Phantoms.var("cx"),
                             Phantoms.var("env"),
+                            Phantoms.true(),
                             Phantoms.var("name"),
                             Phantoms.var("term"),
                             Phantoms.var("typ"),
@@ -2991,26 +3027,6 @@ def _encode_float_value():
             Nothing(),
             [
                 Phantoms.field(
-                    Name("bigfloat"),
-                    Phantoms.lam(
-                        "f",
-                        Phantoms.right(
-                            _ap(
-                                _kref.utils_function_call,
-                                _ap(_kref.utils_py_name_to_py_primary, _py_name("Decimal")),
-                                Phantoms.list_(
-                                    [
-                                        _ap(
-                                            _kref.utils_single_quoted_string,
-                                            Literals.show_bigfloat(Phantoms.var("f")),
-                                        )
-                                    ]
-                                ),
-                            )
-                        ),
-                    ),
-                ),
-                Phantoms.field(
                     Name("float32"),
                     Phantoms.lam(
                         "f",
@@ -3061,7 +3077,7 @@ def _encode_float_value_encode_float32():
                                 _kref.utils_py_atom_to_py_expression,
                                 PySyn.atom_number(
                                     PySyn.number_float(
-                                        Literals.float32_to_bigfloat(Phantoms.var("v"))
+                                        Literals.float32_to_float64(Phantoms.var("v"))
                                     )
                                 ),
                             )
@@ -3110,7 +3126,7 @@ def _encode_float_value_encode_float64():
                                     _kref.utils_py_atom_to_py_expression,
                                     PySyn.atom_number(
                                         PySyn.number_float(
-                                            Literals.float64_to_bigfloat(Phantoms.var("v"))
+                                            Phantoms.var("v")
                                         )
                                     ),
                                 )
@@ -3615,7 +3631,7 @@ def _encode_term_assignment():
         return _proj("hydra.typing.FunctionStructure", field, "fs")
 
     body = Phantoms.lambdas(
-        ["cx", "env", "name", "term", "ts", "comment"],
+        ["cx", "env", "topLevel", "name", "term", "ts", "comment"],
         Eithers.bind(
             _ap(
                 _local("analyzePythonFunction"),
@@ -3664,29 +3680,83 @@ def _encode_term_assignment():
                             Phantoms.var("isComplex"),
                             Logic.not_(Phantoms.var("isTrivial")),
                         ),
-                        Eithers.bind(
-                            Eithers.map_list(
-                                _ap(
-                                    _local("encodeBindingAs"),
-                                    Phantoms.var("cx"),
-                                    Phantoms.var("env2"),
-                                ),
-                                Phantoms.var("bindings"),
+                        Logic.if_else(
+                            Logic.and_(
+                                Logic.not_(Phantoms.var("topLevel")),
+                                Lists.null(Phantoms.var("params")),
                             ),
-                            Phantoms.lam(
-                                "bindingStmts",
+                            # Inner zero-arg thunk: emit `name = Lazy(lambda: <body>)`.
+                            # Use sites emit `name()` which dispatches to Lazy.get()
+                            # via __call__.
+                            Eithers.bind(
                                 _ap(
-                                    _local("functionDefinitionToExpr"),
+                                    _local("encodeTermInline"),
                                     Phantoms.var("cx"),
                                     Phantoms.var("env2"),
-                                    Phantoms.var("name"),
-                                    Phantoms.var("tparams"),
-                                    Phantoms.var("params"),
-                                    Phantoms.var("body"),
-                                    Phantoms.var("doms"),
-                                    Phantoms.var("mcod"),
-                                    Phantoms.var("comment"),
-                                    Phantoms.var("bindingStmts"),
+                                    Phantoms.false(),
+                                    Phantoms.var("term"),
+                                ),
+                                Phantoms.lam(
+                                    "bodyExpr",
+                                    _let_chain(
+                                        [
+                                            (
+                                                "pyName",
+                                                _ap(
+                                                    _kref.names_encode_name,
+                                                    Phantoms.false(),
+                                                    _kref.util_case_convention_lower_snake,
+                                                    Phantoms.var("env2"),
+                                                    Phantoms.var("name"),
+                                                ),
+                                            ),
+                                            (
+                                                "lazyExpr",
+                                                _ap(
+                                                    _local("makeLazy"),
+                                                    Phantoms.var("bodyExpr"),
+                                                ),
+                                            ),
+                                        ],
+                                        Phantoms.right(
+                                            _ap(
+                                                _kref.utils_annotated_statement,
+                                                Phantoms.var("comment"),
+                                                _ap(
+                                                    _kref.utils_assignment_statement,
+                                                    Phantoms.var("pyName"),
+                                                    Phantoms.var("lazyExpr"),
+                                                ),
+                                            )
+                                        ),
+                                    ),
+                                ),
+                            ),
+                            # Top-level OR has args: emit normal def via functionDefinitionToExpr
+                            Eithers.bind(
+                                Eithers.map_list(
+                                    _ap(
+                                        _local("encodeBindingAs"),
+                                        Phantoms.var("cx"),
+                                        Phantoms.var("env2"),
+                                    ),
+                                    Phantoms.var("bindings"),
+                                ),
+                                Phantoms.lam(
+                                    "bindingStmts",
+                                    _ap(
+                                        _local("functionDefinitionToExpr"),
+                                        Phantoms.var("cx"),
+                                        Phantoms.var("env2"),
+                                        Phantoms.var("name"),
+                                        Phantoms.var("tparams"),
+                                        Phantoms.var("params"),
+                                        Phantoms.var("body"),
+                                        Phantoms.var("doms"),
+                                        Phantoms.var("mcod"),
+                                        Phantoms.var("comment"),
+                                        Phantoms.var("bindingStmts"),
+                                    ),
                                 ),
                             ),
                         ),
@@ -4278,26 +4348,39 @@ def _encode_term_inline():
             ),
         ),
     )
+    # Encode as ConsList.of(items...). Public types stay Sequence; ConsList
+    # implements Sequence so callers see the abstract type but get the
+    # structurally-shared persistent value.
     list_branch = Phantoms.lam(
         "terms",
         Eithers.bind(
             Eithers.map_list(Phantoms.var("encode"), Phantoms.var("terms")),
             Phantoms.lam(
                 "pyExprs",
-                Phantoms.right(
-                    _ap(
-                        _kref.utils_py_atom_to_py_expression,
-                        PySyn.atom_tuple(
-                            getattr(PySyn, "tuple")(
-                                Lists.map(
-                                    Phantoms.var(
-                                        "hydra.python.utils.pyExpressionToPyStarNamedExpression"
-                                    ),
-                                    Phantoms.var("pyExprs"),
-                                )
-                            )
+                _let_chain(
+                    [
+                        (
+                            "consListOf",
+                            _ap(
+                                _kref.utils_project_from_expression,
+                                _ap(
+                                    _kref.utils_py_name_to_py_expression,
+                                    _py_name("ConsList"),
+                                ),
+                                _py_name("of"),
+                            ),
                         ),
-                    )
+                    ],
+                    Phantoms.right(
+                        _ap(
+                            _kref.utils_function_call,
+                            _ap(
+                                _kref.utils_py_expression_to_py_primary,
+                                Phantoms.var("consListOf"),
+                            ),
+                            Phantoms.var("pyExprs"),
+                        )
+                    ),
                 ),
             ),
         ),
@@ -4305,6 +4388,9 @@ def _encode_term_inline():
     literal_branch = Phantoms.lam(
         "lit", _ap(_local("encodeLiteral"), Phantoms.var("lit"))
     )
+    # Encode as PersistentMap.of_entries((k, v), ...). Public types stay
+    # Mapping[K, V]; PersistentMap is a Mapping so callers see the abstract
+    # type but get the structurally-shared persistent value.
     map_branch = Phantoms.lam(
         "m",
         Eithers.bind(
@@ -4325,11 +4411,24 @@ def _encode_term_inline():
                                     Phantoms.lam(
                                         "pyV",
                                         Phantoms.right(
-                                            PySyn.double_starred_kvpair_pair(
-                                                PySyn.kvpair(
-                                                    Phantoms.var("pyK"),
-                                                    Phantoms.var("pyV"),
-                                                )
+                                            _ap(
+                                                _kref.utils_py_atom_to_py_expression,
+                                                PySyn.atom_tuple(
+                                                    getattr(PySyn, "tuple")(
+                                                        Phantoms.list_(
+                                                            [
+                                                                _ap(
+                                                                    _kref.utils_py_expression_to_py_star_named_expression,
+                                                                    Phantoms.var("pyK"),
+                                                                ),
+                                                                _ap(
+                                                                    _kref.utils_py_expression_to_py_star_named_expression,
+                                                                    Phantoms.var("pyV"),
+                                                                ),
+                                                            ]
+                                                        )
+                                                    )
+                                                ),
                                             )
                                         ),
                                     ),
@@ -4341,25 +4440,31 @@ def _encode_term_inline():
                 Maps.to_list(Phantoms.var("m")),
             ),
             Phantoms.lam(
-                "pairs",
-                Phantoms.right(
-                    _ap(
-                        _kref.utils_function_call,
-                        _ap(
-                            _kref.utils_py_name_to_py_primary,
-                            _py_name("FrozenDict"),
-                        ),
-                        Phantoms.list_(
-                            [
+                "tuplePairs",
+                _let_chain(
+                    [
+                        (
+                            "pmapOfEntries",
+                            _ap(
+                                _kref.utils_project_from_expression,
                                 _ap(
-                                    _kref.utils_py_atom_to_py_expression,
-                                    PySyn.atom_dict(
-                                        getattr(PySyn, "dict")(Phantoms.var("pairs"))
-                                    ),
-                                )
-                            ]
+                                    _kref.utils_py_name_to_py_expression,
+                                    _py_name("PersistentMap"),
+                                ),
+                                _py_name("of_entries"),
+                            ),
                         ),
-                    )
+                    ],
+                    Phantoms.right(
+                        _ap(
+                            _kref.utils_function_call,
+                            _ap(
+                                _kref.utils_py_expression_to_py_primary,
+                                Phantoms.var("pmapOfEntries"),
+                            ),
+                            Phantoms.var("tuplePairs"),
+                        )
+                    ),
                 ),
             ),
         ),
@@ -4481,6 +4586,9 @@ def _encode_term_inline():
             ),
         ),
     )
+    # Encode as PersistentSet.of(...). Public types stay AbstractSet[E];
+    # PersistentSet implements Set so callers see the abstract type but get
+    # the structurally-shared persistent value.
     set_branch = Phantoms.lam(
         "s",
         Eithers.bind(
@@ -4489,28 +4597,30 @@ def _encode_term_inline():
             ),
             Phantoms.lam(
                 "pyEls",
-                Phantoms.right(
-                    _ap(
-                        _kref.utils_function_call,
-                        _ap(_kref.utils_py_name_to_py_primary, _py_name("frozenset")),
-                        Phantoms.list_(
-                            [
+                _let_chain(
+                    [
+                        (
+                            "psetOf",
+                            _ap(
+                                _kref.utils_project_from_expression,
                                 _ap(
-                                    _kref.utils_py_atom_to_py_expression,
-                                    PySyn.atom_set(
-                                        getattr(PySyn, "set")(
-                                            Lists.map(
-                                                Phantoms.var(
-                                                    "hydra.python.utils.pyExpressionToPyStarNamedExpression"
-                                                ),
-                                                Phantoms.var("pyEls"),
-                                            )
-                                        )
-                                    ),
-                                )
-                            ]
+                                    _kref.utils_py_name_to_py_expression,
+                                    _py_name("PersistentSet"),
+                                ),
+                                _py_name("of"),
+                            ),
                         ),
-                    )
+                    ],
+                    Phantoms.right(
+                        _ap(
+                            _kref.utils_function_call,
+                            _ap(
+                                _kref.utils_py_expression_to_py_primary,
+                                Phantoms.var("psetOf"),
+                            ),
+                            Phantoms.var("pyEls"),
+                        )
+                    ),
                 ),
             ),
         ),
@@ -5504,7 +5614,7 @@ def _encode_type():
                         "pyet",
                         Phantoms.right(
                             name_params(
-                                "frozenlist",
+                                "Sequence",
                                 Phantoms.list_([Phantoms.var("pyet")]),
                             )
                         ),
@@ -5534,7 +5644,7 @@ def _encode_type():
                                 "pyvt",
                                 Phantoms.right(
                                     name_params(
-                                        "FrozenDict",
+                                        "Mapping",
                                         Phantoms.list_(
                                             [
                                                 Phantoms.var("pykt"),
@@ -5661,7 +5771,7 @@ def _encode_type():
                         "pyet",
                         Phantoms.right(
                             name_params(
-                                "frozenset",
+                                "Set",
                                 Phantoms.list_([Phantoms.var("pyet")]),
                             )
                         ),
@@ -6792,10 +6902,6 @@ def _encode_literal_type():
                                         Nothing(),
                                         [
                                             Phantoms.field(
-                                                Name("bigfloat"),
-                                                Phantoms.constant(Phantoms.string("Decimal")),
-                                            ),
-                                            Phantoms.field(
                                                 Name("float32"),
                                                 Phantoms.constant(Phantoms.string("float")),
                                             ),
@@ -7277,8 +7383,36 @@ def _encode_variable():
             Phantoms.right(Phantoms.var("asVariable")),
             Logic.if_else(
                 Sets.member(Phantoms.var("name"), Phantoms.var("inlineVars")),
+                # Inline variable (Lazy-wrapped at definition; force via .get())
                 _let_chain(
-                    [("asFunctionRef", as_function_ref("typ"))],
+                    [
+                        (
+                            "unwrapped",
+                            _ap(_local("lazyDotGet"), Phantoms.var("asVariable")),
+                        ),
+                        (
+                            "asFunctionRef",
+                            Logic.if_else(
+                                Logic.not_(
+                                    Sets.null(
+                                        _ap(
+                                            _kref.variables_free_variables_in_type,
+                                            Phantoms.var("typ"),
+                                        )
+                                    )
+                                ),
+                                _ap(
+                                    _local("makeSimpleLambda"),
+                                    _ap(
+                                        _kref.arity_type_arity,
+                                        Phantoms.var("typ"),
+                                    ),
+                                    Phantoms.var("unwrapped"),
+                                ),
+                                Phantoms.var("unwrapped"),
+                            ),
+                        ),
+                    ],
                     Phantoms.right(Phantoms.var("asFunctionRef")),
                 ),
                 Logic.if_else(
@@ -7422,10 +7556,14 @@ def _encode_variable():
     )
     no_typ_branch = Logic.if_else(
         Sets.member(Phantoms.var("name"), Phantoms.var("tcLambdaVars")),
+        # Untyped lambda variable
         Phantoms.right(Phantoms.var("asVariable")),
         Logic.if_else(
             Sets.member(Phantoms.var("name"), Phantoms.var("inlineVars")),
-            Phantoms.right(Phantoms.var("asVariable")),
+            # Untyped inline variable (Lazy-wrapped at definition; force via .get())
+            Phantoms.right(
+                _ap(_local("lazyDotGet"), Phantoms.var("asVariable"))
+            ),
             Maybes.maybe(
                 not_in_graphBoundTypes_no_prim,
                 is_prim_no_typ_branch,
@@ -7592,10 +7730,27 @@ def _encode_variable():
                         Phantoms.var("args"),
                     ),
                 ),
+                # Lazy-aware function call for inline-var references: name.get()(args)
+                (
+                    "asLazyCall",
+                    _ap(
+                        _kref.utils_function_call,
+                        _ap(
+                            _kref.utils_py_expression_to_py_primary,
+                            _ap(_local("lazyDotGet"), Phantoms.var("asVariable")),
+                        ),
+                        Phantoms.var("args"),
+                    ),
+                ),
             ],
             Logic.if_else(
                 Logic.not_(Lists.null(Phantoms.var("args"))),
-                nonempty_args_branch,
+                # Non-empty args: inline-var calls need .get(); otherwise check primitives
+                Logic.if_else(
+                    Sets.member(Phantoms.var("name"), Phantoms.var("inlineVars")),
+                    Phantoms.right(Phantoms.var("asLazyCall")),
+                    nonempty_args_branch,
+                ),
                 empty_args_branch,
             ),
         ),
@@ -7905,31 +8060,18 @@ def _extend_meta_for_term():
                                         )
                                     ),
                                 ),
-                                Phantoms.field(
-                                    Name("float"),
-                                    Phantoms.lam(
-                                        "fv",
-                                        Phantoms.cases(
-                                            Name("hydra.core.FloatValue"),
-                                            Phantoms.var("fv"),
-                                            Just(Phantoms.var("meta")),
-                                            [
-                                                Phantoms.field(
-                                                    Name("bigfloat"),
-                                                    Phantoms.constant(
-                                                        _ap(
-                                                            _local("setMetaUsesDecimal"),
-                                                            Phantoms.var("meta"),
-                                                            Phantoms.true(),
-                                                        )
-                                                    ),
-                                                ),
-                                            ],
-                                        ),
-                                    ),
-                                ),
                             ],
                         ),
+                    ),
+                ),
+                Phantoms.field(
+                    Name("list"),
+                    Phantoms.constant(
+                        _ap(
+                            _local("setMetaUsesFrozenList"),
+                            Phantoms.var("meta"),
+                            Phantoms.true(),
+                        )
                     ),
                 ),
                 Phantoms.field(
@@ -7937,6 +8079,16 @@ def _extend_meta_for_term():
                     Phantoms.constant(
                         _ap(
                             _local("setMetaUsesFrozenDict"),
+                            Phantoms.var("meta"),
+                            Phantoms.true(),
+                        )
+                    ),
+                ),
+                Phantoms.field(
+                    Name("set"),
+                    Phantoms.constant(
+                        _ap(
+                            _local("setMetaUsesFrozenSet"),
                             Phantoms.var("meta"),
                             Phantoms.true(),
                         )
@@ -7963,6 +8115,7 @@ def _extend_meta_for_term():
                         ),
                     ),
                 ),
+                # Union injections require cast() for proper typing
                 Phantoms.field(
                     Name("inject"),
                     Phantoms.constant(
@@ -8001,43 +8154,20 @@ def _extend_meta_for_type():
     case_fields = [
         Phantoms.field(
             Name("function"),
-            Phantoms.lam(
-                "ft",
-                _let_chain(
-                    [
-                        ("cod", Core.function_type_codomain(Phantoms.var("ft"))),
-                        ("dom", Core.function_type_domain(Phantoms.var("ft"))),
-                        (
-                            "meta2",
-                            _ap(
-                                _local("extendMetaForType"),
-                                Phantoms.var("topLevel"),
-                                Phantoms.var("isTermAnnot"),
-                                Phantoms.var("cod"),
-                                Phantoms.var("metaWithSubtypes"),
-                            ),
-                        ),
-                        (
-                            "meta3",
-                            _ap(
-                                _local("extendMetaForType"),
-                                Phantoms.false(),
-                                Phantoms.var("isTermAnnot"),
-                                Phantoms.var("dom"),
-                                Phantoms.var("meta2"),
-                            ),
-                        ),
-                    ],
-                    Logic.if_else(
-                        Logic.and_(
-                            Phantoms.var("isTermAnnot"), Phantoms.var("topLevel")
-                        ),
-                        Phantoms.var("meta3"),
-                        _ap(
-                            _local("setMetaUsesCallable"),
-                            Phantoms.var("meta3"),
-                            Phantoms.true(),
-                        ),
+            # Avoid exponential recursion: subtypes are already covered by
+            # the Rewriting.subtypes walk that produced metaWithSubtypes.
+            # Re-recursing on cod and dom here gave O(2^N) on deep curried
+            # types. (Fix mirrors b7d29d9b4 in the Haskell coder.)
+            Phantoms.constant(
+                Logic.if_else(
+                    Logic.and_(
+                        Phantoms.var("isTermAnnot"), Phantoms.var("topLevel")
+                    ),
+                    Phantoms.var("metaWithSubtypes"),
+                    _ap(
+                        _local("setMetaUsesCallable"),
+                        Phantoms.var("metaWithSubtypes"),
+                        Phantoms.true(),
                     ),
                 ),
             ),
@@ -8057,6 +8187,16 @@ def _extend_meta_for_type():
             Phantoms.constant(
                 _ap(
                     _local("setMetaUsesFrozenDict"),
+                    Phantoms.var("metaWithSubtypes"),
+                    Phantoms.true(),
+                )
+            ),
+        ),
+        Phantoms.field(
+            Name("set"),
+            Phantoms.constant(
+                _ap(
+                    _local("setMetaUsesFrozenSet"),
                     Phantoms.var("metaWithSubtypes"),
                     Phantoms.true(),
                 )
@@ -8099,29 +8239,6 @@ def _extend_meta_for_type():
                                     Phantoms.var("metaWithSubtypes"),
                                     Phantoms.true(),
                                 )
-                            ),
-                        ),
-                        Phantoms.field(
-                            Name("float"),
-                            Phantoms.lam(
-                                "ft",
-                                Phantoms.cases(
-                                    Name("hydra.core.FloatType"),
-                                    Phantoms.var("ft"),
-                                    Just(Phantoms.var("metaWithSubtypes")),
-                                    [
-                                        Phantoms.field(
-                                            Name("bigfloat"),
-                                            Phantoms.constant(
-                                                _ap(
-                                                    _local("setMetaUsesDecimal"),
-                                                    Phantoms.var("metaWithSubtypes"),
-                                                    Phantoms.true(),
-                                                )
-                                            ),
-                                        ),
-                                    ],
-                                ),
                             ),
                         ),
                     ],
@@ -9392,7 +9509,14 @@ def _module_standard_imports():
         ),
         Phantoms.pair(
             Phantoms.string("collections.abc"),
-            Phantoms.list_([cond("Callable", "usesCallable")]),
+            Phantoms.list_(
+                [
+                    cond("Callable", "usesCallable"),
+                    cond("Mapping", "usesFrozenDict"),
+                    cond("Sequence", "usesFrozenList"),
+                    cond("Set", "usesFrozenSet"),
+                ]
+            ),
         ),
         Phantoms.pair(
             Phantoms.string("dataclasses"),
@@ -9415,14 +9539,30 @@ def _module_standard_imports():
             Phantoms.list_(
                 [
                     cond("Either", "usesEither"),
-                    cond("FrozenDict", "usesFrozenDict"),
                     cond("Just", "usesJust"),
                     cond("Left", "usesLeft"),
                     cond("Maybe", "usesMaybe"),
                     cond("Node", "usesNode"),
                     cond("Nothing", "usesNothing"),
                     cond("Right", "usesRight"),
-                    cond("frozenlist", "usesFrozenList"),
+                ]
+            ),
+        ),
+        Phantoms.pair(
+            Phantoms.string("hydra.python.util"),
+            Phantoms.list_(
+                [
+                    cond("ConsList", "usesFrozenList"),
+                    # Lazy is unconditionally imported: every module with
+                    # let-bindings needs it, and the cost of an unused
+                    # import is negligible.
+                    _ap(
+                        _local("condImportSymbol"),
+                        Phantoms.string("Lazy"),
+                        Phantoms.boolean(True),
+                    ),
+                    cond("PersistentMap", "usesFrozenDict"),
+                    cond("PersistentSet", "usesFrozenSet"),
                 ]
             ),
         ),
@@ -10600,11 +10740,12 @@ def _build_module() -> Module:
             Phantoms.to_definition(_encode_field()),
             Phantoms.to_definition(_encode_field_type()),
             Phantoms.to_definition(_encode_float_value()),
-            Phantoms.to_definition(_encode_forall_type()),
-            Phantoms.to_definition(_encode_function_type()),
             Phantoms.to_definition(_encode_float_value_encode_float32()),
             Phantoms.to_definition(_encode_float_value_encode_float64()),
             Phantoms.to_definition(_encode_float_value_py_special_float()),
+            Phantoms.to_definition(_encode_forall_type()),
+            Phantoms.to_definition(_function_definition_to_expr()),
+            Phantoms.to_definition(_encode_function_type()),
             Phantoms.to_definition(_encode_integer_value()),
             Phantoms.to_definition(_encode_literal()),
             Phantoms.to_definition(_encode_literal_type()),
@@ -10626,8 +10767,8 @@ def _build_module() -> Module:
             Phantoms.to_definition(_encode_union_type()),
             Phantoms.to_definition(_encode_variable()),
             Phantoms.to_definition(_encode_wrapped_type()),
-            Phantoms.to_definition(_environment_type_parameters()),
             Phantoms.to_definition(_enum_variant_pattern()),
+            Phantoms.to_definition(_environment_type_parameters()),
             Phantoms.to_definition(_extend_env_with_lambda_params()),
             Phantoms.to_definition(_extend_env_with_type_var()),
             Phantoms.to_definition(_extend_meta_for_term()),
@@ -10635,7 +10776,6 @@ def _build_module() -> Module:
             Phantoms.to_definition(_extend_meta_for_types()),
             Phantoms.to_definition(_extract_case_elimination()),
             Phantoms.to_definition(_find_type_params()),
-            Phantoms.to_definition(_function_definition_to_expr()),
             Phantoms.to_definition(_gather_lambdas()),
             Phantoms.to_definition(_gather_metadata()),
             Phantoms.to_definition(_generic_arg()),
