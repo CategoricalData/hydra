@@ -29,6 +29,10 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 
 - **[Generating code with Hydra](code-generation.md)** - End-to-end guide to generating source code from Hydra modules: DSL vs JSON paths, the writeXxx functions, bootstrap CLI, sync scripts, and troubleshooting
 
+### Benchmarking
+
+- **[Running benchmarks](running-benchmarks.md)** - How to run the kernel-tests and cross-host inference benchmarks, and how to read the dashboards
+
 ### Maintenance
 
 - **[Repository maintenance](maintenance.md)** - Periodic checks: non-source files, stale generated artifacts, definition ordering

@@ -1,0 +1,50 @@
+[
+  {
+    "host": "java",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 0,
+    "elapsed_seconds": 0.068781,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 25,
+    "elapsed_seconds": 1.019901,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 50,
+    "elapsed_seconds": 1.747366,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 100,
+    "elapsed_seconds": 3.635714,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 200,
+    "elapsed_seconds": 8.068732,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "java",
+    "namespace": "hydra.bench.polymorphicChain",
+    "n": 400,
+    "elapsed_seconds": 17.482509,
+    "ok": true,
+    "error": null
+  }
+]

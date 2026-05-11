@@ -1,0 +1,42 @@
+[
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.fanOut",
+    "n": 0,
+    "elapsed_seconds": 0.4062700839713216,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.fanOut",
+    "n": 25,
+    "elapsed_seconds": 9.639233165886253,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.fanOut",
+    "n": 50,
+    "elapsed_seconds": 17.624549958854914,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.fanOut",
+    "n": 100,
+    "elapsed_seconds": 35.82494533294812,
+    "ok": true,
+    "error": null
+  },
+  {
+    "host": "python-pypy",
+    "namespace": "hydra.bench.fanOut",
+    "n": 200,
+    "elapsed_seconds": 77.18400274962187,
+    "ok": true,
+    "error": null
+  }
+]
