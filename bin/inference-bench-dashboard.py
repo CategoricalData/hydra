@@ -239,7 +239,10 @@ def _print_series(namespace: str,
                         cells.append(cell)
             print(f"{n:>5}  " + "  ".join(cells))
 
-    # 3. Relative-to-fastest at each n.
+    # 3. Relative-to-fastest at each n. Hosts whose adjusted time is below
+    # the noise floor (< 0.05s) are shown as '~noise' rather than producing
+    # nonsensical ratios against a near-zero fastest.
+    noise_floor = 0.05
     print()
     print("Relative (vs fastest at each n):")
     print(header)
@@ -247,25 +250,28 @@ def _print_series(namespace: str,
     for n in sizes:
         if n == 0:
             continue
-        rows: list[tuple[str, float | None]] = []
+        rows: list[tuple[str, float | None, bool]] = []  # (host, t, in_noise)
         for h in hosts:
             r = by_host[h].get(n)
             base = by_host[h].get(0) if has_baseline else None
             if r is None or not r.get("ok"):
-                rows.append((h, None))
+                rows.append((h, None, False))
                 continue
             t = r["elapsed_seconds"]
             if base and base.get("ok"):
-                t = max(t - base["elapsed_seconds"], 1e-9)
-            rows.append((h, t))
-        ok_rows = [(h, t) for h, t in rows if t is not None]
-        if not ok_rows:
+                t = t - base["elapsed_seconds"]
+            in_noise = t < noise_floor
+            rows.append((h, t, in_noise))
+        usable = [t for _, t, in_noise in rows if t is not None and not in_noise]
+        if not usable:
             continue
-        fastest = min(t for _, t in ok_rows)
+        fastest = min(usable)
         cells = []
-        for h, t in rows:
+        for h, t, in_noise in rows:
             if t is None:
                 cells.append(f"{'—':>{col_w}}")
+            elif in_noise:
+                cells.append(f"{GRAY}{'~noise':>{col_w}}{RESET}")
             else:
                 ratio = t / fastest
                 if ratio < 1.005:
