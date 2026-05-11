@@ -46,6 +46,7 @@ sourceSets {
     headsExtras {
         java {
             srcDir file("$projectDir/../../heads/java/src/main/java")
+            include 'hydra/BenchInference.java'
             include 'hydra/Bootstrap.java'
             include 'hydra/Generation.java'
             include 'hydra/HydraTestBase.java'

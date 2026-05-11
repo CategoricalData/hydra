@@ -131,6 +131,15 @@ executables:
     dependencies:
       - hydra
 
+  bench-inference:
+    main: Main.hs
+    source-dirs:
+      - src/exec/bench-inference
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra
+      - time
+
   generate-coq:
     main: Main.hs
     source-dirs:
