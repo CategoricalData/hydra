@@ -36,7 +36,7 @@ KERNEL_TYPES_NAMESPACES = [
         "hydra.error.packaging", "hydra.errors", "hydra.graph", "hydra.json.model",
         "hydra.packaging", "hydra.parsing", "hydra.phantoms", "hydra.query",
         "hydra.relational", "hydra.tabular", "hydra.testing", "hydra.topology",
-        "hydra.typing", "hydra.util", "hydra.variants",
+        "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants",
     ]
 ]
 

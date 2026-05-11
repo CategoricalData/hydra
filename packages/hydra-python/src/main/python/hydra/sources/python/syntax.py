@@ -76,7 +76,7 @@ _terminals = [
     _def("Name", T.wrap(T.string())),
     _def("Number", _union([
         ("integer", T.bigint()),
-        ("float", T.bigfloat()),
+        ("float", T.float64()),
     ])),
     _def("String", _record([
         ("value", T.string()),

@@ -45,6 +45,7 @@ KERNEL_TYPES_NAMESPACES = [
     Namespace("hydra.topology"),
     Namespace("hydra.typing"),
     Namespace("hydra.util"),
+    Namespace("hydra.validation"),
     Namespace("hydra.variants"),
 ]
 
@@ -77,7 +78,6 @@ def _python_language_term():
                 Phantoms.field(
                     Name("floatTypes"),
                     Sets.from_list(Phantoms.list_([
-                        Core.float_type_bigfloat,
                         Core.float_type_float64,
                     ])),
                 ),
