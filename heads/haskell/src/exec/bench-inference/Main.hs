@@ -21,6 +21,7 @@ import Hydra.Kernel
 import Hydra.Generation (showError)
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Sources.All as All
+import qualified Hydra.Sources.Ext as Ext
 import Hydra.Dsl.Bootstrap (bootstrapGraph)
 
 import qualified Data.List               as L
@@ -128,15 +129,16 @@ main = do
     let (sizes, benchNs, mOut) = parseArgs args
     let host = "haskell"
 
-    -- Use the in-memory mainModules (built from Haskell sources at link time).
-    -- No JSON load needed since we're running in-process.
-    let universe = All.mainModules
+    -- Universe: kernel mainModules + the hydra-bench package (linked at build time).
+    -- hydra-bench is a separate package whose modules are not part of the standard
+    -- sync pipeline; running this exec is the canonical way to exercise them.
+    let universe = All.mainModules ++ Ext.hydraBenchModules
     hPrintf IO.stderr "Universe: %d modules\n" (length universe)
 
     -- Find the bench module.
     case L.find (\m -> moduleNamespace m == benchNs) universe of
       Nothing -> do
-        hPrintf IO.stderr "ERROR: bench module %s not found in kernel JSON.\n  Run bin/sync-haskell.sh to regenerate.\n" (unNamespace benchNs)
+        hPrintf IO.stderr "ERROR: bench module %s not found in linked hydra-bench package.\n" (unNamespace benchNs)
         Exit.exitWith (Exit.ExitFailure 2)
       Just benchMod -> do
         let avail = length (moduleDefinitions benchMod)

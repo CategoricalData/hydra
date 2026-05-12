@@ -161,6 +161,8 @@ packagePrefixes =
     -- WebAssembly package
   , ("hydra.wasm.",                 "hydra-wasm")
   , ("hydra.dsl.wasm.",             "hydra-wasm")
+    -- Benchmark package (synthetic inference workloads; opt-in via sync-bench.sh)
+  , ("hydra.bench.",                "hydra-bench")
     -- Extension package (truly-ext coders: Avro, Protobuf, GraphQL, etc.)
   , ("hydra.atlas",                 "hydra-ext")
   , ("hydra.avro.",                 "hydra-ext")
