@@ -131,12 +131,19 @@
   (lambda (f)
     "Map a function returning Either over a Set, collecting results or short-circuiting on Left."
     (lambda (s)
-      (let ((acc nil))
-        (cl-dolist (x s (list :right (set-from-list (nreverse acc))))
-          (let ((result (funcall f x)))
-            (if (eq (either-tag result) :left)
-                (cl-return result)
-                (push (either-val result) acc))))))))
+      ;; Iterate via hydra_lib_sets_to_list so any underlying set
+      ;; representation (legacy list, hash-table) works uniformly.
+      (let ((acc nil)
+            (early-result nil))
+        (catch 'short-circuit
+          (dolist (x (funcall hydra_lib_sets_to_list s))
+            (let ((result (funcall f x)))
+              (if (eq (either-tag result) :left)
+                  (progn (setq early-result result)
+                         (throw 'short-circuit nil))
+                (push (either-val result) acc)))))
+        (or early-result
+            (list :right (funcall hydra_lib_sets_from_list (nreverse acc))))))))
 
 ;; partition_eithers :: [Either a b] -> Pair [a] [b]
 (defvar hydra_lib_eithers_partition_eithers
