@@ -246,7 +246,7 @@ main = do
   -- auto-loaded based on --package or --all-packages — see Step 2c.
   let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp", "hydra-go"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
-  let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext", "hydra-wasm"]
+  let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext", "hydra-wasm", "hydra-bench"]
 
   let targetCap = case target of
         "haskell"     -> "Haskell"
