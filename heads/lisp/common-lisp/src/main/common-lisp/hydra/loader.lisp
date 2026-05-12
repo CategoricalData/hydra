@@ -20,6 +20,10 @@
 ;; Load the alist-based struct compatibility layer
 (load (merge-pathnames "struct-compat.lisp" *hydra-loader-dir*))
 
+;; Load lazy thunk primitives (make-lazy, lazy-force) used by the lazy-let
+;; loader transformation below.
+(load (merge-pathnames "lazy.lisp" *hydra-loader-dir*))
+
 ;; Dynamic hydra-defstruct: creates alist-based constructor and accessors
 ;; at eval time for any struct not pre-defined in struct-compat.lisp
 (defmacro hydra-defstruct (name &rest fields)
@@ -68,6 +72,138 @@
                  (not (fboundp sym)))
         (setf (symbol-function sym) (symbol-value sym))))))
 
+(defun hydra-let-rhs-trivial-p (rhs)
+  "True if a let binding's RHS is so cheap that lazy-wrapping would only add
+   overhead, rather than fixing exponential re-evaluation.
+
+   Trivial RHSs include:
+     - atoms (literals, symbols, numbers, strings)
+     - quoted constants
+     - already-lazy bindings (don't re-wrap)
+     - bare lambda values (constructing a closure is cheap; the body only
+       runs if the lambda is invoked, so wrapping in lazy adds an indirection
+       without preventing any extra evaluation)
+     - simple field accessors and constructors with all-atom args
+
+   The exponential blowup we are guarding against comes from bindings whose
+   RHS performs nontrivial computation that the body then references in
+   multiple conditional branches or recursive paths. For those, lazy ensures
+   single-evaluation. For bindings whose RHS is itself a lambda or a small
+   constructor call, lazy adds overhead without changing semantics."
+  (cond
+    ((atom rhs) t)
+    ((eq (car rhs) 'quote) t)
+    ((eq (car rhs) 'make-lazy) t)                            ; already lazy
+    ;; Lambda values: cheap to construct (no body evaluation), and lazy-
+    ;; wrapping a lambda just adds an extra dereference per invocation.
+    ((or (eq (car rhs) 'cl:lambda) (eq (car rhs) 'lambda)) t)
+    ;; Single-level function call with all-atom args: cheap by construction.
+    ;; E.g. `(make-foo a b c)`, `(funcall f x)`, `(car cell)`.
+    ((and (symbolp (car rhs))
+          (every (lambda (a) (or (atom a)
+                                 (and (consp a) (eq (car a) 'quote))))
+                 (cdr rhs)))
+     t)
+    (t nil)))
+
+(defun hydra-let-binding-already-lazy-p (b)
+  "True if a binding looks like an already-wrapped lazy thunk binding (so
+   the let transformer should not re-wrap it)."
+  (and (consp b)
+       (symbolp (first b))
+       (let ((name (symbol-name (first b))))
+         (search "-LAZY-THUNK" name))))
+
+(defun hydra-body-has-conditional-or-lambda-p (body)
+  "True if BODY contains any branching form (cond/if/case) OR any lambda
+   form. The exponential re-evaluation that lazy-let prevents arises when
+   a binding is referenced from inside multiple conditional branches that
+   each might re-trigger evaluation through recursion. Lambdas qualify
+   because they may be invoked from arbitrary call sites (including from
+   inside conditionals defined elsewhere). If the body has neither
+   conditionals nor lambdas, lazy-wrapping is pure overhead."
+  (labels ((scan (f)
+             (cond
+               ((atom f) nil)
+               ((eq (car f) 'quote) nil)
+               ((member (car f) '(if cond case cl:if cl:cond cl:case
+                                  cl:lambda lambda)
+                        :test #'eq)
+                t)
+               (t (or (scan (car f)) (scan (cdr f)))))))
+    (some #'scan body)))
+
+(defvar *hydra-lazy-debug-log* nil
+  "If non-nil, a stream to write the wrapped form to (for debugging).")
+
+(defun hydra-wrap-let-lazy (let-form bindings body)
+  "Rewrite (LET-FORM BINDINGS BODY...) so that each non-trivial binding RHS
+   is wrapped in (make-lazy (lambda () RHS)) and the body sees the names
+   through a symbol-macrolet that calls (lazy-force NAME-thunk).
+   Trivial bindings flow through unchanged.
+
+   LET-FORM is either 'let or 'let* (preserved in the output for trivial
+   bindings only; lazy bindings emit explicit nested lets to preserve
+   evaluation order for let*).
+
+   Implementation strategy:
+   - Partition bindings into (trivial, lazy) pairs.
+   - Build the output: a single let/let* for trivial bindings (matching
+     original semantics), then for each lazy binding a (let ((name-thunk ...))
+     (symbol-macrolet ((name (lazy-force name-thunk))) ...)) nest."
+  (cond
+    ;; No bindings or all trivial / already-lazy: emit unchanged.
+    ((or (null bindings)
+         (every (lambda (b) (or (not (consp b))
+                                (hydra-let-rhs-trivial-p (second b))
+                                (hydra-let-binding-already-lazy-p b)))
+                bindings))
+     (list* let-form bindings body))
+    ;; Body has no conditional branching and no lambdas: there is no way
+    ;; for a binding to be re-evaluated, so lazy-wrapping only adds
+    ;; overhead. Emit the original let unchanged.
+    ((not (hydra-body-has-conditional-or-lambda-p body))
+     (list* let-form bindings body))
+    (t
+     ;; Walk bindings; emit lazy nests around non-trivial ones.
+     ;; For correctness with `let` (parallel binding), we conceptually want
+     ;; each thunk to see the OUTER scope. Easiest: emit each binding as its
+     ;; own nested let-thunk pair. This converts a parallel let to a sequence,
+     ;; but since the thunks defer evaluation and never observe each other's
+     ;; in-scope name (the symbol-macrolet only kicks in for the body), the
+     ;; observed semantics are unchanged for kernel-emitted let forms.
+     (labels ((wrap (remaining)
+                (if (null remaining)
+                    (cons 'cl:progn body)
+                    (let* ((b (car remaining))
+                           (rest (cdr remaining)))
+                      (cond
+                        ((not (consp b))
+                         ;; Body-only binding (no value), pass through.
+                         (list 'let (list b) (wrap rest)))
+                        ((or (hydra-let-rhs-trivial-p (second b))
+                             (hydra-let-binding-already-lazy-p b))
+                         ;; Trivial RHS or already-lazy: regular let.
+                         (list 'let (list b) (wrap rest)))
+                        (t
+                         ;; Lazy-wrap this binding. The symbol-macrolet
+                         ;; expansion inlines the already-forced fast path:
+                         ;;   if the cell's car is :lazy-value, return its
+                         ;;   cdr directly; else call lazy-force.
+                         ;; This avoids a function call on every reference
+                         ;; after the first.
+                         (let* ((name (first b))
+                                (rhs (second b))
+                                (thunk-sym (intern (concatenate 'string
+                                                    (symbol-name name) "-LAZY-THUNK"))))
+                           `(let ((,thunk-sym (make-lazy (lambda () ,rhs))))
+                              (symbol-macrolet
+                                  ((,name (if (eq (car ,thunk-sym) :lazy-value)
+                                              (cdr ,thunk-sym)
+                                              (lazy-force ,thunk-sym))))
+                                ,(wrap rest))))))))))
+       (wrap bindings)))))
+
 (defun hydra-fix-curried-calls (form &optional lambda-vars)
   "Transform Scheme/Lisp-1 calling conventions to CL Lisp-2 conventions.
    1. ((expr ...) args...) -> (funcall (expr ...) args...) for non-lambda exprs
@@ -98,6 +234,16 @@
                                entry))
                          data))
            form)))
+    ;; Special form: symbol-macrolet - binding list contains (symbol expansion)
+    ;; pairs, NOT function calls. Without this, the binding list looks like a
+    ;; compound expression and the fallthrough wraps it in funcall, mangling
+    ;; the form. Only the BODY needs recursive transformation.
+    ((eq (car form) 'symbol-macrolet)
+     (let ((bindings (second form))
+           (body (cddr form)))
+       (list* 'symbol-macrolet
+              bindings
+              (mapcar (lambda (f) (hydra-fix-curried-calls f lambda-vars)) body))))
     ;; Special form: cond - clauses are (test body...) pairs, not function calls
     ((eq (car form) 'cond)
      (cons 'cond
@@ -113,14 +259,26 @@
        (list* (car form) params
               (mapcar (lambda (f) (hydra-fix-curried-calls f new-vars))
                       (cddr form)))))
-    ;; let/let*: track bound names as lambda-vars (for Lisp-1 → Lisp-2 conversion)
+    ;; let/let*: track bound names as lambda-vars (for Lisp-1 → Lisp-2 conversion).
+    ;;
+    ;; *** Lazy-let transformation ***
+    ;; Wrap each binding's RHS in (make-lazy (lambda () RHS)) and introduce a
+    ;; symbol-macrolet around the body so references to the bound name expand
+    ;; to (lazy-force NAME-thunk). This gives the kernel the lazy let semantics
+    ;; Hydra DSL expects, preventing exponential re-evaluation of deeply nested
+    ;; sub-expressions during inference. See docs/history/python-host-perf-
+    ;; investigation.md for the analogous Python fix in #344.
+    ;;
+    ;; A binding is wrapped iff its RHS is "non-trivial" (not a literal, not a
+    ;; bare variable). Trivial RHSs are emitted as a regular (let ((x V))) so
+    ;; we don't pay the make-lazy / symbol-macrolet overhead for them.
     ((member (car form) '(let let*) :test #'eq)
      (let* ((bindings (second form))
             (body (cddr form))
-            ;; Extract binding names
             (names (mapcar (lambda (b) (if (consp b) (first b) b)) bindings))
             (new-vars (append names lambda-vars))
-            ;; Transform binding values (with existing lambda-vars for let, accumulated for let*)
+            ;; Transform binding values (with existing lambda-vars for let,
+            ;; accumulated for let*).
             (transformed-bindings
              (if (eq (car form) 'let)
                  (mapcar (lambda (b)
@@ -128,7 +286,6 @@
                                (list (first b) (hydra-fix-curried-calls (second b) lambda-vars))
                                b))
                          bindings)
-                 ;; let*: accumulate bindings
                  (let ((acc-vars lambda-vars)
                        (result nil))
                    (dolist (b bindings (nreverse result))
@@ -139,7 +296,7 @@
                          (push b result))))))
             (transformed-body
              (mapcar (lambda (f) (hydra-fix-curried-calls f new-vars)) body)))
-       (list* (car form) transformed-bindings transformed-body)))
+       (hydra-wrap-let-lazy (car form) transformed-bindings transformed-body)))
     ;; Letrec fix: ((lambda (X) BODY) INIT) where INIT references X.
     ;; This is a recursive/self-referential binding (letrec in Scheme).
     ;; Transform to use a mutable cell for the fixpoint:
