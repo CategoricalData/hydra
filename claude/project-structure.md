@@ -28,6 +28,7 @@ worktrees/<branch>/
     hydra-pg/         # Property graph model DSL sources
     hydra-rdf/        # RDF/SHACL model DSL sources
     hydra-ext/        # Miscellaneous extension DSL sources (Avro, Protobuf, GraphQL, ...)
+    hydra-bench/      # Synthetic inference benchmark workloads (opt-in via bin/sync-bench.sh)
     hydra-coq/        # Coq coder DSL sources
     hydra-javascript/ # JavaScript coder DSL sources
   heads/              # Per-host build infrastructure: primitives, DSL runtime, generation
