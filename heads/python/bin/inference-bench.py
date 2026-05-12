@@ -48,6 +48,7 @@ from hydra.generation import (
 from hydra.packaging import DefinitionTerm, Module, Namespace, TermDefinition
 
 KERNEL_JSON = os.path.join(_ROOT, "dist/json/hydra-kernel/src/main/json")
+BENCH_JSON = os.path.join(_ROOT, "dist/json/hydra-bench/src/main/json")
 DEFAULT_BENCH_NS = "hydra.bench.linearChain"
 
 
@@ -56,9 +57,19 @@ def _parse_sizes(s: str) -> list[int]:
 
 
 def _load_universe() -> tuple[Module, ...]:
-    """Load mainModules from the kernel JSON manifest."""
-    nss = read_manifest_field(KERNEL_JSON, "mainModules")
-    return load_modules_from_json(KERNEL_JSON, nss)
+    """Load mainModules from the kernel JSON manifest plus the hydra-bench package.
+
+    hydra-bench is opt-in: its modules live under dist/json/hydra-bench/ and are
+    populated by bin/sync-bench.sh, not by the default sync. If the package
+    directory is absent, the benchmark won't find its workload — that's the
+    intended signal to run sync-bench first.
+    """
+    kernel_nss = read_manifest_field(KERNEL_JSON, "mainModules")
+    universe = list(load_modules_from_json(KERNEL_JSON, kernel_nss))
+    if os.path.isdir(BENCH_JSON):
+        bench_nss = read_manifest_field(BENCH_JSON, "mainModules")
+        universe.extend(load_modules_from_json(BENCH_JSON, bench_nss))
+    return tuple(universe)
 
 
 def _find_bench_module(universe: tuple[Module, ...], ns: str) -> Module:
