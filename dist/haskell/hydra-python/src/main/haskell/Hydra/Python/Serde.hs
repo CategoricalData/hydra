@@ -82,7 +82,7 @@ atomToExpr atom =
       Syntax.AtomNumber v0 -> numberToExpr v0
       Syntax.AtomSet v0 -> setToExpr v0
       Syntax.AtomSetcomp _ -> Serialization.cst "{...}"
-      Syntax.AtomString v0 -> stringToExpr v0
+      Syntax.AtomString v0 -> stringsToExpr v0
       Syntax.AtomTrue -> Serialization.cst "True"
       Syntax.AtomTuple v0 -> tupleToExpr v0
 -- | Serialize an attribute access
@@ -327,6 +327,52 @@ factorToExpr f =
         Serialization.cst "~",
         (factorToExpr v0)]
       Syntax.FactorSimple v0 -> powerToExpr v0
+-- | Serialize an f-string conversion (e.g. !r, !s, !a)
+fstringConversionToExpr :: Syntax.FstringConversion -> Ast.Expr
+fstringConversionToExpr c =
+    Serialization.noSep [
+      Serialization.cst "!",
+      (nameToExpr (Syntax.unFstringConversion c))]
+-- | Serialize a single f-string format-spec element
+fstringFormatSpecToExpr :: Syntax.FstringFormatSpec -> Ast.Expr
+fstringFormatSpecToExpr fs =
+    case fs of
+      Syntax.FstringFormatSpecLiteral v0 -> Serialization.cst v0
+      Syntax.FstringFormatSpecReplacementField v0 -> fstringReplacementFieldToExpr v0
+-- | Serialize an f-string ':format' clause
+fstringFullFormatSpecToExpr :: Syntax.FstringFullFormatSpec -> Ast.Expr
+fstringFullFormatSpecToExpr ffs =
+    Serialization.noSep [
+      Serialization.cst ":",
+      (Serialization.noSep (Lists.map fstringFormatSpecToExpr (Syntax.unFstringFullFormatSpec ffs)))]
+-- | Serialize one piece of an f-string body
+fstringMiddleToExpr :: Syntax.FstringMiddle -> Ast.Expr
+fstringMiddleToExpr fm =
+    case fm of
+      Syntax.FstringMiddleLiteral v0 -> Serialization.cst v0
+      Syntax.FstringMiddleReplacementField v0 -> fstringReplacementFieldToExpr v0
+-- | Serialize an f-string '{expr[=][!conv][:spec]}' replacement
+fstringReplacementFieldToExpr :: Syntax.FstringReplacementField -> Ast.Expr
+fstringReplacementFieldToExpr r =
+
+      let expr = annotatedRhsToExpr (Syntax.fstringReplacementFieldExpression r)
+          eq = Logic.ifElse (Syntax.fstringReplacementFieldEquals r) (Serialization.cst "=") (Serialization.cst "")
+          conv = Maybes.maybe (Serialization.cst "") fstringConversionToExpr (Syntax.fstringReplacementFieldConversion r)
+          spec = Maybes.maybe (Serialization.cst "") fstringFullFormatSpecToExpr (Syntax.fstringReplacementFieldFormatSpec r)
+      in (Serialization.noSep [
+        Serialization.cst "{",
+        expr,
+        eq,
+        conv,
+        spec,
+        (Serialization.cst "}")])
+-- | Serialize a Python f-string literal
+fstringToExpr :: Syntax.Fstring -> Ast.Expr
+fstringToExpr f =
+    Serialization.noSep [
+      Serialization.cst "f\"",
+      (Serialization.noSep (Lists.map fstringMiddleToExpr (Syntax.unFstring f))),
+      (Serialization.cst "\"")]
 -- | Serialize a raw function definition
 functionDefRawToExpr :: Syntax.FunctionDefRaw -> Ast.Expr
 functionDefRawToExpr fdr =
@@ -555,6 +601,7 @@ numberToExpr :: Syntax.Number -> Ast.Expr
 numberToExpr num =
     case num of
       Syntax.NumberFloat v0 -> Serialization.cst (pythonFloatLiteralText (Literals.showFloat64 v0))
+      Syntax.NumberImaginary v0 -> Serialization.cst (Strings.cat2 (pythonFloatLiteralText (Literals.showFloat64 v0)) "j")
       Syntax.NumberInteger v0 -> Serialization.cst (Literals.showBigint v0)
 -- | Serialize an or pattern
 orPatternToExpr :: Syntax.OrPattern -> Ast.Expr
@@ -782,19 +829,44 @@ statementToExpr stmt =
       Syntax.StatementAnnotated v0 -> annotatedStatementToExpr v0
       Syntax.StatementSimple v0 -> Serialization.newlineSep (Lists.map simpleStatementToExpr v0)
       Syntax.StatementCompound v0 -> compoundStatementToExpr v0
+-- | Serialize one element of a `(fstring|string)+` run
+stringOrFstringToExpr :: Syntax.StringOrFstring -> Ast.Expr
+stringOrFstringToExpr sf =
+    case sf of
+      Syntax.StringOrFstringString v0 -> stringToExpr v0
+      Syntax.StringOrFstringFstring v0 -> fstringToExpr v0
+-- | Serialize a Python string prefix to its source-form characters
+stringPrefixToText :: Syntax.StringPrefix -> String
+stringPrefixToText p =
+    case p of
+      Syntax.StringPrefixRaw -> "r"
+      Syntax.StringPrefixBytes -> "b"
+      Syntax.StringPrefixRawBytes -> "rb"
+      Syntax.StringPrefixUnicode -> "u"
 -- | Serialize a Python string literal
 stringToExpr :: Syntax.String_ -> Ast.Expr
 stringToExpr s =
 
       let content = Syntax.stringValue s
+          prefix = Maybes.maybe "" stringPrefixToText (Syntax.stringPrefix s)
           style = Syntax.stringQuoteStyle s
       in case style of
-        Syntax.QuoteStyleSingle -> Serialization.cst (escapePythonString False content)
-        Syntax.QuoteStyleDouble -> Serialization.cst (escapePythonString True content)
-        Syntax.QuoteStyleTriple -> Serialization.noSep [
-          Serialization.cst "r\"\"\"",
+        Syntax.QuoteStyleSingle -> Serialization.cst (Strings.cat2 prefix (escapePythonString False content))
+        Syntax.QuoteStyleDouble -> Serialization.cst (Strings.cat2 prefix (escapePythonString True content))
+        Syntax.QuoteStyleTripleSingle -> Serialization.noSep [
+          Serialization.cst (Strings.cat2 prefix "'''"),
+          (Serialization.cst content),
+          (Serialization.cst "'''")]
+        Syntax.QuoteStyleTripleDouble -> Serialization.noSep [
+          Serialization.cst (Strings.cat2 prefix "\"\"\""),
           (Serialization.cst content),
           (Serialization.cst "\"\"\"")]
+-- | Serialize a `strings` group (a non-empty run of either string/f-string or t-string literals)
+stringsToExpr :: Syntax.Strings -> Ast.Expr
+stringsToExpr ss =
+    case ss of
+      Syntax.StringsRegulars v0 -> Serialization.spaceSep (Lists.map stringOrFstringToExpr v0)
+      Syntax.StringsTstrings v0 -> Serialization.spaceSep (Lists.map tstringToExpr v0)
 -- | Serialize a subject expression
 subjectExpressionToExpr :: Syntax.SubjectExpression -> Ast.Expr
 subjectExpressionToExpr se =
@@ -837,6 +909,52 @@ termToExpr t = factorToExpr (Syntax.termRhs t)
 toPythonComments :: String -> String
 toPythonComments doc_ =
     Logic.ifElse (Equality.equal doc_ "") "" (Strings.intercalate "\n" (Lists.map (\line -> Logic.ifElse (Equality.equal line "") "#" (Strings.cat2 "# " line)) (Strings.lines doc_)))
+-- | Serialize a t-string conversion (e.g. !r, !s, !a)
+tstringConversionToExpr :: Syntax.TstringConversion -> Ast.Expr
+tstringConversionToExpr c =
+    Serialization.noSep [
+      Serialization.cst "!",
+      (nameToExpr (Syntax.unTstringConversion c))]
+-- | Serialize a single t-string format-spec element
+tstringFormatSpecToExpr :: Syntax.TstringFormatSpec -> Ast.Expr
+tstringFormatSpecToExpr fs =
+    case fs of
+      Syntax.TstringFormatSpecLiteral v0 -> Serialization.cst v0
+      Syntax.TstringFormatSpecReplacementField v0 -> tstringReplacementToExpr v0
+-- | Serialize a t-string ':format' clause
+tstringFullFormatSpecToExpr :: Syntax.TstringFullFormatSpec -> Ast.Expr
+tstringFullFormatSpecToExpr ffs =
+    Serialization.noSep [
+      Serialization.cst ":",
+      (Serialization.noSep (Lists.map tstringFormatSpecToExpr (Syntax.unTstringFullFormatSpec ffs)))]
+-- | Serialize one piece of a t-string body
+tstringMiddleToExpr :: Syntax.TstringMiddle -> Ast.Expr
+tstringMiddleToExpr tm =
+    case tm of
+      Syntax.TstringMiddleLiteral v0 -> Serialization.cst v0
+      Syntax.TstringMiddleReplacementField v0 -> tstringReplacementToExpr v0
+-- | Serialize a t-string '{expr[=][!conv][:spec]}' replacement (used both top-level and inside format specs)
+tstringReplacementToExpr :: Syntax.TstringReplacement -> Ast.Expr
+tstringReplacementToExpr r =
+
+      let expr = annotatedRhsToExpr (Syntax.tstringReplacementExpression r)
+          eq = Logic.ifElse (Syntax.tstringReplacementEquals r) (Serialization.cst "=") (Serialization.cst "")
+          conv = Maybes.maybe (Serialization.cst "") tstringConversionToExpr (Syntax.tstringReplacementConversion r)
+          spec = Maybes.maybe (Serialization.cst "") tstringFullFormatSpecToExpr (Syntax.tstringReplacementFormatSpec r)
+      in (Serialization.noSep [
+        Serialization.cst "{",
+        expr,
+        eq,
+        conv,
+        spec,
+        (Serialization.cst "}")])
+-- | Serialize a Python t-string literal (PEP 750)
+tstringToExpr :: Syntax.Tstring -> Ast.Expr
+tstringToExpr t =
+    Serialization.noSep [
+      Serialization.cst "t\"",
+      (Serialization.noSep (Lists.map tstringMiddleToExpr (Syntax.unTstring t))),
+      (Serialization.cst "\"")]
 -- | Serialize a Python tuple
 tupleToExpr :: Syntax.Tuple -> Ast.Expr
 tupleToExpr t =

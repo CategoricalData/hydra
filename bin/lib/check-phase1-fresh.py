@@ -9,6 +9,7 @@ Inputs hashed:
   - packages/*/src/main/haskell/Hydra/Sources/**.hs (DSL sources)
   - heads/haskell/src/main/haskell/**.hs            (hand-written runtime)
   - heads/haskell/src/test/haskell/**.hs            (hand-written test infra)
+  - heads/haskell/src/exec/**/*.hs                  (executables: transform-haskell-dsl-to-json, etc.)
   - heads/haskell/package.yaml                      (build config)
   - heads/haskell/stack.yaml                        (build config)
   - heads/haskell/bin/sync-haskell.sh               (the runner itself)
@@ -53,7 +54,7 @@ def collect_inputs(hydra_root: Path) -> list:
                 for hs in sources.rglob("*.hs"):
                     paths.add(hs)
     heads_haskell = hydra_root / "heads" / "haskell"
-    for sub in ("src/main/haskell", "src/test/haskell"):
+    for sub in ("src/main/haskell", "src/test/haskell", "src/exec"):
         d = heads_haskell / sub
         if d.is_dir():
             for hs in d.rglob("*.hs"):

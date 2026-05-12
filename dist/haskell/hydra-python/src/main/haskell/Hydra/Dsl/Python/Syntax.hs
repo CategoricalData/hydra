@@ -506,7 +506,7 @@ atomSetcomp x =
         Core.fieldName = (Core.Name "setcomp"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the string variant of hydra.python.syntax.Atom
-atomString :: Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm Syntax.Atom
+atomString :: Phantoms.TTerm Syntax.Strings -> Phantoms.TTerm Syntax.Atom
 atomString x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.python.syntax.Atom"),
@@ -3181,72 +3181,232 @@ forStatementWithTypeComment original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.syntax.ForStatement"),
               Core.projectionField = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL constructor for hydra.python.syntax.FuncType
-funcType :: Phantoms.TTerm [Syntax.TypeExpression] -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.FuncType
-funcType type_ body =
+-- | DSL constructor for the hydra.python.syntax.Fstring wrapper
+fstring :: Phantoms.TTerm [Syntax.FstringMiddle] -> Phantoms.TTerm Syntax.Fstring
+fstring x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Fstring"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL constructor for the hydra.python.syntax.FstringConversion wrapper
+fstringConversion :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.FstringConversion
+fstringConversion x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.FstringConversion"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL injection for the literal variant of hydra.python.syntax.FstringFormatSpec
+fstringFormatSpecLiteral :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.FstringFormatSpec
+fstringFormatSpecLiteral x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.FstringFormatSpec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "literal"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the replacementField variant of hydra.python.syntax.FstringFormatSpec
+fstringFormatSpecReplacementField :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm Syntax.FstringFormatSpec
+fstringFormatSpecReplacementField x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.FstringFormatSpec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "replacementField"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL constructor for the hydra.python.syntax.FstringFullFormatSpec wrapper
+fstringFullFormatSpec :: Phantoms.TTerm [Syntax.FstringFormatSpec] -> Phantoms.TTerm Syntax.FstringFullFormatSpec
+fstringFullFormatSpec x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.FstringFullFormatSpec"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL injection for the literal variant of hydra.python.syntax.FstringMiddle
+fstringMiddleLiteral :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.FstringMiddle
+fstringMiddleLiteral x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.FstringMiddle"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "literal"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the replacementField variant of hydra.python.syntax.FstringMiddle
+fstringMiddleReplacementField :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm Syntax.FstringMiddle
+fstringMiddleReplacementField x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.FstringMiddle"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "replacementField"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL constructor for hydra.python.syntax.FstringReplacementField
+fstringReplacementField :: Phantoms.TTerm Syntax.AnnotatedRhs -> Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe Syntax.FstringConversion) -> Phantoms.TTerm (Maybe Syntax.FstringFullFormatSpec) -> Phantoms.TTerm Syntax.FstringReplacementField
+fstringReplacementField expression equals conversion formatSpec =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.python.syntax.FuncType"),
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)},
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Phantoms.unTTerm expression)},
         Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
--- | DSL accessor for the body field of hydra.python.syntax.FuncType
-funcTypeBody :: Phantoms.TTerm Syntax.FuncType -> Phantoms.TTerm Syntax.Expression
-funcTypeBody x =
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Phantoms.unTTerm equals)},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Phantoms.unTTerm conversion)},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Phantoms.unTTerm formatSpec)}]}))
+-- | DSL accessor for the conversion field of hydra.python.syntax.FstringReplacementField
+fstringReplacementFieldConversion :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm (Maybe Syntax.FstringConversion)
+fstringReplacementFieldConversion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.python.syntax.FuncType"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+        Core.projectionField = (Core.Name "conversion")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the equals field of hydra.python.syntax.FstringReplacementField
+fstringReplacementFieldEquals :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm Bool
+fstringReplacementFieldEquals x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+        Core.projectionField = (Core.Name "equals")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the expression field of hydra.python.syntax.FstringReplacementField
+fstringReplacementFieldExpression :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm Syntax.AnnotatedRhs
+fstringReplacementFieldExpression x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+        Core.projectionField = (Core.Name "expression")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the formatSpec field of hydra.python.syntax.FstringReplacementField
+fstringReplacementFieldFormatSpec :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm (Maybe Syntax.FstringFullFormatSpec)
+fstringReplacementFieldFormatSpec x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+        Core.projectionField = (Core.Name "formatSpec")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the conversion field of hydra.python.syntax.FstringReplacementField
+fstringReplacementFieldWithConversion :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm (Maybe Syntax.FstringConversion) -> Phantoms.TTerm Syntax.FstringReplacementField
+fstringReplacementFieldWithConversion original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "expression")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "equals")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "formatSpec")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the equals field of hydra.python.syntax.FstringReplacementField
+fstringReplacementFieldWithEquals :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.FstringReplacementField
+fstringReplacementFieldWithEquals original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "expression")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "conversion")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "formatSpec")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the expression field of hydra.python.syntax.FstringReplacementField
+fstringReplacementFieldWithExpression :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm Syntax.AnnotatedRhs -> Phantoms.TTerm Syntax.FstringReplacementField
+fstringReplacementFieldWithExpression original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "equals")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "conversion")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "formatSpec")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the formatSpec field of hydra.python.syntax.FstringReplacementField
+fstringReplacementFieldWithFormatSpec :: Phantoms.TTerm Syntax.FstringReplacementField -> Phantoms.TTerm (Maybe Syntax.FstringFullFormatSpec) -> Phantoms.TTerm Syntax.FstringReplacementField
+fstringReplacementFieldWithFormatSpec original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "expression")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "equals")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FstringReplacementField"),
+              Core.projectionField = (Core.Name "conversion")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for the hydra.python.syntax.FuncTypeComment wrapper
 funcTypeComment :: Phantoms.TTerm Syntax.TypeComment -> Phantoms.TTerm Syntax.FuncTypeComment
 funcTypeComment x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.FuncTypeComment"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
--- | DSL accessor for the type field of hydra.python.syntax.FuncType
-funcTypeType :: Phantoms.TTerm Syntax.FuncType -> Phantoms.TTerm [Syntax.TypeExpression]
-funcTypeType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.python.syntax.FuncType"),
-        Core.projectionField = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the body field of hydra.python.syntax.FuncType
-funcTypeWithBody :: Phantoms.TTerm Syntax.FuncType -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.FuncType
-funcTypeWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.python.syntax.FuncType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FuncType"),
-              Core.projectionField = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL updater for the type field of hydra.python.syntax.FuncType
-funcTypeWithType :: Phantoms.TTerm Syntax.FuncType -> Phantoms.TTerm [Syntax.TypeExpression] -> Phantoms.TTerm Syntax.FuncType
-funcTypeWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.python.syntax.FuncType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.python.syntax.FuncType"),
-              Core.projectionField = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.python.syntax.FunctionDefRaw
 functionDefRaw :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm [Syntax.TypeParameter] -> Phantoms.TTerm (Maybe Syntax.Parameters) -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm (Maybe Syntax.FuncTypeComment) -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.FunctionDefRaw
 functionDefRaw async name typeParams params returnType funcTypeComment block =
@@ -3976,7 +4136,7 @@ ifTailElse x =
         Core.fieldName = (Core.Name "else"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for the hydra.python.syntax.ImaginaryNumber wrapper
-imaginaryNumber :: Phantoms.TTerm Syntax.Number -> Phantoms.TTerm Syntax.ImaginaryNumber
+imaginaryNumber :: Phantoms.TTerm Double -> Phantoms.TTerm Syntax.ImaginaryNumber
 imaginaryNumber x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.ImaginaryNumber"),
@@ -5102,7 +5262,7 @@ literalExpressionOrAttributeLiteral x =
         Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the string variant of hydra.python.syntax.LiteralExpression
-literalExpressionString :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.LiteralExpression
+literalExpressionString :: Phantoms.TTerm Syntax.Strings -> Phantoms.TTerm Syntax.LiteralExpression
 literalExpressionString x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.python.syntax.LiteralExpression"),
@@ -5516,6 +5676,14 @@ numberFloat x =
       Core.injectionTypeName = (Core.Name "hydra.python.syntax.Number"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "float"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the imaginary variant of hydra.python.syntax.Number
+numberImaginary :: Phantoms.TTerm Double -> Phantoms.TTerm Syntax.Number
+numberImaginary x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.Number"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "imaginary"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the integer variant of hydra.python.syntax.Number
 numberInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.Number
@@ -6523,13 +6691,21 @@ quoteStyleSingle =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "single"),
         Core.fieldTerm = Core.TermUnit}}))
--- | DSL injection for the triple variant of hydra.python.syntax.QuoteStyle
-quoteStyleTriple :: Phantoms.TTerm Syntax.QuoteStyle
-quoteStyleTriple =
+-- | DSL injection for the tripleDouble variant of hydra.python.syntax.QuoteStyle
+quoteStyleTripleDouble :: Phantoms.TTerm Syntax.QuoteStyle
+quoteStyleTripleDouble =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.python.syntax.QuoteStyle"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "triple"),
+        Core.fieldName = (Core.Name "tripleDouble"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the tripleSingle variant of hydra.python.syntax.QuoteStyle
+quoteStyleTripleSingle :: Phantoms.TTerm Syntax.QuoteStyle
+quoteStyleTripleSingle =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.QuoteStyle"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "tripleSingle"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL constructor for hydra.python.syntax.RaiseExpression
 raiseExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.RaiseExpression
@@ -6597,12 +6773,22 @@ raiseStatement x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.RaiseStatement"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
--- | DSL constructor for the hydra.python.syntax.RealNumber wrapper
-realNumber :: Phantoms.TTerm Syntax.Number -> Phantoms.TTerm Syntax.RealNumber
-realNumber x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.RealNumber"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL injection for the float variant of hydra.python.syntax.RealNumber
+realNumberFloat :: Phantoms.TTerm Double -> Phantoms.TTerm Syntax.RealNumber
+realNumberFloat x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.RealNumber"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "float"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the integer variant of hydra.python.syntax.RealNumber
+realNumberInteger :: Phantoms.TTerm Integer -> Phantoms.TTerm Syntax.RealNumber
+realNumberInteger x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.RealNumber"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "integer"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the dot variant of hydra.python.syntax.RelativeImportPrefix
 relativeImportPrefixDot :: Phantoms.TTerm Syntax.RelativeImportPrefix
 relativeImportPrefixDot =
@@ -7922,8 +8108,8 @@ statementSimple x =
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for hydra.python.syntax.String
-string :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.QuoteStyle -> Phantoms.TTerm Syntax.String_
-string value quoteStyle =
+string :: Phantoms.TTerm String -> Phantoms.TTerm (Maybe Syntax.StringPrefix) -> Phantoms.TTerm Syntax.QuoteStyle -> Phantoms.TTerm Syntax.String_
+string value prefix quoteStyle =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.syntax.String"),
       Core.recordFields = [
@@ -7931,8 +8117,67 @@ string value quoteStyle =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm value)},
         Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Phantoms.unTTerm prefix)},
+        Core.Field {
           Core.fieldName = (Core.Name "quoteStyle"),
           Core.fieldTerm = (Phantoms.unTTerm quoteStyle)}]}))
+-- | DSL injection for the fstring variant of hydra.python.syntax.StringOrFstring
+stringOrFstringFstring :: Phantoms.TTerm Syntax.Fstring -> Phantoms.TTerm Syntax.StringOrFstring
+stringOrFstringFstring x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.StringOrFstring"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "fstring"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the string variant of hydra.python.syntax.StringOrFstring
+stringOrFstringString :: Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm Syntax.StringOrFstring
+stringOrFstringString x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.StringOrFstring"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "string"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL accessor for the prefix field of hydra.python.syntax.String
+stringPrefix :: Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm (Maybe Syntax.StringPrefix)
+stringPrefix x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.python.syntax.String"),
+        Core.projectionField = (Core.Name "prefix")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL injection for the bytes variant of hydra.python.syntax.StringPrefix
+stringPrefixBytes :: Phantoms.TTerm Syntax.StringPrefix
+stringPrefixBytes =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.StringPrefix"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "bytes"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the raw variant of hydra.python.syntax.StringPrefix
+stringPrefixRaw :: Phantoms.TTerm Syntax.StringPrefix
+stringPrefixRaw =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.StringPrefix"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "raw"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the rawBytes variant of hydra.python.syntax.StringPrefix
+stringPrefixRawBytes :: Phantoms.TTerm Syntax.StringPrefix
+stringPrefixRawBytes =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.StringPrefix"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "rawBytes"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the unicode variant of hydra.python.syntax.StringPrefix
+stringPrefixUnicode :: Phantoms.TTerm Syntax.StringPrefix
+stringPrefixUnicode =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.StringPrefix"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "unicode"),
+        Core.fieldTerm = Core.TermUnit}}))
 -- | DSL accessor for the quoteStyle field of hydra.python.syntax.String
 stringQuoteStyle :: Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm Syntax.QuoteStyle
 stringQuoteStyle x =
@@ -7949,6 +8194,29 @@ stringValue x =
         Core.projectionTypeName = (Core.Name "hydra.python.syntax.String"),
         Core.projectionField = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the prefix field of hydra.python.syntax.String
+stringWithPrefix :: Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm (Maybe Syntax.StringPrefix) -> Phantoms.TTerm Syntax.String_
+stringWithPrefix original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.String"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "value"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.String"),
+              Core.projectionField = (Core.Name "value")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "quoteStyle"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.String"),
+              Core.projectionField = (Core.Name "quoteStyle")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the quoteStyle field of hydra.python.syntax.String
 stringWithQuoteStyle :: Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm Syntax.QuoteStyle -> Phantoms.TTerm Syntax.String_
 stringWithQuoteStyle original newVal =
@@ -7963,6 +8231,13 @@ stringWithQuoteStyle original newVal =
               Core.projectionField = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.String"),
+              Core.projectionField = (Core.Name "prefix")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "quoteStyle"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL updater for the value field of hydra.python.syntax.String
@@ -7975,12 +8250,35 @@ stringWithValue original newVal =
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.String"),
+              Core.projectionField = (Core.Name "prefix")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
           Core.fieldName = (Core.Name "quoteStyle"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.python.syntax.String"),
               Core.projectionField = (Core.Name "quoteStyle")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL injection for the regulars variant of hydra.python.syntax.Strings
+stringsRegulars :: Phantoms.TTerm [Syntax.StringOrFstring] -> Phantoms.TTerm Syntax.Strings
+stringsRegulars x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.Strings"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "regulars"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the tstrings variant of hydra.python.syntax.Strings
+stringsTstrings :: Phantoms.TTerm [Syntax.Tstring] -> Phantoms.TTerm Syntax.Strings
+stringsTstrings x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.Strings"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "tstrings"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the simple variant of hydra.python.syntax.SubjectExpression
 subjectExpressionSimple :: Phantoms.TTerm Syntax.NamedExpression -> Phantoms.TTerm Syntax.SubjectExpression
 subjectExpressionSimple x =
@@ -9021,6 +9319,226 @@ tryStatementFinally x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "finally"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL constructor for the hydra.python.syntax.Tstring wrapper
+tstring :: Phantoms.TTerm [Syntax.TstringMiddle] -> Phantoms.TTerm Syntax.Tstring
+tstring x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.Tstring"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL constructor for the hydra.python.syntax.TstringConversion wrapper
+tstringConversion :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.TstringConversion
+tstringConversion x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.TstringConversion"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL injection for the literal variant of hydra.python.syntax.TstringFormatSpec
+tstringFormatSpecLiteral :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.TstringFormatSpec
+tstringFormatSpecLiteral x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.TstringFormatSpec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "literal"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the replacementField variant of hydra.python.syntax.TstringFormatSpec
+tstringFormatSpecReplacementField :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm Syntax.TstringFormatSpec
+tstringFormatSpecReplacementField x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.TstringFormatSpec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "replacementField"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL constructor for the hydra.python.syntax.TstringFullFormatSpec wrapper
+tstringFullFormatSpec :: Phantoms.TTerm [Syntax.TstringFormatSpec] -> Phantoms.TTerm Syntax.TstringFullFormatSpec
+tstringFullFormatSpec x =
+    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.python.syntax.TstringFullFormatSpec"),
+      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL injection for the literal variant of hydra.python.syntax.TstringMiddle
+tstringMiddleLiteral :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.TstringMiddle
+tstringMiddleLiteral x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.TstringMiddle"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "literal"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the replacementField variant of hydra.python.syntax.TstringMiddle
+tstringMiddleReplacementField :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm Syntax.TstringMiddle
+tstringMiddleReplacementField x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.TstringMiddle"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "replacementField"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL constructor for hydra.python.syntax.TstringReplacement
+tstringReplacement :: Phantoms.TTerm Syntax.AnnotatedRhs -> Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe Syntax.TstringConversion) -> Phantoms.TTerm (Maybe Syntax.TstringFullFormatSpec) -> Phantoms.TTerm Syntax.TstringReplacement
+tstringReplacement expression equals conversion formatSpec =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Phantoms.unTTerm expression)},
+        Core.Field {
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Phantoms.unTTerm equals)},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Phantoms.unTTerm conversion)},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Phantoms.unTTerm formatSpec)}]}))
+-- | DSL accessor for the conversion field of hydra.python.syntax.TstringReplacement
+tstringReplacementConversion :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm (Maybe Syntax.TstringConversion)
+tstringReplacementConversion x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+        Core.projectionField = (Core.Name "conversion")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the equals field of hydra.python.syntax.TstringReplacement
+tstringReplacementEquals :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm Bool
+tstringReplacementEquals x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+        Core.projectionField = (Core.Name "equals")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the expression field of hydra.python.syntax.TstringReplacement
+tstringReplacementExpression :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm Syntax.AnnotatedRhs
+tstringReplacementExpression x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+        Core.projectionField = (Core.Name "expression")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the formatSpec field of hydra.python.syntax.TstringReplacement
+tstringReplacementFormatSpec :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm (Maybe Syntax.TstringFullFormatSpec)
+tstringReplacementFormatSpec x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+        Core.projectionField = (Core.Name "formatSpec")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the conversion field of hydra.python.syntax.TstringReplacement
+tstringReplacementWithConversion :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm (Maybe Syntax.TstringConversion) -> Phantoms.TTerm Syntax.TstringReplacement
+tstringReplacementWithConversion original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "expression")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "equals")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "formatSpec")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the equals field of hydra.python.syntax.TstringReplacement
+tstringReplacementWithEquals :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.TstringReplacement
+tstringReplacementWithEquals original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "expression")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "conversion")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "formatSpec")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the expression field of hydra.python.syntax.TstringReplacement
+tstringReplacementWithExpression :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm Syntax.AnnotatedRhs -> Phantoms.TTerm Syntax.TstringReplacement
+tstringReplacementWithExpression original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "equals")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "conversion")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "formatSpec")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the formatSpec field of hydra.python.syntax.TstringReplacement
+tstringReplacementWithFormatSpec :: Phantoms.TTerm Syntax.TstringReplacement -> Phantoms.TTerm (Maybe Syntax.TstringFullFormatSpec) -> Phantoms.TTerm Syntax.TstringReplacement
+tstringReplacementWithFormatSpec original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expression"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "expression")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "equals"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "equals")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "conversion"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.python.syntax.TstringReplacement"),
+              Core.projectionField = (Core.Name "conversion")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "formatSpec"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for the hydra.python.syntax.Tuple wrapper
 tuple :: Phantoms.TTerm [Syntax.StarNamedExpression] -> Phantoms.TTerm Syntax.Tuple
 tuple x =
@@ -9387,6 +9905,24 @@ unForIfClauses x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.ForIfClauses")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the body of hydra.python.syntax.Fstring
+unFstring :: Phantoms.TTerm Syntax.Fstring -> Phantoms.TTerm [Syntax.FstringMiddle]
+unFstring x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.Fstring")),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the body of hydra.python.syntax.FstringConversion
+unFstringConversion :: Phantoms.TTerm Syntax.FstringConversion -> Phantoms.TTerm Syntax.Name
+unFstringConversion x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.FstringConversion")),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the body of hydra.python.syntax.FstringFullFormatSpec
+unFstringFullFormatSpec :: Phantoms.TTerm Syntax.FstringFullFormatSpec -> Phantoms.TTerm [Syntax.FstringFormatSpec]
+unFstringFullFormatSpec x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.FstringFullFormatSpec")),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body of hydra.python.syntax.FuncTypeComment
 unFuncTypeComment :: Phantoms.TTerm Syntax.FuncTypeComment -> Phantoms.TTerm Syntax.TypeComment
 unFuncTypeComment x =
@@ -9406,7 +9942,7 @@ unGuard x =
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.Guard")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body of hydra.python.syntax.ImaginaryNumber
-unImaginaryNumber :: Phantoms.TTerm Syntax.ImaginaryNumber -> Phantoms.TTerm Syntax.Number
+unImaginaryNumber :: Phantoms.TTerm Syntax.ImaginaryNumber -> Phantoms.TTerm Double
 unImaginaryNumber x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.ImaginaryNumber")),
@@ -9507,12 +10043,6 @@ unRaiseStatement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.RaiseStatement")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the body of hydra.python.syntax.RealNumber
-unRealNumber :: Phantoms.TTerm Syntax.RealNumber -> Phantoms.TTerm Syntax.Number
-unRealNumber x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.RealNumber")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body of hydra.python.syntax.ReturnStatement
 unReturnStatement :: Phantoms.TTerm Syntax.ReturnStatement -> Phantoms.TTerm [Syntax.StarExpression]
 unReturnStatement x =
@@ -9560,6 +10090,24 @@ unStarredExpression :: Phantoms.TTerm Syntax.StarredExpression -> Phantoms.TTerm
 unStarredExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.StarredExpression")),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the body of hydra.python.syntax.Tstring
+unTstring :: Phantoms.TTerm Syntax.Tstring -> Phantoms.TTerm [Syntax.TstringMiddle]
+unTstring x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.Tstring")),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the body of hydra.python.syntax.TstringConversion
+unTstringConversion :: Phantoms.TTerm Syntax.TstringConversion -> Phantoms.TTerm Syntax.Name
+unTstringConversion x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.TstringConversion")),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the body of hydra.python.syntax.TstringFullFormatSpec
+unTstringFullFormatSpec :: Phantoms.TTerm Syntax.TstringFullFormatSpec -> Phantoms.TTerm [Syntax.TstringFormatSpec]
+unTstringFullFormatSpec x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.python.syntax.TstringFullFormatSpec")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body of hydra.python.syntax.Tuple
 unTuple :: Phantoms.TTerm Syntax.Tuple -> Phantoms.TTerm [Syntax.StarNamedExpression]
