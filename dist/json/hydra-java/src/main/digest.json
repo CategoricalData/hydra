@@ -8,7 +8,7 @@
     "hydra.java.names": "73023aae0beeb040142bad1d9694d7f45f8fe141052339aeb63f0edafe95980f",
     "hydra.java.serde": "0e548f04426d0a3e8bac956c414ce13b62d5698b25324a573d0656c9f7d16456",
     "hydra.java.syntax": "b7f048e09af0ee0257361484c39e42ba5e5be05861cafdf00b127c95dbadf6ea",
-    "hydra.java.testing": "315a58856f36d7fdec5fb56e06584fd4961cd59677a256c214cc293de8eef937",
+    "hydra.java.testing": "fb989e31f752e3e07db2eb200d6b97e8b364ccd06be9fc4b12ea2f621ad6b21b",
     "hydra.java.utils": "09cf205b67f83f4d985420694da17a08b0b03115f11021ed30e17e6a3f25edfb"
   }
 }
