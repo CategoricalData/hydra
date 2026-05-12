@@ -192,6 +192,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Concepts (System F, design) | [Concepts wiki](https://github.com/CategoricalData/hydra/wiki/Concepts) |
 | Property graphs | [Property graphs wiki](https://github.com/CategoricalData/hydra/wiki/Property-graphs) / [hydra-pg README](packages/hydra-pg/README.md) |
 | RDF / SHACL | [RDF wiki](https://github.com/CategoricalData/hydra/wiki/RDF) / [hydra-rdf README](packages/hydra-rdf/README.md) |
+| Inference benchmarks | [hydra-bench README](packages/hydra-bench/README.md) — synthetic workloads + `bin/run-inference-bench.sh` |
 | Release process | [Release process wiki](https://github.com/CategoricalData/hydra/wiki/Release-process) |
 | Demos | [docs/demos.md](docs/demos.md) |
 | Recipes index (full list) | [docs/recipes/index.md](docs/recipes/index.md) |
@@ -234,6 +235,8 @@ give the user a brief status update approximately every 10 minutes.
 | `/sync-scala()` | Run `bin/sync-scala.sh`. |
 | `/sync-go()` | Run `bin/sync-go.sh` — generates kernel into `dist/go/`. Go is a "head bud"; only `hydra-kernel` is targeted (no `hydra-pg`/`hydra-rdf`), and Phase 4 host=go rows are skipped. |
 | `/sync-clojure()` etc. | Run `bin/sync-<dialect>.sh` for clojure / common-lisp / emacs-lisp / scheme. |
+| `/sync-bench()` | Run `bin/sync-bench.sh` — regenerate the hydra-bench package (synthetic inference workloads) for the default haskell/java/python hosts. Pass `--hosts H,...` to scope. Opt-in: the default sync does NOT touch hydra-bench. |
+| `/inference-bench()` | Run `bin/run-inference-bench.sh` — drive the cross-host inference benchmark. The runner now invokes `sync-bench.sh` automatically before measuring so the bench dist is always current. |
 
 ## Coding style (read the full guide!)
 
