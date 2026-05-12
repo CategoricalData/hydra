@@ -269,8 +269,14 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
 
     match case:
         case hydra.testing.TestCaseUniversal(value=tc):
-            expected, actual = tc.expected, tc.actual
+            # For #311: tc.actual and tc.expected are unit-thunks (Callable[[Unit], str]);
+            # force them inside run_universal so expression cost is paid inside the
+            # pytest test timer rather than at test-data load time. The Python coder
+            # emits Hydra's `λ_. body` as Python `lambda _: body`, so we pass a unit
+            # argument (None is fine since the lambda ignores it).
             def run_universal():
+                actual = tc.actual(None)
+                expected = tc.expected(None)
                 if actual != expected:
                     raise AssertionError(f"expected {expected!r} but got {actual!r}")
             return run_universal
