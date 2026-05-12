@@ -94,6 +94,6 @@ universalTestCase cx raw =
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
           _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2)) fieldMap cx) (\field_expected -> Right (Testing.UniversalTestCase {
-          Testing.universalTestCaseActual = field_actual,
-          Testing.universalTestCaseExpected = field_expected}))))
+          Testing.universalTestCaseActual = (\_ -> field_actual),
+          Testing.universalTestCaseExpected = (\_ -> field_expected)}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
