@@ -1565,8 +1565,10 @@
               ;; Skip remaining unimplemented test types
               ((eq? case-type 'delegated_evaluation)    (list 0 0 1))
               ((eq? case-type 'universal)
-               (let ((actual (hydra_testing_universal_test_case-actual case-data))
-                     (expected (hydra_testing_universal_test_case-expected case-data)))
+               ;; For #311: force the actual/expected unit-thunks inside the timing bracket.
+               ;; Hydra `\_. body` is emitted as a one-arg procedure; pass '() as the unit arg.
+               (let ((actual ((hydra_testing_universal_test_case-actual case-data) '()))
+                     (expected ((hydra_testing_universal_test_case-expected case-data) '())))
                  (if (equal? actual expected)
                    (list 1 0 0)
                    (begin

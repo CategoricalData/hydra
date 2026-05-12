@@ -304,10 +304,19 @@ encodedTestGroupToBinding ns lname group = Binding name (unTTerm group)
 testCaseUniversal :: TTerm UniversalTestCase -> TTerm TestCase
 testCaseUniversal = inject _TestCase _TestCase_universal
 
+-- | Build a 'UniversalTestCase' from two string-producing expressions.
+-- Each expression is wrapped in a unit-lambda so its evaluation is deferred
+-- until the runner forces the thunk inside its per-test timing bracket. See
+-- issue #311: without thunking, eagerly-evaluated hosts (Scala, the four
+-- complete Lisps) compute 'actual'/'expected' at test-data load time, before
+-- any timer starts, and report zero elapsed time.
 universalTestCase :: TTerm String -> TTerm String -> TTerm UniversalTestCase
 universalTestCase actual expected = Phantoms.record _UniversalTestCase [
-  _UniversalTestCase_actual Phantoms.>>: actual,
-  _UniversalTestCase_expected Phantoms.>>: expected]
+  _UniversalTestCase_actual Phantoms.>>: thunk actual,
+  _UniversalTestCase_expected Phantoms.>>: thunk expected]
+  where
+    thunk :: TTerm String -> TTerm (() -> String)
+    thunk body = Phantoms.lambda "_" body
 
 -- | Convenience function for creating alpha conversion test cases
 alphaCase :: String -> TTerm Term -> TTerm Name -> TTerm Name -> TTerm Term -> TTerm TestCaseWithMetadata

@@ -160,9 +160,19 @@ see [claude/cross-worktree-messages.md](claude/cross-worktree-messages.md).
 
 After modifying Haskell sources, regenerate downstream implementations.
 Use `./bin/sync.sh --hosts <H1,H2,...> --targets <T1,T2,...>` (or
-`--no-tests` to skip target-language tests).
+`--no-tests` to skip the Haskell-side `stack test` step).
 For the haskell/java/python bootstrapping triad, `./bin/sync-default.sh` is shorthand.
 Per-language wrappers (`bin/sync-java.sh`, `bin/sync-python.sh`, etc.) cover host == target.
+
+`bin/sync.sh` regenerates code into every target language but does **not** run
+the target-language test suites; only Haskell `stack test` is invoked
+(via `sync-haskell.sh`'s Step 6). To validate a target's runtime,
+run that head's own `bin/run-tests.sh` or `bin/test-distribution.sh`
+(e.g. `heads/python/bin/test-distribution.sh hydra-kernel`,
+`packages/hydra-lisp/bin/run-tests.sh scheme`). The bootstrap demo
+(`bin/run-bootstrapping-demo.sh`) is a separate, heavier validation
+that exercises cross-host code generation plus tests.
+
 See [docs/recipes/code-generation.md](docs/recipes/code-generation.md)
 and [docs/troubleshooting.md](docs/troubleshooting.md) (for stale-dist and cache-hit issues).
 

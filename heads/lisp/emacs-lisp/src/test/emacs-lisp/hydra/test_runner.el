@@ -496,8 +496,11 @@
       (error (message "FAIL: %s" path) (message "  EXCEPTION: %S" err) (list 0 1 0)))))
 
 (defun hydra-run-universal-test (path tc)
-  (let ((actual (cdr (assq :actual tc)))
-        (expected (cdr (assq :expected tc))))
+  ;; For #311: :actual and :expected are unit-thunks (Hydra `\_. body`, emitted as one-arg
+  ;; fn-of-unit in Emacs Lisp); force them inside the runner's timing bracket so expression
+  ;; cost is measured here. nil is passed because the body ignores its parameter.
+  (let ((actual (funcall (cdr (assq :actual tc)) nil))
+        (expected (funcall (cdr (assq :expected tc)) nil)))
     (if (equal actual expected)
         (list 1 0 0)
       (message "FAIL: %s" path)
