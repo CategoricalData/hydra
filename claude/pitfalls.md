@@ -176,3 +176,37 @@ correct hashes depend on the merged source state. Resolution: take
 regenerate, then commit the digest deltas as a follow-up
 "Regenerate digests after staging merge" commit. Don't try to merge
 hash maps by hand.
+
+### `run-benchmark-tests.sh` Python leg needs `.venv`
+
+`bin/run-benchmark-tests.sh` invokes `heads/python/.venv/bin/python -m
+pytest` if that interpreter exists and falls back to bare `python3`
+otherwise. The fallback usually lacks `pytest`, so every Python rep
+exits with `No module named pytest` and writes a stub JSON — the
+script then proceeds to other hosts and the wrapper still reports
+exit code 0. Run `cd heads/python && uv sync` once before benching so
+the venv exists.
+
+### `bin/benchmark-dashboard.py` throws `KeyError: 'path'`
+
+The per-host kernel-test JSON written by `run-benchmark-tests.sh` has
+heterogeneous schema: Haskell only populates `summary.totalTimeMs`;
+Python populates per-group `totalTimeMs`; Common-Lisp leaves most
+fields zero. The dashboard assumes every group entry has a `path`
+field and crashes mid-render. Until that bug is fixed, capture wall
+time directly with a small driver script rather than relying on the
+dashboard rollup.
+
+### Sibling-worktree builds skew bench numbers
+
+A heavy `stack`, `ghc`, `update-json`, `bootstrap-from-json`,
+`JavaSelfHostDemo`, or `pypy3 -m hydra.bootstrap` running in any
+other worktree easily takes load average from ~3 to 10+ on a
+10-core machine. Haskell numbers in particular are very sensitive
+because the bench step does its own `stack test` build. Before
+running `bin/run-benchmark-tests.sh`, `bin/run-inference-bench.sh`,
+or `bin/run-bootstrapping-demo.sh`: check `uptime` and
+`ps aux | grep -iE 'update-json|ghc-9|bootstrap-from-json|stack
+build|JavaSelfHost|hydra.bootstrap'` across all worktrees, and
+either wait for sibling activity to clear or warn the user that
+numbers will be pessimistic.
