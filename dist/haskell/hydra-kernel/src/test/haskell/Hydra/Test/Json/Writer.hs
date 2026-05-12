@@ -24,78 +24,78 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "null",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson Model.ValueNull),
-                Testing.universalTestCaseExpected = "null"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson Model.ValueNull),
+                Testing.universalTestCaseExpected = (\_ -> "null")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "true",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueBoolean True)),
-                Testing.universalTestCaseExpected = "true"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueBoolean True)),
+                Testing.universalTestCaseExpected = (\_ -> "true")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "false",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueBoolean False)),
-                Testing.universalTestCaseExpected = "false"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueBoolean False)),
+                Testing.universalTestCaseExpected = (\_ -> "false")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "zero",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "0.0"))),
-                Testing.universalTestCaseExpected = "0"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "0.0"))),
+                Testing.universalTestCaseExpected = (\_ -> "0")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "positive integer",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "42.0"))),
-                Testing.universalTestCaseExpected = "42"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "42.0"))),
+                Testing.universalTestCaseExpected = (\_ -> "42")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "negative integer",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "-17.0"))),
-                Testing.universalTestCaseExpected = "-17"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "-17.0"))),
+                Testing.universalTestCaseExpected = (\_ -> "-17")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "large integer",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1000000.0"))),
-                Testing.universalTestCaseExpected = "1000000"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1000000.0"))),
+                Testing.universalTestCaseExpected = (\_ -> "1000000")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "decimal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "3.14"))),
-                Testing.universalTestCaseExpected = "3.14"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "3.14"))),
+                Testing.universalTestCaseExpected = (\_ -> "3.14")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "negative decimal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "-2.5"))),
-                Testing.universalTestCaseExpected = "-2.5"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "-2.5"))),
+                Testing.universalTestCaseExpected = (\_ -> "-2.5")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "hundredth",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e-2"))),
-                Testing.universalTestCaseExpected = "1.0e-2"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e-2"))),
+                Testing.universalTestCaseExpected = (\_ -> "1.0e-2")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "small decimal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e-3"))),
-                Testing.universalTestCaseExpected = "1.0e-3"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e-3"))),
+                Testing.universalTestCaseExpected = (\_ -> "1.0e-3")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -106,15 +106,15 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "tiny exponent",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e-20"))),
-                Testing.universalTestCaseExpected = "1.0e-20"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e-20"))),
+                Testing.universalTestCaseExpected = (\_ -> "1.0e-20")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "huge exponent",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e20"))),
-                Testing.universalTestCaseExpected = "1.0e20"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueNumber (Literals.stringToDecimal "1.0e20"))),
+                Testing.universalTestCaseExpected = (\_ -> "1.0e20")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -125,64 +125,64 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueString "")),
-                Testing.universalTestCaseExpected = "\"\""})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueString "")),
+                Testing.universalTestCaseExpected = (\_ -> "\"\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "simple string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueString "hello")),
-                Testing.universalTestCaseExpected = "\"hello\""})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueString "hello")),
+                Testing.universalTestCaseExpected = (\_ -> "\"hello\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string with spaces",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueString "hello world")),
-                Testing.universalTestCaseExpected = "\"hello world\""})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueString "hello world")),
+                Testing.universalTestCaseExpected = (\_ -> "\"hello world\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string with double quote",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueString "say \"hi\"")),
-                Testing.universalTestCaseExpected = "\"say \\\"hi\\\"\""})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueString "say \"hi\"")),
+                Testing.universalTestCaseExpected = (\_ -> "\"say \\\"hi\\\"\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string with backslash",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueString "path\\to\\file")),
-                Testing.universalTestCaseExpected = "\"path\\\\to\\\\file\""})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueString "path\\to\\file")),
+                Testing.universalTestCaseExpected = (\_ -> "\"path\\\\to\\\\file\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string with newline",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueString "line1\nline2")),
-                Testing.universalTestCaseExpected = "\"line1\\nline2\""})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueString "line1\nline2")),
+                Testing.universalTestCaseExpected = (\_ -> "\"line1\\nline2\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string with carriage return",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueString "line1\rline2")),
-                Testing.universalTestCaseExpected = "\"line1\\rline2\""})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueString "line1\rline2")),
+                Testing.universalTestCaseExpected = (\_ -> "\"line1\\rline2\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string with tab",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueString "col1\tcol2")),
-                Testing.universalTestCaseExpected = "\"col1\\tcol2\""})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueString "col1\tcol2")),
+                Testing.universalTestCaseExpected = (\_ -> "\"col1\\tcol2\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string with mixed escapes",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueString "a\"b\\c\nd")),
-                Testing.universalTestCaseExpected = "\"a\\\"b\\\\c\\nd\""})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueString "a\"b\\c\nd")),
+                Testing.universalTestCaseExpected = (\_ -> "\"a\\\"b\\\\c\\nd\"")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -193,46 +193,46 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty array",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueArray [])),
-                Testing.universalTestCaseExpected = "[]"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueArray [])),
+                Testing.universalTestCaseExpected = (\_ -> "[]")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single element",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueArray [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueArray [
                   Model.ValueNumber (Literals.stringToDecimal "1.0")])),
-                Testing.universalTestCaseExpected = "[1]"})),
+                Testing.universalTestCaseExpected = (\_ -> "[1]")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple numbers",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueArray [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueArray [
                   Model.ValueNumber (Literals.stringToDecimal "1.0"),
                   (Model.ValueNumber (Literals.stringToDecimal "2.0")),
                   (Model.ValueNumber (Literals.stringToDecimal "3.0"))])),
-                Testing.universalTestCaseExpected = "[1, 2, 3]"})),
+                Testing.universalTestCaseExpected = (\_ -> "[1, 2, 3]")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple strings",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueArray [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueArray [
                   Model.ValueString "a",
                   (Model.ValueString "b")])),
-                Testing.universalTestCaseExpected = "[\"a\", \"b\"]"})),
+                Testing.universalTestCaseExpected = (\_ -> "[\"a\", \"b\"]")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "mixed types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueArray [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueArray [
                   Model.ValueNumber (Literals.stringToDecimal "1.0"),
                   (Model.ValueString "two"),
                   (Model.ValueBoolean True),
                   Model.ValueNull])),
-                Testing.universalTestCaseExpected = "[1, \"two\", true, null]"})),
+                Testing.universalTestCaseExpected = (\_ -> "[1, \"two\", true, null]")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -243,35 +243,35 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty object",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueObject M.empty)),
-                Testing.universalTestCaseExpected = "{}"})),
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueObject M.empty)),
+                Testing.universalTestCaseExpected = (\_ -> "{}")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single key-value",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueObject (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueObject (M.fromList [
                   ("name", (Model.ValueString "Alice"))]))),
-                Testing.universalTestCaseExpected = "{\"name\": \"Alice\"}"})),
+                Testing.universalTestCaseExpected = (\_ -> "{\"name\": \"Alice\"}")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple keys",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueObject (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueObject (M.fromList [
                   ("a", (Model.ValueNumber (Literals.stringToDecimal "1.0"))),
                   ("b", (Model.ValueNumber (Literals.stringToDecimal "2.0")))]))),
-                Testing.universalTestCaseExpected = "{\"a\": 1, \"b\": 2}"})),
+                Testing.universalTestCaseExpected = (\_ -> "{\"a\": 1, \"b\": 2}")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "mixed value types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueObject (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueObject (M.fromList [
                   ("active", (Model.ValueBoolean True)),
                   ("count", (Model.ValueNumber (Literals.stringToDecimal "42.0"))),
                   ("name", (Model.ValueString "test"))]))),
-                Testing.universalTestCaseExpected = "{\"active\": true, \"count\": 42, \"name\": \"test\"}"})),
+                Testing.universalTestCaseExpected = (\_ -> "{\"active\": true, \"count\": 42, \"name\": \"test\"}")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -282,46 +282,46 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested arrays",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueArray [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueArray [
                   Model.ValueArray [
                     Model.ValueNumber (Literals.stringToDecimal "1.0"),
                     (Model.ValueNumber (Literals.stringToDecimal "2.0"))],
                   (Model.ValueArray [
                     Model.ValueNumber (Literals.stringToDecimal "3.0"),
                     (Model.ValueNumber (Literals.stringToDecimal "4.0"))])])),
-                Testing.universalTestCaseExpected = "[[1, 2], [3, 4]]"})),
+                Testing.universalTestCaseExpected = (\_ -> "[[1, 2], [3, 4]]")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "object with array",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueObject (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueObject (M.fromList [
                   (
                     "items",
                     (Model.ValueArray [
                       Model.ValueNumber (Literals.stringToDecimal "1.0"),
                       (Model.ValueNumber (Literals.stringToDecimal "2.0"))]))]))),
-                Testing.universalTestCaseExpected = "{\"items\": [1, 2]}"})),
+                Testing.universalTestCaseExpected = (\_ -> "{\"items\": [1, 2]}")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "array of objects",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueArray [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueArray [
                   Model.ValueObject (M.fromList [
                     ("id", (Model.ValueNumber (Literals.stringToDecimal "1.0")))]),
                   (Model.ValueObject (M.fromList [
                     ("id", (Model.ValueNumber (Literals.stringToDecimal "2.0")))]))])),
-                Testing.universalTestCaseExpected = "[{\"id\": 1}, {\"id\": 2}]"})),
+                Testing.universalTestCaseExpected = (\_ -> "[{\"id\": 1}, {\"id\": 2}]")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "nested object",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Writer.printJson (Model.ValueObject (M.fromList [
+                Testing.universalTestCaseActual = (\_ -> Writer.printJson (Model.ValueObject (M.fromList [
                   ("user", (Model.ValueObject (M.fromList [
                     ("name", (Model.ValueString "Bob"))])))]))),
-                Testing.universalTestCaseExpected = "{\"user\": {\"name\": \"Bob\"}}"})),
+                Testing.universalTestCaseExpected = (\_ -> "{\"user\": {\"name\": \"Bob\"}}")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

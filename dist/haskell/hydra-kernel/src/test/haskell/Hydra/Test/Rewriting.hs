@@ -31,7 +31,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect labels from single node - pre-order",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
                   acc,
                   case term of
                     Core.TermPair v0 -> case (Pairs.first v0) of
@@ -39,14 +39,14 @@ allTests =
                         v1]
                       _ -> []
                     _ -> []]) [] (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList []))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "a")]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect labels from tree - pre-order",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
                   acc,
                   case term of
                     Core.TermPair v0 -> case (Pairs.first v0) of
@@ -61,7 +61,7 @@ allTests =
                       Core.TermLiteral (Core.LiteralString "c"),
                       (Core.TermList [
                         Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "a"),
                   (Core.TermLiteral (Core.LiteralString "b")),
                   (Core.TermLiteral (Core.LiteralString "c")),
@@ -71,7 +71,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect labels from single node - post-order",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPost (\acc -> \term -> Lists.concat [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPost (\acc -> \term -> Lists.concat [
                   acc,
                   case term of
                     Core.TermPair v0 -> case (Pairs.first v0) of
@@ -79,14 +79,14 @@ allTests =
                         v1]
                       _ -> []
                     _ -> []]) [] (Core.TermPair (Core.TermLiteral (Core.LiteralString "a"), (Core.TermList []))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "a")]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect labels from tree - post-order",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPost (\acc -> \term -> Lists.concat [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermList (Lists.map (\lit -> Core.TermLiteral lit) (Rewriting.foldOverTerm Coders.TraversalOrderPost (\acc -> \term -> Lists.concat [
                   acc,
                   case term of
                     Core.TermPair v0 -> case (Pairs.first v0) of
@@ -101,7 +101,7 @@ allTests =
                       Core.TermLiteral (Core.LiteralString "c"),
                       (Core.TermList [
                         Core.TermPair (Core.TermLiteral (Core.LiteralString "d"), (Core.TermList []))])))]))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "b"),
                   (Core.TermLiteral (Core.LiteralString "d")),
                   (Core.TermLiteral (Core.LiteralString "c")),
@@ -111,7 +111,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "sum int32 literals",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -125,13 +125,13 @@ allTests =
                       Core.lambdaDomain = Nothing,
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))])))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 52))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 52))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect list lengths - pre-order",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
                   acc,
                   case term of
                     Core.TermList v0 -> [
@@ -147,7 +147,7 @@ allTests =
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                     Core.applicationArgument = (Core.TermList [
                       Core.TermLiteral (Core.LiteralString "quux")])}))]))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))]))})),
@@ -156,7 +156,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect list lengths - post-order",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPost (\acc -> \term -> Lists.concat [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPost (\acc -> \term -> Lists.concat [
                   acc,
                   case term of
                     Core.TermList v0 -> [
@@ -172,7 +172,7 @@ allTests =
                       Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                     Core.applicationArgument = (Core.TermList [
                       Core.TermLiteral (Core.LiteralString "quux")])}))]))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))]))})),
@@ -186,10 +186,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String type in left side of either is replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                   Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -197,10 +197,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String type in right side of either is replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -208,10 +208,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String types in both sides of either are replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                   Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -219,12 +219,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String type in nested either (left of left) is replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
                   Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))})))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
@@ -234,12 +234,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String type in nested either (right of right) is replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)),
                   Core.eitherTypeRight = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)}))})))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)),
                   Core.eitherTypeRight = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
@@ -249,14 +249,14 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String types in complex nested either are all replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})),
                   Core.eitherTypeRight = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))}))})))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeEither (Core.EitherType {
                     Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                     Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
@@ -268,17 +268,17 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String in list type is replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String in function domain is replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral Core.LiteralTypeString),
                   Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))})))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -286,10 +286,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String in function codomain is replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)),
                   Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt64)),
                   Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -297,8 +297,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "String in optional type is replaced",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)))),
-                Testing.universalTestCaseExpected = (ShowCore.type_ (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
+                Testing.universalTestCaseActual = (\_ -> ShowCore.type_ (Rewriting.rewriteType (\recurse -> \typ -> Logic.ifElse (Equality.equal typ (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (recurse typ)) (Core.TypeMaybe (Core.TypeLiteral Core.LiteralTypeString)))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.type_ (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -309,24 +309,24 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string literal foo replaced with bar",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLiteral (Core.LiteralString "foo")))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralString "bar")))})),
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLiteral (Core.LiteralString "foo")))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralString "bar")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in variable not changed",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermVariable (Core.Name "x")))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermVariable (Core.Name "x")))})),
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermVariable (Core.Name "x")))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermVariable (Core.Name "x")))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermList [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "foo"),
                   (Core.TermLiteral (Core.LiteralString "baz"))]))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "bar"),
                   (Core.TermLiteral (Core.LiteralString "baz"))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -334,11 +334,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple strings in list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermList [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "foo"),
                   (Core.TermLiteral (Core.LiteralString "foo")),
                   (Core.TermLiteral (Core.LiteralString "baz"))]))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralString "bar"),
                   (Core.TermLiteral (Core.LiteralString "bar")),
                   (Core.TermLiteral (Core.LiteralString "baz"))]))})),
@@ -347,17 +347,17 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in optional (just)",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "foo")))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "bar")))))})),
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "foo")))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "bar")))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in function application",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "print")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "print")),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -365,11 +365,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in lambda body",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLambda (Core.Lambda {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLambda (Core.Lambda {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLambda (Core.Lambda {
                   Core.lambdaParameter = (Core.Name "x"),
                   Core.lambdaDomain = Nothing,
                   Core.lambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
@@ -378,12 +378,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in nested applications",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "foo"))}))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "f")),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "g")),
@@ -393,13 +393,13 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in record field",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Person"),
                   Core.recordFields = [
                     Core.Field {
                       Core.fieldName = (Core.Name "name"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Person"),
                   Core.recordFields = [
                     Core.Field {
@@ -410,7 +410,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "strings in multiple record fields",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Data"),
                   Core.recordFields = [
                     Core.Field {
@@ -422,7 +422,7 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "c"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermRecord (Core.Record {
                   Core.recordTypeName = (Core.Name "Data"),
                   Core.recordFields = [
                     Core.Field {
@@ -439,21 +439,21 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in pair",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermPair (Core.TermLiteral (Core.LiteralString "foo"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermPair (Core.TermLiteral (Core.LiteralString "bar"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))})),
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermPair (Core.TermLiteral (Core.LiteralString "foo"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermPair (Core.TermLiteral (Core.LiteralString "bar"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in let binding value",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -465,14 +465,14 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in let body",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -484,7 +484,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in first case branch",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermCases (Core.CaseStatement {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -494,7 +494,7 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermCases (Core.CaseStatement {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -509,7 +509,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in second case branch",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermCases (Core.CaseStatement {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -519,7 +519,7 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermCases (Core.CaseStatement {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = Nothing,
                   Core.caseStatementCases = [
@@ -534,7 +534,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in default branch",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermCases (Core.CaseStatement {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "foo"))),
                   Core.caseStatementCases = [
@@ -544,7 +544,7 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "error"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermCases (Core.CaseStatement {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermCases (Core.CaseStatement {
                   Core.caseStatementTypeName = (Core.Name "Result"),
                   Core.caseStatementDefault = (Just (Core.TermLiteral (Core.LiteralString "bar"))),
                   Core.caseStatementCases = [
@@ -559,7 +559,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string deeply nested in record in list in application",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "process")),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermRecord (Core.Record {
@@ -568,7 +568,7 @@ allTests =
                         Core.Field {
                           Core.fieldName = (Core.Name "value"),
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]})])})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermVariable (Core.Name "process")),
                   Core.applicationArgument = (Core.TermList [
                     Core.TermRecord (Core.Record {
@@ -582,12 +582,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in union inject value",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermInject (Core.Injection {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = (Core.Name "Result"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "success"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermInject (Core.Injection {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = (Core.Name "Result"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "success"),
@@ -597,10 +597,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in wrapped term",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermWrap (Core.WrappedTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "Email"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermWrap (Core.WrappedTerm {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "Email"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -608,10 +608,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in annotated term body",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermAnnotated (Core.AnnotatedTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "foo")),
                   Core.annotatedTermAnnotation = M.empty})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermAnnotated (Core.AnnotatedTerm {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermLiteral (Core.LiteralString "bar")),
                   Core.annotatedTermAnnotation = M.empty})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -619,7 +619,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in first of multiple let bindings",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -630,7 +630,7 @@ allTests =
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "baz")),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "x"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -646,7 +646,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in second of multiple let bindings",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -657,7 +657,7 @@ allTests =
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "y"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -673,7 +673,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in all let bindings and body",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -684,7 +684,7 @@ allTests =
                       Core.bindingTerm = (Core.TermLiteral (Core.LiteralString "foo")),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "x"),
@@ -700,10 +700,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in set",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermSet (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralString "baz"),
                   (Core.TermLiteral (Core.LiteralString "foo"))])))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermSet (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermSet (S.fromList [
                   Core.TermLiteral (Core.LiteralString "bar"),
                   (Core.TermLiteral (Core.LiteralString "baz"))])))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -711,10 +711,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in type lambda body",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermTypeLambda (Core.TypeLambda {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
                   Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermTypeLambda (Core.TypeLambda {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
                   Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "bar"))})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -722,10 +722,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in type application body",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermLiteral (Core.LiteralString "foo")),
                   Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermLiteral (Core.LiteralString "bar")),
                   Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -733,12 +733,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in nested type lambdas",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermTypeLambda (Core.TypeLambda {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
                   Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
                     Core.typeLambdaParameter = (Core.Name "b"),
                     Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralString "foo"))}))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermTypeLambda (Core.TypeLambda {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
                   Core.typeLambdaBody = (Core.TermTypeLambda (Core.TypeLambda {
                     Core.typeLambdaParameter = (Core.Name "b"),
@@ -748,7 +748,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in case branch within let binding",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "handler"),
@@ -764,7 +764,7 @@ allTests =
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "baz"))}]})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermVariable (Core.Name "handler"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLet (Core.Let {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLet (Core.Let {
                   Core.letBindings = [
                     Core.Binding {
                       Core.bindingName = (Core.Name "handler"),
@@ -785,7 +785,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string in annotated wrapped record field",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermAnnotated (Core.AnnotatedTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Rewriting.rewriteTerm (\recurse -> \term -> Logic.ifElse (Equality.equal term (Core.TermLiteral (Core.LiteralString "foo"))) (Core.TermLiteral (Core.LiteralString "bar")) (recurse term)) (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.Name "User"),
                     Core.wrappedTermBody = (Core.TermRecord (Core.Record {
@@ -795,7 +795,7 @@ allTests =
                           Core.fieldName = (Core.Name "name"),
                           Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "foo"))}]}))})),
                   Core.annotatedTermAnnotation = M.empty})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermAnnotated (Core.AnnotatedTerm {
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermAnnotated (Core.AnnotatedTerm {
                   Core.annotatedTermBody = (Core.TermWrap (Core.WrappedTerm {
                     Core.wrappedTermTypeName = (Core.Name "User"),
                     Core.wrappedTermBody = (Core.TermRecord (Core.Record {
@@ -815,7 +815,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through application - sum literals",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -827,13 +827,13 @@ allTests =
                     Core.lambdaDomain = Nothing,
                     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through nested applications",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -852,13 +852,13 @@ allTests =
                           (Core.TermVariable (Core.Name "y"))])}))})),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through let bindings",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -873,13 +873,13 @@ allTests =
                   Core.letBody = (Core.TermList [
                     Core.TermVariable (Core.Name "x"),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 32)))])}))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through record fields",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -894,13 +894,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "y"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]}))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through case branches",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -916,13 +916,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "err"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))}]}))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through pair",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -931,26 +931,26 @@ allTests =
                   _ -> 0)) 0 (Core.TermPair (
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 12))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 12))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through optional",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
                       _ -> 0
                     _ -> 0
                   _ -> 0)) 0 (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through wrapped term",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -959,13 +959,13 @@ allTests =
                   _ -> 0)) 0 (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "Age"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))}))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through type lambda",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -974,13 +974,13 @@ allTests =
                   _ -> 0)) 0 (Core.TermTypeLambda (Core.TypeLambda {
                   Core.typeLambdaParameter = (Core.Name "a"),
                   Core.typeLambdaBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))}))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through type application",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -989,13 +989,13 @@ allTests =
                   _ -> 0)) 0 (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 50))),
                   Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)}))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 50))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 50))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "path tracking through set elements",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -1005,13 +1005,13 @@ allTests =
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))]))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 6))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "deep nesting - application in lambda in let",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Math.add acc (case term of
                   Core.TermLiteral v0 -> case v0 of
                     Core.LiteralInteger v1 -> case v1 of
                       Core.IntegerValueInt32 v2 -> v2
@@ -1029,13 +1029,13 @@ allTests =
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))}))})),
                       Core.bindingTypeScheme = Nothing}],
                   Core.letBody = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))}))))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 15))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 15))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect list lengths in nested structure",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
                   acc,
                   case term of
                     Core.TermList v0 -> [
@@ -1046,7 +1046,7 @@ allTests =
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))],
                   (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))])]))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))]))})),
@@ -1055,7 +1055,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "collect list lengths in let body",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowCore.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
+                Testing.universalTestCaseActual = (\_ -> ShowCore.term (Core.TermList (Lists.map (\n -> Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 n))) (Rewriting.foldOverTerm Coders.TraversalOrderPre (\acc -> \term -> Lists.concat [
                   acc,
                   case term of
                     Core.TermList v0 -> [
@@ -1070,7 +1070,7 @@ allTests =
                   Core.letBody = (Core.TermList [
                     Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                     (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})))))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermList [
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermList [
                   Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)),
                   (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))]))})),
               Testing.testCaseWithMetadataDescription = Nothing,

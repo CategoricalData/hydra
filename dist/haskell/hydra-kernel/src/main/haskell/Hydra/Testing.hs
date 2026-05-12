@@ -15,7 +15,6 @@ _Tag = Core.Name "hydra.testing.Tag"
 data TestCase =
   -- | A universal test case (string comparison)
   TestCaseUniversal UniversalTestCase
-  deriving (Eq, Ord, Read, Show)
 _TestCase = Core.Name "hydra.testing.TestCase"
 _TestCase_universal = Core.Name "universal"
 -- | A test case together with metadata
@@ -29,7 +28,6 @@ data TestCaseWithMetadata =
     testCaseWithMetadataDescription :: (Maybe String),
     -- | Zero or more tags for the test case
     testCaseWithMetadataTags :: [Tag]}
-  deriving (Eq, Ord, Read, Show)
 _TestCaseWithMetadata = Core.Name "hydra.testing.TestCaseWithMetadata"
 _TestCaseWithMetadata_name = Core.Name "name"
 _TestCaseWithMetadata_case = Core.Name "case"
@@ -46,20 +44,18 @@ data TestGroup =
     testGroupSubgroups :: [TestGroup],
     -- | Zero or more test cases
     testGroupCases :: [TestCaseWithMetadata]}
-  deriving (Eq, Ord, Read, Show)
 _TestGroup = Core.Name "hydra.testing.TestGroup"
 _TestGroup_name = Core.Name "name"
 _TestGroup_description = Core.Name "description"
 _TestGroup_subgroups = Core.Name "subgroups"
 _TestGroup_cases = Core.Name "cases"
--- | A universal test case: the actual and expected values are both strings
+-- | A universal test case: the actual and expected values are thunks producing strings.
 data UniversalTestCase =
   UniversalTestCase {
-    -- | The actual result (a string produced by evaluating and showing the test expression)
-    universalTestCaseActual :: String,
-    -- | The expected result (a string produced by showing the expected value)
-    universalTestCaseExpected :: String}
-  deriving (Eq, Ord, Read, Show)
+    -- | A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time.
+    universalTestCaseActual :: (() -> String),
+    -- | A thunk producing the expected result string.
+    universalTestCaseExpected :: (() -> String)}
 _UniversalTestCase = Core.Name "hydra.testing.UniversalTestCase"
 _UniversalTestCase_actual = Core.Name "actual"
 _UniversalTestCase_expected = Core.Name "expected"

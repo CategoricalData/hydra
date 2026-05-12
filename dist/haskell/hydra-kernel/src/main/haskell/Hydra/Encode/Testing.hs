@@ -67,7 +67,7 @@ universalTestCase x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "actual"),
-          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Testing.universalTestCaseActual x))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Testing.universalTestCaseActual x ()))},
         Core.Field {
           Core.fieldName = (Core.Name "expected"),
-          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Testing.universalTestCaseExpected x))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Testing.universalTestCaseExpected x ()))}]})
