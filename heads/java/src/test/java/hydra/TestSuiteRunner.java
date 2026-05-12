@@ -488,8 +488,11 @@ public class TestSuiteRunner {
             @Override
             public DynamicTest visit(TestCase.Universal instance) {
                 UniversalTestCase utc = instance.value;
+                // For #311: utc.expected and utc.actual are unit-thunks; force them
+                // inside the withTimeout lambda so JUnit's per-test timer covers
+                // expression evaluation.
                 return withTimeout(name, () ->
-                    assertEquals(utc.expected, utc.actual));
+                    assertEquals(utc.expected.apply(null), utc.actual.apply(null)));
             }
         });
     }

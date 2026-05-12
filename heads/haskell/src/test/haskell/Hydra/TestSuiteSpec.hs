@@ -27,7 +27,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
   then Nothing
   else Just $ case testCaseWithMetadataCase tcase of
     TestCaseUniversal (UniversalTestCase actual expected) ->
-      H.it "universal" $ H.shouldBe actual expected
+      H.it "universal" $ H.shouldBe (actual ()) (expected ())
 
 runTestCase :: String -> TestRunner -> TestCaseWithMetadata -> H.SpecWith ()
 runTestCase pdesc runner tcase@(TestCaseWithMetadata name _ mdesc _) =

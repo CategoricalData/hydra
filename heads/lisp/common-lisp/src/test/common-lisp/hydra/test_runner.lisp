@@ -874,8 +874,11 @@
     (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0))))
 
 (defun run-universal-test (path tc)
-  (let ((actual (a :actual tc))
-        (expected (a :expected tc)))
+  ;; For #311: the :actual and :expected fields are unit-thunks (Hydra `\_. body`, emitted
+  ;; as one-arg fn-of-unit in Common Lisp); force them inside the runner's timing bracket
+  ;; so expression cost is measured here. nil is passed because the body ignores its parameter.
+  (let ((actual (funcall (a :actual tc) nil))
+        (expected (funcall (a :expected tc) nil)))
     (if (equal actual expected)
       (list 1 0 0)
       (progn

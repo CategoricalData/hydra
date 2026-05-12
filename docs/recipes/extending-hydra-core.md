@@ -33,6 +33,7 @@ and serves as a reference for adding other constructs like pairs, sum types, etc
 - [File Modification Checklist](#file-modification-checklist)
 - [Adding Fields to Existing Record Types](#adding-fields-to-existing-record-types)
 - [Renaming a field in an existing record type](#renaming-a-field-in-an-existing-record-type)
+- [Changing a field's type (delta from rename)](#changing-a-fields-type-delta-from-rename)
 
 ---
 
@@ -1499,6 +1500,53 @@ For a tight WIP cadence: land the change in three commits — source side first
 then docs/lexicon last. The split makes the diff readable for reviewers and
 keeps `git bisect` tractable: a regression in source vs. a regression in regen
 output points at very different layers of the system.
+
+### Changing a field's type (delta from rename)
+
+Working example: `UniversalTestCase.actual` and `.expected` from `string` to
+`unit -> string` (#311, 137 files touched).
+
+The mechanics overlap with a rename — every reader sees the new shape — but
+there are two extra concerns:
+
+1. **The dist-tier Sources/Encode and Sources/Decode files contain DSL Term
+   values whose construction reflects the *old* field shape**, not just
+   wire-format strings. For `string → (unit → string)`, the encoder DSL Term
+   that previously did
+   `applicationArgument = TermApplication (project actual @@ var "x")`
+   (yielding a string the encoder wraps in `LiteralString`) must become
+   `applicationArgument = TermApplication ((project actual @@ var "x") @@ unit)`
+   so the unit-thunk is forced before being treated as a literal string.
+   The Decode side is the inverse: where the old decoder assigned
+   `universalTestCaseActual = field_actual` (string-typed), it now needs to
+   wrap the decoded string in a unit-lambda: `\_ -> field_actual`.
+   Without these patches, `update-json-main` will fail type inference with
+   `cannot unify string with (unit → string)` once the schema flips.
+
+2. **`isSerializableByName` drops the `deriving` clause automatically** for
+   any record whose transitive field types include a function type. Records
+   that previously emitted `deriving (Eq, Ord, Read, Show)` will, post-regen,
+   emit no `deriving` clause when given a function-typed field. Hand-patches
+   to `dist/haskell/.../<Module>.hs` must mirror this: drop `deriving (Eq,
+   Ord, Read, Show)` from the target record *and* from any record that
+   transitively contains it (otherwise GHC complains "No instance for `Eq
+   UniversalTestCase` arising from `deriving (Eq TestCase)`"). The lexicon
+   refresh will also stop indexing the encoder/decoder of the
+   newly-unserializable type — that's expected.
+
+Everything else (DSL helper signatures, callers, dist test data construction
+sites, host-side runner code that consumes the field) is the same playbook as
+"Adding Fields to Existing Record Types": identify every site by field name,
+update one at a time, build, regenerate, build again.
+
+When the new field type is `unit -> string`, target-language code generators
+emit `\_ -> body` (Hydra), `lambda _: body` (Python), `Function<Void, String>`
++ `lambda` (Java), `Unit => String` (Scala), `(fn [_] body)` (Clojure),
+`(lambda (_) body)` (CL/EL), `(lambda (_) body)` (Scheme), `unit -> string`
+(Coq). Every host's runtime call site that *forces* the thunk must pass a
+unit-value argument — `()`, `None`, `null`, `(())`, `nil`, `'()`, `tt` — not
+zero arguments. Hydra's `λ_. body` is always a *one-argument* function in the
+target.
 
 ---
 
