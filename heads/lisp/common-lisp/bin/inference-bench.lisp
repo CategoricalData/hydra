@@ -32,6 +32,7 @@
         default)))
 
 (defvar *json-dir* (get-arg "--json-dir"))
+(defvar *bench-json-dir* (get-arg "--bench-json-dir"))
 (defvar *sizes-str* (get-arg "--sizes" "0,10,25,50,100"))
 (defvar *namespace* (get-arg "--namespace" "hydra.bench.linearChain"))
 (defvar *out-path* (get-arg "--out"))
@@ -248,10 +249,22 @@
 ;; --- Main ---
 
 (format *error-output* "Loading universe from ~A ...~%" *json-dir*)
+(when *bench-json-dir*
+  (format *error-output* "  + bench modules from ~A~%" *bench-json-dir*))
 (force-output *error-output*)
 (let* ((t-load-0 (get-internal-real-time))
        (main-ns (coerce (read-manifest-field *json-dir* "mainModules") 'list))
        (universe (load-modules-from-json *json-dir* main-ns))
+       ;; hydra-bench is opt-in: its modules live under a separate dist tree
+       ;; populated by bin/sync-bench.sh. If the directory's manifest is
+       ;; absent, the bench module won't be found and find-bench-module will
+       ;; error — the intended signal to run sync-bench first.
+       (universe (if (and *bench-json-dir*
+                          (probe-file (format nil "~A/manifest.json" *bench-json-dir*)))
+                     (append universe
+                             (load-modules-from-json *bench-json-dir*
+                               (coerce (read-manifest-field *bench-json-dir* "mainModules") 'list)))
+                     universe))
        (t-load-1 (get-internal-real-time)))
   (format *error-output* "  loaded ~A modules (~,1Fs)~%"
           (length universe)
