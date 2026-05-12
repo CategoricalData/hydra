@@ -59,21 +59,33 @@ find dist/emacs-lisp/hydra-kernel/src/main/emacs-lisp -name '*.el' \
   | xargs -P4 -I{} $EMACS --batch -f batch-native-compile {}
 ```
 
-### Performance: collections — known limitation
+### Performance: collections and lazy let
 
-`lib/maps.el` represents maps as **sorted alists** and `lib/sets.el` as
-**sorted lists**. Both give O(n) `insert`/`lookup`/`delete`, which makes
-inference-style workloads (many incremental inserts into the same map)
-quadratic in the map size. Combined with Emacs Lisp's already-slow curried
-calls, this is a major contributor to the dialect's overall performance
-profile and is part of why Hydra-Emacs-Lisp is not yet treated as a fully
-supported implementation. Emacs 27+ has native `hash-table` with structural
-equality (`make-hash-table :test 'equal`), so a hash-table-based map/set
-would be straightforward. Not done yet. The
-[Hydra-Java collection classes](../../hydra-java/README.md#collection-classes)
-section describes the analogous fix landed for Java in #359; the same
-principle applies here. This will be tracked in a follow-up issue, and
-this section will be updated when the work lands.
+`lib/maps.el` and `lib/sets.el` are facades over Emacs' native
+`make-hash-table :test 'equal`, with copy-on-write semantics on
+mutating operations (insert/delete/union/alter/…) to preserve the
+immutable contract Hydra expects. Iteration helpers (`to_list`,
+`keys`, `elems`) sort entries via `generic-compare` so downstream
+serialization stays deterministic. This replaces the prior
+sorted-alist / sorted-list representation, which was O(n) per op and
+made inference-style workloads quadratic in collection size.
+
+`loader.el` also rewrites every non-trivial `(let ((x EXPR)) BODY)`
+into a lazy thunk + `cl-symbol-macrolet` use-site form, so that the
+RHS is evaluated at most once on first reference. Without this, the
+Emacs Lisp coder's eager native lets cause deeply-nested kernel
+inference code to re-evaluate sub-expressions exponentially — the
+same blowup Python had pre-#344 and Common Lisp had pre-#360. The
+transformation is gated on the body containing a conditional or
+lambda; straight-line let chains stay as plain native lets to avoid
+unnecessary overhead. Runtime helpers (`make-lazy`, `lazy-force`)
+live in `heads/lisp/emacs-lisp/src/main/emacs-lisp/hydra/lazy.el`.
+
+These two fixes together (#361, mirroring #359 for Java and #360 for
+Common Lisp) make Hydra-Emacs-Lisp inference scale near-linearly with
+workload size. See
+[docs/history/emacs-lisp-collections-perf.md](../../../docs/history/emacs-lisp-collections-perf.md)
+for the side-by-side numbers and investigation notes.
 
 ### Hand-written files (in `heads/lisp/emacs-lisp/`)
 
