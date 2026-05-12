@@ -21,7 +21,19 @@
             "union": [
               {"name": "single", "type": {"unit": {}}},
               {"name": "double", "type": {"unit": {}}},
-              {"name": "triple", "type": {"unit": {}}}]},
+              {"name": "tripleSingle", "type": {"unit": {}}},
+              {"name": "tripleDouble", "type": {"unit": {}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.StringPrefix",
+        "typeScheme": {
+          "body": {
+            "union": [
+              {"name": "raw", "type": {"unit": {}}},
+              {"name": "bytes", "type": {"unit": {}}},
+              {"name": "rawBytes", "type": {"unit": {}}},
+              {"name": "unicode", "type": {"unit": {}}}]},
           "variables": []}}},
     {
       "type": {"name": "hydra.python.syntax.Name", "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
@@ -32,7 +44,8 @@
           "body": {
             "union": [
               {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}},
-              {"name": "float", "type": {"literal": {"float": {"float64": {}}}}}]},
+              {"name": "float", "type": {"literal": {"float": {"float64": {}}}}},
+              {"name": "imaginary", "type": {"literal": {"float": {"float64": {}}}}}]},
           "variables": []}}},
     {
       "type": {
@@ -41,6 +54,7 @@
           "body": {
             "record": [
               {"name": "value", "type": {"literal": {"string": {}}}},
+              {"name": "prefix", "type": {"maybe": {"variable": "hydra.python.syntax.StringPrefix"}}},
               {"name": "quoteStyle", "type": {"variable": "hydra.python.syntax.QuoteStyle"}}]},
           "variables": []}}},
     {
@@ -59,15 +73,6 @@
       "type": {
         "name": "hydra.python.syntax.Eval",
         "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.Expression"}}}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.python.syntax.FuncType",
-        "typeScheme": {
-          "body": {
-            "record": [
-              {"name": "type", "type": {"list": {"variable": "hydra.python.syntax.TypeExpression"}}},
-              {"name": "body", "type": {"variable": "hydra.python.syntax.Expression"}}]},
-          "variables": []}}},
     {
       "type": {
         "name": "hydra.python.syntax.Statement",
@@ -720,7 +725,7 @@
             "union": [
               {"name": "number", "type": {"variable": "hydra.python.syntax.SignedNumber"}},
               {"name": "complex", "type": {"variable": "hydra.python.syntax.ComplexNumber"}},
-              {"name": "string", "type": {"literal": {"string": {}}}},
+              {"name": "string", "type": {"variable": "hydra.python.syntax.Strings"}},
               {"name": "none", "type": {"unit": {}}},
               {"name": "true", "type": {"unit": {}}},
               {"name": "false", "type": {"unit": {}}}]},
@@ -760,11 +765,16 @@
     {
       "type": {
         "name": "hydra.python.syntax.RealNumber",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Number"}}, "variables": []}}},
+        "typeScheme": {
+          "body": {
+            "union": [
+              {"name": "integer", "type": {"literal": {"integer": {"bigint": {}}}}},
+              {"name": "float", "type": {"literal": {"float": {"float64": {}}}}}]},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.python.syntax.ImaginaryNumber",
-        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Number"}}, "variables": []}}},
+        "typeScheme": {"body": {"wrap": {"literal": {"float": {"float64": {}}}}}, "variables": []}}},
     {
       "type": {
         "name": "hydra.python.syntax.CapturePattern",
@@ -1266,7 +1276,7 @@
               {"name": "true", "type": {"unit": {}}},
               {"name": "false", "type": {"unit": {}}},
               {"name": "none", "type": {"unit": {}}},
-              {"name": "string", "type": {"variable": "hydra.python.syntax.String"}},
+              {"name": "string", "type": {"variable": "hydra.python.syntax.Strings"}},
               {"name": "number", "type": {"variable": "hydra.python.syntax.Number"}},
               {"name": "tuple", "type": {"variable": "hydra.python.syntax.Tuple"}},
               {"name": "group", "type": {"variable": "hydra.python.syntax.Group"}},
@@ -1359,6 +1369,106 @@
             "record": [
               {"name": "param", "type": {"variable": "hydra.python.syntax.Name"}},
               {"name": "default", "type": {"maybe": {"variable": "hydra.python.syntax.Default"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.Fstring",
+        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.FstringMiddle"}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.FstringMiddle",
+        "typeScheme": {
+          "body": {
+            "union": [
+              {"name": "replacementField", "type": {"variable": "hydra.python.syntax.FstringReplacementField"}},
+              {"name": "literal", "type": {"literal": {"string": {}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.FstringReplacementField",
+        "typeScheme": {
+          "body": {
+            "record": [
+              {"name": "expression", "type": {"variable": "hydra.python.syntax.AnnotatedRhs"}},
+              {"name": "equals", "type": {"literal": {"boolean": {}}}},
+              {"name": "conversion", "type": {"maybe": {"variable": "hydra.python.syntax.FstringConversion"}}},
+              {"name": "formatSpec", "type": {"maybe": {"variable": "hydra.python.syntax.FstringFullFormatSpec"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.FstringConversion",
+        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Name"}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.FstringFullFormatSpec",
+        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.FstringFormatSpec"}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.FstringFormatSpec",
+        "typeScheme": {
+          "body": {
+            "union": [
+              {"name": "literal", "type": {"literal": {"string": {}}}},
+              {"name": "replacementField", "type": {"variable": "hydra.python.syntax.FstringReplacementField"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.Tstring",
+        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.TstringMiddle"}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.TstringMiddle",
+        "typeScheme": {
+          "body": {
+            "union": [
+              {"name": "replacementField", "type": {"variable": "hydra.python.syntax.TstringReplacement"}},
+              {"name": "literal", "type": {"literal": {"string": {}}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.TstringReplacement",
+        "typeScheme": {
+          "body": {
+            "record": [
+              {"name": "expression", "type": {"variable": "hydra.python.syntax.AnnotatedRhs"}},
+              {"name": "equals", "type": {"literal": {"boolean": {}}}},
+              {"name": "conversion", "type": {"maybe": {"variable": "hydra.python.syntax.TstringConversion"}}},
+              {"name": "formatSpec", "type": {"maybe": {"variable": "hydra.python.syntax.TstringFullFormatSpec"}}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.TstringConversion",
+        "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.Name"}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.TstringFullFormatSpec",
+        "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.python.syntax.TstringFormatSpec"}}}, "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.TstringFormatSpec",
+        "typeScheme": {
+          "body": {
+            "union": [
+              {"name": "literal", "type": {"literal": {"string": {}}}},
+              {"name": "replacementField", "type": {"variable": "hydra.python.syntax.TstringReplacement"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.StringOrFstring",
+        "typeScheme": {
+          "body": {
+            "union": [
+              {"name": "string", "type": {"variable": "hydra.python.syntax.String"}},
+              {"name": "fstring", "type": {"variable": "hydra.python.syntax.Fstring"}}]},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.python.syntax.Strings",
+        "typeScheme": {
+          "body": {
+            "union": [
+              {"name": "regulars", "type": {"list": {"variable": "hydra.python.syntax.StringOrFstring"}}},
+              {"name": "tstrings", "type": {"list": {"variable": "hydra.python.syntax.Tstring"}}}]},
           "variables": []}}},
     {
       "type": {
@@ -1649,5 +1759,5 @@
         "name": "hydra.python.syntax.FuncTypeComment",
         "typeScheme": {"body": {"wrap": {"variable": "hydra.python.syntax.TypeComment"}}, "variables": []}}}],
   "dependencies": ["hydra.core", "hydra.core"],
-  "description": "A Python syntax model, based on the Python v3 PEG grammar retrieved on 2024-12-22 from https://docs.python.org/3/reference/grammar.html",
+  "description": "A Python syntax model, tracking the Python 3.14 PEG grammar:\n  https://docs.python.org/3.14/reference/grammar.html",
   "namespace": "hydra.python.syntax"}
