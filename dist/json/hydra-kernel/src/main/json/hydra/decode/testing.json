@@ -1295,7 +1295,11 @@
                                                                               "either": {
                                                                                 "right": {
                                                                                   "record": {
-                                                                                    "fields": [{"name": "actual", "term": {"variable": "field_actual"}}, {"name": "expected", "term": {"variable": "field_expected"}}],
+                                                                                    "fields": [
+                                                                                      {"name": "actual", "term": {"lambda": {"body": {"variable": "field_actual"}, "domain": {"unit": {}}, "parameter": "_"}}},
+                                                                                      {
+                                                                                        "name": "expected",
+                                                                                        "term": {"lambda": {"body": {"variable": "field_expected"}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                                                     "typeName": "hydra.testing.UniversalTestCase"}}}},
                                                                             "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                         "type": {"variable": "hydra.testing.UniversalTestCase"}}},

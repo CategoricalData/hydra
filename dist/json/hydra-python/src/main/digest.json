@@ -8,7 +8,7 @@
     "hydra.python.names": "529c095b8ef6ba9f69cdbfe9614731b00438551bc68051b988abe548267c1114",
     "hydra.python.serde": "c0de50caf86788c902baa867fd482144f6ed348ae60bf466bba1234bc230aabc",
     "hydra.python.syntax": "640167a971c27707b1479cc4e87b99508ba18460100e902204bd00b3a1ecada5",
-    "hydra.python.testing": "07e63e583c705cdc7cc6d58ec8859e019d8bcb2e65f0fa952fa7ef3f6797e64c",
+    "hydra.python.testing": "860f5990ee7462af614a621142a85a9416b79c372c7295225b61b4cbbb1276fd",
     "hydra.python.utils": "9adeefca16a4efe6954213c544578873edd51bcfb2e342835083e2d1723e13d6"
   }
 }
