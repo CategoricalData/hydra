@@ -951,15 +951,30 @@
                                                                                                                                                             "field": {
                                                                                                                                                               "name": "string",
                                                                                                                                                               "term": {
-                                                                                                                                                                "record": {
-                                                                                                                                                                  "fields": [
-                                                                                                                                                                    {
-                                                                                                                                                                      "name": "value",
-                                                                                                                                                                      "term": {"application": {"argument": {"variable": "pyName"}, "function": {"unwrap": "hydra.python.syntax.Name"}}}},
-                                                                                                                                                                    {
-                                                                                                                                                                      "name": "quoteStyle",
-                                                                                                                                                                      "term": {"inject": {"field": {"name": "double", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.QuoteStyle"}}}],
-                                                                                                                                                                  "typeName": "hydra.python.syntax.String"}}},
+                                                                                                                                                                "inject": {
+                                                                                                                                                                  "field": {
+                                                                                                                                                                    "name": "regulars",
+                                                                                                                                                                    "term": {
+                                                                                                                                                                      "list": [
+                                                                                                                                                                        {
+                                                                                                                                                                          "inject": {
+                                                                                                                                                                            "field": {
+                                                                                                                                                                              "name": "string",
+                                                                                                                                                                              "term": {
+                                                                                                                                                                                "record": {
+                                                                                                                                                                                  "fields": [
+                                                                                                                                                                                    {
+                                                                                                                                                                                      "name": "value",
+                                                                                                                                                                                      "term": {"application": {"argument": {"variable": "pyName"}, "function": {"unwrap": "hydra.python.syntax.Name"}}}},
+                                                                                                                                                                                    {
+                                                                                                                                                                                      "name": "prefix",
+                                                                                                                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.StringPrefix"}}}},
+                                                                                                                                                                                    {
+                                                                                                                                                                                      "name": "quoteStyle",
+                                                                                                                                                                                      "term": {"inject": {"field": {"name": "double", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.QuoteStyle"}}}],
+                                                                                                                                                                                  "typeName": "hydra.python.syntax.String"}}},
+                                                                                                                                                                            "typeName": "hydra.python.syntax.StringOrFstring"}}]}},
+                                                                                                                                                                  "typeName": "hydra.python.syntax.Strings"}}},
                                                                                                                                                             "typeName": "hydra.python.syntax.Atom"}}},
                                                                                                                                                       "typeName": "hydra.python.syntax.Primary"}}}],
                                                                                                                                               "typeName": "hydra.python.syntax.AwaitPrimary"}}},

@@ -23,8 +23,8 @@ module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = [Core.ns, Core.ns],
-            moduleDescription = Just ("A Python syntax model, based on the Python v3 PEG grammar retrieved on 2024-12-22"
-      ++ " from https://docs.python.org/3/reference/grammar.html")}
+            moduleDescription = Just ("A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
+      ++ "  https://docs.python.org/3.14/reference/grammar.html")}
   where
     definitions = constructs ++ terminals ++ nonterminals
 
@@ -32,7 +32,8 @@ module_ = Module {
     constructs = [
       annotatedStatement,
       pythonModule,
-      quoteStyle]
+      quoteStyle,
+      stringPrefix]
 
     -- Terminals from the PEG grammar (see below)
     terminals = [
@@ -47,7 +48,6 @@ module_ = Module {
       file,
       interactive,
       eval,
-      funcType,
       statement,
       simpleStatement,
       compoundStatement,
@@ -198,6 +198,20 @@ module_ = Module {
       lambdaParamNoDefault,
       lambdaParamWithDefault,
       lambdaParamMaybeDefault,
+      fstring,
+      fstringMiddle,
+      fstringReplacementField,
+      fstringConversion,
+      fstringFullFormatSpec,
+      fstringFormatSpec,
+      tstring,
+      tstringMiddle,
+      tstringReplacement,
+      tstringConversion,
+      tstringFullFormatSpec,
+      tstringFormatSpec,
+      stringOrFstring,
+      strings,
       list,
       tuple,
       set,
@@ -248,7 +262,22 @@ pythonModule = def "Module" $
   T.wrap $ T.list $ nonemptyList $ python "Statement"
 
 quoteStyle :: Binding
-quoteStyle = def "QuoteStyle" $ T.enum ["single", "double", "triple"]
+quoteStyle = def "QuoteStyle" $ T.enum [
+  "single",        -- '...'
+  "double",        -- "..."
+  "tripleSingle",  -- '''...'''
+  "tripleDouble"]  -- """..."""
+
+-- A non-empty prefix on a regular (non-f, non-t) string literal.
+-- The empty prefix is encoded as Maybe<StringPrefix> = Nothing on the String.
+-- F-strings (f"") and t-strings (t"", 3.14+) have their own AST shapes and are
+-- not represented here; they appear as separate arms of the Strings concatenation.
+stringPrefix :: Binding
+stringPrefix = def "StringPrefix" $ T.enum [
+  "raw",       -- r"" / R""
+  "bytes",     -- b"" / B""
+  "rawBytes",  -- rb / br / Rb / bR / etc.
+  "unicode"]   -- u"" (legacy 3.x compat)
 
 -- Terminals from the PEG grammar (see below)
 
@@ -258,11 +287,13 @@ name = def "Name" $ T.wrap T.string -- NAME in the grammar
 number :: Binding
 number = def "Number" $ T.union [ -- NUMBER in the grammar
   "integer">: T.bigint,
-  "float">: T.float64]
+  "float">: T.float64,
+  "imaginary">: T.float64]
 
 string :: Binding
-string = def "String" $ T.record [ -- STRING in the grammar
+string = def "String" $ T.record [ -- STRING in the grammar (non-f, non-t variants)
   "value">: T.string,
+  "prefix">: T.maybe $ python "StringPrefix",
   "quoteStyle">: python "QuoteStyle"]
 
 typeComment :: Binding
@@ -346,11 +377,10 @@ eval :: Binding
 eval = def "Eval" $ T.wrap $ nonemptyList $ python "Expression"
 
 -- func_type: '(' [type_expressions] ')' '->' expression NEWLINE* ENDMARKER
-
-funcType :: Binding
-funcType = def "FuncType" $ T.record [ -- TODO: func_type is defined in the official BNF grammar, but never used
-  "type">: T.list $ python "TypeExpression",
-  "body">: python "Expression"]
+--
+-- Hydra: omitted. func_type is the PEG production for the `compile(..., 'func_type')`
+-- mode used by typing tools that parse standalone function-type signatures from
+-- comments. Hydra-Python's coder/serde never emits or consumes this form.
 
 -- # GENERAL STATEMENTS
 -- # ==================
@@ -1112,7 +1142,7 @@ literalExpression :: Binding
 literalExpression = def "LiteralExpression" $ T.union [
   "number">: python "SignedNumber",
   "complex">: python "ComplexNumber",
-  "string">: T.string,
+  "string">: python "Strings",  -- PEG: `strings: (fstring|string)+`
   "none">: T.unit,
   "true">: T.unit,
   "false">: T.unit]
@@ -1152,13 +1182,15 @@ signedRealNumber = def "SignedRealNumber" $ T.union [
 --     | NUMBER
 
 realNumber :: Binding
-realNumber = def "RealNumber" $ T.wrap $ python "Number"
+realNumber = def "RealNumber" $ T.union [ -- NUMBER token excluding imaginary literals
+  "integer">: T.bigint,
+  "float">: T.float64]
 
 -- imaginary_number:
 --     | NUMBER
 
 imaginaryNumber :: Binding
-imaginaryNumber = def "ImaginaryNumber" $ T.wrap $ python "Number"
+imaginaryNumber = def "ImaginaryNumber" $ T.wrap T.float64
 
 -- capture_pattern:
 --     | pattern_capture_target
@@ -1185,7 +1217,11 @@ valuePattern = def "ValuePattern" $ T.wrap $ python "Attribute"
 --     | name_or_attr '.' NAME
 
 attribute :: Binding
-attribute = def "Attribute" $ T.wrap $ nonemptyList $ python "Name" -- Actually list with length >= 2
+attribute = def "Attribute" $ T.wrap $ nonemptyList $ python "Name"
+-- Hydra: per the PEG, an `attr` is `name_or_attr '.' NAME` which expands to at least
+-- two NAMEs (head + dot-trailer). Hydra's kernel type system has nonemptyList but no
+-- list-of-length>=2 predicate; the singleton case is structurally permitted but
+-- semantically invalid. Cross-cutting refinement-type item — see plan.
 
 -- name_or_attr:
 --     | attr
@@ -1708,7 +1744,7 @@ atom = def "Atom" $ T.union [
   "true">: T.unit,
   "false">: T.unit,
   "none">: T.unit,
-  "string">: python "String",
+  "string">: python "Strings",  -- PEG: `strings: (fstring|string)+`
   "number">: python "Number",
   "tuple">: python "Tuple",
   "group">: python "Group",
@@ -1829,21 +1865,122 @@ lambdaParamMaybeDefault = def "LambdaParamMaybeDefault" $ T.record [
 -- fstring_middle:
 --     | fstring_replacement_field
 --     | FSTRING_MIDDLE
+
+fstringMiddle :: Binding
+fstringMiddle = def "FstringMiddle" $ T.union [
+  "replacementField">: python "FstringReplacementField",
+  "literal">: T.string] -- FSTRING_MIDDLE
+
 -- fstring_replacement_field:
 --     | '{' annotated_rhs '='? [fstring_conversion] [fstring_full_format_spec] '}'
+
+fstringReplacementField :: Binding
+fstringReplacementField = def "FstringReplacementField" $ T.record [
+  "expression">: python "AnnotatedRhs",
+  "equals">: T.boolean,
+  "conversion">: T.maybe $ python "FstringConversion",
+  "formatSpec">: T.maybe $ python "FstringFullFormatSpec"]
+
 -- fstring_conversion:
 --     | "!" NAME
+
+fstringConversion :: Binding
+fstringConversion = def "FstringConversion" $ T.wrap $ python "Name"
+
 -- fstring_full_format_spec:
 --     | ':' fstring_format_spec*
+
+fstringFullFormatSpec :: Binding
+fstringFullFormatSpec = def "FstringFullFormatSpec" $ T.wrap $ T.list $ python "FstringFormatSpec"
+
 -- fstring_format_spec:
 --     | FSTRING_MIDDLE
 --     | fstring_replacement_field
+
+fstringFormatSpec :: Binding
+fstringFormatSpec = def "FstringFormatSpec" $ T.union [
+  "literal">: T.string, -- FSTRING_MIDDLE
+  "replacementField">: python "FstringReplacementField"]
+
 -- fstring:
 --     | FSTRING_START fstring_middle* FSTRING_END
+
+fstring :: Binding
+fstring = def "Fstring" $ T.wrap $ T.list $ python "FstringMiddle"
+
+-- T-strings (PEP 750, Python 3.14+). Structurally similar to f-strings but
+-- with a few PEG-grammar differences: tstring_middle's "replacement" arm is
+-- the same node as the format-spec's "replacement" arm (both called
+-- tstring_format_spec_replacement_field), whereas f-strings have two
+-- distinct shapes.
 --
+-- tstring_middle:
+--     | tstring_format_spec_replacement_field
+--     | TSTRING_MIDDLE
+
+tstringMiddle :: Binding
+tstringMiddle = def "TstringMiddle" $ T.union [
+  "replacementField">: python "TstringReplacement",
+  "literal">: T.string] -- TSTRING_MIDDLE
+
+-- tstring_format_spec_replacement_field:
+--     | '{' annotated_rhs '='? [tstring_conversion] [tstring_full_format_spec] '}'
+--
+-- Hydra: renamed `tstring_format_spec_replacement_field` to `TstringReplacement` to avoid
+-- a Haskell constructor/type name clash (since this type is referenced as an arm in
+-- TstringFormatSpec via the same `replacementField` label, the generated Haskell ctor
+-- `TstringFormatSpecReplacementField` would collide with the record type of the same name).
+
+tstringReplacement :: Binding
+tstringReplacement = def "TstringReplacement" $ T.record [
+  "expression">: python "AnnotatedRhs",
+  "equals">: T.boolean,
+  "conversion">: T.maybe $ python "TstringConversion",
+  "formatSpec">: T.maybe $ python "TstringFullFormatSpec"]
+
+-- tstring_conversion:
+--     | "!" NAME
+
+tstringConversion :: Binding
+tstringConversion = def "TstringConversion" $ T.wrap $ python "Name"
+
+-- tstring_full_format_spec:
+--     | ':' tstring_format_spec*
+
+tstringFullFormatSpec :: Binding
+tstringFullFormatSpec = def "TstringFullFormatSpec" $ T.wrap $ T.list $ python "TstringFormatSpec"
+
+-- tstring_format_spec:
+--     | TSTRING_MIDDLE
+--     | tstring_format_spec_replacement_field
+
+tstringFormatSpec :: Binding
+tstringFormatSpec = def "TstringFormatSpec" $ T.union [
+  "literal">: T.string, -- TSTRING_MIDDLE
+  "replacementField">: python "TstringReplacement"]
+
+-- tstring:
+--     | TSTRING_START tstring_middle* TSTRING_END
+
+tstring :: Binding
+tstring = def "Tstring" $ T.wrap $ T.list $ python "TstringMiddle"
+
 -- string: STRING
--- strings: (fstring|string)+
+-- strings: (fstring|string)+ | tstring+
 --
+-- Hydra: strings is a union — either a (fstring|string)+ run or a tstring+ run.
+-- Python 3.14 disallows mixing tstrings with non-tstrings in a single juxtaposed-literal group.
+
+stringOrFstring :: Binding
+stringOrFstring = def "StringOrFstring" $ T.union [
+  "string">: python "String",
+  "fstring">: python "Fstring"]
+
+strings :: Binding
+strings = def "Strings" $ T.union [
+  "regulars">: nonemptyList $ python "StringOrFstring",
+  "tstrings">: nonemptyList $ python "Tstring"]
+
 -- list:
 --     | '[' [star_named_expressions] ']'
 
