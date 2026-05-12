@@ -22,6 +22,7 @@ import Hydra.Generation (writeModulesJsonPackageSplit, writeDslJsonPackageSplit,
 import Hydra.PackageRouting (defaultDistJsonRoot)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
+  hydraBenchModules,
   hydraCoqModules, hydraGoModules, hydraJavaModules, hydraJavaScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
@@ -59,11 +60,17 @@ dedupByNamespace = go S.empty
 main :: IO ()
 main = do
   distRoot <- parseDistRoot defaultDistJsonRoot
+  includeBench <- parseIncludeBench
 
+  -- hydra-bench is opt-in: --include-bench must be passed by bin/sync-bench.sh
+  -- to add the synthetic inference workloads to the universe. Default sync
+  -- (bin/sync.sh) omits them so they don't balloon every host's codegen step.
+  let extraBench = if includeBench then hydraBenchModules else []
   let universe = dedupByNamespace $ L.concat
         [ mainModules
         , defaultLibModules
         , dslSourceModules
+        , extraBench
         , hydraCoqModules
         , hydraGoModules
         , hydraJavaModules
@@ -247,3 +254,10 @@ parseDistRoot defaultRoot = do
     go ("--output-dir" : dir : _) = dir
     go (_ : rest)                 = go rest
     go []                         = defaultRoot
+
+-- | --include-bench appends the hydra-bench package's modules to the universe.
+-- Off by default. Set by bin/sync-bench.sh, never by the default sync pipeline.
+parseIncludeBench :: IO Bool
+parseIncludeBench = do
+  args <- getArgs
+  return $ "--include-bench" `elem` args

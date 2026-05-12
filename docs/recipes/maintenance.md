@@ -516,7 +516,7 @@ definition bodies appear in **alphabetical order** within each module.
 
 This applies to:
 - Kernel Source modules (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/`)
-- Per-language coder Source modules (`packages/hydra-haskell/`, `packages/hydra-java/`, `packages/hydra-python/`, `packages/hydra-scala/`, `packages/hydra-lisp/`, `packages/hydra-ext/`, `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-coq/`, `packages/hydra-javascript/`)
+- Per-language coder Source modules (`packages/hydra-haskell/`, `packages/hydra-java/`, `packages/hydra-python/`, `packages/hydra-scala/`, `packages/hydra-lisp/`, `packages/hydra-ext/`, `packages/hydra-pg/`, `packages/hydra-rdf/`, `packages/hydra-coq/`, `packages/hydra-javascript/`, `packages/hydra-bench/`)
 - Hand-written runtime modules (`heads/haskell/src/main/haskell/Hydra/`)
 
 Generated files inherit their ordering from Source modules,

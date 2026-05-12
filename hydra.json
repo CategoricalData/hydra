@@ -17,6 +17,7 @@
     "hydra-wasm",
     "hydra-pg",
     "hydra-rdf",
-    "hydra-ext"
+    "hydra-ext",
+    "hydra-bench"
   ]
 }

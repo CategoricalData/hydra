@@ -132,6 +132,26 @@ for s in "${RAW_SERIES[@]}"; do
 done
 IFS=',' read -ra SERIES_LIST <<< "$expanded_series"
 
+# Ensure hydra-bench is regenerated for the requested hosts. The default sync
+# (bin/sync.sh) does NOT include the bench package — these workloads are
+# deliberately stress-shaped and only relevant for this benchmark — so we
+# always invoke bin/sync-bench.sh up front. It's idempotent and fast when
+# everything is already current.
+echo "" >&2
+echo "===== Ensuring hydra-bench is current for: $HOSTS =====" >&2
+# Map host names to bench-capable host names (drop python-pypy → python).
+bench_hosts_set=()
+IFS=',' read -ra _hosts_arr <<< "$HOSTS"
+for h in "${_hosts_arr[@]}"; do
+    case "$h" in
+        python-pypy) bench_hosts_set+=("python") ;;
+        *) bench_hosts_set+=("$h") ;;
+    esac
+done
+# Deduplicate.
+bench_hosts_dedup=$(printf "%s\n" "${bench_hosts_set[@]}" | awk '!seen[$0]++' | paste -sd, -)
+"$REPO_ROOT/bin/sync-bench.sh" --hosts "$bench_hosts_dedup"
+
 # Run directory mirrors bin/run-benchmark-tests.sh layout for symmetry.
 RUN_DIR="$RUNS_DIR/run_$(python3 -c 'from datetime import datetime,timezone; t=datetime.now(timezone.utc); print(t.strftime("%Y-%m-%d_%H%M%S") + "_" + f"{t.microsecond//1000:03d}")')"
 if [ -n "$TAG" ]; then
