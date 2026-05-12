@@ -160,16 +160,20 @@ packageTestModules _              = []
 
 
 -- | Return the type-defining modules whose DSL wrappers should be generated
--- for this package. Only kernel and hydra-haskell have DSL wrappers today;
--- other packages return [] and skip DSL generation.
---
--- Mirrors update-json-main's dslInputMods composition: the kernel DSL pass
--- covers kernel + json + other modules; the haskell DSL pass covers haskell
--- coder modules. Other packages don't produce DSL wrappers.
+-- for this package. The kernel DSL pass covers kernel + json + other modules;
+-- the haskell DSL pass covers haskell coder modules; each coder package
+-- (hydra-java, hydra-python, hydra-scala, hydra-lisp, hydra-go) maps to its
+-- own type-defining modules so that Hydra/Dsl/<lang>/Syntax.hs phantom
+-- helpers are regenerated whenever the syntax model changes. Other packages
+-- still return [] and skip DSL generation.
 packageDslInputModules :: String -> [Kernel.Module]
 packageDslInputModules "hydra-kernel"  = kernelModules ++ jsonModules ++ otherModules
 packageDslInputModules "hydra-haskell" = haskellModules
+packageDslInputModules "hydra-java"    = hydraJavaModules
 packageDslInputModules "hydra-python"  = hydraPythonModules
+packageDslInputModules "hydra-scala"   = hydraScalaModules
+packageDslInputModules "hydra-lisp"    = hydraLispModules
+packageDslInputModules "hydra-go"      = hydraGoModules
 packageDslInputModules _               = []
 
 
