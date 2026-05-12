@@ -12,6 +12,20 @@ subcommand), a run-directory layout (`benchmark/runs/run_<TS>[_<tag>]/`
 vs `benchmark/inference-runs/run_<TS>[_<tag>]/`), and styling
 (`bin/lib/dashboard_common.py`). The same mental model applies to both.
 
+## Prerequisites
+
+Each host's bench leg shells out to that host's normal test runner.
+Make sure the runner can start before benching, or the leg will produce
+empty/stub results that the dashboard then chokes on:
+
+- **Python**: `cd heads/python && uv sync` once so `heads/python/.venv`
+  exists. Without the venv the bench falls back to bare `python3`, which
+  usually lacks `pytest`.
+- **Java**: a successful `./gradlew :hydra-java:test` from the repo root.
+- **Common Lisp**: native arm64 SBCL on Apple Silicon (the Rosetta-x86
+  build also works but is ~1.4× slower); see
+  [hydra-common-lisp README](../../packages/hydra-lisp/hydra-common-lisp/README.md).
+
 ## Kernel-tests benchmark
 
 Runs the full common test suite under each requested host's test runner,
