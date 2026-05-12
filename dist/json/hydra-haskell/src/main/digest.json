@@ -8,7 +8,7 @@
     "hydra.haskell.operators": "a0cb4db2c3d0ef490ec7d50c08d058e0b2395f67fae3c3c6ea036f931ad1b0b3",
     "hydra.haskell.serde": "1fc26dbc96debf4b8f957cb1e2532d051c5fd1a16f4c7bf2fdf55738b76f4f7d",
     "hydra.haskell.syntax": "0586ab69d521348ff619b3ed9b2850210baee5daffa8442ee3ea3ac4c088da6b",
-    "hydra.haskell.testing": "5af30d65e8f174e4db186be38907d1ed4523423aa3865f97e1285dd910e96e96",
+    "hydra.haskell.testing": "5f897bc96a901b2d75ef2a120e8ef05714af2d3c69979545764aa409e41b60e8",
     "hydra.haskell.utils": "5f1a8cf96820a70fd0b8ed0ca01a77bc559186009eb09a6eb4faf25ae8407e8f"
   }
 }

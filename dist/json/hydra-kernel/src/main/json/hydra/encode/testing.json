@@ -405,8 +405,11 @@
                                             "application": {
                                               "argument": {
                                                 "application": {
-                                                  "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "actual", "typeName": "hydra.testing.UniversalTestCase"}}}},
+                                                  "argument": {"unit": {}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "x"},
+                                                      "function": {"project": {"field": "actual", "typeName": "hydra.testing.UniversalTestCase"}}}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -428,8 +431,11 @@
                                             "application": {
                                               "argument": {
                                                 "application": {
-                                                  "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "expected", "typeName": "hydra.testing.UniversalTestCase"}}}},
+                                                  "argument": {"unit": {}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "x"},
+                                                      "function": {"project": {"field": "expected", "typeName": "hydra.testing.UniversalTestCase"}}}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {

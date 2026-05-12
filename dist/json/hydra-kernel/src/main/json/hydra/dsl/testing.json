@@ -2236,11 +2236,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The expected result (a string produced by showing the expected value)"}}}],
-                            "body": {"literal": {"string": {}}}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                            "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "expected"}},
                 "domain": {
@@ -2250,8 +2247,10 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "The actual result (a string produced by evaluating and showing the test expression)"}}}],
-                        "body": {"literal": {"string": {}}}}},
+                            "value": {
+                              "literal": {
+                                "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
+                        "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "actual"}}}},
         "typeScheme": {
@@ -2265,11 +2264,8 @@
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "The expected result (a string produced by showing the expected value)"}}}],
-                          "body": {"literal": {"string": {}}}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
@@ -2278,8 +2274,10 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "The actual result (a string produced by evaluating and showing the test expression)"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                          "value": {
+                            "literal": {
+                              "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
+                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -2336,8 +2334,10 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "The actual result (a string produced by evaluating and showing the test expression)"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                          "value": {
+                            "literal": {
+                              "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
+                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2393,11 +2393,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The expected result (a string produced by showing the expected value)"}}}],
-                      "body": {"literal": {"string": {}}}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                      "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2483,8 +2480,10 @@
                             "annotation": [
                               {
                                 "key": "description",
-                                "value": {"literal": {"string": "The actual result (a string produced by evaluating and showing the test expression)"}}}],
-                            "body": {"literal": {"string": {}}}}},
+                                "value": {
+                                  "literal": {
+                                    "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
+                            "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2504,8 +2503,10 @@
                           "annotation": [
                             {
                               "key": "description",
-                              "value": {"literal": {"string": "The actual result (a string produced by evaluating and showing the test expression)"}}}],
-                          "body": {"literal": {"string": {}}}}},
+                              "value": {
+                                "literal": {
+                                  "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
+                          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2588,11 +2589,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The expected result (a string produced by showing the expected value)"}}}],
-                            "body": {"literal": {"string": {}}}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                            "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2609,11 +2607,8 @@
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "The expected result (a string produced by showing the expected value)"}}}],
-                          "body": {"literal": {"string": {}}}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
