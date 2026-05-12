@@ -1,0 +1,6 @@
+{
+  "defaultLibModules": [],
+  "dslModules": [],
+  "mainModules": ["hydra.bench.fanOut", "hydra.bench.linearChain", "hydra.bench.polymorphicChain"],
+  "package": "hydra-bench",
+  "testModules": []}
