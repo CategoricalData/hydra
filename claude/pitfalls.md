@@ -58,7 +58,11 @@ shell's `ulimit` blocks.
 by default re-run the per-package `assemble-distribution.sh` for any other
 package. Every coder package is non-baseline: `hydra-java`, `hydra-python`,
 `hydra-scala`, `hydra-lisp`, `hydra-go`, `hydra-pg`, `hydra-rdf`, `hydra-coq`,
-`hydra-javascript`, `hydra-wasm`, `hydra-ext`.
+`hydra-javascript`, `hydra-wasm`, `hydra-ext`, `hydra-bench`.
+
+Note that `hydra-bench` is also opt-in for the JSON regen — it requires
+`--include-bench` on `update-json-main` and `update-json-manifest` (set by
+`bin/sync-bench.sh`). The default `bin/sync.sh` does not regenerate it.
 
 A common surprise: editing a Java-coder DSL source under
 `packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs` and running

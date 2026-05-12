@@ -11,6 +11,7 @@ import Hydra.Generation (writePerPackageManifestsJson)
 import Hydra.PackageRouting (defaultDistJsonRoot)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
+  hydraBenchModules,
   hydraCoqModules, hydraGoModules, hydraJavaModules, hydraJavaScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
@@ -24,6 +25,7 @@ import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
 
 import qualified Data.List as L
 import qualified Data.Set as S
+import qualified System.Environment
 
 
 -- | Deduplicate a list of modules by namespace, keeping the first occurrence.
@@ -38,15 +40,22 @@ dedupByNamespace = go S.empty
 
 main :: IO ()
 main = do
+  args <- System.Environment.getArgs
+  let includeBench = "--include-bench" `elem` args
+
   putStrLn "=== Generate per-package JSON manifests ==="
   putStrLn ""
 
   -- The full main-side universe mirrors update-json-main's input: every
   -- module written to JSON should appear in exactly one package's manifest.
+  -- hydra-bench is opt-in: --include-bench (set by bin/sync-bench.sh) adds the
+  -- synthetic inference workloads. Default sync omits them.
+  let extraBench = if includeBench then hydraBenchModules else []
   let mainUniverse = dedupByNamespace $ L.concat
         [ mainModules
         , defaultLibModules
         , dslSourceModules
+        , extraBench
         , hydraCoqModules
         , hydraGoModules
         , hydraJavaModules
