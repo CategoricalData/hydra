@@ -1,5 +1,6 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | A Python syntax model, based on the Python v3 PEG grammar retrieved on 2024-12-22 from https://docs.python.org/3/reference/grammar.html
+-- | A Python syntax model, tracking the Python 3.14 PEG grammar:
+-- |   https://docs.python.org/3.14/reference/grammar.html
 
 module Hydra.Python.Syntax where
 import qualified Hydra.Core as Core
@@ -21,12 +22,25 @@ _Module = Core.Name "hydra.python.syntax.Module"
 data QuoteStyle =
   QuoteStyleSingle |
   QuoteStyleDouble |
-  QuoteStyleTriple
+  QuoteStyleTripleSingle |
+  QuoteStyleTripleDouble
   deriving (Eq, Ord, Read, Show)
 _QuoteStyle = Core.Name "hydra.python.syntax.QuoteStyle"
 _QuoteStyle_single = Core.Name "single"
 _QuoteStyle_double = Core.Name "double"
-_QuoteStyle_triple = Core.Name "triple"
+_QuoteStyle_tripleSingle = Core.Name "tripleSingle"
+_QuoteStyle_tripleDouble = Core.Name "tripleDouble"
+data StringPrefix =
+  StringPrefixRaw |
+  StringPrefixBytes |
+  StringPrefixRawBytes |
+  StringPrefixUnicode
+  deriving (Eq, Ord, Read, Show)
+_StringPrefix = Core.Name "hydra.python.syntax.StringPrefix"
+_StringPrefix_raw = Core.Name "raw"
+_StringPrefix_bytes = Core.Name "bytes"
+_StringPrefix_rawBytes = Core.Name "rawBytes"
+_StringPrefix_unicode = Core.Name "unicode"
 newtype Name =
   Name {
     unName :: String}
@@ -34,18 +48,22 @@ newtype Name =
 _Name = Core.Name "hydra.python.syntax.Name"
 data Number =
   NumberInteger Integer |
-  NumberFloat Double
+  NumberFloat Double |
+  NumberImaginary Double
   deriving (Eq, Ord, Read, Show)
 _Number = Core.Name "hydra.python.syntax.Number"
 _Number_integer = Core.Name "integer"
 _Number_float = Core.Name "float"
+_Number_imaginary = Core.Name "imaginary"
 data String_ =
   String_ {
     stringValue :: String,
+    stringPrefix :: (Maybe StringPrefix),
     stringQuoteStyle :: QuoteStyle}
   deriving (Eq, Ord, Read, Show)
 _String = Core.Name "hydra.python.syntax.String"
 _String_value = Core.Name "value"
+_String_prefix = Core.Name "prefix"
 _String_quoteStyle = Core.Name "quoteStyle"
 newtype TypeComment =
   TypeComment {
@@ -67,14 +85,6 @@ newtype Eval =
     unEval :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 _Eval = Core.Name "hydra.python.syntax.Eval"
-data FuncType =
-  FuncType {
-    funcTypeType :: [TypeExpression],
-    funcTypeBody :: Expression}
-  deriving (Eq, Ord, Read, Show)
-_FuncType = Core.Name "hydra.python.syntax.FuncType"
-_FuncType_type = Core.Name "type"
-_FuncType_body = Core.Name "body"
 data Statement =
   StatementCompound CompoundStatement |
   StatementSimple [SimpleStatement] |
@@ -742,7 +752,7 @@ _ClosedPattern_class = Core.Name "class"
 data LiteralExpression =
   LiteralExpressionNumber SignedNumber |
   LiteralExpressionComplex ComplexNumber |
-  LiteralExpressionString String |
+  LiteralExpressionString Strings |
   LiteralExpressionNone |
   LiteralExpressionTrue |
   LiteralExpressionFalse
@@ -785,14 +795,16 @@ data SignedRealNumber =
 _SignedRealNumber = Core.Name "hydra.python.syntax.SignedRealNumber"
 _SignedRealNumber_sign = Core.Name "sign"
 _SignedRealNumber_number = Core.Name "number"
-newtype RealNumber =
-  RealNumber {
-    unRealNumber :: Number}
+data RealNumber =
+  RealNumberInteger Integer |
+  RealNumberFloat Double
   deriving (Eq, Ord, Read, Show)
 _RealNumber = Core.Name "hydra.python.syntax.RealNumber"
+_RealNumber_integer = Core.Name "integer"
+_RealNumber_float = Core.Name "float"
 newtype ImaginaryNumber =
   ImaginaryNumber {
-    unImaginaryNumber :: Number}
+    unImaginaryNumber :: Double}
   deriving (Eq, Ord, Read, Show)
 _ImaginaryNumber = Core.Name "hydra.python.syntax.ImaginaryNumber"
 newtype CapturePattern =
@@ -1270,7 +1282,7 @@ data Atom =
   AtomTrue |
   AtomFalse |
   AtomNone |
-  AtomString String_ |
+  AtomString Strings |
   AtomNumber Number |
   AtomTuple Tuple |
   AtomGroup Group |
@@ -1378,6 +1390,102 @@ data LambdaParamMaybeDefault =
 _LambdaParamMaybeDefault = Core.Name "hydra.python.syntax.LambdaParamMaybeDefault"
 _LambdaParamMaybeDefault_param = Core.Name "param"
 _LambdaParamMaybeDefault_default = Core.Name "default"
+newtype Fstring =
+  Fstring {
+    unFstring :: [FstringMiddle]}
+  deriving (Eq, Ord, Read, Show)
+_Fstring = Core.Name "hydra.python.syntax.Fstring"
+data FstringMiddle =
+  FstringMiddleReplacementField FstringReplacementField |
+  FstringMiddleLiteral String
+  deriving (Eq, Ord, Read, Show)
+_FstringMiddle = Core.Name "hydra.python.syntax.FstringMiddle"
+_FstringMiddle_replacementField = Core.Name "replacementField"
+_FstringMiddle_literal = Core.Name "literal"
+data FstringReplacementField =
+  FstringReplacementField {
+    fstringReplacementFieldExpression :: AnnotatedRhs,
+    fstringReplacementFieldEquals :: Bool,
+    fstringReplacementFieldConversion :: (Maybe FstringConversion),
+    fstringReplacementFieldFormatSpec :: (Maybe FstringFullFormatSpec)}
+  deriving (Eq, Ord, Read, Show)
+_FstringReplacementField = Core.Name "hydra.python.syntax.FstringReplacementField"
+_FstringReplacementField_expression = Core.Name "expression"
+_FstringReplacementField_equals = Core.Name "equals"
+_FstringReplacementField_conversion = Core.Name "conversion"
+_FstringReplacementField_formatSpec = Core.Name "formatSpec"
+newtype FstringConversion =
+  FstringConversion {
+    unFstringConversion :: Name}
+  deriving (Eq, Ord, Read, Show)
+_FstringConversion = Core.Name "hydra.python.syntax.FstringConversion"
+newtype FstringFullFormatSpec =
+  FstringFullFormatSpec {
+    unFstringFullFormatSpec :: [FstringFormatSpec]}
+  deriving (Eq, Ord, Read, Show)
+_FstringFullFormatSpec = Core.Name "hydra.python.syntax.FstringFullFormatSpec"
+data FstringFormatSpec =
+  FstringFormatSpecLiteral String |
+  FstringFormatSpecReplacementField FstringReplacementField
+  deriving (Eq, Ord, Read, Show)
+_FstringFormatSpec = Core.Name "hydra.python.syntax.FstringFormatSpec"
+_FstringFormatSpec_literal = Core.Name "literal"
+_FstringFormatSpec_replacementField = Core.Name "replacementField"
+newtype Tstring =
+  Tstring {
+    unTstring :: [TstringMiddle]}
+  deriving (Eq, Ord, Read, Show)
+_Tstring = Core.Name "hydra.python.syntax.Tstring"
+data TstringMiddle =
+  TstringMiddleReplacementField TstringReplacement |
+  TstringMiddleLiteral String
+  deriving (Eq, Ord, Read, Show)
+_TstringMiddle = Core.Name "hydra.python.syntax.TstringMiddle"
+_TstringMiddle_replacementField = Core.Name "replacementField"
+_TstringMiddle_literal = Core.Name "literal"
+data TstringReplacement =
+  TstringReplacement {
+    tstringReplacementExpression :: AnnotatedRhs,
+    tstringReplacementEquals :: Bool,
+    tstringReplacementConversion :: (Maybe TstringConversion),
+    tstringReplacementFormatSpec :: (Maybe TstringFullFormatSpec)}
+  deriving (Eq, Ord, Read, Show)
+_TstringReplacement = Core.Name "hydra.python.syntax.TstringReplacement"
+_TstringReplacement_expression = Core.Name "expression"
+_TstringReplacement_equals = Core.Name "equals"
+_TstringReplacement_conversion = Core.Name "conversion"
+_TstringReplacement_formatSpec = Core.Name "formatSpec"
+newtype TstringConversion =
+  TstringConversion {
+    unTstringConversion :: Name}
+  deriving (Eq, Ord, Read, Show)
+_TstringConversion = Core.Name "hydra.python.syntax.TstringConversion"
+newtype TstringFullFormatSpec =
+  TstringFullFormatSpec {
+    unTstringFullFormatSpec :: [TstringFormatSpec]}
+  deriving (Eq, Ord, Read, Show)
+_TstringFullFormatSpec = Core.Name "hydra.python.syntax.TstringFullFormatSpec"
+data TstringFormatSpec =
+  TstringFormatSpecLiteral String |
+  TstringFormatSpecReplacementField TstringReplacement
+  deriving (Eq, Ord, Read, Show)
+_TstringFormatSpec = Core.Name "hydra.python.syntax.TstringFormatSpec"
+_TstringFormatSpec_literal = Core.Name "literal"
+_TstringFormatSpec_replacementField = Core.Name "replacementField"
+data StringOrFstring =
+  StringOrFstringString String_ |
+  StringOrFstringFstring Fstring
+  deriving (Eq, Ord, Read, Show)
+_StringOrFstring = Core.Name "hydra.python.syntax.StringOrFstring"
+_StringOrFstring_string = Core.Name "string"
+_StringOrFstring_fstring = Core.Name "fstring"
+data Strings =
+  StringsRegulars [StringOrFstring] |
+  StringsTstrings [Tstring]
+  deriving (Eq, Ord, Read, Show)
+_Strings = Core.Name "hydra.python.syntax.Strings"
+_Strings_regulars = Core.Name "regulars"
+_Strings_tstrings = Core.Name "tstrings"
 newtype List =
   List {
     unList :: [StarNamedExpression]}
