@@ -74,8 +74,8 @@ generateJavaTestCase groupPath tcm =
           tcase = Testing.testCaseWithMetadataCase tcm
       in case tcase of
         Testing.TestCaseUniversal v0 ->
-          let actual_ = Testing.universalTestCaseActual v0
-              expected_ = Testing.universalTestCaseExpected v0
+          let actual_ = Testing.universalTestCaseActual v0 ()
+              expected_ = Testing.universalTestCaseExpected v0 ()
               fullName = Logic.ifElse (Lists.null groupPath) name_ (Strings.intercalate "_" (Lists.concat2 groupPath [
                     name_]))
               formattedName = formatJavaTestName fullName
