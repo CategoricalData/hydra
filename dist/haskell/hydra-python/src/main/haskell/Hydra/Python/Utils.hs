@@ -413,22 +413,20 @@ singleQuotedString s = stringToPyExpression Syntax.QuoteStyleSingle s
 -- | Create a string expression with a given quote style
 stringToPyExpression :: Syntax.QuoteStyle -> String -> Syntax.Expression
 stringToPyExpression style s =
-    pyAtomToPyExpression (Syntax.AtomString (Syntax.StringsRegulars [
-      Syntax.StringOrFstringString (Syntax.String_ {
-        Syntax.stringValue = s,
-        Syntax.stringPrefix = Nothing,
-        Syntax.stringQuoteStyle = style})]))
+    pyAtomToPyExpression (Syntax.AtomString (Syntax.String_ {
+      Syntax.stringValue = s,
+      Syntax.stringPrefix = Nothing,
+      Syntax.stringQuoteStyle = style}))
 -- | Current target Python version for code generation
 targetPythonVersion :: Environment.PythonVersion
 targetPythonVersion = Environment.PythonVersionPython310
 -- | Create a raw triple-double-quoted string expression (Python docstring convention). Raw-prefixed so embedded backslashes (e.g. lambda notation `\x.e`) aren't interpreted as escape sequences by Python's string parser.
 tripleQuotedString :: String -> Syntax.Expression
 tripleQuotedString s =
-    pyAtomToPyExpression (Syntax.AtomString (Syntax.StringsRegulars [
-      Syntax.StringOrFstringString (Syntax.String_ {
-        Syntax.stringValue = s,
-        Syntax.stringPrefix = (Just Syntax.StringPrefixRaw),
-        Syntax.stringQuoteStyle = Syntax.QuoteStyleTripleDouble})]))
+    pyAtomToPyExpression (Syntax.AtomString (Syntax.String_ {
+      Syntax.stringValue = s,
+      Syntax.stringPrefix = (Just Syntax.StringPrefixRaw),
+      Syntax.stringQuoteStyle = Syntax.QuoteStyleTripleDouble}))
 -- | Generate a type alias statement using PEP 695 syntax (Python 3.12+)
 typeAliasStatement :: Syntax.Name -> [Syntax.TypeParameter] -> Maybe String -> Syntax.Expression -> Syntax.Statement
 typeAliasStatement name tparams mcomment tyexpr =

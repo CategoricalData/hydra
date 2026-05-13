@@ -738,7 +738,7 @@ stringToPyExpression :: TTermDefinition (Py.QuoteStyle -> String -> Py.Expressio
 stringToPyExpression = def "stringToPyExpression" $
   doc "Create a string expression with a given quote style" $
   lambdas ["style", "s"] $
-    pyAtomToPyExpression @@ (PyDsl.atomString $ PyDsl.pyStringToPyStrings $ PyDsl.string_ (var "s") (var "style"))
+    pyAtomToPyExpression @@ (PyDsl.atomString $ PyDsl.string_ (var "s") (var "style"))
 
 -- | Current target Python version. Change this to Python310 for PyPy compatibility.
 targetPythonVersion :: TTermDefinition PyHelpers.PythonVersion
@@ -753,7 +753,7 @@ tripleQuotedString = def "tripleQuotedString" $
       \Raw-prefixed so embedded backslashes (e.g. lambda notation `\\x.e`) aren't interpreted \
       \as escape sequences by Python's string parser." $
   lambda "s" $
-    pyAtomToPyExpression @@ (PyDsl.atomString $ PyDsl.pyStringToPyStrings $
+    pyAtomToPyExpression @@ (PyDsl.atomString $
       PyDsl.prefixedString_ PyDsl.stringPrefixRaw (var "s") PyDsl.quoteStyleTripleDouble)
 
 -- | Generate a type alias statement using PEP 695 syntax (Python 3.12+)

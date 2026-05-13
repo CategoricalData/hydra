@@ -506,12 +506,20 @@ atomSetcomp x =
         Core.fieldName = (Core.Name "setcomp"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the string variant of hydra.python.syntax.Atom
-atomString :: Phantoms.TTerm Syntax.Strings -> Phantoms.TTerm Syntax.Atom
+atomString :: Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm Syntax.Atom
 atomString x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.python.syntax.Atom"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the stringConcat variant of hydra.python.syntax.Atom
+atomStringConcat :: Phantoms.TTerm [Syntax.StringOrFstring] -> Phantoms.TTerm Syntax.Atom
+atomStringConcat x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.Atom"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "stringConcat"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the true variant of hydra.python.syntax.Atom
 atomTrue :: Phantoms.TTerm Syntax.Atom
@@ -521,6 +529,14 @@ atomTrue =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "true"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the tstrings variant of hydra.python.syntax.Atom
+atomTstrings :: Phantoms.TTerm [Syntax.Tstring] -> Phantoms.TTerm Syntax.Atom
+atomTstrings x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.Atom"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "tstrings"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the tuple variant of hydra.python.syntax.Atom
 atomTuple :: Phantoms.TTerm Syntax.Tuple -> Phantoms.TTerm Syntax.Atom
 atomTuple x =
@@ -5262,12 +5278,20 @@ literalExpressionOrAttributeLiteral x =
         Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the string variant of hydra.python.syntax.LiteralExpression
-literalExpressionString :: Phantoms.TTerm Syntax.Strings -> Phantoms.TTerm Syntax.LiteralExpression
+literalExpressionString :: Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm Syntax.LiteralExpression
 literalExpressionString x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.python.syntax.LiteralExpression"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "string"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the stringConcat variant of hydra.python.syntax.LiteralExpression
+literalExpressionStringConcat :: Phantoms.TTerm [Syntax.StringOrFstring] -> Phantoms.TTerm Syntax.LiteralExpression
+literalExpressionStringConcat x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.LiteralExpression"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "stringConcat"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the true variant of hydra.python.syntax.LiteralExpression
 literalExpressionTrue :: Phantoms.TTerm Syntax.LiteralExpression
@@ -5277,6 +5301,14 @@ literalExpressionTrue =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "true"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the tstrings variant of hydra.python.syntax.LiteralExpression
+literalExpressionTstrings :: Phantoms.TTerm [Syntax.Tstring] -> Phantoms.TTerm Syntax.LiteralExpression
+literalExpressionTstrings x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.python.syntax.LiteralExpression"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "tstrings"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for hydra.python.syntax.MappingPattern
 mappingPattern :: Phantoms.TTerm (Maybe Syntax.ItemsPattern) -> Phantoms.TTerm (Maybe Syntax.DoubleStarPattern) -> Phantoms.TTerm Syntax.MappingPattern
 mappingPattern items doubleStar =
@@ -8263,22 +8295,6 @@ stringWithValue original newVal =
               Core.projectionTypeName = (Core.Name "hydra.python.syntax.String"),
               Core.projectionField = (Core.Name "quoteStyle")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL injection for the regulars variant of hydra.python.syntax.Strings
-stringsRegulars :: Phantoms.TTerm [Syntax.StringOrFstring] -> Phantoms.TTerm Syntax.Strings
-stringsRegulars x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.python.syntax.Strings"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "regulars"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL injection for the tstrings variant of hydra.python.syntax.Strings
-stringsTstrings :: Phantoms.TTerm [Syntax.Tstring] -> Phantoms.TTerm Syntax.Strings
-stringsTstrings x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.python.syntax.Strings"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "tstrings"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the simple variant of hydra.python.syntax.SubjectExpression
 subjectExpressionSimple :: Phantoms.TTerm Syntax.NamedExpression -> Phantoms.TTerm Syntax.SubjectExpression
 subjectExpressionSimple x =
