@@ -211,7 +211,6 @@ module_ = Module {
       tstringFullFormatSpec,
       tstringFormatSpec,
       stringOrFstring,
-      strings,
       list,
       tuple,
       set,
@@ -1142,7 +1141,9 @@ literalExpression :: Binding
 literalExpression = def "LiteralExpression" $ T.union [
   "number">: python "SignedNumber",
   "complex">: python "ComplexNumber",
-  "string">: python "Strings",  -- PEG: `strings: (fstring|string)+`
+  "string">: python "String",  -- single STRING; concatenated runs go through stringConcat / tstrings
+  "stringConcat">: nonemptyList $ python "StringOrFstring",  -- PEG: `(fstring|string)+`
+  "tstrings">: nonemptyList $ python "Tstring",  -- PEG: `tstring+`
   "none">: T.unit,
   "true">: T.unit,
   "false">: T.unit]
@@ -1744,7 +1745,9 @@ atom = def "Atom" $ T.union [
   "true">: T.unit,
   "false">: T.unit,
   "none">: T.unit,
-  "string">: python "Strings",  -- PEG: `strings: (fstring|string)+`
+  "string">: python "String",  -- single STRING; concatenated runs go through stringConcat / tstrings
+  "stringConcat">: nonemptyList $ python "StringOrFstring",  -- PEG: `(fstring|string)+`
+  "tstrings">: nonemptyList $ python "Tstring",  -- PEG: `tstring+`
   "number">: python "Number",
   "tuple">: python "Tuple",
   "group">: python "Group",
@@ -1968,18 +1971,17 @@ tstring = def "Tstring" $ T.wrap $ T.list $ python "TstringMiddle"
 -- string: STRING
 -- strings: (fstring|string)+ | tstring+
 --
--- Hydra: strings is a union — either a (fstring|string)+ run or a tstring+ run.
--- Python 3.14 disallows mixing tstrings with non-tstrings in a single juxtaposed-literal group.
+-- Hydra: the PEG `strings` production is inlined as arms of Atom / LiteralExpression:
+-- the common single-STRING case is `string: String`; multi-piece (fstring|string)+
+-- runs use `stringConcat: nonemptyList StringOrFstring`; tstring+ runs use
+-- `tstrings: nonemptyList Tstring`. Python 3.14 disallows mixing tstrings with
+-- non-tstrings in a single juxtaposed-literal group, which is enforced by the
+-- separate arms.
 
 stringOrFstring :: Binding
 stringOrFstring = def "StringOrFstring" $ T.union [
   "string">: python "String",
   "fstring">: python "Fstring"]
-
-strings :: Binding
-strings = def "Strings" $ T.union [
-  "regulars">: nonemptyList $ python "StringOrFstring",
-  "tstrings">: nonemptyList $ python "Tstring"]
 
 -- list:
 --     | '[' [star_named_expressions] ']'

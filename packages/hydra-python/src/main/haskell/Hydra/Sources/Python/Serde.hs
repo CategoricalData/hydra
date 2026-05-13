@@ -200,7 +200,6 @@ module_ = Module {
       toDefinition stringPrefixToText,
       toDefinition stringToExpr,
       toDefinition stringOrFstringToExpr,
-      toDefinition stringsToExpr,
       toDefinition subjectExpressionToExpr,
       toDefinition sumToExpr,
       toDefinition tPrimaryToExpr,
@@ -305,8 +304,11 @@ atomToExpr = def "atomToExpr" $
       Py._Atom_number>>: lambda "n" $ numberToExpr @@ var "n",
       Py._Atom_set>>: lambda "s" $ setToExpr @@ var "s",
       Py._Atom_setcomp>>: lambda "_" $ Serialization.cst @@ string "{...}",
-      Py._Atom_string>>: lambda "ss" $ stringsToExpr @@ var "ss",
+      Py._Atom_string>>: lambda "s" $ stringToExpr @@ var "s",
+      -- Python juxtaposes adjacent string literals at parse time; render with single-space separation.
+      Py._Atom_stringConcat>>: lambda "rs" $ Serialization.spaceSep @@ Lists.map stringOrFstringToExpr (var "rs"),
       Py._Atom_true>>: constant $ Serialization.cst @@ string "True",
+      Py._Atom_tstrings>>: lambda "ts" $ Serialization.spaceSep @@ Lists.map tstringToExpr (var "ts"),
       Py._Atom_tuple>>: lambda "t" $ tupleToExpr @@ var "t"]
 
 attributeToExpr :: TTermDefinition (Py.Attribute -> Expr)
@@ -1241,15 +1243,6 @@ stringOrFstringToExpr = def "stringOrFstringToExpr" $
     cases Py._StringOrFstring (var "sf") Nothing [
       Py._StringOrFstring_string>>: lambda "s" $ stringToExpr @@ var "s",
       Py._StringOrFstring_fstring>>: lambda "f" $ fstringToExpr @@ var "f"]
-
-stringsToExpr :: TTermDefinition (Py.Strings -> Expr)
-stringsToExpr = def "stringsToExpr" $
-  doc "Serialize a `strings` group (a non-empty run of either string/f-string or t-string literals)" $
-  lambda "ss" $
-    cases Py._Strings (var "ss") Nothing [
-      -- Python juxtaposes adjacent string literals at parse time; render with single-space separation.
-      Py._Strings_regulars>>: lambda "rs" $ Serialization.spaceSep @@ Lists.map stringOrFstringToExpr (var "rs"),
-      Py._Strings_tstrings>>: lambda "ts" $ Serialization.spaceSep @@ Lists.map tstringToExpr (var "ts")]
 
 subjectExpressionToExpr :: TTermDefinition (Py.SubjectExpression -> Expr)
 subjectExpressionToExpr = def "subjectExpressionToExpr" $

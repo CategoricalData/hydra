@@ -2771,26 +2771,14 @@
                             "field": {
                               "name": "string",
                               "term": {
-                                "inject": {
-                                  "field": {
-                                    "name": "regulars",
-                                    "term": {
-                                      "list": [
-                                        {
-                                          "inject": {
-                                            "field": {
-                                              "name": "string",
-                                              "term": {
-                                                "record": {
-                                                  "fields": [
-                                                    {"name": "value", "term": {"variable": "s"}},
-                                                    {
-                                                      "name": "prefix",
-                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.StringPrefix"}}}},
-                                                    {"name": "quoteStyle", "term": {"variable": "style"}}],
-                                                  "typeName": "hydra.python.syntax.String"}}},
-                                            "typeName": "hydra.python.syntax.StringOrFstring"}}]}},
-                                  "typeName": "hydra.python.syntax.Strings"}}},
+                                "record": {
+                                  "fields": [
+                                    {"name": "value", "term": {"variable": "s"}},
+                                    {
+                                      "name": "prefix",
+                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.StringPrefix"}}}},
+                                    {"name": "quoteStyle", "term": {"variable": "style"}}],
+                                  "typeName": "hydra.python.syntax.String"}}},
                             "typeName": "hydra.python.syntax.Atom"}},
                         "function": {"variable": "hydra.python.utils.pyAtomToPyExpression"}}},
                     "domain": {"literal": {"string": {}}},
@@ -2831,28 +2819,16 @@
                         "field": {
                           "name": "string",
                           "term": {
-                            "inject": {
-                              "field": {
-                                "name": "regulars",
-                                "term": {
-                                  "list": [
-                                    {
-                                      "inject": {
-                                        "field": {
-                                          "name": "string",
-                                          "term": {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "value", "term": {"variable": "s"}},
-                                                {
-                                                  "name": "prefix",
-                                                  "term": {"maybe": {"inject": {"field": {"name": "raw", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.StringPrefix"}}}},
-                                                {
-                                                  "name": "quoteStyle",
-                                                  "term": {"inject": {"field": {"name": "tripleDouble", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.QuoteStyle"}}}],
-                                              "typeName": "hydra.python.syntax.String"}}},
-                                        "typeName": "hydra.python.syntax.StringOrFstring"}}]}},
-                              "typeName": "hydra.python.syntax.Strings"}}},
+                            "record": {
+                              "fields": [
+                                {"name": "value", "term": {"variable": "s"}},
+                                {
+                                  "name": "prefix",
+                                  "term": {"maybe": {"inject": {"field": {"name": "raw", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.StringPrefix"}}}},
+                                {
+                                  "name": "quoteStyle",
+                                  "term": {"inject": {"field": {"name": "tripleDouble", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.QuoteStyle"}}}],
+                              "typeName": "hydra.python.syntax.String"}}},
                         "typeName": "hydra.python.syntax.Atom"}},
                     "function": {"variable": "hydra.python.utils.pyAtomToPyExpression"}}},
                 "domain": {"literal": {"string": {}}},

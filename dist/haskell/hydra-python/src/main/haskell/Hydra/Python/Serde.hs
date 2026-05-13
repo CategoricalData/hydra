@@ -82,8 +82,10 @@ atomToExpr atom =
       Syntax.AtomNumber v0 -> numberToExpr v0
       Syntax.AtomSet v0 -> setToExpr v0
       Syntax.AtomSetcomp _ -> Serialization.cst "{...}"
-      Syntax.AtomString v0 -> stringsToExpr v0
+      Syntax.AtomString v0 -> stringToExpr v0
+      Syntax.AtomStringConcat v0 -> Serialization.spaceSep (Lists.map stringOrFstringToExpr v0)
       Syntax.AtomTrue -> Serialization.cst "True"
+      Syntax.AtomTstrings v0 -> Serialization.spaceSep (Lists.map tstringToExpr v0)
       Syntax.AtomTuple v0 -> tupleToExpr v0
 -- | Serialize an attribute access
 attributeToExpr :: Syntax.Attribute -> Ast.Expr
@@ -861,12 +863,6 @@ stringToExpr s =
           Serialization.cst (Strings.cat2 prefix "\"\"\""),
           (Serialization.cst content),
           (Serialization.cst "\"\"\"")]
--- | Serialize a `strings` group (a non-empty run of either string/f-string or t-string literals)
-stringsToExpr :: Syntax.Strings -> Ast.Expr
-stringsToExpr ss =
-    case ss of
-      Syntax.StringsRegulars v0 -> Serialization.spaceSep (Lists.map stringOrFstringToExpr v0)
-      Syntax.StringsTstrings v0 -> Serialization.spaceSep (Lists.map tstringToExpr v0)
 -- | Serialize a subject expression
 subjectExpressionToExpr :: Syntax.SubjectExpression -> Ast.Expr
 subjectExpressionToExpr se =

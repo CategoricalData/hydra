@@ -386,9 +386,29 @@
                             "name": "string",
                             "term": {
                               "lambda": {
-                                "body": {"application": {"argument": {"variable": "ss"}, "function": {"variable": "hydra.python.serde.stringsToExpr"}}},
-                                "domain": {"variable": "hydra.python.syntax.Strings"},
-                                "parameter": "ss"}}},
+                                "body": {"application": {"argument": {"variable": "s"}, "function": {"variable": "hydra.python.serde.stringToExpr"}}},
+                                "domain": {"variable": "hydra.python.syntax.String"},
+                                "parameter": "s"}}},
+                          {
+                            "name": "stringConcat",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "rs"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "hydra.python.serde.stringOrFstringToExpr"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.python.syntax.StringOrFstring"}}},
+                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                "domain": {"list": {"variable": "hydra.python.syntax.StringOrFstring"}},
+                                "parameter": "rs"}}},
                           {
                             "name": "true",
                             "term": {
@@ -396,6 +416,25 @@
                                 "body": {"application": {"argument": {"literal": {"string": "True"}}, "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"unit": {}},
                                 "parameter": "_"}}},
+                          {
+                            "name": "tstrings",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "ts"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "hydra.python.serde.tstringToExpr"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.python.syntax.Tstring"}}},
+                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                "domain": {"list": {"variable": "hydra.python.syntax.Tstring"}},
+                                "parameter": "ts"}}},
                           {
                             "name": "tuple",
                             "term": {
@@ -4762,68 +4801,6 @@
         "typeScheme": {
           "body": {
             "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.StringOrFstring"}}},
-          "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.python.serde.stringsToExpr",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "Serialize a `strings` group (a non-empty run of either string/f-string or t-string literals)"}}}],
-            "body": {
-              "lambda": {
-                "body": {
-                  "application": {
-                    "argument": {"variable": "ss"},
-                    "function": {
-                      "cases": {
-                        "cases": [
-                          {
-                            "name": "regulars",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "rs"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.python.serde.stringOrFstringToExpr"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.python.syntax.StringOrFstring"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                "domain": {"list": {"variable": "hydra.python.syntax.StringOrFstring"}},
-                                "parameter": "rs"}}},
-                          {
-                            "name": "tstrings",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "application": {
-                                    "argument": {
-                                      "application": {
-                                        "argument": {"variable": "ts"},
-                                        "function": {
-                                          "application": {
-                                            "argument": {"variable": "hydra.python.serde.tstringToExpr"},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.python.syntax.Tstring"}}},
-                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                    "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                "domain": {"list": {"variable": "hydra.python.syntax.Tstring"}},
-                                "parameter": "ts"}}}],
-                        "typeName": "hydra.python.syntax.Strings"}}}},
-                "domain": {"variable": "hydra.python.syntax.Strings"},
-                "parameter": "ss"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.python.syntax.Strings"}}},
           "variables": []}}},
     {
       "term": {
