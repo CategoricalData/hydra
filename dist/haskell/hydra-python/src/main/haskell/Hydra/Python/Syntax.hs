@@ -752,7 +752,9 @@ _ClosedPattern_class = Core.Name "class"
 data LiteralExpression =
   LiteralExpressionNumber SignedNumber |
   LiteralExpressionComplex ComplexNumber |
-  LiteralExpressionString Strings |
+  LiteralExpressionString String_ |
+  LiteralExpressionStringConcat [StringOrFstring] |
+  LiteralExpressionTstrings [Tstring] |
   LiteralExpressionNone |
   LiteralExpressionTrue |
   LiteralExpressionFalse
@@ -761,6 +763,8 @@ _LiteralExpression = Core.Name "hydra.python.syntax.LiteralExpression"
 _LiteralExpression_number = Core.Name "number"
 _LiteralExpression_complex = Core.Name "complex"
 _LiteralExpression_string = Core.Name "string"
+_LiteralExpression_stringConcat = Core.Name "stringConcat"
+_LiteralExpression_tstrings = Core.Name "tstrings"
 _LiteralExpression_none = Core.Name "none"
 _LiteralExpression_true = Core.Name "true"
 _LiteralExpression_false = Core.Name "false"
@@ -1282,7 +1286,9 @@ data Atom =
   AtomTrue |
   AtomFalse |
   AtomNone |
-  AtomString Strings |
+  AtomString String_ |
+  AtomStringConcat [StringOrFstring] |
+  AtomTstrings [Tstring] |
   AtomNumber Number |
   AtomTuple Tuple |
   AtomGroup Group |
@@ -1301,6 +1307,8 @@ _Atom_true = Core.Name "true"
 _Atom_false = Core.Name "false"
 _Atom_none = Core.Name "none"
 _Atom_string = Core.Name "string"
+_Atom_stringConcat = Core.Name "stringConcat"
+_Atom_tstrings = Core.Name "tstrings"
 _Atom_number = Core.Name "number"
 _Atom_tuple = Core.Name "tuple"
 _Atom_group = Core.Name "group"
@@ -1479,13 +1487,6 @@ data StringOrFstring =
 _StringOrFstring = Core.Name "hydra.python.syntax.StringOrFstring"
 _StringOrFstring_string = Core.Name "string"
 _StringOrFstring_fstring = Core.Name "fstring"
-data Strings =
-  StringsRegulars [StringOrFstring] |
-  StringsTstrings [Tstring]
-  deriving (Eq, Ord, Read, Show)
-_Strings = Core.Name "hydra.python.syntax.Strings"
-_Strings_regulars = Core.Name "regulars"
-_Strings_tstrings = Core.Name "tstrings"
 newtype List =
   List {
     unList :: [StarNamedExpression]}

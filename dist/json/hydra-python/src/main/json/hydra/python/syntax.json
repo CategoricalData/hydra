@@ -725,7 +725,9 @@
             "union": [
               {"name": "number", "type": {"variable": "hydra.python.syntax.SignedNumber"}},
               {"name": "complex", "type": {"variable": "hydra.python.syntax.ComplexNumber"}},
-              {"name": "string", "type": {"variable": "hydra.python.syntax.Strings"}},
+              {"name": "string", "type": {"variable": "hydra.python.syntax.String"}},
+              {"name": "stringConcat", "type": {"list": {"variable": "hydra.python.syntax.StringOrFstring"}}},
+              {"name": "tstrings", "type": {"list": {"variable": "hydra.python.syntax.Tstring"}}},
               {"name": "none", "type": {"unit": {}}},
               {"name": "true", "type": {"unit": {}}},
               {"name": "false", "type": {"unit": {}}}]},
@@ -1276,7 +1278,9 @@
               {"name": "true", "type": {"unit": {}}},
               {"name": "false", "type": {"unit": {}}},
               {"name": "none", "type": {"unit": {}}},
-              {"name": "string", "type": {"variable": "hydra.python.syntax.Strings"}},
+              {"name": "string", "type": {"variable": "hydra.python.syntax.String"}},
+              {"name": "stringConcat", "type": {"list": {"variable": "hydra.python.syntax.StringOrFstring"}}},
+              {"name": "tstrings", "type": {"list": {"variable": "hydra.python.syntax.Tstring"}}},
               {"name": "number", "type": {"variable": "hydra.python.syntax.Number"}},
               {"name": "tuple", "type": {"variable": "hydra.python.syntax.Tuple"}},
               {"name": "group", "type": {"variable": "hydra.python.syntax.Group"}},
@@ -1460,15 +1464,6 @@
             "union": [
               {"name": "string", "type": {"variable": "hydra.python.syntax.String"}},
               {"name": "fstring", "type": {"variable": "hydra.python.syntax.Fstring"}}]},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.python.syntax.Strings",
-        "typeScheme": {
-          "body": {
-            "union": [
-              {"name": "regulars", "type": {"list": {"variable": "hydra.python.syntax.StringOrFstring"}}},
-              {"name": "tstrings", "type": {"list": {"variable": "hydra.python.syntax.Tstring"}}}]},
           "variables": []}}},
     {
       "type": {

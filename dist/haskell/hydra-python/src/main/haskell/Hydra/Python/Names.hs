@@ -129,11 +129,10 @@ variableReference conv quoted env name =
                         Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
                           Syntax.powerLhs = Syntax.AwaitPrimary {
                             Syntax.awaitPrimaryAwait = False,
-                            Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomString (Syntax.StringsRegulars [
-                              Syntax.StringOrFstringString (Syntax.String_ {
-                                Syntax.stringValue = (Syntax.unName pyName),
-                                Syntax.stringPrefix = Nothing,
-                                Syntax.stringQuoteStyle = Syntax.QuoteStyleDouble})])))},
+                            Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomString (Syntax.String_ {
+                              Syntax.stringValue = (Syntax.unName pyName),
+                              Syntax.stringPrefix = Nothing,
+                              Syntax.stringQuoteStyle = Syntax.QuoteStyleDouble})))},
                           Syntax.powerRhs = Nothing}))}}}}}},
             Syntax.comparisonRhs = []})]])) unquoted)
 -- | Generate a variant name from type name and field name
