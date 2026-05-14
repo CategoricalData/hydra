@@ -14,7 +14,7 @@ import hydra.dsl.meta.lib.maps as Maps
 import hydra.dsl.meta.lib.maybes as Maybes
 import hydra.dsl.meta.lib.pairs as Pairs
 import hydra.dsl.meta.lib.strings as Strings
-import hydra.dsl.meta.phantoms as Phantoms
+from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.core as Core
 
 from hydra.sources.python import _python_helpers as PyDsl
@@ -43,16 +43,11 @@ NS = Namespace("hydra.python.names")
 
 # moduleDependencies = [Names.ns, Formatting.ns, PySerde.ns, pyLanguageNs] L.++
 #                       (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces)
-KERNEL_TYPES_NAMESPACES = [
-    Namespace(n) for n in [
-        "hydra.paths", "hydra.ast", "hydra.classes", "hydra.coders",
-        "hydra.context", "hydra.core", "hydra.error.checking", "hydra.error.core",
-        "hydra.error.packaging", "hydra.errors", "hydra.graph", "hydra.json.model",
-        "hydra.packaging", "hydra.parsing", "hydra.phantoms", "hydra.query",
-        "hydra.relational", "hydra.tabular", "hydra.testing", "hydra.topology",
-        "hydra.typing", "hydra.util", "hydra.validation", "hydra.variants",
-    ]
-]
+from hydra.sources.python._source_dsl import (
+    KERNEL_TYPES_NAMESPACES,
+    make_def,
+    make_local,
+)
 DEPENDENCIES = [
     Namespace("hydra.names"),
     Namespace("hydra.formatting"),
@@ -75,31 +70,18 @@ _PLACEHOLDER = Module(
 )
 
 
-def _def(local_name, term):
-    return Phantoms.definition_in_module(_PLACEHOLDER, local_name, term)
 
 
+_def = make_def(_PLACEHOLDER)
+_local = make_local("hydra.python.names")
 # Frequently used names — define once for reuse.
 _PY_NAME = Name("hydra.python.syntax.Name")
 _PY_DOTTED_NAME = Name("hydra.python.syntax.DottedName")
 _PY_ENV = Name("hydra.python.environment.PythonEnvironment")
 
 
-def _local(local_name: str):
-    """Reference a definition in this module: var('hydra.python.names.<local_name>')."""
-    return Phantoms.var(f"hydra.python.names.{local_name}")
-
-
 def _ref_python_reserved_words():
-    return Phantoms.var("hydra.python.language.pythonReservedWords")
-
-
-def _ap(fun, *args):
-    """Left-associated application: _ap(f, a, b, c) == apply(apply(apply(f, a), b), c)."""
-    out = fun
-    for a in args:
-        out = Phantoms.apply(out, a)
-    return out
+    return var("hydra.python.language.pythonReservedWords")
 
 
 # ----------------------------------------------------------------------
@@ -110,9 +92,9 @@ def _encode_enum_value():
     """encodeName @@ false @@ caseConventionUpperSnake"""
     return _def(
         "encodeEnumValue",
-        Phantoms.doc(
+        doc(
             "Encode a name as a Python enum value (UPPER_SNAKE case)",
-            _ap(_local("encodeName"), Phantoms.false(), util_case_convention_upper_snake),
+            _local("encodeName")(false(), util_case_convention_upper_snake),
         ),
     )
 
@@ -121,17 +103,11 @@ def _encode_field_name():
     """lambdas [env, fname] $ encodeName @@ false @@ lowerSnake @@ env @@ fname"""
     return _def(
         "encodeFieldName",
-        Phantoms.doc(
+        doc(
             "Encode a name as a Python field name (lower_snake case)",
-            Phantoms.lambdas(
+            lambdas(
                 ["env", "fname"],
-                _ap(
-                    _local("encodeName"),
-                    Phantoms.false(),
-                    util_case_convention_lower_snake,
-                    Phantoms.var("env"),
-                    Phantoms.var("fname"),
-                ),
+                _local("encodeName")(false(), util_case_convention_lower_snake, var("env"), var("fname")),
             ),
         ),
     )
@@ -139,52 +115,38 @@ def _encode_field_name():
 
 def _encode_name():
     """Encode a Hydra name as a Python name with the given case convention."""
-    project_namespaces = Phantoms.apply(
-        Phantoms.project(_PY_ENV, Name("namespaces")),
-        Phantoms.var("env"),
+    project_namespaces = apply(
+        project(_PY_ENV, Name("namespaces")),
+        var("env"),
     )
     project_bound_vars = Pairs.second(
-        Phantoms.apply(
-            Phantoms.project(_PY_ENV, Name("boundTypeVariables")),
-            Phantoms.var("env"),
+        apply(
+            project(_PY_ENV, Name("boundTypeVariables")),
+            var("env"),
         )
     )
-    body = Phantoms.lets(
+    body = lets(
         [
-            Phantoms.field(Name("namespaces"), project_namespaces),
-            Phantoms.field(Name("focusPair"), packaging_namespaces_focus(Phantoms.var("namespaces"))),
-            Phantoms.field(Name("focusNs"), Pairs.first(Phantoms.var("focusPair"))),
-            Phantoms.field(Name("boundVars"), project_bound_vars),
-            Phantoms.field(Name("qualName"), _ap(names_qualify_name, Phantoms.var("name"))),
-            Phantoms.field(Name("mns"), packaging_qualified_name_namespace(Phantoms.var("qualName"))),
-            Phantoms.field(Name("local"), packaging_qualified_name_local(Phantoms.var("qualName"))),
-            Phantoms.field(
-                Name("pyLocal"),
-                _ap(
-                    _local("sanitizePythonName"),
-                    _ap(
-                        formatting_convert_case,
-                        util_case_convention_camel,
-                        Phantoms.var("conv"),
-                        Phantoms.var("local"),
-                    ),
-                ),
+            field("namespaces", project_namespaces),
+            field("focusPair", packaging_namespaces_focus(var("namespaces"))),
+            field("focusNs", Pairs.first(var("focusPair"))),
+            field("boundVars", project_bound_vars),
+            field("qualName", names_qualify_name(var("name"))),
+            field("mns", packaging_qualified_name_namespace(var("qualName"))),
+            field("local", packaging_qualified_name_local(var("qualName"))),
+            field("pyLocal",
+                _local("sanitizePythonName")(formatting_convert_case(util_case_convention_camel, var("conv"), var("local"))),
             ),
-            Phantoms.field(
-                Name("pyNs"),
-                Phantoms.lam(
+            field("pyNs",
+                lam(
                     "nsVal",
                     Strings.intercalate(
-                        Phantoms.string("."),
+                        string("."),
                         Lists.map(
-                            _ap(
-                                formatting_convert_case,
-                                util_case_convention_camel,
-                                util_case_convention_lower_snake,
-                            ),
+                            formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake),
                             Strings.split_on(
-                                Phantoms.string("."),
-                                packaging_un_namespace(Phantoms.var("nsVal")),
+                                string("."),
+                                packaging_un_namespace(var("nsVal")),
                             ),
                         ),
                     ),
@@ -192,139 +154,128 @@ def _encode_name():
             ),
         ],
         Logic.if_else(
-            Phantoms.var("isQualified"),
+            var("isQualified"),
             Maybes.maybe(
                 # Not a bound type variable
                 Logic.if_else(
                     Equality.equal(
-                        Phantoms.var("mns"),
-                        Phantoms.just(Phantoms.var("focusNs")),
+                        var("mns"),
+                        just(var("focusNs")),
                     ),
                     # Same namespace
-                    Phantoms.wrap(
+                    wrap(
                         _PY_NAME,
                         Logic.if_else(
                             _local("useFutureAnnotations"),
-                            Phantoms.var("pyLocal"),
-                            _ap(
-                                Phantoms.var("hydra.python.serde.escapePythonString"),
-                                Phantoms.true(),
-                                Phantoms.var("pyLocal"),
-                            ),
+                            var("pyLocal"),
+                            var("hydra.python.serde.escapePythonString")(true(), var("pyLocal")),
                         ),
                     ),
                     # Different or no namespace
                     Maybes.maybe(
-                        Phantoms.wrap(_PY_NAME, Phantoms.var("pyLocal")),
-                        Phantoms.lam(
+                        wrap(_PY_NAME, var("pyLocal")),
+                        lam(
                             "nsVal",
-                            Phantoms.wrap(
+                            wrap(
                                 _PY_NAME,
                                 Strings.cat2(
-                                    Phantoms.apply(Phantoms.var("pyNs"), Phantoms.var("nsVal")),
+                                    apply(var("pyNs"), var("nsVal")),
                                     Strings.cat2(
-                                        Phantoms.string("."),
-                                        Phantoms.var("pyLocal"),
+                                        string("."),
+                                        var("pyLocal"),
                                     ),
                                 ),
                             ),
                         ),
-                        Phantoms.var("mns"),
+                        var("mns"),
                     ),
                 ),
                 # Bound type variable
-                Phantoms.lam("n", Phantoms.var("n")),
-                Maps.lookup(Phantoms.var("name"), Phantoms.var("boundVars")),
+                lam("n", var("n")),
+                Maps.lookup(var("name"), var("boundVars")),
             ),
             # Not qualified
-            Phantoms.wrap(_PY_NAME, Phantoms.var("pyLocal")),
+            wrap(_PY_NAME, var("pyLocal")),
         ),
     )
     return _def(
         "encodeName",
-        Phantoms.doc(
+        doc(
             "Encode a Hydra name as a Python name",
-            Phantoms.lambdas(["isQualified", "conv", "env", "name"], body),
+            lambdas(["isQualified", "conv", "env", "name"], body),
         ),
     )
 
 
 def _encode_name_qualified():
     """Encode a name as a fully qualified Python name."""
-    project_namespaces = Phantoms.apply(
-        Phantoms.project(_PY_ENV, Name("namespaces")),
-        Phantoms.var("env"),
+    project_namespaces = apply(
+        project(_PY_ENV, Name("namespaces")),
+        var("env"),
     )
     project_bound_vars = Pairs.second(
-        Phantoms.apply(
-            Phantoms.project(_PY_ENV, Name("boundTypeVariables")),
-            Phantoms.var("env"),
+        apply(
+            project(_PY_ENV, Name("boundTypeVariables")),
+            var("env"),
         )
     )
-    body = Phantoms.lets(
+    body = lets(
         [
-            Phantoms.field(Name("namespaces"), project_namespaces),
-            Phantoms.field(Name("focusPair"), packaging_namespaces_focus(Phantoms.var("namespaces"))),
-            Phantoms.field(Name("focusNs"), Pairs.first(Phantoms.var("focusPair"))),
-            Phantoms.field(Name("boundVars"), project_bound_vars),
-            Phantoms.field(
-                Name("qualName"),
-                _ap(names_qualify_name, Phantoms.var("name")),
+            field("namespaces", project_namespaces),
+            field("focusPair", packaging_namespaces_focus(var("namespaces"))),
+            field("focusNs", Pairs.first(var("focusPair"))),
+            field("boundVars", project_bound_vars),
+            field("qualName",
+                names_qualify_name(var("name")),
             ),
-            Phantoms.field(
-                Name("mns"),
-                packaging_qualified_name_namespace(Phantoms.var("qualName")),
+            field("mns",
+                packaging_qualified_name_namespace(var("qualName")),
             ),
-            Phantoms.field(
-                Name("local"),
-                packaging_qualified_name_local(Phantoms.var("qualName")),
+            field("local",
+                packaging_qualified_name_local(var("qualName")),
             ),
         ],
         Maybes.maybe(
             # Not a bound type variable
             Logic.if_else(
                 Equality.equal(
-                    Phantoms.var("mns"),
-                    Phantoms.just(Phantoms.var("focusNs")),
+                    var("mns"),
+                    just(var("focusNs")),
                 ),
                 # Same namespace
-                Phantoms.wrap(
+                wrap(
                     _PY_NAME,
                     Logic.if_else(
                         _local("useFutureAnnotations"),
-                        Phantoms.var("local"),
-                        _ap(
-                            Phantoms.var("hydra.python.serde.escapePythonString"),
-                            Phantoms.true(),
-                            Phantoms.var("local"),
-                        ),
+                        var("local"),
+                        var("hydra.python.serde.escapePythonString")(true(), var("local")),
                     ),
                 ),
                 # Different namespace - dotted with sanitization
-                Phantoms.wrap(
+                wrap(
                     _PY_NAME,
                     Strings.intercalate(
-                        Phantoms.string("."),
+                        string("."),
                         Lists.map(
                             _local("sanitizePythonName"),
                             Strings.split_on(
-                                Phantoms.string("."),
-                                Core.un_name(Phantoms.var("name")),
+                                string("."),
+                                Core.un_name(var("name")),
                             ),
                         ),
                     ),
                 ),
             ),
             # Bound type variable
-            Phantoms.lam("n", Phantoms.var("n")),
-            Maps.lookup(Phantoms.var("name"), Phantoms.var("boundVars")),
+            lam("n", var("n")),
+            Maps.lookup(var("name"), var("boundVars")),
         ),
     )
     return _def(
         "encodeNameQualified",
-        Phantoms.doc(
+        doc(
             "Encode a name as a fully qualified Python name",
-            Phantoms.lambdas(["env", "name"], body),
+            lambdas(["env", "name"], body),
         ),
     )
 
@@ -333,28 +284,23 @@ def _encode_namespace():
     """Encode a namespace as a Python dotted name."""
     return _def(
         "encodeNamespace",
-        Phantoms.doc(
+        doc(
             "Encode a namespace as a Python dotted name",
-            Phantoms.lam(
+            lam(
                 "nsVal",
-                Phantoms.wrap(
+                wrap(
                     _PY_DOTTED_NAME,
                     Lists.map(
-                        Phantoms.lam(
+                        lam(
                             "part",
-                            Phantoms.wrap(
+                            wrap(
                                 _PY_NAME,
-                                _ap(
-                                    formatting_convert_case,
-                                    util_case_convention_camel,
-                                    util_case_convention_lower_snake,
-                                    Phantoms.var("part"),
-                                ),
+                                formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake, var("part")),
                             ),
                         ),
                         Strings.split_on(
-                            Phantoms.string("."),
-                            packaging_un_namespace(Phantoms.var("nsVal")),
+                            string("."),
+                            packaging_un_namespace(var("nsVal")),
                         ),
                     ),
                 ),
@@ -367,13 +313,13 @@ def _encode_type_variable():
     """lambda name $ wrap PyName $ capitalize (unName name)"""
     return _def(
         "encodeTypeVariable",
-        Phantoms.doc(
+        doc(
             "Encode a type variable name (capitalized)",
-            Phantoms.lam(
+            lam(
                 "name",
-                Phantoms.wrap(
+                wrap(
                     _PY_NAME,
-                    _ap(formatting_capitalize, Core.un_name(Phantoms.var("name"))),
+                    formatting_capitalize(Core.un_name(var("name"))),
                 ),
             ),
         ),
@@ -384,9 +330,9 @@ def _sanitize_python_name():
     """sanitizeWithUnderscores @@ pythonReservedWords"""
     return _def(
         "sanitizePythonName",
-        Phantoms.doc(
+        doc(
             "Sanitize a string to be a valid Python name",
-            _ap(formatting_sanitize_with_underscores, _ref_python_reserved_words()),
+            formatting_sanitize_with_underscores(_ref_python_reserved_words()),
         ),
     )
 
@@ -395,9 +341,9 @@ def _term_variable_reference():
     """variableReference @@ caseConventionLowerSnake @@ false"""
     return _def(
         "termVariableReference",
-        Phantoms.doc(
+        doc(
             "Reference a term variable as a Python expression",
-            _ap(_local("variableReference"), util_case_convention_lower_snake, Phantoms.false()),
+            _local("variableReference")(util_case_convention_lower_snake, false()),
         ),
     )
 
@@ -406,9 +352,9 @@ def _type_variable_reference():
     """variableReference @@ caseConventionPascal @@ false"""
     return _def(
         "typeVariableReference",
-        Phantoms.doc(
+        doc(
             "Reference a type variable as a Python expression",
-            _ap(_local("variableReference"), util_case_convention_pascal, Phantoms.false()),
+            _local("variableReference")(util_case_convention_pascal, false()),
         ),
     )
 
@@ -417,18 +363,13 @@ def _encode_constant_for_field_name():
     """Generate a constant name for a field definition."""
     return _def(
         "encodeConstantForFieldName",
-        Phantoms.doc(
+        doc(
             "Generate a constant name for a field definition",
-            Phantoms.lambdas(
+            lambdas(
                 ["env", "tname", "fname"],
-                Phantoms.wrap(
+                wrap(
                     _PY_NAME,
-                    _ap(
-                        formatting_convert_case,
-                        util_case_convention_camel,
-                        util_case_convention_upper_snake,
-                        Core.un_name(Phantoms.var("fname")),
-                    ),
+                    formatting_convert_case(util_case_convention_camel, util_case_convention_upper_snake, Core.un_name(var("fname"))),
                 ),
             ),
         ),
@@ -439,11 +380,11 @@ def _encode_constant_for_type_name():
     """Generate a constant name for a type definition (always TYPE_)."""
     return _def(
         "encodeConstantForTypeName",
-        Phantoms.doc(
+        doc(
             "Generate a constant name for a type definition",
-            Phantoms.lambdas(
+            lambdas(
                 ["env", "tname"],
-                Phantoms.wrap(_PY_NAME, Phantoms.string("TYPE_")),
+                wrap(_PY_NAME, string("TYPE_")),
             ),
         ),
     )
@@ -451,63 +392,53 @@ def _encode_constant_for_type_name():
 
 def _variable_reference():
     """Reference a variable as a Python expression with optional quoting."""
-    project_namespaces = Phantoms.apply(
-        Phantoms.project(_PY_ENV, Name("namespaces")),
-        Phantoms.var("env"),
+    project_namespaces = apply(
+        project(_PY_ENV, Name("namespaces")),
+        var("env"),
     )
-    body = Phantoms.lets(
+    body = lets(
         [
-            Phantoms.field(
-                Name("pyName"),
-                _ap(
-                    _local("encodeName"),
-                    Phantoms.true(),
-                    Phantoms.var("conv"),
-                    Phantoms.var("env"),
-                    Phantoms.var("name"),
-                ),
+            field("pyName",
+                _local("encodeName")(true(), var("conv"), var("env"), var("name")),
             ),
-            Phantoms.field(
-                Name("unquoted"),
-                PyDsl.py_name_to_py_expression(Phantoms.var("pyName")),
+            field("unquoted",
+                PyDsl.py_name_to_py_expression(var("pyName")),
             ),
-            Phantoms.field(Name("namespaces"), project_namespaces),
-            Phantoms.field(Name("focusPair"), packaging_namespaces_focus(Phantoms.var("namespaces"))),
-            Phantoms.field(Name("focusNs"), Pairs.first(Phantoms.var("focusPair"))),
-            Phantoms.field(
-                Name("mns"),
-                _ap(names_namespace_of, Phantoms.var("name")),
+            field("namespaces", project_namespaces),
+            field("focusPair", packaging_namespaces_focus(var("namespaces"))),
+            field("focusNs", Pairs.first(var("focusPair"))),
+            field("mns",
+                names_namespace_of(var("name")),
             ),
-            Phantoms.field(
-                Name("sameNamespace"),
+            field("sameNamespace",
                 Maybes.maybe(
-                    Phantoms.false(),
-                    Phantoms.lam(
+                    false(),
+                    lam(
                         "ns",
-                        Equality.equal(Phantoms.var("ns"), Phantoms.var("focusNs")),
+                        Equality.equal(var("ns"), var("focusNs")),
                     ),
-                    Phantoms.var("mns"),
+                    var("mns"),
                 ),
             ),
         ],
         Logic.if_else(
-            Logic.and_(Phantoms.var("quoted"), Phantoms.var("sameNamespace")),
+            Logic.and_(var("quoted"), var("sameNamespace")),
             PyDsl.py_string_to_py_expression(
                 PyDsl.double_quoted_string(
-                    Phantoms.apply(
-                        Phantoms.unwrap(_PY_NAME),
-                        Phantoms.var("pyName"),
+                    apply(
+                        unwrap(_PY_NAME),
+                        var("pyName"),
                     ),
                 ),
             ),
-            Phantoms.var("unquoted"),
+            var("unquoted"),
         ),
     )
     return _def(
         "variableReference",
-        Phantoms.doc(
+        doc(
             "Reference a variable as a Python expression",
-            Phantoms.lambdas(["conv", "quoted", "env", "name"], body),
+            lambdas(["conv", "quoted", "env", "name"], body),
         ),
     )
 
@@ -516,23 +447,16 @@ def _variant_name():
     """Generate a variant name by combining type name and field name."""
     return _def(
         "variantName",
-        Phantoms.doc(
+        doc(
             "Generate a variant name from type name and field name",
-            Phantoms.lambdas(
+            lambdas(
                 ["isQualified", "env", "tname", "fname"],
-                _ap(
-                    _local("encodeName"),
-                    Phantoms.var("isQualified"),
-                    util_case_convention_pascal,
-                    Phantoms.var("env"),
-                    Phantoms.wrap(
-                        Name("hydra.core.Name"),
+                _local("encodeName")(var("isQualified"), util_case_convention_pascal, var("env"), wrap("hydra.core.Name",
                         Strings.cat2(
-                            Core.un_name(Phantoms.var("tname")),
-                            _ap(formatting_capitalize, Core.un_name(Phantoms.var("fname"))),
+                            Core.un_name(var("tname")),
+                            formatting_capitalize(Core.un_name(var("fname"))),
                         ),
-                    ),
-                ),
+                    )),
             ),
         ),
     )
@@ -542,9 +466,9 @@ def _use_future_annotations():
     """Whether to use __future__ annotations for forward references."""
     return _def(
         "useFutureAnnotations",
-        Phantoms.doc(
+        doc(
             "Whether to use __future__ annotations for forward references",
-            Phantoms.true(),
+            true(),
         ),
     )
 
@@ -556,20 +480,20 @@ def _use_future_annotations():
 
 def _build_module() -> Module:
     defs = (
-        Phantoms.to_definition(_encode_constant_for_field_name()),
-        Phantoms.to_definition(_encode_constant_for_type_name()),
-        Phantoms.to_definition(_encode_enum_value()),
-        Phantoms.to_definition(_encode_field_name()),
-        Phantoms.to_definition(_encode_name()),
-        Phantoms.to_definition(_encode_name_qualified()),
-        Phantoms.to_definition(_encode_namespace()),
-        Phantoms.to_definition(_encode_type_variable()),
-        Phantoms.to_definition(_sanitize_python_name()),
-        Phantoms.to_definition(_term_variable_reference()),
-        Phantoms.to_definition(_type_variable_reference()),
-        Phantoms.to_definition(_use_future_annotations()),
-        Phantoms.to_definition(_variable_reference()),
-        Phantoms.to_definition(_variant_name()),
+        to_definition(_encode_constant_for_field_name()),
+        to_definition(_encode_constant_for_type_name()),
+        to_definition(_encode_enum_value()),
+        to_definition(_encode_field_name()),
+        to_definition(_encode_name()),
+        to_definition(_encode_name_qualified()),
+        to_definition(_encode_namespace()),
+        to_definition(_encode_type_variable()),
+        to_definition(_sanitize_python_name()),
+        to_definition(_term_variable_reference()),
+        to_definition(_type_variable_reference()),
+        to_definition(_use_future_annotations()),
+        to_definition(_variable_reference()),
+        to_definition(_variant_name()),
     )
     return Module(
         _PLACEHOLDER.description,
