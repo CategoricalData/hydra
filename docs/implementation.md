@@ -1219,7 +1219,20 @@ definitions into executable code in the target language.
 The encoder/decoder source modules require a special staging step because they are *derived*
 from the type modules rather than hand-written. The sync script (`sync-haskell.sh`) handles
 this with an initial generation pass, followed by a source module generation step, followed
-by a second generation pass:
+by a second generation pass.
+
+Because these derived modules are produced mechanically from a known type, the synthesizer
+is the authority on their types. Each derived Source module contains a single `module_`
+`TermDefinition` whose term has type `hydra.packaging.Module`. The synthesizer
+(`moduleToSourceModule` in `Hydra.Sources.Kernel.Terms.Generation`) must set
+`termDefinitionTypeScheme = Just (TypeScheme [] (TypeVariable "hydra.packaging.Module") Nothing)`
+on that binding, so downstream consumers can skip type inference rather than re-derive it
+from the term's large encoded structure. Leaving the field as `Nothing` forces a full
+`inferModulesIO` pass per derived module — manageable locally but memory-prohibitive on
+typical CI runners. See [#367](https://github.com/CategoricalData/hydra/issues/367) for
+the case where this invariant was violated.
+
+Phases:
 
 | Phase | What it does |
 |-------|--------------|
