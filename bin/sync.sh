@@ -236,6 +236,21 @@ DSL_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-dsl-fresh.py"
 DSL_DIGEST="$HYDRA_ROOT/dist/json/digest.main.json"
 PHASE1_FRESH_CHECK="$HYDRA_ROOT/bin/lib/check-phase1-fresh.py"
 
+# #344: native generators own dist/json/hydra-{java,python}/ in normal
+# operation, so Phase 1 (Haskell DSL → JSON) skips those namespaces by
+# default. On a cold tree where the JSON is missing, do a one-time
+# Haskell-DSL bootstrap so Phases 3/4 have something to read; native
+# generators then take over from Phase 5 onward.
+JAVA_JSON_SENTINEL="$HYDRA_ROOT/dist/json/hydra-java/src/main/json/hydra/java/coder.json"
+PYTHON_JSON_SENTINEL="$HYDRA_ROOT/dist/json/hydra-python/src/main/json/hydra/python/coder.json"
+if [ ! -f "$JAVA_JSON_SENTINEL" ] || [ ! -f "$PYTHON_JSON_SENTINEL" ]; then
+    export HYDRA_INCLUDE_JAVA_PYTHON=1
+    echo ""
+    echo "Cold-start detected (missing hydra-java/hydra-python JSON);"
+    echo "Phase 1 will run with --include-java-python to seed the bootstrap."
+    echo ""
+fi
+
 # Two-tier short-circuit. The phase1-fresh check covers everything that
 # affects Phase 1's outputs (DSL sources + heads/haskell runtime + test
 # infra + stack config), and is safe regardless of --no-tests because
@@ -367,5 +382,101 @@ for H in $HOSTS; do
         esac
     done
 done
+
+# ────────────────────────────────────────────────────────────────────
+# Phase 5: Native DSL→JSON for hydra-java and hydra-python (#344).
+# ────────────────────────────────────────────────────────────────────
+# Re-generate dist/json/hydra-java/ from the Java DSL sources, and
+# dist/json/hydra-python/ from the Python DSL sources. The native
+# generators are the authoritative DSL→JSON path for these two
+# packages; the Haskell-DSL copies in packages/hydra-{java,python}/
+# src/main/haskell/ remain a legacy bootstrap fallback (to be removed
+# before 0.16). Phase 1 already wrote a Haskell-DSL-emitted version of
+# these JSON trees; this phase overwrites them with the native output.
+#
+# Diff diagnostic: we snapshot the Haskell-DSL output, run the native
+# generator, then report the number of files that differ (without
+# failing). Byte-equality is no longer required — the two DSL paths
+# can drift as long as their generated target code passes tests.
+#
+# Skip when the relevant host is not in HOSTS (the native generator
+# needs the host's coder package compiled, which is only built when
+# that language is a host).
+
+# Sentinels indicating each native host is fully built (i.e. has the host's
+# hydra-<lang> dist with the DSL meta-modules a self-host run needs).
+JAVA_HOST_SENTINEL="$HYDRA_ROOT/dist/java/hydra-java/src/main/java/hydra/dsl/java/Syntax.java"
+PYTHON_HOST_SENTINEL="$HYDRA_ROOT/dist/python/hydra-python/src/main/python/hydra/dsl/python/syntax.py"
+
+native_generate_and_report() {
+    local lang="$1"        # java | python
+    local script="$2"      # bin/generate-hydra-<lang>-from-<lang>.sh
+    local sentinel="$3"    # host-built sentinel file
+    shift 3
+    local extra=("$@")     # extra args (e.g. --pypy)
+    local json_dir="$HYDRA_ROOT/dist/json/hydra-$lang/src/main/json"
+
+    if [ ! -f "$sentinel" ]; then
+        echo "  skipping: native $lang host not built (missing $sentinel)."
+        echo "  hydra-$lang JSON remains as written by Phase 1 (Haskell DSL bootstrap)."
+        return 0
+    fi
+    if [ ! -d "$json_dir" ]; then
+        echo "  skipping: $json_dir not present"
+        return 0
+    fi
+    local snap_dir; snap_dir=$(mktemp -d)
+    cp -R "$json_dir"/. "$snap_dir/"
+
+    "$script" "${extra[@]+"${extra[@]}"}"
+
+    local mismatched=0
+    local total=0
+    while IFS= read -r f; do
+        total=$((total + 1))
+        local rel="${f#$json_dir/}"
+        if [ -f "$snap_dir/$rel" ] && ! cmp -s "$f" "$snap_dir/$rel"; then
+            mismatched=$((mismatched + 1))
+        fi
+    done < <(find "$json_dir" -type f -name '*.json')
+
+    rm -rf "$snap_dir"
+
+    if [ "$mismatched" -gt 0 ]; then
+        echo "  hydra-$lang: native output differs from snapshot on $mismatched/$total JSON files (native is authoritative)."
+        # Native overwrote dist/json/hydra-<lang>/, so the downstream
+        # dist/<lang>/hydra-<lang>/ is now derived from a stale JSON
+        # version. Regenerate it from the native JSON so all downstream
+        # state is consistent.
+        echo "  hydra-$lang: regenerating dist/$lang/hydra-$lang from native JSON..."
+        "$HYDRA_ROOT/heads/$lang/bin/assemble-distribution.sh" "hydra-$lang"
+    else
+        echo "  hydra-$lang: native output matches snapshot on all $total JSON files."
+    fi
+}
+
+# Phase 5 is always run for hydra-java and hydra-python (#344): the native
+# generators are the authoritative DSL→JSON path. Phase 1 only writes their
+# JSON on a cold-start bootstrap (when no JSON exists). In any warm state,
+# native is the only writer — drift from the legacy Haskell DSL is silently
+# accepted because the Haskell DSL never runs.
+banner1 "Phase 5: Native DSL→JSON for self-hosted coders (#344)"
+echo ""
+echo "--- hydra-java (native Java DSL → JSON) ---"
+native_generate_and_report java \
+    "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
+    "$JAVA_HOST_SENTINEL"
+echo "--- hydra-python (native Python DSL → JSON) ---"
+# Use PyPy when available — ~4x faster than CPython.
+if command -v pypy3 >/dev/null 2>&1; then
+    native_generate_and_report python \
+        "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
+        "$PYTHON_HOST_SENTINEL" \
+        --pypy
+else
+    native_generate_and_report python \
+        "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
+        "$PYTHON_HOST_SENTINEL"
+fi
 
 banner1_done "Sync complete!"
