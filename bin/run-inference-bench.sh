@@ -9,7 +9,7 @@
 #
 # Usage:
 #   bin/run-inference-bench.sh                          # Default (haskell, java, python; linearChain)
-#   bin/run-inference-bench.sh --hosts all              # All four hosts (adds python-pypy)
+#   bin/run-inference-bench.sh --hosts all              # All six hosts (adds python-pypy, common-lisp, emacs-lisp)
 #   bin/run-inference-bench.sh --series all             # All three series
 #   bin/run-inference-bench.sh --tag baseline           # Tag the run directory
 #   bin/run-inference-bench.sh dashboard [opts]         # Just show the dashboard
