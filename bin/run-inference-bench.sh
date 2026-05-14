@@ -9,7 +9,7 @@
 #
 # Usage:
 #   bin/run-inference-bench.sh                          # Default (haskell, java, python; linearChain)
-#   bin/run-inference-bench.sh --hosts all              # All four hosts (adds python-pypy)
+#   bin/run-inference-bench.sh --hosts all              # All six hosts (adds python-pypy, common-lisp, emacs-lisp)
 #   bin/run-inference-bench.sh --series all             # All three series
 #   bin/run-inference-bench.sh --tag baseline           # Tag the run directory
 #   bin/run-inference-bench.sh dashboard [opts]         # Just show the dashboard
@@ -18,7 +18,7 @@
 #
 # Options:
 #   --hosts H,...   Comma-separated list of hosts (default: haskell,java,python)
-#                   Special: 'all' expands to haskell,java,python,python-pypy,common-lisp
+#                   Special: 'all' expands to haskell,java,python,python-pypy,common-lisp,emacs-lisp
 #   --series S,...  Comma-separated series names (default: linearChain)
 #                   Special: 'all' expands to linearChain,polymorphicChain,fanOut
 #   --sizes N,...   Comma-separated sizes (default: 0,10,25,50,100)
@@ -32,6 +32,7 @@
 #   python        — uv run heads/python/bin/inference-bench.py (CPython)
 #   python-pypy   — pypy3 heads/python/bin/inference-bench.py (PyPy)
 #   common-lisp   — heads/lisp/common-lisp/bin/inference-bench.sh (SBCL)
+#   emacs-lisp    — heads/lisp/emacs-lisp/bin/inference-bench.sh
 #
 # Series (each is a Hydra namespace under hydra.bench.*):
 #   linearChain         — depth-N chain of monomorphic walkers
@@ -49,7 +50,7 @@ RUNS_DIR="$REPO_ROOT/benchmark/inference-runs"
 
 source "$REPO_ROOT/bin/lib/common.sh"
 
-ALL_HOSTS="haskell,java,python,python-pypy,common-lisp"
+ALL_HOSTS="haskell,java,python,python-pypy,common-lisp,emacs-lisp"
 DEFAULT_HOSTS="haskell,java,python"
 ALL_SERIES="linearChain,polymorphicChain,fanOut"
 DEFAULT_SERIES="linearChain"
@@ -105,11 +106,11 @@ IFS=',' read -ra RAW_LIST <<< "$HOSTS"
 for t in "${RAW_LIST[@]}"; do
     case "$t" in
         all) expanded="${expanded:+$expanded,}$ALL_HOSTS" ;;
-        haskell|java|python|python-pypy|common-lisp)
+        haskell|java|python|python-pypy|common-lisp|emacs-lisp)
             expanded="${expanded:+$expanded,}$t" ;;
         *)
             echo "Error: Unknown host '$t'"
-            echo "Valid hosts: haskell, java, python, python-pypy, common-lisp, all"
+            echo "Valid hosts: haskell, java, python, python-pypy, common-lisp, emacs-lisp, all"
             exit 1
             ;;
     esac
@@ -194,6 +195,10 @@ run_host_series() {
             ;;
         common-lisp)
             "$REPO_ROOT/heads/lisp/common-lisp/bin/inference-bench.sh" \
+                --sizes "$SIZES" --namespace "$namespace" --out "$outfile"
+            ;;
+        emacs-lisp)
+            "$REPO_ROOT/heads/lisp/emacs-lisp/bin/inference-bench.sh" \
                 --sizes "$SIZES" --namespace "$namespace" --out "$outfile"
             ;;
         *)

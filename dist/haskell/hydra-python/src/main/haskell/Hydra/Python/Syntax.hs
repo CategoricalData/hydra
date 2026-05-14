@@ -752,7 +752,7 @@ _ClosedPattern_class = Core.Name "class"
 data LiteralExpression =
   LiteralExpressionNumber SignedNumber |
   LiteralExpressionComplex ComplexNumber |
-  LiteralExpressionString Strings |
+  LiteralExpressionString String_ |
   LiteralExpressionNone |
   LiteralExpressionTrue |
   LiteralExpressionFalse
@@ -1282,7 +1282,7 @@ data Atom =
   AtomTrue |
   AtomFalse |
   AtomNone |
-  AtomString Strings |
+  AtomString String_ |
   AtomNumber Number |
   AtomTuple Tuple |
   AtomGroup Group |
@@ -1390,102 +1390,6 @@ data LambdaParamMaybeDefault =
 _LambdaParamMaybeDefault = Core.Name "hydra.python.syntax.LambdaParamMaybeDefault"
 _LambdaParamMaybeDefault_param = Core.Name "param"
 _LambdaParamMaybeDefault_default = Core.Name "default"
-newtype Fstring =
-  Fstring {
-    unFstring :: [FstringMiddle]}
-  deriving (Eq, Ord, Read, Show)
-_Fstring = Core.Name "hydra.python.syntax.Fstring"
-data FstringMiddle =
-  FstringMiddleReplacementField FstringReplacementField |
-  FstringMiddleLiteral String
-  deriving (Eq, Ord, Read, Show)
-_FstringMiddle = Core.Name "hydra.python.syntax.FstringMiddle"
-_FstringMiddle_replacementField = Core.Name "replacementField"
-_FstringMiddle_literal = Core.Name "literal"
-data FstringReplacementField =
-  FstringReplacementField {
-    fstringReplacementFieldExpression :: AnnotatedRhs,
-    fstringReplacementFieldEquals :: Bool,
-    fstringReplacementFieldConversion :: (Maybe FstringConversion),
-    fstringReplacementFieldFormatSpec :: (Maybe FstringFullFormatSpec)}
-  deriving (Eq, Ord, Read, Show)
-_FstringReplacementField = Core.Name "hydra.python.syntax.FstringReplacementField"
-_FstringReplacementField_expression = Core.Name "expression"
-_FstringReplacementField_equals = Core.Name "equals"
-_FstringReplacementField_conversion = Core.Name "conversion"
-_FstringReplacementField_formatSpec = Core.Name "formatSpec"
-newtype FstringConversion =
-  FstringConversion {
-    unFstringConversion :: Name}
-  deriving (Eq, Ord, Read, Show)
-_FstringConversion = Core.Name "hydra.python.syntax.FstringConversion"
-newtype FstringFullFormatSpec =
-  FstringFullFormatSpec {
-    unFstringFullFormatSpec :: [FstringFormatSpec]}
-  deriving (Eq, Ord, Read, Show)
-_FstringFullFormatSpec = Core.Name "hydra.python.syntax.FstringFullFormatSpec"
-data FstringFormatSpec =
-  FstringFormatSpecLiteral String |
-  FstringFormatSpecReplacementField FstringReplacementField
-  deriving (Eq, Ord, Read, Show)
-_FstringFormatSpec = Core.Name "hydra.python.syntax.FstringFormatSpec"
-_FstringFormatSpec_literal = Core.Name "literal"
-_FstringFormatSpec_replacementField = Core.Name "replacementField"
-newtype Tstring =
-  Tstring {
-    unTstring :: [TstringMiddle]}
-  deriving (Eq, Ord, Read, Show)
-_Tstring = Core.Name "hydra.python.syntax.Tstring"
-data TstringMiddle =
-  TstringMiddleReplacementField TstringReplacement |
-  TstringMiddleLiteral String
-  deriving (Eq, Ord, Read, Show)
-_TstringMiddle = Core.Name "hydra.python.syntax.TstringMiddle"
-_TstringMiddle_replacementField = Core.Name "replacementField"
-_TstringMiddle_literal = Core.Name "literal"
-data TstringReplacement =
-  TstringReplacement {
-    tstringReplacementExpression :: AnnotatedRhs,
-    tstringReplacementEquals :: Bool,
-    tstringReplacementConversion :: (Maybe TstringConversion),
-    tstringReplacementFormatSpec :: (Maybe TstringFullFormatSpec)}
-  deriving (Eq, Ord, Read, Show)
-_TstringReplacement = Core.Name "hydra.python.syntax.TstringReplacement"
-_TstringReplacement_expression = Core.Name "expression"
-_TstringReplacement_equals = Core.Name "equals"
-_TstringReplacement_conversion = Core.Name "conversion"
-_TstringReplacement_formatSpec = Core.Name "formatSpec"
-newtype TstringConversion =
-  TstringConversion {
-    unTstringConversion :: Name}
-  deriving (Eq, Ord, Read, Show)
-_TstringConversion = Core.Name "hydra.python.syntax.TstringConversion"
-newtype TstringFullFormatSpec =
-  TstringFullFormatSpec {
-    unTstringFullFormatSpec :: [TstringFormatSpec]}
-  deriving (Eq, Ord, Read, Show)
-_TstringFullFormatSpec = Core.Name "hydra.python.syntax.TstringFullFormatSpec"
-data TstringFormatSpec =
-  TstringFormatSpecLiteral String |
-  TstringFormatSpecReplacementField TstringReplacement
-  deriving (Eq, Ord, Read, Show)
-_TstringFormatSpec = Core.Name "hydra.python.syntax.TstringFormatSpec"
-_TstringFormatSpec_literal = Core.Name "literal"
-_TstringFormatSpec_replacementField = Core.Name "replacementField"
-data StringOrFstring =
-  StringOrFstringString String_ |
-  StringOrFstringFstring Fstring
-  deriving (Eq, Ord, Read, Show)
-_StringOrFstring = Core.Name "hydra.python.syntax.StringOrFstring"
-_StringOrFstring_string = Core.Name "string"
-_StringOrFstring_fstring = Core.Name "fstring"
-data Strings =
-  StringsRegulars [StringOrFstring] |
-  StringsTstrings [Tstring]
-  deriving (Eq, Ord, Read, Show)
-_Strings = Core.Name "hydra.python.syntax.Strings"
-_Strings_regulars = Core.Name "regulars"
-_Strings_tstrings = Core.Name "tstrings"
 newtype List =
   List {
     unList :: [StarNamedExpression]}

@@ -105,10 +105,13 @@ tasks.register('printHeadsExtrasRuntimeClasspath') {
 // hydra/lisp/Coder.java has class-name/filename mismatches that javac rejects
 // (a known generator wart in the lisp coder); skip until that's fixed.
 // hydra/scala/** is excluded because the Scala coder's generated Java doesn't
-// type-check standalone (it's only used through the Scala dist).
+// type-check standalone (it's only used through the Scala dist). The matching
+// dsl wrapper hydra/dsl/scala/Syntax.java references hydra.scala.syntax.* types
+// that the above exclude removes, so it has to be excluded for the same reason.
 compileJava {
     exclude '**/hydra/lisp/Coder.java'
     exclude '**/hydra/scala/**'
+    exclude '**/hydra/dsl/scala/**'
 }
 
 // Test-side excludes: tests that imported the cypher/rdf/pg code that has
