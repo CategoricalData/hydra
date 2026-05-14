@@ -131,6 +131,7 @@ variableReference conv quoted env name =
                             Syntax.awaitPrimaryAwait = False,
                             Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomString (Syntax.String_ {
                               Syntax.stringValue = (Syntax.unName pyName),
+                              Syntax.stringPrefix = Nothing,
                               Syntax.stringQuoteStyle = Syntax.QuoteStyleDouble})))},
                           Syntax.powerRhs = Nothing}))}}}}}},
             Syntax.comparisonRhs = []})]])) unquoted)

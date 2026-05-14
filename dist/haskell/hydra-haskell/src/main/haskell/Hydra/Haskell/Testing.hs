@@ -151,8 +151,8 @@ generateTestCase depth tcm =
           universal =
                   case tcase of
                     Testing.TestCaseUniversal v0 -> v0
-          actual_ = Testing.universalTestCaseActual universal
-          expected_ = Testing.universalTestCaseExpected universal
+          actual_ = Testing.universalTestCaseActual universal ()
+          expected_ = Testing.universalTestCaseExpected universal ()
       in (Right [
         Strings.cat [
           "H.it ",

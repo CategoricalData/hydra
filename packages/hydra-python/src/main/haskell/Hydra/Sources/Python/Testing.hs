@@ -156,8 +156,8 @@ generatePythonTestCase = define "generatePythonTestCase" $
     "tcase">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm"] $
     cases _TestCase (var "tcase") Nothing [
       _TestCase_universal>>: lambda "ucase" $ lets [
-        "actual_">: project _UniversalTestCase _UniversalTestCase_actual @@ var "ucase",
-        "expected_">: project _UniversalTestCase _UniversalTestCase_expected @@ var "ucase",
+        "actual_">: project _UniversalTestCase _UniversalTestCase_actual @@ var "ucase" @@ unit,
+        "expected_">: project _UniversalTestCase _UniversalTestCase_expected @@ var "ucase" @@ unit,
         "fullName">: Logic.ifElse (Lists.null (var "groupPath"))
           (var "name_")
           (Strings.intercalate (string "__") (Lists.concat2 (var "groupPath") (list [var "name_"]))),

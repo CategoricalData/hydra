@@ -77,6 +77,10 @@ public class BenchInference {
                 + File.separator + "dist" + File.separator + "json"
                 + File.separator + "hydra-kernel" + File.separator + "src"
                 + File.separator + "main" + File.separator + "json";
+        String benchMainDir = worktreeRoot
+                + File.separator + "dist" + File.separator + "json"
+                + File.separator + "hydra-bench" + File.separator + "src"
+                + File.separator + "main" + File.separator + "json";
 
         System.err.println("Loading universe from " + kernelMainDir + " ...");
         long t0 = System.currentTimeMillis();
@@ -84,7 +88,14 @@ public class BenchInference {
         // decoding can resolve type-variable references.
         Map<Name, hydra.core.Type> schemaMap = Generation.bootstrapSchemaMap();
         List<Namespace> mainNs = Generation.readManifestField(kernelMainDir, "mainModules");
-        List<Module> universe = Generation.loadModulesFromJson(kernelMainDir, schemaMap, mainNs);
+        List<Module> universe = new ArrayList<>(
+                Generation.loadModulesFromJson(kernelMainDir, schemaMap, mainNs));
+        // hydra-bench is opt-in: populated by bin/sync-bench.sh, absent on a
+        // default sync. If present, append its modules so the workload resolves.
+        if (new java.io.File(benchMainDir).isDirectory()) {
+            List<Namespace> benchNsList = Generation.readManifestField(benchMainDir, "mainModules");
+            universe.addAll(Generation.loadModulesFromJson(benchMainDir, schemaMap, benchNsList));
+        }
         long loadMs = System.currentTimeMillis() - t0;
         System.err.println("  loaded " + universe.size() + " modules ("
                 + String.format("%.1fs", loadMs / 1000.0) + ")");
@@ -99,7 +110,7 @@ public class BenchInference {
         }
         if (benchMod == null) {
             System.err.println("ERROR: bench module " + benchNs
-                    + " not found in kernel JSON. Run bin/sync-haskell.sh.");
+                    + " not found. Run bin/sync-bench.sh to regenerate the hydra-bench package.");
             System.exit(2);
         }
         int avail = benchMod.definitions.size();

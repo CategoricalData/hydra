@@ -75,6 +75,15 @@ sliceSlice = inject Py._Slice Py._Slice_slice_
 string_ :: TTerm String -> TTerm Py.QuoteStyle -> TTerm Py.String_
 string_ val style = record Py._String [
   Py._String_value>>: val,
+  Py._String_prefix>>: nothing,
+  Py._String_quoteStyle>>: style]
+
+-- Like `string_`, but with an explicit prefix (`r` / `b` / `rb` / `u`) attached.
+-- Used by raw triple-quoted docstrings to suppress backslash-escape interpretation.
+prefixedString_ :: TTerm Py.StringPrefix -> TTerm String -> TTerm Py.QuoteStyle -> TTerm Py.String_
+prefixedString_ prefix_ val style = record Py._String [
+  Py._String_value>>: val,
+  Py._String_prefix>>: just prefix_,
   Py._String_quoteStyle>>: style]
 
 untypedAssignmentSimple :: TTerm [Py.StarTarget] -> TTerm Py.AnnotatedRhs -> TTerm Py.UntypedAssignment

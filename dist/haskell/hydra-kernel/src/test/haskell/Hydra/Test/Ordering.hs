@@ -26,78 +26,78 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "name less than (alphabetic)",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "apple"))})) (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "banana"))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "name equal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hello"))})) (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "name greater than",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "zebra"))})) (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "apple"))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonGreaterThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonGreaterThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "qualified name less than",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.core.Term"))})) (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.core.Type"))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "qualified name equal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.core.Term"))})) (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.core.Term"))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "name equality true",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Equality.equal (Core.TermWrap (Core.WrappedTerm {
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Equality.equal (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})) (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) True)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "name equality false",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Equality.equal (Core.TermWrap (Core.WrappedTerm {
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Equality.equal (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "foo"))})) (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "bar"))})))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -108,36 +108,36 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "int32 literal less than",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10))) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20))))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10))) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "int32 literal equal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))) (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "string literal less than",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralString "aaa")) (Core.TermLiteral (Core.LiteralString "bbb")))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralString "aaa")) (Core.TermLiteral (Core.LiteralString "bbb")))),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "boolean false < true",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralBoolean False)) (Core.TermLiteral (Core.LiteralBoolean True)))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralBoolean False)) (Core.TermLiteral (Core.LiteralBoolean True)))),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "boolean true == true",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralBoolean True)) (Core.TermLiteral (Core.LiteralBoolean True)))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermLiteral (Core.LiteralBoolean True)) (Core.TermLiteral (Core.LiteralBoolean True)))),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -148,7 +148,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "person less than by firstName",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypePersonName,
                   Core.recordFields = [
                     Core.Field {
@@ -171,13 +171,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "age"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "person less than by lastName",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypePersonName,
                   Core.recordFields = [
                     Core.Field {
@@ -200,13 +200,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "age"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "person less than by age",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypePersonName,
                   Core.recordFields = [
                     Core.Field {
@@ -229,13 +229,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "age"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "person equal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypePersonName,
                   Core.recordFields = [
                     Core.Field {
@@ -258,13 +258,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "age"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "latLon less than by lat",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypeLatLonName,
                   Core.recordFields = [
                     Core.Field {
@@ -281,13 +281,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "lon"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 20.0)))}]})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "latLon less than by lon",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypeLatLonName,
                   Core.recordFields = [
                     Core.Field {
@@ -304,13 +304,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "lon"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 25.0)))}]})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "latLon equal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypeLatLonName,
                   Core.recordFields = [
                     Core.Field {
@@ -327,13 +327,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "lon"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 20.0)))}]})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "person equality true",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Equality.equal (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Equality.equal (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypePersonName,
                   Core.recordFields = [
                     Core.Field {
@@ -356,13 +356,13 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "age"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]})))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) True)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "person equality false",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Equality.equal (Core.TermRecord (Core.Record {
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Equality.equal (Core.TermRecord (Core.Record {
                   Core.recordTypeName = TestTypes.testTypePersonName,
                   Core.recordFields = [
                     Core.Field {
@@ -385,7 +385,7 @@ allTests =
                     Core.Field {
                       Core.fieldName = (Core.Name "age"),
                       Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]})))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -396,7 +396,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "LatLonPoly Int32 less than by lat",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermRecord (Core.Record {
                     Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                     Core.recordFields = [
@@ -417,13 +417,13 @@ allTests =
                         Core.fieldName = (Core.Name "lon"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]})),
                   Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "LatLonPoly Int32 less than by lon",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermRecord (Core.Record {
                     Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                     Core.recordFields = [
@@ -444,13 +444,13 @@ allTests =
                         Core.fieldName = (Core.Name "lon"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))}]})),
                   Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "LatLonPoly Int32 equal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermRecord (Core.Record {
                     Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                     Core.recordFields = [
@@ -471,13 +471,13 @@ allTests =
                         Core.fieldName = (Core.Name "lon"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]})),
                   Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "LatLonPoly String less than",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermRecord (Core.Record {
                     Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                     Core.recordFields = [
@@ -498,13 +498,13 @@ allTests =
                         Core.fieldName = (Core.Name "lon"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "20W"))}]})),
                   Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "LatLonPoly String equal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermRecord (Core.Record {
                     Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                     Core.recordFields = [
@@ -525,13 +525,13 @@ allTests =
                         Core.fieldName = (Core.Name "lon"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralString "20W"))}]})),
                   Core.typeApplicationTermType = (Core.TypeLiteral Core.LiteralTypeString)})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "PersonOrSomething person vs person",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = TestTypes.testTypePersonOrSomethingName,
                     Core.injectionField = Core.Field {
@@ -566,13 +566,13 @@ allTests =
                             Core.fieldName = (Core.Name "age"),
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]}))}})),
                   Core.typeApplicationTermType = (Core.TypeList (Core.TypeVariable TestTypes.testTypePersonName))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "PersonOrSomething person equal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermInject (Core.Injection {
                     Core.injectionTypeName = TestTypes.testTypePersonOrSomethingName,
                     Core.injectionField = Core.Field {
@@ -607,13 +607,13 @@ allTests =
                             Core.fieldName = (Core.Name "age"),
                             Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 30)))}]}))}})),
                   Core.typeApplicationTermType = (Core.TypeList (Core.TypeVariable TestTypes.testTypePersonName))})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "LatLonPoly Int32 equality true",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Equality.equal (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Equality.equal (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermRecord (Core.Record {
                     Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                     Core.recordFields = [
@@ -634,13 +634,13 @@ allTests =
                         Core.fieldName = (Core.Name "lon"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}]})),
                   Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) True)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "LatLonPoly Int32 equality false",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Equality.equal (Core.TermTypeApplication (Core.TypeApplicationTerm {
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Equality.equal (Core.TermTypeApplication (Core.TypeApplicationTerm {
                   Core.typeApplicationTermBody = (Core.TermRecord (Core.Record {
                     Core.recordTypeName = TestTypes.testTypeLatLonPolyName,
                     Core.recordFields = [
@@ -661,7 +661,7 @@ allTests =
                         Core.fieldName = (Core.Name "lon"),
                         Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 25)))}]})),
                   Core.typeApplicationTermType = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -672,7 +672,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "Number int variant less than",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermInject (Core.Injection {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeNumberName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
@@ -681,13 +681,13 @@ allTests =
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 20)))}})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "Number int variant equal",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermInject (Core.Injection {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeNumberName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
@@ -696,13 +696,13 @@ allTests =
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonEqualTo)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonEqualTo)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "Number float variant less than",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermInject (Core.Injection {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeNumberName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "float"),
@@ -711,13 +711,13 @@ allTests =
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "float"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 2.5)))}})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "Number float vs int (variant name comparison)",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (ShowUtil.comparison (Equality.compare (Core.TermInject (Core.Injection {
+                Testing.universalTestCaseActual = (\_ -> ShowUtil.comparison (Equality.compare (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeNumberName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "float"),
@@ -726,13 +726,13 @@ allTests =
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))}})))),
-                Testing.universalTestCaseExpected = (ShowUtil.comparison Util.ComparisonLessThan)})),
+                Testing.universalTestCaseExpected = (\_ -> ShowUtil.comparison Util.ComparisonLessThan)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "Number int equality true",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Equality.equal (Core.TermInject (Core.Injection {
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Equality.equal (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeNumberName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
@@ -741,13 +741,13 @@ allTests =
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))}})))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) True)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "Number int equality false (different value)",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Equality.equal (Core.TermInject (Core.Injection {
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Equality.equal (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeNumberName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
@@ -756,13 +756,13 @@ allTests =
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 43)))}})))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "Number equality false (different variant)",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Equality.equal (Core.TermInject (Core.Injection {
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Equality.equal (Core.TermInject (Core.Injection {
                   Core.injectionTypeName = TestTypes.testTypeNumberName,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "int"),
@@ -771,7 +771,7 @@ allTests =
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name "float"),
                     Core.fieldTerm = (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 42.0)))}})))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

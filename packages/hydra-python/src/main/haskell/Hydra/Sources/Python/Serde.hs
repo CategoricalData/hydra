@@ -191,6 +191,7 @@ module_ = Module {
       toDefinition starTargetToExpr,
       toDefinition starredExpressionToExpr,
       toDefinition statementToExpr,
+      toDefinition stringPrefixToText,
       toDefinition stringToExpr,
       toDefinition subjectExpressionToExpr,
       toDefinition sumToExpr,
@@ -845,6 +846,8 @@ numberToExpr = def "numberToExpr" $
     cases Py._Number (var "num") Nothing [
       Py._Number_float>>: lambda "f" $
         Serialization.cst @@ (pythonFloatLiteralText @@ Literals.showFloat64 (var "f")),
+      Py._Number_imaginary>>: lambda "f" $
+        Serialization.cst @@ (Strings.cat2 (pythonFloatLiteralText @@ Literals.showFloat64 (var "f")) (string "j")),
       Py._Number_integer>>: lambda "i" $ Serialization.cst @@ Literals.showBigint (var "i")]
 
 orPatternToExpr :: TTermDefinition (Py.OrPattern -> Expr)
@@ -1130,17 +1133,32 @@ statementToExpr = def "statementToExpr" $
         Serialization.newlineSep @@ Lists.map simpleStatementToExpr (var "ss"),
       Py._Statement_compound>>: lambda "c" $ compoundStatementToExpr @@ var "c"]
 
+stringPrefixToText :: TTermDefinition (Py.StringPrefix -> String)
+stringPrefixToText = def "stringPrefixToText" $
+  doc "Serialize a Python string prefix to its source-form characters" $
+  lambda "p" $
+    cases Py._StringPrefix (var "p") Nothing [
+      Py._StringPrefix_raw>>: constant $ string "r",
+      Py._StringPrefix_bytes>>: constant $ string "b",
+      Py._StringPrefix_rawBytes>>: constant $ string "rb",
+      Py._StringPrefix_unicode>>: constant $ string "u"]
+
 stringToExpr :: TTermDefinition (Py.String_ -> Expr)
 stringToExpr = def "stringToExpr" $
   doc "Serialize a Python string literal" $
   lambda "s" $ lets [
     "content">: project Py._String Py._String_value @@ var "s",
+    "prefix">: Maybes.maybe (string "") stringPrefixToText (project Py._String Py._String_prefix @@ var "s"),
     "style">: project Py._String Py._String_quoteStyle @@ var "s"] $
     cases Py._QuoteStyle (var "style") Nothing [
-      Py._QuoteStyle_single>>: constant $ Serialization.cst @@ (escapePythonString @@ false @@ var "content"),
-      Py._QuoteStyle_double>>: constant $ Serialization.cst @@ (escapePythonString @@ true @@ var "content"),
-      Py._QuoteStyle_triple>>: constant $ Serialization.noSep @@ list [
-        Serialization.cst @@ string "r\"\"\"",
+      Py._QuoteStyle_single>>: constant $ Serialization.cst @@ (Strings.cat2 (var "prefix") (escapePythonString @@ false @@ var "content")),
+      Py._QuoteStyle_double>>: constant $ Serialization.cst @@ (Strings.cat2 (var "prefix") (escapePythonString @@ true @@ var "content")),
+      Py._QuoteStyle_tripleSingle>>: constant $ Serialization.noSep @@ list [
+        Serialization.cst @@ Strings.cat2 (var "prefix") (string "'''"),
+        Serialization.cst @@ var "content",
+        Serialization.cst @@ string "'''"],
+      Py._QuoteStyle_tripleDouble>>: constant $ Serialization.noSep @@ list [
+        Serialization.cst @@ Strings.cat2 (var "prefix") (string "\"\"\""),
         Serialization.cst @@ var "content",
         Serialization.cst @@ string "\"\"\""]]
 

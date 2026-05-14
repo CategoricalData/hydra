@@ -368,7 +368,7 @@ unTag x =
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.testing.Tag")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL constructor for hydra.testing.UniversalTestCase
-universalTestCase :: Phantoms.TTerm String -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UniversalTestCase
+universalTestCase :: Phantoms.TTerm (() -> String) -> Phantoms.TTerm (() -> String) -> Phantoms.TTerm Testing.UniversalTestCase
 universalTestCase actual expected =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
@@ -380,7 +380,7 @@ universalTestCase actual expected =
           Core.fieldName = (Core.Name "expected"),
           Core.fieldTerm = (Phantoms.unTTerm expected)}]}))
 -- | DSL accessor for the actual field of hydra.testing.UniversalTestCase
-universalTestCaseActual :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String
+universalTestCaseActual :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm (() -> String)
 universalTestCaseActual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -388,7 +388,7 @@ universalTestCaseActual x =
         Core.projectionField = (Core.Name "actual")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the expected field of hydra.testing.UniversalTestCase
-universalTestCaseExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String
+universalTestCaseExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm (() -> String)
 universalTestCaseExpected x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -396,7 +396,7 @@ universalTestCaseExpected x =
         Core.projectionField = (Core.Name "expected")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the actual field of hydra.testing.UniversalTestCase
-universalTestCaseWithActual :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UniversalTestCase
+universalTestCaseWithActual :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm (() -> String) -> Phantoms.TTerm Testing.UniversalTestCase
 universalTestCaseWithActual original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.testing.UniversalTestCase"),
@@ -412,7 +412,7 @@ universalTestCaseWithActual original newVal =
               Core.projectionField = (Core.Name "expected")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the expected field of hydra.testing.UniversalTestCase
-universalTestCaseWithExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm String -> Phantoms.TTerm Testing.UniversalTestCase
+universalTestCaseWithExpected :: Phantoms.TTerm Testing.UniversalTestCase -> Phantoms.TTerm (() -> String) -> Phantoms.TTerm Testing.UniversalTestCase
 universalTestCaseWithExpected original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.testing.UniversalTestCase"),

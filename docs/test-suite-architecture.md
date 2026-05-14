@@ -132,55 +132,83 @@ T.function (Core.typeVariable $ ref TestTypes.testTypePersonNameDef) T.string
 
 The `ref` function creates a reference to a binding defined in another module, which is resolved during code generation.
 
-## Test Types
+## Test Case Shape
 
-Hydra supports several test case types:
-
-### Type Checking Tests
-
-```haskell
-testCase :: String -> [Tag] -> TTerm Term -> TTerm Term -> TTerm Type -> TTerm TestCaseWithMetadata
-testCase name tags input outputTerm outputType =
-  Testing.testCaseWithMetadata (Phantoms.string name)
-    (Testing.testCaseTypeChecking $ Testing.typeCheckingTestCase input outputTerm outputType)
-    Phantoms.nothing
-    (Phantoms.list $ tag . unTag <$> tags)
-```
-
-### Type Inference Tests
+Since #246, every test case is a single variant: `UniversalTestCase`. The kernel
+schema (`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Types/Testing.hs`)
+declares:
 
 ```haskell
-infTest :: String -> [Tag] -> TTerm Term -> TTerm TypeScheme -> TTerm TestCaseWithMetadata
-infTest name tags term ts =
-  Testing.testCaseWithMetadata (Phantoms.string name)
-    (Testing.testCaseInference $ Testing.inferenceTestCase term ts)
-    Phantoms.nothing
-    (Phantoms.list $ tag . unTag <$> tags)
+universalTestCase = T.record [
+  "actual"   >: T.unit ~> T.string,
+  "expected" >: T.unit ~> T.string]
 ```
 
-### Eta Expansion Tests
+Both fields are **unit-thunks** — functions from unit to string. The thunk shape
+exists for one reason: it defers evaluation of the test expressions until a
+per-test runner forces them, so eagerly-evaluated hosts (Scala, the Lisps) can
+measure expression cost inside their timing brackets. Without thunking, those
+hosts compute `actual`/`expected` at test-data load time, before any timer
+starts, and per-group timings collapse to 0 ms. See issue #311 for context.
+
+### Constructing universal tests
+
+The DSL helper `Hydra.Dsl.Meta.Testing.universalTestCase` wraps each string
+expression in a unit-lambda internally, so callers continue to pass plain
+`TTerm String` values:
 
 ```haskell
-testCase :: String -> TTerm Term -> TTerm Term -> TTerm TestCaseWithMetadata
-testCase name input output =
-  Testing.testCaseWithMetadata (Phantoms.string name) tcase Phantoms.nothing (Phantoms.list [])
-  where
-    tcase = Testing.testCaseEtaExpansion $ Testing.etaExpansionTestCase input output
+import qualified Hydra.Dsl.Meta.Testing as Testing
+import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
+
+-- Typical test construction (string-equality comparison)
+Testing.universalCase "case name" actualExpr expectedExpr
+
+-- Inference-test variant: build the inference call, show the result
+Testing.infTest "case name" tags term typeScheme
+
+-- Reduction-test variant: reduce and show
+Testing.evalCase "case name" inputTerm outputTerm
 ```
 
-### Case Conversion Tests
+Every test helper in `Hydra.Dsl.Meta.Testing` (`universalCase`, `evalCase`,
+`evalCaseWithTags`, `infTest`, `infFailureTest`, `checkTest`, `noChange`,
+`evalPair`, `evalPairWithTags`, `stringEvalPair`, `alphaCase`, `typeRedCase`,
+`validateCoreTermCase`, `validateCoreTermCaseWithProfile`,
+`validatePackagingModuleCase`, `validatePackagingPackageCase`,
+`validatePackagingModuleCaseWithProfile`,
+`validatePackagingPackageCaseWithProfile`, `parserCase`) funnels through
+`universalTestCase` and benefits from the thunk wrap automatically.
 
-```haskell
-testCase :: Int -> CaseConvention -> CaseConvention -> String -> String -> TTerm TestCaseWithMetadata
-testCase i fromConvention toConvention fromString toString =
-  Testing.testCaseWithMetadata name tcase Phantoms.nothing (Phantoms.list [])
-  where
-    tcase = Testing.testCaseCaseConversion $ Testing.caseConversionTestCase
-      (metaConv fromConvention)
-      (metaConv toConvention)
-      (Phantoms.string fromString)
-      (Phantoms.string toString)
-```
+### Host runner contract
+
+Each host's test runner is responsible for *forcing* the thunks inside its
+per-test timing bracket. In Hydra Term-IR, `\_ -> body` is the produced
+function; each target language emits it differently and the runners apply
+an appropriate unit argument:
+
+- Haskell: `actual ()` / `expected ()` (Hydra `\_ -> body` → Haskell `\_ -> body`)
+- Python: `actual(None)` / `expected(None)` (Python `lambda _: body`)
+- Java:  `actual.apply(new hydra.util.Unit())` (Java `Function<Unit, String>`)
+- Scala: `actual(())` / `expected(())` (Scala `Unit => String`)
+- Clojure: `((:actual tc) nil)` (Clojure `(fn [_] body)`)
+- Common Lisp / Emacs Lisp: `(funcall <fn> nil)`
+- Scheme: `(<fn> '())` (`(lambda (_) body)`)
+- Coq: `universalTestCase_actual tc tt` (Coq `unit -> string`)
+
+The argument value is irrelevant — the lambda body ignores it — but the call
+*must* pass one argument, since the lambda is one-arg in every target.
+
+### Benchmark JSON
+
+When `HYDRA_BENCHMARK_OUTPUT` is set, the test runners emit a JSON tree of
+group timings. With the thunk shape, per-group `totalTimeMs` reflects real
+expression cost (typically 2–20 ms per common-test group, ~6 s total for the
+Python suite, ~180 ms for the Haskell suite).
+
+Pre-#311, all four complete Lisps reported 0 ms per group because every test
+expression was evaluated at test-data load time — outside the runner's
+`(System/nanoTime)` bracket.
 
 ## Meta-Level vs Term-Level DSLs
 

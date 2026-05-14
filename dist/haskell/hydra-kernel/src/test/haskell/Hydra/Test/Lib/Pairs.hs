@@ -24,13 +24,13 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "transform both elements",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\p -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\p -> Strings.cat [
                   "(",
                   (Literals.showInt32 (Pairs.first p)),
                   ", ",
                   (Literals.showInt32 (Pairs.second p)),
                   ")"]) (Pairs.bimap (\x -> Math.mul x 2) (\s -> Strings.length s) (5, "ab"))),
-                Testing.universalTestCaseExpected = ((\p -> Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> (\p -> Strings.cat [
                   "(",
                   (Literals.showInt32 (Pairs.first p)),
                   ", ",
@@ -41,13 +41,13 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "with zero",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\p -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\p -> Strings.cat [
                   "(",
                   (Literals.showInt32 (Pairs.first p)),
                   ", ",
                   (Literals.showInt32 (Pairs.second p)),
                   ")"]) (Pairs.bimap (\x -> Math.mul x 2) (\s -> Strings.length s) (0, "hello"))),
-                Testing.universalTestCaseExpected = ((\p -> Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> (\p -> Strings.cat [
                   "(",
                   (Literals.showInt32 (Pairs.first p)),
                   ", ",
@@ -63,22 +63,22 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "extract first element",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Pairs.first (42, "hello"))),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 42)})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Pairs.first (42, "hello"))),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 42)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "with zero",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Pairs.first (0, "world"))),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 0)})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Pairs.first (0, "world"))),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 0)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "negative number",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Pairs.first ((-5), "test"))),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) (-5))})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Pairs.first ((-5), "test"))),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) (-5))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -89,22 +89,22 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "extract second element",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Pairs.second (42, "hello"))),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Pairs.second (42, "hello"))),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Pairs.second (0, ""))),
-                Testing.universalTestCaseExpected = ((\s -> s) "")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Pairs.second (0, ""))),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "long string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Pairs.second (123, "testing"))),
-                Testing.universalTestCaseExpected = ((\s -> s) "testing")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Pairs.second (123, "testing"))),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "testing")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

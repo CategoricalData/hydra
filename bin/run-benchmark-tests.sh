@@ -133,27 +133,23 @@ run_lang() {
             ;;
         clojure)
             echo "=== Running Clojure benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/packages/hydra-lisp/hydra-clojure"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
-                bash run-tests.sh
+                bash "$REPO_ROOT/packages/hydra-lisp/bin/run-tests.sh" clojure
             ;;
         common-lisp)
             echo "=== Running Common Lisp benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/packages/hydra-lisp/hydra-common-lisp"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
-                bash run-tests.sh
+                bash "$REPO_ROOT/packages/hydra-lisp/bin/run-tests.sh" common-lisp
             ;;
         emacs-lisp)
             echo "=== Running Emacs Lisp benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/packages/hydra-lisp/hydra-emacs-lisp"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
-                bash run-tests.sh
+                bash "$REPO_ROOT/packages/hydra-lisp/bin/run-tests.sh" emacs-lisp
             ;;
         scheme)
             echo "=== Running Scheme benchmark tests (run $i/$REPEAT) ==="
-            cd "$REPO_ROOT/packages/hydra-lisp/hydra-scheme"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
-                bash run-tests.sh
+                bash "$REPO_ROOT/packages/hydra-lisp/bin/run-tests.sh" scheme
             ;;
     esac
     echo "  -> $outfile"

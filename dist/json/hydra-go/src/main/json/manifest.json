@@ -1,6 +1,6 @@
 {
   "defaultLibModules": [],
-  "dslModules": [],
+  "dslModules": ["hydra.dsl.go.syntax"],
   "mainModules": ["hydra.go.language", "hydra.go.syntax"],
   "package": "hydra-go",
   "testModules": []}

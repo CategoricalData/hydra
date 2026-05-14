@@ -146,9 +146,16 @@
       t_))
 
 (defun map-term-to-alist (m)
-  "Convert map contents to an alist of (key . value) pairs."
+  "Convert map contents to an alist of (key . value) pairs.
+   Accepts RB-tree map structs (from hydra_lib_maps_*), legacy alists, and
+   lists of two-elt lists (the JSON-decoded shape)."
   (cond
+    ((null m) nil)
+    ;; RB-tree (defstruct from hydra_lib_maps_*)
+    ((rbnode-p m) (rb-entries m))
+    ;; Legacy alist of (k . v) cons cells
     ((and (listp m) (every #'consp m)) m)
+    ;; List of two-elt lists ((k v) ...)
     ((listp m) (mapcar (lambda (pair) (cons (first pair) (second pair))) m))
     (t nil)))
 
@@ -159,8 +166,10 @@
                  (let* ((at (second t_))
                         (ann (annotated_term-annotation at))
                         (body (annotated_term-body at)))
-                   ;; ann is either a map term (:map ...) or an alist directly
+                   ;; ann is either a map term (:map ...), an RB-tree map
+                   ;; struct, or a legacy alist.
                    (let ((ann-pairs (cond
+                                     ((rbnode-p ann) (map-term-to-alist ann))
                                      ((and (consp ann) (eq (first ann) :map))
                                       (map-term-to-alist (second ann)))
                                      ((and (consp ann) (consp (first ann)))
@@ -874,8 +883,11 @@
     (error (e) (format t "FAIL: ~A~%  EXCEPTION: ~A~%" path e) (list 0 1 0))))
 
 (defun run-universal-test (path tc)
-  (let ((actual (a :actual tc))
-        (expected (a :expected tc)))
+  ;; For #311: the :actual and :expected fields are unit-thunks (Hydra `\_. body`, emitted
+  ;; as one-arg fn-of-unit in Common Lisp); force them inside the runner's timing bracket
+  ;; so expression cost is measured here. nil is passed because the body ignores its parameter.
+  (let ((actual (funcall (a :actual tc) nil))
+        (expected (funcall (a :expected tc) nil)))
     (if (equal actual expected)
       (list 1 0 0)
       (progn

@@ -726,8 +726,11 @@
         (else (obj->string err))))
 
     (define (run-universal-test path tc)
-      (let ((actual (hydra_testing_universal_test_case-actual tc))
-            (expected (hydra_testing_universal_test_case-expected tc)))
+      ;; For #311: the actual and expected fields are unit-thunks (Hydra `\_. body`,
+      ;; emitted as one-arg procedure-of-unit in Scheme); force them inside the runner's
+      ;; timing bracket. '() is passed as the unit argument; the body ignores it.
+      (let ((actual ((hydra_testing_universal_test_case-actual tc) '()))
+            (expected ((hydra_testing_universal_test_case-expected tc) '())))
         (if (equal? actual expected)
           (list 1 0 0)
           (begin

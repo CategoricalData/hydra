@@ -29,7 +29,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "incremental inference of subset matches full inference",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType _ -> ""
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
@@ -80,7 +80,7 @@ allTests =
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionTypeScheme = Nothing})]}])),
-                Testing.universalTestCaseExpected = (Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
+                Testing.universalTestCaseExpected = (\_ -> Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType _ -> ""
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
@@ -136,7 +136,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "incremental inference of full universe matches full inference",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType _ -> ""
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
@@ -205,7 +205,7 @@ allTests =
                           Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.testInput.a.idA")),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))})),
                         Packaging.termDefinitionTypeScheme = Nothing})]}])),
-                Testing.universalTestCaseExpected = (Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
+                Testing.universalTestCaseExpected = (\_ -> Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType _ -> ""
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
@@ -279,7 +279,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "incremental inference uses cached scheme verbatim on vacuous-quantifier universe",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<inference error>>") (\ms -> Strings.cat (Lists.map (\m -> Strings.cat (Lists.map (\d -> case d of
                   Packaging.DefinitionType _ -> ""
                   Packaging.DefinitionTerm v0 -> Strings.cat [
                     Core.unName (Packaging.termDefinitionName v0),
@@ -350,7 +350,7 @@ allTests =
                             Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 7)))})),
                           Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 100)))})),
                         Packaging.termDefinitionTypeScheme = Nothing})]}])),
-                Testing.universalTestCaseExpected = "hydra.testInput.w.useFunky :: (int32) = (hydra.testInput.v.funky\10216string\10217\10216int32\10217\10216int32\10217 @ \"foo\" @ 7:int32 @ 100:int32)\n"})),
+                Testing.universalTestCaseExpected = (\_ -> "hydra.testInput.w.useFunky :: (int32) = (hydra.testInput.v.funky\10216string\10217\10216int32\10217\10216int32\10217 @ \"foo\" @ 7:int32 @ 100:int32)\n")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

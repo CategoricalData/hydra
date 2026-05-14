@@ -43,10 +43,16 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {"inject": {"field": {"name": "null", "term": {"unit": {}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "null"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"inject": {"field": {"name": "null", "term": {"unit": {}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "null"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -68,10 +74,16 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": true}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "true"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": true}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "true"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -93,11 +105,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": false}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "false"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": false}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "false"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -119,10 +137,16 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 0}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "0"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 0}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "0"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -144,10 +168,16 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 42}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "42"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 42}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "42"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -169,10 +199,16 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": -17}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "-17"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": -17}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "-17"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -194,11 +230,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1000000}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "1000000"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1000000}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "1000000"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -220,10 +262,16 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 3.14}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "3.14"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 3.14}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "3.14"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -245,10 +293,16 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": -2.5}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "-2.5"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": -2.5}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "-2.5"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -270,11 +324,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1.0e-2}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "1.0e-2"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1.0e-2}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "1.0e-2"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -296,11 +356,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1.0e-3}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "1.0e-3"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1.0e-3}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "1.0e-3"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -335,11 +401,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1.0e-20}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "1.0e-20"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1.0e-20}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "1.0e-20"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -361,11 +433,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1.0e20}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "1.0e20"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1.0e20}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "1.0e20"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -400,10 +478,16 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {"inject": {"field": {"name": "string", "term": {"literal": {"string": ""}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "\"\""}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {"inject": {"field": {"name": "string", "term": {"literal": {"string": ""}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "\"\""}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -425,11 +509,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "string", "term": {"literal": {"string": "hello"}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "\"hello\""}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "string", "term": {"literal": {"string": "hello"}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "\"hello\""}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -451,11 +541,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "string", "term": {"literal": {"string": "hello world"}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "\"hello world\""}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "string", "term": {"literal": {"string": "hello world"}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "\"hello world\""}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -477,11 +573,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "string", "term": {"literal": {"string": "say \"hi\""}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "\"say \\\"hi\\\"\""}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "string", "term": {"literal": {"string": "say \"hi\""}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "\"say \\\"hi\\\"\""}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -503,11 +605,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "string", "term": {"literal": {"string": "path\\to\\file"}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "\"path\\\\to\\\\file\""}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "string", "term": {"literal": {"string": "path\\to\\file"}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "\"path\\\\to\\\\file\""}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -529,11 +637,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "string", "term": {"literal": {"string": "line1\nline2"}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "\"line1\\nline2\""}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "string", "term": {"literal": {"string": "line1\nline2"}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "\"line1\\nline2\""}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -555,11 +669,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "string", "term": {"literal": {"string": "line1\rline2"}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "\"line1\\rline2\""}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "string", "term": {"literal": {"string": "line1\rline2"}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "\"line1\\rline2\""}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -581,11 +701,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "string", "term": {"literal": {"string": "col1\tcol2"}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "\"col1\\tcol2\""}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "string", "term": {"literal": {"string": "col1\tcol2"}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "\"col1\\tcol2\""}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -607,11 +733,17 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {"field": {"name": "string", "term": {"literal": {"string": "a\"b\\c\nd"}}}, "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "\"a\\\"b\\\\c\\nd\""}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {"field": {"name": "string", "term": {"literal": {"string": "a\"b\\c\nd"}}}, "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "\"a\\\"b\\\\c\\nd\""}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -646,13 +778,19 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {"name": "array", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.json.model.Value"}}}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "[]"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {"name": "array", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "[]"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -674,16 +812,22 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "array",
-                                                                    "term": {
-                                                                      "list": [{"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "[1]"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "array",
+                                                                        "term": {
+                                                                          "list": [{"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "[1]"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -705,19 +849,25 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "array",
-                                                                    "term": {
-                                                                      "list": [
-                                                                        {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}},
-                                                                        {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}},
-                                                                        {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 3}}}, "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "[1, 2, 3]"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "array",
+                                                                        "term": {
+                                                                          "list": [
+                                                                            {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}},
+                                                                            {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}},
+                                                                            {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 3}}}, "typeName": "hydra.json.model.Value"}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "[1, 2, 3]"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -739,18 +889,24 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "array",
-                                                                    "term": {
-                                                                      "list": [
-                                                                        {"inject": {"field": {"name": "string", "term": {"literal": {"string": "a"}}}, "typeName": "hydra.json.model.Value"}},
-                                                                        {"inject": {"field": {"name": "string", "term": {"literal": {"string": "b"}}}, "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "[\"a\", \"b\"]"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "array",
+                                                                        "term": {
+                                                                          "list": [
+                                                                            {"inject": {"field": {"name": "string", "term": {"literal": {"string": "a"}}}, "typeName": "hydra.json.model.Value"}},
+                                                                            {"inject": {"field": {"name": "string", "term": {"literal": {"string": "b"}}}, "typeName": "hydra.json.model.Value"}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "[\"a\", \"b\"]"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -772,20 +928,26 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "array",
-                                                                    "term": {
-                                                                      "list": [
-                                                                        {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}},
-                                                                        {"inject": {"field": {"name": "string", "term": {"literal": {"string": "two"}}}, "typeName": "hydra.json.model.Value"}},
-                                                                        {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": true}}}, "typeName": "hydra.json.model.Value"}},
-                                                                        {"inject": {"field": {"name": "null", "term": {"unit": {}}}, "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "[1, \"two\", true, null]"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "array",
+                                                                        "term": {
+                                                                          "list": [
+                                                                            {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}},
+                                                                            {"inject": {"field": {"name": "string", "term": {"literal": {"string": "two"}}}, "typeName": "hydra.json.model.Value"}},
+                                                                            {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": true}}}, "typeName": "hydra.json.model.Value"}},
+                                                                            {"inject": {"field": {"name": "null", "term": {"unit": {}}}, "typeName": "hydra.json.model.Value"}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "[1, \"two\", true, null]"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -820,18 +982,24 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "object",
-                                                                    "term": {
-                                                                      "typeApplication": {
-                                                                        "body": {"typeApplication": {"body": {"map": []}, "type": {"literal": {"string": {}}}}},
-                                                                        "type": {"variable": "hydra.json.model.Value"}}}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "{}"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "object",
+                                                                        "term": {
+                                                                          "typeApplication": {
+                                                                            "body": {"typeApplication": {"body": {"map": []}, "type": {"literal": {"string": {}}}}},
+                                                                            "type": {"variable": "hydra.json.model.Value"}}}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "{}"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -853,20 +1021,26 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "object",
-                                                                    "term": {
-                                                                      "map": [
-                                                                        {
-                                                                          "key": {"literal": {"string": "name"}},
-                                                                          "value": {
-                                                                            "inject": {"field": {"name": "string", "term": {"literal": {"string": "Alice"}}}, "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "{\"name\": \"Alice\"}"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "object",
+                                                                        "term": {
+                                                                          "map": [
+                                                                            {
+                                                                              "key": {"literal": {"string": "name"}},
+                                                                              "value": {
+                                                                                "inject": {"field": {"name": "string", "term": {"literal": {"string": "Alice"}}}, "typeName": "hydra.json.model.Value"}}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "{\"name\": \"Alice\"}"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -888,22 +1062,28 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "object",
-                                                                    "term": {
-                                                                      "map": [
-                                                                        {
-                                                                          "key": {"literal": {"string": "a"}},
-                                                                          "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}}},
-                                                                        {
-                                                                          "key": {"literal": {"string": "b"}},
-                                                                          "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "{\"a\": 1, \"b\": 2}"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "object",
+                                                                        "term": {
+                                                                          "map": [
+                                                                            {
+                                                                              "key": {"literal": {"string": "a"}},
+                                                                              "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}}},
+                                                                            {
+                                                                              "key": {"literal": {"string": "b"}},
+                                                                              "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "{\"a\": 1, \"b\": 2}"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -925,25 +1105,35 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "object",
-                                                                    "term": {
-                                                                      "map": [
-                                                                        {
-                                                                          "key": {"literal": {"string": "active"}},
-                                                                          "value": {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": true}}}, "typeName": "hydra.json.model.Value"}}},
-                                                                        {
-                                                                          "key": {"literal": {"string": "count"}},
-                                                                          "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 42}}}, "typeName": "hydra.json.model.Value"}}},
-                                                                        {
-                                                                          "key": {"literal": {"string": "name"}},
-                                                                          "value": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "test"}}}, "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "{\"active\": true, \"count\": 42, \"name\": \"test\"}"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "object",
+                                                                        "term": {
+                                                                          "map": [
+                                                                            {
+                                                                              "key": {"literal": {"string": "active"}},
+                                                                              "value": {"inject": {"field": {"name": "boolean", "term": {"literal": {"boolean": true}}}, "typeName": "hydra.json.model.Value"}}},
+                                                                            {
+                                                                              "key": {"literal": {"string": "count"}},
+                                                                              "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 42}}}, "typeName": "hydra.json.model.Value"}}},
+                                                                            {
+                                                                              "key": {"literal": {"string": "name"}},
+                                                                              "value": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "test"}}}, "typeName": "hydra.json.model.Value"}}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "lambda": {
+                                                              "body": {"literal": {"string": "{\"active\": true, \"count\": 42, \"name\": \"test\"}"}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -978,34 +1168,40 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "array",
-                                                                    "term": {
-                                                                      "list": [
-                                                                        {
-                                                                          "inject": {
-                                                                            "field": {
-                                                                              "name": "array",
-                                                                              "term": {
-                                                                                "list": [
-                                                                                  {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}},
-                                                                                  {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}}]}},
-                                                                            "typeName": "hydra.json.model.Value"}},
-                                                                        {
-                                                                          "inject": {
-                                                                            "field": {
-                                                                              "name": "array",
-                                                                              "term": {
-                                                                                "list": [
-                                                                                  {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 3}}}, "typeName": "hydra.json.model.Value"}},
-                                                                                  {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 4}}}, "typeName": "hydra.json.model.Value"}}]}},
-                                                                            "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "[[1, 2], [3, 4]]"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "array",
+                                                                        "term": {
+                                                                          "list": [
+                                                                            {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "array",
+                                                                                  "term": {
+                                                                                    "list": [
+                                                                                      {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}},
+                                                                                      {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}}]}},
+                                                                                "typeName": "hydra.json.model.Value"}},
+                                                                            {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "array",
+                                                                                  "term": {
+                                                                                    "list": [
+                                                                                      {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 3}}}, "typeName": "hydra.json.model.Value"}},
+                                                                                      {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 4}}}, "typeName": "hydra.json.model.Value"}}]}},
+                                                                                "typeName": "hydra.json.model.Value"}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "[[1, 2], [3, 4]]"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -1027,27 +1223,33 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "object",
-                                                                    "term": {
-                                                                      "map": [
-                                                                        {
-                                                                          "key": {"literal": {"string": "items"}},
-                                                                          "value": {
-                                                                            "inject": {
-                                                                              "field": {
-                                                                                "name": "array",
-                                                                                "term": {
-                                                                                  "list": [
-                                                                                    {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}},
-                                                                                    {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}}]}},
-                                                                              "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "{\"items\": [1, 2]}"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "object",
+                                                                        "term": {
+                                                                          "map": [
+                                                                            {
+                                                                              "key": {"literal": {"string": "items"}},
+                                                                              "value": {
+                                                                                "inject": {
+                                                                                  "field": {
+                                                                                    "name": "array",
+                                                                                    "term": {
+                                                                                      "list": [
+                                                                                        {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}},
+                                                                                        {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}}]}},
+                                                                                  "typeName": "hydra.json.model.Value"}}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "{\"items\": [1, 2]}"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -1069,36 +1271,42 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "array",
-                                                                    "term": {
-                                                                      "list": [
-                                                                        {
-                                                                          "inject": {
-                                                                            "field": {
-                                                                              "name": "object",
-                                                                              "term": {
-                                                                                "map": [
-                                                                                  {
-                                                                                    "key": {"literal": {"string": "id"}},
-                                                                                    "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}}}]}},
-                                                                            "typeName": "hydra.json.model.Value"}},
-                                                                        {
-                                                                          "inject": {
-                                                                            "field": {
-                                                                              "name": "object",
-                                                                              "term": {
-                                                                                "map": [
-                                                                                  {
-                                                                                    "key": {"literal": {"string": "id"}},
-                                                                                    "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}}}]}},
-                                                                            "typeName": "hydra.json.model.Value"}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "[{\"id\": 1}, {\"id\": 2}]"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "array",
+                                                                        "term": {
+                                                                          "list": [
+                                                                            {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "object",
+                                                                                  "term": {
+                                                                                    "map": [
+                                                                                      {
+                                                                                        "key": {"literal": {"string": "id"}},
+                                                                                        "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 1}}}, "typeName": "hydra.json.model.Value"}}}]}},
+                                                                                "typeName": "hydra.json.model.Value"}},
+                                                                            {
+                                                                              "inject": {
+                                                                                "field": {
+                                                                                  "name": "object",
+                                                                                  "term": {
+                                                                                    "map": [
+                                                                                      {
+                                                                                        "key": {"literal": {"string": "id"}},
+                                                                                        "value": {"inject": {"field": {"name": "number", "term": {"literal": {"decimal": 2}}}, "typeName": "hydra.json.model.Value"}}}]}},
+                                                                                "typeName": "hydra.json.model.Value"}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {"lambda": {"body": {"literal": {"string": "[{\"id\": 1}, {\"id\": 2}]"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
@@ -1120,28 +1328,35 @@
                                                         {
                                                           "name": "actual",
                                                           "term": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "inject": {
-                                                                  "field": {
-                                                                    "name": "object",
-                                                                    "term": {
-                                                                      "map": [
-                                                                        {
-                                                                          "key": {"literal": {"string": "user"}},
-                                                                          "value": {
-                                                                            "inject": {
-                                                                              "field": {
-                                                                                "name": "object",
-                                                                                "term": {
-                                                                                  "map": [
-                                                                                    {
-                                                                                      "key": {"literal": {"string": "name"}},
-                                                                                      "value": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "Bob"}}}, "typeName": "hydra.json.model.Value"}}}]}},
-                                                                              "typeName": "hydra.json.model.Value"}}}]}},
-                                                                  "typeName": "hydra.json.model.Value"}},
-                                                              "function": {"variable": "hydra.json.writer.printJson"}}}},
-                                                        {"name": "expected", "term": {"literal": {"string": "{\"user\": {\"name\": \"Bob\"}}"}}}],
+                                                            "lambda": {
+                                                              "body": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "inject": {
+                                                                      "field": {
+                                                                        "name": "object",
+                                                                        "term": {
+                                                                          "map": [
+                                                                            {
+                                                                              "key": {"literal": {"string": "user"}},
+                                                                              "value": {
+                                                                                "inject": {
+                                                                                  "field": {
+                                                                                    "name": "object",
+                                                                                    "term": {
+                                                                                      "map": [
+                                                                                        {
+                                                                                          "key": {"literal": {"string": "name"}},
+                                                                                          "value": {"inject": {"field": {"name": "string", "term": {"literal": {"string": "Bob"}}}, "typeName": "hydra.json.model.Value"}}}]}},
+                                                                                  "typeName": "hydra.json.model.Value"}}}]}},
+                                                                      "typeName": "hydra.json.model.Value"}},
+                                                                  "function": {"variable": "hydra.json.writer.printJson"}}},
+                                                              "domain": {"unit": {}},
+                                                              "parameter": "_"}}},
+                                                        {
+                                                          "name": "expected",
+                                                          "term": {
+                                                            "lambda": {"body": {"literal": {"string": "{\"user\": {\"name\": \"Bob\"}}"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
                                                       "typeName": "hydra.testing.UniversalTestCase"}}},
                                                 "typeName": "hydra.testing.TestCase"}}},
                                           {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},

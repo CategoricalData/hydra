@@ -58,7 +58,11 @@ shell's `ulimit` blocks.
 by default re-run the per-package `assemble-distribution.sh` for any other
 package. Every coder package is non-baseline: `hydra-java`, `hydra-python`,
 `hydra-scala`, `hydra-lisp`, `hydra-go`, `hydra-pg`, `hydra-rdf`, `hydra-coq`,
-`hydra-javascript`, `hydra-wasm`, `hydra-ext`.
+`hydra-javascript`, `hydra-wasm`, `hydra-ext`, `hydra-bench`.
+
+Note that `hydra-bench` is also opt-in for the JSON regen — it requires
+`--include-bench` on `update-json-main` and `update-json-manifest` (set by
+`bin/sync-bench.sh`). The default `bin/sync.sh` does not regenerate it.
 
 A common surprise: editing a Java-coder DSL source under
 `packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs` and running
@@ -176,3 +180,71 @@ correct hashes depend on the merged source state. Resolution: take
 regenerate, then commit the digest deltas as a follow-up
 "Regenerate digests after staging merge" commit. Don't try to merge
 hash maps by hand.
+
+### `run-benchmark-tests.sh` Python leg needs `.venv`
+
+`bin/run-benchmark-tests.sh` invokes `heads/python/.venv/bin/python -m
+pytest` if that interpreter exists and falls back to bare `python3`
+otherwise. The fallback usually lacks `pytest`, so every Python rep
+exits with `No module named pytest` and writes a stub JSON — the
+script then proceeds to other hosts and the wrapper still reports
+exit code 0. Run `cd heads/python && uv sync` once before benching so
+the venv exists.
+
+### `bin/benchmark-dashboard.py` throws `KeyError: 'path'`
+
+The per-host kernel-test JSON written by `run-benchmark-tests.sh` has
+heterogeneous schema: Haskell only populates `summary.totalTimeMs`;
+Python populates per-group `totalTimeMs`; Common-Lisp leaves most
+fields zero. The dashboard assumes every group entry has a `path`
+field and crashes mid-render. Until that bug is fixed, capture wall
+time directly with a small driver script rather than relying on the
+dashboard rollup.
+
+### Sibling-worktree builds skew bench numbers
+
+A heavy `stack`, `ghc`, `update-json`, `bootstrap-from-json`,
+`JavaSelfHostDemo`, or `pypy3 -m hydra.bootstrap` running in any
+other worktree easily takes load average from ~3 to 10+ on a
+10-core machine. Haskell numbers in particular are very sensitive
+because the bench step does its own `stack test` build. Before
+running `bin/run-benchmark-tests.sh`, `bin/run-inference-bench.sh`,
+or `bin/run-bootstrapping-demo.sh`: check `uptime` and
+`ps aux | grep -iE 'update-json|ghc-9|bootstrap-from-json|stack
+build|JavaSelfHost|hydra.bootstrap'` across all worktrees, and
+either wait for sibling activity to clear or warn the user that
+numbers will be pessimistic.
+
+### Synthesized TermDefinitions must carry a TypeScheme
+
+`moduleToSourceModule` and any other site that synthesizes a
+`TermDefinition` wrapping a statically-typed term (e.g. `encoderFor _T @@ m`
+of type `T`) must populate `termDefinitionTypeScheme` with that type, not
+`Nothing`. If left as `Nothing`, downstream code that loads the module
+(notably `bootstrap-from-json`'s synthesis pass) is forced to call
+`inferModulesIO` to derive the type from a large encoded term, which on a
+16 GB CI runner OOMs after Phase 3 ("Synthesized N encoder source modules")
+with no log output before the watchdog kill.
+
+Symptom: silent SIGKILL during the Haskell CI job's step 5 in the
+post-synthesizer phase, ~15-25 min in. Fix: annotate at synthesis time
+(see `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Generation.hs:583-591`
+for the canonical pattern), and skip the downstream `inferModulesIO` call
+since the type is already known. Bug #367 (#367's CI hang) was this.
+
+### Java rollup needs matching DSL exclude when target syntax is excluded
+
+When `packages/hydra-java/build.gradle`'s `compileJava` block excludes a
+generated subtree like `**/hydra/scala/**` because its types don't
+type-check standalone, the matching `**/hydra/dsl/<lang>/**` must also
+be excluded. After #297's `5032f8038` (regenerate
+`Hydra/Dsl/<lang>/Syntax.hs` for every coder package), each coder package
+emits a DSL wrapper at `dist/java/hydra-<lang>/src/main/java/hydra/dsl/<lang>/Syntax.java`
+that imports `hydra.<lang>.syntax.*`. If the target syntax is excluded,
+the DSL wrapper compile fails with "package hydra.<lang>.syntax does not
+exist".
+
+Currently only `hydra/scala/**` triggers this — the other languages'
+Java emission type-checks standalone. New coder additions that need
+`hydra/<lang>/**` excluded should add `hydra/dsl/<lang>/**` at the same
+time.
