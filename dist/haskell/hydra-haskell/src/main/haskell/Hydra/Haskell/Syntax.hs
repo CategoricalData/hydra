@@ -1,5 +1,5 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | A Haskell syntax model, loosely based on Language.Haskell.Tools.AST
+-- | A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs.
 
 module Hydra.Haskell.Syntax where
 import qualified Hydra.Core as Core
