@@ -77,25 +77,25 @@ constraintToExpr sert =
 -- | Convert a data constructor to an AST expression
 constructorToExpr :: Syntax.Constructor -> Ast.Expr
 constructorToExpr cons =
-    case cons of
-      Syntax.ConstructorOrdinary v0 ->
-        let name = Syntax.positionalConstructorName v0
-            types = Syntax.positionalConstructorFields v0
-        in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
-          Serialization.spaceSep (Lists.map typeToExpr types)]))
-      Syntax.ConstructorRecord v0 ->
-        let name = Syntax.recordConstructorName v0
-            fields = Syntax.recordConstructorFields v0
-        in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
-          Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map fieldWithCommentsToExpr fields)]))
--- | Convert a data constructor with comments to an AST expression
-constructorWithCommentsToExpr :: Syntax.ConstructorWithComments -> Ast.Expr
-constructorWithCommentsToExpr consWithComments =
 
-      let body = Syntax.constructorWithCommentsBody consWithComments
-          mc = Syntax.constructorWithCommentsComments consWithComments
-      in (Maybes.maybe (constructorToExpr body) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
-        constructorToExpr body])) mc)
+      let mc =
+              case cons of
+                Syntax.ConstructorOrdinary v0 -> Syntax.positionalConstructorComments v0
+                Syntax.ConstructorRecord v0 -> Syntax.recordConstructorComments v0
+          body =
+                  case cons of
+                    Syntax.ConstructorOrdinary v0 ->
+                      let name = Syntax.positionalConstructorName v0
+                          types = Syntax.positionalConstructorFields v0
+                      in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
+                        Serialization.spaceSep (Lists.map typeToExpr types)]))
+                    Syntax.ConstructorRecord v0 ->
+                      let name = Syntax.recordConstructorName v0
+                          fields = Syntax.recordConstructorFields v0
+                      in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
+                        Serialization.curlyBracesList Nothing Serialization.halfBlockStyle (Lists.map fieldToExpr fields)]))
+      in (Maybes.maybe body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
+        body])) mc)
 -- | Convert a data/newtype keyword to an AST expression
 dataKeywordToExpr :: Syntax.DataKeyword -> Ast.Expr
 dataKeywordToExpr kw =
@@ -115,48 +115,51 @@ declarationHeadToExpr hd =
 -- | Convert a declaration to an AST expression
 declarationToExpr :: Syntax.Declaration -> Ast.Expr
 declarationToExpr decl =
-    case decl of
-      Syntax.DeclarationData v0 ->
-        let kw = Syntax.dataDeclarationKeyword v0
-            hd = Syntax.dataDeclarationHead v0
-            cons = Syntax.dataDeclarationConstructors v0
-            deriv = Syntax.dataDeclarationDeriving v0
-            derivCat = Lists.concat (Lists.map Syntax.unDerivingClause deriv)
-            constructors = Serialization.orSep Serialization.halfBlockStyle (Lists.map constructorWithCommentsToExpr cons)
-            derivingClause =
-                    Logic.ifElse (Lists.null derivCat) [] [
-                      Serialization.spaceSep (Lists.cons (Serialization.cst "deriving") [
-                        Serialization.parenList False (Lists.map nameToExpr derivCat)])]
-            mainParts =
-                    [
-                      Serialization.spaceSep (Lists.cons (dataKeywordToExpr kw) (Lists.cons (declarationHeadToExpr hd) [
-                        Serialization.cst "="])),
-                      constructors]
-        in (Serialization.indentBlock (Lists.concat2 mainParts derivingClause))
-      Syntax.DeclarationType v0 ->
-        let hd = Syntax.typeSynonymDeclarationName v0
-            typ = Syntax.typeSynonymDeclarationType v0
-        in (Serialization.spaceSep (Lists.cons (Serialization.cst "type") (Lists.cons (declarationHeadToExpr hd) (Lists.cons (Serialization.cst "=") [
-          typeToExpr typ]))))
-      Syntax.DeclarationValueBinding v0 -> valueBindingToExpr v0
-      Syntax.DeclarationTypedBinding v0 ->
-        let typeSig = Syntax.typedBindingTypeSignature v0
-            vb = Syntax.typedBindingValueBinding v0
-            name = Syntax.typeSignatureName typeSig
-            htype = Syntax.typeSignatureType typeSig
-        in (Serialization.newlineSep (Lists.cons (Serialization.structuralSpaceSep [
-          nameToExpr name,
-          (Serialization.cst "::"),
-          (typeToExpr htype)]) [
-          valueBindingToExpr vb]))
--- | Convert a declaration with comments to an AST expression
-declarationWithCommentsToExpr :: Syntax.DeclarationWithComments -> Ast.Expr
-declarationWithCommentsToExpr declWithComments =
 
-      let body = Syntax.declarationWithCommentsBody declWithComments
-          mc = Syntax.declarationWithCommentsComments declWithComments
-      in (Maybes.maybe (declarationToExpr body) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
-        declarationToExpr body])) mc)
+      let mc =
+              case decl of
+                Syntax.DeclarationData v0 -> Syntax.dataDeclarationComments v0
+                Syntax.DeclarationType v0 -> Syntax.typeSynonymDeclarationComments v0
+                Syntax.DeclarationValueBinding v0 -> case v0 of
+                  Syntax.ValueBindingSimple v1 -> Syntax.simpleValueBindingComments v1
+                Syntax.DeclarationTypedBinding v0 -> Syntax.typedBindingComments v0
+          body =
+                  case decl of
+                    Syntax.DeclarationData v0 ->
+                      let kw = Syntax.dataDeclarationKeyword v0
+                          hd = Syntax.dataDeclarationHead v0
+                          cons = Syntax.dataDeclarationConstructors v0
+                          deriv = Syntax.dataDeclarationDeriving v0
+                          derivCat = Lists.concat (Lists.map Syntax.unDerivingClause deriv)
+                          constructors = Serialization.orSep Serialization.halfBlockStyle (Lists.map constructorToExpr cons)
+                          derivingClause =
+                                  Logic.ifElse (Lists.null derivCat) [] [
+                                    Serialization.spaceSep (Lists.cons (Serialization.cst "deriving") [
+                                      Serialization.parenList False (Lists.map nameToExpr derivCat)])]
+                          mainParts =
+                                  [
+                                    Serialization.spaceSep (Lists.cons (dataKeywordToExpr kw) (Lists.cons (declarationHeadToExpr hd) [
+                                      Serialization.cst "="])),
+                                    constructors]
+                      in (Serialization.indentBlock (Lists.concat2 mainParts derivingClause))
+                    Syntax.DeclarationType v0 ->
+                      let hd = Syntax.typeSynonymDeclarationName v0
+                          typ = Syntax.typeSynonymDeclarationType v0
+                      in (Serialization.spaceSep (Lists.cons (Serialization.cst "type") (Lists.cons (declarationHeadToExpr hd) (Lists.cons (Serialization.cst "=") [
+                        typeToExpr typ]))))
+                    Syntax.DeclarationValueBinding v0 -> valueBindingToExpr v0
+                    Syntax.DeclarationTypedBinding v0 ->
+                      let typeSig = Syntax.typedBindingTypeSignature v0
+                          vb = Syntax.typedBindingValueBinding v0
+                          name = Syntax.typeSignatureName typeSig
+                          htype = Syntax.typeSignatureType typeSig
+                      in (Serialization.newlineSep (Lists.cons (Serialization.structuralSpaceSep [
+                        nameToExpr name,
+                        (Serialization.cst "::"),
+                        (typeToExpr htype)]) [
+                        valueBindingToExpr vb]))
+      in (Maybes.maybe body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
+        body])) mc)
 -- | Convert a Haskell expression to an AST expression
 expressionToExpr :: Syntax.Expression -> Ast.Expr
 expressionToExpr expr =
@@ -177,7 +180,6 @@ expressionToExpr expr =
           Serialization.spaceSep (Lists.cons (Serialization.cst "in") [
             expressionToExpr inner])])))
       Syntax.ExpressionList v0 -> Serialization.bracketList Serialization.halfBlockStyle (Lists.map expressionToExpr v0)
-      Syntax.ExpressionParens v0 -> Serialization.parenthesize (expressionToExpr v0)
       Syntax.ExpressionTuple v0 -> Serialization.parenListAdaptive (Lists.map expressionToExpr v0)
       Syntax.ExpressionVariable v0 -> nameToExpr v0
 -- | Convert a field declaration to an AST expression
@@ -186,16 +188,11 @@ fieldToExpr field =
 
       let name = Syntax.fieldName field
           typ = Syntax.fieldType field
-      in (Serialization.spaceSep (Lists.cons (nameToExpr name) (Lists.cons (Serialization.cst "::") [
-        typeToExpr typ])))
--- | Convert a field with comments to an AST expression
-fieldWithCommentsToExpr :: Syntax.FieldWithComments -> Ast.Expr
-fieldWithCommentsToExpr fieldWithComments =
-
-      let field = Syntax.fieldWithCommentsField fieldWithComments
-          mc = Syntax.fieldWithCommentsComments fieldWithComments
-      in (Maybes.maybe (fieldToExpr field) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
-        fieldToExpr field])) mc)
+          mc = Syntax.fieldComments field
+          body = Serialization.spaceSep (Lists.cons (nameToExpr name) (Lists.cons (Serialization.cst "::") [
+                typeToExpr typ]))
+      in (Maybes.maybe body (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
+        body])) mc)
 -- | Convert an if-then-else expression to an AST expression
 ifExpressionToExpr :: Syntax.IfExpression -> Ast.Expr
 ifExpressionToExpr ifExpr =
@@ -297,7 +294,7 @@ moduleToExpr module_ =
                 Serialization.cst (toSimpleComments Constants.warningAutoGeneratedFile)]
           headerLine = Maybes.maybe [] (\h -> [
                 moduleHeadToExpr h]) mh
-          declLines = Lists.map declarationWithCommentsToExpr decls
+          declLines = Lists.map declarationToExpr decls
           importLines = Logic.ifElse (Lists.null imports) [] [
                 Serialization.newlineSep (Lists.map importToExpr imports)]
       in (Serialization.doubleNewlineSep (Lists.concat [
@@ -310,11 +307,7 @@ nameToExpr :: Syntax.Name -> Ast.Expr
 nameToExpr name =
     Serialization.cst (case name of
       Syntax.NameImplicit v0 -> Strings.cat2 "?" (writeQualifiedName v0)
-      Syntax.NameNormal v0 -> writeQualifiedName v0
-      Syntax.NameParens v0 -> Strings.cat [
-        "(",
-        (writeQualifiedName v0),
-        ")"])
+      Syntax.NameNormal v0 -> writeQualifiedName v0)
 -- | Convert an import/export specification to an AST expression
 namedImportExportToExpr :: Syntax.NamedImportExport -> Ast.Expr
 namedImportExportToExpr spec = nameToExpr (Syntax.namedImportExportName spec)
@@ -326,7 +319,6 @@ patternToExpr pat =
       Syntax.PatternList v0 -> Serialization.bracketList Serialization.halfBlockStyle (Lists.map patternToExpr v0)
       Syntax.PatternLiteral v0 -> literalToExpr v0
       Syntax.PatternName v0 -> nameToExpr v0
-      Syntax.PatternParens v0 -> Serialization.parenthesize (patternToExpr v0)
       Syntax.PatternTuple v0 -> Serialization.parenListAdaptive (Lists.map patternToExpr v0)
       Syntax.PatternWildcard -> Serialization.cst "_"
 -- | Convert a record construction expression to an AST expression

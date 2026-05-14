@@ -541,7 +541,7 @@ moduleToHaskellModule :: Packaging.Module -> [Packaging.Definition] -> Context.C
 moduleToHaskellModule mod defs cx g =
     Eithers.bind (Utils.namespacesForModule mod cx g) (\namespaces -> constructModule namespaces mod defs cx g)
 -- | Generate Haskell declarations for type and field name constants
-nameDecls :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> [Syntax.DeclarationWithComments]
+nameDecls :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> [Syntax.Declaration]
 nameDecls namespaces name typ =
 
       let nm = Core.unName name
@@ -549,16 +549,13 @@ nameDecls namespaces name typ =
                   \n -> \pair ->
                     let k = Pairs.first pair
                         v = Pairs.second pair
-                        decl =
-                                Syntax.DeclarationValueBinding (Syntax.ValueBindingSimple (Syntax.SimpleValueBinding {
-                                  Syntax.simpleValueBindingPattern = (Utils.applicationPattern (Utils.simpleName k) []),
-                                  Syntax.simpleValueBindingRhs = (Syntax.RightHandSide (Syntax.ExpressionApplication (Syntax.ApplicationExpression {
-                                    Syntax.applicationExpressionFunction = (Syntax.ExpressionVariable (Utils.elementReference namespaces n)),
-                                    Syntax.applicationExpressionArgument = (Syntax.ExpressionLiteral (Syntax.LiteralString v))}))),
-                                  Syntax.simpleValueBindingLocalBindings = Nothing}))
-                    in Syntax.DeclarationWithComments {
-                      Syntax.declarationWithCommentsBody = decl,
-                      Syntax.declarationWithCommentsComments = Nothing}
+                    in (Syntax.DeclarationValueBinding (Syntax.ValueBindingSimple (Syntax.SimpleValueBinding {
+                      Syntax.simpleValueBindingPattern = (Utils.applicationPattern (Utils.simpleName k) []),
+                      Syntax.simpleValueBindingRhs = (Syntax.RightHandSide (Syntax.ExpressionApplication (Syntax.ApplicationExpression {
+                        Syntax.applicationExpressionFunction = (Syntax.ExpressionVariable (Utils.elementReference namespaces n)),
+                        Syntax.applicationExpressionArgument = (Syntax.ExpressionLiteral (Syntax.LiteralString v))}))),
+                      Syntax.simpleValueBindingLocalBindings = Nothing,
+                      Syntax.simpleValueBindingComments = Nothing})))
           nameDecl = (constantForTypeName name, nm)
           fieldDecls = Lists.map toConstant (Lexical.fieldsOf typ)
           toConstant =
@@ -595,7 +592,7 @@ setMetaUsesSet b m =
       Environment.haskellModuleMetadataUsesMap = (Environment.haskellModuleMetadataUsesMap m),
       Environment.haskellModuleMetadataUsesSet = b}
 -- | Convert a Hydra term definition to a Haskell declaration with comments
-toDataDeclaration :: Packaging.Namespaces Syntax.ModuleName -> Packaging.TermDefinition -> t0 -> Graph.Graph -> Either Errors.Error Syntax.DeclarationWithComments
+toDataDeclaration :: Packaging.Namespaces Syntax.ModuleName -> Packaging.TermDefinition -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Declaration
 toDataDeclaration namespaces def cx g =
 
       let name = Packaging.termDefinitionName def
@@ -622,7 +619,8 @@ toDataDeclaration namespaces def cx g =
                               in (rewriteValueBinding (Syntax.ValueBindingSimple (Syntax.SimpleValueBinding {
                                 Syntax.simpleValueBindingPattern = newPattern,
                                 Syntax.simpleValueBindingRhs = newRhs,
-                                Syntax.simpleValueBindingLocalBindings = bindings})))
+                                Syntax.simpleValueBindingLocalBindings = bindings,
+                                Syntax.simpleValueBindingComments = Nothing})))
                             _ -> vb
                         _ -> vb
           toDecl =
@@ -651,13 +649,12 @@ toDataDeclaration namespaces def cx g =
                                     Syntax.typedBindingTypeSignature = Syntax.TypeSignature {
                                       Syntax.typeSignatureName = hname_,
                                       Syntax.typeSignatureType = htype},
-                                    Syntax.typedBindingValueBinding = (rewriteValueBinding vb)})
-                          in (Right (Syntax.DeclarationWithComments {
-                            Syntax.declarationWithCommentsBody = decl,
-                            Syntax.declarationWithCommentsComments = comments})))))))
+                                    Syntax.typedBindingValueBinding = (rewriteValueBinding vb),
+                                    Syntax.typedBindingComments = comments})
+                          in (Right decl))))))
       in (Eithers.bind (Annotations.getTermDescription cx g term) (\comments -> toDecl comments hname term Nothing))
 -- | Convert a Hydra type definition to Haskell declarations
-toTypeDeclarationsFrom :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either Errors.Error [Syntax.DeclarationWithComments]
+toTypeDeclarationsFrom :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either Errors.Error [Syntax.Declaration]
 toTypeDeclarationsFrom namespaces elementName typ cx g =
 
       let lname = Names.localNameOf elementName
@@ -675,18 +672,16 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                     let hname0 = Utils.simpleName (Utils.newtypeAccessorName tname)
                     in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ_ cx g) (\htype ->
                       let hfield =
-                              Syntax.FieldWithComments {
-                                Syntax.fieldWithCommentsField = Syntax.Field {
-                                  Syntax.fieldName = hname0,
-                                  Syntax.fieldType = htype},
-                                Syntax.fieldWithCommentsComments = Nothing}
+                              Syntax.Field {
+                                Syntax.fieldName = hname0,
+                                Syntax.fieldType = htype,
+                                Syntax.fieldComments = Nothing}
                           constructorName = Utils.simpleName (Names.localNameOf tname)
-                      in (Right (Syntax.ConstructorWithComments {
-                        Syntax.constructorWithCommentsBody = (Syntax.ConstructorRecord (Syntax.RecordConstructor {
-                          Syntax.recordConstructorName = constructorName,
-                          Syntax.recordConstructorFields = [
-                            hfield]})),
-                        Syntax.constructorWithCommentsComments = Nothing}))))
+                      in (Right (Syntax.ConstructorRecord (Syntax.RecordConstructor {
+                        Syntax.recordConstructorName = constructorName,
+                        Syntax.recordConstructorFields = [
+                          hfield],
+                        Syntax.recordConstructorComments = Nothing})))))
           recordCons =
                   \lname_ -> \fields ->
                     let toField =
@@ -694,16 +689,14 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                               let fname = Core.fieldTypeName fieldType
                                   ftype = Core.fieldTypeType fieldType
                                   hname_ = Utils.simpleName (Strings.cat2 (Formatting.decapitalize lname_) (Formatting.capitalize (Core.unName fname)))
-                              in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces ftype cx g) (\htype -> Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments -> Right (Syntax.FieldWithComments {
-                                Syntax.fieldWithCommentsField = Syntax.Field {
-                                  Syntax.fieldName = hname_,
-                                  Syntax.fieldType = htype},
-                                Syntax.fieldWithCommentsComments = comments}))))
-                    in (Eithers.bind (Eithers.mapList toField fields) (\hFields -> Right (Syntax.ConstructorWithComments {
-                      Syntax.constructorWithCommentsBody = (Syntax.ConstructorRecord (Syntax.RecordConstructor {
-                        Syntax.recordConstructorName = (Utils.simpleName lname_),
-                        Syntax.recordConstructorFields = hFields})),
-                      Syntax.constructorWithCommentsComments = Nothing})))
+                              in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces ftype cx g) (\htype -> Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments -> Right (Syntax.Field {
+                                Syntax.fieldName = hname_,
+                                Syntax.fieldType = htype,
+                                Syntax.fieldComments = comments}))))
+                    in (Eithers.bind (Eithers.mapList toField fields) (\hFields -> Right (Syntax.ConstructorRecord (Syntax.RecordConstructor {
+                      Syntax.recordConstructorName = (Utils.simpleName lname_),
+                      Syntax.recordConstructorFields = hFields,
+                      Syntax.recordConstructorComments = Nothing}))))
           unionCons =
                   \boundNames_ -> \lname_ -> \fieldType ->
                     let fname = Core.fieldTypeName fieldType
@@ -718,11 +711,10 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                     in (Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments ->
                       let nm = deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname)))
                       in (Eithers.bind (Logic.ifElse (Equality.equal (Strip.deannotateType ftype) Core.TypeUnit) (Right []) (Eithers.bind (adaptTypeToHaskellAndEncode namespaces ftype cx g) (\htype -> Right [
-                        htype]))) (\typeList -> Right (Syntax.ConstructorWithComments {
-                        Syntax.constructorWithCommentsBody = (Syntax.ConstructorOrdinary (Syntax.PositionalConstructor {
-                          Syntax.positionalConstructorName = (Utils.simpleName nm),
-                          Syntax.positionalConstructorFields = typeList})),
-                        Syntax.constructorWithCommentsComments = comments})))))
+                        htype]))) (\typeList -> Right (Syntax.ConstructorOrdinary (Syntax.PositionalConstructor {
+                        Syntax.positionalConstructorName = (Utils.simpleName nm),
+                        Syntax.positionalConstructorFields = typeList,
+                        Syntax.positionalConstructorComments = comments}))))))
       in (Eithers.bind (Predicates.isSerializableByName cx g elementName) (\isSer ->
         let deriv =
                 Syntax.DerivingClause (Logic.ifElse isSer (Lists.map Utils.rawName [
@@ -734,7 +726,7 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
             vars = Pairs.first unpackResult
             t_ = Pairs.second unpackResult
             hd = declHead hname (Lists.reverse vars)
-        in (Eithers.bind (case (Strip.deannotateType t_) of
+        in (Eithers.bind (Annotations.getTypeDescription cx g typ) (\comments -> Eithers.bind (case (Strip.deannotateType t_) of
           Core.TypeRecord v0 -> Eithers.bind (recordCons lname v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
             Syntax.dataDeclarationKeyword = Syntax.DataKeywordData,
             Syntax.dataDeclarationContext = [],
@@ -742,14 +734,16 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
             Syntax.dataDeclarationConstructors = [
               cons],
             Syntax.dataDeclarationDeriving = [
-              deriv]})))
+              deriv],
+            Syntax.dataDeclarationComments = comments})))
           Core.TypeUnion v0 -> Eithers.bind (Eithers.mapList (unionCons (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) lname) v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
             Syntax.dataDeclarationKeyword = Syntax.DataKeywordData,
             Syntax.dataDeclarationContext = [],
             Syntax.dataDeclarationHead = hd,
             Syntax.dataDeclarationConstructors = cons,
             Syntax.dataDeclarationDeriving = [
-              deriv]})))
+              deriv],
+            Syntax.dataDeclarationComments = comments})))
           Core.TypeWrap v0 -> Eithers.bind (newtypeCons elementName v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
             Syntax.dataDeclarationKeyword = Syntax.DataKeywordNewtype,
             Syntax.dataDeclarationContext = [],
@@ -757,23 +751,21 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
             Syntax.dataDeclarationConstructors = [
               cons],
             Syntax.dataDeclarationDeriving = [
-              deriv]})))
+              deriv],
+            Syntax.dataDeclarationComments = comments})))
           _ -> Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htype -> Right (Syntax.DeclarationType (Syntax.TypeSynonymDeclaration {
             Syntax.typeSynonymDeclarationName = hd,
-            Syntax.typeSynonymDeclarationType = htype})))) (\decl -> Eithers.bind (Annotations.getTypeDescription cx g typ) (\comments -> Eithers.bind (Logic.ifElse includeTypeDefinitions (Eithers.bind (typeDecl namespaces elementName typ cx g) (\decl_ -> Right [
+            Syntax.typeSynonymDeclarationType = htype,
+            Syntax.typeSynonymDeclarationComments = comments})))) (\decl -> Eithers.bind (Logic.ifElse includeTypeDefinitions (Eithers.bind (typeDecl namespaces elementName typ cx g) (\decl_ -> Right [
           decl_])) (Right [])) (\tdecls ->
-          let mainDecl =
-                  Syntax.DeclarationWithComments {
-                    Syntax.declarationWithCommentsBody = decl,
-                    Syntax.declarationWithCommentsComments = comments}
-              nameDecls_ = nameDecls namespaces elementName typ
+          let nameDecls_ = nameDecls namespaces elementName typ
           in (Right (Lists.concat [
             [
-              mainDecl],
+              decl],
             nameDecls_,
             tdecls]))))))))
 -- | Generate a Haskell declaration for a type definition constant
-typeDecl :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> t0 -> Graph.Graph -> Either Errors.Error Syntax.DeclarationWithComments
+typeDecl :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Type -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Declaration
 typeDecl namespaces name typ cx g =
 
       let typeName = \ns -> \name_ -> Names.qname ns (typeNameLocal name_)
@@ -823,10 +815,9 @@ typeDecl namespaces name typ cx g =
                     Syntax.DeclarationValueBinding (Syntax.ValueBindingSimple (Syntax.SimpleValueBinding {
                       Syntax.simpleValueBindingPattern = pat,
                       Syntax.simpleValueBindingRhs = rhs,
-                      Syntax.simpleValueBindingLocalBindings = Nothing}))
-        in (Right (Syntax.DeclarationWithComments {
-          Syntax.declarationWithCommentsBody = decl,
-          Syntax.declarationWithCommentsComments = Nothing}))))
+                      Syntax.simpleValueBindingLocalBindings = Nothing,
+                      Syntax.simpleValueBindingComments = Nothing}))
+        in (Right decl)))
 -- | Convert type scheme constraints to a map of type variables to typeclasses
 typeSchemeConstraintsToClassMap :: Ord t0 => (Maybe (M.Map t0 Core.TypeVariableMetadata) -> M.Map t0 (S.Set Classes.TypeClass))
 typeSchemeConstraintsToClassMap maybeConstraints =

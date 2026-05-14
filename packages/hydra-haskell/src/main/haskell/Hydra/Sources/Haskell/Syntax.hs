@@ -32,10 +32,8 @@ module_ = Module {
       constructor,
       positionalConstructor,
       recordConstructor,
-      constructorWithComments,
       dataDeclaration,
       dataKeyword,
-      declarationWithComments,
       declaration,
       declarationHead,
       applicationDeclarationHead,
@@ -49,12 +47,10 @@ module_ = Module {
       infixExpression,
       lambdaExpression,
       letExpression,
-      prefixApplicationExpression,
       sectionExpression,
       typedExpression,
       recordUpdateExpression,
       field,
-      fieldWithComments,
       fieldUpdate,
       import_,
       importSpec,
@@ -155,7 +151,10 @@ positionalConstructor = define "PositionalConstructor" $
       name,
     "fields">:
       doc "The types of the positional fields" $
-      T.list type_]
+      T.list type_,
+    "comments">:
+      doc "Optional comments" $
+      T.maybe T.string]
 
 recordConstructor :: Binding
 recordConstructor = define "RecordConstructor" $
@@ -166,15 +165,7 @@ recordConstructor = define "RecordConstructor" $
       name,
     "fields">:
       doc "The named fields of the record" $
-      T.list fieldWithComments]
-
-constructorWithComments :: Binding
-constructorWithComments = define "ConstructorWithComments" $
-  doc "A data constructor together with any comments" $
-  T.record [
-    "body">:
-      doc "The constructor"
-      constructor,
+      T.list field,
     "comments">:
       doc "Optional comments" $
       T.maybe T.string]
@@ -194,26 +185,18 @@ dataDeclaration = define "DataDeclaration" $
       declarationHead,
     "constructors">:
       doc "The data constructors" $
-      T.list constructorWithComments,
+      T.list constructor,
     "deriving">:
       doc "Derived type class instances" $
-      T.list derivingClause]
+      T.list derivingClause,
+    "comments">:
+      doc "Optional comments" $
+      T.maybe T.string]
 
 dataKeyword :: Binding
 dataKeyword = define "DataKeyword" $
   doc "The 'data' versus 'newtype keyword" $
   T.enum ["data", "newtype"]
-
-declarationWithComments :: Binding
-declarationWithComments = define "DeclarationWithComments" $
-  doc "A data declaration together with any comments" $
-  T.record [
-    "body">:
-      doc "The declaration"
-      declaration,
-    "comments">:
-      doc "Optional comments" $
-      T.maybe T.string]
 
 declaration :: Binding -- UDecl
 declaration = define "Declaration" $
@@ -243,9 +226,6 @@ declarationHead = define "DeclarationHead" $
     "application">:
       doc "An application-style declaration head"
       applicationDeclarationHead,
-    "parens">:
-      doc "A parenthesized declaration head"
-      declarationHead,
     "simple">:
       doc "A simple name"
       name]
@@ -319,12 +299,6 @@ expression = define "Expression" $
     "list">:
       doc "A list expression" $
       T.list expression,
-    "parens">:
-      doc "A parenthesized expression"
-      expression,
-    "prefixApplication">:
-      doc "A prefix application"
-      prefixApplicationExpression,
     "rightSection">:
       doc "A right section expression"
       sectionExpression,
@@ -424,17 +398,6 @@ letExpression = define "LetExpression" $
       doc "The body of the let expression"
       expression]
 
-prefixApplicationExpression :: Binding
-prefixApplicationExpression = define "PrefixApplicationExpression" $
-  doc "A prefix expression" $
-  T.record [
-    "operator">:
-      doc "The prefix operator"
-      operator,
-    "rhs">:
-      doc "The operand"
-      expression]
-
 sectionExpression :: Binding
 sectionExpression = define "SectionExpression" $
   doc "A section expression" $
@@ -477,15 +440,7 @@ field = define "Field" $
       name,
     "type">:
       doc "The field type"
-      type_]
-
-fieldWithComments :: Binding
-fieldWithComments = define "FieldWithComments" $
-  doc "A field together with any comments" $
-  T.record [
-    "field">:
-      doc "The field"
-      field,
+      type_,
     "comments">:
       doc "Optional comments" $
       T.maybe T.string]
@@ -615,7 +570,7 @@ module' = define "Module" $
       T.list import_,
     "declarations">:
       doc "Module declarations" $
-      T.list declarationWithComments]
+      T.list declaration]
 
 moduleHead :: Binding -- UModuleHead
 moduleHead = define "ModuleHead" $
@@ -646,9 +601,6 @@ name = define "Name" $
       qualifiedName,
     "normal">:
       doc "A normal name"
-      qualifiedName,
-    "parens">:
-      doc "A parenthesized name"
       qualifiedName]
 
 namePart :: Binding -- UNamePart
@@ -687,9 +639,6 @@ pattern = define "Pattern" $
     "name">:
       doc "A name pattern"
       name,
-    "parens">:
-      doc "A parenthesized pattern"
-      pattern,
     "record">:
       doc "A record pattern"
       recordPattern,
@@ -802,9 +751,6 @@ type_ = define "Type" $
     "list">:
       doc "A list type"
       type_,
-    "parens">:
-      doc "A parenthesized type"
-      type_,
     "tuple">:
       doc "A tuple type" $
       T.list type_,
@@ -868,7 +814,10 @@ typeSynonymDeclaration = define "TypeSynonymDeclaration" $
       declarationHead,
     "type">:
       doc "The type being defined"
-      type_]
+      type_,
+    "comments">:
+      doc "Optional comments" $
+      T.maybe T.string]
 
 typeSignature :: Binding -- UTypeSignature
 typeSignature = define "TypeSignature" $
@@ -890,7 +839,10 @@ typedBinding = define "TypedBinding" $
       typeSignature,
     "valueBinding">:
       doc "The value binding"
-      valueBinding]
+      valueBinding,
+    "comments">:
+      doc "Optional comments" $
+      T.maybe T.string]
 
 valueBinding :: Binding -- UValueBind
 valueBinding = define "ValueBinding" $
@@ -913,7 +865,10 @@ simpleValueBinding = define "SimpleValueBinding" $
       rightHandSide,
     "localBindings">:
       doc "Optional local bindings (where clause)" $
-      T.maybe localBindings]
+      T.maybe localBindings,
+    "comments">:
+      doc "Optional comments" $
+      T.maybe T.string]
 
 variable :: Binding
 variable = define "Variable" $

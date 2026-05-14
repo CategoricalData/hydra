@@ -62,33 +62,28 @@ data PositionalConstructor =
     -- | The name of the constructor
     positionalConstructorName :: Name,
     -- | The types of the positional fields
-    positionalConstructorFields :: [Type]}
+    positionalConstructorFields :: [Type],
+    -- | Optional comments
+    positionalConstructorComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 _PositionalConstructor = Core.Name "hydra.haskell.syntax.PositionalConstructor"
 _PositionalConstructor_name = Core.Name "name"
 _PositionalConstructor_fields = Core.Name "fields"
+_PositionalConstructor_comments = Core.Name "comments"
 -- | A record-style data constructor
 data RecordConstructor =
   RecordConstructor {
     -- | The name of the constructor
     recordConstructorName :: Name,
     -- | The named fields of the record
-    recordConstructorFields :: [FieldWithComments]}
+    recordConstructorFields :: [Field],
+    -- | Optional comments
+    recordConstructorComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 _RecordConstructor = Core.Name "hydra.haskell.syntax.RecordConstructor"
 _RecordConstructor_name = Core.Name "name"
 _RecordConstructor_fields = Core.Name "fields"
--- | A data constructor together with any comments
-data ConstructorWithComments =
-  ConstructorWithComments {
-    -- | The constructor
-    constructorWithCommentsBody :: Constructor,
-    -- | Optional comments
-    constructorWithCommentsComments :: (Maybe String)}
-  deriving (Eq, Ord, Read, Show)
-_ConstructorWithComments = Core.Name "hydra.haskell.syntax.ConstructorWithComments"
-_ConstructorWithComments_body = Core.Name "body"
-_ConstructorWithComments_comments = Core.Name "comments"
+_RecordConstructor_comments = Core.Name "comments"
 -- | A data type declaration
 data DataDeclaration =
   DataDeclaration {
@@ -99,9 +94,11 @@ data DataDeclaration =
     -- | The declaration head
     dataDeclarationHead :: DeclarationHead,
     -- | The data constructors
-    dataDeclarationConstructors :: [ConstructorWithComments],
+    dataDeclarationConstructors :: [Constructor],
     -- | Derived type class instances
-    dataDeclarationDeriving :: [DerivingClause]}
+    dataDeclarationDeriving :: [DerivingClause],
+    -- | Optional comments
+    dataDeclarationComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 _DataDeclaration = Core.Name "hydra.haskell.syntax.DataDeclaration"
 _DataDeclaration_keyword = Core.Name "keyword"
@@ -109,6 +106,7 @@ _DataDeclaration_context = Core.Name "context"
 _DataDeclaration_head = Core.Name "head"
 _DataDeclaration_constructors = Core.Name "constructors"
 _DataDeclaration_deriving = Core.Name "deriving"
+_DataDeclaration_comments = Core.Name "comments"
 -- | The 'data' versus 'newtype keyword
 data DataKeyword =
   DataKeywordData |
@@ -117,17 +115,6 @@ data DataKeyword =
 _DataKeyword = Core.Name "hydra.haskell.syntax.DataKeyword"
 _DataKeyword_data = Core.Name "data"
 _DataKeyword_newtype = Core.Name "newtype"
--- | A data declaration together with any comments
-data DeclarationWithComments =
-  DeclarationWithComments {
-    -- | The declaration
-    declarationWithCommentsBody :: Declaration,
-    -- | Optional comments
-    declarationWithCommentsComments :: (Maybe String)}
-  deriving (Eq, Ord, Read, Show)
-_DeclarationWithComments = Core.Name "hydra.haskell.syntax.DeclarationWithComments"
-_DeclarationWithComments_body = Core.Name "body"
-_DeclarationWithComments_comments = Core.Name "comments"
 -- | A data or value declaration
 data Declaration =
   -- | A data type declaration
@@ -148,14 +135,11 @@ _Declaration_typedBinding = Core.Name "typedBinding"
 data DeclarationHead =
   -- | An application-style declaration head
   DeclarationHeadApplication ApplicationDeclarationHead |
-  -- | A parenthesized declaration head
-  DeclarationHeadParens DeclarationHead |
   -- | A simple name
   DeclarationHeadSimple Name
   deriving (Eq, Ord, Read, Show)
 _DeclarationHead = Core.Name "hydra.haskell.syntax.DeclarationHead"
 _DeclarationHead_application = Core.Name "application"
-_DeclarationHead_parens = Core.Name "parens"
 _DeclarationHead_simple = Core.Name "simple"
 -- | An application-style declaration head
 data ApplicationDeclarationHead =
@@ -208,10 +192,6 @@ data Expression =
   ExpressionLet LetExpression |
   -- | A list expression
   ExpressionList [Expression] |
-  -- | A parenthesized expression
-  ExpressionParens Expression |
-  -- | A prefix application
-  ExpressionPrefixApplication PrefixApplicationExpression |
   -- | A right section expression
   ExpressionRightSection SectionExpression |
   -- | A tuple expression
@@ -235,8 +215,6 @@ _Expression_lambda = Core.Name "lambda"
 _Expression_leftSection = Core.Name "leftSection"
 _Expression_let = Core.Name "let"
 _Expression_list = Core.Name "list"
-_Expression_parens = Core.Name "parens"
-_Expression_prefixApplication = Core.Name "prefixApplication"
 _Expression_rightSection = Core.Name "rightSection"
 _Expression_tuple = Core.Name "tuple"
 _Expression_typeSignature = Core.Name "typeSignature"
@@ -325,17 +303,6 @@ data LetExpression =
 _LetExpression = Core.Name "hydra.haskell.syntax.LetExpression"
 _LetExpression_bindings = Core.Name "bindings"
 _LetExpression_inner = Core.Name "inner"
--- | A prefix expression
-data PrefixApplicationExpression =
-  PrefixApplicationExpression {
-    -- | The prefix operator
-    prefixApplicationExpressionOperator :: Operator,
-    -- | The operand
-    prefixApplicationExpressionRhs :: Expression}
-  deriving (Eq, Ord, Read, Show)
-_PrefixApplicationExpression = Core.Name "hydra.haskell.syntax.PrefixApplicationExpression"
-_PrefixApplicationExpression_operator = Core.Name "operator"
-_PrefixApplicationExpression_rhs = Core.Name "rhs"
 -- | A section expression
 data SectionExpression =
   SectionExpression {
@@ -375,22 +342,14 @@ data Field =
     -- | The field name
     fieldName :: Name,
     -- | The field type
-    fieldType :: Type}
+    fieldType :: Type,
+    -- | Optional comments
+    fieldComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 _Field = Core.Name "hydra.haskell.syntax.Field"
 _Field_name = Core.Name "name"
 _Field_type = Core.Name "type"
--- | A field together with any comments
-data FieldWithComments =
-  FieldWithComments {
-    -- | The field
-    fieldWithCommentsField :: Field,
-    -- | Optional comments
-    fieldWithCommentsComments :: (Maybe String)}
-  deriving (Eq, Ord, Read, Show)
-_FieldWithComments = Core.Name "hydra.haskell.syntax.FieldWithComments"
-_FieldWithComments_field = Core.Name "field"
-_FieldWithComments_comments = Core.Name "comments"
+_Field_comments = Core.Name "comments"
 -- | A field name and value
 data FieldUpdate =
   FieldUpdate {
@@ -507,7 +466,7 @@ data Module =
     -- | Import statements
     moduleImports :: [Import],
     -- | Module declarations
-    moduleDeclarations :: [DeclarationWithComments]}
+    moduleDeclarations :: [Declaration]}
   deriving (Eq, Ord, Read, Show)
 _Module = Core.Name "hydra.haskell.syntax.Module"
 _Module_head = Core.Name "head"
@@ -538,14 +497,11 @@ data Name =
   -- | An implicit name
   NameImplicit QualifiedName |
   -- | A normal name
-  NameNormal QualifiedName |
-  -- | A parenthesized name
-  NameParens QualifiedName
+  NameNormal QualifiedName
   deriving (Eq, Ord, Read, Show)
 _Name = Core.Name "hydra.haskell.syntax.Name"
 _Name_implicit = Core.Name "implicit"
 _Name_normal = Core.Name "normal"
-_Name_parens = Core.Name "parens"
 -- | A component of a qualified name
 newtype NamePart =
   NamePart {
@@ -574,8 +530,6 @@ data Pattern =
   PatternLiteral Literal |
   -- | A name pattern
   PatternName Name |
-  -- | A parenthesized pattern
-  PatternParens Pattern |
   -- | A record pattern
   PatternRecord RecordPattern |
   -- | A tuple pattern
@@ -591,7 +545,6 @@ _Pattern_as = Core.Name "as"
 _Pattern_list = Core.Name "list"
 _Pattern_literal = Core.Name "literal"
 _Pattern_name = Core.Name "name"
-_Pattern_parens = Core.Name "parens"
 _Pattern_record = Core.Name "record"
 _Pattern_tuple = Core.Name "tuple"
 _Pattern_typed = Core.Name "typed"
@@ -686,8 +639,6 @@ data Type =
   TypeInfix InfixType |
   -- | A list type
   TypeList Type |
-  -- | A parenthesized type
-  TypeParens Type |
   -- | A tuple type
   TypeTuple [Type] |
   -- | A type variable or type name
@@ -699,7 +650,6 @@ _Type_ctx = Core.Name "ctx"
 _Type_function = Core.Name "function"
 _Type_infix = Core.Name "infix"
 _Type_list = Core.Name "list"
-_Type_parens = Core.Name "parens"
 _Type_tuple = Core.Name "tuple"
 _Type_variable = Core.Name "variable"
 -- | An application type
@@ -755,11 +705,14 @@ data TypeSynonymDeclaration =
     -- | The declaration head
     typeSynonymDeclarationName :: DeclarationHead,
     -- | The type being defined
-    typeSynonymDeclarationType :: Type}
+    typeSynonymDeclarationType :: Type,
+    -- | Optional comments
+    typeSynonymDeclarationComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 _TypeSynonymDeclaration = Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"
 _TypeSynonymDeclaration_name = Core.Name "name"
 _TypeSynonymDeclaration_type = Core.Name "type"
+_TypeSynonymDeclaration_comments = Core.Name "comments"
 -- | A type signature
 data TypeSignature =
   TypeSignature {
@@ -777,11 +730,14 @@ data TypedBinding =
     -- | The type signature
     typedBindingTypeSignature :: TypeSignature,
     -- | The value binding
-    typedBindingValueBinding :: ValueBinding}
+    typedBindingValueBinding :: ValueBinding,
+    -- | Optional comments
+    typedBindingComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 _TypedBinding = Core.Name "hydra.haskell.syntax.TypedBinding"
 _TypedBinding_typeSignature = Core.Name "typeSignature"
 _TypedBinding_valueBinding = Core.Name "valueBinding"
+_TypedBinding_comments = Core.Name "comments"
 -- | A value binding
 data ValueBinding =
   -- | A simple value binding
@@ -797,12 +753,15 @@ data SimpleValueBinding =
     -- | The right-hand side
     simpleValueBindingRhs :: RightHandSide,
     -- | Optional local bindings (where clause)
-    simpleValueBindingLocalBindings :: (Maybe LocalBindings)}
+    simpleValueBindingLocalBindings :: (Maybe LocalBindings),
+    -- | Optional comments
+    simpleValueBindingComments :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 _SimpleValueBinding = Core.Name "hydra.haskell.syntax.SimpleValueBinding"
 _SimpleValueBinding_pattern = Core.Name "pattern"
 _SimpleValueBinding_rhs = Core.Name "rhs"
 _SimpleValueBinding_localBindings = Core.Name "localBindings"
+_SimpleValueBinding_comments = Core.Name "comments"
 -- | A type variable
 newtype Variable =
   Variable {
