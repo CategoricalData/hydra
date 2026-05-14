@@ -175,7 +175,8 @@ simpleValueBinding hname rhs bindings =
       in (Syntax.ValueBindingSimple (Syntax.SimpleValueBinding {
         Syntax.simpleValueBindingPattern = pat,
         Syntax.simpleValueBindingRhs = rightHandSide,
-        Syntax.simpleValueBindingLocalBindings = bindings}))
+        Syntax.simpleValueBindingLocalBindings = bindings,
+        Syntax.simpleValueBindingComments = Nothing}))
 -- | Convert a list of types into a nested type application
 toTypeApplication :: [Syntax.Type] -> Syntax.Type
 toTypeApplication types =

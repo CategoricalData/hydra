@@ -123,7 +123,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The types of the positional fields"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.Type"}}}}}]}}},
+                        "body": {"list": {"variable": "hydra.haskell.syntax.Type"}}}}},
+                  {
+                    "name": "comments",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -145,23 +151,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The named fields of the record"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.FieldWithComments"}}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.haskell.syntax.ConstructorWithComments",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A data constructor together with any comments"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "body",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The constructor"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Constructor"}}}},
+                        "body": {"list": {"variable": "hydra.haskell.syntax.Field"}}}}},
                   {
                     "name": "comments",
                     "type": {
@@ -201,13 +191,19 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The data constructors"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.ConstructorWithComments"}}}}},
+                        "body": {"list": {"variable": "hydra.haskell.syntax.Constructor"}}}}},
                   {
                     "name": "deriving",
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Derived type class instances"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.DerivingClause"}}}}}]}}},
+                        "body": {"list": {"variable": "hydra.haskell.syntax.DerivingClause"}}}}},
+                  {
+                    "name": "comments",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -217,28 +213,6 @@
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "The 'data' versus 'newtype keyword"}}}],
               "body": {"union": [{"name": "data", "type": {"unit": {}}}, {"name": "newtype", "type": {"unit": {}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.haskell.syntax.DeclarationWithComments",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A data declaration together with any comments"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "body",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The declaration"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Declaration"}}}},
-                  {
-                    "name": "comments",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
-                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -289,12 +263,6 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An application-style declaration head"}}}],
                         "body": {"variable": "hydra.haskell.syntax.ApplicationDeclarationHead"}}}},
-                  {
-                    "name": "parens",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A parenthesized declaration head"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.DeclarationHead"}}}},
                   {
                     "name": "simple",
                     "type": {
@@ -430,18 +398,6 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A list expression"}}}],
                         "body": {"list": {"variable": "hydra.haskell.syntax.Expression"}}}}},
-                  {
-                    "name": "parens",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A parenthesized expression"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Expression"}}}},
-                  {
-                    "name": "prefixApplication",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A prefix application"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.PrefixApplicationExpression"}}}},
                   {
                     "name": "rightSection",
                     "type": {
@@ -641,28 +597,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.PrefixApplicationExpression",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A prefix expression"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "operator",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The prefix operator"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Operator"}}}},
-                  {
-                    "name": "rhs",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The operand"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Expression"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
         "name": "hydra.haskell.syntax.SectionExpression",
         "typeScheme": {
           "body": {
@@ -747,23 +681,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The field type"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.haskell.syntax.FieldWithComments",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A field together with any comments"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "field",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The field"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Field"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.Type"}}}},
                   {
                     "name": "comments",
                     "type": {
@@ -1009,7 +927,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Module declarations"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.DeclarationWithComments"}}}}}]}}},
+                        "body": {"list": {"variable": "hydra.haskell.syntax.Declaration"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1068,12 +986,6 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A normal name"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.QualifiedName"}}}},
-                  {
-                    "name": "parens",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A parenthesized name"}}}],
                         "body": {"variable": "hydra.haskell.syntax.QualifiedName"}}}}]}}},
           "variables": []}}},
     {
@@ -1146,12 +1058,6 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A name pattern"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Name"}}}},
-                  {
-                    "name": "parens",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A parenthesized pattern"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Pattern"}}}},
                   {
                     "name": "record",
                     "type": {
@@ -1365,12 +1271,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A list type"}}}],
                         "body": {"variable": "hydra.haskell.syntax.Type"}}}},
                   {
-                    "name": "parens",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A parenthesized type"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Type"}}}},
-                  {
                     "name": "tuple",
                     "type": {
                       "annotated": {
@@ -1497,7 +1397,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type being defined"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
+                        "body": {"variable": "hydra.haskell.syntax.Type"}}}},
+                  {
+                    "name": "comments",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1541,7 +1447,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The value binding"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.ValueBinding"}}}}]}}},
+                        "body": {"variable": "hydra.haskell.syntax.ValueBinding"}}}},
+                  {
+                    "name": "comments",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1585,7 +1497,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional local bindings (where clause)"}}}],
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}}}}}]}}},
+                        "body": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}}}}},
+                  {
+                    "name": "comments",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Optional comments"}}}],
+                        "body": {"maybe": {"literal": {"string": {}}}}}}}]}}},
           "variables": []}}},
     {
       "type": {
