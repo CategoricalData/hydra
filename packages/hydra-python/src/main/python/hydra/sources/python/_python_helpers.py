@@ -107,7 +107,7 @@ def comp_pair_eq(rhs):
 
 
 def double_quoted_string(val):
-    return PySyn.string(val, PySyn.quote_style_double)
+    return PySyn.string(val, nothing(), PySyn.quote_style_double)
 
 
 # Custom helpers (mirrors of Hydra.Dsl.Python.Helpers)
@@ -173,7 +173,11 @@ def simple_type_parameter_simple(n):
 
 
 def string_(val, style):
-    return PySyn.string(val, style)
+    return PySyn.string(val, nothing(), style)
+
+
+def prefixed_string_(prefix, val, style):
+    return PySyn.string(val, just(prefix), style)
 
 
 def untyped_assignment_simple(targets, rhs):
