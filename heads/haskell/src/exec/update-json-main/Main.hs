@@ -39,6 +39,7 @@ import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
 
 import Control.Exception (catch, SomeException)
+import Control.Monad (when)
 import qualified Data.List as L
 import qualified Data.Set as S
 import System.Environment (getArgs)
@@ -59,6 +60,7 @@ dedupByNamespace = go S.empty
 main :: IO ()
 main = do
   distRoot <- parseDistRoot defaultDistJsonRoot
+  includeJavaPython <- parseIncludeJavaPython
 
   let universe = dedupByNamespace $ L.concat
         [ mainModules
@@ -92,12 +94,33 @@ main = do
   -- graph construction is required beyond what inference already does.
   validateKernelModulesOrExit kernelModules
 
-  putStrLn $ "Generating " ++ show (length universe) ++ " modules to JSON, routed per package..."
+  -- Native hosts own the DSL→JSON path for hydra-java and hydra-python (#344).
+  -- Their canonical hydra.java.* / hydra.python.* JSON is produced by
+  -- bin/generate-hydra-{java,python}-from-{java,python}.sh (Phase 0 of sync.sh).
+  -- We still pull in hydraJavaModules / hydraPythonModules above so they
+  -- participate in the inference universe and in DSL-wrapper synthesis below,
+  -- but we exclude their term-level modules from this write pass.
+  --
+  -- Legacy: the Haskell DSL copies at packages/hydra-{java,python}/src/main/haskell/
+  -- remain as a historical reference through 0.15 but no longer drive
+  -- dist/json/hydra-{java,python}/. To be deleted before 0.16.
+  let isNativeOwned m =
+        let ns = Packaging.unNamespace (Kernel.moduleNamespace m)
+        in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
+      writeUniverse
+        | includeJavaPython = universe
+        | otherwise         = filter (not . isNativeOwned) universe
+      excluded = length universe - length writeUniverse
+
+  putStrLn $ "Generating " ++ show (length writeUniverse) ++ " modules to JSON, routed per package..."
+  when (excluded > 0) $
+    putStrLn $ "  (excluded " ++ show excluded
+      ++ " hydra.java.*/hydra.python.* modules — owned by native generators; see #344)"
   putStrLn $ "dist-json root: " ++ distRoot
   putStrLn ""
 
   result <- catch
-    (writeModulesJsonPackageSplit True distRoot universe universe >> return True)
+    (writeModulesJsonPackageSplit True distRoot universe writeUniverse >> return True)
     (\e -> do
       putStrLn $ "Error: " ++ show (e :: SomeException)
       return False)
@@ -107,7 +130,11 @@ main = do
   -- The DSL generator runs over the kernel-side type universe (kernel + json +
   -- other + haskell coder). This matches the old behavior of update-json-main:
   -- DSL modules are produced for every type in that universe.
-  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules ++ hydraPythonModules
+  -- Extended per #358: include all coder-package type modules so
+  -- DSL synthesis covers their syntax/environment types too.
+  let dslInputMods = kernelModules ++ jsonModules ++ otherModules
+        ++ haskellModules ++ hydraJavaModules ++ hydraPythonModules
+        ++ hydraScalaModules ++ hydraLispModules
   dslResult <- catch
     (writeDslJsonPackageSplit distRoot universe dslInputMods >> return True)
     (\e -> do
@@ -243,3 +270,11 @@ parseDistRoot defaultRoot = do
     go ("--output-dir" : dir : _) = dir
     go (_ : rest)                 = go rest
     go []                         = defaultRoot
+
+-- | Parse --include-java-python (default False). When set, the legacy
+-- Haskell DSL also writes hydra.java.*/hydra.python.* JSON (cold-start
+-- bootstrap path). See #344.
+parseIncludeJavaPython :: IO Bool
+parseIncludeJavaPython = do
+  args <- getArgs
+  return $ "--include-java-python" `elem` args
