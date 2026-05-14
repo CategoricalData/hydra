@@ -238,10 +238,10 @@ constructModule = haskellCoderDefinition "constructModule" $
         "hidden">: Pairs.second $ var "triple",
         "spec">: Logic.ifElse (Lists.null $ var "hidden")
           nothing
-          (just $ inject H._SpecImport H._SpecImport_hiding $ Lists.map ("n" ~> record H._ImportExportSpec [
-            H._ImportExportSpec_modifier>>: nothing,
-            H._ImportExportSpec_name>>: HaskellUtilsSource.simpleName @@ var "n",
-            H._ImportExportSpec_subspec>>: nothing]) (var "hidden"))] $
+          (just $ inject H._ImportSpec H._ImportSpec_hiding $ Lists.map ("n" ~> record H._NamedImportExport [
+            H._NamedImportExport_modifier>>: nothing,
+            H._NamedImportExport_name>>: HaskellUtilsSource.simpleName @@ var "n",
+            H._NamedImportExport_subspec>>: nothing]) (var "hidden"))] $
         record H._Import [
           H._Import_qualified>>: Maybes.isJust $ var "malias",
           H._Import_module>>: wrap H._ModuleName $ var "name",
@@ -531,9 +531,9 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
             H._FieldUpdate_value>>: var "hft"],
           "typeName">: HaskellUtilsSource.elementReference @@ var "namespaces" @@ var "sname"] $
           "updates" <<~ Eithers.mapList (var "toFieldUpdate") (var "fields") $
-          right $ inject H._Expression H._Expression_constructRecord $ record H._ConstructRecordExpression [
-            H._ConstructRecordExpression_name>>: var "typeName",
-            H._ConstructRecordExpression_fields>>: var "updates"],
+          right $ inject H._Expression H._Expression_constructRecord $ record H._RecordExpression [
+            H._RecordExpression_name>>: var "typeName",
+            H._RecordExpression_fields>>: var "updates"],
       _Term_set>>: "s" ~> Logic.ifElse (Sets.null $ var "s")
         (right $ HaskellUtilsSource.hsvar @@ string "S.empty")
         (var "nonemptySet" @@ var "s"),
@@ -679,9 +679,9 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
         _TypeClass_equality>>: constant $ string "Eq",
         _TypeClass_ordering>>: constant $ string "Ord"],
       "htype">: inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ (Core.unName $ var "name")] $
-      inject H._Assertion H._Assertion_class $ record H._ClassAssertion [
-        H._ClassAssertion_name>>: var "hname",
-        H._ClassAssertion_types>>: list [var "htype"]],
+      inject H._Constraint H._Constraint_class $ record H._ClassConstraint [
+        H._ClassConstraint_name>>: var "hname",
+        H._ClassConstraint_types>>: list [var "htype"]],
     "assertPairs">: Lists.concat $ Lists.map (var "toPairs") (Maps.toList $ var "classes"),
     "toPairs">: "mapEntry" ~> lets [
       "name">: Pairs.first $ var "mapEntry",
@@ -694,11 +694,11 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
         (right $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
           "hassert">: Logic.ifElse (Equality.equal (Lists.length $ var "encoded") (int32 1))
-            (Maybes.fromMaybe (inject H._Assertion H._Assertion_tuple $ var "encoded") (Lists.maybeHead $ var "encoded"))
-            (inject H._Assertion H._Assertion_tuple $ var "encoded")] $
-          right $ inject H._Type H._Type_ctx $ record H._ContextType [
-            H._ContextType_ctx>>: var "hassert",
-            H._ContextType_type>>: var "htyp"])
+            (Maybes.fromMaybe (inject H._Constraint H._Constraint_tuple $ var "encoded") (Lists.maybeHead $ var "encoded"))
+            (inject H._Constraint H._Constraint_tuple $ var "encoded")] $
+          right $ inject H._Type H._Type_ctx $ record H._ConstrainedType [
+            H._ConstrainedType_ctx>>: var "hassert",
+            H._ConstrainedType_type>>: var "htyp"])
 
 extendMetaForTerm :: TTermDefinition (HE.HaskellModuleMetadata -> Term -> HE.HaskellModuleMetadata)
 extendMetaForTerm = haskellCoderDefinition "extendMetaForTerm" $
@@ -1011,12 +1011,12 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
         "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
           right $ list [var "htype"]) $
       right $ record H._ConstructorWithComments [
-        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_ordinary $ record H._OrdinaryConstructor [
-          H._OrdinaryConstructor_name>>: HaskellUtilsSource.simpleName @@ var "nm",
-          H._OrdinaryConstructor_fields>>: var "typeList"],
+        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_ordinary $ record H._PositionalConstructor [
+          H._PositionalConstructor_name>>: HaskellUtilsSource.simpleName @@ var "nm",
+          H._PositionalConstructor_fields>>: var "typeList"],
         H._ConstructorWithComments_comments>>: var "comments"]] $
       "isSer" <<~ Predicates.isSerializableByName @@ var "cx" @@ var "g" @@ var "elementName" $ lets [
-      "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
+      "deriv">: wrap H._DerivingClause $ Logic.ifElse (var "isSer")
         (Lists.map (HaskellUtilsSource.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
         (list ([] :: [TTerm H.Name])),
       "unpackResult">: HaskellUtilsSource.unpackForallType @@ var "typ",
@@ -1025,30 +1025,30 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
       "decl" <<~ (cases _Type (Strip.deannotateType @@ var "t'")
         (Just $ "htype" <<~ (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g") $
-          right $ inject H._Declaration H._Declaration_type $ record H._TypeDeclaration [
-            H._TypeDeclaration_name>>: var "hd",
-            H._TypeDeclaration_type>>: var "htype"]) [
+          right $ inject H._Declaration H._Declaration_type $ record H._TypeSynonymDeclaration [
+            H._TypeSynonymDeclaration_name>>: var "hd",
+            H._TypeSynonymDeclaration_type>>: var "htype"]) [
         _Type_record>>: "rt" ~>
           "cons" <<~ (var "recordCons" @@ var "lname" @@ var "rt") $
           right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
-            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
+            H._DataDeclaration_keyword>>: injectUnit H._DataKeyword H._DataKeyword_data,
+            H._DataDeclaration_context>>: list ([] :: [TTerm H.Constraint]),
             H._DataDeclaration_head>>: var "hd",
             H._DataDeclaration_constructors>>: list [var "cons"],
             H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_union>>: "rt" ~>
           "cons" <<~ Eithers.mapList (var "unionCons" @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "lname") (var "rt") $
           right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
-            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
+            H._DataDeclaration_keyword>>: injectUnit H._DataKeyword H._DataKeyword_data,
+            H._DataDeclaration_context>>: list ([] :: [TTerm H.Constraint]),
             H._DataDeclaration_head>>: var "hd",
             H._DataDeclaration_constructors>>: var "cons",
             H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_wrap>>: "wrapped" ~>
           "cons" <<~ var "newtypeCons" @@ var "elementName" @@ var "wrapped" $
             right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-              H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_newtype,
-              H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
+              H._DataDeclaration_keyword>>: injectUnit H._DataKeyword H._DataKeyword_newtype,
+              H._DataDeclaration_context>>: list ([] :: [TTerm H.Constraint]),
               H._DataDeclaration_head>>: var "hd",
               H._DataDeclaration_constructors>>: list [var "cons"],
               H._DataDeclaration_deriving>>: list [var "deriv"]]]) $

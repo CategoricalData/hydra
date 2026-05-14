@@ -30,33 +30,33 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Assertion",
+        "name": "hydra.haskell.syntax.Constraint",
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A type assertion"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A type constraint"}}}],
               "body": {
                 "union": [
                   {
                     "name": "class",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A class assertion"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.ClassAssertion"}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A class constraint"}}}],
+                        "body": {"variable": "hydra.haskell.syntax.ClassConstraint"}}}},
                   {
                     "name": "tuple",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A tuple of assertions"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.Assertion"}}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A tuple of constraints"}}}],
+                        "body": {"list": {"variable": "hydra.haskell.syntax.Constraint"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ClassAssertion",
+        "name": "hydra.haskell.syntax.ClassConstraint",
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A class assertion"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A class constraint"}}}],
               "body": {
                 "record": [
                   {
@@ -95,7 +95,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An ordinary (positional) constructor"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.OrdinaryConstructor"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.PositionalConstructor"}}}},
                   {
                     "name": "record",
                     "type": {
@@ -105,7 +105,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.OrdinaryConstructor",
+        "name": "hydra.haskell.syntax.PositionalConstructor",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -183,13 +183,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The 'data' or 'newtype' keyword"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.DataOrNewtype"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.DataKeyword"}}}},
                   {
                     "name": "context",
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Type class constraints"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.Assertion"}}}}},
+                        "body": {"list": {"variable": "hydra.haskell.syntax.Constraint"}}}}},
                   {
                     "name": "head",
                     "type": {
@@ -207,11 +207,11 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Derived type class instances"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.Deriving"}}}}}]}}},
+                        "body": {"list": {"variable": "hydra.haskell.syntax.DerivingClause"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.DataOrNewtype",
+        "name": "hydra.haskell.syntax.DataKeyword",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -260,7 +260,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type synonym declaration"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.TypeDeclaration"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.TypeSynonymDeclaration"}}}},
                   {
                     "name": "valueBinding",
                     "type": {
@@ -326,11 +326,11 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.Deriving",
+        "name": "hydra.haskell.syntax.DerivingClause",
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A 'deriving' statement"}}}],
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A 'deriving' clause"}}}],
               "body": {"wrap": {"list": {"variable": "hydra.haskell.syntax.Name"}}}}},
           "variables": []}}},
     {
@@ -347,7 +347,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An exported declaration"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.ImportExportSpec"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.NamedImportExport"}}}},
                   {
                     "name": "module",
                     "type": {
@@ -381,7 +381,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A record constructor expression"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.ConstructRecordExpression"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.RecordExpression"}}}},
                   {
                     "name": "do",
                     "type": {
@@ -399,7 +399,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An infix application"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.InfixApplicationExpression"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.InfixExpression"}}}},
                   {
                     "name": "literal",
                     "type": {
@@ -459,13 +459,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type signature expression"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.TypeSignatureExpression"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.TypedExpression"}}}},
                   {
                     "name": "updateRecord",
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A record update expression"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.UpdateRecordExpression"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.RecordUpdateExpression"}}}},
                   {
                     "name": "variable",
                     "type": {
@@ -519,7 +519,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ConstructRecordExpression",
+        "name": "hydra.haskell.syntax.RecordExpression",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -569,7 +569,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.InfixApplicationExpression",
+        "name": "hydra.haskell.syntax.InfixExpression",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -685,7 +685,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.TypeSignatureExpression",
+        "name": "hydra.haskell.syntax.TypedExpression",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -707,7 +707,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.UpdateRecordExpression",
+        "name": "hydra.haskell.syntax.RecordUpdateExpression",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -825,11 +825,11 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional import specification"}}}],
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.SpecImport"}}}}}]}}},
+                        "body": {"maybe": {"variable": "hydra.haskell.syntax.ImportSpec"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.SpecImport",
+        "name": "hydra.haskell.syntax.ImportSpec",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -841,13 +841,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A list of imports to include"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.ImportExportSpec"}}}}},
+                        "body": {"list": {"variable": "hydra.haskell.syntax.NamedImportExport"}}}}},
                   {
                     "name": "hiding",
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A list of imports to exclude"}}}],
-                        "body": {"list": {"variable": "hydra.haskell.syntax.ImportExportSpec"}}}}}]}}},
+                        "body": {"list": {"variable": "hydra.haskell.syntax.NamedImportExport"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -860,7 +860,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ImportExportSpec",
+        "name": "hydra.haskell.syntax.NamedImportExport",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -884,11 +884,11 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional subspecification"}}}],
-                        "body": {"maybe": {"variable": "hydra.haskell.syntax.SubspecImportExportSpec"}}}}}]}}},
+                        "body": {"maybe": {"variable": "hydra.haskell.syntax.ImportExportSubspec"}}}}}]}}},
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.SubspecImportExportSpec",
+        "name": "hydra.haskell.syntax.ImportExportSubspec",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -1345,7 +1345,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A context type"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.ContextType"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.ConstrainedType"}}}},
                   {
                     "name": "function",
                     "type": {
@@ -1407,7 +1407,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.ContextType",
+        "name": "hydra.haskell.syntax.ConstrainedType",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -1419,7 +1419,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type class context"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Assertion"}}}},
+                        "body": {"variable": "hydra.haskell.syntax.Constraint"}}}},
                   {
                     "name": "type",
                     "type": {
@@ -1474,12 +1474,12 @@
                     "name": "rhs",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand operator"}}}],
-                        "body": {"variable": "hydra.haskell.syntax.Operator"}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The right-hand type"}}}],
+                        "body": {"variable": "hydra.haskell.syntax.Type"}}}}]}}},
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.haskell.syntax.TypeDeclaration",
+        "name": "hydra.haskell.syntax.TypeSynonymDeclaration",
         "typeScheme": {
           "body": {
             "annotated": {

@@ -105,10 +105,10 @@ constructModule namespaces mod defs cx g =
                                   malias = Pairs.second (Pairs.first triple)
                                   hidden = Pairs.second triple
                                   spec =
-                                          Logic.ifElse (Lists.null hidden) Nothing (Just (Syntax.SpecImportHiding (Lists.map (\n -> Syntax.ImportExportSpec {
-                                            Syntax.importExportSpecModifier = Nothing,
-                                            Syntax.importExportSpecName = (Utils.simpleName n),
-                                            Syntax.importExportSpecSubspec = Nothing}) hidden)))
+                                          Logic.ifElse (Lists.null hidden) Nothing (Just (Syntax.ImportSpecHiding (Lists.map (\n -> Syntax.NamedImportExport {
+                                            Syntax.namedImportExportModifier = Nothing,
+                                            Syntax.namedImportExportName = (Utils.simpleName n),
+                                            Syntax.namedImportExportSubspec = Nothing}) hidden)))
                               in Syntax.Import {
                                 Syntax.importQualified = (Maybes.isJust malias),
                                 Syntax.importModule = (Syntax.ModuleName name),
@@ -317,9 +317,9 @@ encodeTerm depth namespaces term cx g =
                           Syntax.fieldUpdateName = fieldRef,
                           Syntax.fieldUpdateValue = hft})))
               typeName = Utils.elementReference namespaces sname
-          in (Eithers.bind (Eithers.mapList toFieldUpdate fields) (\updates -> Right (Syntax.ExpressionConstructRecord (Syntax.ConstructRecordExpression {
-            Syntax.constructRecordExpressionName = typeName,
-            Syntax.constructRecordExpressionFields = updates}))))
+          in (Eithers.bind (Eithers.mapList toFieldUpdate fields) (\updates -> Right (Syntax.ExpressionConstructRecord (Syntax.RecordExpression {
+            Syntax.recordExpressionName = typeName,
+            Syntax.recordExpressionFields = updates}))))
         Core.TermSet v0 -> Logic.ifElse (Sets.null v0) (Right (Utils.hsvar "S.empty")) (nonemptySet v0)
         Core.TermTypeLambda v0 ->
           let term1 = Core.typeLambdaBody v0
@@ -440,9 +440,9 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
                                   Classes.TypeClassEquality -> "Eq"
                                   Classes.TypeClassOrdering -> "Ord")
                         htype = Syntax.TypeVariable (Utils.rawName (Core.unName name))
-                    in (Syntax.AssertionClass (Syntax.ClassAssertion {
-                      Syntax.classAssertionName = hname,
-                      Syntax.classAssertionTypes = [
+                    in (Syntax.ConstraintClass (Syntax.ClassConstraint {
+                      Syntax.classConstraintName = hname,
+                      Syntax.classConstraintTypes = [
                         htype]}))
           assertPairs = Lists.concat (Lists.map toPairs (Maps.toList classes))
           toPairs =
@@ -454,10 +454,10 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
       in (Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htyp -> Logic.ifElse (Lists.null assertPairs) (Right htyp) (
         let encoded = Lists.map encodeAssertion assertPairs
             hassert =
-                    Logic.ifElse (Equality.equal (Lists.length encoded) 1) (Maybes.fromMaybe (Syntax.AssertionTuple encoded) (Lists.maybeHead encoded)) (Syntax.AssertionTuple encoded)
-        in (Right (Syntax.TypeCtx (Syntax.ContextType {
-          Syntax.contextTypeCtx = hassert,
-          Syntax.contextTypeType = htyp}))))))
+                    Logic.ifElse (Equality.equal (Lists.length encoded) 1) (Maybes.fromMaybe (Syntax.ConstraintTuple encoded) (Lists.maybeHead encoded)) (Syntax.ConstraintTuple encoded)
+        in (Right (Syntax.TypeCtx (Syntax.ConstrainedType {
+          Syntax.constrainedTypeCtx = hassert,
+          Syntax.constrainedTypeType = htyp}))))))
 -- | Encode an unwrap term as a Haskell expression
 encodeUnwrap :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Either t0 Syntax.Expression
 encodeUnwrap namespaces name =
@@ -719,13 +719,13 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                       let nm = deconflict (Strings.cat2 (Formatting.capitalize lname_) (Formatting.capitalize (Core.unName fname)))
                       in (Eithers.bind (Logic.ifElse (Equality.equal (Strip.deannotateType ftype) Core.TypeUnit) (Right []) (Eithers.bind (adaptTypeToHaskellAndEncode namespaces ftype cx g) (\htype -> Right [
                         htype]))) (\typeList -> Right (Syntax.ConstructorWithComments {
-                        Syntax.constructorWithCommentsBody = (Syntax.ConstructorOrdinary (Syntax.OrdinaryConstructor {
-                          Syntax.ordinaryConstructorName = (Utils.simpleName nm),
-                          Syntax.ordinaryConstructorFields = typeList})),
+                        Syntax.constructorWithCommentsBody = (Syntax.ConstructorOrdinary (Syntax.PositionalConstructor {
+                          Syntax.positionalConstructorName = (Utils.simpleName nm),
+                          Syntax.positionalConstructorFields = typeList})),
                         Syntax.constructorWithCommentsComments = comments})))))
       in (Eithers.bind (Predicates.isSerializableByName cx g elementName) (\isSer ->
         let deriv =
-                Syntax.Deriving (Logic.ifElse isSer (Lists.map Utils.rawName [
+                Syntax.DerivingClause (Logic.ifElse isSer (Lists.map Utils.rawName [
                   "Eq",
                   "Ord",
                   "Read",
@@ -736,7 +736,7 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
             hd = declHead hname (Lists.reverse vars)
         in (Eithers.bind (case (Strip.deannotateType t_) of
           Core.TypeRecord v0 -> Eithers.bind (recordCons lname v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
-            Syntax.dataDeclarationKeyword = Syntax.DataOrNewtypeData,
+            Syntax.dataDeclarationKeyword = Syntax.DataKeywordData,
             Syntax.dataDeclarationContext = [],
             Syntax.dataDeclarationHead = hd,
             Syntax.dataDeclarationConstructors = [
@@ -744,23 +744,23 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
             Syntax.dataDeclarationDeriving = [
               deriv]})))
           Core.TypeUnion v0 -> Eithers.bind (Eithers.mapList (unionCons (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) lname) v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
-            Syntax.dataDeclarationKeyword = Syntax.DataOrNewtypeData,
+            Syntax.dataDeclarationKeyword = Syntax.DataKeywordData,
             Syntax.dataDeclarationContext = [],
             Syntax.dataDeclarationHead = hd,
             Syntax.dataDeclarationConstructors = cons,
             Syntax.dataDeclarationDeriving = [
               deriv]})))
           Core.TypeWrap v0 -> Eithers.bind (newtypeCons elementName v0) (\cons -> Right (Syntax.DeclarationData (Syntax.DataDeclaration {
-            Syntax.dataDeclarationKeyword = Syntax.DataOrNewtypeNewtype,
+            Syntax.dataDeclarationKeyword = Syntax.DataKeywordNewtype,
             Syntax.dataDeclarationContext = [],
             Syntax.dataDeclarationHead = hd,
             Syntax.dataDeclarationConstructors = [
               cons],
             Syntax.dataDeclarationDeriving = [
               deriv]})))
-          _ -> Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htype -> Right (Syntax.DeclarationType (Syntax.TypeDeclaration {
-            Syntax.typeDeclarationName = hd,
-            Syntax.typeDeclarationType = htype})))) (\decl -> Eithers.bind (Annotations.getTypeDescription cx g typ) (\comments -> Eithers.bind (Logic.ifElse includeTypeDefinitions (Eithers.bind (typeDecl namespaces elementName typ cx g) (\decl_ -> Right [
+          _ -> Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htype -> Right (Syntax.DeclarationType (Syntax.TypeSynonymDeclaration {
+            Syntax.typeSynonymDeclarationName = hd,
+            Syntax.typeSynonymDeclarationType = htype})))) (\decl -> Eithers.bind (Annotations.getTypeDescription cx g typ) (\comments -> Eithers.bind (Logic.ifElse includeTypeDefinitions (Eithers.bind (typeDecl namespaces elementName typ cx g) (\decl_ -> Right [
           decl_])) (Right [])) (\tdecls ->
           let mainDecl =
                   Syntax.DeclarationWithComments {

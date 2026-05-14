@@ -37,12 +37,6 @@ applicationPatternToExpr appPat =
       let name = Syntax.applicationPatternName appPat
           pats = Syntax.applicationPatternArgs appPat
       in (Serialization.spaceSep (Lists.cons (nameToExpr name) (Lists.map patternToExpr pats)))
--- | Convert a type class assertion to an AST expression
-assertionToExpr :: Syntax.Assertion -> Ast.Expr
-assertionToExpr sert =
-    case sert of
-      Syntax.AssertionClass v0 -> classAssertionToExpr v0
-      Syntax.AssertionTuple v0 -> Serialization.parenList False (Lists.map assertionToExpr v0)
 -- | Convert a case expression to an AST expression
 caseExpressionToExpr :: Syntax.CaseExpression -> Ast.Expr
 caseExpressionToExpr caseExpr =
@@ -66,35 +60,27 @@ caseExpressionToExpr caseExpr =
 -- | Convert a case right-hand side to an AST expression
 caseRhsToExpr :: Syntax.CaseRhs -> Ast.Expr
 caseRhsToExpr rhs = expressionToExpr (Syntax.unCaseRhs rhs)
--- | Convert a class assertion to an AST expression
-classAssertionToExpr :: Syntax.ClassAssertion -> Ast.Expr
-classAssertionToExpr clsAsrt =
+-- | Convert a class constraint to an AST expression
+classConstraintToExpr :: Syntax.ClassConstraint -> Ast.Expr
+classConstraintToExpr clsAsrt =
 
-      let name = Syntax.classAssertionName clsAsrt
-          types = Syntax.classAssertionTypes clsAsrt
+      let name = Syntax.classConstraintName clsAsrt
+          types = Syntax.classConstraintTypes clsAsrt
       in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
         Serialization.commaSep Serialization.halfBlockStyle (Lists.map typeToExpr types)]))
--- | Convert a record construction expression to an AST expression
-constructRecordExpressionToExpr :: Syntax.ConstructRecordExpression -> Ast.Expr
-constructRecordExpressionToExpr constructRecord =
-
-      let name = Syntax.constructRecordExpressionName constructRecord
-          updates = Syntax.constructRecordExpressionFields constructRecord
-          fromUpdate =
-                  \update ->
-                    let fn = Syntax.fieldUpdateName update
-                        val = Syntax.fieldUpdateValue update
-                    in (Serialization.ifx Operators.defineOp (nameToExpr fn) (expressionToExpr val))
-          body = Serialization.commaSep Serialization.halfBlockStyle (Lists.map fromUpdate updates)
-      in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
-        Serialization.brackets Serialization.curlyBraces Serialization.halfBlockStyle body]))
+-- | Convert a type class constraint to an AST expression
+constraintToExpr :: Syntax.Constraint -> Ast.Expr
+constraintToExpr sert =
+    case sert of
+      Syntax.ConstraintClass v0 -> classConstraintToExpr v0
+      Syntax.ConstraintTuple v0 -> Serialization.parenList False (Lists.map constraintToExpr v0)
 -- | Convert a data constructor to an AST expression
 constructorToExpr :: Syntax.Constructor -> Ast.Expr
 constructorToExpr cons =
     case cons of
       Syntax.ConstructorOrdinary v0 ->
-        let name = Syntax.ordinaryConstructorName v0
-            types = Syntax.ordinaryConstructorFields v0
+        let name = Syntax.positionalConstructorName v0
+            types = Syntax.positionalConstructorFields v0
         in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
           Serialization.spaceSep (Lists.map typeToExpr types)]))
       Syntax.ConstructorRecord v0 ->
@@ -111,11 +97,11 @@ constructorWithCommentsToExpr consWithComments =
       in (Maybes.maybe (constructorToExpr body) (\c -> Serialization.newlineSep (Lists.cons (Serialization.cst (toHaskellComments c)) [
         constructorToExpr body])) mc)
 -- | Convert a data/newtype keyword to an AST expression
-dataOrNewtypeToExpr :: Syntax.DataOrNewtype -> Ast.Expr
-dataOrNewtypeToExpr kw =
+dataKeywordToExpr :: Syntax.DataKeyword -> Ast.Expr
+dataKeywordToExpr kw =
     case kw of
-      Syntax.DataOrNewtypeData -> Serialization.cst "data"
-      Syntax.DataOrNewtypeNewtype -> Serialization.cst "newtype"
+      Syntax.DataKeywordData -> Serialization.cst "data"
+      Syntax.DataKeywordNewtype -> Serialization.cst "newtype"
 -- | Convert a declaration head to an AST expression
 declarationHeadToExpr :: Syntax.DeclarationHead -> Ast.Expr
 declarationHeadToExpr hd =
@@ -135,7 +121,7 @@ declarationToExpr decl =
             hd = Syntax.dataDeclarationHead v0
             cons = Syntax.dataDeclarationConstructors v0
             deriv = Syntax.dataDeclarationDeriving v0
-            derivCat = Lists.concat (Lists.map Syntax.unDeriving deriv)
+            derivCat = Lists.concat (Lists.map Syntax.unDerivingClause deriv)
             constructors = Serialization.orSep Serialization.halfBlockStyle (Lists.map constructorWithCommentsToExpr cons)
             derivingClause =
                     Logic.ifElse (Lists.null derivCat) [] [
@@ -143,13 +129,13 @@ declarationToExpr decl =
                         Serialization.parenList False (Lists.map nameToExpr derivCat)])]
             mainParts =
                     [
-                      Serialization.spaceSep (Lists.cons (dataOrNewtypeToExpr kw) (Lists.cons (declarationHeadToExpr hd) [
+                      Serialization.spaceSep (Lists.cons (dataKeywordToExpr kw) (Lists.cons (declarationHeadToExpr hd) [
                         Serialization.cst "="])),
                       constructors]
         in (Serialization.indentBlock (Lists.concat2 mainParts derivingClause))
       Syntax.DeclarationType v0 ->
-        let hd = Syntax.typeDeclarationName v0
-            typ = Syntax.typeDeclarationType v0
+        let hd = Syntax.typeSynonymDeclarationName v0
+            typ = Syntax.typeSynonymDeclarationType v0
         in (Serialization.spaceSep (Lists.cons (Serialization.cst "type") (Lists.cons (declarationHeadToExpr hd) (Lists.cons (Serialization.cst "=") [
           typeToExpr typ]))))
       Syntax.DeclarationValueBinding v0 -> valueBindingToExpr v0
@@ -177,7 +163,7 @@ expressionToExpr expr =
     case expr of
       Syntax.ExpressionApplication v0 -> applicationExpressionToExpr v0
       Syntax.ExpressionCase v0 -> caseExpressionToExpr v0
-      Syntax.ExpressionConstructRecord v0 -> constructRecordExpressionToExpr v0
+      Syntax.ExpressionConstructRecord v0 -> recordExpressionToExpr v0
       Syntax.ExpressionDo v0 -> Serialization.indentBlock (Lists.cons (Serialization.cst "do") (Lists.map statementToExpr v0))
       Syntax.ExpressionIf v0 -> ifExpressionToExpr v0
       Syntax.ExpressionLiteral v0 -> literalToExpr v0
@@ -232,9 +218,6 @@ ifExpressionToExpr ifExpr =
                       expressionToExpr eelse])])
       in (Serialization.ifx ifOp (Serialization.spaceSep (Lists.cons (Serialization.cst "if") [
         expressionToExpr eif])) body)
--- | Convert an import/export specification to an AST expression
-importExportSpecToExpr :: Syntax.ImportExportSpec -> Ast.Expr
-importExportSpecToExpr spec = nameToExpr (Syntax.importExportSpecName spec)
 -- | Convert an import statement to an AST expression
 importToExpr :: Syntax.Import -> Ast.Expr
 importToExpr import_ =
@@ -246,8 +229,8 @@ importToExpr import_ =
           name = Syntax.unModuleName modName
           hidingSec =
                   \spec -> case spec of
-                    Syntax.SpecImportHiding v0 -> Serialization.spaceSep (Lists.cons (Serialization.cst "hiding ") [
-                      Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map importExportSpecToExpr v0))])
+                    Syntax.ImportSpecHiding v0 -> Serialization.spaceSep (Lists.cons (Serialization.cst "hiding ") [
+                      Serialization.parens (Serialization.commaSep Serialization.inlineStyle (Lists.map namedImportExportToExpr v0))])
           parts =
                   Maybes.cat [
                     Just (Serialization.cst "import"),
@@ -332,6 +315,9 @@ nameToExpr name =
         "(",
         (writeQualifiedName v0),
         ")"])
+-- | Convert an import/export specification to an AST expression
+namedImportExportToExpr :: Syntax.NamedImportExport -> Ast.Expr
+namedImportExportToExpr spec = nameToExpr (Syntax.namedImportExportName spec)
 -- | Convert a pattern to an AST expression
 patternToExpr :: Syntax.Pattern -> Ast.Expr
 patternToExpr pat =
@@ -343,6 +329,20 @@ patternToExpr pat =
       Syntax.PatternParens v0 -> Serialization.parenthesize (patternToExpr v0)
       Syntax.PatternTuple v0 -> Serialization.parenListAdaptive (Lists.map patternToExpr v0)
       Syntax.PatternWildcard -> Serialization.cst "_"
+-- | Convert a record construction expression to an AST expression
+recordExpressionToExpr :: Syntax.RecordExpression -> Ast.Expr
+recordExpressionToExpr constructRecord =
+
+      let name = Syntax.recordExpressionName constructRecord
+          updates = Syntax.recordExpressionFields constructRecord
+          fromUpdate =
+                  \update ->
+                    let fn = Syntax.fieldUpdateName update
+                        val = Syntax.fieldUpdateValue update
+                    in (Serialization.ifx Operators.defineOp (nameToExpr fn) (expressionToExpr val))
+          body = Serialization.commaSep Serialization.halfBlockStyle (Lists.map fromUpdate updates)
+      in (Serialization.spaceSep (Lists.cons (nameToExpr name) [
+        Serialization.brackets Serialization.curlyBraces Serialization.halfBlockStyle body]))
 -- | Convert a right-hand side to an AST expression
 rightHandSideToExpr :: Syntax.RightHandSide -> Ast.Expr
 rightHandSideToExpr rhs = expressionToExpr (Syntax.unRightHandSide rhs)
@@ -384,9 +384,9 @@ typeToExpr htype =
             rhs = Syntax.applicationTypeArgument v0
         in (Serialization.ifx Operators.appOp (typeToExpr lhs) (typeToExpr rhs))
       Syntax.TypeCtx v0 ->
-        let ctx = Syntax.contextTypeCtx v0
-            typ = Syntax.contextTypeType v0
-        in (Serialization.ifx Operators.assertOp (assertionToExpr ctx) (typeToExpr typ))
+        let ctx = Syntax.constrainedTypeCtx v0
+            typ = Syntax.constrainedTypeType v0
+        in (Serialization.ifx Operators.assertOp (constraintToExpr ctx) (typeToExpr typ))
       Syntax.TypeFunction v0 ->
         let dom = Syntax.functionTypeDomain v0
             cod = Syntax.functionTypeCodomain v0

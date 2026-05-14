@@ -407,7 +407,7 @@
                                                               {"name": "as", "term": {"maybe": {"variable": "alias"}}},
                                                               {
                                                                 "name": "spec",
-                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.haskell.syntax.SpecImport"}}}}],
+                                                                "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.haskell.syntax.ImportSpec"}}}}],
                                                             "typeName": "hydra.haskell.syntax.Import"}}}},
                                                     "domain": {
                                                       "pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "hydra.haskell.syntax.ModuleName"}}},
@@ -569,18 +569,18 @@
                                                                                             "term": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.haskell.utils.simpleName"}}}},
                                                                                           {
                                                                                             "name": "subspec",
-                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.haskell.syntax.SubspecImportExportSpec"}}}}],
-                                                                                        "typeName": "hydra.haskell.syntax.ImportExportSpec"}},
+                                                                                            "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.haskell.syntax.ImportExportSubspec"}}}}],
+                                                                                        "typeName": "hydra.haskell.syntax.NamedImportExport"}},
                                                                                     "domain": {"literal": {"string": {}}},
                                                                                     "parameter": "n"}},
                                                                                 "function": {
                                                                                   "typeApplication": {
                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"literal": {"string": {}}}}},
-                                                                                    "type": {"variable": "hydra.haskell.syntax.ImportExportSpec"}}}}}}}},
-                                                                      "typeName": "hydra.haskell.syntax.SpecImport"}}},
+                                                                                    "type": {"variable": "hydra.haskell.syntax.NamedImportExport"}}}}}}}},
+                                                                      "typeName": "hydra.haskell.syntax.ImportSpec"}}},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.haskell.syntax.SpecImport"}}},
+                                                                    "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.haskell.syntax.ImportSpec"}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
@@ -588,8 +588,8 @@
                                                                             "argument": {"variable": "hidden"},
                                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.null"}, "type": {"literal": {"string": {}}}}}}},
                                                                         "function": {
-                                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.haskell.syntax.SpecImport"}}}}}}}}}},
-                                                            "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.SpecImport"}}, "variables": []}}],
+                                                                          "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"maybe": {"variable": "hydra.haskell.syntax.ImportSpec"}}}}}}}}}},
+                                                            "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.ImportSpec"}}, "variables": []}}],
                                                         "body": {
                                                           "record": {
                                                             "fields": [
@@ -3481,7 +3481,7 @@
                                                                                               "term": {
                                                                                                 "record": {
                                                                                                   "fields": [{"name": "name", "term": {"variable": "typeName"}}, {"name": "fields", "term": {"variable": "updates"}}],
-                                                                                                  "typeName": "hydra.haskell.syntax.ConstructRecordExpression"}}},
+                                                                                                  "typeName": "hydra.haskell.syntax.RecordExpression"}}},
                                                                                             "typeName": "hydra.haskell.syntax.Expression"}}}},
                                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                                 "type": {"variable": "hydra.haskell.syntax.Expression"}}},
@@ -5078,14 +5078,14 @@
                                                               "term": {
                                                                 "record": {
                                                                   "fields": [{"name": "name", "term": {"variable": "hname"}}, {"name": "types", "term": {"list": [{"variable": "htype"}]}}],
-                                                                  "typeName": "hydra.haskell.syntax.ClassAssertion"}}},
-                                                            "typeName": "hydra.haskell.syntax.Assertion"}}}},
+                                                                  "typeName": "hydra.haskell.syntax.ClassConstraint"}}},
+                                                            "typeName": "hydra.haskell.syntax.Constraint"}}}},
                                                     "domain": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.classes.TypeClass"}}},
                                                     "parameter": "pair"}},
                                                 "typeScheme": {
                                                   "body": {
                                                     "function": {
-                                                      "codomain": {"variable": "hydra.haskell.syntax.Assertion"},
+                                                      "codomain": {"variable": "hydra.haskell.syntax.Constraint"},
                                                       "domain": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.classes.TypeClass"}}}}},
                                                   "variables": []}},
                                               {
@@ -5217,13 +5217,13 @@
                                                                               "typeApplication": {
                                                                                 "body": {"variable": "hydra.lib.lists.map"},
                                                                                 "type": {"pair": {"first": {"variable": "hydra.core.Name"}, "second": {"variable": "hydra.classes.TypeClass"}}}}},
-                                                                            "type": {"variable": "hydra.haskell.syntax.Assertion"}}}}}}},
-                                                                "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Assertion"}}, "variables": []}},
+                                                                            "type": {"variable": "hydra.haskell.syntax.Constraint"}}}}}}},
+                                                                "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Constraint"}}, "variables": []}},
                                                               {
                                                                 "name": "hassert",
                                                                 "term": {
                                                                   "application": {
-                                                                    "argument": {"inject": {"field": {"name": "tuple", "term": {"variable": "encoded"}}, "typeName": "hydra.haskell.syntax.Assertion"}},
+                                                                    "argument": {"inject": {"field": {"name": "tuple", "term": {"variable": "encoded"}}, "typeName": "hydra.haskell.syntax.Constraint"}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
@@ -5232,12 +5232,12 @@
                                                                               "application": {
                                                                                 "argument": {"variable": "encoded"},
                                                                                 "function": {
-                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.haskell.syntax.Assertion"}}}}},
+                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.haskell.syntax.Constraint"}}}}},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {"inject": {"field": {"name": "tuple", "term": {"variable": "encoded"}}, "typeName": "hydra.haskell.syntax.Assertion"}},
+                                                                                "argument": {"inject": {"field": {"name": "tuple", "term": {"variable": "encoded"}}, "typeName": "hydra.haskell.syntax.Constraint"}},
                                                                                 "function": {
-                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.haskell.syntax.Assertion"}}}}}}},
+                                                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.haskell.syntax.Constraint"}}}}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
@@ -5249,11 +5249,11 @@
                                                                                       "application": {
                                                                                         "argument": {"variable": "encoded"},
                                                                                         "function": {
-                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.haskell.syntax.Assertion"}}}}},
+                                                                                          "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.haskell.syntax.Constraint"}}}}},
                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                                                             "function": {
-                                                                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.haskell.syntax.Assertion"}}}}}}}}},
-                                                                "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Assertion"}, "variables": []}}],
+                                                                              "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.haskell.syntax.Constraint"}}}}}}}}},
+                                                                "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Constraint"}, "variables": []}}],
                                                             "body": {
                                                               "typeApplication": {
                                                                 "body": {
@@ -5267,7 +5267,7 @@
                                                                               "term": {
                                                                                 "record": {
                                                                                   "fields": [{"name": "ctx", "term": {"variable": "hassert"}}, {"name": "type", "term": {"variable": "htyp"}}],
-                                                                                  "typeName": "hydra.haskell.syntax.ContextType"}}},
+                                                                                  "typeName": "hydra.haskell.syntax.ConstrainedType"}}},
                                                                             "typeName": "hydra.haskell.syntax.Type"}}}},
                                                                     "type": {"variable": "hydra.errors.Error"}}},
                                                                 "type": {"variable": "hydra.haskell.syntax.Type"}}}}},
@@ -7860,7 +7860,7 @@
                                                                                                               "name": "name",
                                                                                                               "term": {"application": {"argument": {"variable": "nm"}, "function": {"variable": "hydra.haskell.utils.simpleName"}}}},
                                                                                                             {"name": "fields", "term": {"variable": "typeList"}}],
-                                                                                                          "typeName": "hydra.haskell.syntax.OrdinaryConstructor"}}},
+                                                                                                          "typeName": "hydra.haskell.syntax.PositionalConstructor"}}},
                                                                                                     "typeName": "hydra.haskell.syntax.Constructor"}}},
                                                                                               {"name": "comments", "term": {"variable": "comments"}}],
                                                                                             "typeName": "hydra.haskell.syntax.ConstructorWithComments"}}}},
@@ -8015,8 +8015,8 @@
                                                                     "argument": {"variable": "isSer"},
                                                                     "function": {
                                                                       "typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"list": {"variable": "hydra.haskell.syntax.Name"}}}}}}}}}},
-                                                        "typeName": "hydra.haskell.syntax.Deriving"}},
-                                                    "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Deriving"}, "variables": []}},
+                                                        "typeName": "hydra.haskell.syntax.DerivingClause"}},
+                                                    "typeScheme": {"body": {"variable": "hydra.haskell.syntax.DerivingClause"}, "variables": []}},
                                                   {
                                                     "name": "unpackResult",
                                                     "term": {"application": {"argument": {"variable": "typ"}, "function": {"variable": "hydra.haskell.utils.unpackForallType"}}},
@@ -8224,10 +8224,10 @@
                                                                                                       "fields": [
                                                                                                         {
                                                                                                           "name": "keyword",
-                                                                                                          "term": {"inject": {"field": {"name": "data", "term": {"unit": {}}}, "typeName": "hydra.haskell.syntax.DataOrNewtype"}}},
+                                                                                                          "term": {"inject": {"field": {"name": "data", "term": {"unit": {}}}, "typeName": "hydra.haskell.syntax.DataKeyword"}}},
                                                                                                         {
                                                                                                           "name": "context",
-                                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.haskell.syntax.Assertion"}}}},
+                                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.haskell.syntax.Constraint"}}}},
                                                                                                         {"name": "head", "term": {"variable": "hd"}},
                                                                                                         {"name": "constructors", "term": {"list": [{"variable": "cons"}]}},
                                                                                                         {"name": "deriving", "term": {"list": [{"variable": "deriv"}]}}],
@@ -8275,10 +8275,10 @@
                                                                                                       "fields": [
                                                                                                         {
                                                                                                           "name": "keyword",
-                                                                                                          "term": {"inject": {"field": {"name": "data", "term": {"unit": {}}}, "typeName": "hydra.haskell.syntax.DataOrNewtype"}}},
+                                                                                                          "term": {"inject": {"field": {"name": "data", "term": {"unit": {}}}, "typeName": "hydra.haskell.syntax.DataKeyword"}}},
                                                                                                         {
                                                                                                           "name": "context",
-                                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.haskell.syntax.Assertion"}}}},
+                                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.haskell.syntax.Constraint"}}}},
                                                                                                         {"name": "head", "term": {"variable": "hd"}},
                                                                                                         {"name": "constructors", "term": {"variable": "cons"}},
                                                                                                         {"name": "deriving", "term": {"list": [{"variable": "deriv"}]}}],
@@ -8351,10 +8351,10 @@
                                                                                                       "fields": [
                                                                                                         {
                                                                                                           "name": "keyword",
-                                                                                                          "term": {"inject": {"field": {"name": "newtype", "term": {"unit": {}}}, "typeName": "hydra.haskell.syntax.DataOrNewtype"}}},
+                                                                                                          "term": {"inject": {"field": {"name": "newtype", "term": {"unit": {}}}, "typeName": "hydra.haskell.syntax.DataKeyword"}}},
                                                                                                         {
                                                                                                           "name": "context",
-                                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.haskell.syntax.Assertion"}}}},
+                                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.haskell.syntax.Constraint"}}}},
                                                                                                         {"name": "head", "term": {"variable": "hd"}},
                                                                                                         {"name": "constructors", "term": {"list": [{"variable": "cons"}]}},
                                                                                                         {"name": "deriving", "term": {"list": [{"variable": "deriv"}]}}],
@@ -8396,7 +8396,7 @@
                                                                                           "term": {
                                                                                             "record": {
                                                                                               "fields": [{"name": "name", "term": {"variable": "hd"}}, {"name": "type", "term": {"variable": "htype"}}],
-                                                                                              "typeName": "hydra.haskell.syntax.TypeDeclaration"}}},
+                                                                                              "typeName": "hydra.haskell.syntax.TypeSynonymDeclaration"}}},
                                                                                         "typeName": "hydra.haskell.syntax.Declaration"}}}},
                                                                                 "type": {"variable": "hydra.errors.Error"}}},
                                                                             "type": {"variable": "hydra.haskell.syntax.Declaration"}}},
