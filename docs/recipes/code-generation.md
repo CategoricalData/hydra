@@ -9,14 +9,15 @@ A guide to generating source code in target languages from Hydra module definiti
 
 ## Overview
 
-Hydra modules can be defined in any host language's DSL (today: Haskell)
-and generated into any target language (Haskell, Java, Python, Scala,
-Lisp dialects, plus schema-only targets like Coq, Rust, GraphQL, etc.).
+Hydra modules can be defined in any host language's DSL and generated
+into any target language (Haskell, Java, Python, Scala, Lisp dialects,
+plus schema-only targets like Coq, Rust, GraphQL, etc.).
 There are two source representations for modules:
 
 - **DSL modules** are human-authored source code, designed for readability
-  and maintainability. They live under `packages/<pkg>/src/main/haskell/Hydra/Sources/`
-  and are consumed directly by the `writeXxx` functions.
+  and maintainability. They live under `packages/<pkg>/src/main/<lang>/`
+  and are consumed directly by the corresponding host's `writeXxx` /
+  self-host driver.
 - **JSON modules** are a language-neutral interchange format, exported
   from DSL modules. They live under `dist/json/<pkg>/src/main/json/`
   and allow any host language to load modules and generate code
@@ -30,9 +31,27 @@ DSL modules  ---(Phase 1)--->  JSON modules  ---(Phase 2)--->  generated code
 (packages/)                    (dist/json/)                    (dist/<lang>/)
 ```
 
-For Hydra's own kernel, the DSL modules are in Haskell, but this is not
-a requirement. Any host language's DSL can be the source of truth for a
-given set of modules.
+The authoring host language varies per package:
+
+| Package | Source of truth (Phase 1) | Self-host script |
+|---------|---------------------------|------------------|
+| hydra-kernel | Haskell (`src/main/haskell/Hydra/Sources/Kernel/`) | `bin/sync-haskell.sh` (Phase 1 of) |
+| hydra-haskell | Haskell (`src/main/haskell/Hydra/Sources/Haskell/`) | (same as above) |
+| **hydra-java** | **Java (`src/main/java/hydra/sources/java/`)** | `bin/generate-hydra-java-from-java.sh` |
+| **hydra-python** | **Python (`src/main/python/hydra/sources/python/`)** | `bin/generate-hydra-python-from-python.sh` |
+| hydra-scala, hydra-lisp, hydra-pg, hydra-rdf, hydra-ext, ... | Haskell (`src/main/haskell/...`) | (Haskell Phase 1) |
+
+> **Legacy backup for hydra-java and hydra-python:** the Haskell-DSL versions
+> of these two packages' coder modules still live under
+> `packages/hydra-{java,python}/src/main/haskell/Hydra/Sources/{Java,Python}/`.
+> They produce byte-identical Phase-1 output to the host-native sources today
+> and serve as a fallback through the 0.15 line. The main sync sequence
+> (`bin/sync.sh`, `bin/sync-all.sh`, the per-language `bin/sync-<lang>.sh`
+> wrappers) still drives Phase 1 through the legacy Haskell path until that
+> integration lands; explicit Phase-1 regen via the
+> `generate-hydra-<lang>-from-<lang>.sh` scripts already uses the host-native
+> source. Both copies will remain in lock-step through the 0.15 line; the
+> legacy backup will be deleted before 0.16.
 
 ## Per-package layout
 
@@ -200,6 +219,54 @@ editing a DSL source invalidates Phase 1 (regenerates JSON), which
 invalidates Phase 2 for whichever packages own the changed namespace,
 which invalidates Phase 3 for whichever targets consume those packages.
 Targets not reached by the chain stay cached.
+
+## Host-native self-host scripts
+
+`hydra-java` and `hydra-python` are authored in their own host languages
+(Java and Python respectively, with legacy Haskell sources retained as a
+backup until 0.16; see [Overview](#overview)). The two corresponding
+scripts run Phase 1 directly from the host-native sources, no Haskell
+required:
+
+```bash
+# Regenerate dist/json/hydra-java/ from the Java DSL sources
+bin/generate-hydra-java-from-java.sh
+bin/generate-hydra-java-from-java.sh --compare        # byte-compare to canonical
+bin/generate-hydra-java-from-java.sh --force-rebuild  # rebuild Java host first
+
+# Regenerate dist/json/hydra-python/ from the Python DSL sources
+bin/generate-hydra-python-from-python.sh
+bin/generate-hydra-python-from-python.sh --pypy       # ~4x faster than CPython
+bin/generate-hydra-python-from-python.sh --compare
+bin/generate-hydra-python-from-python.sh --force-rebuild
+```
+
+Both scripts:
+1. Build the corresponding host (`bin/sync-java.sh` / `bin/sync-python.sh`)
+   if it isn't already present, so that the Java / Python runtime is
+   available to load the DSL sources.
+2. Run the self-host driver (`hydra.JavaSelfHostDemo` /
+   `bin/python-self-host-demo.py`), which loads the kernel universe from
+   `dist/json/hydra-kernel/`, imports/reflects on the package's DSL source
+   modules, infers types, and writes the resulting JSON.
+3. Optionally byte-compare the new output to the existing
+   `dist/json/hydra-{java,python}/` to verify byte-identical reproduction
+   of canonical.
+
+Use these when you have edited the Java or Python DSL sources and need to
+refresh `dist/json/` from them, or to validate that the host-native sources
+and the legacy Haskell sources still agree.
+
+> See [bin/java-self-host-demo.md](../../bin/java-self-host-demo.md) and
+> [bin/python-self-host-demo.md](../../bin/python-self-host-demo.md) for
+> background on how each driver works internally, including the
+> pre-computed type-scheme workaround used for `hydra.java.coder`.
+
+> **Sync integration:** the main sync scripts (`bin/sync.sh`,
+> `bin/sync-all.sh`, the `bin/sync-<lang>.sh` wrappers) still drive Phase 1
+> via the legacy Haskell pipeline; switching them over to the host-native
+> scripts is planned before 0.16. Until then, run the `generate-...` scripts
+> explicitly when editing the Java or Python DSL sources.
 
 ## Generating from DSL modules directly
 

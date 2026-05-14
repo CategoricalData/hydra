@@ -15,6 +15,12 @@ into eight host languages spanning five implementation families:
 Haskell, Java, Python, Scala, and Lisp (Clojure, Common Lisp, Emacs Lisp, Scheme — sharing one coder).
 All eight pass the common test suite.
 
+The Java and Python coder DSL sources (`packages/hydra-{java,python}/`) are now
+authored in Java and Python respectively (host-native), with legacy Haskell DSL
+copies retained as a backup through 0.15. See `bin/generate-hydra-java-from-java.sh`
+and `bin/generate-hydra-python-from-python.sh` for the self-host Phase-1 scripts.
+The main sync sequence will switch over to these before 0.16.
+
 A ninth target, Go (`hydra-go`, `heads/go/`), is a "head bud" — the kernel can be generated
 to Go via `bin/sync-go.sh`, but the Go coder still has emission bugs and the head's
 hand-written runtime is mostly placeholder. Go is not yet a complete implementation
