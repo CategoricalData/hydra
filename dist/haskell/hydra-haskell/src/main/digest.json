@@ -2,25 +2,25 @@
   "version": 2,
   "generator": "v0-unstamped",
   "inputs": {
-    "hydra.haskell.coder": { "kind": "Other", "hash": "4253ecf34f1e94ac0bb8afc085832d76351c5ea08698acfa190da099685f67d6" },
+    "hydra.haskell.coder": { "kind": "Other", "hash": "034088192ae042d2d2fe478abd21891f01950da3d7fed51c89a477f1d8199c2c" },
     "hydra.haskell.environment": { "kind": "Other", "hash": "75ff0a28ef41a6048ba5ac53c2721dcdd3dba6bb190dc7e9d96155d16f33acbe" },
     "hydra.haskell.language": { "kind": "Other", "hash": "731be7825087fb72bd6f5bd35b13e839eadfb36b3c7bed187312224a75721322" },
     "hydra.haskell.operators": { "kind": "Other", "hash": "a0cb4db2c3d0ef490ec7d50c08d058e0b2395f67fae3c3c6ea036f931ad1b0b3" },
-    "hydra.haskell.serde": { "kind": "Other", "hash": "197bdf513b9a89e283e460975ea7289c17a97e1e07c2b44cc627f7d36eae404f" },
-    "hydra.haskell.syntax": { "kind": "Other", "hash": "eb8160debc4101a7fd5c893c92704874d2f56c3dc0aec6f581a717177f60fa6f" },
+    "hydra.haskell.serde": { "kind": "Other", "hash": "4cca85d9efb8f23d99f3ac1e328bce614e21d2d1d937313968d7cb46a542c334" },
+    "hydra.haskell.syntax": { "kind": "Other", "hash": "e3f7e019a846fecbddd33fbbe638e6fe03de46c025bb007ae3c65db1f7c36075" },
     "hydra.haskell.testing": { "kind": "Other", "hash": "5f897bc96a901b2d75ef2a120e8ef05714af2d3c69979545764aa409e41b60e8" },
-    "hydra.haskell.utils": { "kind": "Other", "hash": "5f1a8cf96820a70fd0b8ed0ca01a77bc559186009eb09a6eb4faf25ae8407e8f" }
+    "hydra.haskell.utils": { "kind": "Other", "hash": "8123f895b8ada51696a4f88b18eaed8d672e723291ecf4ddcdc83ba3e3ffc618" }
   },
   "outputs": {
     "Hydra/Dsl/Haskell/Environment.hs": { "kind": "TargetFile", "hash": "ae851316a5cdb8a24c5d37be05abaadffea475cd2feff551dc6306b9c1f09a49" },
-    "Hydra/Dsl/Haskell/Syntax.hs": { "kind": "TargetFile", "hash": "615bc61c90c2dc63617936e9ccd44779f187034fc5441a4631886bcd63d1e95b" },
-    "Hydra/Haskell/Coder.hs": { "kind": "TargetFile", "hash": "7e641068d14858f453338af9bf48774a57e4491fc4eef34bd24e26a966b6c591" },
+    "Hydra/Dsl/Haskell/Syntax.hs": { "kind": "TargetFile", "hash": "7a05b9e96edbd3df140d2448a2085e2324fff620ec06c9a71247b7acd750e372" },
+    "Hydra/Haskell/Coder.hs": { "kind": "TargetFile", "hash": "b07f76e6ddfdb4f97678260f2ff59906bb32a06469986ac3e80b521121a45965" },
     "Hydra/Haskell/Environment.hs": { "kind": "TargetFile", "hash": "483ee02e8cc8836d94b1d1518c872c18cf892a02e50bb028c52e0457a731810a" },
     "Hydra/Haskell/Language.hs": { "kind": "TargetFile", "hash": "63c194c676e7a26d2711eaeb33b3e5c98bd2abe106c7b5b6926254d0f320b394" },
     "Hydra/Haskell/Operators.hs": { "kind": "TargetFile", "hash": "5c80b3b89c1e7bf818011b68cbee664977a50981a767b28bed055dce064b1586" },
-    "Hydra/Haskell/Serde.hs": { "kind": "TargetFile", "hash": "425cbba44c205702ce030467f9ceb7937b5e23f56f47fbd162665246e5bac29c" },
-    "Hydra/Haskell/Syntax.hs": { "kind": "TargetFile", "hash": "2a3a120079a290af1f16a443473ea35eb8a0bbef8ec518697d0a90b96c2c7ef3" },
+    "Hydra/Haskell/Serde.hs": { "kind": "TargetFile", "hash": "9b75e430bd0a1944f199a215ac066c7b6fa0ee71a4bf55884c5757f728cdf42a" },
+    "Hydra/Haskell/Syntax.hs": { "kind": "TargetFile", "hash": "143798b0369ec6f12a0b9193c4017a357c6655b65b9a1921d88008ef3913ec97" },
     "Hydra/Haskell/Testing.hs": { "kind": "TargetFile", "hash": "b33766f7e4c93c088a576255f82a2b986ebde138ac5934668360af1536cbb020" },
-    "Hydra/Haskell/Utils.hs": { "kind": "TargetFile", "hash": "b3d0fad567c0865fbce1a733ab82ea0a4b59c9804204af17b6b9ee22217f8b48" }
+    "Hydra/Haskell/Utils.hs": { "kind": "TargetFile", "hash": "2297672246427b5818ff9caa142ef8497561ed63e4d2e340c52c1e025e69771d" }
   }
 }
