@@ -28,6 +28,38 @@ def _tbinding_matmul(self, other):
 TBinding.__matmul__ = _tbinding_matmul
 
 
+def _tterm_matmul(self, other):
+    """Apply a TTerm function-term to a TTerm argument: `f @ x` ≡ `apply(f, x)`.
+
+    Enables the `@@` Haskell idiom in Python:
+        var("f") @ var("x")           # apply(f, x)
+        var("f") @ var("x") @ var("y") # apply(apply(f, x), y)
+    """
+    if not isinstance(other, TTerm):
+        return NotImplemented
+    return TTerm(terms.apply(self.value, other.value))
+
+TTerm.__matmul__ = _tterm_matmul
+
+
+def _tterm_call(self, *args):
+    """Treat a TTerm function-term as callable: `f(x, y, z)` ≡ `apply(apply(apply(f, x), y), z)`.
+
+    This is the natural Python idiom for term application — equivalent to Haskell's
+    `f @@ x @@ y @@ z`. All args must themselves be TTerm.
+    """
+    out = self
+    for a in args:
+        if not isinstance(a, TTerm):
+            raise TypeError(
+                f"TTerm() called with non-TTerm argument of type {type(a).__name__}"
+            )
+        out = TTerm(terms.apply(out.value, a.value))
+    return out
+
+TTerm.__call__ = _tterm_call
+
+
 def _name_rshift(self, val):
     """Create a Field from a Name and a TTerm: name >> term."""
     return Field(self, un_tterm(val))
@@ -75,6 +107,11 @@ C = TypeVar("C")
 X = TypeVar("X")
 
 
+def _name(n) -> Name:
+    """Coerce a str or Name to a Name. Convenience for accepting either form."""
+    return n if isinstance(n, Name) else Name(n)
+
+
 def un_tterm(t: TTerm[A]) -> Term:
     """Extract the underlying Term from a TTerm."""
     return t.value
@@ -111,15 +148,34 @@ def binary_function(f) -> TTerm[A]:
             return TTerm[A](terms.string(f"unexpected term as binary function: {term}"))
 
 
-def cases(name: Name, arg: TTerm[A], dflt: Maybe[TTerm[B]], fields: Sequence[Field]) -> TTerm[B]:
-    """Apply a named case match to an argument."""
-    match dflt:
-        case Just(d):
-            dflt_term = Just(un_tterm(d))
-        case Nothing():
-            dflt_term = Nothing()
+def cases(name, arg: TTerm[A], dflt: Maybe[TTerm[B]] = None, fields: Sequence[Field] = ()) -> TTerm[B]:
+    """Apply a named case match to an argument.
 
-    return TTerm[B](terms.apply(terms.match(name, dflt_term, fields), un_tterm(arg)))
+    Accepts a str or Name. Without a default, pass `dflt=None` (treated as Nothing()).
+    With a default, pass `dflt=Just(default_tterm)` or use `cases_with_default(...)`.
+    """
+    if dflt is None:
+        dflt_term = Nothing()
+    else:
+        match dflt:
+            case Just(d):
+                dflt_term = Just(un_tterm(d))
+            case Nothing():
+                dflt_term = Nothing()
+
+    return TTerm[B](terms.apply(terms.match(_name(name), dflt_term, fields), un_tterm(arg)))
+
+
+def cases_with_default(name, arg: TTerm[A], default: TTerm[B], *fields: Field) -> TTerm[B]:
+    """Apply a named case match with a default branch.
+
+    Java-style alternative to `cases(name, arg, Just(default), [f1, f2, ...])`.
+    Accepts variadic field args for ergonomics.
+    """
+    return TTerm[B](terms.apply(
+        terms.match(_name(name), Just(un_tterm(default)), list(fields)),
+        un_tterm(arg)
+    ))
 
 
 def compose(f: TTerm[B], g: TTerm[A]) -> TTerm[C]:
@@ -246,14 +302,14 @@ def el(binding: TBinding[A]) -> terms.Binding:
     return terms.Binding(binding.name, un_tterm(binding.term), Nothing())
 
 
-def field(fname: Name, val: TTerm[A]) -> Field:
-    """Create a field with the given name and value."""
-    return Field(fname, un_tterm(val))
+def field(fname, val: TTerm[A]) -> Field:
+    """Create a field with the given name and value. Accepts str or Name."""
+    return Field(_name(fname), un_tterm(val))
 
 
-def field_name_op(fname: Name, d: TTerm[A]) -> Field:
+def field_name_op(fname, d: TTerm[A]) -> Field:
     """Field definition operator with pre-constructed name: fname>>: value."""
-    return Field(fname, un_tterm(d))
+    return Field(_name(fname), un_tterm(d))
 
 
 def field_op(name: str, term: TTerm[A]) -> Field:
@@ -285,12 +341,12 @@ def identity() -> TTerm[A]:
     return TTerm[A](terms.identity())
 
 
-def inject(name: Name, fname: Name, term: TTerm[A]) -> TTerm[B]:
-    """Create a union injection."""
-    return TTerm[B](terms.inject(name, fname, un_tterm(term)))
+def inject(name, fname, term: TTerm[A]) -> TTerm[B]:
+    """Create a union injection. Accepts str or Name for type/field names."""
+    return TTerm[B](terms.inject(_name(name), _name(fname), un_tterm(term)))
 
 
-def inject_lambda(name: Name, fname: Name) -> TTerm[A]:
+def inject_lambda(name, fname) -> TTerm[A]:
     """Create a function that injects its argument into a union variant."""
     return lam("injected_", inject(name, fname, var("injected_")))
 
@@ -460,6 +516,42 @@ def lets(fields: Sequence[Field], env: TTerm[A]) -> TTerm[A]:
     return TTerm[A](terms.lets(fields, un_tterm(env)))
 
 
+def bindings(*pairs) -> list[Field]:
+    """Sugar for building a list of bindings from (name, value) tuples or Field objects.
+
+    Examples:
+        bindings(("x", val1), ("y", val2))  →  [Field("x", val1.value), Field("y", val2.value)]
+        bindings(field("x", val1), ("y", val2))  →  works with mixed forms
+    """
+    out = []
+    for p in pairs:
+        if isinstance(p, Field):
+            out.append(p)
+        elif isinstance(p, tuple) and len(p) == 2:
+            n, v = p
+            out.append(Field(_name(n), un_tterm(v)))
+        else:
+            raise TypeError(f"bindings: expected Field or (name, value) tuple, got {type(p).__name__}")
+    return out
+
+
+def let_chain(pairs, body: TTerm[A]) -> TTerm[A]:
+    """Emit nested singleton lets (matches Haskell's `<~` chaining).
+
+    Each pair is (name, value). Reverses the list to build inside-out so the
+    first pair is the outermost binding (in scope for all subsequent ones).
+    """
+    out = body
+    for p in reversed(pairs):
+        if isinstance(p, Field):
+            # Field: extract name and value
+            out = TTerm[A](terms.let_term(p.name, p.value, un_tterm(out)))
+        else:
+            n, v = p
+            out = let1(n if isinstance(n, str) else n.value, v, out)
+    return out
+
+
 def lib_primitive() -> TTerm:
     """
     Automatically derive and apply a library primitive with no arguments.
@@ -508,15 +600,18 @@ def map_(m: Mapping[TTerm[A], TTerm[B]]) -> TTerm[dict[A, B]]:
     )
 
 
-def match(name: Name, dflt: Maybe[TTerm[B]], fields: Sequence[Field]) -> TTerm[A]:
-    """Create a pattern match on a union term."""
-    match dflt:
-        case Just(d):
-            dflt_term = Just(un_tterm(d))
-        case Nothing():
-            dflt_term = Nothing()
+def match(name, dflt: Maybe[TTerm[B]] = None, fields: Sequence[Field] = ()) -> TTerm[A]:
+    """Create a pattern match on a union term. Accepts str or Name."""
+    if dflt is None:
+        dflt_term = Nothing()
+    else:
+        match dflt:
+            case Just(d):
+                dflt_term = Just(un_tterm(d))
+            case Nothing():
+                dflt_term = Nothing()
 
-    return TTerm[A](terms.match(name, dflt_term, fields))
+    return TTerm[A](terms.match(_name(name), dflt_term, fields))
 
 
 def module_namespace(mod: Module) -> Namespace:
@@ -586,14 +681,14 @@ def primitive3(prim_name: Name, a: TTerm[A], b: TTerm[B], c: TTerm[C]) -> TTerm[
     )
 
 
-def project(name: Name, fname: Name) -> TTerm[A]:
-    """Extract a field from a record."""
-    return TTerm[A](terms.project(name, fname))
+def project(name, fname) -> TTerm[A]:
+    """Extract a field from a record. Accepts str or Name."""
+    return TTerm[A](terms.project(_name(name), _name(fname)))
 
 
-def record(name: Name, fields: Sequence[Field]) -> TTerm[A]:
-    """Create a record with named fields."""
-    return TTerm[A](terms.record(name, fields))
+def record(name, fields: Sequence[Field]) -> TTerm[A]:
+    """Create a record with named fields. Accepts str or Name."""
+    return TTerm[A](terms.record(_name(name), fields))
 
 
 def ref(binding: TBinding[A]) -> TTerm[A]:
@@ -655,9 +750,9 @@ def unit() -> TTerm[A]:
     return TTerm[A](terms.unit())
 
 
-def inject_unit(name: Name, fname: Name) -> TTerm[A]:
-    """Create a unit injection of a union."""
-    return TTerm[A](terms.inject(name, fname, terms.unit()))
+def inject_unit(name, fname) -> TTerm[A]:
+    """Create a unit injection of a union. Accepts str or Name."""
+    return TTerm[A](terms.inject(_name(name), _name(fname), terms.unit()))
 
 
 def unqualify_name(qname: QualifiedName) -> Name:
@@ -669,9 +764,9 @@ def unqualify_name(qname: QualifiedName) -> Name:
             return Name(qname.local)
 
 
-def unwrap(name: Name) -> TTerm[A]:
-    """Create an unwrap function for a wrapped type."""
-    return TTerm[A](terms.unwrap(name))
+def unwrap(name) -> TTerm[A]:
+    """Create an unwrap function for a wrapped type. Accepts str or Name."""
+    return TTerm[A](terms.unwrap(_name(name)))
 
 
 def var(v: str) -> TTerm[A]:
@@ -703,6 +798,6 @@ def with_type_classes(classes: FrozenDict[Name, frozenset], term: TTerm[A]) -> T
     return TTerm[A](hydra.annotations.set_type_classes(classes, un_tterm(term)))
 
 
-def wrap(name: Name, term: TTerm[A]) -> TTerm[B]:
-    """Create a wrapped term (instance of a newtype)."""
-    return TTerm[B](terms.wrap(name, un_tterm(term)))
+def wrap(name, term: TTerm[A]) -> TTerm[B]:
+    """Create a wrapped term (instance of a newtype). Accepts str or Name."""
+    return TTerm[B](terms.wrap(_name(name), un_tterm(term)))
