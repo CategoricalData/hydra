@@ -119,12 +119,19 @@ To run a specific test class:
 
 ## Code organization
 
-In 0.15, Hydra's Java code is split across three locations
+Hydra's Java code is split across three locations
 (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for the full picture):
 
-- **This package** (`packages/hydra-java/src/main/haskell/`) — the Java coder DSL sources
-  (written in Haskell): `Hydra/Sources/Java/` contains `Syntax`, `Language`, `Coder`, `Serde`,
-  `Names`, `Utils`, `Environment`, and `Testing` modules.
+- **This package** (`packages/hydra-java/src/main/java/hydra/sources/java/`) — the Java coder
+  DSL sources (written in Java). These are the source of truth for the `hydra.java.*` modules
+  (Syntax, Language, Coder, Serde, Names, Utils, Environment, Testing, plus the
+  hand-written `JavaHelpers` and `SourceDsl` support classes).
+
+  > **Legacy backup:** `packages/hydra-java/src/main/haskell/Hydra/Sources/Java/` still
+  > contains the older Haskell-DSL versions of these modules. They are kept as a backup
+  > through the 0.15 line and produce byte-identical `dist/json/hydra-java/` output, but
+  > will be dropped before 0.16. Edits should go into the Java sources, not the Haskell
+  > ones.
 
 - **Java head** ([`heads/java/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/heads/java/src/main/java))
   — hand-written Java runtime
@@ -134,6 +141,8 @@ In 0.15, Hydra's Java code is split across three locations
     persistent collection helpers `ConsList` / `PersistentMap` / `PersistentSet`
     (see [Collection classes](#collection-classes) under design notes)
   - `hydra/tools/` — framework classes (PrimitiveFunction, MapperBase, ...)
+  - `hydra/JavaSelfHostDemo.java` — driver that generates `dist/json/hydra-java/`
+    from the Java DSL sources in this package (see [Generate Java code](#generate-java-code))
 
 - **Generated Java kernel** ([`dist/java/hydra-kernel/src/main/java/`](https://github.com/CategoricalData/hydra/tree/main/dist/java/hydra-kernel/src/main/java))
   — code-generated from the kernel DSL sources
@@ -146,11 +155,50 @@ In 0.15, Hydra's Java code is split across three locations
 
 ## Generate Java code
 
-Java code is generated from the Haskell head, using the Java coder DSL sources in this package.
-See the [Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell)
-for more information on how code generation works.
+Java code generation has two stages: first the Java coder modules' DSL sources are
+exported to JSON (Phase 1), then the JSON is loaded by the Java host and used to
+generate `dist/java/hydra-kernel/` (Phase 2). The two stages live in different
+scripts and can be invoked independently.
 
-The recommended way to regenerate all Java code is the sync script (from the repo root):
+### Phase 1: regenerate `dist/json/hydra-java/` from the Java DSL sources
+
+`bin/generate-hydra-java-from-java.sh` is the self-hosting entry point: it runs
+the Java DSL sources in this package through the Java host and writes
+`dist/json/hydra-java/`.
+
+```bash
+# Regenerate hydra-java JSON from packages/hydra-java/src/main/java/hydra/sources/java/
+bin/generate-hydra-java-from-java.sh
+
+# Same, with byte-compare against the existing canonical
+bin/generate-hydra-java-from-java.sh --compare
+
+# Force a rebuild of the Java host (kernel JSON + dist/java/hydra-kernel) first
+bin/generate-hydra-java-from-java.sh --force-rebuild
+```
+
+The script:
+1. Builds the Java host (`bin/sync-java.sh`) if it isn't already present.
+2. Compiles the rollup (`./gradlew :hydra-java:compileHeadsExtrasJava`).
+3. Runs `hydra.JavaSelfHostDemo`, which loads the kernel universe from
+   `dist/json/hydra-kernel/`, discovers the Java DSL source modules via reflection,
+   infers types for those that don't carry pre-computed type schemes (Coder ships
+   its schemes pre-computed; see [bin/java-self-host-demo.md](../../bin/java-self-host-demo.md)
+   for the rationale), and writes the resulting JSON.
+
+End-to-end is ~30 seconds.
+
+> **Note:** until the main sync sequence is updated to invoke
+> `generate-hydra-java-from-java.sh` automatically, `bin/sync-java.sh` and
+> `bin/sync.sh` still use the legacy Haskell DSL pipeline. The Java DSL output is
+> byte-identical to the Haskell output today (`--compare` confirms it), so running
+> either pipeline produces the same `dist/json/hydra-java/`. The legacy pipeline
+> will be retired before 0.16.
+
+### Phase 2: regenerate `dist/java/` from the JSON
+
+The recommended end-to-end script (which currently still drives Phase 1 via the
+legacy Haskell pipeline) is:
 
 ```bash
 bin/sync-java.sh
@@ -159,37 +207,18 @@ bin/sync-java.sh
 (equivalent to `bin/sync.sh --hosts java --targets java`)
 
 This will:
-1. Generate the kernel modules into `dist/java/hydra-kernel/src/main/java`
-2. Generate the default lib modules
-3. Generate the kernel tests into `dist/java/hydra-kernel/src/test/java`
-4. Build and run all tests
-
-For manual generation, enter GHCi from `heads/haskell/`:
-
-```bash
-cd heads/haskell && stack ghci
-```
-
-And run the following in the REPL:
-
-```haskell
-import Hydra.Generation
-import Hydra.Sources.All
-
--- Generate the kernel
-writeJava "../../dist/java/hydra-kernel/src/main/java" kernelModules kernelModules
-
--- Generate the test suite
-let allModules = mainModules ++ testModules
-writeJava "../../dist/java/hydra-kernel/src/test/java" allModules baseTestModules
-```
+1. Generate / refresh `dist/json/` from the legacy Haskell DSL sources
+2. Generate the Java kernel into `dist/java/hydra-kernel/src/main/java`
+3. Generate the default lib modules
+4. Generate the kernel tests into `dist/java/hydra-kernel/src/test/java`
+5. Build and run all tests
 
 ## Design notes
 
 ### Algebraic data types
 
 The Java coder DSL sources that drive Java code generation live
-[here](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java).
+[here](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-java/src/main/java/hydra/sources/java).
 A variety of techniques are used in order to materialize Hydra's core language in Java,
 including a [pattern](https://garciat.com/posts/java-adt) for representing algebraic data types
 which was originally proposed by Gabriel Garcia,
@@ -270,9 +299,9 @@ Two boundaries exist where plain JDK collections still appear:
 
 The Java coder also emits these helpers automatically when lowering Hydra
 term-level list/map/set literals, so generated code in `dist/java/` is
-consistent with the runtime's choice. See `_Term_list`, `_Term_map`, and
-`_Term_set` in
-[Coder.hs](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Coder.hs).
+consistent with the runtime's choice. See `encodeTermInternal`'s `_Term_list`,
+`_Term_map`, and `_Term_set` arms in
+[Coder.java](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-java/src/main/java/hydra/sources/java/Coder.java).
 
 ### Union Types and Visitors
 

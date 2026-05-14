@@ -1,6 +1,6 @@
 # Hydra-Python
 
-This package contains the **Python coder DSL sources**: Haskell modules that describe
+This package contains the **Python coder DSL sources**: Python modules that describe
 how to translate Hydra modules into Python source code. The runnable Python head
 (hand-written primitives, DSL runtime, pyproject.toml, test runner) lives in
 [`heads/python/`](https://github.com/CategoricalData/hydra/tree/main/heads/python).
@@ -48,7 +48,7 @@ For comprehensive documentation about Hydra's architecture and usage, see:
 - **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** -
   Step-by-step guides
 - **[Syncing Hydra-Python](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/syncing-python.md)** -
-  Regenerating Python from Haskell
+  Regenerating the Python kernel from the JSON modules
 
 ## Testing
 
@@ -108,12 +108,20 @@ cd heads/python && pytest -s
 
 ## Code organization
 
-In 0.15, Hydra's Python code is split across three locations
+Hydra's Python code is split across three locations
 (see [Code organization wiki page](https://github.com/CategoricalData/hydra/wiki/Code-organization) for the full picture):
 
-- **This package** (`packages/hydra-python/src/main/haskell/`) — the Python coder DSL sources
-  (written in Haskell): `Hydra/Sources/Python/` contains `Syntax`, `Language`, `Coder`, `Serde`,
-  `Names`, `Utils`, `Environment`, and `Testing` modules.
+- **This package** (`packages/hydra-python/src/main/python/hydra/sources/python/`) — the
+  Python coder DSL sources (written in Python). These are the source of truth for the
+  `hydra.python.*` modules (`syntax.py`, `language.py`, `coder.py`, `serde.py`,
+  `names.py`, `utils.py`, `environment.py`, `testing.py`, plus the
+  `_python_helpers.py` / `_kernel_refs.py` support modules).
+
+  > **Legacy backup:** `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/` still
+  > contains the older Haskell-DSL versions of these modules. They are kept as a backup
+  > through the 0.15 line and produce byte-identical `dist/json/hydra-python/` output, but
+  > will be dropped before 0.16. Edits should go into the Python sources, not the Haskell
+  > ones.
 
 - **Python head** ([`heads/python/src/main/python/`](https://github.com/CategoricalData/hydra/tree/main/heads/python/src/main/python))
   — hand-written Python runtime
@@ -136,11 +144,52 @@ In 0.15, Hydra's Python code is split across three locations
 
 ## Generate Python code
 
-Python code is generated from the Haskell head. See the
-[Hydra-Haskell README](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-haskell)
-for background on code generation.
+Python code generation has two stages: first the Python coder modules' DSL sources are
+exported to JSON (Phase 1), then the JSON is loaded by the Python host and used to
+generate `dist/python/hydra-kernel/` (Phase 2). The two stages live in different
+scripts and can be invoked independently.
 
-The recommended way to regenerate all Python code is the sync script (from the repo root):
+### Phase 1: regenerate `dist/json/hydra-python/` from the Python DSL sources
+
+`bin/generate-hydra-python-from-python.sh` is the self-hosting entry point: it runs
+the Python DSL sources in this package through the Python host and writes
+`dist/json/hydra-python/`.
+
+```bash
+# Regenerate hydra-python JSON from packages/hydra-python/src/main/python/hydra/sources/python/
+bin/generate-hydra-python-from-python.sh
+
+# Same, with byte-compare against the existing canonical
+bin/generate-hydra-python-from-python.sh --compare
+
+# Use PyPy for ~4x faster generation (CPython is the default)
+bin/generate-hydra-python-from-python.sh --pypy
+
+# Force a rebuild of the Python host (kernel JSON + dist/python/hydra-kernel) first
+bin/generate-hydra-python-from-python.sh --force-rebuild
+```
+
+The script:
+1. Builds the Python host (`bin/sync-python.sh`) if it isn't already present.
+2. Runs `bin/python-self-host-demo.py`, which loads the kernel universe from
+   `dist/json/hydra-kernel/`, imports the Python DSL source modules, infers types,
+   and writes the resulting JSON.
+
+End-to-end is ~110 seconds under PyPy (faster than the Haskell incremental pipeline)
+and ~500 seconds under CPython. See [bin/python-self-host-demo.md](../../bin/python-self-host-demo.md)
+for background.
+
+> **Note:** until the main sync sequence is updated to invoke
+> `generate-hydra-python-from-python.sh` automatically, `bin/sync-python.sh` and
+> `bin/sync.sh` still use the legacy Haskell DSL pipeline. The Python DSL output is
+> byte-identical to the Haskell output today (`--compare` confirms it), so running
+> either pipeline produces the same `dist/json/hydra-python/`. The legacy pipeline
+> will be retired before 0.16.
+
+### Phase 2: regenerate `dist/python/` from the JSON
+
+The recommended end-to-end script (which currently still drives Phase 1 via the
+legacy Haskell pipeline) is:
 
 ```bash
 bin/sync-python.sh
@@ -149,29 +198,10 @@ bin/sync-python.sh
 (equivalent to `bin/sync.sh --hosts python --targets python`)
 
 This will:
-1. Generate the kernel modules into `dist/python/hydra-kernel/src/main/python`
-2. Generate the kernel tests into `dist/python/hydra-kernel/src/test/python`
-3. Run the pytest suite
-
-For manual generation, enter GHCi from `heads/haskell/`:
-
-```bash
-cd heads/haskell && stack ghci
-```
-
-And run in the REPL:
-
-```haskell
-import Hydra.Generation
-import Hydra.Sources.All
-
--- Generate the kernel
-writePython "../../dist/python/hydra-kernel/src/main/python" kernelModules kernelModules
-
--- Generate the test suite
-let allModules = mainModules ++ testModules
-writePython "../../dist/python/hydra-kernel/src/test/python" allModules baseTestModules
-```
+1. Generate / refresh `dist/json/` from the legacy Haskell DSL sources
+2. Generate the Python kernel into `dist/python/hydra-kernel/src/main/python`
+3. Generate the kernel tests into `dist/python/hydra-kernel/src/test/python`
+4. Run the pytest suite
 
 ### Validate generated code
 
