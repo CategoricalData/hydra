@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "generator": "v0-unstamped",
+  "inputs": {
+    "hydra.bench.fanOut": { "kind": "Other", "hash": "3976d49e97820592a896fdeac1868797b5f7aaa29836283d42e415328de4c472" },
+    "hydra.bench.linearChain": { "kind": "Other", "hash": "7c5e1853984c03ff0df31598e0791c3f640d97b92e59f339c0c89e3c3a1681d5" },
+    "hydra.bench.polymorphicChain": { "kind": "Other", "hash": "02d4d56b8b5f04b2073182af05fd8bae9222fd86868a57688a047cdc58f3d5dd" }
+  },
+  "outputs": {
+    "Hydra/Bench/FanOut.hs": { "kind": "TargetFile", "hash": "5bba58e29e21e9c0a55681d3f9a69dfacd5a8305cac27905650fc4f2695791d4" },
+    "Hydra/Bench/LinearChain.hs": { "kind": "TargetFile", "hash": "04b20682ec87fd7e45846adad2d17623756d35782bd3b0aa5d1da2327870d732" },
+    "Hydra/Bench/PolymorphicChain.hs": { "kind": "TargetFile", "hash": "b48c59eaf9fb80083a1d8812c1b538eb0dcdefcfafde3b513ae57e5727969e1f" }
+  }
+}

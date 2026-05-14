@@ -48,6 +48,7 @@ library:
     - ../../dist/haskell/hydra-scala/src/main/haskell
     - ../../dist/haskell/hydra-lisp/src/main/haskell
     - ../../dist/haskell/hydra-ext/src/main/haskell
+    - ../../dist/haskell/hydra-bench/src/main/haskell
     - ../../dist/haskell/hydra-go/src/main/haskell
     - ../../dist/haskell/hydra-pg/src/main/haskell
     - ../../dist/haskell/hydra-rdf/src/main/haskell
@@ -57,6 +58,7 @@ library:
     - ../../packages/hydra-javascript/src/main/haskell
     - ../../packages/hydra-kernel/src/main/haskell
     - ../../packages/hydra-lisp/src/main/haskell
+    - ../../packages/hydra-bench/src/main/haskell
     - ../../packages/hydra-ext/src/main/haskell
     - ../../packages/hydra-go/src/main/haskell
     - ../../packages/hydra-pg/src/main/haskell

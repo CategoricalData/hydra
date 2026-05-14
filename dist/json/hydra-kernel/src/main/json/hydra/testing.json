@@ -108,7 +108,7 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {"literal": {"string": "A universal test case: the actual and expected values are both strings"}}}],
+                  "value": {"literal": {"string": "A universal test case: the actual and expected values are thunks producing strings."}}}],
               "body": {
                 "record": [
                   {
@@ -118,17 +118,16 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "The actual result (a string produced by evaluating and showing the test expression)"}}}],
-                        "body": {"literal": {"string": {}}}}}},
+                            "value": {
+                              "literal": {
+                                "string": "A thunk producing the actual result string. Wrapping in a thunk defers expression evaluation until the test runner forces it, so eagerly-evaluated hosts measure expression cost inside their timing bracket rather than at test-data load time."}}}],
+                        "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}}},
                   {
                     "name": "expected",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The expected result (a string produced by showing the expected value)"}}}],
-                        "body": {"literal": {"string": {}}}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
+                        "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}}}]}}},
           "variables": []}}}],
   "dependencies": ["hydra.core"],
   "description": "A model for unit testing",

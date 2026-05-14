@@ -546,9 +546,12 @@
       [0 1 0])))
 
 (defn- run-universal-test [path tc]
-  "Run a universal test case: compare actual and expected strings."
-  (let [actual (:actual tc)
-        expected (:expected tc)]
+  "Run a universal test case: force the actual/expected unit-thunks (Hydra `\\_. body`,
+   emitted as one-arg fn-of-unit in Clojure) and compare. For #311, forcing them inside the
+   runner's timing bracket ensures expression cost is measured, rather than collapsing to
+   0 ms at test-data load time. The dummy nil is passed because the body ignores its parameter."
+  (let [actual ((:actual tc) nil)
+        expected ((:expected tc) nil)]
     (if (= actual expected)
       [1 0 0]
       (do (println (str "FAIL: " path))

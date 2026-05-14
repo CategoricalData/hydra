@@ -25,8 +25,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty set",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) Sets.empty),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) Sets.empty),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -37,8 +37,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single element",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.singleton 42)),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.singleton 42)),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   42]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -50,11 +50,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "create from list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.fromList [
                   1,
                   2,
                   3])),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2,
                   3]))})),
@@ -63,12 +63,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "duplicates removed",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.fromList [
                   1,
                   2,
                   1,
                   3])),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2,
                   3]))})),
@@ -77,8 +77,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.fromList [])),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.fromList [])),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -89,11 +89,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "convert to list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Sets.toList (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Sets.toList (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) [
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Core.list (\n -> Literals.showInt32 n) xs) [
                   1,
                   2,
                   3])})),
@@ -102,11 +102,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unsorted input",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Sets.toList (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Sets.toList (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) [
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Core.list (\n -> Literals.showInt32 n) xs) [
                   1,
                   2,
                   3])})),
@@ -115,8 +115,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty set",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Sets.toList S.empty)),
-                Testing.universalTestCaseExpected = ((\xs -> Core.list (\n -> Literals.showInt32 n) xs) [])})),
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Core.list (\n -> Literals.showInt32 n) xs) (Sets.toList S.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Core.list (\n -> Literals.showInt32 n) xs) [])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -127,11 +127,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "insert new element",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.insert 4 (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.insert 4 (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2,
                   3,
@@ -141,11 +141,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "insert existing element",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.insert 2 (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.insert 2 (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2,
                   3]))})),
@@ -154,8 +154,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "insert into empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.insert 1 S.empty)),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.insert 1 S.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
@@ -167,11 +167,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "delete existing",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.delete 2 (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.delete 2 (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   3]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -179,11 +179,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "delete non-existing",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.delete 4 (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.delete 4 (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2,
                   3]))})),
@@ -192,8 +192,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "delete from empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.delete 1 S.empty)),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.delete 1 S.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -204,28 +204,28 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "element exists",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Sets.member 2 (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Sets.member 2 (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) True)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "element missing",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Sets.member 4 (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Sets.member 4 (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty set",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Sets.member 1 S.empty)),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Sets.member 1 S.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -236,26 +236,26 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "three elements",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Sets.size (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Sets.size (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 3)})),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 3)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single element",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Sets.size (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Sets.size (S.fromList [
                   42]))),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 1)})),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 1)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty set",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Sets.size S.empty)),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 0)})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Sets.size S.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 0)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -266,17 +266,17 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty set",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Sets.null S.empty)),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) True)})),
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Sets.null S.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "non-empty set",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Sets.null (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Sets.null (S.fromList [
                   1,
                   2]))),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -287,12 +287,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "union two sets",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.union (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.union (S.fromList [
                   1,
                   2]) (S.fromList [
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2,
                   3]))})),
@@ -301,10 +301,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "union with empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.union (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.union (S.fromList [
                   1,
                   2]) S.empty)),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -312,10 +312,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty with non-empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.union S.empty (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.union S.empty (S.fromList [
                   1,
                   2]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -328,7 +328,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "union of multiple sets",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.unions [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.unions [
                   S.fromList [
                     1,
                     2],
@@ -338,7 +338,7 @@ allTests =
                   (S.fromList [
                     3,
                     4])])),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2,
                   3,
@@ -348,14 +348,14 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "union with empty sets",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.unions [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.unions [
                   S.fromList [
                     1,
                     2],
                   S.empty,
                   (S.fromList [
                     3])])),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2,
                   3]))})),
@@ -364,19 +364,19 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty list of sets",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.unions [])),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.unions [])),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single set",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.unions [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.unions [
                   S.fromList [
                     1,
                     2,
                     3]])),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2,
                   3]))})),
@@ -390,14 +390,14 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "common elements",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.intersection (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.intersection (S.fromList [
                   1,
                   2,
                   3]) (S.fromList [
                   2,
                   3,
                   4]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   2,
                   3]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -405,21 +405,21 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "no common elements",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.intersection (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.intersection (S.fromList [
                   1,
                   2]) (S.fromList [
                   3,
                   4]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "intersection with empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.intersection (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.intersection (S.fromList [
                   1,
                   2]) S.empty)),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -430,13 +430,13 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "remove elements",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.difference (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.difference (S.fromList [
                   1,
                   2,
                   3]) (S.fromList [
                   2,
                   4]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   3]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -444,12 +444,12 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "no overlap",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.difference (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.difference (S.fromList [
                   1,
                   2]) (S.fromList [
                   3,
                   4]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -457,10 +457,10 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "difference with empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.difference (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.difference (S.fromList [
                   1,
                   2]) S.empty)),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   1,
                   2]))})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -473,11 +473,11 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "map function",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.map (\x -> Math.mul x 2) (S.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.map (\x -> Math.mul x 2) (S.fromList [
                   1,
                   2,
                   3]))),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (S.fromList [
                   2,
                   4,
                   6]))})),
@@ -486,8 +486,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "map on empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.map (\x -> Math.mul x 2) S.empty)),
-                Testing.universalTestCaseExpected = ((\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) (Sets.map (\x -> Math.mul x 2) S.empty)),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> Core.set (\n -> Literals.showInt32 n) s) S.empty)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

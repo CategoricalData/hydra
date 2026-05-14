@@ -8,7 +8,7 @@
     "hydra.java.names": { "kind": "Other", "hash": "73023aae0beeb040142bad1d9694d7f45f8fe141052339aeb63f0edafe95980f" },
     "hydra.java.serde": { "kind": "Other", "hash": "0e548f04426d0a3e8bac956c414ce13b62d5698b25324a573d0656c9f7d16456" },
     "hydra.java.syntax": { "kind": "Other", "hash": "b7f048e09af0ee0257361484c39e42ba5e5be05861cafdf00b127c95dbadf6ea" },
-    "hydra.java.testing": { "kind": "Other", "hash": "315a58856f36d7fdec5fb56e06584fd4961cd59677a256c214cc293de8eef937" },
+    "hydra.java.testing": { "kind": "Other", "hash": "fb989e31f752e3e07db2eb200d6b97e8b364ccd06be9fc4b12ea2f621ad6b21b" },
     "hydra.java.utils": { "kind": "Other", "hash": "09cf205b67f83f4d985420694da17a08b0b03115f11021ed30e17e6a3f25edfb" }
   },
   "outputs": {
@@ -20,7 +20,7 @@
     "Hydra/Java/Names.hs": { "kind": "TargetFile", "hash": "88599e8fafa787c04e1f20f05cdc8da775a9848dfd19911ffcc8562e93fb2512" },
     "Hydra/Java/Serde.hs": { "kind": "TargetFile", "hash": "2aee2b3a75d424b9548c99d54bdbcdc036ff318b518a706667a02d5df48577f7" },
     "Hydra/Java/Syntax.hs": { "kind": "TargetFile", "hash": "12585cd817856659d083738987a276ed5efec17ce7cc68ccb0b95c6988c12a55" },
-    "Hydra/Java/Testing.hs": { "kind": "TargetFile", "hash": "d6eeba331cb41ae5edfe356e4425ab65a42cab6c0a50a27bfe6cf8e6fc17b592" },
+    "Hydra/Java/Testing.hs": { "kind": "TargetFile", "hash": "274a0c5330c6f9a772be73a413168ec536694352f36ed65d6767c468fcabd03a" },
     "Hydra/Java/Utils.hs": { "kind": "TargetFile", "hash": "eb4c246f3f38acb93dd3b350a9c9331f11da1c6fb8f4e7795d54ea4942a5d24b" }
   }
 }

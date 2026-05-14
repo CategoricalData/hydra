@@ -237,8 +237,8 @@ generateTestCase = define "generateTestCase" $
     "name_">: project _TestCaseWithMetadata _TestCaseWithMetadata_name @@ var "tcm",
     "tcase">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm",
     "universal">: match _TestCase Nothing ["universal">: lambda "u" $ var "u"] @@ var "tcase",
-    "actual_">: project _UniversalTestCase _UniversalTestCase_actual @@ var "universal",
-    "expected_">: project _UniversalTestCase _UniversalTestCase_expected @@ var "universal"] $
+    "actual_">: project _UniversalTestCase _UniversalTestCase_actual @@ var "universal" @@ unit,
+    "expected_">: project _UniversalTestCase _UniversalTestCase_expected @@ var "universal" @@ unit] $
     right (list [
       Strings.cat (list [string "H.it ", Literals.showString (var "name_"), string " $ H.shouldBe"]),
       Strings.cat (list [string "  (", var "actual_", string ")"]),

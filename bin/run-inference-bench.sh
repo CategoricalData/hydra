@@ -9,7 +9,7 @@
 #
 # Usage:
 #   bin/run-inference-bench.sh                          # Default (haskell, java, python; linearChain)
-#   bin/run-inference-bench.sh --hosts all              # All four hosts (adds python-pypy)
+#   bin/run-inference-bench.sh --hosts all              # All six hosts (adds python-pypy, common-lisp, emacs-lisp)
 #   bin/run-inference-bench.sh --series all             # All three series
 #   bin/run-inference-bench.sh --tag baseline           # Tag the run directory
 #   bin/run-inference-bench.sh dashboard [opts]         # Just show the dashboard
@@ -18,7 +18,7 @@
 #
 # Options:
 #   --hosts H,...   Comma-separated list of hosts (default: haskell,java,python)
-#                   Special: 'all' expands to haskell,java,python,python-pypy
+#                   Special: 'all' expands to haskell,java,python,python-pypy,common-lisp,emacs-lisp
 #   --series S,...  Comma-separated series names (default: linearChain)
 #                   Special: 'all' expands to linearChain,polymorphicChain,fanOut
 #   --sizes N,...   Comma-separated sizes (default: 0,10,25,50,100)
@@ -31,6 +31,8 @@
 #   java          — heads/java/bin/inference-bench.sh (loads kernel JSON)
 #   python        — uv run heads/python/bin/inference-bench.py (CPython)
 #   python-pypy   — pypy3 heads/python/bin/inference-bench.py (PyPy)
+#   common-lisp   — heads/lisp/common-lisp/bin/inference-bench.sh (SBCL)
+#   emacs-lisp    — heads/lisp/emacs-lisp/bin/inference-bench.sh
 #
 # Series (each is a Hydra namespace under hydra.bench.*):
 #   linearChain         — depth-N chain of monomorphic walkers
@@ -48,7 +50,7 @@ RUNS_DIR="$REPO_ROOT/benchmark/inference-runs"
 
 source "$REPO_ROOT/bin/lib/common.sh"
 
-ALL_HOSTS="haskell,java,python,python-pypy"
+ALL_HOSTS="haskell,java,python,python-pypy,common-lisp,emacs-lisp"
 DEFAULT_HOSTS="haskell,java,python"
 ALL_SERIES="linearChain,polymorphicChain,fanOut"
 DEFAULT_SERIES="linearChain"
@@ -104,11 +106,11 @@ IFS=',' read -ra RAW_LIST <<< "$HOSTS"
 for t in "${RAW_LIST[@]}"; do
     case "$t" in
         all) expanded="${expanded:+$expanded,}$ALL_HOSTS" ;;
-        haskell|java|python|python-pypy)
+        haskell|java|python|python-pypy|common-lisp|emacs-lisp)
             expanded="${expanded:+$expanded,}$t" ;;
         *)
             echo "Error: Unknown host '$t'"
-            echo "Valid hosts: haskell, java, python, python-pypy, all"
+            echo "Valid hosts: haskell, java, python, python-pypy, common-lisp, emacs-lisp, all"
             exit 1
             ;;
     esac
@@ -131,6 +133,26 @@ for s in "${RAW_SERIES[@]}"; do
     esac
 done
 IFS=',' read -ra SERIES_LIST <<< "$expanded_series"
+
+# Ensure hydra-bench is regenerated for the requested hosts. The default sync
+# (bin/sync.sh) does NOT include the bench package — these workloads are
+# deliberately stress-shaped and only relevant for this benchmark — so we
+# always invoke bin/sync-bench.sh up front. It's idempotent and fast when
+# everything is already current.
+echo "" >&2
+echo "===== Ensuring hydra-bench is current for: $HOSTS =====" >&2
+# Map host names to bench-capable host names (drop python-pypy → python).
+bench_hosts_set=()
+IFS=',' read -ra _hosts_arr <<< "$HOSTS"
+for h in "${_hosts_arr[@]}"; do
+    case "$h" in
+        python-pypy) bench_hosts_set+=("python") ;;
+        *) bench_hosts_set+=("$h") ;;
+    esac
+done
+# Deduplicate.
+bench_hosts_dedup=$(printf "%s\n" "${bench_hosts_set[@]}" | awk '!seen[$0]++' | paste -sd, -)
+"$REPO_ROOT/bin/sync-bench.sh" --hosts "$bench_hosts_dedup"
 
 # Run directory mirrors bin/run-benchmark-tests.sh layout for symmetry.
 RUN_DIR="$RUNS_DIR/run_$(python3 -c 'from datetime import datetime,timezone; t=datetime.now(timezone.utc); print(t.strftime("%Y-%m-%d_%H%M%S") + "_" + f"{t.microsecond//1000:03d}")')"
@@ -170,6 +192,14 @@ run_host_series() {
                 && pypy3 bin/inference-bench.py \
                      --sizes "$SIZES" --namespace "$namespace" --out "$outfile" \
                      --host-tag python-pypy > /dev/null )
+            ;;
+        common-lisp)
+            "$REPO_ROOT/heads/lisp/common-lisp/bin/inference-bench.sh" \
+                --sizes "$SIZES" --namespace "$namespace" --out "$outfile"
+            ;;
+        emacs-lisp)
+            "$REPO_ROOT/heads/lisp/emacs-lisp/bin/inference-bench.sh" \
+                --sizes "$SIZES" --namespace "$namespace" --out "$outfile"
             ;;
         *)
             echo "Unknown host: $host" >&2

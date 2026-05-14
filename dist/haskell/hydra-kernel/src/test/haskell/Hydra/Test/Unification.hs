@@ -32,198 +32,198 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in itself",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeVariable (Core.Name "a")))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeVariable (Core.Name "a")))),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable does not occur in different variable",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeVariable (Core.Name "b")))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean False)})),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeVariable (Core.Name "b")))),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable does not occur in int32",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean False)})),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable does not occur in string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeLiteral Core.LiteralTypeString))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean False)})),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeLiteral Core.LiteralTypeString))),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in list element type",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeList (Core.TypeVariable (Core.Name "a"))))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeList (Core.TypeVariable (Core.Name "a"))))),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable does not occur in list of different type",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeList (Core.TypeVariable (Core.Name "b"))))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean False)})),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeList (Core.TypeVariable (Core.Name "b"))))),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in function domain",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                   Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in function codomain",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable does not occur in function with different vars",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "b")),
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "c"))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean False)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in optional type",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))))),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in pair first",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypePair (Core.PairType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeVariable (Core.Name "a")),
                   Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in pair second",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypePair (Core.PairType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.pairTypeSecond = (Core.TypeVariable (Core.Name "a"))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in either left",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "a")),
                   Core.eitherTypeRight = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in either right",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeEither (Core.EitherType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "a"))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in map key type",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeMap (Core.MapType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeVariable (Core.Name "a")),
                   Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in map value type",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeMap (Core.MapType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
                   Core.mapTypeValues = (Core.TypeVariable (Core.Name "a"))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in set type",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeSet (Core.TypeVariable (Core.Name "a"))))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeSet (Core.TypeVariable (Core.Name "a"))))),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in nested list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "a")))))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeList (Core.TypeList (Core.TypeVariable (Core.Name "a")))))),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in list of functions",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeList (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeList (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))}))))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable does not occur in complex type without it",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                   Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.pairTypeSecond = (Core.TypeVariable (Core.Name "b"))})))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean False)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs deep in complex type",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
                   Core.functionTypeCodomain = (Core.TypeMaybe (Core.TypePair (Core.PairType {
                     Core.pairTypeFirst = (Core.TypeLiteral Core.LiteralTypeString),
                     Core.pairTypeSecond = (Core.TypeVariable (Core.Name "a"))})))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in forAll body",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeForall (Core.ForallType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeForall (Core.ForallType {
                   Core.forallTypeParameter = (Core.Name "b"),
                   Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "b")),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))}))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "variable occurs in forAll bound position",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeForall (Core.ForallType {
+                Testing.universalTestCaseActual = (\_ -> Literals.showBoolean (Unification.variableOccursInType (Core.Name "a") (Core.TypeForall (Core.ForallType {
                   Core.forallTypeParameter = (Core.Name "a"),
                   Core.forallTypeBody = (Core.TypeFunction (Core.FunctionType {
                     Core.functionTypeDomain = (Core.TypeVariable (Core.Name "a")),
                     Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "a"))}))})))),
-                Testing.universalTestCaseExpected = (Literals.showBoolean True)})),
+                Testing.universalTestCaseExpected = (\_ -> Literals.showBoolean True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -234,7 +234,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify identical int32 types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -246,7 +246,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -258,7 +258,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify identical string types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -270,7 +270,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeLiteral Core.LiteralTypeString) (Core.TypeLiteral Core.LiteralTypeString) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -282,7 +282,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify identical variable types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -294,7 +294,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeVariable (Core.Name "a")) (Core.TypeVariable (Core.Name "a")) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -306,7 +306,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify variable with int32",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -318,7 +318,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeVariable (Core.Name "a")) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -331,7 +331,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify int32 with variable",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -343,7 +343,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TypeVariable (Core.Name "a")) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -356,7 +356,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify two different variables",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -368,7 +368,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeVariable (Core.Name "a")) (Core.TypeVariable (Core.Name "b")) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -381,7 +381,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify list of variables with list of int32",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -393,7 +393,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeList (Core.TypeVariable (Core.Name "a"))) (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -406,7 +406,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify identical list types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -418,7 +418,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)) (Core.TypeList (Core.TypeLiteral Core.LiteralTypeString)) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -430,7 +430,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify function types with variables",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -446,7 +446,7 @@ allTests =
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -460,7 +460,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify identical function types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -476,7 +476,7 @@ allTests =
                   Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -488,7 +488,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify optional types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -500,7 +500,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))) (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -513,7 +513,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify pair types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -529,7 +529,7 @@ allTests =
                   Core.pairTypeSecond = (Core.TypeVariable (Core.Name "b"))})) (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -543,7 +543,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify either types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -559,7 +559,7 @@ allTests =
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "b"))})) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -573,7 +573,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify map types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -589,7 +589,7 @@ allTests =
                   Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))})) (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
                   Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -603,7 +603,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify set types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -615,7 +615,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeSet (Core.TypeVariable (Core.Name "a"))) (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -628,7 +628,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unify unit types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -640,7 +640,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) Core.TypeUnit Core.TypeUnit "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -652,7 +652,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "fail to unify int32 with string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -664,13 +664,13 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TypeLiteral Core.LiteralTypeString) "test")),
-                Testing.universalTestCaseExpected = "failure"})),
+                Testing.universalTestCaseExpected = (\_ -> "failure")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "fail to unify list with function",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -684,13 +684,13 @@ allTests =
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})) "test")),
-                Testing.universalTestCaseExpected = "failure"})),
+                Testing.universalTestCaseExpected = (\_ -> "failure")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "occur check: variable with list containing it",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\ts -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\ts -> Strings.cat [
                   "{",
                   (Strings.intercalate ", " (Lists.map (\p -> Strings.cat [
                     Core.unName (Pairs.first p),
@@ -702,7 +702,7 @@ allTests =
                     Core.typeSchemeVariables = [],
                     Core.typeSchemeBody = (Core.TypeVariable n),
                     Core.typeSchemeConstraints = Nothing})) [])) (Core.TypeVariable (Core.Name "a")) (Core.TypeList (Core.TypeVariable (Core.Name "a"))) "test")),
-                Testing.universalTestCaseExpected = "failure"})),
+                Testing.universalTestCaseExpected = (\_ -> "failure")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -713,7 +713,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join identical int32",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -722,7 +722,7 @@ allTests =
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
                   "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -736,7 +736,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join identical string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -745,7 +745,7 @@ allTests =
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
                   "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeLiteral Core.LiteralTypeString) (Core.TypeLiteral Core.LiteralTypeString) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -759,7 +759,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join list types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -768,7 +768,7 @@ allTests =
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
                   "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeList (Core.TypeVariable (Core.Name "a"))) (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -786,7 +786,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join function types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -799,7 +799,7 @@ allTests =
                   Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "b"))})) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeLiteral Core.LiteralTypeString)})) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -821,7 +821,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join optional types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -830,7 +830,7 @@ allTests =
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
                   "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeMaybe (Core.TypeVariable (Core.Name "a"))) (Core.TypeMaybe (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -848,7 +848,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join pair types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -861,7 +861,7 @@ allTests =
                   Core.pairTypeSecond = (Core.TypeVariable (Core.Name "b"))})) (Core.TypePair (Core.PairType {
                   Core.pairTypeFirst = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -883,7 +883,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join either types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -896,7 +896,7 @@ allTests =
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "b"))})) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -918,7 +918,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join map types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -931,7 +931,7 @@ allTests =
                   Core.mapTypeValues = (Core.TypeVariable (Core.Name "v"))})) (Core.TypeMap (Core.MapType {
                   Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
                   Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -953,7 +953,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join set types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -962,7 +962,7 @@ allTests =
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
                   "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeSet (Core.TypeVariable (Core.Name "a"))) (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -980,7 +980,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "join unit types",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -989,7 +989,7 @@ allTests =
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
                   "]"]) (Unification.joinTypes Lexical.emptyContext Core.TypeUnit Core.TypeUnit "test")),
-                Testing.universalTestCaseExpected = (Strings.cat [
+                Testing.universalTestCaseExpected = (\_ -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -1003,7 +1003,7 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "fail to join int32 with string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -1012,13 +1012,13 @@ allTests =
                     (ShowCore.type_ (Typing.typeConstraintRight c)),
                     ")"]) cs)),
                   "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)) (Core.TypeLiteral Core.LiteralTypeString) "test")),
-                Testing.universalTestCaseExpected = "failure"})),
+                Testing.universalTestCaseExpected = (\_ -> "failure")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "fail to join list with function",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -1029,13 +1029,13 @@ allTests =
                   "]"]) (Unification.joinTypes Lexical.emptyContext (Core.TypeList (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.functionTypeCodomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})) "test")),
-                Testing.universalTestCaseExpected = "failure"})),
+                Testing.universalTestCaseExpected = (\_ -> "failure")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "fail to join pair with either",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\_ -> "failure") (\cs -> Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\_2 -> "failure") (\cs -> Strings.cat [
                   "[",
                   (Strings.intercalate ", " (Lists.map (\c -> Strings.cat [
                     "(",
@@ -1048,7 +1048,7 @@ allTests =
                   Core.pairTypeSecond = (Core.TypeLiteral Core.LiteralTypeString)})) (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
                   Core.eitherTypeRight = (Core.TypeLiteral Core.LiteralTypeString)})) "test")),
-                Testing.universalTestCaseExpected = "failure"})),
+                Testing.universalTestCaseExpected = (\_ -> "failure")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

@@ -335,7 +335,10 @@ moduleToSourceModule m =
                   Packaging.DefinitionTerm (Packaging.TermDefinition {
                     Packaging.termDefinitionName = (Core.Name (Strings.cat2 (Packaging.unNamespace sourceNs) ".module_")),
                     Packaging.termDefinitionTerm = (EncodePackaging.module_ m),
-                    Packaging.termDefinitionTypeScheme = Nothing})
+                    Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
+                      Core.typeSchemeVariables = [],
+                      Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Module")),
+                      Core.typeSchemeConstraints = Nothing}))})
       in Packaging.Module {
         Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unNamespace (Packaging.moduleNamespace m)))),
         Packaging.moduleNamespace = sourceNs,

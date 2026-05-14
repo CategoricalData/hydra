@@ -22,6 +22,7 @@ import Hydra.Generation (writeModulesJsonPackageSplit, writeDslJsonPackageSplit,
 import Hydra.PackageRouting (defaultDistJsonRoot)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
+  hydraBenchModules,
   hydraCoqModules, hydraGoModules, hydraJavaModules, hydraJavaScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
@@ -61,11 +62,17 @@ main :: IO ()
 main = do
   distRoot <- parseDistRoot defaultDistJsonRoot
   includeJavaPython <- parseIncludeJavaPython
+  includeBench <- parseIncludeBench
 
+  -- hydra-bench is opt-in: --include-bench must be passed by bin/sync-bench.sh
+  -- to add the synthetic inference workloads to the universe. Default sync
+  -- (bin/sync.sh) omits them so they don't balloon every host's codegen step.
+  let extraBench = if includeBench then hydraBenchModules else []
   let universe = dedupByNamespace $ L.concat
         [ mainModules
         , defaultLibModules
         , dslSourceModules
+        , extraBench
         , hydraCoqModules
         , hydraGoModules
         , hydraJavaModules
@@ -127,14 +134,14 @@ main = do
 
   putStrLn ""
   putStrLn "Generating DSL wrapper modules to JSON..."
-  -- The DSL generator runs over the kernel-side type universe (kernel + json +
-  -- other + haskell coder). This matches the old behavior of update-json-main:
-  -- DSL modules are produced for every type in that universe.
-  -- Extended per #358: include all coder-package type modules so
-  -- DSL synthesis covers their syntax/environment types too.
-  let dslInputMods = kernelModules ++ jsonModules ++ otherModules
-        ++ haskellModules ++ hydraJavaModules ++ hydraPythonModules
-        ++ hydraScalaModules ++ hydraLispModules
+  -- The DSL generator runs over every package whose syntax model defines types
+  -- (kernel + json + other + haskell coder, plus each coder package). DSL
+  -- wrappers are routed to their owning package's dist/json/<pkg>/.../hydra/dsl/<lang>/
+  -- via PackageRouting, so the resulting Hydra/Dsl/<lang>/Syntax.hs phantom
+  -- helpers regenerate whenever the corresponding syntax model changes.
+  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
+                  ++ hydraJavaModules ++ hydraPythonModules ++ hydraScalaModules
+                  ++ hydraLispModules ++ hydraGoModules
   dslResult <- catch
     (writeDslJsonPackageSplit distRoot universe dslInputMods >> return True)
     (\e -> do
@@ -278,3 +285,10 @@ parseIncludeJavaPython :: IO Bool
 parseIncludeJavaPython = do
   args <- getArgs
   return $ "--include-java-python" `elem` args
+
+-- | --include-bench appends the hydra-bench package's modules to the universe.
+-- Off by default. Set by bin/sync-bench.sh, never by the default sync pipeline.
+parseIncludeBench :: IO Bool
+parseIncludeBench = do
+  args <- getArgs
+  return $ "--include-bench" `elem` args

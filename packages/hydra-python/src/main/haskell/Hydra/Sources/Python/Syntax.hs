@@ -23,8 +23,8 @@ module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = [Core.ns, Core.ns],
-            moduleDescription = Just ("A Python syntax model, based on the Python v3 PEG grammar retrieved on 2024-12-22"
-      ++ " from https://docs.python.org/3/reference/grammar.html")}
+            moduleDescription = Just ("A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
+      ++ "  https://docs.python.org/3.14/reference/grammar.html")}
   where
     definitions = constructs ++ terminals ++ nonterminals
 
@@ -32,7 +32,8 @@ module_ = Module {
     constructs = [
       annotatedStatement,
       pythonModule,
-      quoteStyle]
+      quoteStyle,
+      stringPrefix]
 
     -- Terminals from the PEG grammar (see below)
     terminals = [
@@ -47,7 +48,6 @@ module_ = Module {
       file,
       interactive,
       eval,
-      funcType,
       statement,
       simpleStatement,
       compoundStatement,
@@ -248,7 +248,22 @@ pythonModule = def "Module" $
   T.wrap $ T.list $ nonemptyList $ python "Statement"
 
 quoteStyle :: Binding
-quoteStyle = def "QuoteStyle" $ T.enum ["single", "double", "triple"]
+quoteStyle = def "QuoteStyle" $ T.enum [
+  "single",        -- '...'
+  "double",        -- "..."
+  "tripleSingle",  -- '''...'''
+  "tripleDouble"]  -- """..."""
+
+-- A non-empty prefix on a regular (non-f, non-t) string literal.
+-- The empty prefix is encoded as Maybe<StringPrefix> = Nothing on the String.
+-- F-strings (f"") and t-strings (t"", 3.14+) have their own AST shapes and are
+-- not represented here; they appear as separate arms of the Strings concatenation.
+stringPrefix :: Binding
+stringPrefix = def "StringPrefix" $ T.enum [
+  "raw",       -- r"" / R""
+  "bytes",     -- b"" / B""
+  "rawBytes",  -- rb / br / Rb / bR / etc.
+  "unicode"]   -- u"" (legacy 3.x compat)
 
 -- Terminals from the PEG grammar (see below)
 
@@ -258,11 +273,13 @@ name = def "Name" $ T.wrap T.string -- NAME in the grammar
 number :: Binding
 number = def "Number" $ T.union [ -- NUMBER in the grammar
   "integer">: T.bigint,
-  "float">: T.float64]
+  "float">: T.float64,
+  "imaginary">: T.float64]
 
 string :: Binding
-string = def "String" $ T.record [ -- STRING in the grammar
+string = def "String" $ T.record [ -- STRING in the grammar (non-f, non-t variants)
   "value">: T.string,
+  "prefix">: T.maybe $ python "StringPrefix",
   "quoteStyle">: python "QuoteStyle"]
 
 typeComment :: Binding
@@ -346,11 +363,10 @@ eval :: Binding
 eval = def "Eval" $ T.wrap $ nonemptyList $ python "Expression"
 
 -- func_type: '(' [type_expressions] ')' '->' expression NEWLINE* ENDMARKER
-
-funcType :: Binding
-funcType = def "FuncType" $ T.record [ -- TODO: func_type is defined in the official BNF grammar, but never used
-  "type">: T.list $ python "TypeExpression",
-  "body">: python "Expression"]
+--
+-- Hydra: omitted. func_type is the PEG production for the `compile(..., 'func_type')`
+-- mode used by typing tools that parse standalone function-type signatures from
+-- comments. Hydra-Python's coder/serde never emits or consumes this form.
 
 -- # GENERAL STATEMENTS
 -- # ==================
@@ -1112,7 +1128,7 @@ literalExpression :: Binding
 literalExpression = def "LiteralExpression" $ T.union [
   "number">: python "SignedNumber",
   "complex">: python "ComplexNumber",
-  "string">: T.string,
+  "string">: python "String",
   "none">: T.unit,
   "true">: T.unit,
   "false">: T.unit]
@@ -1152,13 +1168,15 @@ signedRealNumber = def "SignedRealNumber" $ T.union [
 --     | NUMBER
 
 realNumber :: Binding
-realNumber = def "RealNumber" $ T.wrap $ python "Number"
+realNumber = def "RealNumber" $ T.union [ -- NUMBER token excluding imaginary literals
+  "integer">: T.bigint,
+  "float">: T.float64]
 
 -- imaginary_number:
 --     | NUMBER
 
 imaginaryNumber :: Binding
-imaginaryNumber = def "ImaginaryNumber" $ T.wrap $ python "Number"
+imaginaryNumber = def "ImaginaryNumber" $ T.wrap T.float64
 
 -- capture_pattern:
 --     | pattern_capture_target
@@ -1185,7 +1203,11 @@ valuePattern = def "ValuePattern" $ T.wrap $ python "Attribute"
 --     | name_or_attr '.' NAME
 
 attribute :: Binding
-attribute = def "Attribute" $ T.wrap $ nonemptyList $ python "Name" -- Actually list with length >= 2
+attribute = def "Attribute" $ T.wrap $ nonemptyList $ python "Name"
+-- Hydra: per the PEG, an `attr` is `name_or_attr '.' NAME` which expands to at least
+-- two NAMEs (head + dot-trailer). Hydra's kernel type system has nonemptyList but no
+-- list-of-length>=2 predicate; the singleton case is structurally permitted but
+-- semantically invalid. Cross-cutting refinement-type item — see plan.
 
 -- name_or_attr:
 --     | attr
@@ -1826,24 +1848,15 @@ lambdaParamMaybeDefault = def "LambdaParamMaybeDefault" $ T.record [
 -- # LITERALS
 -- # ========
 --
--- fstring_middle:
---     | fstring_replacement_field
---     | FSTRING_MIDDLE
--- fstring_replacement_field:
---     | '{' annotated_rhs '='? [fstring_conversion] [fstring_full_format_spec] '}'
--- fstring_conversion:
---     | "!" NAME
--- fstring_full_format_spec:
---     | ':' fstring_format_spec*
--- fstring_format_spec:
---     | FSTRING_MIDDLE
---     | fstring_replacement_field
--- fstring:
---     | FSTRING_START fstring_middle* FSTRING_END
---
--- string: STRING
--- strings: (fstring|string)+
---
+-- string: STRING — Atom.string and LiteralExpression.string hold a single
+-- STRING literal directly (see the String definition above). Python's PEG
+-- also supports juxtaposed-string concatenation (`(fstring|string)+`) and
+-- t-strings (Python 3.14, PEP 750); those productions are not modelled
+-- here because no current code path constructs them. If/when a Python
+-- source parser or f-string-emitting coder is added, reintroduce
+-- StringOrFstring + Fstring* + Tstring* and a corresponding union or
+-- additional arm on Atom / LiteralExpression.
+
 -- list:
 --     | '[' [star_named_expressions] ']'
 

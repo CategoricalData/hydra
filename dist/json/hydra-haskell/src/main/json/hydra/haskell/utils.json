@@ -1821,7 +1821,8 @@
                                       "fields": [
                                         {"name": "pattern", "term": {"variable": "pat"}},
                                         {"name": "rhs", "term": {"variable": "rightHandSide"}},
-                                        {"name": "localBindings", "term": {"variable": "bindings"}}],
+                                        {"name": "localBindings", "term": {"variable": "bindings"}},
+                                        {"name": "comments", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}],
                                       "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}},
                                 "typeName": "hydra.haskell.syntax.ValueBinding"}}}},
                         "domain": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}},

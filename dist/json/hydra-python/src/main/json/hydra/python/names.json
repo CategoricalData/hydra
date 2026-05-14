@@ -957,6 +957,9 @@
                                                                                                                                                                       "name": "value",
                                                                                                                                                                       "term": {"application": {"argument": {"variable": "pyName"}, "function": {"unwrap": "hydra.python.syntax.Name"}}}},
                                                                                                                                                                     {
+                                                                                                                                                                      "name": "prefix",
+                                                                                                                                                                      "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.python.syntax.StringPrefix"}}}},
+                                                                                                                                                                    {
                                                                                                                                                                       "name": "quoteStyle",
                                                                                                                                                                       "term": {"inject": {"field": {"name": "double", "term": {"unit": {}}}, "typeName": "hydra.python.syntax.QuoteStyle"}}}],
                                                                                                                                                                   "typeName": "hydra.python.syntax.String"}}},
