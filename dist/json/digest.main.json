@@ -77,7 +77,7 @@
     "hydra.haskell.language": "731be7825087fb72bd6f5bd35b13e839eadfb36b3c7bed187312224a75721322",
     "hydra.haskell.operators": "a0cb4db2c3d0ef490ec7d50c08d058e0b2395f67fae3c3c6ea036f931ad1b0b3",
     "hydra.haskell.serde": "4cca85d9efb8f23d99f3ac1e328bce614e21d2d1d937313968d7cb46a542c334",
-    "hydra.haskell.syntax": "e3f7e019a846fecbddd33fbbe638e6fe03de46c025bb007ae3c65db1f7c36075",
+    "hydra.haskell.syntax": "b968f051167974f56bf999c8578b160f83623815b154cfc81039f051ddc183c8",
     "hydra.haskell.testing": "5f897bc96a901b2d75ef2a120e8ef05714af2d3c69979545764aa409e41b60e8",
     "hydra.haskell.utils": "8123f895b8ada51696a4f88b18eaed8d672e723291ecf4ddcdc83ba3e3ffc618",
     "hydra.hoisting": "6b12d7ba5d7db9638f965246e86a017d9c0035ab8b69bd7f2ae9ab03c923681d",

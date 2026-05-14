@@ -1,4 +1,5 @@
--- | A Haskell syntax model, loosely based on Language.Haskell.Tools.AST
+-- | A Haskell syntax model for Hydra.
+-- | Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs.
 
 module Hydra.Sources.Haskell.Syntax where
 
@@ -22,7 +23,7 @@ module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = [Core.ns, Core.ns],
-            moduleDescription = Just "A Haskell syntax model, loosely based on Language.Haskell.Tools.AST"}
+            moduleDescription = Just "A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs."}
   where
     definitions = [
       alternative,
@@ -87,7 +88,7 @@ module_ = Module {
       simpleValueBinding,
       variable]
 
-alternative :: Binding -- UAlt
+alternative :: Binding
 alternative = define "Alternative" $
   doc "A pattern-matching alternative" $
   T.record [
@@ -101,7 +102,7 @@ alternative = define "Alternative" $
       doc "Optional local bindings" $
       T.maybe localBindings]
 
-constraint :: Binding -- UConstraint (UClassAssert)
+constraint :: Binding
 constraint = define "Constraint" $
   doc "A type constraint" $
   T.union [
@@ -113,7 +114,7 @@ constraint = define "Constraint" $
       T.list constraint]
   -- omitted for now: implicit and infix constraints
 
-classConstraint :: Binding -- UClassAssert
+classConstraint :: Binding
 classConstraint = define "ClassConstraint" $
   doc "A class constraint" $
   T.record [
@@ -124,13 +125,13 @@ classConstraint = define "ClassConstraint" $
       doc "The types to which the class is applied" $
       T.list type_]
 
-caseRhs :: Binding -- UCaseRhs'
+caseRhs :: Binding
 caseRhs = define "CaseRhs" $
   doc "The right-hand side of a pattern-matching alternative" $
   -- omitted for now: guarded
   T.wrap expression
 
-constructor :: Binding -- UConDecl
+constructor :: Binding
 constructor = define "Constructor" $
   doc "A data constructor" $
   -- omitted for now: ordinary (positional), infix
@@ -170,7 +171,7 @@ recordConstructor = define "RecordConstructor" $
       doc "Optional comments" $
       T.maybe T.string]
 
-dataDeclaration :: Binding -- UDataDecl
+dataDeclaration :: Binding
 dataDeclaration = define "DataDeclaration" $
   doc "A data type declaration" $
   T.record [
@@ -198,7 +199,7 @@ dataKeyword = define "DataKeyword" $
   doc "The 'data' versus 'newtype keyword" $
   T.enum ["data", "newtype"]
 
-declaration :: Binding -- UDecl
+declaration :: Binding
 declaration = define "Declaration" $
   doc "A data or value declaration" $
   -- omitted for now: typeFamily, typeSignature, closedTypeFamily, gDataDecl, typeInst, dataInst, gDataInst, class, inst,
@@ -218,7 +219,7 @@ declaration = define "Declaration" $
       doc "A typed binding"
       typedBinding]
 
-declarationHead :: Binding -- UDeclHead
+declarationHead :: Binding
 declarationHead = define "DeclarationHead" $
   doc "The left-hand side of a declaration" $
   -- omitted for now: infix application
@@ -241,13 +242,13 @@ applicationDeclarationHead = define "ApplicationDeclarationHead" $
       doc "The type variable operand"
       variable]
 
-derivingClause :: Binding -- UDeriving
+derivingClause :: Binding
 derivingClause = define "DerivingClause" $
   doc "A 'deriving' clause" $
   -- omitted for now: infix, parenthesized, and application instance heads
   T.wrap $ T.list name
 
-export :: Binding -- UExportSpec
+export :: Binding
 export = define "Export" $
   doc "An export statement" $
   T.union [
@@ -258,7 +259,7 @@ export = define "Export" $
       doc "An exported module"
       moduleName]
 
-expression :: Binding -- UExpr
+expression :: Binding
 expression = define "Expression" $
   doc "A data expression" $
   -- omitted for now: multi-if, unboxed tuple, tuple section, unboxed tuple section, parallel array,
@@ -431,7 +432,7 @@ recordUpdateExpression = define "RecordUpdateExpression" $
       doc "The field updates" $
       T.list fieldUpdate]
 
-field :: Binding -- UFieldDecl
+field :: Binding
 field = define "Field" $
   doc "A field (name/type pair)" $
   T.record [
@@ -445,7 +446,7 @@ field = define "Field" $
       doc "Optional comments" $
       T.maybe T.string]
 
-fieldUpdate :: Binding -- UFieldUpdate
+fieldUpdate :: Binding
 fieldUpdate = define "FieldUpdate" $
   doc "A field name and value" $
   -- omitted for now: pun, wildcard
@@ -457,7 +458,7 @@ fieldUpdate = define "FieldUpdate" $
       doc "The field value"
       expression]
 
-import_ :: Binding -- UImportDecl
+import_ :: Binding
 import_ = define "Import" $
   doc "An import statement" $
   -- omitted for now: source, safe, pkg
@@ -486,12 +487,12 @@ importSpec = define "ImportSpec" $
       doc "A list of imports to exclude" $
       T.list namedImportExport]
 
-importModifier :: Binding -- UImportModifier
+importModifier :: Binding
 importModifier = define "ImportModifier" $
   doc "An import modifier ('pattern' or 'type')" $
   T.enum ["pattern", "type"]
 
-namedImportExport :: Binding -- UIESpec
+namedImportExport :: Binding
 namedImportExport = define "NamedImportExport" $
   doc "An import or export specification" $
   T.record [
@@ -516,7 +517,7 @@ importExportSubspec = define "ImportExportSubspec" $
       doc "Import/export specific names" $
       T.list name]
 
-literal :: Binding -- ULiteral
+literal :: Binding
 literal = define "Literal" $
   doc "A literal value" $
   -- omitted for now: frac, primChar
@@ -540,7 +541,7 @@ literal = define "Literal" $
       doc "A string literal"
       T.string]
 
-localBinding :: Binding -- ULocalBind
+localBinding :: Binding
 localBinding = define "LocalBinding" $
   doc "A local binding" $
   -- omitted for now: fixity, pragma
@@ -552,12 +553,12 @@ localBinding = define "LocalBinding" $
       doc "A value binding"
       valueBinding]
 
-localBindings :: Binding -- ULocalBinds
+localBindings :: Binding
 localBindings = define "LocalBindings" $
   doc "A collection of local bindings" $
   T.wrap $ T.list localBinding
 
-module' :: Binding -- UModule
+module' :: Binding
 module' = define "Module" $
   doc "A Haskell module" $
   -- omitted for now: pragma
@@ -572,7 +573,7 @@ module' = define "Module" $
       doc "Module declarations" $
       T.list declaration]
 
-moduleHead :: Binding -- UModuleHead
+moduleHead :: Binding
 moduleHead = define "ModuleHead" $
   doc "A module head" $
   -- omitted for now: pragma
@@ -585,14 +586,14 @@ moduleHead = define "ModuleHead" $
       moduleName,
     "exports">:
       doc "Export list" $
-      T.list export] -- UExportSpecs
+      T.list export]
 
-moduleName :: Binding -- UModuleName
+moduleName :: Binding
 moduleName = define "ModuleName" $
   doc "A module name" $
   T.wrap T.string
 
-name :: Binding -- UName
+name :: Binding
 name = define "Name" $
   doc "A name" $
   T.union [
@@ -603,12 +604,12 @@ name = define "Name" $
       doc "A normal name"
       qualifiedName]
 
-namePart :: Binding -- UNamePart
+namePart :: Binding
 namePart = define "NamePart" $
   doc "A component of a qualified name" $
   T.wrap T.string
 
-operator :: Binding -- UOperator
+operator :: Binding
 operator = define "Operator" $
   doc "An operator" $
   T.union [
@@ -619,7 +620,7 @@ operator = define "Operator" $
       doc "A normal infix operator"
       qualifiedName]
 
-pattern :: Binding -- UPattern
+pattern :: Binding
 pattern = define "Pattern" $
   doc "A pattern" $
   -- omitted for now: unboxed tuples, parallel arrays, irrefutable, bang, view, splice, quasiquote, plusk, unboxed sum
@@ -696,7 +697,7 @@ typedPattern = define "TypedPattern" $
       doc "The type annotation"
       type_]
 
-patternField :: Binding -- UPatternField
+patternField :: Binding
 patternField = define "PatternField" $
   doc "A pattern field" $
   -- omitted for now: puns, wildcards
@@ -708,7 +709,7 @@ patternField = define "PatternField" $
       doc "The field pattern"
       pattern]
 
-qualifiedName :: Binding -- UQualifiedName
+qualifiedName :: Binding
 qualifiedName = define "QualifiedName" $
   doc "A qualified name" $
   T.record [
@@ -719,18 +720,18 @@ qualifiedName = define "QualifiedName" $
       doc "The unqualified name part"
       namePart]
 
-rightHandSide :: Binding -- URhs
+rightHandSide :: Binding
 rightHandSide = define "RightHandSide" $
   doc "A right-hand side of a binding" $
   -- omitted for now: guarded rhs
   T.wrap expression
 
-statement :: Binding -- UStmt
+statement :: Binding
 statement = define "Statement" $
   doc "A do-notation statement" $
   T.wrap expression
 
-type_ :: Binding -- UType
+type_ :: Binding
 type_ = define "Type" $
   doc "A type expression" $
   -- omitted for now: forall, unboxed tuple, parallel array, kinded, promoted, splice, quasiquote, bang,
@@ -775,7 +776,7 @@ constrainedType = define "ConstrainedType" $
   T.record [
     "ctx">:
       doc "The type class context"
-      constraint, -- UContext
+      constraint,
     "type">:
       doc "The constrained type"
       type_]
@@ -805,7 +806,7 @@ infixType = define "InfixType" $
       doc "The right-hand type"
       type_]
 
-typeSynonymDeclaration :: Binding -- UTypeDecl
+typeSynonymDeclaration :: Binding
 typeSynonymDeclaration = define "TypeSynonymDeclaration" $
   doc "A type synonym declaration" $
   T.record [
@@ -819,7 +820,7 @@ typeSynonymDeclaration = define "TypeSynonymDeclaration" $
       doc "Optional comments" $
       T.maybe T.string]
 
-typeSignature :: Binding -- UTypeSignature
+typeSignature :: Binding
 typeSignature = define "TypeSignature" $
   doc "A type signature" $
   T.record [
@@ -844,7 +845,7 @@ typedBinding = define "TypedBinding" $
       doc "Optional comments" $
       T.maybe T.string]
 
-valueBinding :: Binding -- UValueBind
+valueBinding :: Binding
 valueBinding = define "ValueBinding" $
   doc "A value binding" $
   -- omitted for now: funBind
