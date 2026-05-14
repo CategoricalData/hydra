@@ -37,6 +37,7 @@ import Hydra.Sources.Kernel.Lib.Defaults.All (defaultLibModules)
 import Hydra.Sources.Test.All (testModules)
 
 import qualified Hydra.Kernel as Kernel
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Sources.Demos.GenPG.Transform as GenPGTransform
 
 import Control.Monad (when)
@@ -56,6 +57,22 @@ dedupByNamespace = go S.empty
       | ns `S.member` seen = go seen ms
       | otherwise          = m : go (S.insert ns seen) ms
       where ns = Kernel.moduleNamespace m
+
+
+-- | Native hosts own the DSL→JSON path for hydra-java and hydra-python (#344).
+-- Their canonical hydra.java.* / hydra.python.* JSON is produced by
+-- bin/generate-hydra-{java,python}-from-{java,python}.sh (Phase 0 of sync.sh).
+-- We still keep their modules in 'fullMainUniverse' so they participate in the
+-- inference universe and in DSL-wrapper synthesis, but we exclude them from
+-- the term-level JSON write pass.
+--
+-- Legacy: the Haskell DSL copies at packages/hydra-{java,python}/src/main/haskell/
+-- remain as a historical reference through 0.15 but no longer drive
+-- dist/json/hydra-{java,python}/. To be deleted before 0.16.
+isNativeOwned :: Kernel.Module -> Bool
+isNativeOwned m =
+  let ns = Packaging.unNamespace (Kernel.moduleNamespace m)
+  in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
 
 
 -- | All main-side modules across all packages, deduped. Used as the type-
@@ -86,16 +103,18 @@ fullMainUniverse = dedupByNamespace $ L.concat
 
 
 data Options = Options
-  { optPackage      :: Maybe String
-  , optSourceSet    :: String
-  , optDistJsonRoot :: FilePath
+  { optPackage          :: Maybe String
+  , optSourceSet        :: String
+  , optDistJsonRoot     :: FilePath
+  , optIncludeJavaPython :: Bool
   }
 
 defaultOptions :: Options
 defaultOptions = Options
-  { optPackage      = Nothing
-  , optSourceSet    = "main"
-  , optDistJsonRoot = defaultDistJsonRoot
+  { optPackage          = Nothing
+  , optSourceSet        = "main"
+  , optDistJsonRoot     = defaultDistJsonRoot
+  , optIncludeJavaPython = False
   }
 
 
@@ -111,6 +130,7 @@ parseArgs = go defaultOptions
       | s == "main" || s == "test" = go (opts { optSourceSet = s }) rest
       | otherwise                  = Left $ "--source-set must be 'main' or 'test', got: " ++ s
     go opts ("--dist-json-root" : d : rest) = go (opts { optDistJsonRoot = d }) rest
+    go opts ("--include-java-python" : rest) = go (opts { optIncludeJavaPython = True }) rest
     go _    (arg : _) = Left $ "Unknown argument: " ++ arg
 
 
@@ -130,6 +150,12 @@ usage = unlines
   , "  --source-set <main|test> Source set to transform (default: main)."
   , "                           'test' is only non-empty for hydra-kernel today."
   , "  --dist-json-root <dir>   Output root (default: ../../dist/json)."
+  , "  --include-java-python    Force-write term-level JSON for hydra-java and"
+  , "                           hydra-python. By default (#344) the native"
+  , "                           generators in bin/generate-hydra-{java,python}-"
+  , "                           from-{java,python}.sh own these paths; this flag"
+  , "                           is for cold-start bootstrap when the native host"
+  , "                           is not yet built."
   ]
 
 
@@ -169,7 +195,10 @@ packageTestModules _              = []
 packageDslInputModules :: String -> [Kernel.Module]
 packageDslInputModules "hydra-kernel"  = kernelModules ++ jsonModules ++ otherModules
 packageDslInputModules "hydra-haskell" = haskellModules
+packageDslInputModules "hydra-java"    = hydraJavaModules
 packageDslInputModules "hydra-python"  = hydraPythonModules
+packageDslInputModules "hydra-scala"   = hydraScalaModules
+packageDslInputModules "hydra-lisp"    = hydraLispModules
 packageDslInputModules _               = []
 
 
@@ -184,19 +213,20 @@ main = do
       exitFailure
     Right o -> return o
 
-  let srcSet    = optSourceSet opts
-      distRoot  = optDistJsonRoot opts
+  let srcSet           = optSourceSet opts
+      distRoot         = optDistJsonRoot opts
+      includeJavaPython = optIncludeJavaPython opts
 
   case optPackage opts of
-    Just pkg -> runSinglePackage pkg srcSet distRoot
-    Nothing  -> runAllPackages      srcSet distRoot
+    Just pkg -> runSinglePackage pkg srcSet distRoot includeJavaPython
+    Nothing  -> runAllPackages      srcSet distRoot includeJavaPython
 
   putStrLn "=== Done. ==="
 
 -- | Transform a single package. Historical behaviour, kept for scoped
 -- callers that invoke one package at a time.
-runSinglePackage :: String -> String -> FilePath -> IO ()
-runSinglePackage pkg srcSet distRoot = do
+runSinglePackage :: String -> String -> FilePath -> Bool -> IO ()
+runSinglePackage pkg srcSet distRoot includeJavaPython = do
   let outDir = distRoot FP.</> pkg FP.</> "src" FP.</> srcSet FP.</> "json"
   putStrLn $ "=== Transform Haskell DSL -> JSON: " ++ pkg ++ " (" ++ srcSet ++ ") ==="
 
@@ -204,22 +234,37 @@ runSinglePackage pkg srcSet distRoot = do
         "main" ->
           let owned = filter (\m -> namespaceToPackage (Kernel.moduleNamespace m) == pkg)
                              fullMainUniverse
-          in (owned, fullMainUniverse)
+              -- #344: skip term-level JSON for hydra.java.*/hydra.python.* unless
+              -- --include-java-python (cold-start bootstrap). The native generators
+              -- own these paths in normal operation.
+              kept | includeJavaPython = owned
+                   | otherwise         = filter (not . isNativeOwned) owned
+          in (kept, fullMainUniverse)
         "test" ->
           let ts       = packageTestModules pkg
               testUniv = fullMainUniverse ++ ts
           in (ts, testUniv)
         _ -> ([], fullMainUniverse)
 
-  when (null mods) $ do
+  -- #344: for hydra-java/hydra-python in 'main' without --include-java-python,
+  -- term-level JSON is owned by the native generator, so 'mods' may be empty.
+  -- We still emit DSL wrappers below, so don't exit early in that case.
+  let nativeOwnedPkg = srcSet == "main"
+                       && not includeJavaPython
+                       && (pkg == "hydra-java" || pkg == "hydra-python")
+  when (null mods && not nativeOwnedPkg) $ do
     putStrLn $ "  (no modules in " ++ pkg ++ "/" ++ srcSet ++ "; skipping)"
     exitSuccess
 
-  putStrLn $ "  Writing " ++ show (length mods) ++ " modules -> " ++ outDir
+  if nativeOwnedPkg
+    then putStrLn $ "  (" ++ pkg
+           ++ ": term-level JSON owned by native generator; see #344)"
+    else putStrLn $ "  Writing " ++ show (length mods) ++ " modules -> " ++ outDir
 
   case srcSet of
     "main" -> do
-      writeModulesJsonPackageSplit True distRoot universe mods
+      when (not (null mods)) $
+        writeModulesJsonPackageSplit True distRoot universe mods
       let dslInputs = packageDslInputModules pkg
       case dslInputs of
         [] -> return ()
@@ -236,15 +281,26 @@ runSinglePackage pkg srcSet distRoot = do
 -- per-package JSON tree based on namespaceToPackage, so passing the whole
 -- universe produces the same on-disk layout as per-package calls — but
 -- we only pay the Haskell startup + DSL-compile cost once.
-runAllPackages :: String -> FilePath -> IO ()
-runAllPackages srcSet distRoot = do
+runAllPackages :: String -> FilePath -> Bool -> IO ()
+runAllPackages srcSet distRoot includeJavaPython = do
   putStrLn $ "=== Transform Haskell DSL -> JSON: all packages (" ++ srcSet ++ ") ==="
 
   case srcSet of
     "main" -> do
-      putStrLn $ "  Writing " ++ show (length fullMainUniverse)
+      -- #344: term-level JSON for hydra.java.* / hydra.python.* is owned by
+      -- the native generators in normal operation. Drop them from the write
+      -- set unless --include-java-python (cold-start bootstrap). The full
+      -- universe is still used for inference.
+      let writeUniverse
+            | includeJavaPython = fullMainUniverse
+            | otherwise         = filter (not . isNativeOwned) fullMainUniverse
+          excluded = length fullMainUniverse - length writeUniverse
+      putStrLn $ "  Writing " ++ show (length writeUniverse)
         ++ " main modules (routed per-package)..."
-      writeModulesJsonPackageSplit True distRoot fullMainUniverse fullMainUniverse
+      when (excluded > 0) $
+        putStrLn $ "  (excluded " ++ show excluded
+          ++ " hydra.java.*/hydra.python.* modules — owned by native generators; see #344)"
+      writeModulesJsonPackageSplit True distRoot fullMainUniverse writeUniverse
       -- DSL wrappers: generate for every package that has type-defining
       -- inputs. The routing is implicit — wrapper namespaces like
       -- hydra.dsl.<pkg>.* resolve to their owning package via
