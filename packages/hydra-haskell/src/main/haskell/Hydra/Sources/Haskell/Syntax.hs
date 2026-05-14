@@ -26,41 +26,41 @@ module_ = Module {
   where
     definitions = [
       alternative,
-      assertion,
-      classAssertion,
+      constraint,
+      classConstraint,
       caseRhs,
       constructor,
-      ordinaryConstructor,
+      positionalConstructor,
       recordConstructor,
       constructorWithComments,
       dataDeclaration,
-      dataOrNewtype,
+      dataKeyword,
       declarationWithComments,
       declaration,
       declarationHead,
       applicationDeclarationHead,
-      deriving_,
+      derivingClause,
       export,
       expression,
       applicationExpression,
       caseExpression,
-      constructRecordExpression,
+      recordExpression,
       ifExpression,
-      infixApplicationExpression,
+      infixExpression,
       lambdaExpression,
       letExpression,
       prefixApplicationExpression,
       sectionExpression,
-      typeSignatureExpression,
-      updateRecordExpression,
+      typedExpression,
+      recordUpdateExpression,
       field,
       fieldWithComments,
       fieldUpdate,
       import_,
-      specImport,
+      importSpec,
       importModifier,
-      importExportSpec,
-      subspecImportExportSpec,
+      namedImportExport,
+      importExportSubspec,
       literal,
       localBinding,
       localBindings,
@@ -81,10 +81,10 @@ module_ = Module {
       statement,
       type_,
       applicationType,
-      contextType,
+      constrainedType,
       functionType,
       infixType,
-      typeDeclaration,
+      typeSynonymDeclaration,
       typeSignature,
       typedBinding,
       valueBinding,
@@ -105,21 +105,21 @@ alternative = define "Alternative" $
       doc "Optional local bindings" $
       T.maybe localBindings]
 
-assertion :: Binding -- UAssertion (UClassAssert)
-assertion = define "Assertion" $
-  doc "A type assertion" $
+constraint :: Binding -- UConstraint (UClassAssert)
+constraint = define "Constraint" $
+  doc "A type constraint" $
   T.union [
     "class">:
-      doc "A class assertion"
-      classAssertion,
+      doc "A class constraint"
+      classConstraint,
     "tuple">:
-      doc "A tuple of assertions" $
-      T.list assertion]
-  -- omitted for now: implicit and infix assertions
+      doc "A tuple of constraints" $
+      T.list constraint]
+  -- omitted for now: implicit and infix constraints
 
-classAssertion :: Binding -- UClassAssert
-classAssertion = define "ClassAssertion" $
-  doc "A class assertion" $
+classConstraint :: Binding -- UClassAssert
+classConstraint = define "ClassConstraint" $
+  doc "A class constraint" $
   T.record [
     "name">:
       doc "The name of the class"
@@ -141,13 +141,13 @@ constructor = define "Constructor" $
   T.union [
     "ordinary">:
       doc "An ordinary (positional) constructor"
-      ordinaryConstructor,
+      positionalConstructor,
     "record">:
       doc "A record constructor"
       recordConstructor]
 
-ordinaryConstructor :: Binding
-ordinaryConstructor = define "OrdinaryConstructor" $
+positionalConstructor :: Binding
+positionalConstructor = define "PositionalConstructor" $
   doc "An ordinary (positional) data constructor" $
   T.record [
     "name">:
@@ -185,10 +185,10 @@ dataDeclaration = define "DataDeclaration" $
   T.record [
     "keyword">:
       doc "The 'data' or 'newtype' keyword"
-      dataOrNewtype,
+      dataKeyword,
     "context">:
       doc "Type class constraints" $
-      T.list assertion,
+      T.list constraint,
     "head">:
       doc "The declaration head"
       declarationHead,
@@ -197,10 +197,10 @@ dataDeclaration = define "DataDeclaration" $
       T.list constructorWithComments,
     "deriving">:
       doc "Derived type class instances" $
-      T.list deriving_]
+      T.list derivingClause]
 
-dataOrNewtype :: Binding
-dataOrNewtype = define "DataOrNewtype" $
+dataKeyword :: Binding
+dataKeyword = define "DataKeyword" $
   doc "The 'data' versus 'newtype keyword" $
   T.enum ["data", "newtype"]
 
@@ -227,7 +227,7 @@ declaration = define "Declaration" $
       dataDeclaration,
     "type">:
       doc "A type synonym declaration"
-      typeDeclaration,
+      typeSynonymDeclaration,
     "valueBinding">:
       doc "A value binding"
       valueBinding,
@@ -261,9 +261,9 @@ applicationDeclarationHead = define "ApplicationDeclarationHead" $
       doc "The type variable operand"
       variable]
 
-deriving_ :: Binding -- UDeriving
-deriving_ = define "Deriving" $
-  doc "A 'deriving' statement" $
+derivingClause :: Binding -- UDeriving
+derivingClause = define "DerivingClause" $
+  doc "A 'deriving' clause" $
   -- omitted for now: infix, parenthesized, and application instance heads
   T.wrap $ T.list name
 
@@ -273,7 +273,7 @@ export = define "Export" $
   T.union [
     "declaration">:
       doc "An exported declaration"
-      importExportSpec,
+      namedImportExport,
     "module">:
       doc "An exported module"
       moduleName]
@@ -294,7 +294,7 @@ expression = define "Expression" $
       caseExpression,
     "constructRecord">:
       doc "A record constructor expression"
-      constructRecordExpression,
+      recordExpression,
     "do">:
       doc "A 'do' expression" $
       T.list statement, -- omitted for now: do vs. mdo
@@ -303,7 +303,7 @@ expression = define "Expression" $
       ifExpression,
     "infixApplication">:
       doc "An infix application"
-      infixApplicationExpression,
+      infixExpression,
     "literal">:
       doc "A literal value"
       literal,
@@ -333,10 +333,10 @@ expression = define "Expression" $
       T.list expression,
     "typeSignature">:
       doc "A type signature expression"
-      typeSignatureExpression,
+      typedExpression,
     "updateRecord">:
       doc "A record update expression"
-      updateRecordExpression,
+      recordUpdateExpression,
     "variable">:
       doc "A variable reference"
       name]
@@ -363,8 +363,8 @@ caseExpression = define "CaseExpression" $
       doc "The pattern-matching alternatives" $
       T.list alternative]
 
-constructRecordExpression :: Binding
-constructRecordExpression = define "ConstructRecordExpression" $
+recordExpression :: Binding
+recordExpression = define "RecordExpression" $
   doc "A record constructor expression" $
   T.record [
     "name">:
@@ -388,8 +388,8 @@ ifExpression = define "IfExpression" $
       doc "The 'else' branch"
       expression]
 
-infixApplicationExpression :: Binding
-infixApplicationExpression = define "InfixApplicationExpression" $
+infixExpression :: Binding
+infixExpression = define "InfixExpression" $
   doc "An infix application expression" $
   T.record [
     "lhs">:
@@ -446,8 +446,8 @@ sectionExpression = define "SectionExpression" $
       doc "The operand"
       expression]
 
-typeSignatureExpression :: Binding
-typeSignatureExpression = define "TypeSignatureExpression" $
+typedExpression :: Binding
+typedExpression = define "TypedExpression" $
   doc "A type signature expression" $
   T.record [
     "inner">:
@@ -457,8 +457,8 @@ typeSignatureExpression = define "TypeSignatureExpression" $
       doc "The type signature"
       type_]
 
-updateRecordExpression :: Binding
-updateRecordExpression = define "UpdateRecordExpression" $
+recordUpdateExpression :: Binding
+recordUpdateExpression = define "RecordUpdateExpression" $
   doc "An update record expression" $
   T.record [
     "inner">:
@@ -518,26 +518,26 @@ import_ = define "Import" $
       T.maybe moduleName,
     "spec">:
       doc "Optional import specification" $
-      T.maybe specImport]
+      T.maybe importSpec]
 
-specImport :: Binding
-specImport = define "SpecImport" $
+importSpec :: Binding
+importSpec = define "ImportSpec" $
   doc "An import specification" $
   T.union [
     "list">:
       doc "A list of imports to include" $
-      T.list importExportSpec,
+      T.list namedImportExport,
     "hiding">:
       doc "A list of imports to exclude" $
-      T.list importExportSpec]
+      T.list namedImportExport]
 
 importModifier :: Binding -- UImportModifier
 importModifier = define "ImportModifier" $
   doc "An import modifier ('pattern' or 'type')" $
   T.enum ["pattern", "type"]
 
-importExportSpec :: Binding -- UIESpec
-importExportSpec = define "ImportExportSpec" $
+namedImportExport :: Binding -- UIESpec
+namedImportExport = define "NamedImportExport" $
   doc "An import or export specification" $
   T.record [
     "modifier">:
@@ -548,10 +548,10 @@ importExportSpec = define "ImportExportSpec" $
       name,
     "subspec">:
       doc "Optional subspecification" $
-      T.maybe subspecImportExportSpec]
+      T.maybe importExportSubspec]
 
-subspecImportExportSpec :: Binding
-subspecImportExportSpec = define "SubspecImportExportSpec" $
+importExportSubspec :: Binding
+importExportSubspec = define "ImportExportSubspec" $
   doc "A subspecification within an import/export" $
   T.union [
     "all">:
@@ -792,7 +792,7 @@ type_ = define "Type" $
       applicationType,
     "ctx">:
       doc "A context type"
-      contextType,
+      constrainedType,
     "function">:
       doc "A function type"
       functionType,
@@ -823,13 +823,13 @@ applicationType = define "ApplicationType" $
       doc "The type argument"
       type_]
 
-contextType :: Binding
-contextType = define "ContextType" $
+constrainedType :: Binding
+constrainedType = define "ConstrainedType" $
   doc "A type with a context (type class constraints)" $
   T.record [
     "ctx">:
       doc "The type class context"
-      assertion, -- UContext
+      constraint, -- UContext
     "type">:
       doc "The constrained type"
       type_]
@@ -856,11 +856,11 @@ infixType = define "InfixType" $
       doc "The type operator"
       operator,
     "rhs">:
-      doc "The right-hand operator"
-      operator]
+      doc "The right-hand type"
+      type_]
 
-typeDeclaration :: Binding -- UTypeDecl
-typeDeclaration = define "TypeDeclaration" $
+typeSynonymDeclaration :: Binding -- UTypeDecl
+typeSynonymDeclaration = define "TypeSynonymDeclaration" $
   doc "A type synonym declaration" $
   T.record [
     "name">:

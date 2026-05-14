@@ -19,27 +19,27 @@ _Alternative = Core.Name "hydra.haskell.syntax.Alternative"
 _Alternative_pattern = Core.Name "pattern"
 _Alternative_rhs = Core.Name "rhs"
 _Alternative_binds = Core.Name "binds"
--- | A type assertion
-data Assertion =
-  -- | A class assertion
-  AssertionClass ClassAssertion |
-  -- | A tuple of assertions
-  AssertionTuple [Assertion]
+-- | A type constraint
+data Constraint =
+  -- | A class constraint
+  ConstraintClass ClassConstraint |
+  -- | A tuple of constraints
+  ConstraintTuple [Constraint]
   deriving (Eq, Ord, Read, Show)
-_Assertion = Core.Name "hydra.haskell.syntax.Assertion"
-_Assertion_class = Core.Name "class"
-_Assertion_tuple = Core.Name "tuple"
--- | A class assertion
-data ClassAssertion =
-  ClassAssertion {
+_Constraint = Core.Name "hydra.haskell.syntax.Constraint"
+_Constraint_class = Core.Name "class"
+_Constraint_tuple = Core.Name "tuple"
+-- | A class constraint
+data ClassConstraint =
+  ClassConstraint {
     -- | The name of the class
-    classAssertionName :: Name,
+    classConstraintName :: Name,
     -- | The types to which the class is applied
-    classAssertionTypes :: [Type]}
+    classConstraintTypes :: [Type]}
   deriving (Eq, Ord, Read, Show)
-_ClassAssertion = Core.Name "hydra.haskell.syntax.ClassAssertion"
-_ClassAssertion_name = Core.Name "name"
-_ClassAssertion_types = Core.Name "types"
+_ClassConstraint = Core.Name "hydra.haskell.syntax.ClassConstraint"
+_ClassConstraint_name = Core.Name "name"
+_ClassConstraint_types = Core.Name "types"
 -- | The right-hand side of a pattern-matching alternative
 newtype CaseRhs =
   CaseRhs {
@@ -49,7 +49,7 @@ _CaseRhs = Core.Name "hydra.haskell.syntax.CaseRhs"
 -- | A data constructor
 data Constructor =
   -- | An ordinary (positional) constructor
-  ConstructorOrdinary OrdinaryConstructor |
+  ConstructorOrdinary PositionalConstructor |
   -- | A record constructor
   ConstructorRecord RecordConstructor
   deriving (Eq, Ord, Read, Show)
@@ -57,16 +57,16 @@ _Constructor = Core.Name "hydra.haskell.syntax.Constructor"
 _Constructor_ordinary = Core.Name "ordinary"
 _Constructor_record = Core.Name "record"
 -- | An ordinary (positional) data constructor
-data OrdinaryConstructor =
-  OrdinaryConstructor {
+data PositionalConstructor =
+  PositionalConstructor {
     -- | The name of the constructor
-    ordinaryConstructorName :: Name,
+    positionalConstructorName :: Name,
     -- | The types of the positional fields
-    ordinaryConstructorFields :: [Type]}
+    positionalConstructorFields :: [Type]}
   deriving (Eq, Ord, Read, Show)
-_OrdinaryConstructor = Core.Name "hydra.haskell.syntax.OrdinaryConstructor"
-_OrdinaryConstructor_name = Core.Name "name"
-_OrdinaryConstructor_fields = Core.Name "fields"
+_PositionalConstructor = Core.Name "hydra.haskell.syntax.PositionalConstructor"
+_PositionalConstructor_name = Core.Name "name"
+_PositionalConstructor_fields = Core.Name "fields"
 -- | A record-style data constructor
 data RecordConstructor =
   RecordConstructor {
@@ -93,15 +93,15 @@ _ConstructorWithComments_comments = Core.Name "comments"
 data DataDeclaration =
   DataDeclaration {
     -- | The 'data' or 'newtype' keyword
-    dataDeclarationKeyword :: DataOrNewtype,
+    dataDeclarationKeyword :: DataKeyword,
     -- | Type class constraints
-    dataDeclarationContext :: [Assertion],
+    dataDeclarationContext :: [Constraint],
     -- | The declaration head
     dataDeclarationHead :: DeclarationHead,
     -- | The data constructors
     dataDeclarationConstructors :: [ConstructorWithComments],
     -- | Derived type class instances
-    dataDeclarationDeriving :: [Deriving]}
+    dataDeclarationDeriving :: [DerivingClause]}
   deriving (Eq, Ord, Read, Show)
 _DataDeclaration = Core.Name "hydra.haskell.syntax.DataDeclaration"
 _DataDeclaration_keyword = Core.Name "keyword"
@@ -110,13 +110,13 @@ _DataDeclaration_head = Core.Name "head"
 _DataDeclaration_constructors = Core.Name "constructors"
 _DataDeclaration_deriving = Core.Name "deriving"
 -- | The 'data' versus 'newtype keyword
-data DataOrNewtype =
-  DataOrNewtypeData |
-  DataOrNewtypeNewtype
+data DataKeyword =
+  DataKeywordData |
+  DataKeywordNewtype
   deriving (Eq, Ord, Read, Show)
-_DataOrNewtype = Core.Name "hydra.haskell.syntax.DataOrNewtype"
-_DataOrNewtype_data = Core.Name "data"
-_DataOrNewtype_newtype = Core.Name "newtype"
+_DataKeyword = Core.Name "hydra.haskell.syntax.DataKeyword"
+_DataKeyword_data = Core.Name "data"
+_DataKeyword_newtype = Core.Name "newtype"
 -- | A data declaration together with any comments
 data DeclarationWithComments =
   DeclarationWithComments {
@@ -133,7 +133,7 @@ data Declaration =
   -- | A data type declaration
   DeclarationData DataDeclaration |
   -- | A type synonym declaration
-  DeclarationType TypeDeclaration |
+  DeclarationType TypeSynonymDeclaration |
   -- | A value binding
   DeclarationValueBinding ValueBinding |
   -- | A typed binding
@@ -168,16 +168,16 @@ data ApplicationDeclarationHead =
 _ApplicationDeclarationHead = Core.Name "hydra.haskell.syntax.ApplicationDeclarationHead"
 _ApplicationDeclarationHead_function = Core.Name "function"
 _ApplicationDeclarationHead_operand = Core.Name "operand"
--- | A 'deriving' statement
-newtype Deriving =
-  Deriving {
-    unDeriving :: [Name]}
+-- | A 'deriving' clause
+newtype DerivingClause =
+  DerivingClause {
+    unDerivingClause :: [Name]}
   deriving (Eq, Ord, Read, Show)
-_Deriving = Core.Name "hydra.haskell.syntax.Deriving"
+_DerivingClause = Core.Name "hydra.haskell.syntax.DerivingClause"
 -- | An export statement
 data Export =
   -- | An exported declaration
-  ExportDeclaration ImportExportSpec |
+  ExportDeclaration NamedImportExport |
   -- | An exported module
   ExportModule ModuleName
   deriving (Eq, Ord, Read, Show)
@@ -191,13 +191,13 @@ data Expression =
   -- | A case expression
   ExpressionCase CaseExpression |
   -- | A record constructor expression
-  ExpressionConstructRecord ConstructRecordExpression |
+  ExpressionConstructRecord RecordExpression |
   -- | A 'do' expression
   ExpressionDo [Statement] |
   -- | An 'if' expression
   ExpressionIf IfExpression |
   -- | An infix application
-  ExpressionInfixApplication InfixApplicationExpression |
+  ExpressionInfixApplication InfixExpression |
   -- | A literal value
   ExpressionLiteral Literal |
   -- | A lambda expression
@@ -217,9 +217,9 @@ data Expression =
   -- | A tuple expression
   ExpressionTuple [Expression] |
   -- | A type signature expression
-  ExpressionTypeSignature TypeSignatureExpression |
+  ExpressionTypeSignature TypedExpression |
   -- | A record update expression
-  ExpressionUpdateRecord UpdateRecordExpression |
+  ExpressionUpdateRecord RecordUpdateExpression |
   -- | A variable reference
   ExpressionVariable Name
   deriving (Eq, Ord, Read, Show)
@@ -265,16 +265,16 @@ _CaseExpression = Core.Name "hydra.haskell.syntax.CaseExpression"
 _CaseExpression_case = Core.Name "case"
 _CaseExpression_alternatives = Core.Name "alternatives"
 -- | A record constructor expression
-data ConstructRecordExpression =
-  ConstructRecordExpression {
+data RecordExpression =
+  RecordExpression {
     -- | The constructor name
-    constructRecordExpressionName :: Name,
+    recordExpressionName :: Name,
     -- | The field assignments
-    constructRecordExpressionFields :: [FieldUpdate]}
+    recordExpressionFields :: [FieldUpdate]}
   deriving (Eq, Ord, Read, Show)
-_ConstructRecordExpression = Core.Name "hydra.haskell.syntax.ConstructRecordExpression"
-_ConstructRecordExpression_name = Core.Name "name"
-_ConstructRecordExpression_fields = Core.Name "fields"
+_RecordExpression = Core.Name "hydra.haskell.syntax.RecordExpression"
+_RecordExpression_name = Core.Name "name"
+_RecordExpression_fields = Core.Name "fields"
 -- | An 'if' expression
 data IfExpression =
   IfExpression {
@@ -290,19 +290,19 @@ _IfExpression_condition = Core.Name "condition"
 _IfExpression_then = Core.Name "then"
 _IfExpression_else = Core.Name "else"
 -- | An infix application expression
-data InfixApplicationExpression =
-  InfixApplicationExpression {
+data InfixExpression =
+  InfixExpression {
     -- | The left-hand operand
-    infixApplicationExpressionLhs :: Expression,
+    infixExpressionLhs :: Expression,
     -- | The infix operator
-    infixApplicationExpressionOperator :: Operator,
+    infixExpressionOperator :: Operator,
     -- | The right-hand operand
-    infixApplicationExpressionRhs :: Expression}
+    infixExpressionRhs :: Expression}
   deriving (Eq, Ord, Read, Show)
-_InfixApplicationExpression = Core.Name "hydra.haskell.syntax.InfixApplicationExpression"
-_InfixApplicationExpression_lhs = Core.Name "lhs"
-_InfixApplicationExpression_operator = Core.Name "operator"
-_InfixApplicationExpression_rhs = Core.Name "rhs"
+_InfixExpression = Core.Name "hydra.haskell.syntax.InfixExpression"
+_InfixExpression_lhs = Core.Name "lhs"
+_InfixExpression_operator = Core.Name "operator"
+_InfixExpression_rhs = Core.Name "rhs"
 -- | A lambda expression
 data LambdaExpression =
   LambdaExpression {
@@ -348,27 +348,27 @@ _SectionExpression = Core.Name "hydra.haskell.syntax.SectionExpression"
 _SectionExpression_operator = Core.Name "operator"
 _SectionExpression_expression = Core.Name "expression"
 -- | A type signature expression
-data TypeSignatureExpression =
-  TypeSignatureExpression {
+data TypedExpression =
+  TypedExpression {
     -- | The expression being typed
-    typeSignatureExpressionInner :: Expression,
+    typedExpressionInner :: Expression,
     -- | The type signature
-    typeSignatureExpressionType :: Type}
+    typedExpressionType :: Type}
   deriving (Eq, Ord, Read, Show)
-_TypeSignatureExpression = Core.Name "hydra.haskell.syntax.TypeSignatureExpression"
-_TypeSignatureExpression_inner = Core.Name "inner"
-_TypeSignatureExpression_type = Core.Name "type"
+_TypedExpression = Core.Name "hydra.haskell.syntax.TypedExpression"
+_TypedExpression_inner = Core.Name "inner"
+_TypedExpression_type = Core.Name "type"
 -- | An update record expression
-data UpdateRecordExpression =
-  UpdateRecordExpression {
+data RecordUpdateExpression =
+  RecordUpdateExpression {
     -- | The record being updated
-    updateRecordExpressionInner :: Expression,
+    recordUpdateExpressionInner :: Expression,
     -- | The field updates
-    updateRecordExpressionFields :: [FieldUpdate]}
+    recordUpdateExpressionFields :: [FieldUpdate]}
   deriving (Eq, Ord, Read, Show)
-_UpdateRecordExpression = Core.Name "hydra.haskell.syntax.UpdateRecordExpression"
-_UpdateRecordExpression_inner = Core.Name "inner"
-_UpdateRecordExpression_fields = Core.Name "fields"
+_RecordUpdateExpression = Core.Name "hydra.haskell.syntax.RecordUpdateExpression"
+_RecordUpdateExpression_inner = Core.Name "inner"
+_RecordUpdateExpression_fields = Core.Name "fields"
 -- | A field (name/type pair)
 data Field =
   Field {
@@ -412,7 +412,7 @@ data Import =
     -- | Optional alias for the module
     importAs :: (Maybe ModuleName),
     -- | Optional import specification
-    importSpec :: (Maybe SpecImport)}
+    importSpec :: (Maybe ImportSpec)}
   deriving (Eq, Ord, Read, Show)
 _Import = Core.Name "hydra.haskell.syntax.Import"
 _Import_qualified = Core.Name "qualified"
@@ -420,15 +420,15 @@ _Import_module = Core.Name "module"
 _Import_as = Core.Name "as"
 _Import_spec = Core.Name "spec"
 -- | An import specification
-data SpecImport =
+data ImportSpec =
   -- | A list of imports to include
-  SpecImportList [ImportExportSpec] |
+  ImportSpecList [NamedImportExport] |
   -- | A list of imports to exclude
-  SpecImportHiding [ImportExportSpec]
+  ImportSpecHiding [NamedImportExport]
   deriving (Eq, Ord, Read, Show)
-_SpecImport = Core.Name "hydra.haskell.syntax.SpecImport"
-_SpecImport_list = Core.Name "list"
-_SpecImport_hiding = Core.Name "hiding"
+_ImportSpec = Core.Name "hydra.haskell.syntax.ImportSpec"
+_ImportSpec_list = Core.Name "list"
+_ImportSpec_hiding = Core.Name "hiding"
 -- | An import modifier ('pattern' or 'type')
 data ImportModifier =
   ImportModifierPattern |
@@ -438,29 +438,29 @@ _ImportModifier = Core.Name "hydra.haskell.syntax.ImportModifier"
 _ImportModifier_pattern = Core.Name "pattern"
 _ImportModifier_type = Core.Name "type"
 -- | An import or export specification
-data ImportExportSpec =
-  ImportExportSpec {
+data NamedImportExport =
+  NamedImportExport {
     -- | Optional import modifier
-    importExportSpecModifier :: (Maybe ImportModifier),
+    namedImportExportModifier :: (Maybe ImportModifier),
     -- | The name being imported or exported
-    importExportSpecName :: Name,
+    namedImportExportName :: Name,
     -- | Optional subspecification
-    importExportSpecSubspec :: (Maybe SubspecImportExportSpec)}
+    namedImportExportSubspec :: (Maybe ImportExportSubspec)}
   deriving (Eq, Ord, Read, Show)
-_ImportExportSpec = Core.Name "hydra.haskell.syntax.ImportExportSpec"
-_ImportExportSpec_modifier = Core.Name "modifier"
-_ImportExportSpec_name = Core.Name "name"
-_ImportExportSpec_subspec = Core.Name "subspec"
+_NamedImportExport = Core.Name "hydra.haskell.syntax.NamedImportExport"
+_NamedImportExport_modifier = Core.Name "modifier"
+_NamedImportExport_name = Core.Name "name"
+_NamedImportExport_subspec = Core.Name "subspec"
 -- | A subspecification within an import/export
-data SubspecImportExportSpec =
+data ImportExportSubspec =
   -- | Import/export all
-  SubspecImportExportSpecAll |
+  ImportExportSubspecAll |
   -- | Import/export specific names
-  SubspecImportExportSpecList [Name]
+  ImportExportSubspecList [Name]
   deriving (Eq, Ord, Read, Show)
-_SubspecImportExportSpec = Core.Name "hydra.haskell.syntax.SubspecImportExportSpec"
-_SubspecImportExportSpec_all = Core.Name "all"
-_SubspecImportExportSpec_list = Core.Name "list"
+_ImportExportSubspec = Core.Name "hydra.haskell.syntax.ImportExportSubspec"
+_ImportExportSubspec_all = Core.Name "all"
+_ImportExportSubspec_list = Core.Name "list"
 -- | A literal value
 data Literal =
   -- | A character literal
@@ -679,7 +679,7 @@ data Type =
   -- | An application type
   TypeApplication ApplicationType |
   -- | A context type
-  TypeCtx ContextType |
+  TypeCtx ConstrainedType |
   -- | A function type
   TypeFunction FunctionType |
   -- | An infix type
@@ -714,16 +714,16 @@ _ApplicationType = Core.Name "hydra.haskell.syntax.ApplicationType"
 _ApplicationType_context = Core.Name "context"
 _ApplicationType_argument = Core.Name "argument"
 -- | A type with a context (type class constraints)
-data ContextType =
-  ContextType {
+data ConstrainedType =
+  ConstrainedType {
     -- | The type class context
-    contextTypeCtx :: Assertion,
+    constrainedTypeCtx :: Constraint,
     -- | The constrained type
-    contextTypeType :: Type}
+    constrainedTypeType :: Type}
   deriving (Eq, Ord, Read, Show)
-_ContextType = Core.Name "hydra.haskell.syntax.ContextType"
-_ContextType_ctx = Core.Name "ctx"
-_ContextType_type = Core.Name "type"
+_ConstrainedType = Core.Name "hydra.haskell.syntax.ConstrainedType"
+_ConstrainedType_ctx = Core.Name "ctx"
+_ConstrainedType_type = Core.Name "type"
 -- | A function type
 data FunctionType =
   FunctionType {
@@ -742,24 +742,24 @@ data InfixType =
     infixTypeLhs :: Type,
     -- | The type operator
     infixTypeOperator :: Operator,
-    -- | The right-hand operator
-    infixTypeRhs :: Operator}
+    -- | The right-hand type
+    infixTypeRhs :: Type}
   deriving (Eq, Ord, Read, Show)
 _InfixType = Core.Name "hydra.haskell.syntax.InfixType"
 _InfixType_lhs = Core.Name "lhs"
 _InfixType_operator = Core.Name "operator"
 _InfixType_rhs = Core.Name "rhs"
 -- | A type synonym declaration
-data TypeDeclaration =
-  TypeDeclaration {
+data TypeSynonymDeclaration =
+  TypeSynonymDeclaration {
     -- | The declaration head
-    typeDeclarationName :: DeclarationHead,
+    typeSynonymDeclarationName :: DeclarationHead,
     -- | The type being defined
-    typeDeclarationType :: Type}
+    typeSynonymDeclarationType :: Type}
   deriving (Eq, Ord, Read, Show)
-_TypeDeclaration = Core.Name "hydra.haskell.syntax.TypeDeclaration"
-_TypeDeclaration_name = Core.Name "name"
-_TypeDeclaration_type = Core.Name "type"
+_TypeSynonymDeclaration = Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"
+_TypeSynonymDeclaration_name = Core.Name "name"
+_TypeSynonymDeclaration_type = Core.Name "type"
 -- | A type signature
 data TypeSignature =
   TypeSignature {
