@@ -214,3 +214,37 @@ or `bin/run-bootstrapping-demo.sh`: check `uptime` and
 build|JavaSelfHost|hydra.bootstrap'` across all worktrees, and
 either wait for sibling activity to clear or warn the user that
 numbers will be pessimistic.
+
+### Synthesized TermDefinitions must carry a TypeScheme
+
+`moduleToSourceModule` and any other site that synthesizes a
+`TermDefinition` wrapping a statically-typed term (e.g. `encoderFor _T @@ m`
+of type `T`) must populate `termDefinitionTypeScheme` with that type, not
+`Nothing`. If left as `Nothing`, downstream code that loads the module
+(notably `bootstrap-from-json`'s synthesis pass) is forced to call
+`inferModulesIO` to derive the type from a large encoded term, which on a
+16 GB CI runner OOMs after Phase 3 ("Synthesized N encoder source modules")
+with no log output before the watchdog kill.
+
+Symptom: silent SIGKILL during the Haskell CI job's step 5 in the
+post-synthesizer phase, ~15-25 min in. Fix: annotate at synthesis time
+(see `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Kernel/Terms/Generation.hs:583-591`
+for the canonical pattern), and skip the downstream `inferModulesIO` call
+since the type is already known. Bug #367 (#367's CI hang) was this.
+
+### Java rollup needs matching DSL exclude when target syntax is excluded
+
+When `packages/hydra-java/build.gradle`'s `compileJava` block excludes a
+generated subtree like `**/hydra/scala/**` because its types don't
+type-check standalone, the matching `**/hydra/dsl/<lang>/**` must also
+be excluded. After #297's `5032f8038` (regenerate
+`Hydra/Dsl/<lang>/Syntax.hs` for every coder package), each coder package
+emits a DSL wrapper at `dist/java/hydra-<lang>/src/main/java/hydra/dsl/<lang>/Syntax.java`
+that imports `hydra.<lang>.syntax.*`. If the target syntax is excluded,
+the DSL wrapper compile fails with "package hydra.<lang>.syntax does not
+exist".
+
+Currently only `hydra/scala/**` triggers this — the other languages'
+Java emission type-checks standalone. New coder additions that need
+`hydra/<lang>/**` excluded should add `hydra/dsl/<lang>/**` at the same
+time.
