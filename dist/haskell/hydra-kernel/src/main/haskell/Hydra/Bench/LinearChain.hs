@@ -6375,6 +6375,196 @@ walker40 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 400; recurses to walker399.
+walker400 :: Core.Term -> Maybe Core.Term
+walker400 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker399 arg) (\_ -> walker399 fun) (walker399 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker399 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker399 inner) (walker399 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 401; recurses to walker400.
+walker401 :: Core.Term -> Maybe Core.Term
+walker401 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker400 arg) (\_ -> walker400 fun) (walker400 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker400 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker400 inner) (walker400 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 402; recurses to walker401.
+walker402 :: Core.Term -> Maybe Core.Term
+walker402 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker401 arg) (\_ -> walker401 fun) (walker401 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker401 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker401 inner) (walker401 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 403; recurses to walker402.
+walker403 :: Core.Term -> Maybe Core.Term
+walker403 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker402 arg) (\_ -> walker402 fun) (walker402 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker402 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker402 inner) (walker402 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 404; recurses to walker403.
+walker404 :: Core.Term -> Maybe Core.Term
+walker404 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker403 arg) (\_ -> walker403 fun) (walker403 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker403 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker403 inner) (walker403 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 405; recurses to walker404.
+walker405 :: Core.Term -> Maybe Core.Term
+walker405 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker404 arg) (\_ -> walker404 fun) (walker404 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker404 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker404 inner) (walker404 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 406; recurses to walker405.
+walker406 :: Core.Term -> Maybe Core.Term
+walker406 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker405 arg) (\_ -> walker405 fun) (walker405 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker405 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker405 inner) (walker405 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 407; recurses to walker406.
+walker407 :: Core.Term -> Maybe Core.Term
+walker407 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker406 arg) (\_ -> walker406 fun) (walker406 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker406 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker406 inner) (walker406 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 408; recurses to walker407.
+walker408 :: Core.Term -> Maybe Core.Term
+walker408 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker407 arg) (\_ -> walker407 fun) (walker407 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker407 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker407 inner) (walker407 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 409; recurses to walker408.
+walker409 :: Core.Term -> Maybe Core.Term
+walker409 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker408 arg) (\_ -> walker408 fun) (walker408 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker408 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker408 inner) (walker408 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 41; recurses to walker40.
 walker41 :: Core.Term -> Maybe Core.Term
 walker41 t =
@@ -6391,6 +6581,196 @@ walker41 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker40 inner) (walker40 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 410; recurses to walker409.
+walker410 :: Core.Term -> Maybe Core.Term
+walker410 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker409 arg) (\_ -> walker409 fun) (walker409 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker409 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker409 inner) (walker409 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 411; recurses to walker410.
+walker411 :: Core.Term -> Maybe Core.Term
+walker411 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker410 arg) (\_ -> walker410 fun) (walker410 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker410 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker410 inner) (walker410 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 412; recurses to walker411.
+walker412 :: Core.Term -> Maybe Core.Term
+walker412 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker411 arg) (\_ -> walker411 fun) (walker411 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker411 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker411 inner) (walker411 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 413; recurses to walker412.
+walker413 :: Core.Term -> Maybe Core.Term
+walker413 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker412 arg) (\_ -> walker412 fun) (walker412 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker412 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker412 inner) (walker412 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 414; recurses to walker413.
+walker414 :: Core.Term -> Maybe Core.Term
+walker414 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker413 arg) (\_ -> walker413 fun) (walker413 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker413 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker413 inner) (walker413 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 415; recurses to walker414.
+walker415 :: Core.Term -> Maybe Core.Term
+walker415 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker414 arg) (\_ -> walker414 fun) (walker414 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker414 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker414 inner) (walker414 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 416; recurses to walker415.
+walker416 :: Core.Term -> Maybe Core.Term
+walker416 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker415 arg) (\_ -> walker415 fun) (walker415 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker415 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker415 inner) (walker415 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 417; recurses to walker416.
+walker417 :: Core.Term -> Maybe Core.Term
+walker417 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker416 arg) (\_ -> walker416 fun) (walker416 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker416 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker416 inner) (walker416 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 418; recurses to walker417.
+walker418 :: Core.Term -> Maybe Core.Term
+walker418 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker417 arg) (\_ -> walker417 fun) (walker417 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker417 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker417 inner) (walker417 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 419; recurses to walker418.
+walker419 :: Core.Term -> Maybe Core.Term
+walker419 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker418 arg) (\_ -> walker418 fun) (walker418 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker418 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker418 inner) (walker418 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6413,6 +6793,196 @@ walker42 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 420; recurses to walker419.
+walker420 :: Core.Term -> Maybe Core.Term
+walker420 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker419 arg) (\_ -> walker419 fun) (walker419 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker419 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker419 inner) (walker419 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 421; recurses to walker420.
+walker421 :: Core.Term -> Maybe Core.Term
+walker421 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker420 arg) (\_ -> walker420 fun) (walker420 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker420 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker420 inner) (walker420 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 422; recurses to walker421.
+walker422 :: Core.Term -> Maybe Core.Term
+walker422 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker421 arg) (\_ -> walker421 fun) (walker421 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker421 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker421 inner) (walker421 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 423; recurses to walker422.
+walker423 :: Core.Term -> Maybe Core.Term
+walker423 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker422 arg) (\_ -> walker422 fun) (walker422 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker422 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker422 inner) (walker422 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 424; recurses to walker423.
+walker424 :: Core.Term -> Maybe Core.Term
+walker424 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker423 arg) (\_ -> walker423 fun) (walker423 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker423 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker423 inner) (walker423 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 425; recurses to walker424.
+walker425 :: Core.Term -> Maybe Core.Term
+walker425 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker424 arg) (\_ -> walker424 fun) (walker424 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker424 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker424 inner) (walker424 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 426; recurses to walker425.
+walker426 :: Core.Term -> Maybe Core.Term
+walker426 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker425 arg) (\_ -> walker425 fun) (walker425 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker425 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker425 inner) (walker425 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 427; recurses to walker426.
+walker427 :: Core.Term -> Maybe Core.Term
+walker427 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker426 arg) (\_ -> walker426 fun) (walker426 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker426 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker426 inner) (walker426 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 428; recurses to walker427.
+walker428 :: Core.Term -> Maybe Core.Term
+walker428 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker427 arg) (\_ -> walker427 fun) (walker427 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker427 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker427 inner) (walker427 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 429; recurses to walker428.
+walker429 :: Core.Term -> Maybe Core.Term
+walker429 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker428 arg) (\_ -> walker428 fun) (walker428 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker428 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker428 inner) (walker428 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 43; recurses to walker42.
 walker43 :: Core.Term -> Maybe Core.Term
 walker43 t =
@@ -6429,6 +6999,196 @@ walker43 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker42 inner) (walker42 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 430; recurses to walker429.
+walker430 :: Core.Term -> Maybe Core.Term
+walker430 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker429 arg) (\_ -> walker429 fun) (walker429 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker429 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker429 inner) (walker429 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 431; recurses to walker430.
+walker431 :: Core.Term -> Maybe Core.Term
+walker431 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker430 arg) (\_ -> walker430 fun) (walker430 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker430 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker430 inner) (walker430 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 432; recurses to walker431.
+walker432 :: Core.Term -> Maybe Core.Term
+walker432 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker431 arg) (\_ -> walker431 fun) (walker431 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker431 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker431 inner) (walker431 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 433; recurses to walker432.
+walker433 :: Core.Term -> Maybe Core.Term
+walker433 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker432 arg) (\_ -> walker432 fun) (walker432 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker432 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker432 inner) (walker432 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 434; recurses to walker433.
+walker434 :: Core.Term -> Maybe Core.Term
+walker434 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker433 arg) (\_ -> walker433 fun) (walker433 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker433 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker433 inner) (walker433 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 435; recurses to walker434.
+walker435 :: Core.Term -> Maybe Core.Term
+walker435 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker434 arg) (\_ -> walker434 fun) (walker434 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker434 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker434 inner) (walker434 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 436; recurses to walker435.
+walker436 :: Core.Term -> Maybe Core.Term
+walker436 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker435 arg) (\_ -> walker435 fun) (walker435 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker435 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker435 inner) (walker435 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 437; recurses to walker436.
+walker437 :: Core.Term -> Maybe Core.Term
+walker437 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker436 arg) (\_ -> walker436 fun) (walker436 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker436 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker436 inner) (walker436 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 438; recurses to walker437.
+walker438 :: Core.Term -> Maybe Core.Term
+walker438 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker437 arg) (\_ -> walker437 fun) (walker437 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker437 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker437 inner) (walker437 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 439; recurses to walker438.
+walker439 :: Core.Term -> Maybe Core.Term
+walker439 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker438 arg) (\_ -> walker438 fun) (walker438 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker438 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker438 inner) (walker438 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6451,6 +7211,196 @@ walker44 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 440; recurses to walker439.
+walker440 :: Core.Term -> Maybe Core.Term
+walker440 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker439 arg) (\_ -> walker439 fun) (walker439 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker439 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker439 inner) (walker439 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 441; recurses to walker440.
+walker441 :: Core.Term -> Maybe Core.Term
+walker441 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker440 arg) (\_ -> walker440 fun) (walker440 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker440 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker440 inner) (walker440 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 442; recurses to walker441.
+walker442 :: Core.Term -> Maybe Core.Term
+walker442 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker441 arg) (\_ -> walker441 fun) (walker441 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker441 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker441 inner) (walker441 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 443; recurses to walker442.
+walker443 :: Core.Term -> Maybe Core.Term
+walker443 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker442 arg) (\_ -> walker442 fun) (walker442 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker442 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker442 inner) (walker442 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 444; recurses to walker443.
+walker444 :: Core.Term -> Maybe Core.Term
+walker444 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker443 arg) (\_ -> walker443 fun) (walker443 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker443 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker443 inner) (walker443 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 445; recurses to walker444.
+walker445 :: Core.Term -> Maybe Core.Term
+walker445 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker444 arg) (\_ -> walker444 fun) (walker444 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker444 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker444 inner) (walker444 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 446; recurses to walker445.
+walker446 :: Core.Term -> Maybe Core.Term
+walker446 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker445 arg) (\_ -> walker445 fun) (walker445 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker445 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker445 inner) (walker445 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 447; recurses to walker446.
+walker447 :: Core.Term -> Maybe Core.Term
+walker447 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker446 arg) (\_ -> walker446 fun) (walker446 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker446 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker446 inner) (walker446 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 448; recurses to walker447.
+walker448 :: Core.Term -> Maybe Core.Term
+walker448 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker447 arg) (\_ -> walker447 fun) (walker447 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker447 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker447 inner) (walker447 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 449; recurses to walker448.
+walker449 :: Core.Term -> Maybe Core.Term
+walker449 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker448 arg) (\_ -> walker448 fun) (walker448 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker448 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker448 inner) (walker448 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 45; recurses to walker44.
 walker45 :: Core.Term -> Maybe Core.Term
 walker45 t =
@@ -6467,6 +7417,196 @@ walker45 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker44 inner) (walker44 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 450; recurses to walker449.
+walker450 :: Core.Term -> Maybe Core.Term
+walker450 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker449 arg) (\_ -> walker449 fun) (walker449 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker449 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker449 inner) (walker449 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 451; recurses to walker450.
+walker451 :: Core.Term -> Maybe Core.Term
+walker451 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker450 arg) (\_ -> walker450 fun) (walker450 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker450 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker450 inner) (walker450 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 452; recurses to walker451.
+walker452 :: Core.Term -> Maybe Core.Term
+walker452 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker451 arg) (\_ -> walker451 fun) (walker451 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker451 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker451 inner) (walker451 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 453; recurses to walker452.
+walker453 :: Core.Term -> Maybe Core.Term
+walker453 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker452 arg) (\_ -> walker452 fun) (walker452 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker452 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker452 inner) (walker452 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 454; recurses to walker453.
+walker454 :: Core.Term -> Maybe Core.Term
+walker454 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker453 arg) (\_ -> walker453 fun) (walker453 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker453 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker453 inner) (walker453 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 455; recurses to walker454.
+walker455 :: Core.Term -> Maybe Core.Term
+walker455 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker454 arg) (\_ -> walker454 fun) (walker454 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker454 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker454 inner) (walker454 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 456; recurses to walker455.
+walker456 :: Core.Term -> Maybe Core.Term
+walker456 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker455 arg) (\_ -> walker455 fun) (walker455 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker455 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker455 inner) (walker455 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 457; recurses to walker456.
+walker457 :: Core.Term -> Maybe Core.Term
+walker457 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker456 arg) (\_ -> walker456 fun) (walker456 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker456 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker456 inner) (walker456 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 458; recurses to walker457.
+walker458 :: Core.Term -> Maybe Core.Term
+walker458 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker457 arg) (\_ -> walker457 fun) (walker457 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker457 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker457 inner) (walker457 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 459; recurses to walker458.
+walker459 :: Core.Term -> Maybe Core.Term
+walker459 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker458 arg) (\_ -> walker458 fun) (walker458 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker458 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker458 inner) (walker458 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6489,6 +7629,196 @@ walker46 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 460; recurses to walker459.
+walker460 :: Core.Term -> Maybe Core.Term
+walker460 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker459 arg) (\_ -> walker459 fun) (walker459 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker459 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker459 inner) (walker459 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 461; recurses to walker460.
+walker461 :: Core.Term -> Maybe Core.Term
+walker461 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker460 arg) (\_ -> walker460 fun) (walker460 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker460 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker460 inner) (walker460 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 462; recurses to walker461.
+walker462 :: Core.Term -> Maybe Core.Term
+walker462 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker461 arg) (\_ -> walker461 fun) (walker461 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker461 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker461 inner) (walker461 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 463; recurses to walker462.
+walker463 :: Core.Term -> Maybe Core.Term
+walker463 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker462 arg) (\_ -> walker462 fun) (walker462 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker462 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker462 inner) (walker462 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 464; recurses to walker463.
+walker464 :: Core.Term -> Maybe Core.Term
+walker464 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker463 arg) (\_ -> walker463 fun) (walker463 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker463 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker463 inner) (walker463 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 465; recurses to walker464.
+walker465 :: Core.Term -> Maybe Core.Term
+walker465 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker464 arg) (\_ -> walker464 fun) (walker464 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker464 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker464 inner) (walker464 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 466; recurses to walker465.
+walker466 :: Core.Term -> Maybe Core.Term
+walker466 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker465 arg) (\_ -> walker465 fun) (walker465 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker465 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker465 inner) (walker465 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 467; recurses to walker466.
+walker467 :: Core.Term -> Maybe Core.Term
+walker467 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker466 arg) (\_ -> walker466 fun) (walker466 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker466 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker466 inner) (walker466 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 468; recurses to walker467.
+walker468 :: Core.Term -> Maybe Core.Term
+walker468 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker467 arg) (\_ -> walker467 fun) (walker467 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker467 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker467 inner) (walker467 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 469; recurses to walker468.
+walker469 :: Core.Term -> Maybe Core.Term
+walker469 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker468 arg) (\_ -> walker468 fun) (walker468 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker468 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker468 inner) (walker468 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 47; recurses to walker46.
 walker47 :: Core.Term -> Maybe Core.Term
 walker47 t =
@@ -6505,6 +7835,196 @@ walker47 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker46 inner) (walker46 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 470; recurses to walker469.
+walker470 :: Core.Term -> Maybe Core.Term
+walker470 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker469 arg) (\_ -> walker469 fun) (walker469 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker469 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker469 inner) (walker469 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 471; recurses to walker470.
+walker471 :: Core.Term -> Maybe Core.Term
+walker471 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker470 arg) (\_ -> walker470 fun) (walker470 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker470 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker470 inner) (walker470 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 472; recurses to walker471.
+walker472 :: Core.Term -> Maybe Core.Term
+walker472 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker471 arg) (\_ -> walker471 fun) (walker471 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker471 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker471 inner) (walker471 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 473; recurses to walker472.
+walker473 :: Core.Term -> Maybe Core.Term
+walker473 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker472 arg) (\_ -> walker472 fun) (walker472 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker472 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker472 inner) (walker472 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 474; recurses to walker473.
+walker474 :: Core.Term -> Maybe Core.Term
+walker474 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker473 arg) (\_ -> walker473 fun) (walker473 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker473 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker473 inner) (walker473 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 475; recurses to walker474.
+walker475 :: Core.Term -> Maybe Core.Term
+walker475 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker474 arg) (\_ -> walker474 fun) (walker474 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker474 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker474 inner) (walker474 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 476; recurses to walker475.
+walker476 :: Core.Term -> Maybe Core.Term
+walker476 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker475 arg) (\_ -> walker475 fun) (walker475 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker475 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker475 inner) (walker475 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 477; recurses to walker476.
+walker477 :: Core.Term -> Maybe Core.Term
+walker477 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker476 arg) (\_ -> walker476 fun) (walker476 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker476 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker476 inner) (walker476 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 478; recurses to walker477.
+walker478 :: Core.Term -> Maybe Core.Term
+walker478 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker477 arg) (\_ -> walker477 fun) (walker477 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker477 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker477 inner) (walker477 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 479; recurses to walker478.
+walker479 :: Core.Term -> Maybe Core.Term
+walker479 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker478 arg) (\_ -> walker478 fun) (walker478 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker478 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker478 inner) (walker478 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6527,6 +8047,196 @@ walker48 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 480; recurses to walker479.
+walker480 :: Core.Term -> Maybe Core.Term
+walker480 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker479 arg) (\_ -> walker479 fun) (walker479 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker479 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker479 inner) (walker479 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 481; recurses to walker480.
+walker481 :: Core.Term -> Maybe Core.Term
+walker481 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker480 arg) (\_ -> walker480 fun) (walker480 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker480 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker480 inner) (walker480 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 482; recurses to walker481.
+walker482 :: Core.Term -> Maybe Core.Term
+walker482 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker481 arg) (\_ -> walker481 fun) (walker481 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker481 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker481 inner) (walker481 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 483; recurses to walker482.
+walker483 :: Core.Term -> Maybe Core.Term
+walker483 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker482 arg) (\_ -> walker482 fun) (walker482 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker482 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker482 inner) (walker482 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 484; recurses to walker483.
+walker484 :: Core.Term -> Maybe Core.Term
+walker484 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker483 arg) (\_ -> walker483 fun) (walker483 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker483 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker483 inner) (walker483 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 485; recurses to walker484.
+walker485 :: Core.Term -> Maybe Core.Term
+walker485 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker484 arg) (\_ -> walker484 fun) (walker484 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker484 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker484 inner) (walker484 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 486; recurses to walker485.
+walker486 :: Core.Term -> Maybe Core.Term
+walker486 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker485 arg) (\_ -> walker485 fun) (walker485 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker485 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker485 inner) (walker485 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 487; recurses to walker486.
+walker487 :: Core.Term -> Maybe Core.Term
+walker487 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker486 arg) (\_ -> walker486 fun) (walker486 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker486 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker486 inner) (walker486 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 488; recurses to walker487.
+walker488 :: Core.Term -> Maybe Core.Term
+walker488 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker487 arg) (\_ -> walker487 fun) (walker487 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker487 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker487 inner) (walker487 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 489; recurses to walker488.
+walker489 :: Core.Term -> Maybe Core.Term
+walker489 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker488 arg) (\_ -> walker488 fun) (walker488 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker488 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker488 inner) (walker488 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 49; recurses to walker48.
 walker49 :: Core.Term -> Maybe Core.Term
 walker49 t =
@@ -6543,6 +8253,196 @@ walker49 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker48 inner) (walker48 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 490; recurses to walker489.
+walker490 :: Core.Term -> Maybe Core.Term
+walker490 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker489 arg) (\_ -> walker489 fun) (walker489 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker489 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker489 inner) (walker489 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 491; recurses to walker490.
+walker491 :: Core.Term -> Maybe Core.Term
+walker491 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker490 arg) (\_ -> walker490 fun) (walker490 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker490 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker490 inner) (walker490 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 492; recurses to walker491.
+walker492 :: Core.Term -> Maybe Core.Term
+walker492 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker491 arg) (\_ -> walker491 fun) (walker491 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker491 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker491 inner) (walker491 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 493; recurses to walker492.
+walker493 :: Core.Term -> Maybe Core.Term
+walker493 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker492 arg) (\_ -> walker492 fun) (walker492 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker492 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker492 inner) (walker492 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 494; recurses to walker493.
+walker494 :: Core.Term -> Maybe Core.Term
+walker494 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker493 arg) (\_ -> walker493 fun) (walker493 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker493 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker493 inner) (walker493 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 495; recurses to walker494.
+walker495 :: Core.Term -> Maybe Core.Term
+walker495 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker494 arg) (\_ -> walker494 fun) (walker494 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker494 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker494 inner) (walker494 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 496; recurses to walker495.
+walker496 :: Core.Term -> Maybe Core.Term
+walker496 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker495 arg) (\_ -> walker495 fun) (walker495 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker495 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker495 inner) (walker495 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 497; recurses to walker496.
+walker497 :: Core.Term -> Maybe Core.Term
+walker497 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker496 arg) (\_ -> walker496 fun) (walker496 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker496 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker496 inner) (walker496 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 498; recurses to walker497.
+walker498 :: Core.Term -> Maybe Core.Term
+walker498 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker497 arg) (\_ -> walker497 fun) (walker497 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker497 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker497 inner) (walker497 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 499; recurses to walker498.
+walker499 :: Core.Term -> Maybe Core.Term
+walker499 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker498 arg) (\_ -> walker498 fun) (walker498 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker498 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker498 inner) (walker498 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6584,6 +8484,196 @@ walker50 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 500; recurses to walker499.
+walker500 :: Core.Term -> Maybe Core.Term
+walker500 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker499 arg) (\_ -> walker499 fun) (walker499 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker499 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker499 inner) (walker499 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 501; recurses to walker500.
+walker501 :: Core.Term -> Maybe Core.Term
+walker501 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker500 arg) (\_ -> walker500 fun) (walker500 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker500 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker500 inner) (walker500 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 502; recurses to walker501.
+walker502 :: Core.Term -> Maybe Core.Term
+walker502 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker501 arg) (\_ -> walker501 fun) (walker501 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker501 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker501 inner) (walker501 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 503; recurses to walker502.
+walker503 :: Core.Term -> Maybe Core.Term
+walker503 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker502 arg) (\_ -> walker502 fun) (walker502 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker502 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker502 inner) (walker502 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 504; recurses to walker503.
+walker504 :: Core.Term -> Maybe Core.Term
+walker504 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker503 arg) (\_ -> walker503 fun) (walker503 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker503 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker503 inner) (walker503 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 505; recurses to walker504.
+walker505 :: Core.Term -> Maybe Core.Term
+walker505 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker504 arg) (\_ -> walker504 fun) (walker504 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker504 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker504 inner) (walker504 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 506; recurses to walker505.
+walker506 :: Core.Term -> Maybe Core.Term
+walker506 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker505 arg) (\_ -> walker505 fun) (walker505 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker505 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker505 inner) (walker505 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 507; recurses to walker506.
+walker507 :: Core.Term -> Maybe Core.Term
+walker507 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker506 arg) (\_ -> walker506 fun) (walker506 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker506 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker506 inner) (walker506 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 508; recurses to walker507.
+walker508 :: Core.Term -> Maybe Core.Term
+walker508 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker507 arg) (\_ -> walker507 fun) (walker507 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker507 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker507 inner) (walker507 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 509; recurses to walker508.
+walker509 :: Core.Term -> Maybe Core.Term
+walker509 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker508 arg) (\_ -> walker508 fun) (walker508 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker508 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker508 inner) (walker508 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 51; recurses to walker50.
 walker51 :: Core.Term -> Maybe Core.Term
 walker51 t =
@@ -6600,6 +8690,196 @@ walker51 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker50 inner) (walker50 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 510; recurses to walker509.
+walker510 :: Core.Term -> Maybe Core.Term
+walker510 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker509 arg) (\_ -> walker509 fun) (walker509 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker509 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker509 inner) (walker509 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 511; recurses to walker510.
+walker511 :: Core.Term -> Maybe Core.Term
+walker511 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker510 arg) (\_ -> walker510 fun) (walker510 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker510 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker510 inner) (walker510 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 512; recurses to walker511.
+walker512 :: Core.Term -> Maybe Core.Term
+walker512 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker511 arg) (\_ -> walker511 fun) (walker511 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker511 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker511 inner) (walker511 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 513; recurses to walker512.
+walker513 :: Core.Term -> Maybe Core.Term
+walker513 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker512 arg) (\_ -> walker512 fun) (walker512 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker512 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker512 inner) (walker512 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 514; recurses to walker513.
+walker514 :: Core.Term -> Maybe Core.Term
+walker514 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker513 arg) (\_ -> walker513 fun) (walker513 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker513 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker513 inner) (walker513 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 515; recurses to walker514.
+walker515 :: Core.Term -> Maybe Core.Term
+walker515 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker514 arg) (\_ -> walker514 fun) (walker514 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker514 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker514 inner) (walker514 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 516; recurses to walker515.
+walker516 :: Core.Term -> Maybe Core.Term
+walker516 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker515 arg) (\_ -> walker515 fun) (walker515 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker515 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker515 inner) (walker515 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 517; recurses to walker516.
+walker517 :: Core.Term -> Maybe Core.Term
+walker517 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker516 arg) (\_ -> walker516 fun) (walker516 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker516 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker516 inner) (walker516 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 518; recurses to walker517.
+walker518 :: Core.Term -> Maybe Core.Term
+walker518 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker517 arg) (\_ -> walker517 fun) (walker517 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker517 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker517 inner) (walker517 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 519; recurses to walker518.
+walker519 :: Core.Term -> Maybe Core.Term
+walker519 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker518 arg) (\_ -> walker518 fun) (walker518 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker518 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker518 inner) (walker518 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6622,6 +8902,196 @@ walker52 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 520; recurses to walker519.
+walker520 :: Core.Term -> Maybe Core.Term
+walker520 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker519 arg) (\_ -> walker519 fun) (walker519 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker519 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker519 inner) (walker519 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 521; recurses to walker520.
+walker521 :: Core.Term -> Maybe Core.Term
+walker521 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker520 arg) (\_ -> walker520 fun) (walker520 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker520 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker520 inner) (walker520 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 522; recurses to walker521.
+walker522 :: Core.Term -> Maybe Core.Term
+walker522 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker521 arg) (\_ -> walker521 fun) (walker521 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker521 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker521 inner) (walker521 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 523; recurses to walker522.
+walker523 :: Core.Term -> Maybe Core.Term
+walker523 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker522 arg) (\_ -> walker522 fun) (walker522 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker522 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker522 inner) (walker522 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 524; recurses to walker523.
+walker524 :: Core.Term -> Maybe Core.Term
+walker524 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker523 arg) (\_ -> walker523 fun) (walker523 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker523 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker523 inner) (walker523 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 525; recurses to walker524.
+walker525 :: Core.Term -> Maybe Core.Term
+walker525 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker524 arg) (\_ -> walker524 fun) (walker524 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker524 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker524 inner) (walker524 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 526; recurses to walker525.
+walker526 :: Core.Term -> Maybe Core.Term
+walker526 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker525 arg) (\_ -> walker525 fun) (walker525 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker525 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker525 inner) (walker525 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 527; recurses to walker526.
+walker527 :: Core.Term -> Maybe Core.Term
+walker527 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker526 arg) (\_ -> walker526 fun) (walker526 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker526 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker526 inner) (walker526 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 528; recurses to walker527.
+walker528 :: Core.Term -> Maybe Core.Term
+walker528 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker527 arg) (\_ -> walker527 fun) (walker527 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker527 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker527 inner) (walker527 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 529; recurses to walker528.
+walker529 :: Core.Term -> Maybe Core.Term
+walker529 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker528 arg) (\_ -> walker528 fun) (walker528 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker528 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker528 inner) (walker528 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 53; recurses to walker52.
 walker53 :: Core.Term -> Maybe Core.Term
 walker53 t =
@@ -6638,6 +9108,196 @@ walker53 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker52 inner) (walker52 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 530; recurses to walker529.
+walker530 :: Core.Term -> Maybe Core.Term
+walker530 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker529 arg) (\_ -> walker529 fun) (walker529 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker529 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker529 inner) (walker529 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 531; recurses to walker530.
+walker531 :: Core.Term -> Maybe Core.Term
+walker531 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker530 arg) (\_ -> walker530 fun) (walker530 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker530 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker530 inner) (walker530 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 532; recurses to walker531.
+walker532 :: Core.Term -> Maybe Core.Term
+walker532 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker531 arg) (\_ -> walker531 fun) (walker531 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker531 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker531 inner) (walker531 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 533; recurses to walker532.
+walker533 :: Core.Term -> Maybe Core.Term
+walker533 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker532 arg) (\_ -> walker532 fun) (walker532 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker532 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker532 inner) (walker532 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 534; recurses to walker533.
+walker534 :: Core.Term -> Maybe Core.Term
+walker534 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker533 arg) (\_ -> walker533 fun) (walker533 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker533 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker533 inner) (walker533 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 535; recurses to walker534.
+walker535 :: Core.Term -> Maybe Core.Term
+walker535 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker534 arg) (\_ -> walker534 fun) (walker534 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker534 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker534 inner) (walker534 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 536; recurses to walker535.
+walker536 :: Core.Term -> Maybe Core.Term
+walker536 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker535 arg) (\_ -> walker535 fun) (walker535 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker535 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker535 inner) (walker535 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 537; recurses to walker536.
+walker537 :: Core.Term -> Maybe Core.Term
+walker537 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker536 arg) (\_ -> walker536 fun) (walker536 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker536 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker536 inner) (walker536 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 538; recurses to walker537.
+walker538 :: Core.Term -> Maybe Core.Term
+walker538 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker537 arg) (\_ -> walker537 fun) (walker537 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker537 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker537 inner) (walker537 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 539; recurses to walker538.
+walker539 :: Core.Term -> Maybe Core.Term
+walker539 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker538 arg) (\_ -> walker538 fun) (walker538 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker538 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker538 inner) (walker538 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6660,6 +9320,196 @@ walker54 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 540; recurses to walker539.
+walker540 :: Core.Term -> Maybe Core.Term
+walker540 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker539 arg) (\_ -> walker539 fun) (walker539 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker539 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker539 inner) (walker539 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 541; recurses to walker540.
+walker541 :: Core.Term -> Maybe Core.Term
+walker541 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker540 arg) (\_ -> walker540 fun) (walker540 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker540 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker540 inner) (walker540 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 542; recurses to walker541.
+walker542 :: Core.Term -> Maybe Core.Term
+walker542 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker541 arg) (\_ -> walker541 fun) (walker541 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker541 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker541 inner) (walker541 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 543; recurses to walker542.
+walker543 :: Core.Term -> Maybe Core.Term
+walker543 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker542 arg) (\_ -> walker542 fun) (walker542 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker542 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker542 inner) (walker542 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 544; recurses to walker543.
+walker544 :: Core.Term -> Maybe Core.Term
+walker544 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker543 arg) (\_ -> walker543 fun) (walker543 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker543 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker543 inner) (walker543 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 545; recurses to walker544.
+walker545 :: Core.Term -> Maybe Core.Term
+walker545 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker544 arg) (\_ -> walker544 fun) (walker544 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker544 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker544 inner) (walker544 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 546; recurses to walker545.
+walker546 :: Core.Term -> Maybe Core.Term
+walker546 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker545 arg) (\_ -> walker545 fun) (walker545 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker545 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker545 inner) (walker545 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 547; recurses to walker546.
+walker547 :: Core.Term -> Maybe Core.Term
+walker547 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker546 arg) (\_ -> walker546 fun) (walker546 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker546 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker546 inner) (walker546 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 548; recurses to walker547.
+walker548 :: Core.Term -> Maybe Core.Term
+walker548 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker547 arg) (\_ -> walker547 fun) (walker547 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker547 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker547 inner) (walker547 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 549; recurses to walker548.
+walker549 :: Core.Term -> Maybe Core.Term
+walker549 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker548 arg) (\_ -> walker548 fun) (walker548 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker548 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker548 inner) (walker548 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 55; recurses to walker54.
 walker55 :: Core.Term -> Maybe Core.Term
 walker55 t =
@@ -6676,6 +9526,196 @@ walker55 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker54 inner) (walker54 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 550; recurses to walker549.
+walker550 :: Core.Term -> Maybe Core.Term
+walker550 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker549 arg) (\_ -> walker549 fun) (walker549 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker549 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker549 inner) (walker549 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 551; recurses to walker550.
+walker551 :: Core.Term -> Maybe Core.Term
+walker551 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker550 arg) (\_ -> walker550 fun) (walker550 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker550 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker550 inner) (walker550 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 552; recurses to walker551.
+walker552 :: Core.Term -> Maybe Core.Term
+walker552 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker551 arg) (\_ -> walker551 fun) (walker551 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker551 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker551 inner) (walker551 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 553; recurses to walker552.
+walker553 :: Core.Term -> Maybe Core.Term
+walker553 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker552 arg) (\_ -> walker552 fun) (walker552 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker552 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker552 inner) (walker552 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 554; recurses to walker553.
+walker554 :: Core.Term -> Maybe Core.Term
+walker554 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker553 arg) (\_ -> walker553 fun) (walker553 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker553 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker553 inner) (walker553 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 555; recurses to walker554.
+walker555 :: Core.Term -> Maybe Core.Term
+walker555 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker554 arg) (\_ -> walker554 fun) (walker554 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker554 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker554 inner) (walker554 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 556; recurses to walker555.
+walker556 :: Core.Term -> Maybe Core.Term
+walker556 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker555 arg) (\_ -> walker555 fun) (walker555 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker555 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker555 inner) (walker555 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 557; recurses to walker556.
+walker557 :: Core.Term -> Maybe Core.Term
+walker557 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker556 arg) (\_ -> walker556 fun) (walker556 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker556 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker556 inner) (walker556 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 558; recurses to walker557.
+walker558 :: Core.Term -> Maybe Core.Term
+walker558 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker557 arg) (\_ -> walker557 fun) (walker557 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker557 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker557 inner) (walker557 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 559; recurses to walker558.
+walker559 :: Core.Term -> Maybe Core.Term
+walker559 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker558 arg) (\_ -> walker558 fun) (walker558 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker558 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker558 inner) (walker558 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6698,6 +9738,196 @@ walker56 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 560; recurses to walker559.
+walker560 :: Core.Term -> Maybe Core.Term
+walker560 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker559 arg) (\_ -> walker559 fun) (walker559 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker559 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker559 inner) (walker559 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 561; recurses to walker560.
+walker561 :: Core.Term -> Maybe Core.Term
+walker561 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker560 arg) (\_ -> walker560 fun) (walker560 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker560 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker560 inner) (walker560 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 562; recurses to walker561.
+walker562 :: Core.Term -> Maybe Core.Term
+walker562 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker561 arg) (\_ -> walker561 fun) (walker561 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker561 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker561 inner) (walker561 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 563; recurses to walker562.
+walker563 :: Core.Term -> Maybe Core.Term
+walker563 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker562 arg) (\_ -> walker562 fun) (walker562 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker562 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker562 inner) (walker562 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 564; recurses to walker563.
+walker564 :: Core.Term -> Maybe Core.Term
+walker564 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker563 arg) (\_ -> walker563 fun) (walker563 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker563 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker563 inner) (walker563 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 565; recurses to walker564.
+walker565 :: Core.Term -> Maybe Core.Term
+walker565 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker564 arg) (\_ -> walker564 fun) (walker564 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker564 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker564 inner) (walker564 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 566; recurses to walker565.
+walker566 :: Core.Term -> Maybe Core.Term
+walker566 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker565 arg) (\_ -> walker565 fun) (walker565 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker565 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker565 inner) (walker565 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 567; recurses to walker566.
+walker567 :: Core.Term -> Maybe Core.Term
+walker567 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker566 arg) (\_ -> walker566 fun) (walker566 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker566 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker566 inner) (walker566 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 568; recurses to walker567.
+walker568 :: Core.Term -> Maybe Core.Term
+walker568 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker567 arg) (\_ -> walker567 fun) (walker567 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker567 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker567 inner) (walker567 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 569; recurses to walker568.
+walker569 :: Core.Term -> Maybe Core.Term
+walker569 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker568 arg) (\_ -> walker568 fun) (walker568 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker568 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker568 inner) (walker568 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 57; recurses to walker56.
 walker57 :: Core.Term -> Maybe Core.Term
 walker57 t =
@@ -6714,6 +9944,196 @@ walker57 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker56 inner) (walker56 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 570; recurses to walker569.
+walker570 :: Core.Term -> Maybe Core.Term
+walker570 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker569 arg) (\_ -> walker569 fun) (walker569 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker569 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker569 inner) (walker569 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 571; recurses to walker570.
+walker571 :: Core.Term -> Maybe Core.Term
+walker571 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker570 arg) (\_ -> walker570 fun) (walker570 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker570 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker570 inner) (walker570 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 572; recurses to walker571.
+walker572 :: Core.Term -> Maybe Core.Term
+walker572 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker571 arg) (\_ -> walker571 fun) (walker571 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker571 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker571 inner) (walker571 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 573; recurses to walker572.
+walker573 :: Core.Term -> Maybe Core.Term
+walker573 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker572 arg) (\_ -> walker572 fun) (walker572 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker572 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker572 inner) (walker572 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 574; recurses to walker573.
+walker574 :: Core.Term -> Maybe Core.Term
+walker574 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker573 arg) (\_ -> walker573 fun) (walker573 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker573 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker573 inner) (walker573 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 575; recurses to walker574.
+walker575 :: Core.Term -> Maybe Core.Term
+walker575 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker574 arg) (\_ -> walker574 fun) (walker574 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker574 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker574 inner) (walker574 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 576; recurses to walker575.
+walker576 :: Core.Term -> Maybe Core.Term
+walker576 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker575 arg) (\_ -> walker575 fun) (walker575 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker575 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker575 inner) (walker575 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 577; recurses to walker576.
+walker577 :: Core.Term -> Maybe Core.Term
+walker577 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker576 arg) (\_ -> walker576 fun) (walker576 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker576 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker576 inner) (walker576 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 578; recurses to walker577.
+walker578 :: Core.Term -> Maybe Core.Term
+walker578 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker577 arg) (\_ -> walker577 fun) (walker577 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker577 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker577 inner) (walker577 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 579; recurses to walker578.
+walker579 :: Core.Term -> Maybe Core.Term
+walker579 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker578 arg) (\_ -> walker578 fun) (walker578 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker578 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker578 inner) (walker578 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6736,6 +10156,196 @@ walker58 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 580; recurses to walker579.
+walker580 :: Core.Term -> Maybe Core.Term
+walker580 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker579 arg) (\_ -> walker579 fun) (walker579 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker579 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker579 inner) (walker579 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 581; recurses to walker580.
+walker581 :: Core.Term -> Maybe Core.Term
+walker581 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker580 arg) (\_ -> walker580 fun) (walker580 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker580 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker580 inner) (walker580 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 582; recurses to walker581.
+walker582 :: Core.Term -> Maybe Core.Term
+walker582 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker581 arg) (\_ -> walker581 fun) (walker581 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker581 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker581 inner) (walker581 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 583; recurses to walker582.
+walker583 :: Core.Term -> Maybe Core.Term
+walker583 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker582 arg) (\_ -> walker582 fun) (walker582 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker582 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker582 inner) (walker582 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 584; recurses to walker583.
+walker584 :: Core.Term -> Maybe Core.Term
+walker584 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker583 arg) (\_ -> walker583 fun) (walker583 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker583 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker583 inner) (walker583 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 585; recurses to walker584.
+walker585 :: Core.Term -> Maybe Core.Term
+walker585 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker584 arg) (\_ -> walker584 fun) (walker584 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker584 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker584 inner) (walker584 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 586; recurses to walker585.
+walker586 :: Core.Term -> Maybe Core.Term
+walker586 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker585 arg) (\_ -> walker585 fun) (walker585 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker585 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker585 inner) (walker585 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 587; recurses to walker586.
+walker587 :: Core.Term -> Maybe Core.Term
+walker587 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker586 arg) (\_ -> walker586 fun) (walker586 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker586 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker586 inner) (walker586 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 588; recurses to walker587.
+walker588 :: Core.Term -> Maybe Core.Term
+walker588 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker587 arg) (\_ -> walker587 fun) (walker587 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker587 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker587 inner) (walker587 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 589; recurses to walker588.
+walker589 :: Core.Term -> Maybe Core.Term
+walker589 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker588 arg) (\_ -> walker588 fun) (walker588 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker588 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker588 inner) (walker588 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 59; recurses to walker58.
 walker59 :: Core.Term -> Maybe Core.Term
 walker59 t =
@@ -6752,6 +10362,196 @@ walker59 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker58 inner) (walker58 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 590; recurses to walker589.
+walker590 :: Core.Term -> Maybe Core.Term
+walker590 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker589 arg) (\_ -> walker589 fun) (walker589 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker589 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker589 inner) (walker589 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 591; recurses to walker590.
+walker591 :: Core.Term -> Maybe Core.Term
+walker591 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker590 arg) (\_ -> walker590 fun) (walker590 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker590 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker590 inner) (walker590 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 592; recurses to walker591.
+walker592 :: Core.Term -> Maybe Core.Term
+walker592 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker591 arg) (\_ -> walker591 fun) (walker591 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker591 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker591 inner) (walker591 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 593; recurses to walker592.
+walker593 :: Core.Term -> Maybe Core.Term
+walker593 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker592 arg) (\_ -> walker592 fun) (walker592 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker592 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker592 inner) (walker592 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 594; recurses to walker593.
+walker594 :: Core.Term -> Maybe Core.Term
+walker594 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker593 arg) (\_ -> walker593 fun) (walker593 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker593 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker593 inner) (walker593 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 595; recurses to walker594.
+walker595 :: Core.Term -> Maybe Core.Term
+walker595 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker594 arg) (\_ -> walker594 fun) (walker594 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker594 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker594 inner) (walker594 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 596; recurses to walker595.
+walker596 :: Core.Term -> Maybe Core.Term
+walker596 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker595 arg) (\_ -> walker595 fun) (walker595 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker595 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker595 inner) (walker595 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 597; recurses to walker596.
+walker597 :: Core.Term -> Maybe Core.Term
+walker597 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker596 arg) (\_ -> walker596 fun) (walker596 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker596 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker596 inner) (walker596 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 598; recurses to walker597.
+walker598 :: Core.Term -> Maybe Core.Term
+walker598 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker597 arg) (\_ -> walker597 fun) (walker597 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker597 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker597 inner) (walker597 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 599; recurses to walker598.
+walker599 :: Core.Term -> Maybe Core.Term
+walker599 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker598 arg) (\_ -> walker598 fun) (walker598 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker598 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker598 inner) (walker598 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6793,6 +10593,196 @@ walker60 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 600; recurses to walker599.
+walker600 :: Core.Term -> Maybe Core.Term
+walker600 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker599 arg) (\_ -> walker599 fun) (walker599 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker599 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker599 inner) (walker599 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 601; recurses to walker600.
+walker601 :: Core.Term -> Maybe Core.Term
+walker601 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker600 arg) (\_ -> walker600 fun) (walker600 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker600 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker600 inner) (walker600 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 602; recurses to walker601.
+walker602 :: Core.Term -> Maybe Core.Term
+walker602 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker601 arg) (\_ -> walker601 fun) (walker601 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker601 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker601 inner) (walker601 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 603; recurses to walker602.
+walker603 :: Core.Term -> Maybe Core.Term
+walker603 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker602 arg) (\_ -> walker602 fun) (walker602 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker602 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker602 inner) (walker602 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 604; recurses to walker603.
+walker604 :: Core.Term -> Maybe Core.Term
+walker604 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker603 arg) (\_ -> walker603 fun) (walker603 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker603 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker603 inner) (walker603 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 605; recurses to walker604.
+walker605 :: Core.Term -> Maybe Core.Term
+walker605 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker604 arg) (\_ -> walker604 fun) (walker604 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker604 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker604 inner) (walker604 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 606; recurses to walker605.
+walker606 :: Core.Term -> Maybe Core.Term
+walker606 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker605 arg) (\_ -> walker605 fun) (walker605 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker605 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker605 inner) (walker605 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 607; recurses to walker606.
+walker607 :: Core.Term -> Maybe Core.Term
+walker607 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker606 arg) (\_ -> walker606 fun) (walker606 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker606 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker606 inner) (walker606 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 608; recurses to walker607.
+walker608 :: Core.Term -> Maybe Core.Term
+walker608 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker607 arg) (\_ -> walker607 fun) (walker607 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker607 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker607 inner) (walker607 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 609; recurses to walker608.
+walker609 :: Core.Term -> Maybe Core.Term
+walker609 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker608 arg) (\_ -> walker608 fun) (walker608 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker608 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker608 inner) (walker608 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 61; recurses to walker60.
 walker61 :: Core.Term -> Maybe Core.Term
 walker61 t =
@@ -6809,6 +10799,196 @@ walker61 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker60 inner) (walker60 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 610; recurses to walker609.
+walker610 :: Core.Term -> Maybe Core.Term
+walker610 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker609 arg) (\_ -> walker609 fun) (walker609 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker609 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker609 inner) (walker609 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 611; recurses to walker610.
+walker611 :: Core.Term -> Maybe Core.Term
+walker611 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker610 arg) (\_ -> walker610 fun) (walker610 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker610 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker610 inner) (walker610 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 612; recurses to walker611.
+walker612 :: Core.Term -> Maybe Core.Term
+walker612 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker611 arg) (\_ -> walker611 fun) (walker611 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker611 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker611 inner) (walker611 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 613; recurses to walker612.
+walker613 :: Core.Term -> Maybe Core.Term
+walker613 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker612 arg) (\_ -> walker612 fun) (walker612 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker612 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker612 inner) (walker612 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 614; recurses to walker613.
+walker614 :: Core.Term -> Maybe Core.Term
+walker614 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker613 arg) (\_ -> walker613 fun) (walker613 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker613 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker613 inner) (walker613 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 615; recurses to walker614.
+walker615 :: Core.Term -> Maybe Core.Term
+walker615 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker614 arg) (\_ -> walker614 fun) (walker614 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker614 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker614 inner) (walker614 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 616; recurses to walker615.
+walker616 :: Core.Term -> Maybe Core.Term
+walker616 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker615 arg) (\_ -> walker615 fun) (walker615 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker615 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker615 inner) (walker615 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 617; recurses to walker616.
+walker617 :: Core.Term -> Maybe Core.Term
+walker617 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker616 arg) (\_ -> walker616 fun) (walker616 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker616 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker616 inner) (walker616 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 618; recurses to walker617.
+walker618 :: Core.Term -> Maybe Core.Term
+walker618 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker617 arg) (\_ -> walker617 fun) (walker617 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker617 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker617 inner) (walker617 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 619; recurses to walker618.
+walker619 :: Core.Term -> Maybe Core.Term
+walker619 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker618 arg) (\_ -> walker618 fun) (walker618 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker618 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker618 inner) (walker618 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6831,6 +11011,196 @@ walker62 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 620; recurses to walker619.
+walker620 :: Core.Term -> Maybe Core.Term
+walker620 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker619 arg) (\_ -> walker619 fun) (walker619 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker619 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker619 inner) (walker619 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 621; recurses to walker620.
+walker621 :: Core.Term -> Maybe Core.Term
+walker621 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker620 arg) (\_ -> walker620 fun) (walker620 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker620 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker620 inner) (walker620 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 622; recurses to walker621.
+walker622 :: Core.Term -> Maybe Core.Term
+walker622 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker621 arg) (\_ -> walker621 fun) (walker621 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker621 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker621 inner) (walker621 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 623; recurses to walker622.
+walker623 :: Core.Term -> Maybe Core.Term
+walker623 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker622 arg) (\_ -> walker622 fun) (walker622 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker622 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker622 inner) (walker622 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 624; recurses to walker623.
+walker624 :: Core.Term -> Maybe Core.Term
+walker624 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker623 arg) (\_ -> walker623 fun) (walker623 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker623 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker623 inner) (walker623 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 625; recurses to walker624.
+walker625 :: Core.Term -> Maybe Core.Term
+walker625 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker624 arg) (\_ -> walker624 fun) (walker624 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker624 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker624 inner) (walker624 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 626; recurses to walker625.
+walker626 :: Core.Term -> Maybe Core.Term
+walker626 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker625 arg) (\_ -> walker625 fun) (walker625 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker625 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker625 inner) (walker625 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 627; recurses to walker626.
+walker627 :: Core.Term -> Maybe Core.Term
+walker627 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker626 arg) (\_ -> walker626 fun) (walker626 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker626 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker626 inner) (walker626 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 628; recurses to walker627.
+walker628 :: Core.Term -> Maybe Core.Term
+walker628 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker627 arg) (\_ -> walker627 fun) (walker627 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker627 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker627 inner) (walker627 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 629; recurses to walker628.
+walker629 :: Core.Term -> Maybe Core.Term
+walker629 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker628 arg) (\_ -> walker628 fun) (walker628 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker628 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker628 inner) (walker628 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 63; recurses to walker62.
 walker63 :: Core.Term -> Maybe Core.Term
 walker63 t =
@@ -6847,6 +11217,196 @@ walker63 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker62 inner) (walker62 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 630; recurses to walker629.
+walker630 :: Core.Term -> Maybe Core.Term
+walker630 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker629 arg) (\_ -> walker629 fun) (walker629 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker629 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker629 inner) (walker629 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 631; recurses to walker630.
+walker631 :: Core.Term -> Maybe Core.Term
+walker631 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker630 arg) (\_ -> walker630 fun) (walker630 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker630 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker630 inner) (walker630 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 632; recurses to walker631.
+walker632 :: Core.Term -> Maybe Core.Term
+walker632 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker631 arg) (\_ -> walker631 fun) (walker631 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker631 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker631 inner) (walker631 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 633; recurses to walker632.
+walker633 :: Core.Term -> Maybe Core.Term
+walker633 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker632 arg) (\_ -> walker632 fun) (walker632 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker632 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker632 inner) (walker632 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 634; recurses to walker633.
+walker634 :: Core.Term -> Maybe Core.Term
+walker634 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker633 arg) (\_ -> walker633 fun) (walker633 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker633 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker633 inner) (walker633 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 635; recurses to walker634.
+walker635 :: Core.Term -> Maybe Core.Term
+walker635 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker634 arg) (\_ -> walker634 fun) (walker634 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker634 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker634 inner) (walker634 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 636; recurses to walker635.
+walker636 :: Core.Term -> Maybe Core.Term
+walker636 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker635 arg) (\_ -> walker635 fun) (walker635 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker635 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker635 inner) (walker635 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 637; recurses to walker636.
+walker637 :: Core.Term -> Maybe Core.Term
+walker637 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker636 arg) (\_ -> walker636 fun) (walker636 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker636 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker636 inner) (walker636 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 638; recurses to walker637.
+walker638 :: Core.Term -> Maybe Core.Term
+walker638 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker637 arg) (\_ -> walker637 fun) (walker637 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker637 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker637 inner) (walker637 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 639; recurses to walker638.
+walker639 :: Core.Term -> Maybe Core.Term
+walker639 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker638 arg) (\_ -> walker638 fun) (walker638 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker638 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker638 inner) (walker638 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6869,6 +11429,196 @@ walker64 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 640; recurses to walker639.
+walker640 :: Core.Term -> Maybe Core.Term
+walker640 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker639 arg) (\_ -> walker639 fun) (walker639 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker639 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker639 inner) (walker639 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 641; recurses to walker640.
+walker641 :: Core.Term -> Maybe Core.Term
+walker641 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker640 arg) (\_ -> walker640 fun) (walker640 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker640 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker640 inner) (walker640 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 642; recurses to walker641.
+walker642 :: Core.Term -> Maybe Core.Term
+walker642 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker641 arg) (\_ -> walker641 fun) (walker641 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker641 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker641 inner) (walker641 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 643; recurses to walker642.
+walker643 :: Core.Term -> Maybe Core.Term
+walker643 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker642 arg) (\_ -> walker642 fun) (walker642 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker642 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker642 inner) (walker642 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 644; recurses to walker643.
+walker644 :: Core.Term -> Maybe Core.Term
+walker644 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker643 arg) (\_ -> walker643 fun) (walker643 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker643 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker643 inner) (walker643 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 645; recurses to walker644.
+walker645 :: Core.Term -> Maybe Core.Term
+walker645 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker644 arg) (\_ -> walker644 fun) (walker644 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker644 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker644 inner) (walker644 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 646; recurses to walker645.
+walker646 :: Core.Term -> Maybe Core.Term
+walker646 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker645 arg) (\_ -> walker645 fun) (walker645 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker645 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker645 inner) (walker645 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 647; recurses to walker646.
+walker647 :: Core.Term -> Maybe Core.Term
+walker647 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker646 arg) (\_ -> walker646 fun) (walker646 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker646 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker646 inner) (walker646 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 648; recurses to walker647.
+walker648 :: Core.Term -> Maybe Core.Term
+walker648 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker647 arg) (\_ -> walker647 fun) (walker647 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker647 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker647 inner) (walker647 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 649; recurses to walker648.
+walker649 :: Core.Term -> Maybe Core.Term
+walker649 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker648 arg) (\_ -> walker648 fun) (walker648 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker648 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker648 inner) (walker648 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 65; recurses to walker64.
 walker65 :: Core.Term -> Maybe Core.Term
 walker65 t =
@@ -6885,6 +11635,196 @@ walker65 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker64 inner) (walker64 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 650; recurses to walker649.
+walker650 :: Core.Term -> Maybe Core.Term
+walker650 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker649 arg) (\_ -> walker649 fun) (walker649 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker649 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker649 inner) (walker649 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 651; recurses to walker650.
+walker651 :: Core.Term -> Maybe Core.Term
+walker651 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker650 arg) (\_ -> walker650 fun) (walker650 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker650 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker650 inner) (walker650 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 652; recurses to walker651.
+walker652 :: Core.Term -> Maybe Core.Term
+walker652 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker651 arg) (\_ -> walker651 fun) (walker651 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker651 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker651 inner) (walker651 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 653; recurses to walker652.
+walker653 :: Core.Term -> Maybe Core.Term
+walker653 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker652 arg) (\_ -> walker652 fun) (walker652 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker652 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker652 inner) (walker652 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 654; recurses to walker653.
+walker654 :: Core.Term -> Maybe Core.Term
+walker654 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker653 arg) (\_ -> walker653 fun) (walker653 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker653 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker653 inner) (walker653 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 655; recurses to walker654.
+walker655 :: Core.Term -> Maybe Core.Term
+walker655 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker654 arg) (\_ -> walker654 fun) (walker654 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker654 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker654 inner) (walker654 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 656; recurses to walker655.
+walker656 :: Core.Term -> Maybe Core.Term
+walker656 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker655 arg) (\_ -> walker655 fun) (walker655 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker655 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker655 inner) (walker655 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 657; recurses to walker656.
+walker657 :: Core.Term -> Maybe Core.Term
+walker657 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker656 arg) (\_ -> walker656 fun) (walker656 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker656 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker656 inner) (walker656 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 658; recurses to walker657.
+walker658 :: Core.Term -> Maybe Core.Term
+walker658 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker657 arg) (\_ -> walker657 fun) (walker657 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker657 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker657 inner) (walker657 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 659; recurses to walker658.
+walker659 :: Core.Term -> Maybe Core.Term
+walker659 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker658 arg) (\_ -> walker658 fun) (walker658 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker658 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker658 inner) (walker658 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6907,6 +11847,196 @@ walker66 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 660; recurses to walker659.
+walker660 :: Core.Term -> Maybe Core.Term
+walker660 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker659 arg) (\_ -> walker659 fun) (walker659 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker659 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker659 inner) (walker659 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 661; recurses to walker660.
+walker661 :: Core.Term -> Maybe Core.Term
+walker661 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker660 arg) (\_ -> walker660 fun) (walker660 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker660 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker660 inner) (walker660 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 662; recurses to walker661.
+walker662 :: Core.Term -> Maybe Core.Term
+walker662 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker661 arg) (\_ -> walker661 fun) (walker661 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker661 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker661 inner) (walker661 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 663; recurses to walker662.
+walker663 :: Core.Term -> Maybe Core.Term
+walker663 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker662 arg) (\_ -> walker662 fun) (walker662 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker662 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker662 inner) (walker662 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 664; recurses to walker663.
+walker664 :: Core.Term -> Maybe Core.Term
+walker664 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker663 arg) (\_ -> walker663 fun) (walker663 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker663 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker663 inner) (walker663 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 665; recurses to walker664.
+walker665 :: Core.Term -> Maybe Core.Term
+walker665 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker664 arg) (\_ -> walker664 fun) (walker664 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker664 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker664 inner) (walker664 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 666; recurses to walker665.
+walker666 :: Core.Term -> Maybe Core.Term
+walker666 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker665 arg) (\_ -> walker665 fun) (walker665 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker665 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker665 inner) (walker665 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 667; recurses to walker666.
+walker667 :: Core.Term -> Maybe Core.Term
+walker667 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker666 arg) (\_ -> walker666 fun) (walker666 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker666 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker666 inner) (walker666 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 668; recurses to walker667.
+walker668 :: Core.Term -> Maybe Core.Term
+walker668 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker667 arg) (\_ -> walker667 fun) (walker667 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker667 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker667 inner) (walker667 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 669; recurses to walker668.
+walker669 :: Core.Term -> Maybe Core.Term
+walker669 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker668 arg) (\_ -> walker668 fun) (walker668 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker668 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker668 inner) (walker668 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 67; recurses to walker66.
 walker67 :: Core.Term -> Maybe Core.Term
 walker67 t =
@@ -6923,6 +12053,196 @@ walker67 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker66 inner) (walker66 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 670; recurses to walker669.
+walker670 :: Core.Term -> Maybe Core.Term
+walker670 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker669 arg) (\_ -> walker669 fun) (walker669 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker669 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker669 inner) (walker669 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 671; recurses to walker670.
+walker671 :: Core.Term -> Maybe Core.Term
+walker671 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker670 arg) (\_ -> walker670 fun) (walker670 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker670 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker670 inner) (walker670 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 672; recurses to walker671.
+walker672 :: Core.Term -> Maybe Core.Term
+walker672 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker671 arg) (\_ -> walker671 fun) (walker671 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker671 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker671 inner) (walker671 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 673; recurses to walker672.
+walker673 :: Core.Term -> Maybe Core.Term
+walker673 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker672 arg) (\_ -> walker672 fun) (walker672 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker672 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker672 inner) (walker672 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 674; recurses to walker673.
+walker674 :: Core.Term -> Maybe Core.Term
+walker674 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker673 arg) (\_ -> walker673 fun) (walker673 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker673 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker673 inner) (walker673 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 675; recurses to walker674.
+walker675 :: Core.Term -> Maybe Core.Term
+walker675 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker674 arg) (\_ -> walker674 fun) (walker674 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker674 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker674 inner) (walker674 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 676; recurses to walker675.
+walker676 :: Core.Term -> Maybe Core.Term
+walker676 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker675 arg) (\_ -> walker675 fun) (walker675 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker675 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker675 inner) (walker675 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 677; recurses to walker676.
+walker677 :: Core.Term -> Maybe Core.Term
+walker677 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker676 arg) (\_ -> walker676 fun) (walker676 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker676 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker676 inner) (walker676 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 678; recurses to walker677.
+walker678 :: Core.Term -> Maybe Core.Term
+walker678 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker677 arg) (\_ -> walker677 fun) (walker677 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker677 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker677 inner) (walker677 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 679; recurses to walker678.
+walker679 :: Core.Term -> Maybe Core.Term
+walker679 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker678 arg) (\_ -> walker678 fun) (walker678 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker678 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker678 inner) (walker678 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -6945,6 +12265,196 @@ walker68 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 680; recurses to walker679.
+walker680 :: Core.Term -> Maybe Core.Term
+walker680 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker679 arg) (\_ -> walker679 fun) (walker679 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker679 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker679 inner) (walker679 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 681; recurses to walker680.
+walker681 :: Core.Term -> Maybe Core.Term
+walker681 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker680 arg) (\_ -> walker680 fun) (walker680 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker680 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker680 inner) (walker680 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 682; recurses to walker681.
+walker682 :: Core.Term -> Maybe Core.Term
+walker682 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker681 arg) (\_ -> walker681 fun) (walker681 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker681 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker681 inner) (walker681 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 683; recurses to walker682.
+walker683 :: Core.Term -> Maybe Core.Term
+walker683 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker682 arg) (\_ -> walker682 fun) (walker682 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker682 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker682 inner) (walker682 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 684; recurses to walker683.
+walker684 :: Core.Term -> Maybe Core.Term
+walker684 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker683 arg) (\_ -> walker683 fun) (walker683 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker683 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker683 inner) (walker683 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 685; recurses to walker684.
+walker685 :: Core.Term -> Maybe Core.Term
+walker685 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker684 arg) (\_ -> walker684 fun) (walker684 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker684 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker684 inner) (walker684 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 686; recurses to walker685.
+walker686 :: Core.Term -> Maybe Core.Term
+walker686 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker685 arg) (\_ -> walker685 fun) (walker685 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker685 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker685 inner) (walker685 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 687; recurses to walker686.
+walker687 :: Core.Term -> Maybe Core.Term
+walker687 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker686 arg) (\_ -> walker686 fun) (walker686 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker686 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker686 inner) (walker686 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 688; recurses to walker687.
+walker688 :: Core.Term -> Maybe Core.Term
+walker688 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker687 arg) (\_ -> walker687 fun) (walker687 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker687 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker687 inner) (walker687 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 689; recurses to walker688.
+walker689 :: Core.Term -> Maybe Core.Term
+walker689 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker688 arg) (\_ -> walker688 fun) (walker688 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker688 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker688 inner) (walker688 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 69; recurses to walker68.
 walker69 :: Core.Term -> Maybe Core.Term
 walker69 t =
@@ -6961,6 +12471,196 @@ walker69 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker68 inner) (walker68 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 690; recurses to walker689.
+walker690 :: Core.Term -> Maybe Core.Term
+walker690 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker689 arg) (\_ -> walker689 fun) (walker689 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker689 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker689 inner) (walker689 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 691; recurses to walker690.
+walker691 :: Core.Term -> Maybe Core.Term
+walker691 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker690 arg) (\_ -> walker690 fun) (walker690 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker690 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker690 inner) (walker690 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 692; recurses to walker691.
+walker692 :: Core.Term -> Maybe Core.Term
+walker692 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker691 arg) (\_ -> walker691 fun) (walker691 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker691 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker691 inner) (walker691 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 693; recurses to walker692.
+walker693 :: Core.Term -> Maybe Core.Term
+walker693 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker692 arg) (\_ -> walker692 fun) (walker692 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker692 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker692 inner) (walker692 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 694; recurses to walker693.
+walker694 :: Core.Term -> Maybe Core.Term
+walker694 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker693 arg) (\_ -> walker693 fun) (walker693 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker693 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker693 inner) (walker693 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 695; recurses to walker694.
+walker695 :: Core.Term -> Maybe Core.Term
+walker695 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker694 arg) (\_ -> walker694 fun) (walker694 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker694 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker694 inner) (walker694 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 696; recurses to walker695.
+walker696 :: Core.Term -> Maybe Core.Term
+walker696 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker695 arg) (\_ -> walker695 fun) (walker695 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker695 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker695 inner) (walker695 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 697; recurses to walker696.
+walker697 :: Core.Term -> Maybe Core.Term
+walker697 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker696 arg) (\_ -> walker696 fun) (walker696 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker696 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker696 inner) (walker696 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 698; recurses to walker697.
+walker698 :: Core.Term -> Maybe Core.Term
+walker698 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker697 arg) (\_ -> walker697 fun) (walker697 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker697 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker697 inner) (walker697 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 699; recurses to walker698.
+walker699 :: Core.Term -> Maybe Core.Term
+walker699 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker698 arg) (\_ -> walker698 fun) (walker698 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker698 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker698 inner) (walker698 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7002,6 +12702,196 @@ walker70 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 700; recurses to walker699.
+walker700 :: Core.Term -> Maybe Core.Term
+walker700 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker699 arg) (\_ -> walker699 fun) (walker699 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker699 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker699 inner) (walker699 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 701; recurses to walker700.
+walker701 :: Core.Term -> Maybe Core.Term
+walker701 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker700 arg) (\_ -> walker700 fun) (walker700 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker700 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker700 inner) (walker700 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 702; recurses to walker701.
+walker702 :: Core.Term -> Maybe Core.Term
+walker702 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker701 arg) (\_ -> walker701 fun) (walker701 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker701 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker701 inner) (walker701 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 703; recurses to walker702.
+walker703 :: Core.Term -> Maybe Core.Term
+walker703 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker702 arg) (\_ -> walker702 fun) (walker702 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker702 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker702 inner) (walker702 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 704; recurses to walker703.
+walker704 :: Core.Term -> Maybe Core.Term
+walker704 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker703 arg) (\_ -> walker703 fun) (walker703 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker703 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker703 inner) (walker703 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 705; recurses to walker704.
+walker705 :: Core.Term -> Maybe Core.Term
+walker705 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker704 arg) (\_ -> walker704 fun) (walker704 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker704 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker704 inner) (walker704 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 706; recurses to walker705.
+walker706 :: Core.Term -> Maybe Core.Term
+walker706 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker705 arg) (\_ -> walker705 fun) (walker705 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker705 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker705 inner) (walker705 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 707; recurses to walker706.
+walker707 :: Core.Term -> Maybe Core.Term
+walker707 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker706 arg) (\_ -> walker706 fun) (walker706 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker706 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker706 inner) (walker706 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 708; recurses to walker707.
+walker708 :: Core.Term -> Maybe Core.Term
+walker708 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker707 arg) (\_ -> walker707 fun) (walker707 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker707 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker707 inner) (walker707 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 709; recurses to walker708.
+walker709 :: Core.Term -> Maybe Core.Term
+walker709 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker708 arg) (\_ -> walker708 fun) (walker708 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker708 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker708 inner) (walker708 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 71; recurses to walker70.
 walker71 :: Core.Term -> Maybe Core.Term
 walker71 t =
@@ -7018,6 +12908,196 @@ walker71 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker70 inner) (walker70 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 710; recurses to walker709.
+walker710 :: Core.Term -> Maybe Core.Term
+walker710 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker709 arg) (\_ -> walker709 fun) (walker709 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker709 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker709 inner) (walker709 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 711; recurses to walker710.
+walker711 :: Core.Term -> Maybe Core.Term
+walker711 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker710 arg) (\_ -> walker710 fun) (walker710 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker710 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker710 inner) (walker710 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 712; recurses to walker711.
+walker712 :: Core.Term -> Maybe Core.Term
+walker712 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker711 arg) (\_ -> walker711 fun) (walker711 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker711 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker711 inner) (walker711 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 713; recurses to walker712.
+walker713 :: Core.Term -> Maybe Core.Term
+walker713 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker712 arg) (\_ -> walker712 fun) (walker712 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker712 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker712 inner) (walker712 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 714; recurses to walker713.
+walker714 :: Core.Term -> Maybe Core.Term
+walker714 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker713 arg) (\_ -> walker713 fun) (walker713 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker713 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker713 inner) (walker713 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 715; recurses to walker714.
+walker715 :: Core.Term -> Maybe Core.Term
+walker715 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker714 arg) (\_ -> walker714 fun) (walker714 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker714 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker714 inner) (walker714 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 716; recurses to walker715.
+walker716 :: Core.Term -> Maybe Core.Term
+walker716 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker715 arg) (\_ -> walker715 fun) (walker715 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker715 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker715 inner) (walker715 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 717; recurses to walker716.
+walker717 :: Core.Term -> Maybe Core.Term
+walker717 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker716 arg) (\_ -> walker716 fun) (walker716 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker716 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker716 inner) (walker716 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 718; recurses to walker717.
+walker718 :: Core.Term -> Maybe Core.Term
+walker718 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker717 arg) (\_ -> walker717 fun) (walker717 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker717 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker717 inner) (walker717 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 719; recurses to walker718.
+walker719 :: Core.Term -> Maybe Core.Term
+walker719 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker718 arg) (\_ -> walker718 fun) (walker718 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker718 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker718 inner) (walker718 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7040,6 +13120,196 @@ walker72 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 720; recurses to walker719.
+walker720 :: Core.Term -> Maybe Core.Term
+walker720 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker719 arg) (\_ -> walker719 fun) (walker719 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker719 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker719 inner) (walker719 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 721; recurses to walker720.
+walker721 :: Core.Term -> Maybe Core.Term
+walker721 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker720 arg) (\_ -> walker720 fun) (walker720 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker720 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker720 inner) (walker720 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 722; recurses to walker721.
+walker722 :: Core.Term -> Maybe Core.Term
+walker722 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker721 arg) (\_ -> walker721 fun) (walker721 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker721 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker721 inner) (walker721 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 723; recurses to walker722.
+walker723 :: Core.Term -> Maybe Core.Term
+walker723 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker722 arg) (\_ -> walker722 fun) (walker722 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker722 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker722 inner) (walker722 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 724; recurses to walker723.
+walker724 :: Core.Term -> Maybe Core.Term
+walker724 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker723 arg) (\_ -> walker723 fun) (walker723 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker723 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker723 inner) (walker723 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 725; recurses to walker724.
+walker725 :: Core.Term -> Maybe Core.Term
+walker725 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker724 arg) (\_ -> walker724 fun) (walker724 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker724 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker724 inner) (walker724 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 726; recurses to walker725.
+walker726 :: Core.Term -> Maybe Core.Term
+walker726 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker725 arg) (\_ -> walker725 fun) (walker725 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker725 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker725 inner) (walker725 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 727; recurses to walker726.
+walker727 :: Core.Term -> Maybe Core.Term
+walker727 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker726 arg) (\_ -> walker726 fun) (walker726 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker726 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker726 inner) (walker726 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 728; recurses to walker727.
+walker728 :: Core.Term -> Maybe Core.Term
+walker728 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker727 arg) (\_ -> walker727 fun) (walker727 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker727 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker727 inner) (walker727 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 729; recurses to walker728.
+walker729 :: Core.Term -> Maybe Core.Term
+walker729 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker728 arg) (\_ -> walker728 fun) (walker728 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker728 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker728 inner) (walker728 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 73; recurses to walker72.
 walker73 :: Core.Term -> Maybe Core.Term
 walker73 t =
@@ -7056,6 +13326,196 @@ walker73 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker72 inner) (walker72 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 730; recurses to walker729.
+walker730 :: Core.Term -> Maybe Core.Term
+walker730 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker729 arg) (\_ -> walker729 fun) (walker729 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker729 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker729 inner) (walker729 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 731; recurses to walker730.
+walker731 :: Core.Term -> Maybe Core.Term
+walker731 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker730 arg) (\_ -> walker730 fun) (walker730 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker730 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker730 inner) (walker730 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 732; recurses to walker731.
+walker732 :: Core.Term -> Maybe Core.Term
+walker732 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker731 arg) (\_ -> walker731 fun) (walker731 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker731 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker731 inner) (walker731 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 733; recurses to walker732.
+walker733 :: Core.Term -> Maybe Core.Term
+walker733 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker732 arg) (\_ -> walker732 fun) (walker732 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker732 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker732 inner) (walker732 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 734; recurses to walker733.
+walker734 :: Core.Term -> Maybe Core.Term
+walker734 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker733 arg) (\_ -> walker733 fun) (walker733 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker733 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker733 inner) (walker733 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 735; recurses to walker734.
+walker735 :: Core.Term -> Maybe Core.Term
+walker735 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker734 arg) (\_ -> walker734 fun) (walker734 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker734 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker734 inner) (walker734 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 736; recurses to walker735.
+walker736 :: Core.Term -> Maybe Core.Term
+walker736 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker735 arg) (\_ -> walker735 fun) (walker735 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker735 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker735 inner) (walker735 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 737; recurses to walker736.
+walker737 :: Core.Term -> Maybe Core.Term
+walker737 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker736 arg) (\_ -> walker736 fun) (walker736 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker736 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker736 inner) (walker736 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 738; recurses to walker737.
+walker738 :: Core.Term -> Maybe Core.Term
+walker738 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker737 arg) (\_ -> walker737 fun) (walker737 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker737 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker737 inner) (walker737 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 739; recurses to walker738.
+walker739 :: Core.Term -> Maybe Core.Term
+walker739 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker738 arg) (\_ -> walker738 fun) (walker738 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker738 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker738 inner) (walker738 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7078,6 +13538,196 @@ walker74 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 740; recurses to walker739.
+walker740 :: Core.Term -> Maybe Core.Term
+walker740 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker739 arg) (\_ -> walker739 fun) (walker739 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker739 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker739 inner) (walker739 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 741; recurses to walker740.
+walker741 :: Core.Term -> Maybe Core.Term
+walker741 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker740 arg) (\_ -> walker740 fun) (walker740 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker740 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker740 inner) (walker740 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 742; recurses to walker741.
+walker742 :: Core.Term -> Maybe Core.Term
+walker742 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker741 arg) (\_ -> walker741 fun) (walker741 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker741 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker741 inner) (walker741 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 743; recurses to walker742.
+walker743 :: Core.Term -> Maybe Core.Term
+walker743 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker742 arg) (\_ -> walker742 fun) (walker742 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker742 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker742 inner) (walker742 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 744; recurses to walker743.
+walker744 :: Core.Term -> Maybe Core.Term
+walker744 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker743 arg) (\_ -> walker743 fun) (walker743 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker743 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker743 inner) (walker743 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 745; recurses to walker744.
+walker745 :: Core.Term -> Maybe Core.Term
+walker745 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker744 arg) (\_ -> walker744 fun) (walker744 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker744 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker744 inner) (walker744 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 746; recurses to walker745.
+walker746 :: Core.Term -> Maybe Core.Term
+walker746 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker745 arg) (\_ -> walker745 fun) (walker745 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker745 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker745 inner) (walker745 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 747; recurses to walker746.
+walker747 :: Core.Term -> Maybe Core.Term
+walker747 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker746 arg) (\_ -> walker746 fun) (walker746 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker746 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker746 inner) (walker746 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 748; recurses to walker747.
+walker748 :: Core.Term -> Maybe Core.Term
+walker748 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker747 arg) (\_ -> walker747 fun) (walker747 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker747 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker747 inner) (walker747 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 749; recurses to walker748.
+walker749 :: Core.Term -> Maybe Core.Term
+walker749 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker748 arg) (\_ -> walker748 fun) (walker748 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker748 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker748 inner) (walker748 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 75; recurses to walker74.
 walker75 :: Core.Term -> Maybe Core.Term
 walker75 t =
@@ -7094,6 +13744,196 @@ walker75 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker74 inner) (walker74 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 750; recurses to walker749.
+walker750 :: Core.Term -> Maybe Core.Term
+walker750 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker749 arg) (\_ -> walker749 fun) (walker749 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker749 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker749 inner) (walker749 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 751; recurses to walker750.
+walker751 :: Core.Term -> Maybe Core.Term
+walker751 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker750 arg) (\_ -> walker750 fun) (walker750 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker750 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker750 inner) (walker750 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 752; recurses to walker751.
+walker752 :: Core.Term -> Maybe Core.Term
+walker752 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker751 arg) (\_ -> walker751 fun) (walker751 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker751 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker751 inner) (walker751 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 753; recurses to walker752.
+walker753 :: Core.Term -> Maybe Core.Term
+walker753 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker752 arg) (\_ -> walker752 fun) (walker752 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker752 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker752 inner) (walker752 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 754; recurses to walker753.
+walker754 :: Core.Term -> Maybe Core.Term
+walker754 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker753 arg) (\_ -> walker753 fun) (walker753 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker753 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker753 inner) (walker753 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 755; recurses to walker754.
+walker755 :: Core.Term -> Maybe Core.Term
+walker755 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker754 arg) (\_ -> walker754 fun) (walker754 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker754 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker754 inner) (walker754 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 756; recurses to walker755.
+walker756 :: Core.Term -> Maybe Core.Term
+walker756 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker755 arg) (\_ -> walker755 fun) (walker755 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker755 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker755 inner) (walker755 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 757; recurses to walker756.
+walker757 :: Core.Term -> Maybe Core.Term
+walker757 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker756 arg) (\_ -> walker756 fun) (walker756 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker756 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker756 inner) (walker756 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 758; recurses to walker757.
+walker758 :: Core.Term -> Maybe Core.Term
+walker758 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker757 arg) (\_ -> walker757 fun) (walker757 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker757 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker757 inner) (walker757 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 759; recurses to walker758.
+walker759 :: Core.Term -> Maybe Core.Term
+walker759 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker758 arg) (\_ -> walker758 fun) (walker758 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker758 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker758 inner) (walker758 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7116,6 +13956,196 @@ walker76 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 760; recurses to walker759.
+walker760 :: Core.Term -> Maybe Core.Term
+walker760 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker759 arg) (\_ -> walker759 fun) (walker759 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker759 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker759 inner) (walker759 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 761; recurses to walker760.
+walker761 :: Core.Term -> Maybe Core.Term
+walker761 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker760 arg) (\_ -> walker760 fun) (walker760 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker760 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker760 inner) (walker760 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 762; recurses to walker761.
+walker762 :: Core.Term -> Maybe Core.Term
+walker762 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker761 arg) (\_ -> walker761 fun) (walker761 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker761 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker761 inner) (walker761 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 763; recurses to walker762.
+walker763 :: Core.Term -> Maybe Core.Term
+walker763 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker762 arg) (\_ -> walker762 fun) (walker762 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker762 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker762 inner) (walker762 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 764; recurses to walker763.
+walker764 :: Core.Term -> Maybe Core.Term
+walker764 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker763 arg) (\_ -> walker763 fun) (walker763 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker763 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker763 inner) (walker763 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 765; recurses to walker764.
+walker765 :: Core.Term -> Maybe Core.Term
+walker765 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker764 arg) (\_ -> walker764 fun) (walker764 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker764 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker764 inner) (walker764 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 766; recurses to walker765.
+walker766 :: Core.Term -> Maybe Core.Term
+walker766 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker765 arg) (\_ -> walker765 fun) (walker765 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker765 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker765 inner) (walker765 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 767; recurses to walker766.
+walker767 :: Core.Term -> Maybe Core.Term
+walker767 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker766 arg) (\_ -> walker766 fun) (walker766 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker766 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker766 inner) (walker766 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 768; recurses to walker767.
+walker768 :: Core.Term -> Maybe Core.Term
+walker768 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker767 arg) (\_ -> walker767 fun) (walker767 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker767 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker767 inner) (walker767 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 769; recurses to walker768.
+walker769 :: Core.Term -> Maybe Core.Term
+walker769 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker768 arg) (\_ -> walker768 fun) (walker768 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker768 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker768 inner) (walker768 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 77; recurses to walker76.
 walker77 :: Core.Term -> Maybe Core.Term
 walker77 t =
@@ -7132,6 +14162,196 @@ walker77 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker76 inner) (walker76 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 770; recurses to walker769.
+walker770 :: Core.Term -> Maybe Core.Term
+walker770 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker769 arg) (\_ -> walker769 fun) (walker769 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker769 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker769 inner) (walker769 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 771; recurses to walker770.
+walker771 :: Core.Term -> Maybe Core.Term
+walker771 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker770 arg) (\_ -> walker770 fun) (walker770 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker770 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker770 inner) (walker770 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 772; recurses to walker771.
+walker772 :: Core.Term -> Maybe Core.Term
+walker772 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker771 arg) (\_ -> walker771 fun) (walker771 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker771 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker771 inner) (walker771 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 773; recurses to walker772.
+walker773 :: Core.Term -> Maybe Core.Term
+walker773 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker772 arg) (\_ -> walker772 fun) (walker772 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker772 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker772 inner) (walker772 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 774; recurses to walker773.
+walker774 :: Core.Term -> Maybe Core.Term
+walker774 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker773 arg) (\_ -> walker773 fun) (walker773 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker773 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker773 inner) (walker773 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 775; recurses to walker774.
+walker775 :: Core.Term -> Maybe Core.Term
+walker775 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker774 arg) (\_ -> walker774 fun) (walker774 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker774 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker774 inner) (walker774 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 776; recurses to walker775.
+walker776 :: Core.Term -> Maybe Core.Term
+walker776 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker775 arg) (\_ -> walker775 fun) (walker775 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker775 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker775 inner) (walker775 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 777; recurses to walker776.
+walker777 :: Core.Term -> Maybe Core.Term
+walker777 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker776 arg) (\_ -> walker776 fun) (walker776 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker776 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker776 inner) (walker776 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 778; recurses to walker777.
+walker778 :: Core.Term -> Maybe Core.Term
+walker778 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker777 arg) (\_ -> walker777 fun) (walker777 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker777 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker777 inner) (walker777 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 779; recurses to walker778.
+walker779 :: Core.Term -> Maybe Core.Term
+walker779 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker778 arg) (\_ -> walker778 fun) (walker778 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker778 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker778 inner) (walker778 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
@@ -7154,6 +14374,196 @@ walker78 t =
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
+-- | Term walker level 780; recurses to walker779.
+walker780 :: Core.Term -> Maybe Core.Term
+walker780 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker779 arg) (\_ -> walker779 fun) (walker779 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker779 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker779 inner) (walker779 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 781; recurses to walker780.
+walker781 :: Core.Term -> Maybe Core.Term
+walker781 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker780 arg) (\_ -> walker780 fun) (walker780 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker780 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker780 inner) (walker780 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 782; recurses to walker781.
+walker782 :: Core.Term -> Maybe Core.Term
+walker782 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker781 arg) (\_ -> walker781 fun) (walker781 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker781 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker781 inner) (walker781 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 783; recurses to walker782.
+walker783 :: Core.Term -> Maybe Core.Term
+walker783 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker782 arg) (\_ -> walker782 fun) (walker782 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker782 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker782 inner) (walker782 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 784; recurses to walker783.
+walker784 :: Core.Term -> Maybe Core.Term
+walker784 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker783 arg) (\_ -> walker783 fun) (walker783 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker783 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker783 inner) (walker783 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 785; recurses to walker784.
+walker785 :: Core.Term -> Maybe Core.Term
+walker785 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker784 arg) (\_ -> walker784 fun) (walker784 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker784 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker784 inner) (walker784 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 786; recurses to walker785.
+walker786 :: Core.Term -> Maybe Core.Term
+walker786 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker785 arg) (\_ -> walker785 fun) (walker785 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker785 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker785 inner) (walker785 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 787; recurses to walker786.
+walker787 :: Core.Term -> Maybe Core.Term
+walker787 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker786 arg) (\_ -> walker786 fun) (walker786 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker786 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker786 inner) (walker786 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 788; recurses to walker787.
+walker788 :: Core.Term -> Maybe Core.Term
+walker788 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker787 arg) (\_ -> walker787 fun) (walker787 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker787 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker787 inner) (walker787 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 789; recurses to walker788.
+walker789 :: Core.Term -> Maybe Core.Term
+walker789 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker788 arg) (\_ -> walker788 fun) (walker788 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker788 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker788 inner) (walker788 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
 -- | Term walker level 79; recurses to walker78.
 walker79 :: Core.Term -> Maybe Core.Term
 walker79 t =
@@ -7170,6 +14580,196 @@ walker79 t =
         Core.TermLet v0 ->
           let body = Core.letBody v0
           in (Maybes.maybe Nothing (\inner -> walker78 inner) (walker78 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 790; recurses to walker789.
+walker790 :: Core.Term -> Maybe Core.Term
+walker790 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker789 arg) (\_ -> walker789 fun) (walker789 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker789 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker789 inner) (walker789 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 791; recurses to walker790.
+walker791 :: Core.Term -> Maybe Core.Term
+walker791 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker790 arg) (\_ -> walker790 fun) (walker790 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker790 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker790 inner) (walker790 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 792; recurses to walker791.
+walker792 :: Core.Term -> Maybe Core.Term
+walker792 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker791 arg) (\_ -> walker791 fun) (walker791 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker791 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker791 inner) (walker791 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 793; recurses to walker792.
+walker793 :: Core.Term -> Maybe Core.Term
+walker793 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker792 arg) (\_ -> walker792 fun) (walker792 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker792 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker792 inner) (walker792 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 794; recurses to walker793.
+walker794 :: Core.Term -> Maybe Core.Term
+walker794 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker793 arg) (\_ -> walker793 fun) (walker793 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker793 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker793 inner) (walker793 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 795; recurses to walker794.
+walker795 :: Core.Term -> Maybe Core.Term
+walker795 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker794 arg) (\_ -> walker794 fun) (walker794 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker794 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker794 inner) (walker794 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 796; recurses to walker795.
+walker796 :: Core.Term -> Maybe Core.Term
+walker796 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker795 arg) (\_ -> walker795 fun) (walker795 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker795 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker795 inner) (walker795 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 797; recurses to walker796.
+walker797 :: Core.Term -> Maybe Core.Term
+walker797 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker796 arg) (\_ -> walker796 fun) (walker796 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker796 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker796 inner) (walker796 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 798; recurses to walker797.
+walker798 :: Core.Term -> Maybe Core.Term
+walker798 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker797 arg) (\_ -> walker797 fun) (walker797 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker797 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker797 inner) (walker797 body))
+        Core.TermVariable _ -> Just stripped
+        Core.TermLiteral _ -> Just stripped
+        _ -> Just stripped
+-- | Term walker level 799; recurses to walker798.
+walker799 :: Core.Term -> Maybe Core.Term
+walker799 t =
+
+      let stripped = Strip.deannotateTerm t
+      in case stripped of
+        Core.TermApplication v0 ->
+          let fun = Core.applicationFunction v0
+              arg = Core.applicationArgument v0
+          in (Maybes.maybe (walker798 arg) (\_ -> walker798 fun) (walker798 fun))
+        Core.TermLambda v0 ->
+          let body = Core.lambdaBody v0
+          in (walker798 body)
+        Core.TermLet v0 ->
+          let body = Core.letBody v0
+          in (Maybes.maybe Nothing (\inner -> walker798 inner) (walker798 body))
         Core.TermVariable _ -> Just stripped
         Core.TermLiteral _ -> Just stripped
         _ -> Just stripped
