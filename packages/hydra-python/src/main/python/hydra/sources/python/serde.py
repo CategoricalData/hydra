@@ -1364,6 +1364,12 @@ def _number_to_expr():
             field("float",
                 lam("f", serialization_cst(_local("pythonFloatLiteralText")(var("hydra.lib.literals.showFloat64")(var("f"))))),
             ),
+            field("imaginary",
+                lam("f", serialization_cst(Strings.cat2(
+                    _local("pythonFloatLiteralText")(var("hydra.lib.literals.showFloat64")(var("f"))),
+                    string("j"),
+                ))),
+            ),
             field("integer",
                 lam("i", serialization_cst(var("hydra.lib.literals.showBigint")(var("i")))),
             ),
@@ -1952,26 +1958,53 @@ def _statement_to_expr():
     )
 
 
+def _string_prefix_to_text():
+    body = cases(
+        _ty("StringPrefix"), var("p"), Nothing(),
+        [
+            field("raw", constant(string("r"))),
+            field("bytes", constant(string("b"))),
+            field("rawBytes", constant(string("rb"))),
+            field("unicode", constant(string("u"))),
+        ],
+    )
+    return _def(
+        "stringPrefixToText",
+        doc(
+            "Serialize a Python string prefix to its source-form characters",
+            lambdas(["p"], body),
+        ),
+    )
+
+
 def _string_to_expr():
     body = lets(
         [
             field("content", _proj("String", "value", "s")),
+            field("prefix", Maybes.maybe(string(""), _local("stringPrefixToText"), _proj("String", "prefix", "s"))),
             field("style", _proj("String", "quoteStyle", "s")),
         ],
         cases(
             _ty("QuoteStyle"), var("style"), Nothing(),
             [
                 field("single",
-                    constant(serialization_cst(_local("escapePythonString")(false(), var("content")))),
+                    constant(serialization_cst(Strings.cat2(var("prefix"), _local("escapePythonString")(false(), var("content"))))),
                 ),
                 field("double",
-                    constant(serialization_cst(_local("escapePythonString")(true(), var("content")))),
+                    constant(serialization_cst(Strings.cat2(var("prefix"), _local("escapePythonString")(true(), var("content"))))),
                 ),
-                field("triple",
+                field("tripleSingle",
                     constant(_no_sep(list_([
-                        _cst('r"""'),
+                        serialization_cst(Strings.cat2(var("prefix"), string("'''"))),
                         serialization_cst(var("content")),
-                        _cst('"""'),
+                        serialization_cst(string("'''")),
+                    ]))),
+                ),
+                field("tripleDouble",
+                    constant(_no_sep(list_([
+                        serialization_cst(Strings.cat2(var("prefix"), string('"""'))),
+                        serialization_cst(var("content")),
+                        serialization_cst(string('"""')),
                     ]))),
                 ),
             ],
@@ -2458,6 +2491,7 @@ def _build_module() -> Module:
             to_definition(_star_target_to_expr()),
             to_definition(_starred_expression_to_expr()),
             to_definition(_statement_to_expr()),
+            to_definition(_string_prefix_to_text()),
             to_definition(_string_to_expr()),
             to_definition(_subject_expression_to_expr()),
             to_definition(_sum_to_expr()),

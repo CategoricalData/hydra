@@ -20,8 +20,8 @@ import hydra.dsl.types as T
 NS = Namespace("hydra.python.syntax")
 DEPENDENCIES = [Namespace("hydra.core"), Namespace("hydra.core")]
 DESCRIPTION = (
-    "A Python syntax model, based on the Python v3 PEG grammar retrieved on 2024-12-22"
-    " from https://docs.python.org/3/reference/grammar.html"
+    "A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
+    "  https://docs.python.org/3.14/reference/grammar.html"
 )
 
 
@@ -68,7 +68,8 @@ _constructs = [
         ("statement", _py("Statement")),
     ])),
     _def("Module", T.wrap(T.list_(_ne(_py("Statement"))))),
-    _def("QuoteStyle", T.enum(["single", "double", "triple"])),
+    _def("QuoteStyle", T.enum(["single", "double", "tripleSingle", "tripleDouble"])),
+    _def("StringPrefix", T.enum(["raw", "bytes", "rawBytes", "unicode"])),
 ]
 
 # terminals from PEG grammar
@@ -77,9 +78,11 @@ _terminals = [
     _def("Number", _union([
         ("integer", T.bigint()),
         ("float", T.float64()),
+        ("imaginary", T.float64()),
     ])),
     _def("String", _record([
         ("value", T.string()),
+        ("prefix", T.maybe(_py("StringPrefix"))),
         ("quoteStyle", _py("QuoteStyle")),
     ])),
     _def("TypeComment", T.wrap(T.string())),
@@ -90,10 +93,6 @@ _nonterminals = [
     _def("File", T.wrap(T.list_(_py("Statement")))),
     _def("Interactive", T.wrap(_py("Statement"))),
     _def("Eval", T.wrap(_ne(_py("Expression")))),
-    _def("FuncType", _record([
-        ("type", T.list_(_py("TypeExpression"))),
-        ("body", _py("Expression")),
-    ])),
     _def("Statement", _union([
         ("compound", _py("CompoundStatement")),
         ("simple", _ne(_py("SimpleStatement"))),
@@ -404,7 +403,7 @@ _nonterminals = [
     _def("LiteralExpression", _union([
         ("number", _py("SignedNumber")),
         ("complex", _py("ComplexNumber")),
-        ("string", T.string()),
+        ("string", _py("String")),
         ("none", T.unit()),
         ("true", T.unit()),
         ("false", T.unit()),
@@ -423,8 +422,11 @@ _nonterminals = [
         ("sign", _py("PlusOrMinus")),
         ("number", _py("RealNumber")),
     ])),
-    _def("RealNumber", T.wrap(_py("Number"))),
-    _def("ImaginaryNumber", T.wrap(_py("Number"))),
+    _def("RealNumber", _union([
+        ("integer", T.bigint()),
+        ("float", T.float64()),
+    ])),
+    _def("ImaginaryNumber", T.wrap(T.float64())),
     _def("CapturePattern", T.wrap(_py("PatternCaptureTarget"))),
     _def("PatternCaptureTarget", T.wrap(_py("Name"))),
     _def("ValuePattern", T.wrap(_py("Attribute"))),

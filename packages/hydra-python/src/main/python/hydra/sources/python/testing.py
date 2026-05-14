@@ -133,10 +133,10 @@ def _generate_python_test_case():
     universal_branch_body = lets(
         [
             field("actual_",
-                project(_UNIVERSAL_TEST_CASE, Name("actual"))(var("ucase")),
+                project(_UNIVERSAL_TEST_CASE, Name("actual"))(var("ucase"))(unit()),
             ),
             field("expected_",
-                project(_UNIVERSAL_TEST_CASE, Name("expected"))(var("ucase")),
+                project(_UNIVERSAL_TEST_CASE, Name("expected"))(var("ucase"))(unit()),
             ),
             field("fullName",
                 Logic.if_else(

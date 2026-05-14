@@ -1123,11 +1123,21 @@ def _target_python_version():
 
 
 def _triple_quoted_string():
-    body = _local("stringToPyExpression")(PySyn.quote_style_triple, var("s"))
+    body = _local("pyAtomToPyExpression")(
+        PySyn.atom_string(
+            PyDsl.prefixed_string_(
+                PySyn.string_prefix_raw,
+                var("s"),
+                PySyn.quote_style_triple_double,
+            )
+        )
+    )
     return _def(
         "tripleQuotedString",
         doc(
-            "Create a triple-quoted string expression",
+            "Create a raw triple-double-quoted string expression (Python docstring convention). "
+            "Raw-prefixed so embedded backslashes (e.g. lambda notation `\\x.e`) aren't interpreted "
+            "as escape sequences by Python's string parser.",
             lambdas(["s"], body),
         ),
     )
