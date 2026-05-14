@@ -86,15 +86,6 @@ prefixedString_ prefix_ val style = record Py._String [
   Py._String_prefix>>: just prefix_,
   Py._String_quoteStyle>>: style]
 
--- Strings (`(fstring|string)+` per PEG 3.14) convenience helper.
--- Wraps a single regular String_ in the union form expected by atom.string /
--- literalExpression.string post-Step-4. Generated phantom helpers cover the
--- raw union-arm injections (stringOrFstringString / stringOrFstringFstring /
--- stringsRegulars) and the inner record/wrap types.
-
-pyStringToPyStrings :: TTerm Py.String_ -> TTerm Py.Strings
-pyStringToPyStrings s = stringsRegulars (list [stringOrFstringString s])
-
 untypedAssignmentSimple :: TTerm [Py.StarTarget] -> TTerm Py.AnnotatedRhs -> TTerm Py.UntypedAssignment
 untypedAssignmentSimple targets rhs = untypedAssignment targets rhs nothing
 
@@ -155,7 +146,7 @@ pyNameToPyExpression :: TTerm Py.Name -> TTerm Py.Expression
 pyNameToPyExpression n = pyPrimaryToPyExpression (pyNameToPyPrimary n)
 
 pyStringToPyExpression :: TTerm Py.String_ -> TTerm Py.Expression
-pyStringToPyExpression s = pyPrimaryToPyExpression (primarySimple (atomString (pyStringToPyStrings s)))
+pyStringToPyExpression s = pyPrimaryToPyExpression (primarySimple (atomString s))
 
 raiseExpressionException :: TTerm Py.RaiseExpression -> TTerm Py.Expression
 raiseExpressionException re = project Py._RaiseExpression Py._RaiseExpression_expression @@ re

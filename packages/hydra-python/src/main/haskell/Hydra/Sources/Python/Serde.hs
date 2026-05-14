@@ -132,12 +132,6 @@ module_ = Module {
       toDefinition doubleStarredKvpairToExpr,
       toDefinition expressionToExpr,
       toDefinition factorToExpr,
-      toDefinition fstringConversionToExpr,
-      toDefinition fstringFormatSpecToExpr,
-      toDefinition fstringFullFormatSpecToExpr,
-      toDefinition fstringMiddleToExpr,
-      toDefinition fstringReplacementFieldToExpr,
-      toDefinition fstringToExpr,
       toDefinition functionDefRawToExpr,
       toDefinition functionDefinitionToExpr,
       toDefinition groupToExpr,
@@ -199,20 +193,12 @@ module_ = Module {
       toDefinition statementToExpr,
       toDefinition stringPrefixToText,
       toDefinition stringToExpr,
-      toDefinition stringOrFstringToExpr,
-      toDefinition stringsToExpr,
       toDefinition subjectExpressionToExpr,
       toDefinition sumToExpr,
       toDefinition tPrimaryToExpr,
       toDefinition tPrimaryAndNameToExpr,
       toDefinition targetWithStarAtomToExpr,
       toDefinition termToExpr,
-      toDefinition tstringConversionToExpr,
-      toDefinition tstringFormatSpecToExpr,
-      toDefinition tstringReplacementToExpr,
-      toDefinition tstringFullFormatSpecToExpr,
-      toDefinition tstringMiddleToExpr,
-      toDefinition tstringToExpr,
       toDefinition tupleToExpr,
       toDefinition typeAliasToExpr,
       toDefinition typeParameterToExpr,
@@ -305,7 +291,7 @@ atomToExpr = def "atomToExpr" $
       Py._Atom_number>>: lambda "n" $ numberToExpr @@ var "n",
       Py._Atom_set>>: lambda "s" $ setToExpr @@ var "s",
       Py._Atom_setcomp>>: lambda "_" $ Serialization.cst @@ string "{...}",
-      Py._Atom_string>>: lambda "ss" $ stringsToExpr @@ var "ss",
+      Py._Atom_string>>: lambda "s" $ stringToExpr @@ var "s",
       Py._Atom_true>>: constant $ Serialization.cst @@ string "True",
       Py._Atom_tuple>>: lambda "t" $ tupleToExpr @@ var "t"]
 
@@ -583,64 +569,6 @@ factorToExpr = def "factorToExpr" $
       Py._Factor_complement>>: lambda "inner" $
         Serialization.noSep @@ list [Serialization.cst @@ string "~", factorToExpr @@ var "inner"],
       Py._Factor_simple>>: lambda "p" $ powerToExpr @@ var "p"]
-
-fstringToExpr :: TTermDefinition (Py.Fstring -> Expr)
-fstringToExpr = def "fstringToExpr" $
-  doc "Serialize a Python f-string literal" $
-  lambda "f" $ Serialization.noSep @@ list [
-    Serialization.cst @@ string "f\"",
-    Serialization.noSep @@ Lists.map fstringMiddleToExpr (unwrap Py._Fstring @@ var "f"),
-    Serialization.cst @@ string "\""]
-
-fstringConversionToExpr :: TTermDefinition (Py.FstringConversion -> Expr)
-fstringConversionToExpr = def "fstringConversionToExpr" $
-  doc "Serialize an f-string conversion (e.g. !r, !s, !a)" $
-  lambda "c" $ Serialization.noSep @@ list [
-    Serialization.cst @@ string "!",
-    nameToExpr @@ (unwrap Py._FstringConversion @@ var "c")]
-
-fstringFormatSpecToExpr :: TTermDefinition (Py.FstringFormatSpec -> Expr)
-fstringFormatSpecToExpr = def "fstringFormatSpecToExpr" $
-  doc "Serialize a single f-string format-spec element" $
-  lambda "fs" $
-    cases Py._FstringFormatSpec (var "fs") Nothing [
-      Py._FstringFormatSpec_literal>>: lambda "s" $ Serialization.cst @@ var "s",
-      Py._FstringFormatSpec_replacementField>>: lambda "r" $ fstringReplacementFieldToExpr @@ var "r"]
-
-fstringFullFormatSpecToExpr :: TTermDefinition (Py.FstringFullFormatSpec -> Expr)
-fstringFullFormatSpecToExpr = def "fstringFullFormatSpecToExpr" $
-  doc "Serialize an f-string ':format' clause" $
-  lambda "ffs" $ Serialization.noSep @@ list [
-    Serialization.cst @@ string ":",
-    Serialization.noSep @@ Lists.map fstringFormatSpecToExpr (unwrap Py._FstringFullFormatSpec @@ var "ffs")]
-
-fstringMiddleToExpr :: TTermDefinition (Py.FstringMiddle -> Expr)
-fstringMiddleToExpr = def "fstringMiddleToExpr" $
-  doc "Serialize one piece of an f-string body" $
-  lambda "fm" $
-    cases Py._FstringMiddle (var "fm") Nothing [
-      Py._FstringMiddle_literal>>: lambda "s" $ Serialization.cst @@ var "s",
-      Py._FstringMiddle_replacementField>>: lambda "r" $ fstringReplacementFieldToExpr @@ var "r"]
-
-fstringReplacementFieldToExpr :: TTermDefinition (Py.FstringReplacementField -> Expr)
-fstringReplacementFieldToExpr = def "fstringReplacementFieldToExpr" $
-  doc "Serialize an f-string '{expr[=][!conv][:spec]}' replacement" $
-  lambda "r" $ lets [
-    "expr">: annotatedRhsToExpr @@ (project Py._FstringReplacementField Py._FstringReplacementField_expression @@ var "r"),
-    "eq">: Logic.ifElse (project Py._FstringReplacementField Py._FstringReplacementField_equals @@ var "r")
-      (Serialization.cst @@ string "=")
-      (Serialization.cst @@ string ""),
-    "conv">: Maybes.maybe (Serialization.cst @@ string "") fstringConversionToExpr
-      (project Py._FstringReplacementField Py._FstringReplacementField_conversion @@ var "r"),
-    "spec">: Maybes.maybe (Serialization.cst @@ string "") fstringFullFormatSpecToExpr
-      (project Py._FstringReplacementField Py._FstringReplacementField_formatSpec @@ var "r")] $
-    Serialization.noSep @@ list [
-      Serialization.cst @@ string "{",
-      var "expr",
-      var "eq",
-      var "conv",
-      var "spec",
-      Serialization.cst @@ string "}"]
 
 functionDefRawToExpr :: TTermDefinition (Py.FunctionDefRaw -> Expr)
 functionDefRawToExpr = def "functionDefRawToExpr" $
@@ -1234,23 +1162,6 @@ stringToExpr = def "stringToExpr" $
         Serialization.cst @@ var "content",
         Serialization.cst @@ string "\"\"\""]]
 
-stringOrFstringToExpr :: TTermDefinition (Py.StringOrFstring -> Expr)
-stringOrFstringToExpr = def "stringOrFstringToExpr" $
-  doc "Serialize one element of a `(fstring|string)+` run" $
-  lambda "sf" $
-    cases Py._StringOrFstring (var "sf") Nothing [
-      Py._StringOrFstring_string>>: lambda "s" $ stringToExpr @@ var "s",
-      Py._StringOrFstring_fstring>>: lambda "f" $ fstringToExpr @@ var "f"]
-
-stringsToExpr :: TTermDefinition (Py.Strings -> Expr)
-stringsToExpr = def "stringsToExpr" $
-  doc "Serialize a `strings` group (a non-empty run of either string/f-string or t-string literals)" $
-  lambda "ss" $
-    cases Py._Strings (var "ss") Nothing [
-      -- Python juxtaposes adjacent string literals at parse time; render with single-space separation.
-      Py._Strings_regulars>>: lambda "rs" $ Serialization.spaceSep @@ Lists.map stringOrFstringToExpr (var "rs"),
-      Py._Strings_tstrings>>: lambda "ts" $ Serialization.spaceSep @@ Lists.map tstringToExpr (var "ts")]
-
 subjectExpressionToExpr :: TTermDefinition (Py.SubjectExpression -> Expr)
 subjectExpressionToExpr = def "subjectExpressionToExpr" $
   doc "Serialize a subject expression" $
@@ -1302,64 +1213,6 @@ termToExpr = def "termToExpr" $
   lambda "t" $
     -- Just encode the factor; multiplication rarely used in generated code
     factorToExpr @@ (project Py._Term Py._Term_rhs @@ var "t")
-
-tstringToExpr :: TTermDefinition (Py.Tstring -> Expr)
-tstringToExpr = def "tstringToExpr" $
-  doc "Serialize a Python t-string literal (PEP 750)" $
-  lambda "t" $ Serialization.noSep @@ list [
-    Serialization.cst @@ string "t\"",
-    Serialization.noSep @@ Lists.map tstringMiddleToExpr (unwrap Py._Tstring @@ var "t"),
-    Serialization.cst @@ string "\""]
-
-tstringConversionToExpr :: TTermDefinition (Py.TstringConversion -> Expr)
-tstringConversionToExpr = def "tstringConversionToExpr" $
-  doc "Serialize a t-string conversion (e.g. !r, !s, !a)" $
-  lambda "c" $ Serialization.noSep @@ list [
-    Serialization.cst @@ string "!",
-    nameToExpr @@ (unwrap Py._TstringConversion @@ var "c")]
-
-tstringFormatSpecToExpr :: TTermDefinition (Py.TstringFormatSpec -> Expr)
-tstringFormatSpecToExpr = def "tstringFormatSpecToExpr" $
-  doc "Serialize a single t-string format-spec element" $
-  lambda "fs" $
-    cases Py._TstringFormatSpec (var "fs") Nothing [
-      Py._TstringFormatSpec_literal>>: lambda "s" $ Serialization.cst @@ var "s",
-      Py._TstringFormatSpec_replacementField>>: lambda "r" $ tstringReplacementToExpr @@ var "r"]
-
-tstringReplacementToExpr :: TTermDefinition (Py.TstringReplacement -> Expr)
-tstringReplacementToExpr = def "tstringReplacementToExpr" $
-  doc "Serialize a t-string '{expr[=][!conv][:spec]}' replacement (used both top-level and inside format specs)" $
-  lambda "r" $ lets [
-    "expr">: annotatedRhsToExpr @@ (project Py._TstringReplacement Py._TstringReplacement_expression @@ var "r"),
-    "eq">: Logic.ifElse (project Py._TstringReplacement Py._TstringReplacement_equals @@ var "r")
-      (Serialization.cst @@ string "=")
-      (Serialization.cst @@ string ""),
-    "conv">: Maybes.maybe (Serialization.cst @@ string "") tstringConversionToExpr
-      (project Py._TstringReplacement Py._TstringReplacement_conversion @@ var "r"),
-    "spec">: Maybes.maybe (Serialization.cst @@ string "") tstringFullFormatSpecToExpr
-      (project Py._TstringReplacement Py._TstringReplacement_formatSpec @@ var "r")] $
-    Serialization.noSep @@ list [
-      Serialization.cst @@ string "{",
-      var "expr",
-      var "eq",
-      var "conv",
-      var "spec",
-      Serialization.cst @@ string "}"]
-
-tstringFullFormatSpecToExpr :: TTermDefinition (Py.TstringFullFormatSpec -> Expr)
-tstringFullFormatSpecToExpr = def "tstringFullFormatSpecToExpr" $
-  doc "Serialize a t-string ':format' clause" $
-  lambda "ffs" $ Serialization.noSep @@ list [
-    Serialization.cst @@ string ":",
-    Serialization.noSep @@ Lists.map tstringFormatSpecToExpr (unwrap Py._TstringFullFormatSpec @@ var "ffs")]
-
-tstringMiddleToExpr :: TTermDefinition (Py.TstringMiddle -> Expr)
-tstringMiddleToExpr = def "tstringMiddleToExpr" $
-  doc "Serialize one piece of a t-string body" $
-  lambda "tm" $
-    cases Py._TstringMiddle (var "tm") Nothing [
-      Py._TstringMiddle_literal>>: lambda "s" $ Serialization.cst @@ var "s",
-      Py._TstringMiddle_replacementField>>: lambda "r" $ tstringReplacementToExpr @@ var "r"]
 
 tupleToExpr :: TTermDefinition (Py.Tuple -> Expr)
 tupleToExpr = def "tupleToExpr" $

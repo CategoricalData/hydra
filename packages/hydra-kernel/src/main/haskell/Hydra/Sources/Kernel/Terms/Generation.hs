@@ -580,10 +580,15 @@ moduleToSourceModule = define "moduleToSourceModule" $
   -- The module type namespace
   "modTypeNs" <~ (wrap _Namespace (string "hydra.packaging") :: TTerm Namespace) $
   -- Create binding: module_ = <encoded Module term>
+  -- The binding is statically typed as hydra.packaging.Module so inference can
+  -- skip re-deriving the (large) term's type from scratch.
   "moduleDef" <~ Packaging.definitionTerm (Packaging.termDefinition
     (wrap _Name (Packaging.unNamespace (var "sourceNs") ++ (string ".module_")))
     (encoderFor _Module @@ var "m")
-    nothing) $
+    (just (Core.typeScheme
+      (list ([] :: [TTerm Name]))
+      (Core.typeVariable (wrap _Name (string "hydra.packaging.Module")))
+      nothing))) $
   Packaging.module_
     (just $ (string "Source module for ") ++ Packaging.unNamespace (Packaging.moduleNamespace $ var "m"))
     (var "sourceNs")
