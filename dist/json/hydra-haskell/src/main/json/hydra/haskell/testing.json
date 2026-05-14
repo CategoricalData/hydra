@@ -1030,15 +1030,21 @@
                                     "name": "actual_",
                                     "term": {
                                       "application": {
-                                        "argument": {"variable": "universal"},
-                                        "function": {"project": {"field": "actual", "typeName": "hydra.testing.UniversalTestCase"}}}},
+                                        "argument": {"unit": {}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "universal"},
+                                            "function": {"project": {"field": "actual", "typeName": "hydra.testing.UniversalTestCase"}}}}}},
                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "expected_",
                                     "term": {
                                       "application": {
-                                        "argument": {"variable": "universal"},
-                                        "function": {"project": {"field": "expected", "typeName": "hydra.testing.UniversalTestCase"}}}},
+                                        "argument": {"unit": {}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "universal"},
+                                            "function": {"project": {"field": "expected", "typeName": "hydra.testing.UniversalTestCase"}}}}}},
                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                 "body": {
                                   "typeApplication": {

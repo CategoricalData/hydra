@@ -64,11 +64,12 @@ Require hydra.test.variables.
    Test evaluation
    ----------------------------------------------------------------- *)
 
-(* Run a UniversalTestCase: actual and expected are already strings. *)
+(* Run a UniversalTestCase: actual and expected are unit-thunks (Hydra `\_. body`,
+   emitted as `unit -> string` in Coq). Apply each to tt to obtain the string. For #311. *)
 Definition run_universal_test_case (tc : UniversalTestCase) : bool :=
   String.eqb
-    (universalTestCase_actual tc)
-    (universalTestCase_expected tc).
+    (universalTestCase_actual tc tt)
+    (universalTestCase_expected tc tt).
 
 Definition run_test_case (tc : TestCase) : bool :=
   match tc with

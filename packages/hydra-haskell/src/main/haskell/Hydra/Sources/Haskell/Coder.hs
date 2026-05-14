@@ -238,10 +238,10 @@ constructModule = haskellCoderDefinition "constructModule" $
         "hidden">: Pairs.second $ var "triple",
         "spec">: Logic.ifElse (Lists.null $ var "hidden")
           nothing
-          (just $ inject H._SpecImport H._SpecImport_hiding $ Lists.map ("n" ~> record H._ImportExportSpec [
-            H._ImportExportSpec_modifier>>: nothing,
-            H._ImportExportSpec_name>>: HaskellUtilsSource.simpleName @@ var "n",
-            H._ImportExportSpec_subspec>>: nothing]) (var "hidden"))] $
+          (just $ inject H._ImportSpec H._ImportSpec_hiding $ Lists.map ("n" ~> record H._NamedImportExport [
+            H._NamedImportExport_modifier>>: nothing,
+            H._NamedImportExport_name>>: HaskellUtilsSource.simpleName @@ var "n",
+            H._NamedImportExport_subspec>>: nothing]) (var "hidden"))] $
         record H._Import [
           H._Import_qualified>>: Maybes.isJust $ var "malias",
           H._Import_module>>: wrap H._ModuleName $ var "name",
@@ -531,9 +531,9 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
             H._FieldUpdate_value>>: var "hft"],
           "typeName">: HaskellUtilsSource.elementReference @@ var "namespaces" @@ var "sname"] $
           "updates" <<~ Eithers.mapList (var "toFieldUpdate") (var "fields") $
-          right $ inject H._Expression H._Expression_constructRecord $ record H._ConstructRecordExpression [
-            H._ConstructRecordExpression_name>>: var "typeName",
-            H._ConstructRecordExpression_fields>>: var "updates"],
+          right $ inject H._Expression H._Expression_constructRecord $ record H._RecordExpression [
+            H._RecordExpression_name>>: var "typeName",
+            H._RecordExpression_fields>>: var "updates"],
       _Term_set>>: "s" ~> Logic.ifElse (Sets.null $ var "s")
         (right $ HaskellUtilsSource.hsvar @@ string "S.empty")
         (var "nonemptySet" @@ var "s"),
@@ -679,9 +679,9 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
         _TypeClass_equality>>: constant $ string "Eq",
         _TypeClass_ordering>>: constant $ string "Ord"],
       "htype">: inject H._Type H._Type_variable $ HaskellUtilsSource.rawName @@ (Core.unName $ var "name")] $
-      inject H._Assertion H._Assertion_class $ record H._ClassAssertion [
-        H._ClassAssertion_name>>: var "hname",
-        H._ClassAssertion_types>>: list [var "htype"]],
+      inject H._Constraint H._Constraint_class $ record H._ClassConstraint [
+        H._ClassConstraint_name>>: var "hname",
+        H._ClassConstraint_types>>: list [var "htype"]],
     "assertPairs">: Lists.concat $ Lists.map (var "toPairs") (Maps.toList $ var "classes"),
     "toPairs">: "mapEntry" ~> lets [
       "name">: Pairs.first $ var "mapEntry",
@@ -694,11 +694,11 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
         (right $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
           "hassert">: Logic.ifElse (Equality.equal (Lists.length $ var "encoded") (int32 1))
-            (Maybes.fromMaybe (inject H._Assertion H._Assertion_tuple $ var "encoded") (Lists.maybeHead $ var "encoded"))
-            (inject H._Assertion H._Assertion_tuple $ var "encoded")] $
-          right $ inject H._Type H._Type_ctx $ record H._ContextType [
-            H._ContextType_ctx>>: var "hassert",
-            H._ContextType_type>>: var "htyp"])
+            (Maybes.fromMaybe (inject H._Constraint H._Constraint_tuple $ var "encoded") (Lists.maybeHead $ var "encoded"))
+            (inject H._Constraint H._Constraint_tuple $ var "encoded")] $
+          right $ inject H._Type H._Type_ctx $ record H._ConstrainedType [
+            H._ConstrainedType_ctx>>: var "hassert",
+            H._ConstrainedType_type>>: var "htyp"])
 
 extendMetaForTerm :: TTermDefinition (HE.HaskellModuleMetadata -> Term -> HE.HaskellModuleMetadata)
 extendMetaForTerm = haskellCoderDefinition "extendMetaForTerm" $
@@ -797,23 +797,21 @@ moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Packaging.moduleNamespace $ var "mod")] $
   right $ Maps.singleton (var "filepath") (var "s")
 
-nameDecls :: TTermDefinition (HaskellNamespaces -> Name -> Type -> [H.DeclarationWithComments])
+nameDecls :: TTermDefinition (HaskellNamespaces -> Name -> Type -> [H.Declaration])
 nameDecls = haskellCoderDefinition "nameDecls" $
   doc "Generate Haskell declarations for type and field name constants" $
   "namespaces" ~> "name" ~> "typ" ~> lets [
     "nm">: Core.unName $ var "name",
     "toDecl">: "n" ~> "pair" ~> lets [
       "k">: Pairs.first $ var "pair",
-      "v">: Pairs.second $ var "pair",
-      "decl">: inject H._Declaration H._Declaration_valueBinding $ inject H._ValueBinding H._ValueBinding_simple $ record H._SimpleValueBinding [
+      "v">: Pairs.second $ var "pair"] $
+      inject H._Declaration H._Declaration_valueBinding $ inject H._ValueBinding H._ValueBinding_simple $ record H._SimpleValueBinding [
         H._SimpleValueBinding_pattern>>: HaskellUtilsSource.applicationPattern @@ (HaskellUtilsSource.simpleName @@ var "k") @@ list ([] :: [TTerm H.Pattern]),
         H._SimpleValueBinding_rhs>>: wrap H._RightHandSide $ inject H._Expression H._Expression_application $ record H._ApplicationExpression [
           H._ApplicationExpression_function>>: inject H._Expression H._Expression_variable $ HaskellUtilsSource.elementReference @@ var "namespaces" @@ var "n",
           H._ApplicationExpression_argument>>: inject H._Expression H._Expression_literal $ inject H._Literal H._Literal_string $ var "v"],
-        H._SimpleValueBinding_localBindings>>: nothing]] $
-      record H._DeclarationWithComments [
-        H._DeclarationWithComments_body>>: var "decl",
-        H._DeclarationWithComments_comments>>: nothing],
+        H._SimpleValueBinding_localBindings>>: nothing,
+        H._SimpleValueBinding_comments>>: nothing],
     "nameDecl">: pair (constantForTypeName @@ var "name") (var "nm"),
     "fieldDecls">: Lists.map (var "toConstant") (Lexical.fieldsOf @@ var "typ"),
     "toConstant">: "fieldType" ~> lets [
@@ -821,7 +819,7 @@ nameDecls = haskellCoderDefinition "nameDecls" $
       pair (constantForFieldName @@ var "name" @@ var "fname") (Core.unName $ var "fname")] $
     Logic.ifElse (useCoreImport)
       (Lists.cons (var "toDecl" @@ Core.nameLift _Name @@ var "nameDecl") (Lists.map (var "toDecl" @@ Core.nameLift _Name) (var "fieldDecls")))
-      (list ([] :: [TTerm H.DeclarationWithComments]))
+      (list ([] :: [TTerm H.Declaration]))
 
 setMetaUsesByteString :: TTermDefinition (Bool -> HE.HaskellModuleMetadata -> HE.HaskellModuleMetadata)
 setMetaUsesByteString = haskellCoderDefinition "setMetaUsesByteString" $
@@ -871,7 +869,7 @@ setMetaUsesSet = haskellCoderDefinition "setMetaUsesSet" $
         project HE._HaskellModuleMetadata HE._HaskellModuleMetadata_usesMap @@ var "m",
       HE._HaskellModuleMetadata_usesSet>>: var "b"]
 
-toDataDeclaration :: TTermDefinition (HaskellNamespaces -> TermDefinition -> Context -> Graph -> Either Error H.DeclarationWithComments)
+toDataDeclaration :: TTermDefinition (HaskellNamespaces -> TermDefinition -> Context -> Graph -> Either Error H.Declaration)
 toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   doc "Convert a Hydra term definition to a Haskell declaration with comments" $
   "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
@@ -901,7 +899,8 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
                   var "rewriteValueBinding" @@ (inject H._ValueBinding H._ValueBinding_simple $ record H._SimpleValueBinding [
                     H._SimpleValueBinding_pattern>>: var "newPattern",
                     H._SimpleValueBinding_rhs>>: var "newRhs",
-                    H._SimpleValueBinding_localBindings>>: var "bindings"])]]],
+                    H._SimpleValueBinding_localBindings>>: var "bindings",
+                    H._SimpleValueBinding_comments>>: nothing])]]],
     "toDecl">: "comments" ~> "hname'" ~> "term'" ~> "bindings" ~>
       cases _Term (Strip.deannotateTerm @@ var "term'")
         (Just $
@@ -919,10 +918,9 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
            H._TypedBinding_typeSignature>>: record H._TypeSignature [
              H._TypeSignature_name>>: var "hname'",
              H._TypeSignature_type>>: var "htype"],
-           H._TypedBinding_valueBinding>>: var "rewriteValueBinding" @@ var "vb"]] $
-          right $ record H._DeclarationWithComments [
-            H._DeclarationWithComments_body>>: var "decl",
-            H._DeclarationWithComments_comments>>: var "comments"]) [
+           H._TypedBinding_valueBinding>>: var "rewriteValueBinding" @@ var "vb",
+           H._TypedBinding_comments>>: var "comments"]] $
+          right $ var "decl") [
         _Term_let>>: "letTerm" ~> lets [
           -- For let terms, encode each binding's term directly
           "lbindings">: Core.letBindings $ var "letTerm",
@@ -942,7 +940,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
 
 -- | Simplified version of toTypeDeclarations that works with Name and Type directly
 -- This is used with the new Definition-based API
-toTypeDeclarationsFrom :: TTermDefinition (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either Error [H.DeclarationWithComments])
+toTypeDeclarationsFrom :: TTermDefinition (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either Error [H.Declaration])
 toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
   doc "Convert a Hydra type definition to Haskell declarations" $
   "namespaces" ~> "elementName" ~> "typ" ~> "cx" ~> "g" ~> lets [
@@ -963,17 +961,15 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
     "newtypeCons">: "tname" ~> "typ'" ~> lets [
       "hname0">: HaskellUtilsSource.simpleName @@ (HaskellUtilsSource.newtypeAccessorName @@ var "tname")] $
       "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" @@ var "cx" @@ var "g" $ lets [
-      "hfield">: record H._FieldWithComments [
-        H._FieldWithComments_field>>: record H._Field [
-          H._Field_name>>: var "hname0",
-          H._Field_type>>: var "htype"],
-        H._FieldWithComments_comments>>: nothing],
+      "hfield">: record H._Field [
+        H._Field_name>>: var "hname0",
+        H._Field_type>>: var "htype",
+        H._Field_comments>>: nothing],
       "constructorName">: HaskellUtilsSource.simpleName @@ (Names.localNameOf @@ var "tname")] $
-      right $ record H._ConstructorWithComments [
-        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
-          H._RecordConstructor_name>>: var "constructorName",
-          H._RecordConstructor_fields>>: list [var "hfield"]],
-        H._ConstructorWithComments_comments>>: nothing],
+      right $ inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
+        H._RecordConstructor_name>>: var "constructorName",
+        H._RecordConstructor_fields>>: list [var "hfield"],
+        H._RecordConstructor_comments>>: nothing],
     "recordCons">: "lname'" ~> "fields" ~> lets [
       "toField">: "fieldType" ~> lets [
         "fname">: Core.fieldTypeName $ var "fieldType",
@@ -983,17 +979,15 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
           (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
         "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
         "comments" <<~ Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "ftype" $
-        right $ record H._FieldWithComments [
-          H._FieldWithComments_field>>: record H._Field [
-            H._Field_name>>: var "hname'",
-            H._Field_type>>: var "htype"],
-          H._FieldWithComments_comments>>: var "comments"]] $
+        right $ record H._Field [
+          H._Field_name>>: var "hname'",
+          H._Field_type>>: var "htype",
+          H._Field_comments>>: var "comments"]] $
       "hFields" <<~ Eithers.mapList (var "toField") (var "fields") $
-      right $ record H._ConstructorWithComments [
-        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
-          H._RecordConstructor_name>>: HaskellUtilsSource.simpleName @@ var "lname'",
-          H._RecordConstructor_fields>>: var "hFields"],
-        H._ConstructorWithComments_comments>>: nothing],
+      right $ inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
+        H._RecordConstructor_name>>: HaskellUtilsSource.simpleName @@ var "lname'",
+        H._RecordConstructor_fields>>: var "hFields",
+        H._RecordConstructor_comments>>: nothing],
     "unionCons">: "boundNames'" ~> "lname'" ~> "fieldType" ~> lets [
       "fname">: Core.fieldTypeName $ var "fieldType",
       "ftype">: Core.fieldTypeType $ var "fieldType",
@@ -1010,60 +1004,60 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
         (right $ list ([] :: [TTerm H.CaseRhs])) $
         "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
           right $ list [var "htype"]) $
-      right $ record H._ConstructorWithComments [
-        H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_ordinary $ record H._OrdinaryConstructor [
-          H._OrdinaryConstructor_name>>: HaskellUtilsSource.simpleName @@ var "nm",
-          H._OrdinaryConstructor_fields>>: var "typeList"],
-        H._ConstructorWithComments_comments>>: var "comments"]] $
+      right $ inject H._Constructor H._Constructor_ordinary $ record H._PositionalConstructor [
+        H._PositionalConstructor_name>>: HaskellUtilsSource.simpleName @@ var "nm",
+        H._PositionalConstructor_fields>>: var "typeList",
+        H._PositionalConstructor_comments>>: var "comments"]] $
       "isSer" <<~ Predicates.isSerializableByName @@ var "cx" @@ var "g" @@ var "elementName" $ lets [
-      "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
+      "deriv">: wrap H._DerivingClause $ Logic.ifElse (var "isSer")
         (Lists.map (HaskellUtilsSource.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
         (list ([] :: [TTerm H.Name])),
       "unpackResult">: HaskellUtilsSource.unpackForallType @@ var "typ",
       "vars">: Pairs.first $ var "unpackResult",
       "t'">: Pairs.second $ var "unpackResult",
       "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
+      "comments" <<~ Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ" $
       "decl" <<~ (cases _Type (Strip.deannotateType @@ var "t'")
         (Just $ "htype" <<~ (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g") $
-          right $ inject H._Declaration H._Declaration_type $ record H._TypeDeclaration [
-            H._TypeDeclaration_name>>: var "hd",
-            H._TypeDeclaration_type>>: var "htype"]) [
+          right $ inject H._Declaration H._Declaration_type $ record H._TypeSynonymDeclaration [
+            H._TypeSynonymDeclaration_name>>: var "hd",
+            H._TypeSynonymDeclaration_type>>: var "htype",
+            H._TypeSynonymDeclaration_comments>>: var "comments"]) [
         _Type_record>>: "rt" ~>
           "cons" <<~ (var "recordCons" @@ var "lname" @@ var "rt") $
           right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
-            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
+            H._DataDeclaration_keyword>>: injectUnit H._DataKeyword H._DataKeyword_data,
+            H._DataDeclaration_context>>: list ([] :: [TTerm H.Constraint]),
             H._DataDeclaration_head>>: var "hd",
             H._DataDeclaration_constructors>>: list [var "cons"],
-            H._DataDeclaration_deriving>>: list [var "deriv"]],
+            H._DataDeclaration_deriving>>: list [var "deriv"],
+            H._DataDeclaration_comments>>: var "comments"],
         _Type_union>>: "rt" ~>
           "cons" <<~ Eithers.mapList (var "unionCons" @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "lname") (var "rt") $
           right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-            H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
-            H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
+            H._DataDeclaration_keyword>>: injectUnit H._DataKeyword H._DataKeyword_data,
+            H._DataDeclaration_context>>: list ([] :: [TTerm H.Constraint]),
             H._DataDeclaration_head>>: var "hd",
             H._DataDeclaration_constructors>>: var "cons",
-            H._DataDeclaration_deriving>>: list [var "deriv"]],
+            H._DataDeclaration_deriving>>: list [var "deriv"],
+            H._DataDeclaration_comments>>: var "comments"],
         _Type_wrap>>: "wrapped" ~>
           "cons" <<~ var "newtypeCons" @@ var "elementName" @@ var "wrapped" $
             right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
-              H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_newtype,
-              H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
+              H._DataDeclaration_keyword>>: injectUnit H._DataKeyword H._DataKeyword_newtype,
+              H._DataDeclaration_context>>: list ([] :: [TTerm H.Constraint]),
               H._DataDeclaration_head>>: var "hd",
               H._DataDeclaration_constructors>>: list [var "cons"],
-              H._DataDeclaration_deriving>>: list [var "deriv"]]]) $
-      "comments" <<~ Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ" $
+              H._DataDeclaration_deriving>>: list [var "deriv"],
+              H._DataDeclaration_comments>>: var "comments"]]) $
       "tdecls" <<~ (Logic.ifElse (includeTypeDefinitions)
         ("decl'" <<~ typeDecl @@ var "namespaces" @@ var "elementName" @@ var "typ" @@ var "cx" @@ var "g" $
           right $ list [var "decl'"])
-        (right $ list ([] :: [TTerm H.DeclarationWithComments]))) $ lets [
-      "mainDecl">: record H._DeclarationWithComments [
-        H._DeclarationWithComments_body>>: var "decl",
-        H._DeclarationWithComments_comments>>: var "comments"],
+        (right $ list ([] :: [TTerm H.Declaration]))) $ lets [
       "nameDecls'">: nameDecls @@ var "namespaces" @@ var "elementName" @@ var "typ"] $
-      right $ Lists.concat $ list [list [var "mainDecl"], var "nameDecls'", var "tdecls"]
+      right $ Lists.concat $ list [list [var "decl"], var "nameDecls'", var "tdecls"]
 
-typeDecl :: TTermDefinition (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either Error H.DeclarationWithComments)
+typeDecl :: TTermDefinition (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either Error H.Declaration)
 typeDecl = haskellCoderDefinition "typeDecl" $
   doc "Generate a Haskell declaration for a type definition constant" $
   "namespaces" ~> "name" ~> "typ" ~> "cx" ~> "g" ~> lets [
@@ -1110,10 +1104,9 @@ typeDecl = haskellCoderDefinition "typeDecl" $
     "decl">: inject H._Declaration H._Declaration_valueBinding $ inject H._ValueBinding H._ValueBinding_simple $ record H._SimpleValueBinding [
       H._SimpleValueBinding_pattern>>: var "pat",
       H._SimpleValueBinding_rhs>>: var "rhs",
-      H._SimpleValueBinding_localBindings>>: nothing]] $
-    right $ record H._DeclarationWithComments [
-      H._DeclarationWithComments_body>>: var "decl",
-      H._DeclarationWithComments_comments>>: nothing]
+      H._SimpleValueBinding_localBindings>>: nothing,
+      H._SimpleValueBinding_comments>>: nothing]] $
+    right $ var "decl"
 
 -- | Convert TypeScheme constraints to the Map format used by encodeTypeWithClassAssertions.
 -- TypeScheme constraints are Maybe (Map Name TypeVariableMetadata), where TypeVariableMetadata

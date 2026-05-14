@@ -4,6 +4,7 @@ import hydra.core.*
 import hydra.graph.{Graph, Primitive}
 import hydra.testing.*
 import hydra.lib.Libraries
+import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funsuite.AnyFunSuite
 
 /**
@@ -12,13 +13,32 @@ import org.scalatest.funsuite.AnyFunSuite
  * All test cases are now UniversalTestCase instances (string comparison).
  * Legacy per-type handlers have been removed.
  */
-class TestSuiteRunner extends AnyFunSuite {
+class TestSuiteRunner extends AnyFunSuite with BeforeAndAfterAll {
 
   private val allTests: TestGroup = hydra.test.testSuite.allTests
 
+  // Benchmark support: when HYDRA_BENCHMARK_OUTPUT is set, accumulate per-group
+  // elapsed times by bracketing each group's tests with sentinel tests that
+  // start/stop a timer keyed by Hydra-path. ScalaTest runs registered tests in
+  // registration order, so sentinels reliably surround the group's real tests.
+  // Mirrors the Java head's pattern (000_TIMER_START / 999_TIMER_END).
+  private val benchmarkOutput: Option[String] = Option(System.getenv("HYDRA_BENCHMARK_OUTPUT"))
+  private val benchmarkTimers = _root_.scala.collection.mutable.Map.empty[String, Long]
+  private val benchmarkResults = _root_.scala.collection.mutable.Map.empty[String, Double]
+
   registerTests(allTests, allTests.name)
 
+  override def afterAll(): Unit = {
+    benchmarkOutput.foreach(writeBenchmarkJson)
+    super.afterAll()
+  }
+
   private def registerTests(group: TestGroup, path: String): Unit = {
+    // Timer start sentinel
+    if (benchmarkOutput.isDefined) {
+      test(path + "/000_TIMER_START") { benchmarkTimers += (path -> System.nanoTime()) }
+    }
+
     for (tc <- group.cases) {
       val name = tc.name + tc.description.map(d => ": " + d).getOrElse("")
       val fullPath = path + "/" + name
@@ -26,6 +46,15 @@ class TestSuiteRunner extends AnyFunSuite {
     }
     for (subgroup <- group.subgroups)
       registerTests(subgroup, path + "/" + subgroup.name)
+
+    // Timer stop sentinel
+    if (benchmarkOutput.isDefined) {
+      test(path + "/999_TIMER_END") {
+        benchmarkTimers.get(path).foreach { start =>
+          benchmarkResults += (path -> (System.nanoTime() - start) / 1_000_000.0)
+        }
+      }
+    }
   }
 
   private def shouldSkip(tc: TestCaseWithMetadata): Boolean =
@@ -34,10 +63,80 @@ class TestSuiteRunner extends AnyFunSuite {
   private def registerTestCase(name: String, tc: TestCaseWithMetadata): Unit = {
     tc.`case` match {
       case TestCase.universal(uc) =>
-        test(name) { assert(uc.expected == uc.actual) }
+        // For #311: actual and expected are unit-thunks; force them inside the test
+        // block so ScalaTest's per-test timer covers expression evaluation, rather
+        // than firing them at allTests build time.
+        test(name) { assert(uc.expected(()) == uc.actual(())) }
       case _ =>
         test(name) { cancel("Unhandled test case type") }
     }
+  }
+
+  // ---- Benchmark JSON writer (matches the JSON shape used by other heads) ----
+
+  private def writeBenchmarkJson(outputPath: String): Unit = {
+    val json = buildBenchmarkJson(allTests)
+    val writer = new _root_.java.io.FileWriter(outputPath)
+    try writer.write(json)
+    finally writer.close()
+    println("Benchmark results written to " + outputPath)
+  }
+
+  private def buildBenchmarkJson(root: TestGroup): String = {
+    val sb = new StringBuilder
+    sb.append("{\n")
+    sb.append("  \"metadata\": {\n")
+    sb.append("    \"language\": \"scala\"\n")
+    sb.append("  },\n")
+    sb.append("  \"groups\": [\n")
+    sb.append(renderGroup("    ", root.name, root))
+    sb.append("\n  ],\n")
+    val (passed, skipped) = countCases(root)
+    val totalTime = benchmarkResults.getOrElse(root.name, 0.0)
+    sb.append("  \"summary\": {\n")
+    sb.append(s"""    "totalPassed": $passed,\n""")
+    sb.append("    \"totalFailed\": 0,\n")
+    sb.append(s"""    "totalSkipped": $skipped,\n""")
+    sb.append(s"""    "totalTimeMs": $totalTime\n""")
+    sb.append("  }\n")
+    sb.append("}\n")
+    sb.toString
+  }
+
+  private def renderGroup(indent: String, path: String, g: TestGroup): String = {
+    val sb = new StringBuilder
+    val timeMs = benchmarkResults.getOrElse(path, 0.0)
+    sb.append(indent).append("{\n")
+    sb.append(indent).append("  \"name\": ").append("\"").append(g.name).append("\",\n")
+    sb.append(indent).append("  \"time_ms\": ").append(timeMs).append(",\n")
+    sb.append(indent).append("  \"subgroups\": [")
+    if (g.subgroups.isEmpty) {
+      sb.append("]")
+    } else {
+      sb.append("\n")
+      val parts = g.subgroups.map { sub =>
+        renderGroup(indent + "    ", path + "/" + sub.name, sub)
+      }
+      sb.append(parts.mkString(",\n"))
+      sb.append("\n").append(indent).append("  ]")
+    }
+    sb.append("\n").append(indent).append("}")
+    sb.toString
+  }
+
+  private def countCases(g: TestGroup): (Int, Int) = {
+    var passed = 0
+    var skipped = 0
+    for (c <- g.cases) {
+      if (c.tags.contains("disabled") || c.tags.contains("disabledForPython")) skipped += 1
+      else passed += 1
+    }
+    for (sub <- g.subgroups) {
+      val (p, s) = countCases(sub)
+      passed += p
+      skipped += s
+    }
+    (passed, skipped)
   }
 }
 

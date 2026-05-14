@@ -555,6 +555,7 @@ numberToExpr :: Syntax.Number -> Ast.Expr
 numberToExpr num =
     case num of
       Syntax.NumberFloat v0 -> Serialization.cst (pythonFloatLiteralText (Literals.showFloat64 v0))
+      Syntax.NumberImaginary v0 -> Serialization.cst (Strings.cat2 (pythonFloatLiteralText (Literals.showFloat64 v0)) "j")
       Syntax.NumberInteger v0 -> Serialization.cst (Literals.showBigint v0)
 -- | Serialize an or pattern
 orPatternToExpr :: Syntax.OrPattern -> Ast.Expr
@@ -782,17 +783,30 @@ statementToExpr stmt =
       Syntax.StatementAnnotated v0 -> annotatedStatementToExpr v0
       Syntax.StatementSimple v0 -> Serialization.newlineSep (Lists.map simpleStatementToExpr v0)
       Syntax.StatementCompound v0 -> compoundStatementToExpr v0
+-- | Serialize a Python string prefix to its source-form characters
+stringPrefixToText :: Syntax.StringPrefix -> String
+stringPrefixToText p =
+    case p of
+      Syntax.StringPrefixRaw -> "r"
+      Syntax.StringPrefixBytes -> "b"
+      Syntax.StringPrefixRawBytes -> "rb"
+      Syntax.StringPrefixUnicode -> "u"
 -- | Serialize a Python string literal
 stringToExpr :: Syntax.String_ -> Ast.Expr
 stringToExpr s =
 
       let content = Syntax.stringValue s
+          prefix = Maybes.maybe "" stringPrefixToText (Syntax.stringPrefix s)
           style = Syntax.stringQuoteStyle s
       in case style of
-        Syntax.QuoteStyleSingle -> Serialization.cst (escapePythonString False content)
-        Syntax.QuoteStyleDouble -> Serialization.cst (escapePythonString True content)
-        Syntax.QuoteStyleTriple -> Serialization.noSep [
-          Serialization.cst "r\"\"\"",
+        Syntax.QuoteStyleSingle -> Serialization.cst (Strings.cat2 prefix (escapePythonString False content))
+        Syntax.QuoteStyleDouble -> Serialization.cst (Strings.cat2 prefix (escapePythonString True content))
+        Syntax.QuoteStyleTripleSingle -> Serialization.noSep [
+          Serialization.cst (Strings.cat2 prefix "'''"),
+          (Serialization.cst content),
+          (Serialization.cst "'''")]
+        Syntax.QuoteStyleTripleDouble -> Serialization.noSep [
+          Serialization.cst (Strings.cat2 prefix "\"\"\""),
           (Serialization.cst content),
           (Serialization.cst "\"\"\"")]
 -- | Serialize a subject expression

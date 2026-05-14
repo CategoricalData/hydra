@@ -749,9 +749,12 @@ targetPythonVersion = def "targetPythonVersion" $
 -- | Create a triple-quoted string expression
 tripleQuotedString :: TTermDefinition (String -> Py.Expression)
 tripleQuotedString = def "tripleQuotedString" $
-  doc "Create a triple-quoted string expression" $
+  doc "Create a raw triple-double-quoted string expression (Python docstring convention). \
+      \Raw-prefixed so embedded backslashes (e.g. lambda notation `\\x.e`) aren't interpreted \
+      \as escape sequences by Python's string parser." $
   lambda "s" $
-    stringToPyExpression @@ PyDsl.quoteStyleTriple @@ var "s"
+    pyAtomToPyExpression @@ (PyDsl.atomString $
+      PyDsl.prefixedString_ PyDsl.stringPrefixRaw (var "s") PyDsl.quoteStyleTripleDouble)
 
 -- | Generate a type alias statement using PEP 695 syntax (Python 3.12+)
 typeAliasStatement :: TTermDefinition (Py.Name -> [Py.TypeParameter] -> Maybe String -> Py.Expression -> Py.Statement)

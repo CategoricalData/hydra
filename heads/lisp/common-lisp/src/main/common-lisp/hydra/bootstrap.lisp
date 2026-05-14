@@ -16,6 +16,14 @@
 ;; Without this setting, SBCL reads them as single-float, losing precision.
 (setf *read-default-float-format* 'double-float)
 
+;; Disable IEEE-754 floating-point traps so NaN- and overflow-producing
+;; operations return quiet NaN/Inf instead of raising. Linux SBCL (and
+;; native arm64 macOS SBCL 2.6+) leaves these enabled by default, so the
+;; same operations raise FLOATING-POINT-INVALID-OPERATION when the kernel
+;; evaluates expressions like (sqrt -1) or (log 0) during test generation.
+;; Hydra's IEEE-754 semantics require quiet NaN/Inf.
+#+sbcl (sb-int:set-floating-point-modes :traps nil)
+
 ;; Parse command-line arguments
 ;; With --load, SBCL puts everything after -- in *posix-argv*
 (defvar *bootstrap-args*

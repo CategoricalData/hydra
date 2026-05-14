@@ -166,9 +166,19 @@ see [claude/cross-worktree-messages.md](claude/cross-worktree-messages.md).
 
 After modifying Haskell sources, regenerate downstream implementations.
 Use `./bin/sync.sh --hosts <H1,H2,...> --targets <T1,T2,...>` (or
-`--no-tests` to skip target-language tests).
+`--no-tests` to skip the Haskell-side `stack test` step).
 For the haskell/java/python bootstrapping triad, `./bin/sync-default.sh` is shorthand.
 Per-language wrappers (`bin/sync-java.sh`, `bin/sync-python.sh`, etc.) cover host == target.
+
+`bin/sync.sh` regenerates code into every target language but does **not** run
+the target-language test suites; only Haskell `stack test` is invoked
+(via `sync-haskell.sh`'s Step 6). To validate a target's runtime,
+run that head's own `bin/run-tests.sh` or `bin/test-distribution.sh`
+(e.g. `heads/python/bin/test-distribution.sh hydra-kernel`,
+`packages/hydra-lisp/bin/run-tests.sh scheme`). The bootstrap demo
+(`bin/run-bootstrapping-demo.sh`) is a separate, heavier validation
+that exercises cross-host code generation plus tests.
+
 See [docs/recipes/code-generation.md](docs/recipes/code-generation.md)
 and [docs/troubleshooting.md](docs/troubleshooting.md) (for stale-dist and cache-hit issues).
 
@@ -198,6 +208,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Concepts (System F, design) | [Concepts wiki](https://github.com/CategoricalData/hydra/wiki/Concepts) |
 | Property graphs | [Property graphs wiki](https://github.com/CategoricalData/hydra/wiki/Property-graphs) / [hydra-pg README](packages/hydra-pg/README.md) |
 | RDF / SHACL | [RDF wiki](https://github.com/CategoricalData/hydra/wiki/RDF) / [hydra-rdf README](packages/hydra-rdf/README.md) |
+| Inference benchmarks | [hydra-bench README](packages/hydra-bench/README.md) — synthetic workloads + `bin/run-inference-bench.sh` |
 | Release process | [Release process wiki](https://github.com/CategoricalData/hydra/wiki/Release-process) |
 | Demos | [docs/demos.md](docs/demos.md) |
 | Recipes index (full list) | [docs/recipes/index.md](docs/recipes/index.md) |
@@ -240,6 +251,8 @@ give the user a brief status update approximately every 10 minutes.
 | `/sync-scala()` | Run `bin/sync-scala.sh`. |
 | `/sync-go()` | Run `bin/sync-go.sh` — generates kernel into `dist/go/`. Go is a "head bud"; only `hydra-kernel` is targeted (no `hydra-pg`/`hydra-rdf`), and Phase 4 host=go rows are skipped. |
 | `/sync-clojure()` etc. | Run `bin/sync-<dialect>.sh` for clojure / common-lisp / emacs-lisp / scheme. |
+| `/sync-bench()` | Run `bin/sync-bench.sh` — regenerate the hydra-bench package (synthetic inference workloads) for the default haskell/java/python hosts. Pass `--hosts H,...` to scope. Opt-in: the default sync does NOT touch hydra-bench. |
+| `/inference-bench()` | Run `bin/run-inference-bench.sh` — drive the cross-host inference benchmark. The runner now invokes `sync-bench.sh` automatically before measuring so the bench dist is always current. |
 
 ## Coding style (read the full guide!)
 

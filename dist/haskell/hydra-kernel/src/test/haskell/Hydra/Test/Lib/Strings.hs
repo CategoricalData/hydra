@@ -28,87 +28,87 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "basic concatenation",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat [
                   "one",
                   "two",
                   "three"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "onetwothree")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "onetwothree")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat [
                   "hello"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat [])),
-                Testing.universalTestCaseExpected = ((\s -> s) "")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat [])),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "with empty strings",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat [
                   "",
                   "one",
                   "",
                   ""])),
-                Testing.universalTestCaseExpected = ((\s -> s) "one")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "one")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all empty strings",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat [
                   "",
                   "",
                   "",
                   ""])),
-                Testing.universalTestCaseExpected = ((\s -> s) "")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode strings",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat [
                   "\241",
                   "\19990",
                   "\127757"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "\241\19990\127757")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\241\19990\127757")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "combining characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat [
                   "e",
                   "\769"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "e\769")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "e\769")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "control characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat [
                   "\n",
                   "\t",
                   "\r"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "\n\t\r")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\n\t\r")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "null character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat [
                   "hello",
                   "\NUL",
                   "world"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello\NULworld")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello\NULworld")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -119,50 +119,50 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "basic concatenation",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat2 "hello" "world")),
-                Testing.universalTestCaseExpected = ((\s -> s) "helloworld")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat2 "hello" "world")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "helloworld")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty first string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat2 "" "world")),
-                Testing.universalTestCaseExpected = ((\s -> s) "world")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat2 "" "world")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "world")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty second string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat2 "hello" "")),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat2 "hello" "")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "both empty strings",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat2 "" "")),
-                Testing.universalTestCaseExpected = ((\s -> s) "")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat2 "" "")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat2 "\241" "\19990")),
-                Testing.universalTestCaseExpected = ((\s -> s) "\241\19990")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat2 "\241" "\19990")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\241\19990")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "special characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat2 "\n" "\t")),
-                Testing.universalTestCaseExpected = ((\s -> s) "\n\t")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat2 "\n" "\t")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\n\t")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "null characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.cat2 "hello\NUL" "world")),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello\NULworld")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.cat2 "hello\NUL" "world")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello\NULworld")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -173,67 +173,67 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "basic ascii string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.fromList [
                   104,
                   101,
                   108,
                   108,
                   111])),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty code point list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.fromList [])),
-                Testing.universalTestCaseExpected = ((\s -> s) "")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.fromList [])),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.fromList [
                   97])),
-                Testing.universalTestCaseExpected = ((\s -> s) "a")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "a")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.fromList [
                   241,
                   19990,
                   127757])),
-                Testing.universalTestCaseExpected = ((\s -> s) "\241\19990\127757")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\241\19990\127757")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "combining character sequence",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.fromList [
                   101,
                   769])),
-                Testing.universalTestCaseExpected = ((\s -> s) "e\769")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "e\769")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "special characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.fromList [
                   10,
                   9,
                   13])),
-                Testing.universalTestCaseExpected = ((\s -> s) "\n\t\r")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\n\t\r")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "null character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.fromList [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.fromList [
                   104,
                   0,
                   105])),
-                Testing.universalTestCaseExpected = ((\s -> s) "h\NULi")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "h\NULi")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -244,74 +244,74 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "comma separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.intercalate "," [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.intercalate "," [
                   "one",
                   "two",
                   "three"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "one,two,three")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "one,two,three")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.intercalate "" [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.intercalate "" [
                   "a",
                   "b",
                   "c"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "abc")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "abc")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multi-character separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.intercalate " | " [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.intercalate " | " [
                   "A",
                   "B",
                   "C"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "A | B | C")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "A | B | C")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.intercalate "," [])),
-                Testing.universalTestCaseExpected = ((\s -> s) "")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.intercalate "," [])),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single item list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.intercalate "," [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.intercalate "," [
                   "only"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "only")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "only")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty strings in list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.intercalate "," [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.intercalate "," [
                   "",
                   "a",
                   ""])),
-                Testing.universalTestCaseExpected = ((\s -> s) ",a,")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) ",a,")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.intercalate "\127757" [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.intercalate "\127757" [
                   "link1",
                   "link2"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "link1\127757link2")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "link1\127757link2")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "newline separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.intercalate "\n" [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.intercalate "\n" [
                   "line1",
                   "line2"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "line1\nline2")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "line1\nline2")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -322,43 +322,43 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.length "")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 0)})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Strings.length "")),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 0)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.length "a")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 1)})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Strings.length "a")),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 1)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "basic word",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.length "hello")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 5)})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Strings.length "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 5)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.length "\241\19990\127757")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 3)})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Strings.length "\241\19990\127757")),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 3)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "combining character sequence",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.length "e\769")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 2)})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Strings.length "e\769")),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 2)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "special characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\n -> Literals.showInt32 n) (Strings.length "\n\t\r")),
-                Testing.universalTestCaseExpected = ((\n -> Literals.showInt32 n) 3)})),
+                Testing.universalTestCaseActual = (\_ -> (\n -> Literals.showInt32 n) (Strings.length "\n\t\r")),
+                Testing.universalTestCaseExpected = (\_ -> (\n -> Literals.showInt32 n) 3)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -369,16 +369,16 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single line",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "hello world")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "hello world")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "hello world"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "two lines",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "hello\nworld")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "hello\nworld")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "hello",
                   "world"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -386,8 +386,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "three lines",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "one\ntwo\nthree")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "one\ntwo\nthree")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "one",
                   "two",
                   "three"])})),
@@ -396,31 +396,31 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [])})),
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "just newline",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "\n")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "\n")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   ""])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "trailing newline",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "hello\n")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "hello\n")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "hello"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "leading newline",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "\nhello")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "\nhello")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "",
                   "hello"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -428,8 +428,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple consecutive newlines",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "a\n\nb")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "a\n\nb")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "a",
                   "",
                   "b"])})),
@@ -438,8 +438,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode content",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "\241\n\19990")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "\241\n\19990")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "\241",
                   "\19990"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -447,8 +447,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "tabs not split",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "a\tb\nc")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.lines "a\tb\nc")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "a\tb",
                   "c"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -461,111 +461,111 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "first character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 104))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 104))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "middle character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 108))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "last character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 111))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 111))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single character string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 97))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 97))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\241"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 241))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 241))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multi-byte unicode",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "\19990"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 19990))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 19990))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "second of combining pair",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "e\769"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 769))))))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 769))))))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "out of bounds",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "negative index",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-1))))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = (Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
+                Testing.universalTestCaseActual = (\_ -> Eithers.either (\e -> "<<eval error>>") (\t -> ShowCore.term t) (Reduction.reduceTerm TestGraph.testContext TestGraph.testGraph True (Core.TermApplication (Core.Application {
                   Core.applicationFunction = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.strings.maybeCharAt")),
                     Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
                   Core.applicationArgument = (Core.TermLiteral (Core.LiteralString ""))})))),
-                Testing.universalTestCaseExpected = (ShowCore.term (Core.TermMaybe Nothing))})),
+                Testing.universalTestCaseExpected = (\_ -> ShowCore.term (Core.TermMaybe Nothing))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -576,50 +576,50 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Strings.null "")),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) True)})),
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Strings.null "")),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) True)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Strings.null "a")),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Strings.null "a")),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "space",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Strings.null " ")),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Strings.null " ")),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode space",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Strings.null "\160")),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Strings.null "\160")),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "newline",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Strings.null "\n")),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Strings.null "\n")),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "null character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Strings.null "\NUL")),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Strings.null "\NUL")),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multi-character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\b -> Literals.showBoolean b) (Strings.null "hello")),
-                Testing.universalTestCaseExpected = ((\b -> Literals.showBoolean b) False)})),
+                Testing.universalTestCaseActual = (\_ -> (\b -> Literals.showBoolean b) (Strings.null "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\b -> Literals.showBoolean b) False)})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -630,8 +630,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "basic separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "ss" "Mississippi")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "ss" "Mississippi")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "Mi",
                   "i",
                   "ippi"])})),
@@ -640,8 +640,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single char separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn " " "one two three")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn " " "one two three")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "one",
                   "two",
                   "three"])})),
@@ -650,8 +650,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multi-char separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "  " "a  b  c")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "  " "a  b  c")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "a",
                   "b",
                   "c"])})),
@@ -660,16 +660,16 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "separator not found",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "x" "hello")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "x" "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "hello"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "separator at start",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "h" "hello")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "h" "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "",
                   "ello"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -677,8 +677,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "separator at end",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "o" "hello")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "o" "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "hell",
                   ""])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -686,8 +686,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "leading and trailing separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn " " " one two ")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn " " " one two ")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "",
                   "one",
                   "two",
@@ -697,8 +697,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "whole string as separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "Mississippi" "Mississippi")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "Mississippi" "Mississippi")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "",
                   ""])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -706,8 +706,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "consecutive separators",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn " " "a  b")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn " " "a  b")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "a",
                   "",
                   "b"])})),
@@ -716,8 +716,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple occurrences",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "l" "hello")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "l" "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "he",
                   "",
                   "o"])})),
@@ -726,8 +726,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "overlapping pattern",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "aa" "aaa")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "aa" "aaa")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "",
                   "a"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -735,8 +735,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "" "abc")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "" "abc")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "",
                   "a",
                   "b",
@@ -746,24 +746,24 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "separator on empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "x" "")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "x" "")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   ""])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "both empty",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "" "")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "" "")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   ""])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single char both",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "a" "a")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "a" "a")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "",
                   ""])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -771,8 +771,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "\19990" "hello\19990world")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "\19990" "hello\19990world")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "hello",
                   "world"])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -780,8 +780,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode content",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "," "\241,\19990,\127757")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "," "\241,\19990,\127757")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "\241",
                   "\19990",
                   "\127757"])})),
@@ -790,8 +790,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "newline separator",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "\n" "line1\nline2\nline3")),
-                Testing.universalTestCaseExpected = ((\xs -> Literals.showString (Strings.intercalate ", " xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) (Strings.splitOn "\n" "line1\nline2\nline3")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Literals.showString (Strings.intercalate ", " xs)) [
                   "line1",
                   "line2",
                   "line3"])})),
@@ -805,23 +805,23 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "")),
-                Testing.universalTestCaseExpected = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [])})),
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "a")),
-                Testing.universalTestCaseExpected = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "a")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
                   97])})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "basic word",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "hello")),
-                Testing.universalTestCaseExpected = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
                   104,
                   101,
                   108,
@@ -832,8 +832,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "\241\19990\127757")),
-                Testing.universalTestCaseExpected = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "\241\19990\127757")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
                   241,
                   19990,
                   127757])})),
@@ -842,8 +842,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "combining character sequence",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "e\769")),
-                Testing.universalTestCaseExpected = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "e\769")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
                   101,
                   769])})),
               Testing.testCaseWithMetadataDescription = Nothing,
@@ -851,8 +851,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "control characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "\n\t\r")),
-                Testing.universalTestCaseExpected = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "\n\t\r")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
                   10,
                   9,
                   13])})),
@@ -861,8 +861,8 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "null character",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "h\NULi")),
-                Testing.universalTestCaseExpected = ((\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
+                Testing.universalTestCaseActual = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) (Strings.toList "h\NULi")),
+                Testing.universalTestCaseExpected = (\_ -> (\xs -> Strings.intercalate ", " (Lists.map (\n -> Literals.showInt32 n) xs)) [
                   104,
                   0,
                   105])})),
@@ -876,50 +876,50 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "mixed case",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toLower "Hello World")),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello world")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toLower "Hello World")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello world")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all uppercase",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toLower "HELLO")),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toLower "HELLO")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all lowercase",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toLower "hello")),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toLower "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toLower "")),
-                Testing.universalTestCaseExpected = ((\s -> s) "")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toLower "")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "with numbers and punctuation",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toLower "Abc123, XYZ!")),
-                Testing.universalTestCaseExpected = ((\s -> s) "abc123, xyz!")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toLower "Abc123, XYZ!")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "abc123, xyz!")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "control characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toLower "\n\t\r")),
-                Testing.universalTestCaseExpected = ((\s -> s) "\n\t\r")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toLower "\n\t\r")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\n\t\r")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode accented chars",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toLower "\209\193\201\205\211\218")),
-                Testing.universalTestCaseExpected = ((\s -> s) "\241\225\233\237\243\250")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toLower "\209\193\201\205\211\218")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\241\225\233\237\243\250")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -930,50 +930,50 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "mixed case",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toUpper "hello World")),
-                Testing.universalTestCaseExpected = ((\s -> s) "HELLO WORLD")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toUpper "hello World")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "HELLO WORLD")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all lowercase",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toUpper "hello")),
-                Testing.universalTestCaseExpected = ((\s -> s) "HELLO")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toUpper "hello")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "HELLO")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all uppercase",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toUpper "HELLO")),
-                Testing.universalTestCaseExpected = ((\s -> s) "HELLO")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toUpper "HELLO")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "HELLO")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty string",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toUpper "")),
-                Testing.universalTestCaseExpected = ((\s -> s) "")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toUpper "")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "with numbers and punctuation",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toUpper "abc123, xyz!")),
-                Testing.universalTestCaseExpected = ((\s -> s) "ABC123, XYZ!")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toUpper "abc123, xyz!")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "ABC123, XYZ!")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "control characters",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toUpper "\n\t\r")),
-                Testing.universalTestCaseExpected = ((\s -> s) "\n\t\r")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toUpper "\n\t\r")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\n\t\r")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode accented chars",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.toUpper "\241\225\233\237\243\250")),
-                Testing.universalTestCaseExpected = ((\s -> s) "\209\193\201\205\211\218")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.toUpper "\241\225\233\237\243\250")),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\209\193\201\205\211\218")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -984,55 +984,55 @@ allTests =
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "multiple lines",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.unlines [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.unlines [
                   "one",
                   "two",
                   "three"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "one\ntwo\nthree\n")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "one\ntwo\nthree\n")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "single line",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.unlines [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.unlines [
                   "hello"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello\n")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello\n")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "empty list",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.unlines [])),
-                Testing.universalTestCaseExpected = ((\s -> s) "")})),
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.unlines [])),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "with empty lines",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.unlines [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.unlines [
                   "hello",
                   "",
                   "world"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "hello\n\nworld\n")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "hello\n\nworld\n")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "all empty lines",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.unlines [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.unlines [
                   "",
                   "",
                   ""])),
-                Testing.universalTestCaseExpected = ((\s -> s) "\n\n\n")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\n\n\n")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
               Testing.testCaseWithMetadataName = "unicode content",
               Testing.testCaseWithMetadataCase = (Testing.TestCaseUniversal (Testing.UniversalTestCase {
-                Testing.universalTestCaseActual = ((\s -> s) (Strings.unlines [
+                Testing.universalTestCaseActual = (\_ -> (\s -> s) (Strings.unlines [
                   "\241o\241o",
                   "\19990\30028"])),
-                Testing.universalTestCaseExpected = ((\s -> s) "\241o\241o\n\19990\30028\n")})),
+                Testing.universalTestCaseExpected = (\_ -> (\s -> s) "\241o\241o\n\19990\30028\n")})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

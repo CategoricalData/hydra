@@ -2979,6 +2979,25 @@
                                 "domain": {"literal": {"float": {"float64": {}}}},
                                 "parameter": "f"}}},
                           {
+                            "name": "imaginary",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "j"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.lib.literals.showFloat64"}}},
+                                                "function": {"variable": "hydra.python.serde.pythonFloatLiteralText"}}},
+                                            "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                "domain": {"literal": {"float": {"float64": {}}}},
+                                "parameter": "f"}}},
+                          {
                             "name": "integer",
                             "term": {
                               "lambda": {
@@ -4298,6 +4317,37 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.python.serde.stringPrefixToText",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Serialize a Python string prefix to its source-form characters"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "p"},
+                    "function": {
+                      "cases": {
+                        "cases": [
+                          {"name": "raw", "term": {"lambda": {"body": {"literal": {"string": "r"}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {"name": "bytes", "term": {"lambda": {"body": {"literal": {"string": "b"}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {
+                            "name": "rawBytes",
+                            "term": {"lambda": {"body": {"literal": {"string": "rb"}}, "domain": {"unit": {}}, "parameter": "_"}}},
+                          {
+                            "name": "unicode",
+                            "term": {"lambda": {"body": {"literal": {"string": "u"}}, "domain": {"unit": {}}, "parameter": "_"}}}],
+                        "typeName": "hydra.python.syntax.StringPrefix"}}}},
+                "domain": {"variable": "hydra.python.syntax.StringPrefix"},
+                "parameter": "p"}}}},
+        "typeScheme": {
+          "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.python.syntax.StringPrefix"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.python.serde.stringToExpr",
         "term": {
           "annotated": {
@@ -4311,6 +4361,23 @@
                         "name": "content",
                         "term": {
                           "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "value", "typeName": "hydra.python.syntax.String"}}}},
+                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
+                      {
+                        "name": "prefix",
+                        "term": {
+                          "application": {
+                            "argument": {
+                              "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "prefix", "typeName": "hydra.python.syntax.String"}}}},
+                            "function": {
+                              "application": {
+                                "argument": {"variable": "hydra.python.serde.stringPrefixToText"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": ""}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
+                                        "type": {"variable": "hydra.python.syntax.StringPrefix"}}}}}}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "style",
@@ -4333,9 +4400,12 @@
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"variable": "content"},
-                                            "function": {
-                                              "application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.python.serde.escapePythonString"}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "content"},
+                                                "function": {
+                                                  "application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.python.serde.escapePythonString"}}}}},
+                                            "function": {"application": {"argument": {"variable": "prefix"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                         "function": {"variable": "hydra.serialization.cst"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
@@ -4347,21 +4417,50 @@
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {"variable": "content"},
-                                            "function": {
-                                              "application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.python.serde.escapePythonString"}}}}},
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "content"},
+                                                "function": {
+                                                  "application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.python.serde.escapePythonString"}}}}},
+                                            "function": {"application": {"argument": {"variable": "prefix"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                         "function": {"variable": "hydra.serialization.cst"}}},
                                     "domain": {"unit": {}},
                                     "parameter": "_"}}},
                               {
-                                "name": "triple",
+                                "name": "tripleSingle",
                                 "term": {
                                   "lambda": {
                                     "body": {
                                       "application": {
                                         "argument": {
                                           "list": [
-                                            {"application": {"argument": {"literal": {"string": "r\"\"\""}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                            {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"literal": {"string": "'''"}},
+                                                    "function": {"application": {"argument": {"variable": "prefix"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                "function": {"variable": "hydra.serialization.cst"}}},
+                                            {"application": {"argument": {"variable": "content"}, "function": {"variable": "hydra.serialization.cst"}}},
+                                            {"application": {"argument": {"literal": {"string": "'''"}}, "function": {"variable": "hydra.serialization.cst"}}}]},
+                                        "function": {"variable": "hydra.serialization.noSep"}}},
+                                    "domain": {"unit": {}},
+                                    "parameter": "_"}}},
+                              {
+                                "name": "tripleDouble",
+                                "term": {
+                                  "lambda": {
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "list": [
+                                            {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"literal": {"string": "\"\"\""}},
+                                                    "function": {"application": {"argument": {"variable": "prefix"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
+                                                "function": {"variable": "hydra.serialization.cst"}}},
                                             {"application": {"argument": {"variable": "content"}, "function": {"variable": "hydra.serialization.cst"}}},
                                             {"application": {"argument": {"literal": {"string": "\"\"\""}}, "function": {"variable": "hydra.serialization.cst"}}}]},
                                         "function": {"variable": "hydra.serialization.noSep"}}},

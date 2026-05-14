@@ -246,7 +246,7 @@ main = do
   -- auto-loaded based on --package or --all-packages — see Step 2c.
   let coderPackages   = ["hydra-java", "hydra-python", "hydra-scala", "hydra-lisp", "hydra-go"]
   let extDemoPackages = ["hydra-pg", "hydra-rdf"]
-  let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext", "hydra-wasm"]
+  let extPackages     = ["hydra-coq", "hydra-javascript", "hydra-ext", "hydra-wasm", "hydra-bench"]
 
   let targetCap = case target of
         "haskell"     -> "Haskell"
@@ -443,14 +443,15 @@ main = do
       encSrc <- generateEncoderSourceModules allMainMods typeMods
       putStrLn $ "  Synthesized " ++ show (length decSrc) ++ " decoder source modules"
       putStrLn $ "  Synthesized " ++ show (length encSrc) ++ " encoder source modules"
-      -- Run inference on the synthesized modules; the generator call below uses
-      -- doInfer=False, which would fail on these untyped bindings otherwise.
+      -- Synthesized Source modules each contain one `module_` binding whose
+      -- TermDefinition is annotated with TypeScheme [] (TypeVariable _Module),
+      -- so the type is statically known. Skip the full-universe inference
+      -- pass that historically ran here — it consumed multi-GB of memory on
+      -- CI runners while solving for a type the synthesizer already provides.
       let synthesized = decSrc ++ encSrc
-      let inferUniverse = allMainMods ++ synthesized
-      inferred <- inferModulesIO inferUniverse synthesized
-      putStrLn $ "  Inferred types for " ++ show (length inferred) ++ " synthesized modules"
+      putStrLn $ "  Synthesized modules carry static TypeScheme; skipping inference."
       putStrLn ""
-      return inferred
+      return synthesized
     else return []
 
   -- When --ext-only is used, load the ext demo packages (hydra-pg, hydra-rdf)

@@ -72,7 +72,7 @@ case "$PACKAGE" in
     hydra-java|hydra-python|hydra-scala|hydra-lisp|hydra-go)
         LOAD_FLAGS="--include-coders"
         ;;
-    hydra-pg|hydra-rdf|hydra-coq|hydra-javascript|hydra-ext|hydra-wasm)
+    hydra-pg|hydra-rdf|hydra-coq|hydra-javascript|hydra-ext|hydra-wasm|hydra-bench)
         # --include-coders is also needed because ext modules reference
         # coder-package types. The package itself is auto-loaded via --package.
         LOAD_FLAGS="--include-coders"

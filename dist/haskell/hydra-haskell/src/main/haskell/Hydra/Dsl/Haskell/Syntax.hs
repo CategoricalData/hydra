@@ -415,22 +415,6 @@ asPatternWithName original newVal =
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.AsPattern"),
               Core.projectionField = (Core.Name "inner")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL injection for the class variant of hydra.haskell.syntax.Assertion
-assertionClass :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm Syntax.Assertion
-assertionClass x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Assertion"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "class"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL injection for the tuple variant of hydra.haskell.syntax.Assertion
-assertionTuple :: Phantoms.TTerm [Syntax.Assertion] -> Phantoms.TTerm Syntax.Assertion
-assertionTuple x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Assertion"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "tuple"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for hydra.haskell.syntax.CaseExpression
 caseExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm [Syntax.Alternative] -> Phantoms.TTerm Syntax.CaseExpression
 caseExpression case_ alternatives =
@@ -497,11 +481,11 @@ caseRhs x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.CaseRhs"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
--- | DSL constructor for hydra.haskell.syntax.ClassAssertion
-classAssertion :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.ClassAssertion
-classAssertion name types =
+-- | DSL constructor for hydra.haskell.syntax.ClassConstraint
+classConstraint :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.ClassConstraint
+classConstraint name types =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ClassAssertion"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ClassConstraint"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -509,27 +493,27 @@ classAssertion name types =
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Phantoms.unTTerm types)}]}))
--- | DSL accessor for the name field of hydra.haskell.syntax.ClassAssertion
-classAssertionName :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm Syntax.Name
-classAssertionName x =
+-- | DSL accessor for the name field of hydra.haskell.syntax.ClassConstraint
+classConstraintName :: Phantoms.TTerm Syntax.ClassConstraint -> Phantoms.TTerm Syntax.Name
+classConstraintName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ClassAssertion"),
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ClassConstraint"),
         Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the types field of hydra.haskell.syntax.ClassAssertion
-classAssertionTypes :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm [Syntax.Type]
-classAssertionTypes x =
+-- | DSL accessor for the types field of hydra.haskell.syntax.ClassConstraint
+classConstraintTypes :: Phantoms.TTerm Syntax.ClassConstraint -> Phantoms.TTerm [Syntax.Type]
+classConstraintTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ClassAssertion"),
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ClassConstraint"),
         Core.projectionField = (Core.Name "types")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the name field of hydra.haskell.syntax.ClassAssertion
-classAssertionWithName :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.ClassAssertion
-classAssertionWithName original newVal =
+-- | DSL updater for the name field of hydra.haskell.syntax.ClassConstraint
+classConstraintWithName :: Phantoms.TTerm Syntax.ClassConstraint -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.ClassConstraint
+classConstraintWithName original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ClassAssertion"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ClassConstraint"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -538,87 +522,103 @@ classAssertionWithName original newVal =
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ClassAssertion"),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ClassConstraint"),
               Core.projectionField = (Core.Name "types")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the types field of hydra.haskell.syntax.ClassAssertion
-classAssertionWithTypes :: Phantoms.TTerm Syntax.ClassAssertion -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.ClassAssertion
-classAssertionWithTypes original newVal =
+-- | DSL updater for the types field of hydra.haskell.syntax.ClassConstraint
+classConstraintWithTypes :: Phantoms.TTerm Syntax.ClassConstraint -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.ClassConstraint
+classConstraintWithTypes original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ClassAssertion"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ClassConstraint"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ClassAssertion"),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ClassConstraint"),
               Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "types"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL constructor for hydra.haskell.syntax.ConstructRecordExpression
-constructRecordExpression :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm [Syntax.FieldUpdate] -> Phantoms.TTerm Syntax.ConstructRecordExpression
-constructRecordExpression name fields =
+-- | DSL constructor for hydra.haskell.syntax.ConstrainedType
+constrainedType :: Phantoms.TTerm Syntax.Constraint -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ConstrainedType
+constrainedType ctx type_ =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ConstructRecordExpression"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ConstrainedType"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
+          Core.fieldName = (Core.Name "ctx"),
+          Core.fieldTerm = (Phantoms.unTTerm ctx)},
         Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm fields)}]}))
--- | DSL accessor for the fields field of hydra.haskell.syntax.ConstructRecordExpression
-constructRecordExpressionFields :: Phantoms.TTerm Syntax.ConstructRecordExpression -> Phantoms.TTerm [Syntax.FieldUpdate]
-constructRecordExpressionFields x =
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+-- | DSL accessor for the ctx field of hydra.haskell.syntax.ConstrainedType
+constrainedTypeCtx :: Phantoms.TTerm Syntax.ConstrainedType -> Phantoms.TTerm Syntax.Constraint
+constrainedTypeCtx x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstructRecordExpression"),
-        Core.projectionField = (Core.Name "fields")})),
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstrainedType"),
+        Core.projectionField = (Core.Name "ctx")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the name field of hydra.haskell.syntax.ConstructRecordExpression
-constructRecordExpressionName :: Phantoms.TTerm Syntax.ConstructRecordExpression -> Phantoms.TTerm Syntax.Name
-constructRecordExpressionName x =
+-- | DSL accessor for the type field of hydra.haskell.syntax.ConstrainedType
+constrainedTypeType :: Phantoms.TTerm Syntax.ConstrainedType -> Phantoms.TTerm Syntax.Type
+constrainedTypeType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstructRecordExpression"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstrainedType"),
+        Core.projectionField = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the fields field of hydra.haskell.syntax.ConstructRecordExpression
-constructRecordExpressionWithFields :: Phantoms.TTerm Syntax.ConstructRecordExpression -> Phantoms.TTerm [Syntax.FieldUpdate] -> Phantoms.TTerm Syntax.ConstructRecordExpression
-constructRecordExpressionWithFields original newVal =
+-- | DSL updater for the ctx field of hydra.haskell.syntax.ConstrainedType
+constrainedTypeWithCtx :: Phantoms.TTerm Syntax.ConstrainedType -> Phantoms.TTerm Syntax.Constraint -> Phantoms.TTerm Syntax.ConstrainedType
+constrainedTypeWithCtx original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ConstructRecordExpression"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ConstrainedType"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstructRecordExpression"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL updater for the name field of hydra.haskell.syntax.ConstructRecordExpression
-constructRecordExpressionWithName :: Phantoms.TTerm Syntax.ConstructRecordExpression -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.ConstructRecordExpression
-constructRecordExpressionWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ConstructRecordExpression"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
+          Core.fieldName = (Core.Name "ctx"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)},
         Core.Field {
-          Core.fieldName = (Core.Name "fields"),
+          Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstructRecordExpression"),
-              Core.projectionField = (Core.Name "fields")})),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstrainedType"),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the type field of hydra.haskell.syntax.ConstrainedType
+constrainedTypeWithType :: Phantoms.TTerm Syntax.ConstrainedType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ConstrainedType
+constrainedTypeWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ConstrainedType"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "ctx"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstrainedType"),
+              Core.projectionField = (Core.Name "ctx")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL injection for the class variant of hydra.haskell.syntax.Constraint
+constraintClass :: Phantoms.TTerm Syntax.ClassConstraint -> Phantoms.TTerm Syntax.Constraint
+constraintClass x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Constraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "class"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the tuple variant of hydra.haskell.syntax.Constraint
+constraintTuple :: Phantoms.TTerm [Syntax.Constraint] -> Phantoms.TTerm Syntax.Constraint
+constraintTuple x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Constraint"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "tuple"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the ordinary variant of hydra.haskell.syntax.Constructor
-constructorOrdinary :: Phantoms.TTerm Syntax.OrdinaryConstructor -> Phantoms.TTerm Syntax.Constructor
+constructorOrdinary :: Phantoms.TTerm Syntax.PositionalConstructor -> Phantoms.TTerm Syntax.Constructor
 constructorOrdinary x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Constructor"),
@@ -633,129 +633,9 @@ constructorRecord x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "record"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL constructor for hydra.haskell.syntax.ConstructorWithComments
-constructorWithComments :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.ConstructorWithComments
-constructorWithComments body comments =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ConstructorWithComments"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
--- | DSL accessor for the body field of hydra.haskell.syntax.ConstructorWithComments
-constructorWithCommentsBody :: Phantoms.TTerm Syntax.ConstructorWithComments -> Phantoms.TTerm Syntax.Constructor
-constructorWithCommentsBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstructorWithComments"),
-        Core.projectionField = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the comments field of hydra.haskell.syntax.ConstructorWithComments
-constructorWithCommentsComments :: Phantoms.TTerm Syntax.ConstructorWithComments -> Phantoms.TTerm (Maybe String)
-constructorWithCommentsComments x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstructorWithComments"),
-        Core.projectionField = (Core.Name "comments")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the body field of hydra.haskell.syntax.ConstructorWithComments
-constructorWithCommentsWithBody :: Phantoms.TTerm Syntax.ConstructorWithComments -> Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm Syntax.ConstructorWithComments
-constructorWithCommentsWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ConstructorWithComments"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstructorWithComments"),
-              Core.projectionField = (Core.Name "comments")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the comments field of hydra.haskell.syntax.ConstructorWithComments
-constructorWithCommentsWithComments :: Phantoms.TTerm Syntax.ConstructorWithComments -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.ConstructorWithComments
-constructorWithCommentsWithComments original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ConstructorWithComments"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ConstructorWithComments"),
-              Core.projectionField = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL constructor for hydra.haskell.syntax.ContextType
-contextType :: Phantoms.TTerm Syntax.Assertion -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ContextType
-contextType ctx type_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ContextType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "ctx"),
-          Core.fieldTerm = (Phantoms.unTTerm ctx)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
--- | DSL accessor for the ctx field of hydra.haskell.syntax.ContextType
-contextTypeCtx :: Phantoms.TTerm Syntax.ContextType -> Phantoms.TTerm Syntax.Assertion
-contextTypeCtx x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ContextType"),
-        Core.projectionField = (Core.Name "ctx")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the type field of hydra.haskell.syntax.ContextType
-contextTypeType :: Phantoms.TTerm Syntax.ContextType -> Phantoms.TTerm Syntax.Type
-contextTypeType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ContextType"),
-        Core.projectionField = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the ctx field of hydra.haskell.syntax.ContextType
-contextTypeWithCtx :: Phantoms.TTerm Syntax.ContextType -> Phantoms.TTerm Syntax.Assertion -> Phantoms.TTerm Syntax.ContextType
-contextTypeWithCtx original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ContextType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "ctx"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ContextType"),
-              Core.projectionField = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the type field of hydra.haskell.syntax.ContextType
-contextTypeWithType :: Phantoms.TTerm Syntax.ContextType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ContextType
-contextTypeWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ContextType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "ctx"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ContextType"),
-              Core.projectionField = (Core.Name "ctx")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.haskell.syntax.DataDeclaration
-dataDeclaration :: Phantoms.TTerm Syntax.DataOrNewtype -> Phantoms.TTerm [Syntax.Assertion] -> Phantoms.TTerm Syntax.DeclarationHead -> Phantoms.TTerm [Syntax.ConstructorWithComments] -> Phantoms.TTerm [Syntax.Deriving] -> Phantoms.TTerm Syntax.DataDeclaration
-dataDeclaration keyword context head constructors deriving_ =
+dataDeclaration :: Phantoms.TTerm Syntax.DataKeyword -> Phantoms.TTerm [Syntax.Constraint] -> Phantoms.TTerm Syntax.DeclarationHead -> Phantoms.TTerm [Syntax.Constructor] -> Phantoms.TTerm [Syntax.DerivingClause] -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.DataDeclaration
+dataDeclaration keyword context head constructors deriving_ comments =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
       Core.recordFields = [
@@ -773,9 +653,20 @@ dataDeclaration keyword context head constructors deriving_ =
           Core.fieldTerm = (Phantoms.unTTerm constructors)},
         Core.Field {
           Core.fieldName = (Core.Name "deriving"),
-          Core.fieldTerm = (Phantoms.unTTerm deriving_)}]}))
+          Core.fieldTerm = (Phantoms.unTTerm deriving_)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
+-- | DSL accessor for the comments field of hydra.haskell.syntax.DataDeclaration
+dataDeclarationComments :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm (Maybe String)
+dataDeclarationComments x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+        Core.projectionField = (Core.Name "comments")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the constructors field of hydra.haskell.syntax.DataDeclaration
-dataDeclarationConstructors :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.ConstructorWithComments]
+dataDeclarationConstructors :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.Constructor]
 dataDeclarationConstructors x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -783,7 +674,7 @@ dataDeclarationConstructors x =
         Core.projectionField = (Core.Name "constructors")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the context field of hydra.haskell.syntax.DataDeclaration
-dataDeclarationContext :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.Assertion]
+dataDeclarationContext :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.Constraint]
 dataDeclarationContext x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -791,7 +682,7 @@ dataDeclarationContext x =
         Core.projectionField = (Core.Name "context")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the deriving field of hydra.haskell.syntax.DataDeclaration
-dataDeclarationDeriving :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.Deriving]
+dataDeclarationDeriving :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.DerivingClause]
 dataDeclarationDeriving x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -807,15 +698,59 @@ dataDeclarationHead x =
         Core.projectionField = (Core.Name "head")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the keyword field of hydra.haskell.syntax.DataDeclaration
-dataDeclarationKeyword :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm Syntax.DataOrNewtype
+dataDeclarationKeyword :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm Syntax.DataKeyword
 dataDeclarationKeyword x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
         Core.projectionField = (Core.Name "keyword")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the comments field of hydra.haskell.syntax.DataDeclaration
+dataDeclarationWithComments :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.DataDeclaration
+dataDeclarationWithComments original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "keyword"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "keyword")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "context"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "context")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "head"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "head")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "constructors"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "constructors")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "deriving"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "deriving")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL updater for the constructors field of hydra.haskell.syntax.DataDeclaration
-dataDeclarationWithConstructors :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.ConstructorWithComments] -> Phantoms.TTerm Syntax.DataDeclaration
+dataDeclarationWithConstructors :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.Constructor] -> Phantoms.TTerm Syntax.DataDeclaration
 dataDeclarationWithConstructors original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
@@ -850,9 +785,16 @@ dataDeclarationWithConstructors original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
               Core.projectionField = (Core.Name "deriving")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "comments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the context field of hydra.haskell.syntax.DataDeclaration
-dataDeclarationWithContext :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.Assertion] -> Phantoms.TTerm Syntax.DataDeclaration
+dataDeclarationWithContext :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.Constraint] -> Phantoms.TTerm Syntax.DataDeclaration
 dataDeclarationWithContext original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
@@ -887,9 +829,16 @@ dataDeclarationWithContext original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
               Core.projectionField = (Core.Name "deriving")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "comments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the deriving field of hydra.haskell.syntax.DataDeclaration
-dataDeclarationWithDeriving :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.Deriving] -> Phantoms.TTerm Syntax.DataDeclaration
+dataDeclarationWithDeriving :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm [Syntax.DerivingClause] -> Phantoms.TTerm Syntax.DataDeclaration
 dataDeclarationWithDeriving original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
@@ -924,7 +873,14 @@ dataDeclarationWithDeriving original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "deriving"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the head field of hydra.haskell.syntax.DataDeclaration
 dataDeclarationWithHead :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm Syntax.DeclarationHead -> Phantoms.TTerm Syntax.DataDeclaration
 dataDeclarationWithHead original newVal =
@@ -961,9 +917,16 @@ dataDeclarationWithHead original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
               Core.projectionField = (Core.Name "deriving")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "comments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the keyword field of hydra.haskell.syntax.DataDeclaration
-dataDeclarationWithKeyword :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm Syntax.DataOrNewtype -> Phantoms.TTerm Syntax.DataDeclaration
+dataDeclarationWithKeyword :: Phantoms.TTerm Syntax.DataDeclaration -> Phantoms.TTerm Syntax.DataKeyword -> Phantoms.TTerm Syntax.DataDeclaration
 dataDeclarationWithKeyword original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
@@ -998,20 +961,27 @@ dataDeclarationWithKeyword original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
               Core.projectionField = (Core.Name "deriving")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DataDeclaration"),
+              Core.projectionField = (Core.Name "comments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL injection for the data variant of hydra.haskell.syntax.DataOrNewtype
-dataOrNewtypeData :: Phantoms.TTerm Syntax.DataOrNewtype
-dataOrNewtypeData =
+-- | DSL injection for the data variant of hydra.haskell.syntax.DataKeyword
+dataKeywordData :: Phantoms.TTerm Syntax.DataKeyword
+dataKeywordData =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.DataOrNewtype"),
+      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.DataKeyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "data"),
         Core.fieldTerm = Core.TermUnit}}))
--- | DSL injection for the newtype variant of hydra.haskell.syntax.DataOrNewtype
-dataOrNewtypeNewtype :: Phantoms.TTerm Syntax.DataOrNewtype
-dataOrNewtypeNewtype =
+-- | DSL injection for the newtype variant of hydra.haskell.syntax.DataKeyword
+dataKeywordNewtype :: Phantoms.TTerm Syntax.DataKeyword
+dataKeywordNewtype =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.DataOrNewtype"),
+      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.DataKeyword"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "newtype"),
         Core.fieldTerm = Core.TermUnit}}))
@@ -1031,14 +1001,6 @@ declarationHeadApplication x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "application"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL injection for the parens variant of hydra.haskell.syntax.DeclarationHead
-declarationHeadParens :: Phantoms.TTerm Syntax.DeclarationHead -> Phantoms.TTerm Syntax.DeclarationHead
-declarationHeadParens x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.DeclarationHead"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "parens"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the simple variant of hydra.haskell.syntax.DeclarationHead
 declarationHeadSimple :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.DeclarationHead
 declarationHeadSimple x =
@@ -1048,7 +1010,7 @@ declarationHeadSimple x =
         Core.fieldName = (Core.Name "simple"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the type variant of hydra.haskell.syntax.Declaration
-declarationType :: Phantoms.TTerm Syntax.TypeDeclaration -> Phantoms.TTerm Syntax.Declaration
+declarationType :: Phantoms.TTerm Syntax.TypeSynonymDeclaration -> Phantoms.TTerm Syntax.Declaration
 declarationType x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Declaration"),
@@ -1071,74 +1033,14 @@ declarationValueBinding x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "valueBinding"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL constructor for hydra.haskell.syntax.DeclarationWithComments
-declarationWithComments :: Phantoms.TTerm Syntax.Declaration -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.DeclarationWithComments
-declarationWithComments body comments =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.DeclarationWithComments"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
--- | DSL accessor for the body field of hydra.haskell.syntax.DeclarationWithComments
-declarationWithCommentsBody :: Phantoms.TTerm Syntax.DeclarationWithComments -> Phantoms.TTerm Syntax.Declaration
-declarationWithCommentsBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DeclarationWithComments"),
-        Core.projectionField = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the comments field of hydra.haskell.syntax.DeclarationWithComments
-declarationWithCommentsComments :: Phantoms.TTerm Syntax.DeclarationWithComments -> Phantoms.TTerm (Maybe String)
-declarationWithCommentsComments x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DeclarationWithComments"),
-        Core.projectionField = (Core.Name "comments")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the body field of hydra.haskell.syntax.DeclarationWithComments
-declarationWithCommentsWithBody :: Phantoms.TTerm Syntax.DeclarationWithComments -> Phantoms.TTerm Syntax.Declaration -> Phantoms.TTerm Syntax.DeclarationWithComments
-declarationWithCommentsWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.DeclarationWithComments"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DeclarationWithComments"),
-              Core.projectionField = (Core.Name "comments")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the comments field of hydra.haskell.syntax.DeclarationWithComments
-declarationWithCommentsWithComments :: Phantoms.TTerm Syntax.DeclarationWithComments -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.DeclarationWithComments
-declarationWithCommentsWithComments original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.DeclarationWithComments"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.DeclarationWithComments"),
-              Core.projectionField = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL constructor for the hydra.haskell.syntax.Deriving wrapper
-deriving_ :: Phantoms.TTerm [Syntax.Name] -> Phantoms.TTerm Syntax.Deriving
-deriving_ x =
+-- | DSL constructor for the hydra.haskell.syntax.DerivingClause wrapper
+derivingClause :: Phantoms.TTerm [Syntax.Name] -> Phantoms.TTerm Syntax.DerivingClause
+derivingClause x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.Deriving"),
+      Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.DerivingClause"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 -- | DSL injection for the declaration variant of hydra.haskell.syntax.Export
-exportDeclaration :: Phantoms.TTerm Syntax.ImportExportSpec -> Phantoms.TTerm Syntax.Export
+exportDeclaration :: Phantoms.TTerm Syntax.NamedImportExport -> Phantoms.TTerm Syntax.Export
 exportDeclaration x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Export"),
@@ -1170,7 +1072,7 @@ expressionCase x =
         Core.fieldName = (Core.Name "case"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the constructRecord variant of hydra.haskell.syntax.Expression
-expressionConstructRecord :: Phantoms.TTerm Syntax.ConstructRecordExpression -> Phantoms.TTerm Syntax.Expression
+expressionConstructRecord :: Phantoms.TTerm Syntax.RecordExpression -> Phantoms.TTerm Syntax.Expression
 expressionConstructRecord x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Expression"),
@@ -1194,7 +1096,7 @@ expressionIf x =
         Core.fieldName = (Core.Name "if"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the infixApplication variant of hydra.haskell.syntax.Expression
-expressionInfixApplication :: Phantoms.TTerm Syntax.InfixApplicationExpression -> Phantoms.TTerm Syntax.Expression
+expressionInfixApplication :: Phantoms.TTerm Syntax.InfixExpression -> Phantoms.TTerm Syntax.Expression
 expressionInfixApplication x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Expression"),
@@ -1241,22 +1143,6 @@ expressionLiteral x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "literal"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL injection for the parens variant of hydra.haskell.syntax.Expression
-expressionParens :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Expression
-expressionParens x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Expression"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "parens"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL injection for the prefixApplication variant of hydra.haskell.syntax.Expression
-expressionPrefixApplication :: Phantoms.TTerm Syntax.PrefixApplicationExpression -> Phantoms.TTerm Syntax.Expression
-expressionPrefixApplication x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Expression"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "prefixApplication"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the rightSection variant of hydra.haskell.syntax.Expression
 expressionRightSection :: Phantoms.TTerm Syntax.SectionExpression -> Phantoms.TTerm Syntax.Expression
 expressionRightSection x =
@@ -1274,7 +1160,7 @@ expressionTuple x =
         Core.fieldName = (Core.Name "tuple"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the typeSignature variant of hydra.haskell.syntax.Expression
-expressionTypeSignature :: Phantoms.TTerm Syntax.TypeSignatureExpression -> Phantoms.TTerm Syntax.Expression
+expressionTypeSignature :: Phantoms.TTerm Syntax.TypedExpression -> Phantoms.TTerm Syntax.Expression
 expressionTypeSignature x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Expression"),
@@ -1282,7 +1168,7 @@ expressionTypeSignature x =
         Core.fieldName = (Core.Name "typeSignature"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the updateRecord variant of hydra.haskell.syntax.Expression
-expressionUpdateRecord :: Phantoms.TTerm Syntax.UpdateRecordExpression -> Phantoms.TTerm Syntax.Expression
+expressionUpdateRecord :: Phantoms.TTerm Syntax.RecordUpdateExpression -> Phantoms.TTerm Syntax.Expression
 expressionUpdateRecord x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Expression"),
@@ -1298,8 +1184,8 @@ expressionVariable x =
         Core.fieldName = (Core.Name "variable"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for hydra.haskell.syntax.Field
-field :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Field
-field name type_ =
+field :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.Field
+field name type_ comments =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.Field"),
       Core.recordFields = [
@@ -1308,7 +1194,18 @@ field name type_ =
           Core.fieldTerm = (Phantoms.unTTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+          Core.fieldTerm = (Phantoms.unTTerm type_)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
+-- | DSL accessor for the comments field of hydra.haskell.syntax.Field
+fieldComments :: Phantoms.TTerm Syntax.Field -> Phantoms.TTerm (Maybe String)
+fieldComments x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.Field"),
+        Core.projectionField = (Core.Name "comments")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.haskell.syntax.Field
 fieldName :: Phantoms.TTerm Syntax.Field -> Phantoms.TTerm Syntax.Name
 fieldName x =
@@ -1385,66 +1282,29 @@ fieldUpdateWithValue original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL constructor for hydra.haskell.syntax.FieldWithComments
-fieldWithComments :: Phantoms.TTerm Syntax.Field -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.FieldWithComments
-fieldWithComments field comments =
+-- | DSL updater for the comments field of hydra.haskell.syntax.Field
+fieldWithComments :: Phantoms.TTerm Syntax.Field -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.Field
+fieldWithComments original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.FieldWithComments"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.Field"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "field"),
-          Core.fieldTerm = (Phantoms.unTTerm field)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
--- | DSL accessor for the comments field of hydra.haskell.syntax.FieldWithComments
-fieldWithCommentsComments :: Phantoms.TTerm Syntax.FieldWithComments -> Phantoms.TTerm (Maybe String)
-fieldWithCommentsComments x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.FieldWithComments"),
-        Core.projectionField = (Core.Name "comments")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the field field of hydra.haskell.syntax.FieldWithComments
-fieldWithCommentsField :: Phantoms.TTerm Syntax.FieldWithComments -> Phantoms.TTerm Syntax.Field
-fieldWithCommentsField x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.FieldWithComments"),
-        Core.projectionField = (Core.Name "field")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the comments field of hydra.haskell.syntax.FieldWithComments
-fieldWithCommentsWithComments :: Phantoms.TTerm Syntax.FieldWithComments -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.FieldWithComments
-fieldWithCommentsWithComments original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.FieldWithComments"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "field"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.FieldWithComments"),
-              Core.projectionField = (Core.Name "field")})),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.Field"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.Field"),
+              Core.projectionField = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "comments"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL updater for the field field of hydra.haskell.syntax.FieldWithComments
-fieldWithCommentsWithField :: Phantoms.TTerm Syntax.FieldWithComments -> Phantoms.TTerm Syntax.Field -> Phantoms.TTerm Syntax.FieldWithComments
-fieldWithCommentsWithField original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.FieldWithComments"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "field"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "comments"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.FieldWithComments"),
-              Core.projectionField = (Core.Name "comments")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.haskell.syntax.Field
 fieldWithName :: Phantoms.TTerm Syntax.Field -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.Field
 fieldWithName original newVal =
@@ -1460,6 +1320,13 @@ fieldWithName original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.Field"),
               Core.projectionField = (Core.Name "type")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.Field"),
+              Core.projectionField = (Core.Name "comments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.haskell.syntax.Field
 fieldWithType :: Phantoms.TTerm Syntax.Field -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Field
@@ -1476,7 +1343,14 @@ fieldWithType original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.Field"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.haskell.syntax.FunctionType
 functionType :: Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.FunctionType
 functionType domain codomain =
@@ -1646,7 +1520,7 @@ ifExpressionWithThen original newVal =
               Core.projectionField = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.haskell.syntax.Import
-import_ :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ModuleName -> Phantoms.TTerm (Maybe Syntax.ModuleName) -> Phantoms.TTerm (Maybe Syntax.SpecImport) -> Phantoms.TTerm Syntax.Import
+import_ :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ModuleName -> Phantoms.TTerm (Maybe Syntax.ModuleName) -> Phantoms.TTerm (Maybe Syntax.ImportSpec) -> Phantoms.TTerm Syntax.Import
 import_ qualified module_ as spec =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.Import"),
@@ -1671,114 +1545,22 @@ importAs x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.Import"),
         Core.projectionField = (Core.Name "as")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL constructor for hydra.haskell.syntax.ImportExportSpec
-importExportSpec :: Phantoms.TTerm (Maybe Syntax.ImportModifier) -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm (Maybe Syntax.SubspecImportExportSpec) -> Phantoms.TTerm Syntax.ImportExportSpec
-importExportSpec modifier name subspec =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "modifier"),
-          Core.fieldTerm = (Phantoms.unTTerm modifier)},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
-        Core.Field {
-          Core.fieldName = (Core.Name "subspec"),
-          Core.fieldTerm = (Phantoms.unTTerm subspec)}]}))
--- | DSL accessor for the modifier field of hydra.haskell.syntax.ImportExportSpec
-importExportSpecModifier :: Phantoms.TTerm Syntax.ImportExportSpec -> Phantoms.TTerm (Maybe Syntax.ImportModifier)
-importExportSpecModifier x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-        Core.projectionField = (Core.Name "modifier")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the name field of hydra.haskell.syntax.ImportExportSpec
-importExportSpecName :: Phantoms.TTerm Syntax.ImportExportSpec -> Phantoms.TTerm Syntax.Name
-importExportSpecName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-        Core.projectionField = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the subspec field of hydra.haskell.syntax.ImportExportSpec
-importExportSpecSubspec :: Phantoms.TTerm Syntax.ImportExportSpec -> Phantoms.TTerm (Maybe Syntax.SubspecImportExportSpec)
-importExportSpecSubspec x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-        Core.projectionField = (Core.Name "subspec")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the modifier field of hydra.haskell.syntax.ImportExportSpec
-importExportSpecWithModifier :: Phantoms.TTerm Syntax.ImportExportSpec -> Phantoms.TTerm (Maybe Syntax.ImportModifier) -> Phantoms.TTerm Syntax.ImportExportSpec
-importExportSpecWithModifier original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "modifier"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "subspec"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-              Core.projectionField = (Core.Name "subspec")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the name field of hydra.haskell.syntax.ImportExportSpec
-importExportSpecWithName :: Phantoms.TTerm Syntax.ImportExportSpec -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.ImportExportSpec
-importExportSpecWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "modifier"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-              Core.projectionField = (Core.Name "modifier")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "subspec"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-              Core.projectionField = (Core.Name "subspec")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the subspec field of hydra.haskell.syntax.ImportExportSpec
-importExportSpecWithSubspec :: Phantoms.TTerm Syntax.ImportExportSpec -> Phantoms.TTerm (Maybe Syntax.SubspecImportExportSpec) -> Phantoms.TTerm Syntax.ImportExportSpec
-importExportSpecWithSubspec original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "modifier"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-              Core.projectionField = (Core.Name "modifier")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSpec"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "subspec"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL injection for the all variant of hydra.haskell.syntax.ImportExportSubspec
+importExportSubspecAll :: Phantoms.TTerm Syntax.ImportExportSubspec
+importExportSubspecAll =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSubspec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "all"),
+        Core.fieldTerm = Core.TermUnit}}))
+-- | DSL injection for the list variant of hydra.haskell.syntax.ImportExportSubspec
+importExportSubspecList :: Phantoms.TTerm [Syntax.Name] -> Phantoms.TTerm Syntax.ImportExportSubspec
+importExportSubspecList x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.ImportExportSubspec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "list"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the pattern variant of hydra.haskell.syntax.ImportModifier
 importModifierPattern :: Phantoms.TTerm Syntax.ImportModifier
 importModifierPattern =
@@ -1812,13 +1594,29 @@ importQualified x =
         Core.projectionField = (Core.Name "qualified")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the spec field of hydra.haskell.syntax.Import
-importSpec :: Phantoms.TTerm Syntax.Import -> Phantoms.TTerm (Maybe Syntax.SpecImport)
+importSpec :: Phantoms.TTerm Syntax.Import -> Phantoms.TTerm (Maybe Syntax.ImportSpec)
 importSpec x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.Import"),
         Core.projectionField = (Core.Name "spec")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL injection for the hiding variant of hydra.haskell.syntax.ImportSpec
+importSpecHiding :: Phantoms.TTerm [Syntax.NamedImportExport] -> Phantoms.TTerm Syntax.ImportSpec
+importSpecHiding x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.ImportSpec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "hiding"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the list variant of hydra.haskell.syntax.ImportSpec
+importSpecList :: Phantoms.TTerm [Syntax.NamedImportExport] -> Phantoms.TTerm Syntax.ImportSpec
+importSpecList x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.ImportSpec"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "list"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL updater for the as field of hydra.haskell.syntax.Import
 importWithAs :: Phantoms.TTerm Syntax.Import -> Phantoms.TTerm (Maybe Syntax.ModuleName) -> Phantoms.TTerm Syntax.Import
 importWithAs original newVal =
@@ -1910,7 +1708,7 @@ importWithQualified original newVal =
               Core.projectionField = (Core.Name "spec")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the spec field of hydra.haskell.syntax.Import
-importWithSpec :: Phantoms.TTerm Syntax.Import -> Phantoms.TTerm (Maybe Syntax.SpecImport) -> Phantoms.TTerm Syntax.Import
+importWithSpec :: Phantoms.TTerm Syntax.Import -> Phantoms.TTerm (Maybe Syntax.ImportSpec) -> Phantoms.TTerm Syntax.Import
 importWithSpec original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.Import"),
@@ -1939,11 +1737,11 @@ importWithSpec original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "spec"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL constructor for hydra.haskell.syntax.InfixApplicationExpression
-infixApplicationExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.InfixApplicationExpression
-infixApplicationExpression lhs operator rhs =
+-- | DSL constructor for hydra.haskell.syntax.InfixExpression
+infixExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.InfixExpression
+infixExpression lhs operator rhs =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
@@ -1954,35 +1752,35 @@ infixApplicationExpression lhs operator rhs =
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Phantoms.unTTerm rhs)}]}))
--- | DSL accessor for the lhs field of hydra.haskell.syntax.InfixApplicationExpression
-infixApplicationExpressionLhs :: Phantoms.TTerm Syntax.InfixApplicationExpression -> Phantoms.TTerm Syntax.Expression
-infixApplicationExpressionLhs x =
+-- | DSL accessor for the lhs field of hydra.haskell.syntax.InfixExpression
+infixExpressionLhs :: Phantoms.TTerm Syntax.InfixExpression -> Phantoms.TTerm Syntax.Expression
+infixExpressionLhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
         Core.projectionField = (Core.Name "lhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the operator field of hydra.haskell.syntax.InfixApplicationExpression
-infixApplicationExpressionOperator :: Phantoms.TTerm Syntax.InfixApplicationExpression -> Phantoms.TTerm Syntax.Operator
-infixApplicationExpressionOperator x =
+-- | DSL accessor for the operator field of hydra.haskell.syntax.InfixExpression
+infixExpressionOperator :: Phantoms.TTerm Syntax.InfixExpression -> Phantoms.TTerm Syntax.Operator
+infixExpressionOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
         Core.projectionField = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the rhs field of hydra.haskell.syntax.InfixApplicationExpression
-infixApplicationExpressionRhs :: Phantoms.TTerm Syntax.InfixApplicationExpression -> Phantoms.TTerm Syntax.Expression
-infixApplicationExpressionRhs x =
+-- | DSL accessor for the rhs field of hydra.haskell.syntax.InfixExpression
+infixExpressionRhs :: Phantoms.TTerm Syntax.InfixExpression -> Phantoms.TTerm Syntax.Expression
+infixExpressionRhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
         Core.projectionField = (Core.Name "rhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the lhs field of hydra.haskell.syntax.InfixApplicationExpression
-infixApplicationExpressionWithLhs :: Phantoms.TTerm Syntax.InfixApplicationExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.InfixApplicationExpression
-infixApplicationExpressionWithLhs original newVal =
+-- | DSL updater for the lhs field of hydra.haskell.syntax.InfixExpression
+infixExpressionWithLhs :: Phantoms.TTerm Syntax.InfixExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.InfixExpression
+infixExpressionWithLhs original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
@@ -1991,27 +1789,27 @@ infixApplicationExpressionWithLhs original newVal =
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
               Core.projectionField = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
               Core.projectionField = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the operator field of hydra.haskell.syntax.InfixApplicationExpression
-infixApplicationExpressionWithOperator :: Phantoms.TTerm Syntax.InfixApplicationExpression -> Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.InfixApplicationExpression
-infixApplicationExpressionWithOperator original newVal =
+-- | DSL updater for the operator field of hydra.haskell.syntax.InfixExpression
+infixExpressionWithOperator :: Phantoms.TTerm Syntax.InfixExpression -> Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.InfixExpression
+infixExpressionWithOperator original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
               Core.projectionField = (Core.Name "lhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
@@ -2021,34 +1819,34 @@ infixApplicationExpressionWithOperator original newVal =
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
               Core.projectionField = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the rhs field of hydra.haskell.syntax.InfixApplicationExpression
-infixApplicationExpressionWithRhs :: Phantoms.TTerm Syntax.InfixApplicationExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.InfixApplicationExpression
-infixApplicationExpressionWithRhs original newVal =
+-- | DSL updater for the rhs field of hydra.haskell.syntax.InfixExpression
+infixExpressionWithRhs :: Phantoms.TTerm Syntax.InfixExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.InfixExpression
+infixExpressionWithRhs original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "lhs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
               Core.projectionField = (Core.Name "lhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixApplicationExpression"),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.InfixExpression"),
               Core.projectionField = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.haskell.syntax.InfixType
-infixType :: Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.InfixType
+infixType :: Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.InfixType
 infixType lhs operator rhs =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixType"),
@@ -2079,7 +1877,7 @@ infixTypeOperator x =
         Core.projectionField = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the rhs field of hydra.haskell.syntax.InfixType
-infixTypeRhs :: Phantoms.TTerm Syntax.InfixType -> Phantoms.TTerm Syntax.Operator
+infixTypeRhs :: Phantoms.TTerm Syntax.InfixType -> Phantoms.TTerm Syntax.Type
 infixTypeRhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2133,7 +1931,7 @@ infixTypeWithOperator original newVal =
               Core.projectionField = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the rhs field of hydra.haskell.syntax.InfixType
-infixTypeWithRhs :: Phantoms.TTerm Syntax.InfixType -> Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.InfixType
+infixTypeWithRhs :: Phantoms.TTerm Syntax.InfixType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.InfixType
 infixTypeWithRhs original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.InfixType"),
@@ -2346,7 +2144,7 @@ localBindings x =
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.LocalBindings"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 -- | DSL constructor for hydra.haskell.syntax.Module
-module_ :: Phantoms.TTerm (Maybe Syntax.ModuleHead) -> Phantoms.TTerm [Syntax.Import] -> Phantoms.TTerm [Syntax.DeclarationWithComments] -> Phantoms.TTerm Syntax.Module
+module_ :: Phantoms.TTerm (Maybe Syntax.ModuleHead) -> Phantoms.TTerm [Syntax.Import] -> Phantoms.TTerm [Syntax.Declaration] -> Phantoms.TTerm Syntax.Module
 module_ head imports declarations =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.Module"),
@@ -2361,7 +2159,7 @@ module_ head imports declarations =
           Core.fieldName = (Core.Name "declarations"),
           Core.fieldTerm = (Phantoms.unTTerm declarations)}]}))
 -- | DSL accessor for the declarations field of hydra.haskell.syntax.Module
-moduleDeclarations :: Phantoms.TTerm Syntax.Module -> Phantoms.TTerm [Syntax.DeclarationWithComments]
+moduleDeclarations :: Phantoms.TTerm Syntax.Module -> Phantoms.TTerm [Syntax.Declaration]
 moduleDeclarations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2499,7 +2297,7 @@ moduleName x =
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.ModuleName"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 -- | DSL updater for the declarations field of hydra.haskell.syntax.Module
-moduleWithDeclarations :: Phantoms.TTerm Syntax.Module -> Phantoms.TTerm [Syntax.DeclarationWithComments] -> Phantoms.TTerm Syntax.Module
+moduleWithDeclarations :: Phantoms.TTerm Syntax.Module -> Phantoms.TTerm [Syntax.Declaration] -> Phantoms.TTerm Syntax.Module
 moduleWithDeclarations original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.Module"),
@@ -2583,20 +2381,120 @@ nameNormal x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normal"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL injection for the parens variant of hydra.haskell.syntax.Name
-nameParens :: Phantoms.TTerm Syntax.QualifiedName -> Phantoms.TTerm Syntax.Name
-nameParens x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Name"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "parens"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for the hydra.haskell.syntax.NamePart wrapper
 namePart :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.NamePart
 namePart x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.NamePart"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL constructor for hydra.haskell.syntax.NamedImportExport
+namedImportExport :: Phantoms.TTerm (Maybe Syntax.ImportModifier) -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm (Maybe Syntax.ImportExportSubspec) -> Phantoms.TTerm Syntax.NamedImportExport
+namedImportExport modifier name subspec =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "modifier"),
+          Core.fieldTerm = (Phantoms.unTTerm modifier)},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "subspec"),
+          Core.fieldTerm = (Phantoms.unTTerm subspec)}]}))
+-- | DSL accessor for the modifier field of hydra.haskell.syntax.NamedImportExport
+namedImportExportModifier :: Phantoms.TTerm Syntax.NamedImportExport -> Phantoms.TTerm (Maybe Syntax.ImportModifier)
+namedImportExportModifier x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+        Core.projectionField = (Core.Name "modifier")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the name field of hydra.haskell.syntax.NamedImportExport
+namedImportExportName :: Phantoms.TTerm Syntax.NamedImportExport -> Phantoms.TTerm Syntax.Name
+namedImportExportName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+        Core.projectionField = (Core.Name "name")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the subspec field of hydra.haskell.syntax.NamedImportExport
+namedImportExportSubspec :: Phantoms.TTerm Syntax.NamedImportExport -> Phantoms.TTerm (Maybe Syntax.ImportExportSubspec)
+namedImportExportSubspec x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+        Core.projectionField = (Core.Name "subspec")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the modifier field of hydra.haskell.syntax.NamedImportExport
+namedImportExportWithModifier :: Phantoms.TTerm Syntax.NamedImportExport -> Phantoms.TTerm (Maybe Syntax.ImportModifier) -> Phantoms.TTerm Syntax.NamedImportExport
+namedImportExportWithModifier original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "modifier"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "subspec"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+              Core.projectionField = (Core.Name "subspec")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the name field of hydra.haskell.syntax.NamedImportExport
+namedImportExportWithName :: Phantoms.TTerm Syntax.NamedImportExport -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.NamedImportExport
+namedImportExportWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "modifier"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+              Core.projectionField = (Core.Name "modifier")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "subspec"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+              Core.projectionField = (Core.Name "subspec")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the subspec field of hydra.haskell.syntax.NamedImportExport
+namedImportExportWithSubspec :: Phantoms.TTerm Syntax.NamedImportExport -> Phantoms.TTerm (Maybe Syntax.ImportExportSubspec) -> Phantoms.TTerm Syntax.NamedImportExport
+namedImportExportWithSubspec original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "modifier"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+              Core.projectionField = (Core.Name "modifier")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.NamedImportExport"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "subspec"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL injection for the backtick variant of hydra.haskell.syntax.Operator
 operatorBacktick :: Phantoms.TTerm Syntax.QualifiedName -> Phantoms.TTerm Syntax.Operator
 operatorBacktick x =
@@ -2613,66 +2511,6 @@ operatorNormal x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "normal"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL constructor for hydra.haskell.syntax.OrdinaryConstructor
-ordinaryConstructor :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.OrdinaryConstructor
-ordinaryConstructor name fields =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.OrdinaryConstructor"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm fields)}]}))
--- | DSL accessor for the fields field of hydra.haskell.syntax.OrdinaryConstructor
-ordinaryConstructorFields :: Phantoms.TTerm Syntax.OrdinaryConstructor -> Phantoms.TTerm [Syntax.Type]
-ordinaryConstructorFields x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.OrdinaryConstructor"),
-        Core.projectionField = (Core.Name "fields")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the name field of hydra.haskell.syntax.OrdinaryConstructor
-ordinaryConstructorName :: Phantoms.TTerm Syntax.OrdinaryConstructor -> Phantoms.TTerm Syntax.Name
-ordinaryConstructorName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.OrdinaryConstructor"),
-        Core.projectionField = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the fields field of hydra.haskell.syntax.OrdinaryConstructor
-ordinaryConstructorWithFields :: Phantoms.TTerm Syntax.OrdinaryConstructor -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.OrdinaryConstructor
-ordinaryConstructorWithFields original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.OrdinaryConstructor"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.OrdinaryConstructor"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL updater for the name field of hydra.haskell.syntax.OrdinaryConstructor
-ordinaryConstructorWithName :: Phantoms.TTerm Syntax.OrdinaryConstructor -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.OrdinaryConstructor
-ordinaryConstructorWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.OrdinaryConstructor"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.OrdinaryConstructor"),
-              Core.projectionField = (Core.Name "fields")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the application variant of hydra.haskell.syntax.Pattern
 patternApplication :: Phantoms.TTerm Syntax.ApplicationPattern -> Phantoms.TTerm Syntax.Pattern
 patternApplication x =
@@ -2773,14 +2611,6 @@ patternName x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "name"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL injection for the parens variant of hydra.haskell.syntax.Pattern
-patternParens :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.Pattern
-patternParens x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Pattern"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "parens"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the record variant of hydra.haskell.syntax.Pattern
 patternRecord :: Phantoms.TTerm Syntax.RecordPattern -> Phantoms.TTerm Syntax.Pattern
 patternRecord x =
@@ -2813,66 +2643,114 @@ patternWildcard =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
         Core.fieldTerm = Core.TermUnit}}))
--- | DSL constructor for hydra.haskell.syntax.PrefixApplicationExpression
-prefixApplicationExpression :: Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.PrefixApplicationExpression
-prefixApplicationExpression operator rhs =
+-- | DSL constructor for hydra.haskell.syntax.PositionalConstructor
+positionalConstructor :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.PositionalConstructor
+positionalConstructor name fields comments =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.PrefixApplicationExpression"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm operator)},
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
         Core.Field {
-          Core.fieldName = (Core.Name "rhs"),
-          Core.fieldTerm = (Phantoms.unTTerm rhs)}]}))
--- | DSL accessor for the operator field of hydra.haskell.syntax.PrefixApplicationExpression
-prefixApplicationExpressionOperator :: Phantoms.TTerm Syntax.PrefixApplicationExpression -> Phantoms.TTerm Syntax.Operator
-prefixApplicationExpressionOperator x =
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Phantoms.unTTerm fields)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
+-- | DSL accessor for the comments field of hydra.haskell.syntax.PositionalConstructor
+positionalConstructorComments :: Phantoms.TTerm Syntax.PositionalConstructor -> Phantoms.TTerm (Maybe String)
+positionalConstructorComments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PrefixApplicationExpression"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+        Core.projectionField = (Core.Name "comments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the rhs field of hydra.haskell.syntax.PrefixApplicationExpression
-prefixApplicationExpressionRhs :: Phantoms.TTerm Syntax.PrefixApplicationExpression -> Phantoms.TTerm Syntax.Expression
-prefixApplicationExpressionRhs x =
+-- | DSL accessor for the fields field of hydra.haskell.syntax.PositionalConstructor
+positionalConstructorFields :: Phantoms.TTerm Syntax.PositionalConstructor -> Phantoms.TTerm [Syntax.Type]
+positionalConstructorFields x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PrefixApplicationExpression"),
-        Core.projectionField = (Core.Name "rhs")})),
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+        Core.projectionField = (Core.Name "fields")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the operator field of hydra.haskell.syntax.PrefixApplicationExpression
-prefixApplicationExpressionWithOperator :: Phantoms.TTerm Syntax.PrefixApplicationExpression -> Phantoms.TTerm Syntax.Operator -> Phantoms.TTerm Syntax.PrefixApplicationExpression
-prefixApplicationExpressionWithOperator original newVal =
+-- | DSL accessor for the name field of hydra.haskell.syntax.PositionalConstructor
+positionalConstructorName :: Phantoms.TTerm Syntax.PositionalConstructor -> Phantoms.TTerm Syntax.Name
+positionalConstructorName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+        Core.projectionField = (Core.Name "name")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the comments field of hydra.haskell.syntax.PositionalConstructor
+positionalConstructorWithComments :: Phantoms.TTerm Syntax.PositionalConstructor -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.PositionalConstructor
+positionalConstructorWithComments original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.PrefixApplicationExpression"),
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
       Core.recordFields = [
         Core.Field {
-          Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "rhs"),
+          Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PrefixApplicationExpression"),
-              Core.projectionField = (Core.Name "rhs")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the rhs field of hydra.haskell.syntax.PrefixApplicationExpression
-prefixApplicationExpressionWithRhs :: Phantoms.TTerm Syntax.PrefixApplicationExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.PrefixApplicationExpression
-prefixApplicationExpressionWithRhs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.PrefixApplicationExpression"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "operator"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PrefixApplicationExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+              Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
-          Core.fieldName = (Core.Name "rhs"),
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+              Core.projectionField = (Core.Name "fields")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the fields field of hydra.haskell.syntax.PositionalConstructor
+positionalConstructorWithFields :: Phantoms.TTerm Syntax.PositionalConstructor -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.PositionalConstructor
+positionalConstructorWithFields original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the name field of hydra.haskell.syntax.PositionalConstructor
+positionalConstructorWithName :: Phantoms.TTerm Syntax.PositionalConstructor -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.PositionalConstructor
+positionalConstructorWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+              Core.projectionField = (Core.Name "fields")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.PositionalConstructor"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.haskell.syntax.QualifiedName
 qualifiedName :: Phantoms.TTerm [Syntax.NamePart] -> Phantoms.TTerm Syntax.NamePart -> Phantoms.TTerm Syntax.QualifiedName
 qualifiedName qualifiers unqualified =
@@ -2934,8 +2812,8 @@ qualifiedNameWithUnqualified original newVal =
           Core.fieldName = (Core.Name "unqualified"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.haskell.syntax.RecordConstructor
-recordConstructor :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm [Syntax.FieldWithComments] -> Phantoms.TTerm Syntax.RecordConstructor
-recordConstructor name fields =
+recordConstructor :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm [Syntax.Field] -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.RecordConstructor
+recordConstructor name fields comments =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
       Core.recordFields = [
@@ -2944,9 +2822,20 @@ recordConstructor name fields =
           Core.fieldTerm = (Phantoms.unTTerm name)},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm fields)}]}))
+          Core.fieldTerm = (Phantoms.unTTerm fields)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
+-- | DSL accessor for the comments field of hydra.haskell.syntax.RecordConstructor
+recordConstructorComments :: Phantoms.TTerm Syntax.RecordConstructor -> Phantoms.TTerm (Maybe String)
+recordConstructorComments x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
+        Core.projectionField = (Core.Name "comments")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the fields field of hydra.haskell.syntax.RecordConstructor
-recordConstructorFields :: Phantoms.TTerm Syntax.RecordConstructor -> Phantoms.TTerm [Syntax.FieldWithComments]
+recordConstructorFields :: Phantoms.TTerm Syntax.RecordConstructor -> Phantoms.TTerm [Syntax.Field]
 recordConstructorFields x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -2961,8 +2850,31 @@ recordConstructorName x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
         Core.projectionField = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the comments field of hydra.haskell.syntax.RecordConstructor
+recordConstructorWithComments :: Phantoms.TTerm Syntax.RecordConstructor -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.RecordConstructor
+recordConstructorWithComments original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
+              Core.projectionField = (Core.Name "fields")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL updater for the fields field of hydra.haskell.syntax.RecordConstructor
-recordConstructorWithFields :: Phantoms.TTerm Syntax.RecordConstructor -> Phantoms.TTerm [Syntax.FieldWithComments] -> Phantoms.TTerm Syntax.RecordConstructor
+recordConstructorWithFields :: Phantoms.TTerm Syntax.RecordConstructor -> Phantoms.TTerm [Syntax.Field] -> Phantoms.TTerm Syntax.RecordConstructor
 recordConstructorWithFields original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
@@ -2976,7 +2888,14 @@ recordConstructorWithFields original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.haskell.syntax.RecordConstructor
 recordConstructorWithName :: Phantoms.TTerm Syntax.RecordConstructor -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.RecordConstructor
 recordConstructorWithName original newVal =
@@ -2991,6 +2910,73 @@ recordConstructorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
+              Core.projectionField = (Core.Name "fields")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordConstructor"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.haskell.syntax.RecordExpression
+recordExpression :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm [Syntax.FieldUpdate] -> Phantoms.TTerm Syntax.RecordExpression
+recordExpression name fields =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.RecordExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Phantoms.unTTerm fields)}]}))
+-- | DSL accessor for the fields field of hydra.haskell.syntax.RecordExpression
+recordExpressionFields :: Phantoms.TTerm Syntax.RecordExpression -> Phantoms.TTerm [Syntax.FieldUpdate]
+recordExpressionFields x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordExpression"),
+        Core.projectionField = (Core.Name "fields")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the name field of hydra.haskell.syntax.RecordExpression
+recordExpressionName :: Phantoms.TTerm Syntax.RecordExpression -> Phantoms.TTerm Syntax.Name
+recordExpressionName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordExpression"),
+        Core.projectionField = (Core.Name "name")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the fields field of hydra.haskell.syntax.RecordExpression
+recordExpressionWithFields :: Phantoms.TTerm Syntax.RecordExpression -> Phantoms.TTerm [Syntax.FieldUpdate] -> Phantoms.TTerm Syntax.RecordExpression
+recordExpressionWithFields original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.RecordExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordExpression"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the name field of hydra.haskell.syntax.RecordExpression
+recordExpressionWithName :: Phantoms.TTerm Syntax.RecordExpression -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.RecordExpression
+recordExpressionWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.RecordExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordExpression"),
               Core.projectionField = (Core.Name "fields")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.haskell.syntax.RecordPattern
@@ -3051,6 +3037,66 @@ recordPatternWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordPattern"),
+              Core.projectionField = (Core.Name "fields")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.haskell.syntax.RecordUpdateExpression
+recordUpdateExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm [Syntax.FieldUpdate] -> Phantoms.TTerm Syntax.RecordUpdateExpression
+recordUpdateExpression inner fields =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.RecordUpdateExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inner"),
+          Core.fieldTerm = (Phantoms.unTTerm inner)},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Phantoms.unTTerm fields)}]}))
+-- | DSL accessor for the fields field of hydra.haskell.syntax.RecordUpdateExpression
+recordUpdateExpressionFields :: Phantoms.TTerm Syntax.RecordUpdateExpression -> Phantoms.TTerm [Syntax.FieldUpdate]
+recordUpdateExpressionFields x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordUpdateExpression"),
+        Core.projectionField = (Core.Name "fields")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the inner field of hydra.haskell.syntax.RecordUpdateExpression
+recordUpdateExpressionInner :: Phantoms.TTerm Syntax.RecordUpdateExpression -> Phantoms.TTerm Syntax.Expression
+recordUpdateExpressionInner x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordUpdateExpression"),
+        Core.projectionField = (Core.Name "inner")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the fields field of hydra.haskell.syntax.RecordUpdateExpression
+recordUpdateExpressionWithFields :: Phantoms.TTerm Syntax.RecordUpdateExpression -> Phantoms.TTerm [Syntax.FieldUpdate] -> Phantoms.TTerm Syntax.RecordUpdateExpression
+recordUpdateExpressionWithFields original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.RecordUpdateExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inner"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordUpdateExpression"),
+              Core.projectionField = (Core.Name "inner")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the inner field of hydra.haskell.syntax.RecordUpdateExpression
+recordUpdateExpressionWithInner :: Phantoms.TTerm Syntax.RecordUpdateExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.RecordUpdateExpression
+recordUpdateExpressionWithInner original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.RecordUpdateExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inner"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "fields"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.RecordUpdateExpression"),
               Core.projectionField = (Core.Name "fields")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.haskell.syntax.RightHandSide wrapper
@@ -3120,8 +3166,8 @@ sectionExpressionWithOperator original newVal =
               Core.projectionField = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.haskell.syntax.SimpleValueBinding
-simpleValueBinding :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.RightHandSide -> Phantoms.TTerm (Maybe Syntax.LocalBindings) -> Phantoms.TTerm Syntax.SimpleValueBinding
-simpleValueBinding pattern rhs localBindings =
+simpleValueBinding :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.RightHandSide -> Phantoms.TTerm (Maybe Syntax.LocalBindings) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.SimpleValueBinding
+simpleValueBinding pattern rhs localBindings comments =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
       Core.recordFields = [
@@ -3133,7 +3179,18 @@ simpleValueBinding pattern rhs localBindings =
           Core.fieldTerm = (Phantoms.unTTerm rhs)},
         Core.Field {
           Core.fieldName = (Core.Name "localBindings"),
-          Core.fieldTerm = (Phantoms.unTTerm localBindings)}]}))
+          Core.fieldTerm = (Phantoms.unTTerm localBindings)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
+-- | DSL accessor for the comments field of hydra.haskell.syntax.SimpleValueBinding
+simpleValueBindingComments :: Phantoms.TTerm Syntax.SimpleValueBinding -> Phantoms.TTerm (Maybe String)
+simpleValueBindingComments x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
+        Core.projectionField = (Core.Name "comments")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the localBindings field of hydra.haskell.syntax.SimpleValueBinding
 simpleValueBindingLocalBindings :: Phantoms.TTerm Syntax.SimpleValueBinding -> Phantoms.TTerm (Maybe Syntax.LocalBindings)
 simpleValueBindingLocalBindings x =
@@ -3158,6 +3215,36 @@ simpleValueBindingRhs x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
         Core.projectionField = (Core.Name "rhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the comments field of hydra.haskell.syntax.SimpleValueBinding
+simpleValueBindingWithComments :: Phantoms.TTerm Syntax.SimpleValueBinding -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.SimpleValueBinding
+simpleValueBindingWithComments original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "pattern"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
+              Core.projectionField = (Core.Name "pattern")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "rhs"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
+              Core.projectionField = (Core.Name "rhs")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "localBindings"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
+              Core.projectionField = (Core.Name "localBindings")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL updater for the localBindings field of hydra.haskell.syntax.SimpleValueBinding
 simpleValueBindingWithLocalBindings :: Phantoms.TTerm Syntax.SimpleValueBinding -> Phantoms.TTerm (Maybe Syntax.LocalBindings) -> Phantoms.TTerm Syntax.SimpleValueBinding
 simpleValueBindingWithLocalBindings original newVal =
@@ -3180,7 +3267,14 @@ simpleValueBindingWithLocalBindings original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "localBindings"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the pattern field of hydra.haskell.syntax.SimpleValueBinding
 simpleValueBindingWithPattern :: Phantoms.TTerm Syntax.SimpleValueBinding -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.SimpleValueBinding
 simpleValueBindingWithPattern original newVal =
@@ -3203,6 +3297,13 @@ simpleValueBindingWithPattern original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
               Core.projectionField = (Core.Name "localBindings")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
+              Core.projectionField = (Core.Name "comments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the rhs field of hydra.haskell.syntax.SimpleValueBinding
 simpleValueBindingWithRhs :: Phantoms.TTerm Syntax.SimpleValueBinding -> Phantoms.TTerm Syntax.RightHandSide -> Phantoms.TTerm Syntax.SimpleValueBinding
@@ -3226,45 +3327,20 @@ simpleValueBindingWithRhs original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
               Core.projectionField = (Core.Name "localBindings")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.SimpleValueBinding"),
+              Core.projectionField = (Core.Name "comments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL injection for the hiding variant of hydra.haskell.syntax.SpecImport
-specImportHiding :: Phantoms.TTerm [Syntax.ImportExportSpec] -> Phantoms.TTerm Syntax.SpecImport
-specImportHiding x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.SpecImport"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "hiding"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL injection for the list variant of hydra.haskell.syntax.SpecImport
-specImportList :: Phantoms.TTerm [Syntax.ImportExportSpec] -> Phantoms.TTerm Syntax.SpecImport
-specImportList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.SpecImport"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for the hydra.haskell.syntax.Statement wrapper
 statement :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Statement
 statement x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.haskell.syntax.Statement"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
--- | DSL injection for the all variant of hydra.haskell.syntax.SubspecImportExportSpec
-subspecImportExportSpecAll :: Phantoms.TTerm Syntax.SubspecImportExportSpec
-subspecImportExportSpecAll =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.SubspecImportExportSpec"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "all"),
-        Core.fieldTerm = Core.TermUnit}}))
--- | DSL injection for the list variant of hydra.haskell.syntax.SubspecImportExportSpec
-subspecImportExportSpecList :: Phantoms.TTerm [Syntax.Name] -> Phantoms.TTerm Syntax.SubspecImportExportSpec
-subspecImportExportSpecList x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.SubspecImportExportSpec"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "list"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the application variant of hydra.haskell.syntax.Type
 typeApplication :: Phantoms.TTerm Syntax.ApplicationType -> Phantoms.TTerm Syntax.Type
 typeApplication x =
@@ -3274,73 +3350,13 @@ typeApplication x =
         Core.fieldName = (Core.Name "application"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the ctx variant of hydra.haskell.syntax.Type
-typeCtx :: Phantoms.TTerm Syntax.ContextType -> Phantoms.TTerm Syntax.Type
+typeCtx :: Phantoms.TTerm Syntax.ConstrainedType -> Phantoms.TTerm Syntax.Type
 typeCtx x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "ctx"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL constructor for hydra.haskell.syntax.TypeDeclaration
-typeDeclaration :: Phantoms.TTerm Syntax.DeclarationHead -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeDeclaration
-typeDeclaration name type_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeDeclaration"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
--- | DSL accessor for the name field of hydra.haskell.syntax.TypeDeclaration
-typeDeclarationName :: Phantoms.TTerm Syntax.TypeDeclaration -> Phantoms.TTerm Syntax.DeclarationHead
-typeDeclarationName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeDeclaration"),
-        Core.projectionField = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the type field of hydra.haskell.syntax.TypeDeclaration
-typeDeclarationType :: Phantoms.TTerm Syntax.TypeDeclaration -> Phantoms.TTerm Syntax.Type
-typeDeclarationType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeDeclaration"),
-        Core.projectionField = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the name field of hydra.haskell.syntax.TypeDeclaration
-typeDeclarationWithName :: Phantoms.TTerm Syntax.TypeDeclaration -> Phantoms.TTerm Syntax.DeclarationHead -> Phantoms.TTerm Syntax.TypeDeclaration
-typeDeclarationWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeDeclaration"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeDeclaration"),
-              Core.projectionField = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the type field of hydra.haskell.syntax.TypeDeclaration
-typeDeclarationWithType :: Phantoms.TTerm Syntax.TypeDeclaration -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeDeclaration
-typeDeclarationWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeDeclaration"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeDeclaration"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL injection for the function variant of hydra.haskell.syntax.Type
 typeFunction :: Phantoms.TTerm Syntax.FunctionType -> Phantoms.TTerm Syntax.Type
 typeFunction x =
@@ -3365,14 +3381,6 @@ typeList x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "list"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
--- | DSL injection for the parens variant of hydra.haskell.syntax.Type
-typeParens :: Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Type
-typeParens x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.haskell.syntax.Type"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "parens"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for hydra.haskell.syntax.TypeSignature
 typeSignature :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeSignature
 typeSignature name type_ =
@@ -3385,66 +3393,6 @@ typeSignature name type_ =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
--- | DSL constructor for hydra.haskell.syntax.TypeSignatureExpression
-typeSignatureExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeSignatureExpression
-typeSignatureExpression inner type_ =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeSignatureExpression"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inner"),
-          Core.fieldTerm = (Phantoms.unTTerm inner)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
--- | DSL accessor for the inner field of hydra.haskell.syntax.TypeSignatureExpression
-typeSignatureExpressionInner :: Phantoms.TTerm Syntax.TypeSignatureExpression -> Phantoms.TTerm Syntax.Expression
-typeSignatureExpressionInner x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSignatureExpression"),
-        Core.projectionField = (Core.Name "inner")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the type field of hydra.haskell.syntax.TypeSignatureExpression
-typeSignatureExpressionType :: Phantoms.TTerm Syntax.TypeSignatureExpression -> Phantoms.TTerm Syntax.Type
-typeSignatureExpressionType x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSignatureExpression"),
-        Core.projectionField = (Core.Name "type")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the inner field of hydra.haskell.syntax.TypeSignatureExpression
-typeSignatureExpressionWithInner :: Phantoms.TTerm Syntax.TypeSignatureExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.TypeSignatureExpression
-typeSignatureExpressionWithInner original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeSignatureExpression"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inner"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSignatureExpression"),
-              Core.projectionField = (Core.Name "type")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the type field of hydra.haskell.syntax.TypeSignatureExpression
-typeSignatureExpressionWithType :: Phantoms.TTerm Syntax.TypeSignatureExpression -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeSignatureExpression
-typeSignatureExpressionWithType original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeSignatureExpression"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inner"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSignatureExpression"),
-              Core.projectionField = (Core.Name "inner")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "type"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL accessor for the name field of hydra.haskell.syntax.TypeSignature
 typeSignatureName :: Phantoms.TTerm Syntax.TypeSignature -> Phantoms.TTerm Syntax.Name
 typeSignatureName x =
@@ -3493,6 +3441,114 @@ typeSignatureWithType original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL constructor for hydra.haskell.syntax.TypeSynonymDeclaration
+typeSynonymDeclaration :: Phantoms.TTerm Syntax.DeclarationHead -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TypeSynonymDeclaration
+typeSynonymDeclaration name type_ comments =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm type_)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
+-- | DSL accessor for the comments field of hydra.haskell.syntax.TypeSynonymDeclaration
+typeSynonymDeclarationComments :: Phantoms.TTerm Syntax.TypeSynonymDeclaration -> Phantoms.TTerm (Maybe String)
+typeSynonymDeclarationComments x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+        Core.projectionField = (Core.Name "comments")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the name field of hydra.haskell.syntax.TypeSynonymDeclaration
+typeSynonymDeclarationName :: Phantoms.TTerm Syntax.TypeSynonymDeclaration -> Phantoms.TTerm Syntax.DeclarationHead
+typeSynonymDeclarationName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+        Core.projectionField = (Core.Name "name")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the type field of hydra.haskell.syntax.TypeSynonymDeclaration
+typeSynonymDeclarationType :: Phantoms.TTerm Syntax.TypeSynonymDeclaration -> Phantoms.TTerm Syntax.Type
+typeSynonymDeclarationType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+        Core.projectionField = (Core.Name "type")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the comments field of hydra.haskell.syntax.TypeSynonymDeclaration
+typeSynonymDeclarationWithComments :: Phantoms.TTerm Syntax.TypeSynonymDeclaration -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TypeSynonymDeclaration
+typeSynonymDeclarationWithComments original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+              Core.projectionField = (Core.Name "type")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the name field of hydra.haskell.syntax.TypeSynonymDeclaration
+typeSynonymDeclarationWithName :: Phantoms.TTerm Syntax.TypeSynonymDeclaration -> Phantoms.TTerm Syntax.DeclarationHead -> Phantoms.TTerm Syntax.TypeSynonymDeclaration
+typeSynonymDeclarationWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+              Core.projectionField = (Core.Name "type")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the type field of hydra.haskell.syntax.TypeSynonymDeclaration
+typeSynonymDeclarationWithType :: Phantoms.TTerm Syntax.TypeSynonymDeclaration -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeSynonymDeclaration
+typeSynonymDeclarationWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypeSynonymDeclaration"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the tuple variant of hydra.haskell.syntax.Type
 typeTuple :: Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.Type
 typeTuple x =
@@ -3510,8 +3566,8 @@ typeVariable x =
         Core.fieldName = (Core.Name "variable"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL constructor for hydra.haskell.syntax.TypedBinding
-typedBinding :: Phantoms.TTerm Syntax.TypeSignature -> Phantoms.TTerm Syntax.ValueBinding -> Phantoms.TTerm Syntax.TypedBinding
-typedBinding typeSignature valueBinding =
+typedBinding :: Phantoms.TTerm Syntax.TypeSignature -> Phantoms.TTerm Syntax.ValueBinding -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TypedBinding
+typedBinding typeSignature valueBinding comments =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
       Core.recordFields = [
@@ -3520,7 +3576,18 @@ typedBinding typeSignature valueBinding =
           Core.fieldTerm = (Phantoms.unTTerm typeSignature)},
         Core.Field {
           Core.fieldName = (Core.Name "valueBinding"),
-          Core.fieldTerm = (Phantoms.unTTerm valueBinding)}]}))
+          Core.fieldTerm = (Phantoms.unTTerm valueBinding)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm comments)}]}))
+-- | DSL accessor for the comments field of hydra.haskell.syntax.TypedBinding
+typedBindingComments :: Phantoms.TTerm Syntax.TypedBinding -> Phantoms.TTerm (Maybe String)
+typedBindingComments x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
+        Core.projectionField = (Core.Name "comments")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeSignature field of hydra.haskell.syntax.TypedBinding
 typedBindingTypeSignature :: Phantoms.TTerm Syntax.TypedBinding -> Phantoms.TTerm Syntax.TypeSignature
 typedBindingTypeSignature x =
@@ -3537,6 +3604,29 @@ typedBindingValueBinding x =
         Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
         Core.projectionField = (Core.Name "valueBinding")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the comments field of hydra.haskell.syntax.TypedBinding
+typedBindingWithComments :: Phantoms.TTerm Syntax.TypedBinding -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TypedBinding
+typedBindingWithComments original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeSignature"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
+              Core.projectionField = (Core.Name "typeSignature")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "valueBinding"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
+              Core.projectionField = (Core.Name "valueBinding")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL updater for the typeSignature field of hydra.haskell.syntax.TypedBinding
 typedBindingWithTypeSignature :: Phantoms.TTerm Syntax.TypedBinding -> Phantoms.TTerm Syntax.TypeSignature -> Phantoms.TTerm Syntax.TypedBinding
 typedBindingWithTypeSignature original newVal =
@@ -3552,6 +3642,13 @@ typedBindingWithTypeSignature original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
               Core.projectionField = (Core.Name "valueBinding")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
+              Core.projectionField = (Core.Name "comments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the valueBinding field of hydra.haskell.syntax.TypedBinding
 typedBindingWithValueBinding :: Phantoms.TTerm Syntax.TypedBinding -> Phantoms.TTerm Syntax.ValueBinding -> Phantoms.TTerm Syntax.TypedBinding
@@ -3568,6 +3665,73 @@ typedBindingWithValueBinding original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueBinding"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "comments"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedBinding"),
+              Core.projectionField = (Core.Name "comments")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL constructor for hydra.haskell.syntax.TypedExpression
+typedExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypedExpression
+typedExpression inner type_ =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypedExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inner"),
+          Core.fieldTerm = (Phantoms.unTTerm inner)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Phantoms.unTTerm type_)}]}))
+-- | DSL accessor for the inner field of hydra.haskell.syntax.TypedExpression
+typedExpressionInner :: Phantoms.TTerm Syntax.TypedExpression -> Phantoms.TTerm Syntax.Expression
+typedExpressionInner x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedExpression"),
+        Core.projectionField = (Core.Name "inner")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the type field of hydra.haskell.syntax.TypedExpression
+typedExpressionType :: Phantoms.TTerm Syntax.TypedExpression -> Phantoms.TTerm Syntax.Type
+typedExpressionType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedExpression"),
+        Core.projectionField = (Core.Name "type")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the inner field of hydra.haskell.syntax.TypedExpression
+typedExpressionWithInner :: Phantoms.TTerm Syntax.TypedExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.TypedExpression
+typedExpressionWithInner original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypedExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inner"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedExpression"),
+              Core.projectionField = (Core.Name "type")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the type field of hydra.haskell.syntax.TypedExpression
+typedExpressionWithType :: Phantoms.TTerm Syntax.TypedExpression -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypedExpression
+typedExpressionWithType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.TypedExpression"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "inner"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.TypedExpression"),
+              Core.projectionField = (Core.Name "inner")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.haskell.syntax.TypedPattern
 typedPattern :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypedPattern
@@ -3635,11 +3799,11 @@ unCaseRhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.haskell.syntax.CaseRhs")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the body of hydra.haskell.syntax.Deriving
-unDeriving :: Phantoms.TTerm Syntax.Deriving -> Phantoms.TTerm [Syntax.Name]
-unDeriving x =
+-- | DSL accessor for the body of hydra.haskell.syntax.DerivingClause
+unDerivingClause :: Phantoms.TTerm Syntax.DerivingClause -> Phantoms.TTerm [Syntax.Name]
+unDerivingClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.haskell.syntax.Deriving")),
+      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.haskell.syntax.DerivingClause")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body of hydra.haskell.syntax.LocalBindings
 unLocalBindings :: Phantoms.TTerm Syntax.LocalBindings -> Phantoms.TTerm [Syntax.LocalBinding]
@@ -3677,66 +3841,6 @@ unVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.haskell.syntax.Variable")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL constructor for hydra.haskell.syntax.UpdateRecordExpression
-updateRecordExpression :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm [Syntax.FieldUpdate] -> Phantoms.TTerm Syntax.UpdateRecordExpression
-updateRecordExpression inner fields =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.UpdateRecordExpression"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inner"),
-          Core.fieldTerm = (Phantoms.unTTerm inner)},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm fields)}]}))
--- | DSL accessor for the fields field of hydra.haskell.syntax.UpdateRecordExpression
-updateRecordExpressionFields :: Phantoms.TTerm Syntax.UpdateRecordExpression -> Phantoms.TTerm [Syntax.FieldUpdate]
-updateRecordExpressionFields x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.UpdateRecordExpression"),
-        Core.projectionField = (Core.Name "fields")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the inner field of hydra.haskell.syntax.UpdateRecordExpression
-updateRecordExpressionInner :: Phantoms.TTerm Syntax.UpdateRecordExpression -> Phantoms.TTerm Syntax.Expression
-updateRecordExpressionInner x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.UpdateRecordExpression"),
-        Core.projectionField = (Core.Name "inner")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the fields field of hydra.haskell.syntax.UpdateRecordExpression
-updateRecordExpressionWithFields :: Phantoms.TTerm Syntax.UpdateRecordExpression -> Phantoms.TTerm [Syntax.FieldUpdate] -> Phantoms.TTerm Syntax.UpdateRecordExpression
-updateRecordExpressionWithFields original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.UpdateRecordExpression"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inner"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.UpdateRecordExpression"),
-              Core.projectionField = (Core.Name "inner")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
--- | DSL updater for the inner field of hydra.haskell.syntax.UpdateRecordExpression
-updateRecordExpressionWithInner :: Phantoms.TTerm Syntax.UpdateRecordExpression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.UpdateRecordExpression
-updateRecordExpressionWithInner original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.haskell.syntax.UpdateRecordExpression"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "inner"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "fields"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.haskell.syntax.UpdateRecordExpression"),
-              Core.projectionField = (Core.Name "fields")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the simple variant of hydra.haskell.syntax.ValueBinding
 valueBindingSimple :: Phantoms.TTerm Syntax.SimpleValueBinding -> Phantoms.TTerm Syntax.ValueBinding
 valueBindingSimple x =

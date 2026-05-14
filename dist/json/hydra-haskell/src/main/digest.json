@@ -2,13 +2,13 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.haskell.coder": "9b706d3d85c807694282c6fe6394acf4bbbc2f2ec7660d8140788e2038d7a79d",
+    "hydra.haskell.coder": "034088192ae042d2d2fe478abd21891f01950da3d7fed51c89a477f1d8199c2c",
     "hydra.haskell.environment": "75ff0a28ef41a6048ba5ac53c2721dcdd3dba6bb190dc7e9d96155d16f33acbe",
     "hydra.haskell.language": "731be7825087fb72bd6f5bd35b13e839eadfb36b3c7bed187312224a75721322",
     "hydra.haskell.operators": "a0cb4db2c3d0ef490ec7d50c08d058e0b2395f67fae3c3c6ea036f931ad1b0b3",
-    "hydra.haskell.serde": "1fc26dbc96debf4b8f957cb1e2532d051c5fd1a16f4c7bf2fdf55738b76f4f7d",
-    "hydra.haskell.syntax": "0586ab69d521348ff619b3ed9b2850210baee5daffa8442ee3ea3ac4c088da6b",
-    "hydra.haskell.testing": "5af30d65e8f174e4db186be38907d1ed4523423aa3865f97e1285dd910e96e96",
-    "hydra.haskell.utils": "5f1a8cf96820a70fd0b8ed0ca01a77bc559186009eb09a6eb4faf25ae8407e8f"
+    "hydra.haskell.serde": "4cca85d9efb8f23d99f3ac1e328bce614e21d2d1d937313968d7cb46a542c334",
+    "hydra.haskell.syntax": "b968f051167974f56bf999c8578b160f83623815b154cfc81039f051ddc183c8",
+    "hydra.haskell.testing": "5f897bc96a901b2d75ef2a120e8ef05714af2d3c69979545764aa409e41b60e8",
+    "hydra.haskell.utils": "8123f895b8ada51696a4f88b18eaed8d672e723291ecf4ddcdc83ba3e3ffc618"
   }
 }

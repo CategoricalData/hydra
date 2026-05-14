@@ -363,7 +363,8 @@ simpleValueBinding = haskellUtilsDefinition "simpleValueBinding" $
       record H._SimpleValueBinding [
         H._SimpleValueBinding_pattern>>: var "pat",
         H._SimpleValueBinding_rhs>>: var "rightHandSide",
-        H._SimpleValueBinding_localBindings>>: var "bindings"]
+        H._SimpleValueBinding_localBindings>>: var "bindings",
+        H._SimpleValueBinding_comments>>: nothing]
 
 toTypeApplication :: TTermDefinition ([H.Type] -> H.Type)
 toTypeApplication = haskellUtilsDefinition "toTypeApplication" $

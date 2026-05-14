@@ -34,6 +34,7 @@ module Hydra.Sources.Ext (
 import Hydra.Kernel
 import Hydra.Sources.All
 
+import qualified Hydra.Sources.Bench.Manifest as BenchManifest
 import qualified Hydra.Sources.Coq.Manifest as CoqManifest
 import qualified Hydra.Sources.Ext.Manifest as ExtManifest
 import qualified Hydra.Sources.Go.Manifest as GoManifest
@@ -83,6 +84,9 @@ import qualified Data.List as L
 -- ----------------------------------------------------------------------
 -- Per-package unions (thin aliases over each package's manifest)
 -- ----------------------------------------------------------------------
+
+hydraBenchModules :: [Module]
+hydraBenchModules = BenchManifest.mainModules
 
 hydraCoqModules :: [Module]
 hydraCoqModules = CoqManifest.mainModules
