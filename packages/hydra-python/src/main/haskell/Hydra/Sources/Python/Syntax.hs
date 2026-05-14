@@ -198,20 +198,6 @@ module_ = Module {
       lambdaParamNoDefault,
       lambdaParamWithDefault,
       lambdaParamMaybeDefault,
-      fstring,
-      fstringMiddle,
-      fstringReplacementField,
-      fstringConversion,
-      fstringFullFormatSpec,
-      fstringFormatSpec,
-      tstring,
-      tstringMiddle,
-      tstringReplacement,
-      tstringConversion,
-      tstringFullFormatSpec,
-      tstringFormatSpec,
-      stringOrFstring,
-      strings,
       list,
       tuple,
       set,
@@ -1142,7 +1128,7 @@ literalExpression :: Binding
 literalExpression = def "LiteralExpression" $ T.union [
   "number">: python "SignedNumber",
   "complex">: python "ComplexNumber",
-  "string">: python "Strings",  -- PEG: `strings: (fstring|string)+`
+  "string">: python "String",
   "none">: T.unit,
   "true">: T.unit,
   "false">: T.unit]
@@ -1744,7 +1730,7 @@ atom = def "Atom" $ T.union [
   "true">: T.unit,
   "false">: T.unit,
   "none">: T.unit,
-  "string">: python "Strings",  -- PEG: `strings: (fstring|string)+`
+  "string">: python "String",
   "number">: python "Number",
   "tuple">: python "Tuple",
   "group">: python "Group",
@@ -1862,124 +1848,14 @@ lambdaParamMaybeDefault = def "LambdaParamMaybeDefault" $ T.record [
 -- # LITERALS
 -- # ========
 --
--- fstring_middle:
---     | fstring_replacement_field
---     | FSTRING_MIDDLE
-
-fstringMiddle :: Binding
-fstringMiddle = def "FstringMiddle" $ T.union [
-  "replacementField">: python "FstringReplacementField",
-  "literal">: T.string] -- FSTRING_MIDDLE
-
--- fstring_replacement_field:
---     | '{' annotated_rhs '='? [fstring_conversion] [fstring_full_format_spec] '}'
-
-fstringReplacementField :: Binding
-fstringReplacementField = def "FstringReplacementField" $ T.record [
-  "expression">: python "AnnotatedRhs",
-  "equals">: T.boolean,
-  "conversion">: T.maybe $ python "FstringConversion",
-  "formatSpec">: T.maybe $ python "FstringFullFormatSpec"]
-
--- fstring_conversion:
---     | "!" NAME
-
-fstringConversion :: Binding
-fstringConversion = def "FstringConversion" $ T.wrap $ python "Name"
-
--- fstring_full_format_spec:
---     | ':' fstring_format_spec*
-
-fstringFullFormatSpec :: Binding
-fstringFullFormatSpec = def "FstringFullFormatSpec" $ T.wrap $ T.list $ python "FstringFormatSpec"
-
--- fstring_format_spec:
---     | FSTRING_MIDDLE
---     | fstring_replacement_field
-
-fstringFormatSpec :: Binding
-fstringFormatSpec = def "FstringFormatSpec" $ T.union [
-  "literal">: T.string, -- FSTRING_MIDDLE
-  "replacementField">: python "FstringReplacementField"]
-
--- fstring:
---     | FSTRING_START fstring_middle* FSTRING_END
-
-fstring :: Binding
-fstring = def "Fstring" $ T.wrap $ T.list $ python "FstringMiddle"
-
--- T-strings (PEP 750, Python 3.14+). Structurally similar to f-strings but
--- with a few PEG-grammar differences: tstring_middle's "replacement" arm is
--- the same node as the format-spec's "replacement" arm (both called
--- tstring_format_spec_replacement_field), whereas f-strings have two
--- distinct shapes.
---
--- tstring_middle:
---     | tstring_format_spec_replacement_field
---     | TSTRING_MIDDLE
-
-tstringMiddle :: Binding
-tstringMiddle = def "TstringMiddle" $ T.union [
-  "replacementField">: python "TstringReplacement",
-  "literal">: T.string] -- TSTRING_MIDDLE
-
--- tstring_format_spec_replacement_field:
---     | '{' annotated_rhs '='? [tstring_conversion] [tstring_full_format_spec] '}'
---
--- Hydra: renamed `tstring_format_spec_replacement_field` to `TstringReplacement` to avoid
--- a Haskell constructor/type name clash (since this type is referenced as an arm in
--- TstringFormatSpec via the same `replacementField` label, the generated Haskell ctor
--- `TstringFormatSpecReplacementField` would collide with the record type of the same name).
-
-tstringReplacement :: Binding
-tstringReplacement = def "TstringReplacement" $ T.record [
-  "expression">: python "AnnotatedRhs",
-  "equals">: T.boolean,
-  "conversion">: T.maybe $ python "TstringConversion",
-  "formatSpec">: T.maybe $ python "TstringFullFormatSpec"]
-
--- tstring_conversion:
---     | "!" NAME
-
-tstringConversion :: Binding
-tstringConversion = def "TstringConversion" $ T.wrap $ python "Name"
-
--- tstring_full_format_spec:
---     | ':' tstring_format_spec*
-
-tstringFullFormatSpec :: Binding
-tstringFullFormatSpec = def "TstringFullFormatSpec" $ T.wrap $ T.list $ python "TstringFormatSpec"
-
--- tstring_format_spec:
---     | TSTRING_MIDDLE
---     | tstring_format_spec_replacement_field
-
-tstringFormatSpec :: Binding
-tstringFormatSpec = def "TstringFormatSpec" $ T.union [
-  "literal">: T.string, -- TSTRING_MIDDLE
-  "replacementField">: python "TstringReplacement"]
-
--- tstring:
---     | TSTRING_START tstring_middle* TSTRING_END
-
-tstring :: Binding
-tstring = def "Tstring" $ T.wrap $ T.list $ python "TstringMiddle"
-
--- string: STRING
--- strings: (fstring|string)+ | tstring+
---
--- Hydra: strings is a union — either a (fstring|string)+ run or a tstring+ run.
--- Python 3.14 disallows mixing tstrings with non-tstrings in a single juxtaposed-literal group.
-
-stringOrFstring :: Binding
-stringOrFstring = def "StringOrFstring" $ T.union [
-  "string">: python "String",
-  "fstring">: python "Fstring"]
-
-strings :: Binding
-strings = def "Strings" $ T.union [
-  "regulars">: nonemptyList $ python "StringOrFstring",
-  "tstrings">: nonemptyList $ python "Tstring"]
+-- string: STRING — Atom.string and LiteralExpression.string hold a single
+-- STRING literal directly (see the String definition above). Python's PEG
+-- also supports juxtaposed-string concatenation (`(fstring|string)+`) and
+-- t-strings (Python 3.14, PEP 750); those productions are not modelled
+-- here because no current code path constructs them. If/when a Python
+-- source parser or f-string-emitting coder is added, reintroduce
+-- StringOrFstring + Fstring* + Tstring* and a corresponding union or
+-- additional arm on Atom / LiteralExpression.
 
 -- list:
 --     | '[' [star_named_expressions] ']'
