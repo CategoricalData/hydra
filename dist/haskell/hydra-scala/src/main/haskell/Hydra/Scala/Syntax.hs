@@ -1,22 +1,25 @@
 -- Note: this is an automatically generated file. Do not edit.
--- | A Scala syntax model based on Scalameta (https://scalameta.org)
+-- | A Scala syntax model for Hydra, anchored on Scalameta (https://scalameta.org). Departs from Scalameta where Hydra's needs differ: Term is renamed to Data, the FunctionType/FunctionData wrappers are flattened, and arms Hydra never emits (xml literals, quasiquote/macro forms) are omitted.
 
 module Hydra.Scala.Syntax where
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Int as I
+-- | A wrapper for strings used in scala.Predef contexts.
 newtype PredefString =
   PredefString {
     unPredefString :: String}
   deriving (Eq, Ord, Read, Show)
 _PredefString = Core.Name "hydra.scala.syntax.PredefString"
+-- | A Scala 2 symbol literal (corresponds to scala.Symbol).
 data ScalaSymbol =
   ScalaSymbol {
     scalaSymbolName :: String}
   deriving (Eq, Ord, Read, Show)
 _ScalaSymbol = Core.Name "hydra.scala.syntax.ScalaSymbol"
 _ScalaSymbol_name = Core.Name "name"
+-- | The root of the Scalameta tree hierarchy. Each arm names a major AST category.
 data Tree =
   TreeRef Ref |
   TreeStat Stat |
