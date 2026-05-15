@@ -109,6 +109,29 @@ sync first — typically `bin/sync.sh --hosts all --targets all`. Symptom:
 `compileHeadsExtrasJava FAILED` with many "package hydra.lisp.syntax does not
 exist" errors.
 
+### `sbt test` from `packages/hydra-scala/` needs cross-target dist trees
+
+Same shape as the `hydra-java` issue above. The Scala sbt project at
+`packages/hydra-scala/build.sbt` declares `unmanagedSourceDirectories` over
+`dist/scala/hydra-{kernel,haskell,java,python,scala,lisp}/...`. If any of
+those cross-target dists is stale (e.g., a kernel-type change like #311's
+thunked `UniversalTestCase.actual` doesn't propagate because `dist/scala/`
+is gitignored), `sbt compile` fails on type mismatches in code that hasn't
+been regenerated. `heads/scala/bin/test-distribution.sh hydra-kernel`
+exhibits the same.
+
+`bin/sync-scala.sh` is **narrow**: it only covers `host=scala × target=scala`,
+so it populates `dist/scala/hydra-scala/` (and `hydra-kernel`/`hydra-pg`/`hydra-rdf`
+via Phase 3), but **not** `dist/scala/hydra-{haskell,java,python,lisp}/`. The
+package README's "Full sync" label is misleading; that command is a self-host
+self-target refresh, not a comprehensive one.
+
+To fully refresh Scala dist, use `bin/sync.sh --hosts scala --targets all`
+(or per-package `heads/scala/bin/assemble-distribution.sh hydra-haskell` etc.).
+Symptom: `sbt test` reports `Type Mismatch Error: Found (Unit => String),
+Required: String` or similar in a generated `dist/scala/hydra-<lang>/.../*.scala`
+file with an mtime predating a kernel-type change.
+
 ### `hydra-java:compileJava` OOM during incremental rebuild
 
 Symptom: `Exception: java.lang.OutOfMemoryError thrown from the
