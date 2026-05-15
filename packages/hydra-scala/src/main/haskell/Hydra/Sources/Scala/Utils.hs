@@ -221,16 +221,15 @@ slambda :: TTermDefinition (String -> Scala.Data -> Y.Maybe Scala.Type -> Scala.
 slambda = def "slambda" $
   doc "Create a Scala lambda (function) expression" $
   lambda "v" $ lambda "body" $ lambda "sdom" $
-    inject _Data _Data_functionData (
-      inject _FunctionDataData _FunctionDataData_function (
-        record _FunctionData [
-          _FunctionData_params>>: list [
-            record _ParamData [
-              _ParamData_mods>>: list ([] :: [TTerm Scala.Mod]),
-              _ParamData_name>>: inject Scala._Name Scala._Name_value (var "v"),
-              _ParamData_decltpe>>: var "sdom",
-              _ParamData_default>>: nothing]],
-          _FunctionData_body>>: var "body"]))
+    inject _Data _Data_function (
+      record _FunctionData [
+        _FunctionData_params>>: list [
+          record _ParamData [
+            _ParamData_mods>>: list ([] :: [TTerm Scala.Mod]),
+            _ParamData_name>>: inject Scala._Name Scala._Name_value (var "v"),
+            _ParamData_decltpe>>: var "sdom",
+            _ParamData_default>>: nothing]],
+        _FunctionData_body>>: var "body"])
 
 sname :: TTermDefinition (String -> Scala.Data)
 sname = def "sname" $
@@ -313,12 +312,10 @@ typeToString = def "typeToString" $
         (Just $ string "Any")
         [Scala._RefType_name>>: ("tn" ~> project Scala._NameType Scala._NameType_value @@ var "tn")]),
       Scala._Type_var>>: ("tv" ~> project Scala._NameType Scala._NameType_value @@ (project Scala._VarType Scala._VarType_name @@ var "tv")),
-      Scala._Type_functionType>>: ("ft" ~> cases Scala._FunctionTypeType (var "ft")
-        (Just $ string "Any") [
-        Scala._FunctionTypeType_function>>: ("fn" ~> lets [
-          "params">: Lists.map (asTerm typeToString) (project Scala._FunctionType Scala._FunctionType_params @@ var "fn"),
-          "res">: asTerm typeToString @@ (project Scala._FunctionType Scala._FunctionType_res @@ var "fn")] $
-          Strings.cat (list [string "(", Strings.intercalate (string ", ") (var "params"), string ") => ", var "res"]))]),
+      Scala._Type_function>>: ("fn" ~> lets [
+        "params">: Lists.map (asTerm typeToString) (project Scala._FunctionType Scala._FunctionType_params @@ var "fn"),
+        "res">: asTerm typeToString @@ (project Scala._FunctionType Scala._FunctionType_res @@ var "fn")] $
+        Strings.cat (list [string "(", Strings.intercalate (string ", ") (var "params"), string ") => ", var "res"])),
       Scala._Type_apply>>: ("ta" ~> lets [
         "base">: asTerm typeToString @@ (project Scala._ApplyType Scala._ApplyType_tpe @@ var "ta"),
         "argStrs">: Lists.map (asTerm typeToString) (project Scala._ApplyType Scala._ApplyType_args @@ var "ta")] $
@@ -334,8 +331,6 @@ _ApplyData_args = Name "args"
 _AssignData = Scala._AssignData
 _AssignData_lhs = Name "lhs"
 _AssignData_rhs = Name "rhs"
-_FunctionDataData = Scala._FunctionDataData
-_FunctionDataData_function = Name "function"
 _FunctionData = Scala._FunctionData
 _FunctionData_params = Name "params"
 _FunctionData_body = Name "body"
@@ -352,7 +347,7 @@ _RefData_name = Name "name"
 
 _Data_apply = Scala._Data_apply
 _Data_assign = Scala._Data_assign
-_Data_functionData = Scala._Data_functionData
+_Data_function = Scala._Data_function
 _Data_ref = Scala._Data_ref
 _Data_lit = Scala._Data_lit
 _Data_match = Scala._Data_match
@@ -366,7 +361,6 @@ _Data_match = Scala._Data_match
 _ApplyType = Scala._ApplyType
 _ApplyType_tpe = Name "tpe"
 _ApplyType_args = Name "args"
-_FunctionTypeType = Scala._FunctionTypeType
 _FunctionType = Scala._FunctionType
 _FunctionType_params = Name "params"
 _FunctionType_res = Name "res"
@@ -388,7 +382,6 @@ _VarType = Scala._VarType
 _VarType_name = Name "name"
 
 _Type_apply = Scala._Type_apply
-_Type_functionType = Scala._Type_functionType
 _Type_lambda = Scala._Type_lambda
 _Type_ref = Scala._Type_ref
 _Type_var = Scala._Type_var

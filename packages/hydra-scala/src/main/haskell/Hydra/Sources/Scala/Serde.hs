@@ -103,7 +103,7 @@ module_ = Module {
       toDefinition matchOp,
       toDefinition scalaFloatLiteralText,
       toDefinition caseToExpr,
-      toDefinition dataFunctionDataToExpr,
+      toDefinition dataFunctionToExpr,
       toDefinition dataNameToExpr,
       toDefinition dataParamToExpr,
       toDefinition dataRefToExpr,
@@ -151,26 +151,24 @@ caseToExpr = define "caseToExpr" $
       Serialization.cst @@ string "=>",
       termToExpr @@ var "term"]
 
-dataFunctionDataToExpr :: TTermDefinition (Scala.FunctionDataData -> Expr)
-dataFunctionDataToExpr = define "dataFunctionDataToExpr" $
-  doc "Convert function data to an expression" $
-  lambda "ft" $
-    cases Scala._FunctionDataData (var "ft") Nothing [
-      Scala._FunctionDataData_function>>: lambda "f" $ lets [
-        "params">: project Scala._FunctionData Scala._FunctionData_params @@ var "f",
-        "body">: project Scala._FunctionData Scala._FunctionData_body @@ var "f",
-        "bodyExpr">: termToExpr @@ var "body",
-        "bodyLen">: Serialization.expressionLength @@ var "bodyExpr"] $
-        -- For long lambda bodies (>60 chars), put body on indented new line
-        Logic.ifElse (Equality.gt (var "bodyLen") (int32 60))
-          (Serialization.noSep @@ list [
-            Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "params")),
-            Serialization.cst @@ string " =>\n  ",
-            var "bodyExpr"])
-          (Serialization.spaceSep @@ list [
-            Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "params")),
-            Serialization.cst @@ string "=>",
-            var "bodyExpr"])]
+dataFunctionToExpr :: TTermDefinition (Scala.FunctionData -> Expr)
+dataFunctionToExpr = define "dataFunctionToExpr" $
+  doc "Convert a function-data lambda to an expression" $
+  lambda "f" $ lets [
+    "params">: project Scala._FunctionData Scala._FunctionData_params @@ var "f",
+    "body">: project Scala._FunctionData Scala._FunctionData_body @@ var "f",
+    "bodyExpr">: termToExpr @@ var "body",
+    "bodyLen">: Serialization.expressionLength @@ var "bodyExpr"] $
+    -- For long lambda bodies (>60 chars), put body on indented new line
+    Logic.ifElse (Equality.gt (var "bodyLen") (int32 60))
+      (Serialization.noSep @@ list [
+        Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "params")),
+        Serialization.cst @@ string " =>\n  ",
+        var "bodyExpr"])
+      (Serialization.spaceSep @@ list [
+        Serialization.parenListAdaptive @@ (Lists.map dataParamToExpr (var "params")),
+        Serialization.cst @@ string "=>",
+        var "bodyExpr"])
 
 dataNameToExpr :: TTermDefinition (Scala.NameData -> Expr)
 dataNameToExpr = define "dataNameToExpr" $
@@ -508,7 +506,7 @@ termToExpr = define "termToExpr" $
         "mCases">: project Scala._MatchData Scala._MatchData_cases @@ var "m"] $
         Serialization.ifx @@ matchOp @@ (termToExpr @@ var "expr") @@
           (Serialization.newlineSep @@ (Lists.map caseToExpr (var "mCases"))),
-      Scala._Data_functionData>>: lambda "ft" $ dataFunctionDataToExpr @@ var "ft",
+      Scala._Data_function>>: lambda "f" $ dataFunctionToExpr @@ var "f",
       Scala._Data_block>>: lambda "blk" $ lets [
         "stats">: project Scala._BlockData Scala._BlockData_stats @@ var "blk"] $
         Serialization.curlyBlock @@ Serialization.fullBlockStyle @@ (Serialization.newlineSep @@ (Lists.map statToExpr (var "stats")))]
@@ -527,12 +525,10 @@ typeToExpr = define "typeToExpr" $
         Serialization.noSep @@ list [
           typeToExpr @@ var "fun",
           Serialization.bracketList @@ Serialization.inlineStyle @@ (Lists.map typeToExpr (var "args"))],
-      Scala._Type_functionType>>: lambda "ft" $
-        cases Scala._FunctionTypeType (var "ft") Nothing [
-          Scala._FunctionTypeType_function>>: lambda "tf" $ lets [
-            "cod">: project Scala._FunctionType Scala._FunctionType_res @@ var "tf",
-            "dom">: Maybes.fromMaybe (var "cod") (Lists.maybeHead (project Scala._FunctionType Scala._FunctionType_params @@ var "tf"))] $
-            Serialization.ifx @@ functionArrowOp @@ (typeToExpr @@ var "dom") @@ (typeToExpr @@ var "cod")],
+      Scala._Type_function>>: lambda "tf" $ lets [
+        "cod">: project Scala._FunctionType Scala._FunctionType_res @@ var "tf",
+        "dom">: Maybes.fromMaybe (var "cod") (Lists.maybeHead (project Scala._FunctionType Scala._FunctionType_params @@ var "tf"))] $
+        Serialization.ifx @@ functionArrowOp @@ (typeToExpr @@ var "dom") @@ (typeToExpr @@ var "cod"),
       Scala._Type_lambda>>: lambda "tl" $ lets [
         "params">: project Scala._LambdaType Scala._LambdaType_tparams @@ var "tl",
         "body">: project Scala._LambdaType Scala._LambdaType_tpe @@ var "tl"] $

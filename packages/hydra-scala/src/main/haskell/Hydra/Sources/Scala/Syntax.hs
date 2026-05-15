@@ -66,7 +66,6 @@ module_ = Module {
       matchData,
       tryData,
       tryWithHandlerData,
-      functionDataData,
       contextFunctionData,
       functionData,
       polyFunctionData,
@@ -89,7 +88,6 @@ module_ = Module {
       singletonType,
       applyType,
       applyInfixType,
-      functionTypeType,
       functionType,
       polyFunctionType,
       contextFunctionType,
@@ -272,7 +270,8 @@ data_ = def "Data" $
     "match">: meta "MatchData",
     "try">: meta "TryData",
     "tryWithHandler">: meta "TryWithHandlerData",
-    "functionData">: meta "FunctionDataData",
+    "function">: meta "FunctionData",
+    "contextFunction">: meta "ContextFunctionData",
     "polyFunction">: meta "PolyFunctionData",
     "partialFunction">: meta "PartialFunctionData",
     "while">: meta "WhileData",
@@ -453,12 +452,6 @@ tryWithHandlerData = def "TryWithHandlerData" $
     "catchp">: meta "Data",
     "finallyp">: T.maybe $ meta "Data"]
 
-functionDataData :: Binding
-functionDataData = def "FunctionDataData" $
-  T.union [
-    "contextFunction">: meta "ContextFunctionData",
-    "function">: meta "FunctionData"]
-
 contextFunctionData :: Binding
 contextFunctionData = def "ContextFunctionData" $
   T.record [
@@ -539,7 +532,8 @@ type_ = def "Type" $
     "anonymousName">: meta "AnonymousNameType",
     "apply">: meta "ApplyType",
     "applyInfix">: meta "ApplyInfixType",
-    "functionType">: meta "FunctionTypeType",
+    "function">: meta "FunctionType",
+    "contextFunction">: meta "ContextFunctionType",
     "polyFunction">: meta "PolyFunctionType",
     "implicitFunction">: meta "ImplicitFunctionType",
     "tuple">: meta "TupleType",
@@ -605,12 +599,6 @@ applyInfixType = def "ApplyInfixType" $
     "lhs">: meta "Type",
     "op">: meta "NameType",
     "rhs">: meta "Type"]
-
-functionTypeType :: Binding
-functionTypeType = def "FunctionTypeType" $
-  T.union [
-    "function">: meta "FunctionType",
-    "contextFunction">: meta "ContextFunctionType"]
 
 functionType :: Binding
 functionType = def "FunctionType" $
