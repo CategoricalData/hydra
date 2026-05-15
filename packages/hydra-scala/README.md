@@ -34,13 +34,17 @@ To regenerate the Scala code from the Haskell source of truth:
 
 ```bash
 # From the repo root
-bin/sync-scala.sh             # Full sync (--hosts scala --targets scala)
+bin/sync-scala.sh             # Narrow self-sync (--hosts scala --targets scala)
 bin/sync-scala.sh --no-tests  # Skip target-language tests
 ```
 
-Or include Scala in a wider sync:
+`sync-scala.sh` only refreshes `dist/scala/hydra-scala/` plus the baseline
+`dist/scala/{hydra-kernel,hydra-pg,hydra-rdf}/` trees. If you need to compile
+the full sbt project (which references `dist/scala/hydra-{haskell,java,python,lisp}/`
+as well), use a wider sync:
 
 ```bash
+bin/sync.sh --hosts scala --targets all                     # full Scala refresh
 bin/sync.sh --hosts haskell,scala --targets haskell,scala
 bin/sync.sh --hosts all --targets all                       # full matrix
 ```
