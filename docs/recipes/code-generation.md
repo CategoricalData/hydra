@@ -425,7 +425,7 @@ flags match what the target generation actually references.
 When a kernel source change alters the *behavior of a synthesizer that
 produces JSON output* — e.g., editing
 `Hydra/Sources/Kernel/Terms/Dsls.hs` (the DSL-wrapper synthesizer) or
-`Hydra/Sources/Haskell/Coder.hs` — one `/sync-haskell()` is not enough.
+`Hydra/Sources/Haskell/Coder.hs` — one `/sync-haskell` is not enough.
 Phase 1 builds a new binary with your change, but Phase 2 runs that
 binary against the existing JSON inputs to regenerate downstream JSON.
 Outputs that depend on the *new* synthesizer behavior (the DSL-wrapper
@@ -434,7 +434,7 @@ the first sync rebuilds the binary, the second runs the new binary
 against the now-updated source state.
 
 If you edit a synthesizer and only see partial propagation, run
-`/sync-haskell()` a second time before debugging.
+`/sync-haskell` a second time before debugging.
 
 This is a known limitation of the current cache key, which hashes the
 *input source* but not the *transform binary*. The fix is tracked in
@@ -487,7 +487,7 @@ such a module, the build sequence is:
 1. `stack build` -- verifies the library and execs compile against
    the renamed source. The test target is *not* configured at this
    step, so it cannot fail on the missing generated module.
-2. `/sync-haskell()` -- regenerates the dist files under the new
+2. `/sync-haskell` -- regenerates the dist files under the new
    namespace, then runs `stack test` itself as part of its final
    verification phase.
 

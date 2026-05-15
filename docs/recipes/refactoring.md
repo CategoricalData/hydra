@@ -327,7 +327,7 @@ generated module), and regeneration depends on the kernel building.
    so the new identifier exists.
 2. Patch every dist/haskell file that references the old name —
    `grep -rln '\boldName\b' dist/haskell/` and apply the rename across all hits.
-3. Run `/sync-haskell()`. Phase 1 (DSL → JSON) will compile and re-emit JSON
+3. Run `/sync-haskell`. Phase 1 (DSL → JSON) will compile and re-emit JSON
    against the new identifier; Phase 4 (JSON → Haskell) will overwrite your
    patches with the canonical regenerated output.
 4. If the rename changes the encoder's output for transitively-affected

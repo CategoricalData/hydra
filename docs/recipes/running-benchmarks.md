@@ -97,7 +97,7 @@ an artificially sublinear exponent.
 Each series lives under `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Bench/`
 and is registered in `Hydra.Sources.Kernel.Manifest`. To extend the
 maximum N supported by a series, edit its source file's `numWalkers`
-constant and re-run `/sync-haskell()` to regenerate the JSON. All hosts
+constant and re-run `/sync-haskell` to regenerate the JSON. All hosts
 read the same kernel JSON, so a single sync propagates the new size.
 
 | Series             | Shape                                                         |

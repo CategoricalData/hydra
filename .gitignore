@@ -90,7 +90,11 @@ dist/haskell/*/.test-input-hash.txt
 # Other
 *.log
 *.swp
-.claude
+# Per-user Claude state (settings, session caches, etc.) is gitignored,
+# but the in-repo slash commands live under .claude/commands/ and ARE
+# tracked. Pattern: exclude .claude contents but re-include .claude/commands/.
+.claude/*
+!.claude/commands/
 # Hydra branch plan files (see CLAUDE.md)
 *-plan.md
 # Cross-worktree Claude messages (see CLAUDE.md)
