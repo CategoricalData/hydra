@@ -536,7 +536,7 @@ The `Validate.Packaging.checkDefinitionOrdering` check (run as part of
 `Validate.Packaging.kernelModule` / `kernelPackage`) walks each module's
 `definitions` list and reports any consecutive pair whose local names are
 not in ascending lexicographic ASCII order.
-This check runs against `Sources.kernelModules` as part of `/sync-haskell()`,
+This check runs against `Sources.kernelModules` as part of `/sync-haskell`,
 so list-order violations fail the sync.
 A maintenance pass therefore does not need to re-check the list order.
 
@@ -980,7 +980,7 @@ but the reviewer (main session) owns the triage.
 
 ## Full maintenance pass
 
-To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
+To run all checks in sequence (invoked via `/maintenance` in CLAUDE.md):
 
 1. Scan for non-source files; remove or untrack as appropriate; update `.gitignore`.
 2. Find stale generated files across all implementations; delete confirmed orphans.
@@ -993,8 +993,8 @@ To run all checks in sequence (invoked via `/maintenance()` in CLAUDE.md):
 5. Run `Validate.Packaging.kernelPackage` against `Sources.kernelModules`
    (i.e. the kernel-quality validator suite, including `checkDefinitionOrdering`,
    `checkDefinitionDocumentation`, `checkDefinitionNameConvention`, etc.).
-   This step belongs in `/sync-haskell()` and may move there in the future;
-   until it does, run it as part of `/maintenance()`.
+   This step belongs in `/sync-haskell` and may move there in the future;
+   until it does, run it as part of `/maintenance`.
    The validator must be invoked only on the hand-written Source modules
    (`Sources.kernelModules`); do not pass in generator-derived modules
    (`hydra.dsl.*`, `hydra.encode.*`, `hydra.decode.*`) — those use a
@@ -1048,7 +1048,7 @@ If no changes affect generated files or tests, skip the sync.
 | Stale generated files | After refactoring (renames, deletes, splits) |
 | Design violations | Periodically, before release, after adding sync-script patches |
 | Coding style (body order vs list order) | After large changes, before release |
-| Kernel package validation (`kernelPackage`) | Every maintenance pass; ideally part of `/sync-haskell()` |
+| Kernel package validation (`kernelPackage`) | Every maintenance pass; ideally part of `/sync-haskell` |
 | Primitive consistency | After adding/changing primitives, after adding a new implementation |
 | Test parity | After sync-all, after benchmarking runs |
 | `.cabal` exposed-modules | After deleting generated Haskell modules |
