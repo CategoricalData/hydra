@@ -13,7 +13,13 @@ fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
-HYDRA_SCALA_DIR="$HYDRA_ROOT/heads/scala"
+# Scala layout: sbt project lives under packages/hydra-scala/; hand-written
+# runtime sources (lib/, tests) live under heads/scala/. The bootstrap demo
+# uses its own self-contained build.sbt (under resources/scala/) that does
+# not reference the parent repo's dist/.
+HYDRA_SCALA_PKG="$HYDRA_ROOT/packages/hydra-scala"
+HYDRA_SCALA_HEAD="$HYDRA_ROOT/heads/scala"
+SCALA_RESOURCES="$SCRIPT_DIR/../resources/scala"
 
 # Clean and create output directory
 echo "Preparing output directory: $OUTPUT_DIR"
@@ -25,27 +31,27 @@ echo "Copying static resources for Scala target..."
 
 # Build files
 echo "  Copying build files..."
-cp "$HYDRA_SCALA_DIR/build.sbt" "$OUTPUT_DIR/"
+cp "$SCALA_RESOURCES/build.sbt" "$OUTPUT_DIR/"
 mkdir -p "$OUTPUT_DIR/project"
-cp "$HYDRA_SCALA_DIR/project/build.properties" "$OUTPUT_DIR/project/" 2>/dev/null || true
+cp "$HYDRA_SCALA_PKG/project/build.properties" "$OUTPUT_DIR/project/" 2>/dev/null || true
 
 # Hand-written source files (primitive libraries)
 # Note: we exclude Generation.scala and Bootstrap.scala because they reference
 # hydra.* coder modules which are not present in the bootstrapping target.
 echo "  Copying hand-written source files..."
-if [ -d "$HYDRA_SCALA_DIR/src/main/scala" ]; then
+if [ -d "$HYDRA_SCALA_HEAD/src/main/scala" ]; then
     mkdir -p "$OUTPUT_DIR/src/main/scala/hydra"
     # Copy lib/ directory (primitive implementations)
-    if [ -d "$HYDRA_SCALA_DIR/src/main/scala/hydra/lib" ]; then
-        cp -r "$HYDRA_SCALA_DIR/src/main/scala/hydra/lib" "$OUTPUT_DIR/src/main/scala/hydra/"
+    if [ -d "$HYDRA_SCALA_HEAD/src/main/scala/hydra/lib" ]; then
+        cp -r "$HYDRA_SCALA_HEAD/src/main/scala/hydra/lib" "$OUTPUT_DIR/src/main/scala/hydra/"
     fi
 fi
 
 # Test runner
 echo "  Copying test runner..."
-if [ -d "$HYDRA_SCALA_DIR/src/test/scala" ]; then
+if [ -d "$HYDRA_SCALA_HEAD/src/test/scala" ]; then
     mkdir -p "$OUTPUT_DIR/src/test/scala"
-    cp -r "$HYDRA_SCALA_DIR/src/test/scala/hydra" "$OUTPUT_DIR/src/test/scala/"
+    cp -r "$HYDRA_SCALA_HEAD/src/test/scala/hydra" "$OUTPUT_DIR/src/test/scala/"
 fi
 
 # Summary
