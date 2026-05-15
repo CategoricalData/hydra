@@ -136,7 +136,7 @@ constructModule = def "constructModule" $
     "termDefs">: Pairs.second (var "partitioned"),
     "nsName">: Packaging.unNamespace (Packaging.moduleNamespace (var "mod")),
     "pname">: toScalaName (var "nsName"),
-    "pref">: inject _Data_Ref _Data_Ref_name (var "pname")] $
+    "pref">: inject _RefData _RefData_name (var "pname")] $
     Eithers.bind
       (Eithers.mapList ("td" ~> asTerm encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "td") (var "typeDefs"))
       ("typeDeclStats" ~>
@@ -151,8 +151,8 @@ constructModule = def "constructModule" $
                   _Pkg_ref>>: var "pref",
                   _Pkg_stats>>: Lists.concat (list [var "imports", var "typeDeclStats", var "termDeclStats"])]))))
   where
-    toScalaName n = record _Data_Name [
-      _Data_Name_value>>: wrap _PredefString (Strings.intercalate (string ".") (Strings.splitOn (string ".") n))]
+    toScalaName n = record _NameData [
+      _NameData_value>>: wrap _PredefString (Strings.intercalate (string ".") (Strings.splitOn (string ".") n))]
 
 -- | Drop N domain types from a function type, returning the remaining type.
 --   dropDomains 0 (A -> B -> C) = A -> B -> C
@@ -214,9 +214,9 @@ encodeCase = def "encodeCase" $
         (emptyList)
         (list [inject _Pat _Pat_wildcard unit]))
       (list [ScalaUtilsSource.svar @@ var "v"]),
-    "pat">: inject _Pat _Pat_extract (record _Pat_Extract [
-      _Pat_Extract_fun>>: ScalaUtilsSource.sname @@ (ScalaUtilsSource.qualifyUnionFieldName @@ string "MATCHED." @@ var "sn" @@ var "fname"),
-      _Pat_Extract_args>>: var "patArgs"]),
+    "pat">: inject _Pat _Pat_extract (record _ExtractPat [
+      _ExtractPat_fun>>: ScalaUtilsSource.sname @@ (ScalaUtilsSource.qualifyUnionFieldName @@ string "MATCHED." @@ var "sn" @@ var "fname"),
+      _ExtractPat_args>>: var "patArgs"]),
     "applied">: asTerm applyVar @@ var "fterm" @@ var "v"] $
     Eithers.bind
       (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "applied")
@@ -272,15 +272,15 @@ encodeComplexTermDef = def "encodeComplexTermDef" $
                   ("sbindings" ~> lets [
                     "defBody">: Logic.ifElse (Lists.null (var "sbindings"))
                       (var "sbody")
-                      (inject _Data _Data_block (record _Data_Block [
-                        _Data_Block_stats>>: Lists.concat2 (var "sbindings") (list [inject _Stat _Stat_term (var "sbody")])]))] $
-                    right (inject _Stat _Stat_defn (inject _Defn _Defn_def (record _Defn_Def [
-                      _Defn_Def_mods>>: emptyList,
-                      _Defn_Def_name>>: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")],
-                      _Defn_Def_tparams>>: var "tparams",
-                      _Defn_Def_paramss>>: Lists.map ("p" ~> list [var "p"]) (var "sparams"),
-                      _Defn_Def_decltpe>>: just (var "scod"),
-                      _Defn_Def_body>>: var "defBody"])))))))
+                      (inject _Data _Data_block (record _BlockData [
+                        _BlockData_stats>>: Lists.concat2 (var "sbindings") (list [inject _Stat _Stat_term (var "sbody")])]))] $
+                    right (inject _Stat _Stat_defn (inject _Defn _Defn_def (record _DefDefn [
+                      _DefDefn_mods>>: emptyList,
+                      _DefDefn_name>>: record _NameData [_NameData_value>>: wrap _PredefString (var "lname")],
+                      _DefDefn_tparams>>: var "tparams",
+                      _DefDefn_paramss>>: Lists.map ("p" ~> list [var "p"]) (var "sparams"),
+                      _DefDefn_decltpe>>: just (var "scod"),
+                      _DefDefn_body>>: var "defBody"])))))))
 
 encodeFunction :: TTermDefinition (Context -> Graph -> M.Map Name Term -> Term -> Maybe Term -> Either Error Scala.Data)
 encodeFunction = def "encodeFunction" $
@@ -352,11 +352,11 @@ encodeFunction = def "encodeFunction" $
               (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta"))
             ("msdom" ~>
               right (ScalaUtilsSource.slambda @@ var "pv" @@
-                (inject _Data _Data_ref (inject _Data_Ref _Data_Ref_select (
-                  record _Data_Select [
-                    _Data_Select_qual>>: ScalaUtilsSource.sname @@ var "pv",
-                    _Data_Select_name>>: record _Data_Name [
-                      _Data_Name_value>>: wrap _PredefString (var "fname")]])))
+                (inject _Data _Data_ref (inject _RefData _RefData_select (
+                  record _SelectData [
+                    _SelectData_qual>>: ScalaUtilsSource.sname @@ var "pv",
+                    _SelectData_name>>: record _NameData [
+                      _NameData_value>>: wrap _PredefString (var "fname")]])))
                 @@ var "msdom")))
 
           -- Applied projection: encode in the application handler (shouldn't reach here)
@@ -364,11 +364,11 @@ encodeFunction = def "encodeFunction" $
             Eithers.bind
               (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
               ("sa" ~>
-                right (inject _Data _Data_ref (inject _Data_Ref _Data_Ref_select (
-                  record _Data_Select [
-                    _Data_Select_qual>>: var "sa",
-                    _Data_Select_name>>: record _Data_Name [
-                      _Data_Name_value>>: wrap _PredefString (var "fname")]])))))
+                right (inject _Data _Data_ref (inject _RefData _RefData_select (
+                  record _SelectData [
+                    _SelectData_qual>>: var "sa",
+                    _SelectData_name>>: record _NameData [
+                      _NameData_value>>: wrap _PredefString (var "fname")]])))))
           (var "arg")),
       _Term_cases>>: ("cs" ~> lets [
         "v">: string "v",
@@ -404,27 +404,27 @@ encodeFunction = def "encodeFunction" $
                   (Eithers.bind
                     (asTerm findSdom @@ var "cx" @@ var "g" @@ var "meta")
                     ("sdom" ~>
-                      right (ScalaUtilsSource.slambda @@ var "v" @@ (inject _Data _Data_match (record _Data_Match [
-                        _Data_Match_expr>>: ScalaUtilsSource.sname @@ var "v",
-                        _Data_Match_cases>>: var "scases"])) @@ var "sdom")))
+                      right (ScalaUtilsSource.slambda @@ var "v" @@ (inject _Data _Data_match (record _MatchData [
+                        _MatchData_expr>>: ScalaUtilsSource.sname @@ var "v",
+                        _MatchData_cases>>: var "scases"])) @@ var "sdom")))
                   ("a" ~>
                     Eithers.bind
                       (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
                       ("sa" ~>
-                        right (inject _Data _Data_match (record _Data_Match [
-                          _Data_Match_expr>>: var "sa",
-                          _Data_Match_cases>>: var "scases"]))))
+                        right (inject _Data _Data_match (record _MatchData [
+                          _MatchData_expr>>: var "sa",
+                          _MatchData_cases>>: var "scases"]))))
                   (var "arg"))))])
 
 -- | Helper to construct a lazy val statement (for top-level definitions to avoid forward reference errors)
 mkLazyVal :: TTerm String -> TTerm (Maybe Scala.Type) -> TTerm Scala.Data -> TTerm Scala.Stat
 mkLazyVal vname mdecltpe rhs =
-  inject _Stat _Stat_defn (inject _Defn _Defn_val (record _Defn_Val [
-    _Defn_Val_mods>>: list [inject Scala._Mod Scala._Mod_lazy unit],
-    _Defn_Val_pats>>: list [inject _Pat _Pat_var (record _Pat_Var [
-      _Pat_Var_name>>: record _Data_Name [_Data_Name_value>>: wrap _PredefString vname]])],
-    _Defn_Val_decltpe>>: mdecltpe,
-    _Defn_Val_rhs>>: rhs]))
+  inject _Stat _Stat_defn (inject _Defn _Defn_val (record _ValDefn [
+    _ValDefn_mods>>: list [inject Scala._Mod Scala._Mod_lazy unit],
+    _ValDefn_pats>>: list [inject _Pat _Pat_var (record _VarPat [
+      _VarPat_name>>: record _NameData [_NameData_value>>: wrap _PredefString vname]])],
+    _ValDefn_decltpe>>: mdecltpe,
+    _ValDefn_rhs>>: rhs]))
 
 encodeLetBinding :: TTermDefinition (Context -> Graph -> S.Set Name -> Binding -> Either Error Scala.Stat)
 encodeLetBinding = def "encodeLetBinding" $
@@ -532,15 +532,15 @@ encodeLocalDef = def "encodeLocalDef" $
                   ("sbindings" ~> lets [
                     "defBody">: Logic.ifElse (Lists.null (var "sbindings"))
                       (var "sbody")
-                      (inject _Data _Data_block (record _Data_Block [
-                        _Data_Block_stats>>: Lists.concat2 (var "sbindings") (list [inject _Stat _Stat_term (var "sbody")])]))] $
-                    right (inject _Stat _Stat_defn (inject _Defn _Defn_def (record _Defn_Def [
-                      _Defn_Def_mods>>: emptyList,
-                      _Defn_Def_name>>: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")],
-                      _Defn_Def_tparams>>: var "tparams",
-                      _Defn_Def_paramss>>: Lists.map ("p" ~> list [var "p"]) (var "sparams"),
-                      _Defn_Def_decltpe>>: just (var "scod"),
-                      _Defn_Def_body>>: var "defBody"])))))))
+                      (inject _Data _Data_block (record _BlockData [
+                        _BlockData_stats>>: Lists.concat2 (var "sbindings") (list [inject _Stat _Stat_term (var "sbody")])]))] $
+                    right (inject _Stat _Stat_defn (inject _Defn _Defn_def (record _DefDefn [
+                      _DefDefn_mods>>: emptyList,
+                      _DefDefn_name>>: record _NameData [_NameData_value>>: wrap _PredefString (var "lname")],
+                      _DefDefn_tparams>>: var "tparams",
+                      _DefDefn_paramss>>: Lists.map ("p" ~> list [var "p"]) (var "sparams"),
+                      _DefDefn_decltpe>>: just (var "scod"),
+                      _DefDefn_body>>: var "defBody"])))))))
 
 encodeTerm :: TTermDefinition (Context -> Graph -> Term -> Either Error Scala.Data)
 encodeTerm = def "encodeTerm" $
@@ -598,7 +598,7 @@ encodeTerm = def "encodeTerm" $
                       "hasForallResidual">: Logic.not (Lists.null (Lists.filter ("st" ~>
                         cases Scala._Type (var "st") (Just false) [
                           Scala._Type_var>>: ("tv" ~> lets [
-                            "tvName">: project Scala._Type_Name Scala._Type_Name_value @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")] $
+                            "tvName">: project Scala._NameType Scala._NameType_value @@ (project Scala._VarType Scala._VarType_name @@ var "tv")] $
                             Logic.and
                               (Logic.not (Lists.elem (int32 46) (Strings.toList (var "tvName"))))
                               (Logic.not (Sets.member (var "tvName") (var "inScopeTypeVarNames"))))])
@@ -654,11 +654,11 @@ encodeTerm = def "encodeTerm" $
             Eithers.bind
               (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
               ("sarg" ~>
-                right (inject _Data _Data_ref (inject _Data_Ref _Data_Ref_select (
-                  record _Data_Select [
-                    _Data_Select_qual>>: var "sarg",
-                    _Data_Select_name>>: record _Data_Name [
-                      _Data_Name_value>>: wrap _PredefString (var "fname")]]))))),
+                right (inject _Data _Data_ref (inject _RefData _RefData_select (
+                  record _SelectData [
+                    _SelectData_qual>>: var "sarg",
+                    _SelectData_name>>: record _NameData [
+                      _NameData_value>>: wrap _PredefString (var "fname")]]))))),
           _Term_cases>>: (constant $
             asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "fun") @@ var "fun" @@ just (var "arg"))]),
       _Term_lambda>>: (constant $
@@ -798,8 +798,8 @@ encodeTerm = def "encodeTerm" $
             Eithers.bind
               (asTerm encodeTerm @@ var "cx" @@ var "gLet" @@ var "body")
               ("sbody" ~>
-                right (inject _Data _Data_block (record _Data_Block [
-                  _Data_Block_stats>>: Lists.concat2 (var "sbindings") (list [inject _Stat _Stat_term (var "sbody")])])))))])
+                right (inject _Data _Data_block (record _BlockData [
+                  _BlockData_stats>>: Lists.concat2 (var "sbindings") (list [inject _Stat _Stat_term (var "sbody")])])))))])
 
 encodeTermDefinition :: TTermDefinition (Context -> Graph -> TermDefinition -> Either Error Scala.Stat)
 encodeTermDefinition = def "encodeTermDefinition" $
@@ -870,10 +870,10 @@ encodeType = def "encodeType" $
             Eithers.bind
               (asTerm encodeType @@ var "cx" @@ var "g" @@ var "cod")
               ("scod" ~>
-                right (inject Scala._Type _Type_functionType (inject _Type_FunctionType _Type_FunctionType_function (
-                  record _Type_Function [
-                    _Type_Function_params>>: list [var "sdom"],
-                    _Type_Function_res>>: var "scod"])))))),
+                right (inject Scala._Type _Type_functionType (inject _FunctionTypeType _FunctionTypeType_function (
+                  record Scala._FunctionType [
+                    _FunctionType_params>>: list [var "sdom"],
+                    _FunctionType_res>>: var "scod"])))))),
       _Type_list>>: ("lt" ~>
         Eithers.bind
           (asTerm encodeType @@ var "cx" @@ var "g" @@ var "lt")
@@ -939,19 +939,19 @@ encodeType = def "encodeType" $
         Eithers.bind
           (asTerm encodeType @@ var "cx" @@ var "g" @@ var "body")
           ("sbody" ~>
-            right (inject Scala._Type _Type_lambda (record _Type_Lambda [
-              _Type_Lambda_tparams>>: list [ScalaUtilsSource.stparam @@ var "v"],
-              _Type_Lambda_tpe>>: var "sbody"])))),
+            right (inject Scala._Type _Type_lambda (record Scala._LambdaType [
+              _LambdaType_tparams>>: list [ScalaUtilsSource.stparam @@ var "v"],
+              _LambdaType_tpe>>: var "sbody"])))),
       _Type_variable>>: ("v" ~> lets [
         "rawName">: Core.unName (var "v"),
         -- Only capitalize short type variable names (no dots), not qualified type references
         "typeName">: Logic.ifElse (Lists.elem (int32 46) (Strings.toList (var "rawName")))
           (var "rawName")
           (Formatting.capitalize @@ var "rawName")] $
-        right (inject Scala._Type _Type_var (record _Type_Var [
-          _Type_Var_name>>: record _Type_Name [_Type_Name_value>>: var "typeName"]])))])
+        right (inject Scala._Type _Type_var (record _VarType [
+          _VarType_name>>: record _NameType [_NameType_value>>: var "typeName"]])))])
   where
-    stref s = inject Scala._Type _Type_ref (inject _Type_Ref _Type_Ref_name (record _Type_Name [_Type_Name_value>>: s]))
+    stref s = inject Scala._Type _Type_ref (inject _RefType _RefType_name (record _NameType [_NameType_value>>: s]))
 
 encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error Scala.Stat)
 encodeTypeDefinition = def "encodeTypeDefinition" $
@@ -960,8 +960,8 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "name">: project _TypeDefinition _TypeDefinition_name @@ var "td",
     "typ">: Core.typeSchemeBody $ project _TypeDefinition _TypeDefinition_typeScheme @@ var "td",
     "lname">: Names.localNameOf @@ var "name",
-    "tname">: record _Type_Name [_Type_Name_value>>: var "lname"],
-    "dname">: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")],
+    "tname">: record _NameType [_NameType_value>>: var "lname"],
+    "dname">: record _NameData [_NameData_value>>: wrap _PredefString (var "lname")],
     "freeVars">: Lists.filter ("v" ~> Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "v"))))) (Sets.toList (Variables.freeVariablesInType @@ var "typ")),
     "tparams">: Lists.map ("__v" ~> stparam (var "__v")) (var "freeVars")] $
     (cases _Type (Strip.deannotateType @@ var "typ") (Just $ defaultTypeCase (var "lname") (var "tparams") (var "cx") (var "g") (var "typ")) [
@@ -990,11 +990,11 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
                 (asTerm encodeType @@ var "cx" @@ var "g" @@ var "wt2")
                 ("styp" ~>
                   right (inject _Stat _Stat_defn (inject _Defn _Defn_type (
-                    record _Defn_Type [
-                      _Defn_Type_mods>>: emptyList,
-                      _Defn_Type_name>>: var "tname",
-                      _Defn_Type_tparams>>: var "allTparams",
-                      _Defn_Type_body>>: var "styp"])))))]),
+                    record _TypeDefn [
+                      _TypeDefn_mods>>: emptyList,
+                      _TypeDefn_name>>: var "tname",
+                      _TypeDefn_tparams>>: var "allTparams",
+                      _TypeDefn_body>>: var "styp"])))))]),
       _Type_record>>: ("rt" ~> recordTypeCase (var "tname") (var "tparams") (var "cx") (var "g") (var "rt")),
       _Type_union>>: ("rt" ~> unionTypeCase (var "tname") (var "lname") (var "tparams") (var "cx") (var "g") (var "rt")),
       _Type_wrap>>: ("wt" ~>
@@ -1002,58 +1002,58 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
           (asTerm encodeType @@ var "cx" @@ var "g" @@ var "wt")
           ("styp" ~>
             right (inject _Stat _Stat_defn (inject _Defn _Defn_type (
-              record _Defn_Type [
-                _Defn_Type_mods>>: emptyList,
-                _Defn_Type_name>>: var "tname",
-                _Defn_Type_tparams>>: var "tparams",
-                _Defn_Type_body>>: var "styp"])))))])
+              record _TypeDefn [
+                _TypeDefn_mods>>: emptyList,
+                _TypeDefn_name>>: var "tname",
+                _TypeDefn_tparams>>: var "tparams",
+                _TypeDefn_body>>: var "styp"])))))])
   where
-    defaultTypeCase :: TTerm String -> TTerm [Scala.Type_Param] -> TTerm Context -> TTerm Graph -> TTerm Type -> TTerm (Either Error Scala.Stat)
+    defaultTypeCase :: TTerm String -> TTerm [Scala.ParamType] -> TTerm Context -> TTerm Graph -> TTerm Type -> TTerm (Either Error Scala.Stat)
     defaultTypeCase lname tparams cx g typ =
       "mkAlias" <~ ("styp" ~>
         right (inject _Stat _Stat_defn (inject _Defn _Defn_type (
-          record _Defn_Type [
-            _Defn_Type_mods>>: emptyList,
-            _Defn_Type_name>>: record _Type_Name [_Type_Name_value>>: lname],
-            _Defn_Type_tparams>>: tparams,
-            _Defn_Type_body>>: var "styp"])))) $
+          record _TypeDefn [
+            _TypeDefn_mods>>: emptyList,
+            _TypeDefn_name>>: record _NameType [_NameType_value>>: lname],
+            _TypeDefn_tparams>>: tparams,
+            _TypeDefn_body>>: var "styp"])))) $
       -- Try encodeType; if it fails (e.g. for anonymous wrap/record/union), produce a type alias to Any
       Eithers.either_
         (constant $ var "mkAlias" @@ (ScalaUtilsSource.stref @@ string "Any"))
         (var "mkAlias")
         (asTerm encodeType @@ cx @@ g @@ typ)
 
-    recordTypeCase :: TTerm Scala.Type_Name -> TTerm [Scala.Type_Param] -> TTerm Context -> TTerm Graph -> TTerm [FieldType] -> TTerm (Either Error Scala.Stat)
+    recordTypeCase :: TTerm Scala.NameType -> TTerm [Scala.ParamType] -> TTerm Context -> TTerm Graph -> TTerm [FieldType] -> TTerm (Either Error Scala.Stat)
     recordTypeCase tname tparams cx g rt =
       Eithers.bind
         (Eithers.mapList ("f" ~> asTerm fieldToParam @@ cx @@ g @@ var "f") rt)
         ("params" ~>
           right (inject _Stat _Stat_defn (inject _Defn _Defn_class (
-            record _Defn_Class [
-              _Defn_Class_mods>>: list [inject _Mod _Mod_case unit],
-              _Defn_Class_name>>: tname,
-              _Defn_Class_tparams>>: tparams,
-              _Defn_Class_ctor>>: record _Ctor_Primary [
-                _Ctor_Primary_mods>>: emptyList,
-                _Ctor_Primary_name>>: inject Scala._Name _Name_value (string ""),
-                _Ctor_Primary_paramss>>: list [var "params"]],
-              _Defn_Class_template>>: emptyTemplate]))))
+            record _ClassDefn [
+              _ClassDefn_mods>>: list [inject _Mod _Mod_case unit],
+              _ClassDefn_name>>: tname,
+              _ClassDefn_tparams>>: tparams,
+              _ClassDefn_ctor>>: record _PrimaryCtor [
+                _PrimaryCtor_mods>>: emptyList,
+                _PrimaryCtor_name>>: inject Scala._Name _Name_value (string ""),
+                _PrimaryCtor_paramss>>: list [var "params"]],
+              _ClassDefn_template>>: emptyTemplate]))))
 
-    unionTypeCase :: TTerm Scala.Type_Name -> TTerm String -> TTerm [Scala.Type_Param] -> TTerm Context -> TTerm Graph -> TTerm [FieldType] -> TTerm (Either Error Scala.Stat)
+    unionTypeCase :: TTerm Scala.NameType -> TTerm String -> TTerm [Scala.ParamType] -> TTerm Context -> TTerm Graph -> TTerm [FieldType] -> TTerm (Either Error Scala.Stat)
     unionTypeCase tname lname tparams cx g rt =
       Eithers.bind
         (Eithers.mapList ("f" ~> asTerm fieldToEnumCase @@ cx @@ g @@ lname @@ tparams @@ var "f") rt)
         ("cases" ~>
           right (inject _Stat _Stat_defn (inject _Defn _Defn_enum (
-            record _Defn_Enum [
-              _Defn_Enum_mods>>: emptyList,
-              _Defn_Enum_name>>: tname,
-              _Defn_Enum_tparams>>: tparams,
-              _Defn_Enum_ctor>>: record _Ctor_Primary [
-                _Ctor_Primary_mods>>: emptyList,
-                _Ctor_Primary_name>>: inject Scala._Name _Name_value (string ""),
-                _Ctor_Primary_paramss>>: emptyList],
-              _Defn_Enum_template>>: record _Template [
+            record _EnumDefn [
+              _EnumDefn_mods>>: emptyList,
+              _EnumDefn_name>>: tname,
+              _EnumDefn_tparams>>: tparams,
+              _EnumDefn_ctor>>: record _PrimaryCtor [
+                _PrimaryCtor_mods>>: emptyList,
+                _PrimaryCtor_name>>: inject Scala._Name _Name_value (string ""),
+                _PrimaryCtor_paramss>>: emptyList],
+              _EnumDefn_template>>: record _Template [
                 _Template_early>>: emptyList,
                 _Template_inits>>: emptyList,
                 _Template_self>>: wrap _Self unit,
@@ -1067,26 +1067,26 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 
     stparam v = lets [
       "vn">: Formatting.capitalize @@ (Core.unName v)] $
-      record _Type_Param [
-        _Type_Param_mods>>: emptyList,
-        _Type_Param_name>>: inject Scala._Name _Name_value (var "vn"),
-        _Type_Param_tparams>>: emptyList,
-        _Type_Param_tbounds>>: emptyList,
-        _Type_Param_vbounds>>: emptyList,
-        _Type_Param_cbounds>>: emptyList]
+      record _ParamType [
+        _ParamType_mods>>: emptyList,
+        _ParamType_name>>: inject Scala._Name _Name_value (var "vn"),
+        _ParamType_tparams>>: emptyList,
+        _ParamType_tbounds>>: emptyList,
+        _ParamType_vbounds>>: emptyList,
+        _ParamType_cbounds>>: emptyList]
 
-encodeTypedParam :: TTermDefinition (Context -> Graph -> (Name, Type) -> Either Error Scala.Data_Param)
+encodeTypedParam :: TTermDefinition (Context -> Graph -> (Name, Type) -> Either Error Scala.ParamData)
 encodeTypedParam = def "encodeTypedParam" $
   doc "Encode a parameter with its type annotation" $
   lambda "cx" $ lambda "g" $ lambda "pair" $ lets [
     "pname">: ScalaUtilsSource.scalaEscapeName @@ (Names.localNameOf @@ (Pairs.first (var "pair"))),
     "pdom">: Pairs.second (var "pair")] $
     Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ var "pdom")
-      ("sdom" ~> right (record _Data_Param [
-        _Data_Param_mods>>: emptyList,
-        _Data_Param_name>>: inject Scala._Name _Name_value (var "pname"),
-        _Data_Param_decltpe>>: just (var "sdom"),
-        _Data_Param_default>>: nothing]))
+      ("sdom" ~> right (record _ParamData [
+        _ParamData_mods>>: emptyList,
+        _ParamData_name>>: inject Scala._Name _Name_value (var "pname"),
+        _ParamData_decltpe>>: just (var "sdom"),
+        _ParamData_default>>: nothing]))
 
 encodeUntypeApplicationTerm :: TTermDefinition (Context -> Graph -> Term -> Either Error Scala.Data)
 encodeUntypeApplicationTerm = def "encodeUntypeApplicationTerm" $
@@ -1162,48 +1162,48 @@ extractParams = def "extractParams" $
       _Term_typeApplication>>: ("ta" ~> extractParams @@ (Core.typeApplicationTermBody $ var "ta")),
       _Term_let>>: ("lt" ~> extractParams @@ (Core.letBody $ var "lt"))]
 
-fieldToEnumCase :: TTermDefinition (Context -> Graph -> String -> [Scala.Type_Param] -> FieldType -> Either Error Scala.Stat)
+fieldToEnumCase :: TTermDefinition (Context -> Graph -> String -> [Scala.ParamType] -> FieldType -> Either Error Scala.Stat)
 fieldToEnumCase = def "fieldToEnumCase" $
   doc "Convert a field type to a Scala enum case" $
   lambda "cx" $ lambda "g" $ lambda "parentName" $ lambda "tparams" $ lambda "ft" $ lets [
     "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _FieldType _FieldType_name @@ var "ft")),
     "ftyp">: project _FieldType _FieldType_type @@ var "ft",
-    "caseName">: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "fname")],
+    "caseName">: record _NameData [_NameData_value>>: wrap _PredefString (var "fname")],
     "isUnit">: cases _Type (Strip.deannotateType @@ var "ftyp") (Just false) [
       _Type_unit>>: (constant true),
       _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))],
     "parentType">: Logic.ifElse (Lists.null (var "tparams"))
       (stref (var "parentName"))
-      (inject Scala._Type _Type_apply (record _Type_Apply [
-        _Type_Apply_tpe>>: stref (var "parentName"),
-        _Type_Apply_args>>: Lists.map (asTerm typeParamToTypeVar) (var "tparams")]))] $
+      (inject Scala._Type _Type_apply (record _ApplyType [
+        _ApplyType_tpe>>: stref (var "parentName"),
+        _ApplyType_args>>: Lists.map (asTerm typeParamToTypeVar) (var "tparams")]))] $
     Eithers.bind
       (asTerm encodeType @@ var "cx" @@ var "g" @@ var "ftyp")
       ("sftyp" ~>
         right (inject _Stat _Stat_defn (inject _Defn _Defn_enumCase (
-          record _Defn_EnumCase [
-            _Defn_EnumCase_mods>>: emptyList,
-            _Defn_EnumCase_name>>: var "caseName",
-            _Defn_EnumCase_tparams>>: emptyList,
-            _Defn_EnumCase_ctor>>: record _Ctor_Primary [
-              _Ctor_Primary_mods>>: emptyList,
-              _Ctor_Primary_name>>: inject Scala._Name _Name_value (string ""),
-              _Ctor_Primary_paramss>>: list [
+          record _EnumCaseDefn [
+            _EnumCaseDefn_mods>>: emptyList,
+            _EnumCaseDefn_name>>: var "caseName",
+            _EnumCaseDefn_tparams>>: emptyList,
+            _EnumCaseDefn_ctor>>: record _PrimaryCtor [
+              _PrimaryCtor_mods>>: emptyList,
+              _PrimaryCtor_name>>: inject Scala._Name _Name_value (string ""),
+              _PrimaryCtor_paramss>>: list [
                 Logic.ifElse (var "isUnit")
                   (emptyList)
-                  (list [record _Data_Param [
-                    _Data_Param_mods>>: emptyList,
-                    _Data_Param_name>>: inject Scala._Name _Name_value (string "value"),
-                    _Data_Param_decltpe>>: just (var "sftyp"),
-                    _Data_Param_default>>: nothing]])]],
-            _Defn_EnumCase_inits>>: list [record _Init [
+                  (list [record _ParamData [
+                    _ParamData_mods>>: emptyList,
+                    _ParamData_name>>: inject Scala._Name _Name_value (string "value"),
+                    _ParamData_decltpe>>: just (var "sftyp"),
+                    _ParamData_default>>: nothing]])]],
+            _EnumCaseDefn_inits>>: list [record _Init [
               _Init_tpe>>: var "parentType",
               _Init_name>>: inject Scala._Name _Name_value (string ""),
               _Init_argss>>: emptyList]]]))))
   where
-    stref s = inject Scala._Type _Type_ref (inject _Type_Ref _Type_Ref_name (record _Type_Name [_Type_Name_value>>: s]))
+    stref s = inject Scala._Type _Type_ref (inject _RefType _RefType_name (record _NameType [_NameType_value>>: s]))
 
-fieldToParam :: TTermDefinition (Context -> Graph -> FieldType -> Either Error Scala.Data_Param)
+fieldToParam :: TTermDefinition (Context -> Graph -> FieldType -> Either Error Scala.ParamData)
 fieldToParam = def "fieldToParam" $
   doc "Convert a field type to a Scala parameter" $
   lambda "cx" $ lambda "g" $ lambda "ft" $ lets [
@@ -1212,11 +1212,11 @@ fieldToParam = def "fieldToParam" $
     Eithers.bind
       (asTerm encodeType @@ var "cx" @@ var "g" @@ var "ftyp")
       ("sftyp" ~>
-        right (record _Data_Param [
-          _Data_Param_mods>>: emptyList,
-          _Data_Param_name>>: inject Scala._Name _Name_value (var "fname"),
-          _Data_Param_decltpe>>: just (var "sftyp"),
-          _Data_Param_default>>: nothing]))
+        right (record _ParamData [
+          _ParamData_mods>>: emptyList,
+          _ParamData_name>>: inject Scala._Name _Name_value (var "fname"),
+          _ParamData_decltpe>>: just (var "sftyp"),
+          _ParamData_default>>: nothing]))
 
 -- | Type alias for Result
 -- type Result a = Either Error a
@@ -1330,9 +1330,9 @@ toElImport = def "toElImport" $
         record _Import [
           _Import_importers>>: list [
             record _Importer [
-              _Importer_ref>>: inject _Data_Ref _Data_Ref_name (
-                record _Data_Name [
-                  _Data_Name_value>>: wrap _PredefString (
+              _Importer_ref>>: inject _RefData _RefData_name (
+                record _NameData [
+                  _NameData_value>>: wrap _PredefString (
                     Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]),
               _Importer_importees>>: list [inject _Importee _Importee_wildcard unit]]]]))
 
@@ -1345,63 +1345,63 @@ toPrimImport = def "toPrimImport" $
         record _Import [
           _Import_importers>>: list [
             record _Importer [
-              _Importer_ref>>: inject _Data_Ref _Data_Ref_name (
-                record _Data_Name [
-                  _Data_Name_value>>: wrap _PredefString (
+              _Importer_ref>>: inject _RefData _RefData_name (
+                record _NameData [
+                  _NameData_value>>: wrap _PredefString (
                     Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]),
               _Importer_importees>>: emptyList]]]))
 
-typeParamToTypeVar :: TTermDefinition (Scala.Type_Param -> Scala.Type)
+typeParamToTypeVar :: TTermDefinition (Scala.ParamType -> Scala.Type)
 typeParamToTypeVar = def "typeParamToTypeVar" $
   doc "Convert a type parameter to a type variable reference" $
   lambda "tp" $ lets [
-    "n">: project _Type_Param _Type_Param_name @@ var "tp",
+    "n">: project _ParamType _ParamType_name @@ var "tp",
     "s">: cases Scala._Name (var "n") (Just $ string "") [
       Scala._Name_value>>: ("v" ~> var "v")]] $
-    inject Scala._Type _Type_var (record _Type_Var [
-      _Type_Var_name>>: record _Type_Name [_Type_Name_value>>: var "s"]])
+    inject Scala._Type _Type_var (record _VarType [
+      _VarType_name>>: record _NameType [_NameType_value>>: var "s"]])
 
 -- | Helper to construct a Scala val statement
 mkVal :: TTerm String -> TTerm (Maybe Scala.Type) -> TTerm Scala.Data -> TTerm Scala.Stat
 mkVal vname mdecltpe rhs =
-  inject _Stat _Stat_defn (inject _Defn _Defn_val (record _Defn_Val [
-    _Defn_Val_mods>>: emptyList,
-    _Defn_Val_pats>>: list [inject _Pat _Pat_var (record _Pat_Var [
-      _Pat_Var_name>>: record _Data_Name [_Data_Name_value>>: wrap _PredefString vname]])],
-    _Defn_Val_decltpe>>: mdecltpe,
-    _Defn_Val_rhs>>: rhs]))
+  inject _Stat _Stat_defn (inject _Defn _Defn_val (record _ValDefn [
+    _ValDefn_mods>>: emptyList,
+    _ValDefn_pats>>: list [inject _Pat _Pat_var (record _VarPat [
+      _VarPat_name>>: record _NameData [_NameData_value>>: wrap _PredefString vname]])],
+    _ValDefn_decltpe>>: mdecltpe,
+    _ValDefn_rhs>>: rhs]))
 
 
 -- Name references used by Coder
 
 -- Scala Meta names (re-exported from Utils for convenience)
 _Data = Scala._Data
-_Data_Apply = Scala._Data_Apply
-_Data_Assign = Scala._Data_Assign
-_Data_FunctionData = Scala._Data_FunctionData
-_Data_FunctionData_function = Scala._Data_FunctionData_function
-_Data_Function = Scala._Data_Function
-_Data_Function_params = Name "params"
-_Data_Function_body = Name "body"
-_Data_Match = Scala._Data_Match
-_Data_Match_expr = Name "expr"
-_Data_Match_cases = Name "cases"
-_Data_Name = Scala._Data_Name
-_Data_Name_value = Name "value"
-_Data_Param = Scala._Data_Param
-_Data_Param_mods = Name "mods"
-_Data_Param_name = Name "name"
-_Data_Param_decltpe = Name "decltpe"
-_Data_Param_default = Name "default"
-_Data_Ref = Scala._Data_Ref
-_Data_Ref_name = Name "name"
-_Data_Ref_select = Name "select"
-_Data_Select = Scala._Data_Select
-_Data_Select_qual = Name "qual"
-_Data_Select_name = Name "name"
+_ApplyData = Scala._ApplyData
+_AssignData = Scala._AssignData
+_FunctionDataData = Scala._FunctionDataData
+_FunctionDataData_function = Scala._FunctionDataData_function
+_FunctionData = Scala._FunctionData
+_FunctionData_params = Name "params"
+_FunctionData_body = Name "body"
+_MatchData = Scala._MatchData
+_MatchData_expr = Name "expr"
+_MatchData_cases = Name "cases"
+_NameData = Scala._NameData
+_NameData_value = Name "value"
+_ParamData = Scala._ParamData
+_ParamData_mods = Name "mods"
+_ParamData_name = Name "name"
+_ParamData_decltpe = Name "decltpe"
+_ParamData_default = Name "default"
+_RefData = Scala._RefData
+_RefData_name = Name "name"
+_RefData_select = Name "select"
+_SelectData = Scala._SelectData
+_SelectData_qual = Name "qual"
+_SelectData_name = Name "name"
 
-_Data_Block = Scala._Data_Block
-_Data_Block_stats = Scala._Data_Block_stats
+_BlockData = Scala._BlockData
+_BlockData_stats = Scala._BlockData_stats
 
 _Data_apply = Scala._Data_apply
 _Data_assign = Scala._Data_assign
@@ -1413,30 +1413,28 @@ _Data_match = Scala._Data_match
 
 _Name_value = Scala._Name_value
 
-_Type_Apply = Scala._Type_Apply
-_Type_Apply_tpe = Name "tpe"
-_Type_Apply_args = Name "args"
-_Type_FunctionType = Scala._Type_FunctionType
-_Type_FunctionType_function = Name "function"
-_Type_Function = Scala._Type_Function
-_Type_Function_params = Name "params"
-_Type_Function_res = Name "res"
-_Type_Lambda = Scala._Type_Lambda
-_Type_Lambda_tparams = Name "tparams"
-_Type_Lambda_tpe = Name "tpe"
-_Type_Name = Scala._Type_Name
-_Type_Name_value = Name "value"
-_Type_Param = Scala._Type_Param
-_Type_Param_mods = Name "mods"
-_Type_Param_name = Name "name"
-_Type_Param_tparams = Name "tparams"
-_Type_Param_tbounds = Name "tbounds"
-_Type_Param_vbounds = Name "vbounds"
-_Type_Param_cbounds = Name "cbounds"
-_Type_Ref = Scala._Type_Ref
-_Type_Ref_name = Name "name"
-_Type_Var = Scala._Type_Var
-_Type_Var_name = Name "name"
+_ApplyType = Scala._ApplyType
+_ApplyType_tpe = Name "tpe"
+_ApplyType_args = Name "args"
+_FunctionTypeType = Scala._FunctionTypeType
+_FunctionTypeType_function = Name "function"
+_FunctionType_params = Name "params"
+_FunctionType_res = Name "res"
+_LambdaType_tparams = Name "tparams"
+_LambdaType_tpe = Name "tpe"
+_NameType = Scala._NameType
+_NameType_value = Name "value"
+_ParamType = Scala._ParamType
+_ParamType_mods = Name "mods"
+_ParamType_name = Name "name"
+_ParamType_tparams = Name "tparams"
+_ParamType_tbounds = Name "tbounds"
+_ParamType_vbounds = Name "vbounds"
+_ParamType_cbounds = Name "cbounds"
+_RefType = Scala._RefType
+_RefType_name = Name "name"
+_VarType = Scala._VarType
+_VarType_name = Name "name"
 
 _Type_apply = Scala._Type_apply
 _Type_functionType = Scala._Type_functionType
@@ -1445,11 +1443,11 @@ _Type_ref = Scala._Type_ref
 _Type_var = Scala._Type_var
 
 _Pat = Scala._Pat
-_Pat_Var = Scala._Pat_Var
-_Pat_Var_name = Name "name"
-_Pat_Extract = Scala._Pat_Extract
-_Pat_Extract_fun = Name "fun"
-_Pat_Extract_args = Name "args"
+_VarPat = Scala._VarPat
+_VarPat_name = Name "name"
+_ExtractPat = Scala._ExtractPat
+_ExtractPat_fun = Name "fun"
+_ExtractPat_args = Name "args"
 _Pat_var = Scala._Pat_var
 _Pat_wildcard = Scala._Pat_wildcard
 _Pat_extract = Name "extract"
@@ -1473,41 +1471,41 @@ _Stat_defn = Scala._Stat_defn
 _Stat_importExport = Scala._Stat_importExport
 
 _Defn = Scala._Defn
-_Defn_Class = Scala._Defn_Class
-_Defn_Class_mods = Name "mods"
-_Defn_Class_name = Name "name"
-_Defn_Class_tparams = Name "tparams"
-_Defn_Class_ctor = Name "ctor"
-_Defn_Class_template = Name "template"
-_Defn_Def = Scala._Defn_Def
-_Defn_Def_mods = Name "mods"
-_Defn_Def_name = Name "name"
-_Defn_Def_tparams = Name "tparams"
-_Defn_Def_paramss = Name "paramss"
-_Defn_Def_decltpe = Name "decltpe"
-_Defn_Def_body = Name "body"
-_Defn_Enum = Scala._Defn_Enum
-_Defn_Enum_mods = Name "mods"
-_Defn_Enum_name = Name "name"
-_Defn_Enum_tparams = Name "tparams"
-_Defn_Enum_ctor = Name "ctor"
-_Defn_Enum_template = Name "template"
-_Defn_EnumCase = Scala._Defn_EnumCase
-_Defn_EnumCase_mods = Name "mods"
-_Defn_EnumCase_name = Name "name"
-_Defn_EnumCase_tparams = Name "tparams"
-_Defn_EnumCase_ctor = Name "ctor"
-_Defn_EnumCase_inits = Name "inits"
-_Defn_Type = Scala._Defn_Type
-_Defn_Type_mods = Name "mods"
-_Defn_Type_name = Name "name"
-_Defn_Type_tparams = Name "tparams"
-_Defn_Type_body = Name "body"
-_Defn_Val = Scala._Defn_Val
-_Defn_Val_mods = Name "mods"
-_Defn_Val_pats = Name "pats"
-_Defn_Val_decltpe = Name "decltpe"
-_Defn_Val_rhs = Name "rhs"
+_ClassDefn = Scala._ClassDefn
+_ClassDefn_mods = Name "mods"
+_ClassDefn_name = Name "name"
+_ClassDefn_tparams = Name "tparams"
+_ClassDefn_ctor = Name "ctor"
+_ClassDefn_template = Name "template"
+_DefDefn = Scala._DefDefn
+_DefDefn_mods = Name "mods"
+_DefDefn_name = Name "name"
+_DefDefn_tparams = Name "tparams"
+_DefDefn_paramss = Name "paramss"
+_DefDefn_decltpe = Name "decltpe"
+_DefDefn_body = Name "body"
+_EnumDefn = Scala._EnumDefn
+_EnumDefn_mods = Name "mods"
+_EnumDefn_name = Name "name"
+_EnumDefn_tparams = Name "tparams"
+_EnumDefn_ctor = Name "ctor"
+_EnumDefn_template = Name "template"
+_EnumCaseDefn = Scala._EnumCaseDefn
+_EnumCaseDefn_mods = Name "mods"
+_EnumCaseDefn_name = Name "name"
+_EnumCaseDefn_tparams = Name "tparams"
+_EnumCaseDefn_ctor = Name "ctor"
+_EnumCaseDefn_inits = Name "inits"
+_TypeDefn = Scala._TypeDefn
+_TypeDefn_mods = Name "mods"
+_TypeDefn_name = Name "name"
+_TypeDefn_tparams = Name "tparams"
+_TypeDefn_body = Name "body"
+_ValDefn = Scala._ValDefn
+_ValDefn_mods = Name "mods"
+_ValDefn_pats = Name "pats"
+_ValDefn_decltpe = Name "decltpe"
+_ValDefn_rhs = Name "rhs"
 
 _Defn_class = Name "class"
 _Defn_def = Name "def"
@@ -1516,10 +1514,10 @@ _Defn_enumCase = Name "enumCase"
 _Defn_type = Name "type"
 _Defn_val = Name "val"
 
-_Ctor_Primary = Scala._Ctor_Primary
-_Ctor_Primary_mods = Name "mods"
-_Ctor_Primary_name = Name "name"
-_Ctor_Primary_paramss = Name "paramss"
+_PrimaryCtor = Scala._PrimaryCtor
+_PrimaryCtor_mods = Name "mods"
+_PrimaryCtor_name = Name "name"
+_PrimaryCtor_paramss = Name "paramss"
 _Template = Scala._Template
 _Template_early = Name "early"
 _Template_inits = Name "inits"
