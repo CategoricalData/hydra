@@ -146,9 +146,9 @@ sapply = def "sapply" $
   doc "Apply a Scala data expression to a list of arguments" $
   lambda "fun" $ lambda "args" $
     inject _Data _Data_apply (
-      record _Data_Apply [
-        _Data_Apply_fun>>: var "fun",
-        _Data_Apply_args>>: var "args"])
+      record _ApplyData [
+        _ApplyData_fun>>: var "fun",
+        _ApplyData_args>>: var "args"])
 
 sapplyTypes :: TTermDefinition (Scala.Data -> [Scala.Type] -> Scala.Data)
 sapplyTypes = def "sapplyTypes" $
@@ -161,10 +161,10 @@ sapplyTypes = def "sapplyTypes" $
     -- Combine function with type args: extract name from fun, append type args
     cases _Data (var "fun")
       (Just $ var "fun") -- If not a name ref, can't add type args
-      [_Data_ref>>: ("ref" ~> cases _Data_Ref (var "ref")
+      [_Data_ref>>: ("ref" ~> cases _RefData (var "ref")
         (Just $ var "fun")
-        [_Data_Ref_name>>: ("dn" ~> lets [
-          "nameStr">: project _Data_Name _Data_Name_value @@ var "dn",
+        [_RefData_name>>: ("dn" ~> lets [
+          "nameStr">: project _NameData _NameData_value @@ var "dn",
           "rawName">: unwrap Scala._PredefString @@ var "nameStr"] $
           sname @@ (var "rawName" ++ var "typeArgStr"))])]
 
@@ -173,9 +173,9 @@ sassign = def "sassign" $
   doc "Create a Scala assignment expression" $
   lambda "lhs" $ lambda "rhs" $
     inject _Data _Data_assign (
-      record _Data_Assign [
-        _Data_Assign_lhs>>: var "lhs",
-        _Data_Assign_rhs>>: var "rhs"])
+      record _AssignData [
+        _AssignData_lhs>>: var "lhs",
+        _AssignData_rhs>>: var "rhs"])
 
 scalaEscapeName :: TTermDefinition (String -> String)
 scalaEscapeName = def "scalaEscapeName" $
@@ -222,24 +222,24 @@ slambda = def "slambda" $
   doc "Create a Scala lambda (function) expression" $
   lambda "v" $ lambda "body" $ lambda "sdom" $
     inject _Data _Data_functionData (
-      inject _Data_FunctionData _Data_FunctionData_function (
-        record _Data_Function [
-          _Data_Function_params>>: list [
-            record _Data_Param [
-              _Data_Param_mods>>: list ([] :: [TTerm Scala.Mod]),
-              _Data_Param_name>>: inject Scala._Name Scala._Name_value (var "v"),
-              _Data_Param_decltpe>>: var "sdom",
-              _Data_Param_default>>: nothing]],
-          _Data_Function_body>>: var "body"]))
+      inject _FunctionDataData _FunctionDataData_function (
+        record _FunctionData [
+          _FunctionData_params>>: list [
+            record _ParamData [
+              _ParamData_mods>>: list ([] :: [TTerm Scala.Mod]),
+              _ParamData_name>>: inject Scala._Name Scala._Name_value (var "v"),
+              _ParamData_decltpe>>: var "sdom",
+              _ParamData_default>>: nothing]],
+          _FunctionData_body>>: var "body"]))
 
 sname :: TTermDefinition (String -> Scala.Data)
 sname = def "sname" $
   doc "Create a Scala name reference" $
   lambda "s" $
     inject _Data _Data_ref (
-      inject _Data_Ref _Data_Ref_name (
-        record _Data_Name [
-          _Data_Name_value>>: wrap _PredefString (var "s")]))
+      inject _RefData _RefData_name (
+        record _NameData [
+          _NameData_value>>: wrap _PredefString (var "s")]))
 
 sprim :: TTermDefinition (Name -> Scala.Data)
 sprim = def "sprim" $
@@ -255,9 +255,9 @@ stapply = def "stapply" $
   doc "Apply a Scala type to a list of type arguments" $
   lambda "t" $ lambda "args" $
     inject Scala._Type Scala._Type_apply (
-      record _Type_Apply [
-        _Type_Apply_tpe>>: var "t",
-        _Type_Apply_args>>: var "args"])
+      record _ApplyType [
+        _ApplyType_tpe>>: var "t",
+        _ApplyType_args>>: var "args"])
 
 stapply1 :: TTermDefinition (Scala.Type -> Scala.Type -> Scala.Type)
 stapply1 = def "stapply1" $
@@ -271,27 +271,27 @@ stapply2 = def "stapply2" $
   lambda "t1" $ lambda "t2" $ lambda "t3" $
     stapply @@ var "t1" @@ list [var "t2", var "t3"]
 
-stparam :: TTermDefinition (Name -> Scala.Type_Param)
+stparam :: TTermDefinition (Name -> Scala.ParamType)
 stparam = def "stparam" $
   doc "Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params" $
   lambda "name" $ lets [
     "v">: Formatting.capitalize @@ (Core.unName $ var "name")] $
-    record _Type_Param [
-      _Type_Param_mods>>: list ([] :: [TTerm Scala.Mod]),
-      _Type_Param_name>>: inject Scala._Name Scala._Name_value (var "v"),
-      _Type_Param_tparams>>: list ([] :: [TTerm Scala.Type_Param]),
-      _Type_Param_tbounds>>: list ([] :: [TTerm Scala.TypeBounds]),
-      _Type_Param_vbounds>>: list ([] :: [TTerm Scala.Type]),
-      _Type_Param_cbounds>>: list ([] :: [TTerm Scala.Type])]
+    record _ParamType [
+      _ParamType_mods>>: list ([] :: [TTerm Scala.Mod]),
+      _ParamType_name>>: inject Scala._Name Scala._Name_value (var "v"),
+      _ParamType_tparams>>: list ([] :: [TTerm Scala.ParamType]),
+      _ParamType_tbounds>>: list ([] :: [TTerm Scala.TypeBounds]),
+      _ParamType_vbounds>>: list ([] :: [TTerm Scala.Type]),
+      _ParamType_cbounds>>: list ([] :: [TTerm Scala.Type])]
 
 stref :: TTermDefinition (String -> Scala.Type)
 stref = def "stref" $
   doc "Create a Scala type reference by name" $
   lambda "s" $
     inject Scala._Type Scala._Type_ref (
-      inject _Type_Ref _Type_Ref_name (
-        record _Type_Name [
-          _Type_Name_value>>: var "s"]))
+      inject _RefType _RefType_name (
+        record _NameType [
+          _NameType_value>>: var "s"]))
 
 svar :: TTermDefinition (Name -> Scala.Pat)
 svar = def "svar" $
@@ -299,9 +299,9 @@ svar = def "svar" $
   lambda "name" $ lets [
     "v">: Core.unName $ var "name"] $
     inject _Pat _Pat_var (
-      record _Pat_Var [
-        _Pat_Var_name>>: record _Data_Name [
-          _Data_Name_value>>: wrap _PredefString (var "v")]])
+      record _VarPat [
+        _VarPat_name>>: record _NameData [
+          _NameData_value>>: wrap _PredefString (var "v")]])
 
 typeToString :: TTermDefinition (Scala.Type -> String)
 typeToString = def "typeToString" $
@@ -309,46 +309,46 @@ typeToString = def "typeToString" $
   lambda "t" $
     cases Scala._Type (var "t")
       (Just $ string "Any") [
-      Scala._Type_ref>>: ("tr" ~> cases Scala._Type_Ref (var "tr")
+      Scala._Type_ref>>: ("tr" ~> cases Scala._RefType (var "tr")
         (Just $ string "Any")
-        [Scala._Type_Ref_name>>: ("tn" ~> project Scala._Type_Name Scala._Type_Name_value @@ var "tn")]),
-      Scala._Type_var>>: ("tv" ~> project Scala._Type_Name Scala._Type_Name_value @@ (project Scala._Type_Var Scala._Type_Var_name @@ var "tv")),
-      Scala._Type_functionType>>: ("ft" ~> cases Scala._Type_FunctionType (var "ft")
+        [Scala._RefType_name>>: ("tn" ~> project Scala._NameType Scala._NameType_value @@ var "tn")]),
+      Scala._Type_var>>: ("tv" ~> project Scala._NameType Scala._NameType_value @@ (project Scala._VarType Scala._VarType_name @@ var "tv")),
+      Scala._Type_functionType>>: ("ft" ~> cases Scala._FunctionTypeType (var "ft")
         (Just $ string "Any") [
-        Scala._Type_FunctionType_function>>: ("fn" ~> lets [
-          "params">: Lists.map (asTerm typeToString) (project Scala._Type_Function Scala._Type_Function_params @@ var "fn"),
-          "res">: asTerm typeToString @@ (project Scala._Type_Function Scala._Type_Function_res @@ var "fn")] $
+        Scala._FunctionTypeType_function>>: ("fn" ~> lets [
+          "params">: Lists.map (asTerm typeToString) (project Scala._FunctionType Scala._FunctionType_params @@ var "fn"),
+          "res">: asTerm typeToString @@ (project Scala._FunctionType Scala._FunctionType_res @@ var "fn")] $
           Strings.cat (list [string "(", Strings.intercalate (string ", ") (var "params"), string ") => ", var "res"]))]),
       Scala._Type_apply>>: ("ta" ~> lets [
-        "base">: asTerm typeToString @@ (project Scala._Type_Apply Scala._Type_Apply_tpe @@ var "ta"),
-        "argStrs">: Lists.map (asTerm typeToString) (project Scala._Type_Apply Scala._Type_Apply_args @@ var "ta")] $
+        "base">: asTerm typeToString @@ (project Scala._ApplyType Scala._ApplyType_tpe @@ var "ta"),
+        "argStrs">: Lists.map (asTerm typeToString) (project Scala._ApplyType Scala._ApplyType_args @@ var "ta")] $
         Strings.cat (list [var "base", string "[", Strings.intercalate (string ", ") (var "argStrs"), string "]"]))]
 
 
 -- Scala Meta type/constructor name references
 
 _Data = Scala._Data
-_Data_Apply = Scala._Data_Apply
-_Data_Apply_fun = Name "fun"
-_Data_Apply_args = Name "args"
-_Data_Assign = Scala._Data_Assign
-_Data_Assign_lhs = Name "lhs"
-_Data_Assign_rhs = Name "rhs"
-_Data_FunctionData = Scala._Data_FunctionData
-_Data_FunctionData_function = Name "function"
-_Data_Function = Scala._Data_Function
-_Data_Function_params = Name "params"
-_Data_Function_body = Name "body"
-_Data_Match = Scala._Data_Match
-_Data_Name = Scala._Data_Name
-_Data_Name_value = Name "value"
-_Data_Param = Scala._Data_Param
-_Data_Param_mods = Name "mods"
-_Data_Param_name = Name "name"
-_Data_Param_decltpe = Name "decltpe"
-_Data_Param_default = Name "default"
-_Data_Ref = Scala._Data_Ref
-_Data_Ref_name = Name "name"
+_ApplyData = Scala._ApplyData
+_ApplyData_fun = Name "fun"
+_ApplyData_args = Name "args"
+_AssignData = Scala._AssignData
+_AssignData_lhs = Name "lhs"
+_AssignData_rhs = Name "rhs"
+_FunctionDataData = Scala._FunctionDataData
+_FunctionDataData_function = Name "function"
+_FunctionData = Scala._FunctionData
+_FunctionData_params = Name "params"
+_FunctionData_body = Name "body"
+_MatchData = Scala._MatchData
+_NameData = Scala._NameData
+_NameData_value = Name "value"
+_ParamData = Scala._ParamData
+_ParamData_mods = Name "mods"
+_ParamData_name = Name "name"
+_ParamData_decltpe = Name "decltpe"
+_ParamData_default = Name "default"
+_RefData = Scala._RefData
+_RefData_name = Name "name"
 
 _Data_apply = Scala._Data_apply
 _Data_assign = Scala._Data_assign
@@ -363,29 +363,29 @@ _Data_match = Scala._Data_match
 -- to avoid ambiguity with Hydra.Kernel._Name
 
 -- Note: Scala._Type is used via the Scala. prefix to avoid ambiguity with Hydra.Kernel._Type
-_Type_Apply = Scala._Type_Apply
-_Type_Apply_tpe = Name "tpe"
-_Type_Apply_args = Name "args"
-_Type_FunctionType = Scala._Type_FunctionType
-_Type_Function = Scala._Type_Function
-_Type_Function_params = Name "params"
-_Type_Function_res = Name "res"
-_Type_Lambda = Scala._Type_Lambda
-_Type_Lambda_tparams = Name "tparams"
-_Type_Lambda_tpe = Name "tpe"
-_Type_Name = Scala._Type_Name
-_Type_Name_value = Name "value"
-_Type_Param = Scala._Type_Param
-_Type_Param_mods = Name "mods"
-_Type_Param_name = Name "name"
-_Type_Param_tparams = Name "tparams"
-_Type_Param_tbounds = Name "tbounds"
-_Type_Param_vbounds = Name "vbounds"
-_Type_Param_cbounds = Name "cbounds"
-_Type_Ref = Scala._Type_Ref
-_Type_Ref_name = Name "name"
-_Type_Var = Scala._Type_Var
-_Type_Var_name = Name "name"
+_ApplyType = Scala._ApplyType
+_ApplyType_tpe = Name "tpe"
+_ApplyType_args = Name "args"
+_FunctionTypeType = Scala._FunctionTypeType
+_FunctionType = Scala._FunctionType
+_FunctionType_params = Name "params"
+_FunctionType_res = Name "res"
+_LambdaType = Scala._LambdaType
+_LambdaType_tparams = Name "tparams"
+_LambdaType_tpe = Name "tpe"
+_NameType = Scala._NameType
+_NameType_value = Name "value"
+_ParamType = Scala._ParamType
+_ParamType_mods = Name "mods"
+_ParamType_name = Name "name"
+_ParamType_tparams = Name "tparams"
+_ParamType_tbounds = Name "tbounds"
+_ParamType_vbounds = Name "vbounds"
+_ParamType_cbounds = Name "cbounds"
+_RefType = Scala._RefType
+_RefType_name = Name "name"
+_VarType = Scala._VarType
+_VarType_name = Name "name"
 
 _Type_apply = Scala._Type_apply
 _Type_functionType = Scala._Type_functionType
@@ -394,11 +394,11 @@ _Type_ref = Scala._Type_ref
 _Type_var = Scala._Type_var
 
 _Pat = Scala._Pat
-_Pat_Var = Scala._Pat_Var
-_Pat_Var_name = Name "name"
-_Pat_Extract = Scala._Pat_Extract
-_Pat_Extract_fun = Name "fun"
-_Pat_Extract_args = Name "args"
+_VarPat = Scala._VarPat
+_VarPat_name = Name "name"
+_ExtractPat = Scala._ExtractPat
+_ExtractPat_fun = Name "fun"
+_ExtractPat_args = Name "args"
 
 _Pat_var = Scala._Pat_var
 _Pat_extract = Name "extract"
@@ -420,14 +420,14 @@ _Stat_defn = Scala._Stat_defn
 _Stat_importExport = Scala._Stat_importExport
 
 _Defn = Scala._Defn
-_Defn_Class = Scala._Defn_Class
-_Defn_Def = Scala._Defn_Def
-_Defn_Enum = Scala._Defn_Enum
-_Defn_EnumCase = Scala._Defn_EnumCase
-_Defn_Type = Scala._Defn_Type
-_Defn_Val = Scala._Defn_Val
+_ClassDefn = Scala._ClassDefn
+_DefDefn = Scala._DefDefn
+_EnumDefn = Scala._EnumDefn
+_EnumCaseDefn = Scala._EnumCaseDefn
+_TypeDefn = Scala._TypeDefn
+_ValDefn = Scala._ValDefn
 
-_Ctor_Primary = Scala._Ctor_Primary
+_PrimaryCtor = Scala._PrimaryCtor
 _Template = Scala._Template
 _Self = Scala._Self
 _Mod = Scala._Mod
