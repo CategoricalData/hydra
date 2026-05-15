@@ -284,7 +284,7 @@ bindingsToStatements env bindings cx g0 =
           thunkedVars =
                   Sets.fromList (Lists.concat (Lists.map (\b ->
                     let bname = Core.bindingName b
-                    in (Logic.ifElse (Logic.and (Logic.not (Sets.member bname recursiveVars)) (Logic.and (needsThunking (Core.bindingTerm b)) (Logic.not (bindingIsFunctionType b)))) [
+                    in (Logic.ifElse (Logic.and (Logic.not (Sets.member bname recursiveVars)) (Logic.and (Predicates.isComplexBinding gExtended b) (Logic.and (Logic.not (Predicates.isTrivialTerm (Core.bindingTerm b))) (Logic.not (bindingIsFunctionType b))))) [
                       bname] [])) flatBindings))
           aliasesExtended =
                   JavaEnvironment.Aliases {
