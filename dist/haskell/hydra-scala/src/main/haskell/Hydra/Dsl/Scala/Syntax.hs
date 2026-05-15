@@ -697,22 +697,6 @@ dataPolyFunction x =
         Core.fieldName = (Core.Name "polyFunction"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataQuotedMacroExpr :: Phantoms.TTerm Syntax.QuotedMacroExprData -> Phantoms.TTerm Syntax.Data
-dataQuotedMacroExpr x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Data"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "quotedMacroExpr"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-dataQuotedMacroType :: Phantoms.TTerm Syntax.QuotedMacroTypeData -> Phantoms.TTerm Syntax.Data
-dataQuotedMacroType x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Data"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "quotedMacroType"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 dataRef :: Phantoms.TTerm Syntax.RefData -> Phantoms.TTerm Syntax.Data
 dataRef x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -735,14 +719,6 @@ dataReturn x =
       Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Data"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "return"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-dataSplicedMacroExpr :: Phantoms.TTerm Syntax.SplicedMacroExprData -> Phantoms.TTerm Syntax.Data
-dataSplicedMacroExpr x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Data"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "splicedMacroExpr"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 dataThrow :: Phantoms.TTerm Syntax.ThrowData -> Phantoms.TTerm Syntax.Data
@@ -783,14 +759,6 @@ dataWhile x =
       Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Data"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "while"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-dataXml :: Phantoms.TTerm Syntax.XmlData -> Phantoms.TTerm Syntax.Data
-dataXml x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Data"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "xml"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 annotateData :: Phantoms.TTerm Syntax.Data -> Phantoms.TTerm [Syntax.AnnotMod] -> Phantoms.TTerm Syntax.AnnotateData
@@ -2419,58 +2387,6 @@ polyFunctionDataWithTparams original newVal =
               Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-quotedMacroExprData :: Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.QuotedMacroExprData
-quotedMacroExprData body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.QuotedMacroExprData"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
-
-quotedMacroExprDataBody :: Phantoms.TTerm Syntax.QuotedMacroExprData -> Phantoms.TTerm Syntax.Data
-quotedMacroExprDataBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.QuotedMacroExprData"),
-        Core.projectionField = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-quotedMacroExprDataWithBody :: Phantoms.TTerm Syntax.QuotedMacroExprData -> Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.QuotedMacroExprData
-quotedMacroExprDataWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.QuotedMacroExprData"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-quotedMacroTypeData :: Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.QuotedMacroTypeData
-quotedMacroTypeData tpe =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.QuotedMacroTypeData"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "tpe"),
-          Core.fieldTerm = (Phantoms.unTTerm tpe)}]}))
-
-quotedMacroTypeDataTpe :: Phantoms.TTerm Syntax.QuotedMacroTypeData -> Phantoms.TTerm Syntax.Type
-quotedMacroTypeDataTpe x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.QuotedMacroTypeData"),
-        Core.projectionField = (Core.Name "tpe")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-quotedMacroTypeDataWithTpe :: Phantoms.TTerm Syntax.QuotedMacroTypeData -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.QuotedMacroTypeData
-quotedMacroTypeDataWithTpe original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.QuotedMacroTypeData"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "tpe"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
 refDataAnonymous :: Phantoms.TTerm Syntax.AnonymousData -> Phantoms.TTerm Syntax.RefData
 refDataAnonymous x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -2630,32 +2546,6 @@ selectDataWithQual original newVal =
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SelectData"),
               Core.projectionField = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-splicedMacroExprData :: Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.SplicedMacroExprData
-splicedMacroExprData body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.SplicedMacroExprData"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
-
-splicedMacroExprDataBody :: Phantoms.TTerm Syntax.SplicedMacroExprData -> Phantoms.TTerm Syntax.Data
-splicedMacroExprDataBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.SplicedMacroExprData"),
-        Core.projectionField = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-splicedMacroExprDataWithBody :: Phantoms.TTerm Syntax.SplicedMacroExprData -> Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.SplicedMacroExprData
-splicedMacroExprDataWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.SplicedMacroExprData"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 superData :: Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.SuperData
 superData thisp superp =
@@ -3049,66 +2939,6 @@ whileDataWithExpr original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.WhileData"),
               Core.projectionField = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-xmlData :: Phantoms.TTerm [Syntax.Lit] -> Phantoms.TTerm [Syntax.Data] -> Phantoms.TTerm Syntax.XmlData
-xmlData parts args =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.XmlData"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "parts"),
-          Core.fieldTerm = (Phantoms.unTTerm parts)},
-        Core.Field {
-          Core.fieldName = (Core.Name "args"),
-          Core.fieldTerm = (Phantoms.unTTerm args)}]}))
-
-xmlDataArgs :: Phantoms.TTerm Syntax.XmlData -> Phantoms.TTerm [Syntax.Data]
-xmlDataArgs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.XmlData"),
-        Core.projectionField = (Core.Name "args")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-xmlDataParts :: Phantoms.TTerm Syntax.XmlData -> Phantoms.TTerm [Syntax.Lit]
-xmlDataParts x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.XmlData"),
-        Core.projectionField = (Core.Name "parts")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-xmlDataWithArgs :: Phantoms.TTerm Syntax.XmlData -> Phantoms.TTerm [Syntax.Data] -> Phantoms.TTerm Syntax.XmlData
-xmlDataWithArgs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.XmlData"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "parts"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.XmlData"),
-              Core.projectionField = (Core.Name "parts")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "args"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-xmlDataWithParts :: Phantoms.TTerm Syntax.XmlData -> Phantoms.TTerm [Syntax.Lit] -> Phantoms.TTerm Syntax.XmlData
-xmlDataWithParts original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.XmlData"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "parts"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "args"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.XmlData"),
-              Core.projectionField = (Core.Name "args")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 declDef :: Phantoms.TTerm Syntax.DefDecl -> Phantoms.TTerm Syntax.Decl
@@ -4083,14 +3913,6 @@ defnGivenAlias x =
       Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Defn"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "givenAlias"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-defnMacro :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm Syntax.Defn
-defnMacro x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Defn"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "macro"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 defnObject :: Phantoms.TTerm Syntax.ObjectDefn -> Phantoms.TTerm Syntax.Defn
@@ -5903,342 +5725,6 @@ givenDefnWithTparams original newVal =
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.scala.syntax.GivenDefn"),
               Core.projectionField = (Core.Name "templ")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-macroDefn :: Phantoms.TTerm [Syntax.Mod] -> Phantoms.TTerm Syntax.NameData -> Phantoms.TTerm [Syntax.ParamType] -> Phantoms.TTerm [[Syntax.ParamData]] -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.MacroDefn
-macroDefn mods name tparams paramss decltpe body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "mods"),
-          Core.fieldTerm = (Phantoms.unTTerm mods)},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm name)},
-        Core.Field {
-          Core.fieldName = (Core.Name "tparams"),
-          Core.fieldTerm = (Phantoms.unTTerm tparams)},
-        Core.Field {
-          Core.fieldName = (Core.Name "paramss"),
-          Core.fieldTerm = (Phantoms.unTTerm paramss)},
-        Core.Field {
-          Core.fieldName = (Core.Name "decltpe"),
-          Core.fieldTerm = (Phantoms.unTTerm decltpe)},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
-
-macroDefnBody :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm Syntax.Data
-macroDefnBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-        Core.projectionField = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-macroDefnDecltpe :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm (Maybe Syntax.Type)
-macroDefnDecltpe x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-        Core.projectionField = (Core.Name "decltpe")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-macroDefnMods :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm [Syntax.Mod]
-macroDefnMods x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-        Core.projectionField = (Core.Name "mods")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-macroDefnName :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm Syntax.NameData
-macroDefnName x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-        Core.projectionField = (Core.Name "name")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-macroDefnParamss :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm [[Syntax.ParamData]]
-macroDefnParamss x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-        Core.projectionField = (Core.Name "paramss")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-macroDefnTparams :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm [Syntax.ParamType]
-macroDefnTparams x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-        Core.projectionField = (Core.Name "tparams")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-macroDefnWithBody :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.MacroDefn
-macroDefnWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "mods"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "mods")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "tparams"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "tparams")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "paramss"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "paramss")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "decltpe"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "decltpe")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-macroDefnWithDecltpe :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.MacroDefn
-macroDefnWithDecltpe original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "mods"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "mods")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "tparams"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "tparams")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "paramss"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "paramss")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "decltpe"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-macroDefnWithMods :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm [Syntax.Mod] -> Phantoms.TTerm Syntax.MacroDefn
-macroDefnWithMods original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "mods"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "tparams"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "tparams")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "paramss"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "paramss")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "decltpe"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "decltpe")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-macroDefnWithName :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm Syntax.NameData -> Phantoms.TTerm Syntax.MacroDefn
-macroDefnWithName original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "mods"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "mods")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "tparams"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "tparams")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "paramss"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "paramss")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "decltpe"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "decltpe")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-macroDefnWithParamss :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm [[Syntax.ParamData]] -> Phantoms.TTerm Syntax.MacroDefn
-macroDefnWithParamss original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "mods"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "mods")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "tparams"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "tparams")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "paramss"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "decltpe"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "decltpe")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "body")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
-
-macroDefnWithTparams :: Phantoms.TTerm Syntax.MacroDefn -> Phantoms.TTerm [Syntax.ParamType] -> Phantoms.TTerm Syntax.MacroDefn
-macroDefnWithTparams original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "mods"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "mods")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "name"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "name")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "tparams"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "paramss"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "paramss")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "decltpe"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "decltpe")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroDefn"),
-              Core.projectionField = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 objectDefn :: Phantoms.TTerm Syntax.NameData -> Phantoms.TTerm Syntax.ObjectDefn
@@ -8247,14 +7733,6 @@ patInterpolate x =
         Core.fieldName = (Core.Name "interpolate"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-patMacro :: Phantoms.TTerm Syntax.MacroPat -> Phantoms.TTerm Syntax.Pat
-patMacro x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Pat"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "macro"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 patRepeated :: Phantoms.TTerm Syntax.RepeatedPat -> Phantoms.TTerm Syntax.Pat
 patRepeated x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -8302,14 +7780,6 @@ patWildcard =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "wildcard"),
         Core.fieldTerm = Core.TermUnit}}))
-
-patXml :: Phantoms.TTerm Syntax.XmlPat -> Phantoms.TTerm Syntax.Pat
-patXml x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Pat"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "xml"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 alternativePat :: Phantoms.TTerm Syntax.Pat -> Phantoms.TTerm Syntax.Pat -> Phantoms.TTerm Syntax.AlternativePat
 alternativePat lhs rhs =
@@ -8685,32 +8155,6 @@ interpolatePatWithPrefix original newVal =
               Core.projectionField = (Core.Name "parts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
-macroPat :: Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.MacroPat
-macroPat body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroPat"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
-
-macroPatBody :: Phantoms.TTerm Syntax.MacroPat -> Phantoms.TTerm Syntax.Data
-macroPatBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroPat"),
-        Core.projectionField = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-macroPatWithBody :: Phantoms.TTerm Syntax.MacroPat -> Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.MacroPat
-macroPatWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroPat"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
 repeatedPat :: Phantoms.TTerm Syntax.NameData -> Phantoms.TTerm Syntax.RepeatedPat
 repeatedPat name =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
@@ -8848,66 +8292,6 @@ varPatWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-xmlPat :: Phantoms.TTerm [Syntax.Lit] -> Phantoms.TTerm [Syntax.Pat] -> Phantoms.TTerm Syntax.XmlPat
-xmlPat parts args =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.XmlPat"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "parts"),
-          Core.fieldTerm = (Phantoms.unTTerm parts)},
-        Core.Field {
-          Core.fieldName = (Core.Name "args"),
-          Core.fieldTerm = (Phantoms.unTTerm args)}]}))
-
-xmlPatArgs :: Phantoms.TTerm Syntax.XmlPat -> Phantoms.TTerm [Syntax.Pat]
-xmlPatArgs x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.XmlPat"),
-        Core.projectionField = (Core.Name "args")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-xmlPatParts :: Phantoms.TTerm Syntax.XmlPat -> Phantoms.TTerm [Syntax.Lit]
-xmlPatParts x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.XmlPat"),
-        Core.projectionField = (Core.Name "parts")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-xmlPatWithArgs :: Phantoms.TTerm Syntax.XmlPat -> Phantoms.TTerm [Syntax.Pat] -> Phantoms.TTerm Syntax.XmlPat
-xmlPatWithArgs original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.XmlPat"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "parts"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.XmlPat"),
-              Core.projectionField = (Core.Name "parts")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "args"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-xmlPatWithParts :: Phantoms.TTerm Syntax.XmlPat -> Phantoms.TTerm [Syntax.Lit] -> Phantoms.TTerm Syntax.XmlPat
-xmlPatWithParts original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.XmlPat"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "parts"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "args"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.scala.syntax.XmlPat"),
-              Core.projectionField = (Core.Name "args")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pkg :: Phantoms.TTerm Syntax.NameData -> Phantoms.TTerm Syntax.RefData -> Phantoms.TTerm [Syntax.Stat] -> Phantoms.TTerm Syntax.Pkg
 pkg name ref stats =
@@ -9129,12 +8513,6 @@ predefString :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.PredefString
 predefString x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.scala.syntax.PredefString"),
-      Core.wrappedTermBody = (Phantoms.unTTerm x)}))
-
-quasi :: Phantoms.TTerm () -> Phantoms.TTerm Syntax.Quasi
-quasi x =
-    Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
-      Core.wrappedTermTypeName = (Core.Name "hydra.scala.syntax.Quasi"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 
 refInit :: Phantoms.TTerm Syntax.Init -> Phantoms.TTerm Syntax.Ref
@@ -9485,14 +8863,6 @@ treePat x =
         Core.fieldName = (Core.Name "pat"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-treeQuasi :: Phantoms.TTerm Syntax.Quasi -> Phantoms.TTerm Syntax.Tree
-treeQuasi x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Tree"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "quasi"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
 treeRef :: Phantoms.TTerm Syntax.Ref -> Phantoms.TTerm Syntax.Tree
 treeRef x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
@@ -9739,14 +9109,6 @@ typeLambda x =
       Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Type"),
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lambda"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-typeMacro :: Phantoms.TTerm Syntax.MacroType -> Phantoms.TTerm Syntax.Type
-typeMacro x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Type"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "macro"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 typeMatch :: Phantoms.TTerm Syntax.MatchType -> Phantoms.TTerm Syntax.Type
@@ -10463,32 +9825,6 @@ lambdaTypeWithTpe original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tpe"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
-
-macroType :: Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.MacroType
-macroType body =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
-          Core.fieldTerm = (Phantoms.unTTerm body)}]}))
-
-macroTypeBody :: Phantoms.TTerm Syntax.MacroType -> Phantoms.TTerm Syntax.Data
-macroTypeBody x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.scala.syntax.MacroType"),
-        Core.projectionField = (Core.Name "body")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-macroTypeWithBody :: Phantoms.TTerm Syntax.MacroType -> Phantoms.TTerm Syntax.Data -> Phantoms.TTerm Syntax.MacroType
-macroTypeWithBody original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.scala.syntax.MacroType"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 
 matchType :: Phantoms.TTerm Syntax.Type -> Phantoms.TTerm [Syntax.TypeCase] -> Phantoms.TTerm Syntax.MatchType
@@ -11571,12 +10907,6 @@ unPredefString :: Phantoms.TTerm Syntax.PredefString -> Phantoms.TTerm String
 unPredefString x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.scala.syntax.PredefString")),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-unQuasi :: Phantoms.TTerm Syntax.Quasi -> Phantoms.TTerm ()
-unQuasi x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermUnwrap (Core.Name "hydra.scala.syntax.Quasi")),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unSelf :: Phantoms.TTerm Syntax.Self -> Phantoms.TTerm ()
