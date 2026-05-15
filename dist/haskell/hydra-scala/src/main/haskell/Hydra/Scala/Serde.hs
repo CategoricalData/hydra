@@ -27,12 +27,12 @@ caseToExpr c =
         (Serialization.cst "=>"),
         (termToExpr term)])
 -- | Convert function data to an expression
-dataFunctionDataToExpr :: Syntax.Data_FunctionData -> Ast.Expr
+dataFunctionDataToExpr :: Syntax.FunctionDataData -> Ast.Expr
 dataFunctionDataToExpr ft =
     case ft of
-      Syntax.Data_FunctionDataFunction v0 ->
-        let params = Syntax.data_FunctionParams v0
-            body = Syntax.data_FunctionBody v0
+      Syntax.FunctionDataDataFunction v0 ->
+        let params = Syntax.functionDataParams v0
+            body = Syntax.functionDataBody v0
             bodyExpr = termToExpr body
             bodyLen = Serialization.expressionLength bodyExpr
         in (Logic.ifElse (Equality.gt bodyLen 60) (Serialization.noSep [
@@ -43,42 +43,42 @@ dataFunctionDataToExpr ft =
           (Serialization.cst "=>"),
           bodyExpr]))
 -- | Convert a data name to an expression
-dataNameToExpr :: Syntax.Data_Name -> Ast.Expr
-dataNameToExpr dn = Serialization.cst (Syntax.unPredefString (Syntax.data_NameValue dn))
+dataNameToExpr :: Syntax.NameData -> Ast.Expr
+dataNameToExpr dn = Serialization.cst (Syntax.unPredefString (Syntax.nameDataValue dn))
 -- | Convert a data parameter to an expression
-dataParamToExpr :: Syntax.Data_Param -> Ast.Expr
+dataParamToExpr :: Syntax.ParamData -> Ast.Expr
 dataParamToExpr dp =
 
-      let name = Syntax.data_ParamName dp
-          stype = Syntax.data_ParamDecltpe dp
+      let name = Syntax.paramDataName dp
+          stype = Syntax.paramDataDecltpe dp
       in (Serialization.noSep (Maybes.cat [
         Maybes.pure (nameToExpr name),
         (Maybes.map (\t -> Serialization.spaceSep [
           Serialization.cst ":",
           (typeToExpr t)]) stype)]))
 -- | Convert a data reference to an expression
-dataRefToExpr :: Syntax.Data_Ref -> Ast.Expr
+dataRefToExpr :: Syntax.RefData -> Ast.Expr
 dataRefToExpr ref =
     case ref of
-      Syntax.Data_RefName v0 -> dataNameToExpr v0
-      Syntax.Data_RefSelect v0 -> dataSelectToExpr v0
+      Syntax.RefDataName v0 -> dataNameToExpr v0
+      Syntax.RefDataSelect v0 -> dataSelectToExpr v0
 -- | Convert a data select to an expression
-dataSelectToExpr :: Syntax.Data_Select -> Ast.Expr
+dataSelectToExpr :: Syntax.SelectData -> Ast.Expr
 dataSelectToExpr sel =
 
-      let arg = Syntax.data_SelectQual sel
-          name = Syntax.data_SelectName sel
-      in (Serialization.ifx dotOp (termToExpr arg) (termToExpr (Syntax.DataRef (Syntax.Data_RefName name))))
+      let arg = Syntax.selectDataQual sel
+          name = Syntax.selectDataName sel
+      in (Serialization.ifx dotOp (termToExpr arg) (termToExpr (Syntax.DataRef (Syntax.RefDataName name))))
 -- | Convert a definition to an expression
 defnToExpr :: Syntax.Defn -> Ast.Expr
 defnToExpr def =
     case def of
       Syntax.DefnDef v0 ->
-        let name = Syntax.defn_DefName v0
-            tparams = Syntax.defn_DefTparams v0
-            paramss = Syntax.defn_DefParamss v0
-            scod = Syntax.defn_DefDecltpe v0
-            body = Syntax.defn_DefBody v0
+        let name = Syntax.defDefnName v0
+            tparams = Syntax.defDefnTparams v0
+            paramss = Syntax.defDefnParamss v0
+            scod = Syntax.defDefnDecltpe v0
+            body = Syntax.defDefnBody v0
             tparamsExpr =
                     Logic.ifElse (Lists.null tparams) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams)))
             scodExpr =
@@ -109,9 +109,9 @@ defnToExpr def =
           defSig,
           bodyExpr]))
       Syntax.DefnType v0 ->
-        let name = Syntax.defn_TypeName v0
-            tparams = Syntax.defn_TypeTparams v0
-            body = Syntax.defn_TypeBody v0
+        let name = Syntax.typeDefnName v0
+            tparams = Syntax.typeDefnTparams v0
+            body = Syntax.typeDefnBody v0
         in (Serialization.spaceSep (Maybes.cat [
           Maybes.pure (Serialization.cst "type"),
           (Maybes.pure (typeNameToExpr name)),
@@ -119,16 +119,16 @@ defnToExpr def =
           (Maybes.pure (Serialization.cst "=")),
           (Maybes.pure (typeToExpr body))]))
       Syntax.DefnVal v0 ->
-        let mods = Syntax.defn_ValMods v0
-            pats = Syntax.defn_ValPats v0
-            typ = Syntax.defn_ValDecltpe v0
-            rhs = Syntax.defn_ValRhs v0
+        let mods = Syntax.valDefnMods v0
+            pats = Syntax.valDefnPats v0
+            typ = Syntax.valDefnDecltpe v0
+            rhs = Syntax.valDefnRhs v0
             nameStr =
                     Maybes.fromMaybe "" (Maybes.map (\firstPat ->
                       let patName =
                               case firstPat of
-                                Syntax.PatVar v1 -> Syntax.pat_VarName v1
-                      in (Syntax.unPredefString (Syntax.data_NameValue patName))) (Lists.maybeHead pats))
+                                Syntax.PatVar v1 -> Syntax.varPatName v1
+                      in (Syntax.unPredefString (Syntax.nameDataValue patName))) (Lists.maybeHead pats))
             nameAndType =
                     Maybes.maybe (Serialization.cst nameStr) (\t -> Serialization.spaceSep [
                       Serialization.cst (Strings.cat2 nameStr ":"),
@@ -140,11 +140,11 @@ defnToExpr def =
           (Serialization.cst "="),
           (termToExpr rhs)])
       Syntax.DefnClass v0 ->
-        let mods = Syntax.defn_ClassMods v0
-            name = Syntax.defn_ClassName v0
-            tparams = Syntax.defn_ClassTparams v0
-            ctor = Syntax.defn_ClassCtor v0
-            paramss = Syntax.ctor_PrimaryParamss ctor
+        let mods = Syntax.classDefnMods v0
+            name = Syntax.classDefnName v0
+            tparams = Syntax.classDefnTparams v0
+            ctor = Syntax.classDefnCtor v0
+            paramss = Syntax.primaryCtorParamss ctor
             tparamsExpr =
                     Logic.ifElse (Lists.null tparams) Nothing (Maybes.pure (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr tparams)))
             paramsExpr =
@@ -160,9 +160,9 @@ defnToExpr def =
             Serialization.cst "class",
             nameAndParams]]))
       Syntax.DefnEnum v0 ->
-        let name = Syntax.defn_EnumName v0
-            tparams = Syntax.defn_EnumTparams v0
-            template = Syntax.defn_EnumTemplate v0
+        let name = Syntax.enumDefnName v0
+            tparams = Syntax.enumDefnTparams v0
+            template = Syntax.enumDefnTemplate v0
             stats = Syntax.templateStats template
             enumHeader =
                     Serialization.spaceSep [
@@ -180,10 +180,10 @@ defnToExpr def =
             enumHeader],
           enumCases]))
       Syntax.DefnEnumCase v0 ->
-        let name = Syntax.defn_EnumCaseName v0
-            ctor = Syntax.defn_EnumCaseCtor v0
-            inits = Syntax.defn_EnumCaseInits v0
-            paramss = Syntax.ctor_PrimaryParamss ctor
+        let name = Syntax.enumCaseDefnName v0
+            ctor = Syntax.enumCaseDefnCtor v0
+            inits = Syntax.enumCaseDefnInits v0
+            paramss = Syntax.primaryCtorParamss ctor
             allParams = Lists.concat paramss
             params =
                     Logic.ifElse (Lists.null allParams) (Serialization.cst "") (Serialization.parenListAdaptive (Lists.map dataParamToExpr allParams))
@@ -225,18 +225,18 @@ importerToExpr imp =
           importees = Syntax.importerImportees imp
           refName =
                   case ref of
-                    Syntax.Data_RefName v0 -> Syntax.unPredefString (Syntax.data_NameValue v0)
+                    Syntax.RefDataName v0 -> Syntax.unPredefString (Syntax.nameDataValue v0)
           forImportees =
                   Logic.ifElse (Lists.null importees) (Serialization.cst "") (Logic.ifElse (Equality.equal (Lists.length importees) 1) (Maybes.fromMaybe (Serialization.cst "") (Maybes.map (\firstImp -> Serialization.noSep [
                     Serialization.cst ".",
                     case firstImp of
                       Syntax.ImporteeWildcard -> Serialization.cst "*"
-                      Syntax.ImporteeName v0 -> Serialization.cst (case (Syntax.importee_NameName v0) of
+                      Syntax.ImporteeName v0 -> Serialization.cst (case (Syntax.nameImporteeName v0) of
                         Syntax.NameValue v1 -> v1)]) (Lists.maybeHead importees))) (Serialization.noSep [
                     Serialization.cst ".",
                     (Serialization.curlyBracesList Nothing Serialization.inlineStyle (Lists.map (\it -> case it of
                       Syntax.ImporteeWildcard -> Serialization.cst "*"
-                      Syntax.ImporteeName v0 -> Serialization.cst (case (Syntax.importee_NameName v0) of
+                      Syntax.ImporteeName v0 -> Serialization.cst (case (Syntax.nameImporteeName v0) of
                         Syntax.NameValue v1 -> v1)) importees))]))
       in (Serialization.spaceSep [
         Serialization.cst "import",
@@ -294,12 +294,12 @@ patToExpr :: Syntax.Pat -> Ast.Expr
 patToExpr pat =
     case pat of
       Syntax.PatExtract v0 ->
-        let fun = Syntax.pat_ExtractFun v0
-            args = Syntax.pat_ExtractArgs v0
+        let fun = Syntax.extractPatFun v0
+            args = Syntax.extractPatArgs v0
         in (Logic.ifElse (Lists.null args) (termToExpr fun) (Serialization.noSep [
           termToExpr fun,
           (Serialization.parenListAdaptive (Lists.map patToExpr args))]))
-      Syntax.PatVar v0 -> dataNameToExpr (Syntax.pat_VarName v0)
+      Syntax.PatVar v0 -> dataNameToExpr (Syntax.varPatName v0)
       Syntax.PatWildcard -> Serialization.cst "_"
 -- | Convert a package to an expression
 pkgToExpr :: Syntax.Pkg -> Ast.Expr
@@ -332,54 +332,54 @@ termToExpr term =
       Syntax.DataLit v0 -> litToExpr v0
       Syntax.DataRef v0 -> dataRefToExpr v0
       Syntax.DataApply v0 ->
-        let fun = Syntax.data_ApplyFun v0
-            args = Syntax.data_ApplyArgs v0
+        let fun = Syntax.applyDataFun v0
+            args = Syntax.applyDataArgs v0
         in (Serialization.noSep [
           termToExpr fun,
           (Serialization.parenListAdaptive (Lists.map termToExpr args))])
       Syntax.DataAssign v0 ->
-        let lhs = Syntax.data_AssignLhs v0
-            rhs = Syntax.data_AssignRhs v0
+        let lhs = Syntax.assignDataLhs v0
+            rhs = Syntax.assignDataRhs v0
         in (Serialization.spaceSep [
           termToExpr lhs,
           (Serialization.cst "->"),
           (termToExpr rhs)])
-      Syntax.DataTuple v0 -> Serialization.parenListAdaptive (Lists.map termToExpr (Syntax.data_TupleArgs v0))
+      Syntax.DataTuple v0 -> Serialization.parenListAdaptive (Lists.map termToExpr (Syntax.tupleDataArgs v0))
       Syntax.DataMatch v0 ->
-        let expr = Syntax.data_MatchExpr v0
-            mCases = Syntax.data_MatchCases v0
+        let expr = Syntax.matchDataExpr v0
+            mCases = Syntax.matchDataCases v0
         in (Serialization.ifx matchOp (termToExpr expr) (Serialization.newlineSep (Lists.map caseToExpr mCases)))
       Syntax.DataFunctionData v0 -> dataFunctionDataToExpr v0
       Syntax.DataBlock v0 ->
-        let stats = Syntax.data_BlockStats v0
+        let stats = Syntax.blockDataStats v0
         in (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map statToExpr stats)))
 -- | Convert a type name to an expression
-typeNameToExpr :: Syntax.Type_Name -> Ast.Expr
-typeNameToExpr tn = Serialization.cst (Syntax.type_NameValue tn)
+typeNameToExpr :: Syntax.NameType -> Ast.Expr
+typeNameToExpr tn = Serialization.cst (Syntax.nameTypeValue tn)
 -- | Convert a type parameter to an expression
-typeParamToExpr :: Syntax.Type_Param -> Ast.Expr
-typeParamToExpr tp = nameToExpr (Syntax.type_ParamName tp)
+typeParamToExpr :: Syntax.ParamType -> Ast.Expr
+typeParamToExpr tp = nameToExpr (Syntax.paramTypeName tp)
 -- | Convert a type to an expression
 typeToExpr :: Syntax.Type -> Ast.Expr
 typeToExpr typ =
     case typ of
       Syntax.TypeRef v0 -> case v0 of
-        Syntax.Type_RefName v1 -> typeNameToExpr v1
+        Syntax.RefTypeName v1 -> typeNameToExpr v1
       Syntax.TypeApply v0 ->
-        let fun = Syntax.type_ApplyTpe v0
-            args = Syntax.type_ApplyArgs v0
+        let fun = Syntax.applyTypeTpe v0
+            args = Syntax.applyTypeArgs v0
         in (Serialization.noSep [
           typeToExpr fun,
           (Serialization.bracketList Serialization.inlineStyle (Lists.map typeToExpr args))])
       Syntax.TypeFunctionType v0 -> case v0 of
-        Syntax.Type_FunctionTypeFunction v1 ->
-          let cod = Syntax.type_FunctionRes v1
-              dom = Maybes.fromMaybe cod (Lists.maybeHead (Syntax.type_FunctionParams v1))
+        Syntax.FunctionTypeTypeFunction v1 ->
+          let cod = Syntax.functionTypeRes v1
+              dom = Maybes.fromMaybe cod (Lists.maybeHead (Syntax.functionTypeParams v1))
           in (Serialization.ifx functionArrowOp (typeToExpr dom) (typeToExpr cod))
       Syntax.TypeLambda v0 ->
-        let params = Syntax.type_LambdaTparams v0
-            body = Syntax.type_LambdaTpe v0
+        let params = Syntax.lambdaTypeTparams v0
+            body = Syntax.lambdaTypeTpe v0
         in (Serialization.noSep [
           typeToExpr body,
           (Serialization.bracketList Serialization.inlineStyle (Lists.map typeParamToExpr params))])
-      Syntax.TypeVar v0 -> typeNameToExpr (Syntax.type_VarName v0)
+      Syntax.TypeVar v0 -> typeNameToExpr (Syntax.varTypeName v0)

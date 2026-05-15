@@ -108,40 +108,40 @@ _Lit_bytes = Core.Name "bytes"
 _Lit_symbol = Core.Name "symbol"
 data Data =
   DataLit Lit |
-  DataRef Data_Ref |
-  DataInterpolate Data_Interpolate |
-  DataXml Data_Xml |
-  DataApply Data_Apply |
-  DataApplyUsing Data_ApplyUsing |
-  DataApplyType Data_ApplyType |
-  DataAssign Data_Assign |
-  DataReturn Data_Return |
-  DataThrow Data_Throw |
-  DataAscribe Data_Ascribe |
-  DataAnnotate Data_Annotate |
-  DataTuple Data_Tuple |
-  DataBlock Data_Block |
-  DataEndMarker Data_EndMarker |
-  DataIf Data_If |
-  DataQuotedMacroExpr Data_QuotedMacroExpr |
-  DataQuotedMacroType Data_QuotedMacroType |
-  DataSplicedMacroExpr Data_SplicedMacroExpr |
-  DataMatch Data_Match |
-  DataTry Data_Try |
-  DataTryWithHandler Data_TryWithHandler |
-  DataFunctionData Data_FunctionData |
-  DataPolyFunction Data_PolyFunction |
-  DataPartialFunction Data_PartialFunction |
-  DataWhile Data_While |
-  DataDo Data_Do |
-  DataFor Data_For |
-  DataForYield Data_ForYield |
-  DataNew Data_New |
-  DataNewAnonymous Data_NewAnonymous |
+  DataRef RefData |
+  DataInterpolate InterpolateData |
+  DataXml XmlData |
+  DataApply ApplyData |
+  DataApplyUsing ApplyUsingData |
+  DataApplyType ApplyTypeData |
+  DataAssign AssignData |
+  DataReturn ReturnData |
+  DataThrow ThrowData |
+  DataAscribe AscribeData |
+  DataAnnotate AnnotateData |
+  DataTuple TupleData |
+  DataBlock BlockData |
+  DataEndMarker EndMarkerData |
+  DataIf IfData |
+  DataQuotedMacroExpr QuotedMacroExprData |
+  DataQuotedMacroType QuotedMacroTypeData |
+  DataSplicedMacroExpr SplicedMacroExprData |
+  DataMatch MatchData |
+  DataTry TryData |
+  DataTryWithHandler TryWithHandlerData |
+  DataFunctionData FunctionDataData |
+  DataPolyFunction PolyFunctionData |
+  DataPartialFunction PartialFunctionData |
+  DataWhile WhileData |
+  DataDo DoData |
+  DataFor ForData |
+  DataForYield ForYieldData |
+  DataNew NewData |
+  DataNewAnonymous NewAnonymousData |
   DataPlaceholder |
-  DataEta Data_Eta |
-  DataRepeated Data_Repeated |
-  DataParam Data_Param
+  DataEta EtaData |
+  DataRepeated RepeatedData |
+  DataParam ParamData
   deriving (Eq, Ord, Read, Show)
 _Data = Core.Name "hydra.scala.syntax.Data"
 _Data_lit = Core.Name "lit"
@@ -179,354 +179,354 @@ _Data_placeholder = Core.Name "placeholder"
 _Data_eta = Core.Name "eta"
 _Data_repeated = Core.Name "repeated"
 _Data_param = Core.Name "param"
-data Data_Ref =
-  Data_RefThis Data_This |
-  Data_RefSuper Data_Super |
-  Data_RefName Data_Name |
-  Data_RefAnonymous Data_Anonymous |
-  Data_RefSelect Data_Select |
-  Data_RefApplyUnary Data_ApplyUnary
+data RefData =
+  RefDataThis ThisData |
+  RefDataSuper SuperData |
+  RefDataName NameData |
+  RefDataAnonymous AnonymousData |
+  RefDataSelect SelectData |
+  RefDataApplyUnary ApplyUnaryData
   deriving (Eq, Ord, Read, Show)
-_Data_Ref = Core.Name "hydra.scala.syntax.Data_Ref"
-_Data_Ref_this = Core.Name "this"
-_Data_Ref_super = Core.Name "super"
-_Data_Ref_name = Core.Name "name"
-_Data_Ref_anonymous = Core.Name "anonymous"
-_Data_Ref_select = Core.Name "select"
-_Data_Ref_applyUnary = Core.Name "applyUnary"
-newtype Data_This =
-  Data_This {
-    unData_This :: ()}
+_RefData = Core.Name "hydra.scala.syntax.RefData"
+_RefData_this = Core.Name "this"
+_RefData_super = Core.Name "super"
+_RefData_name = Core.Name "name"
+_RefData_anonymous = Core.Name "anonymous"
+_RefData_select = Core.Name "select"
+_RefData_applyUnary = Core.Name "applyUnary"
+newtype ThisData =
+  ThisData {
+    unThisData :: ()}
   deriving (Eq, Ord, Read, Show)
-_Data_This = Core.Name "hydra.scala.syntax.Data_This"
-data Data_Super =
-  Data_Super {
-    data_SuperThisp :: Name,
-    data_SuperSuperp :: Name}
+_ThisData = Core.Name "hydra.scala.syntax.ThisData"
+data SuperData =
+  SuperData {
+    superDataThisp :: Name,
+    superDataSuperp :: Name}
   deriving (Eq, Ord, Read, Show)
-_Data_Super = Core.Name "hydra.scala.syntax.Data_Super"
-_Data_Super_thisp = Core.Name "thisp"
-_Data_Super_superp = Core.Name "superp"
-data Data_Name =
-  Data_Name {
-    data_NameValue :: PredefString}
+_SuperData = Core.Name "hydra.scala.syntax.SuperData"
+_SuperData_thisp = Core.Name "thisp"
+_SuperData_superp = Core.Name "superp"
+data NameData =
+  NameData {
+    nameDataValue :: PredefString}
   deriving (Eq, Ord, Read, Show)
-_Data_Name = Core.Name "hydra.scala.syntax.Data_Name"
-_Data_Name_value = Core.Name "value"
-newtype Data_Anonymous =
-  Data_Anonymous {
-    unData_Anonymous :: ()}
+_NameData = Core.Name "hydra.scala.syntax.NameData"
+_NameData_value = Core.Name "value"
+newtype AnonymousData =
+  AnonymousData {
+    unAnonymousData :: ()}
   deriving (Eq, Ord, Read, Show)
-_Data_Anonymous = Core.Name "hydra.scala.syntax.Data_Anonymous"
-data Data_Select =
-  Data_Select {
-    data_SelectQual :: Data,
-    data_SelectName :: Data_Name}
+_AnonymousData = Core.Name "hydra.scala.syntax.AnonymousData"
+data SelectData =
+  SelectData {
+    selectDataQual :: Data,
+    selectDataName :: NameData}
   deriving (Eq, Ord, Read, Show)
-_Data_Select = Core.Name "hydra.scala.syntax.Data_Select"
-_Data_Select_qual = Core.Name "qual"
-_Data_Select_name = Core.Name "name"
-data Data_Interpolate =
-  Data_Interpolate {
-    data_InterpolatePrefix :: Data_Name,
-    data_InterpolateParts :: [Lit],
-    data_InterpolateArgs :: [Data]}
+_SelectData = Core.Name "hydra.scala.syntax.SelectData"
+_SelectData_qual = Core.Name "qual"
+_SelectData_name = Core.Name "name"
+data InterpolateData =
+  InterpolateData {
+    interpolateDataPrefix :: NameData,
+    interpolateDataParts :: [Lit],
+    interpolateDataArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
-_Data_Interpolate = Core.Name "hydra.scala.syntax.Data_Interpolate"
-_Data_Interpolate_prefix = Core.Name "prefix"
-_Data_Interpolate_parts = Core.Name "parts"
-_Data_Interpolate_args = Core.Name "args"
-data Data_Xml =
-  Data_Xml {
-    data_XmlParts :: [Lit],
-    data_XmlArgs :: [Data]}
+_InterpolateData = Core.Name "hydra.scala.syntax.InterpolateData"
+_InterpolateData_prefix = Core.Name "prefix"
+_InterpolateData_parts = Core.Name "parts"
+_InterpolateData_args = Core.Name "args"
+data XmlData =
+  XmlData {
+    xmlDataParts :: [Lit],
+    xmlDataArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
-_Data_Xml = Core.Name "hydra.scala.syntax.Data_Xml"
-_Data_Xml_parts = Core.Name "parts"
-_Data_Xml_args = Core.Name "args"
-data Data_Apply =
-  Data_Apply {
-    data_ApplyFun :: Data,
-    data_ApplyArgs :: [Data]}
+_XmlData = Core.Name "hydra.scala.syntax.XmlData"
+_XmlData_parts = Core.Name "parts"
+_XmlData_args = Core.Name "args"
+data ApplyData =
+  ApplyData {
+    applyDataFun :: Data,
+    applyDataArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
-_Data_Apply = Core.Name "hydra.scala.syntax.Data_Apply"
-_Data_Apply_fun = Core.Name "fun"
-_Data_Apply_args = Core.Name "args"
-data Data_ApplyUsing =
-  Data_ApplyUsing {
-    data_ApplyUsingFun :: Data,
-    data_ApplyUsingTargs :: [Data]}
+_ApplyData = Core.Name "hydra.scala.syntax.ApplyData"
+_ApplyData_fun = Core.Name "fun"
+_ApplyData_args = Core.Name "args"
+data ApplyUsingData =
+  ApplyUsingData {
+    applyUsingDataFun :: Data,
+    applyUsingDataTargs :: [Data]}
   deriving (Eq, Ord, Read, Show)
-_Data_ApplyUsing = Core.Name "hydra.scala.syntax.Data_ApplyUsing"
-_Data_ApplyUsing_fun = Core.Name "fun"
-_Data_ApplyUsing_targs = Core.Name "targs"
-data Data_ApplyType =
-  Data_ApplyType {
-    data_ApplyTypeLhs :: Data,
-    data_ApplyTypeOp :: Data_Name,
-    data_ApplyTypeTargs :: [Type],
-    data_ApplyTypeArgs :: [Data]}
+_ApplyUsingData = Core.Name "hydra.scala.syntax.ApplyUsingData"
+_ApplyUsingData_fun = Core.Name "fun"
+_ApplyUsingData_targs = Core.Name "targs"
+data ApplyTypeData =
+  ApplyTypeData {
+    applyTypeDataLhs :: Data,
+    applyTypeDataOp :: NameData,
+    applyTypeDataTargs :: [Type],
+    applyTypeDataArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
-_Data_ApplyType = Core.Name "hydra.scala.syntax.Data_ApplyType"
-_Data_ApplyType_lhs = Core.Name "lhs"
-_Data_ApplyType_op = Core.Name "op"
-_Data_ApplyType_targs = Core.Name "targs"
-_Data_ApplyType_args = Core.Name "args"
-data Data_ApplyInfix =
-  Data_ApplyInfix {
-    data_ApplyInfixLhs :: Data,
-    data_ApplyInfixOp :: Data_Name,
-    data_ApplyInfixTargs :: [Type],
-    data_ApplyInfixArgs :: [Data]}
+_ApplyTypeData = Core.Name "hydra.scala.syntax.ApplyTypeData"
+_ApplyTypeData_lhs = Core.Name "lhs"
+_ApplyTypeData_op = Core.Name "op"
+_ApplyTypeData_targs = Core.Name "targs"
+_ApplyTypeData_args = Core.Name "args"
+data ApplyInfixData =
+  ApplyInfixData {
+    applyInfixDataLhs :: Data,
+    applyInfixDataOp :: NameData,
+    applyInfixDataTargs :: [Type],
+    applyInfixDataArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
-_Data_ApplyInfix = Core.Name "hydra.scala.syntax.Data_ApplyInfix"
-_Data_ApplyInfix_lhs = Core.Name "lhs"
-_Data_ApplyInfix_op = Core.Name "op"
-_Data_ApplyInfix_targs = Core.Name "targs"
-_Data_ApplyInfix_args = Core.Name "args"
-data Data_ApplyUnary =
-  Data_ApplyUnary {
-    data_ApplyUnaryOp :: Data_Name,
-    data_ApplyUnaryArg :: Data}
+_ApplyInfixData = Core.Name "hydra.scala.syntax.ApplyInfixData"
+_ApplyInfixData_lhs = Core.Name "lhs"
+_ApplyInfixData_op = Core.Name "op"
+_ApplyInfixData_targs = Core.Name "targs"
+_ApplyInfixData_args = Core.Name "args"
+data ApplyUnaryData =
+  ApplyUnaryData {
+    applyUnaryDataOp :: NameData,
+    applyUnaryDataArg :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_ApplyUnary = Core.Name "hydra.scala.syntax.Data_ApplyUnary"
-_Data_ApplyUnary_op = Core.Name "op"
-_Data_ApplyUnary_arg = Core.Name "arg"
-data Data_Assign =
-  Data_Assign {
-    data_AssignLhs :: Data,
-    data_AssignRhs :: Data}
+_ApplyUnaryData = Core.Name "hydra.scala.syntax.ApplyUnaryData"
+_ApplyUnaryData_op = Core.Name "op"
+_ApplyUnaryData_arg = Core.Name "arg"
+data AssignData =
+  AssignData {
+    assignDataLhs :: Data,
+    assignDataRhs :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_Assign = Core.Name "hydra.scala.syntax.Data_Assign"
-_Data_Assign_lhs = Core.Name "lhs"
-_Data_Assign_rhs = Core.Name "rhs"
-data Data_Return =
-  Data_Return {
-    data_ReturnExpr :: Data}
+_AssignData = Core.Name "hydra.scala.syntax.AssignData"
+_AssignData_lhs = Core.Name "lhs"
+_AssignData_rhs = Core.Name "rhs"
+data ReturnData =
+  ReturnData {
+    returnDataExpr :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_Return = Core.Name "hydra.scala.syntax.Data_Return"
-_Data_Return_expr = Core.Name "expr"
-data Data_Throw =
-  Data_Throw {
-    data_ThrowExpr :: Data}
+_ReturnData = Core.Name "hydra.scala.syntax.ReturnData"
+_ReturnData_expr = Core.Name "expr"
+data ThrowData =
+  ThrowData {
+    throwDataExpr :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_Throw = Core.Name "hydra.scala.syntax.Data_Throw"
-_Data_Throw_expr = Core.Name "expr"
-data Data_Ascribe =
-  Data_Ascribe {
-    data_AscribeExpr :: Data,
-    data_AscribeTpe :: Type}
+_ThrowData = Core.Name "hydra.scala.syntax.ThrowData"
+_ThrowData_expr = Core.Name "expr"
+data AscribeData =
+  AscribeData {
+    ascribeDataExpr :: Data,
+    ascribeDataTpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Data_Ascribe = Core.Name "hydra.scala.syntax.Data_Ascribe"
-_Data_Ascribe_expr = Core.Name "expr"
-_Data_Ascribe_tpe = Core.Name "tpe"
-data Data_Annotate =
-  Data_Annotate {
-    data_AnnotateExpr :: Data,
-    data_AnnotateAnnots :: [Mod_Annot]}
+_AscribeData = Core.Name "hydra.scala.syntax.AscribeData"
+_AscribeData_expr = Core.Name "expr"
+_AscribeData_tpe = Core.Name "tpe"
+data AnnotateData =
+  AnnotateData {
+    annotateDataExpr :: Data,
+    annotateDataAnnots :: [AnnotMod]}
   deriving (Eq, Ord, Read, Show)
-_Data_Annotate = Core.Name "hydra.scala.syntax.Data_Annotate"
-_Data_Annotate_expr = Core.Name "expr"
-_Data_Annotate_annots = Core.Name "annots"
-data Data_Tuple =
-  Data_Tuple {
-    data_TupleArgs :: [Data]}
+_AnnotateData = Core.Name "hydra.scala.syntax.AnnotateData"
+_AnnotateData_expr = Core.Name "expr"
+_AnnotateData_annots = Core.Name "annots"
+data TupleData =
+  TupleData {
+    tupleDataArgs :: [Data]}
   deriving (Eq, Ord, Read, Show)
-_Data_Tuple = Core.Name "hydra.scala.syntax.Data_Tuple"
-_Data_Tuple_args = Core.Name "args"
-data Data_Block =
-  Data_Block {
-    data_BlockStats :: [Stat]}
+_TupleData = Core.Name "hydra.scala.syntax.TupleData"
+_TupleData_args = Core.Name "args"
+data BlockData =
+  BlockData {
+    blockDataStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
-_Data_Block = Core.Name "hydra.scala.syntax.Data_Block"
-_Data_Block_stats = Core.Name "stats"
-data Data_EndMarker =
-  Data_EndMarker {
-    data_EndMarkerName :: Data_Name}
+_BlockData = Core.Name "hydra.scala.syntax.BlockData"
+_BlockData_stats = Core.Name "stats"
+data EndMarkerData =
+  EndMarkerData {
+    endMarkerDataName :: NameData}
   deriving (Eq, Ord, Read, Show)
-_Data_EndMarker = Core.Name "hydra.scala.syntax.Data_EndMarker"
-_Data_EndMarker_name = Core.Name "name"
-data Data_If =
-  Data_If {
-    data_IfCond :: Data,
-    data_IfThenp :: Data,
-    data_IfElsep :: Data}
+_EndMarkerData = Core.Name "hydra.scala.syntax.EndMarkerData"
+_EndMarkerData_name = Core.Name "name"
+data IfData =
+  IfData {
+    ifDataCond :: Data,
+    ifDataThenp :: Data,
+    ifDataElsep :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_If = Core.Name "hydra.scala.syntax.Data_If"
-_Data_If_cond = Core.Name "cond"
-_Data_If_thenp = Core.Name "thenp"
-_Data_If_elsep = Core.Name "elsep"
-data Data_QuotedMacroExpr =
-  Data_QuotedMacroExpr {
-    data_QuotedMacroExprBody :: Data}
+_IfData = Core.Name "hydra.scala.syntax.IfData"
+_IfData_cond = Core.Name "cond"
+_IfData_thenp = Core.Name "thenp"
+_IfData_elsep = Core.Name "elsep"
+data QuotedMacroExprData =
+  QuotedMacroExprData {
+    quotedMacroExprDataBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_QuotedMacroExpr = Core.Name "hydra.scala.syntax.Data_QuotedMacroExpr"
-_Data_QuotedMacroExpr_body = Core.Name "body"
-data Data_QuotedMacroType =
-  Data_QuotedMacroType {
-    data_QuotedMacroTypeTpe :: Type}
+_QuotedMacroExprData = Core.Name "hydra.scala.syntax.QuotedMacroExprData"
+_QuotedMacroExprData_body = Core.Name "body"
+data QuotedMacroTypeData =
+  QuotedMacroTypeData {
+    quotedMacroTypeDataTpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Data_QuotedMacroType = Core.Name "hydra.scala.syntax.Data_QuotedMacroType"
-_Data_QuotedMacroType_tpe = Core.Name "tpe"
-data Data_SplicedMacroExpr =
-  Data_SplicedMacroExpr {
-    data_SplicedMacroExprBody :: Data}
+_QuotedMacroTypeData = Core.Name "hydra.scala.syntax.QuotedMacroTypeData"
+_QuotedMacroTypeData_tpe = Core.Name "tpe"
+data SplicedMacroExprData =
+  SplicedMacroExprData {
+    splicedMacroExprDataBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_SplicedMacroExpr = Core.Name "hydra.scala.syntax.Data_SplicedMacroExpr"
-_Data_SplicedMacroExpr_body = Core.Name "body"
-data Data_Match =
-  Data_Match {
-    data_MatchExpr :: Data,
-    data_MatchCases :: [Case]}
+_SplicedMacroExprData = Core.Name "hydra.scala.syntax.SplicedMacroExprData"
+_SplicedMacroExprData_body = Core.Name "body"
+data MatchData =
+  MatchData {
+    matchDataExpr :: Data,
+    matchDataCases :: [Case]}
   deriving (Eq, Ord, Read, Show)
-_Data_Match = Core.Name "hydra.scala.syntax.Data_Match"
-_Data_Match_expr = Core.Name "expr"
-_Data_Match_cases = Core.Name "cases"
-data Data_Try =
-  Data_Try {
-    data_TryExpr :: Data,
-    data_TryCatchp :: [Case],
-    data_TryFinallyp :: (Maybe Data)}
+_MatchData = Core.Name "hydra.scala.syntax.MatchData"
+_MatchData_expr = Core.Name "expr"
+_MatchData_cases = Core.Name "cases"
+data TryData =
+  TryData {
+    tryDataExpr :: Data,
+    tryDataCatchp :: [Case],
+    tryDataFinallyp :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
-_Data_Try = Core.Name "hydra.scala.syntax.Data_Try"
-_Data_Try_expr = Core.Name "expr"
-_Data_Try_catchp = Core.Name "catchp"
-_Data_Try_finallyp = Core.Name "finallyp"
-data Data_TryWithHandler =
-  Data_TryWithHandler {
-    data_TryWithHandlerExpr :: Data,
-    data_TryWithHandlerCatchp :: Data,
-    data_TryWithHandlerFinallyp :: (Maybe Data)}
+_TryData = Core.Name "hydra.scala.syntax.TryData"
+_TryData_expr = Core.Name "expr"
+_TryData_catchp = Core.Name "catchp"
+_TryData_finallyp = Core.Name "finallyp"
+data TryWithHandlerData =
+  TryWithHandlerData {
+    tryWithHandlerDataExpr :: Data,
+    tryWithHandlerDataCatchp :: Data,
+    tryWithHandlerDataFinallyp :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
-_Data_TryWithHandler = Core.Name "hydra.scala.syntax.Data_TryWithHandler"
-_Data_TryWithHandler_expr = Core.Name "expr"
-_Data_TryWithHandler_catchp = Core.Name "catchp"
-_Data_TryWithHandler_finallyp = Core.Name "finallyp"
-data Data_FunctionData =
-  Data_FunctionDataContextFunction Data_ContextFunction |
-  Data_FunctionDataFunction Data_Function
+_TryWithHandlerData = Core.Name "hydra.scala.syntax.TryWithHandlerData"
+_TryWithHandlerData_expr = Core.Name "expr"
+_TryWithHandlerData_catchp = Core.Name "catchp"
+_TryWithHandlerData_finallyp = Core.Name "finallyp"
+data FunctionDataData =
+  FunctionDataDataContextFunction ContextFunctionData |
+  FunctionDataDataFunction FunctionData
   deriving (Eq, Ord, Read, Show)
-_Data_FunctionData = Core.Name "hydra.scala.syntax.Data_FunctionData"
-_Data_FunctionData_contextFunction = Core.Name "contextFunction"
-_Data_FunctionData_function = Core.Name "function"
-data Data_ContextFunction =
-  Data_ContextFunction {
-    data_ContextFunctionParams :: [Data_Param],
-    data_ContextFunctionBody :: Data}
+_FunctionDataData = Core.Name "hydra.scala.syntax.FunctionDataData"
+_FunctionDataData_contextFunction = Core.Name "contextFunction"
+_FunctionDataData_function = Core.Name "function"
+data ContextFunctionData =
+  ContextFunctionData {
+    contextFunctionDataParams :: [ParamData],
+    contextFunctionDataBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_ContextFunction = Core.Name "hydra.scala.syntax.Data_ContextFunction"
-_Data_ContextFunction_params = Core.Name "params"
-_Data_ContextFunction_body = Core.Name "body"
-data Data_Function =
-  Data_Function {
-    data_FunctionParams :: [Data_Param],
-    data_FunctionBody :: Data}
+_ContextFunctionData = Core.Name "hydra.scala.syntax.ContextFunctionData"
+_ContextFunctionData_params = Core.Name "params"
+_ContextFunctionData_body = Core.Name "body"
+data FunctionData =
+  FunctionData {
+    functionDataParams :: [ParamData],
+    functionDataBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_Function = Core.Name "hydra.scala.syntax.Data_Function"
-_Data_Function_params = Core.Name "params"
-_Data_Function_body = Core.Name "body"
-data Data_PolyFunction =
-  Data_PolyFunction {
-    data_PolyFunctionTparams :: [Type_Param],
-    data_PolyFunctionBody :: Data}
+_FunctionData = Core.Name "hydra.scala.syntax.FunctionData"
+_FunctionData_params = Core.Name "params"
+_FunctionData_body = Core.Name "body"
+data PolyFunctionData =
+  PolyFunctionData {
+    polyFunctionDataTparams :: [ParamType],
+    polyFunctionDataBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_PolyFunction = Core.Name "hydra.scala.syntax.Data_PolyFunction"
-_Data_PolyFunction_tparams = Core.Name "tparams"
-_Data_PolyFunction_body = Core.Name "body"
-data Data_PartialFunction =
-  Data_PartialFunction {
-    data_PartialFunctionCases :: [Case]}
+_PolyFunctionData = Core.Name "hydra.scala.syntax.PolyFunctionData"
+_PolyFunctionData_tparams = Core.Name "tparams"
+_PolyFunctionData_body = Core.Name "body"
+data PartialFunctionData =
+  PartialFunctionData {
+    partialFunctionDataCases :: [Case]}
   deriving (Eq, Ord, Read, Show)
-_Data_PartialFunction = Core.Name "hydra.scala.syntax.Data_PartialFunction"
-_Data_PartialFunction_cases = Core.Name "cases"
-data Data_While =
-  Data_While {
-    data_WhileExpr :: Data,
-    data_WhileBody :: Data}
+_PartialFunctionData = Core.Name "hydra.scala.syntax.PartialFunctionData"
+_PartialFunctionData_cases = Core.Name "cases"
+data WhileData =
+  WhileData {
+    whileDataExpr :: Data,
+    whileDataBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_While = Core.Name "hydra.scala.syntax.Data_While"
-_Data_While_expr = Core.Name "expr"
-_Data_While_body = Core.Name "body"
-data Data_Do =
-  Data_Do {
-    data_DoBody :: Data,
-    data_DoExpr :: Data}
+_WhileData = Core.Name "hydra.scala.syntax.WhileData"
+_WhileData_expr = Core.Name "expr"
+_WhileData_body = Core.Name "body"
+data DoData =
+  DoData {
+    doDataBody :: Data,
+    doDataExpr :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_Do = Core.Name "hydra.scala.syntax.Data_Do"
-_Data_Do_body = Core.Name "body"
-_Data_Do_expr = Core.Name "expr"
-data Data_For =
-  Data_For {
-    data_ForEnums :: [Enumerator]}
+_DoData = Core.Name "hydra.scala.syntax.DoData"
+_DoData_body = Core.Name "body"
+_DoData_expr = Core.Name "expr"
+data ForData =
+  ForData {
+    forDataEnums :: [Enumerator]}
   deriving (Eq, Ord, Read, Show)
-_Data_For = Core.Name "hydra.scala.syntax.Data_For"
-_Data_For_enums = Core.Name "enums"
-data Data_ForYield =
-  Data_ForYield {
-    data_ForYieldEnums :: [Enumerator]}
+_ForData = Core.Name "hydra.scala.syntax.ForData"
+_ForData_enums = Core.Name "enums"
+data ForYieldData =
+  ForYieldData {
+    forYieldDataEnums :: [Enumerator]}
   deriving (Eq, Ord, Read, Show)
-_Data_ForYield = Core.Name "hydra.scala.syntax.Data_ForYield"
-_Data_ForYield_enums = Core.Name "enums"
-data Data_New =
-  Data_New {
-    data_NewInit :: Init}
+_ForYieldData = Core.Name "hydra.scala.syntax.ForYieldData"
+_ForYieldData_enums = Core.Name "enums"
+data NewData =
+  NewData {
+    newDataInit :: Init}
   deriving (Eq, Ord, Read, Show)
-_Data_New = Core.Name "hydra.scala.syntax.Data_New"
-_Data_New_init = Core.Name "init"
-data Data_NewAnonymous =
-  Data_NewAnonymous {
-    data_NewAnonymousTempl :: Template}
+_NewData = Core.Name "hydra.scala.syntax.NewData"
+_NewData_init = Core.Name "init"
+data NewAnonymousData =
+  NewAnonymousData {
+    newAnonymousDataTempl :: Template}
   deriving (Eq, Ord, Read, Show)
-_Data_NewAnonymous = Core.Name "hydra.scala.syntax.Data_NewAnonymous"
-_Data_NewAnonymous_templ = Core.Name "templ"
-data Data_Eta =
-  Data_Eta {
-    data_EtaExpr :: Data}
+_NewAnonymousData = Core.Name "hydra.scala.syntax.NewAnonymousData"
+_NewAnonymousData_templ = Core.Name "templ"
+data EtaData =
+  EtaData {
+    etaDataExpr :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_Eta = Core.Name "hydra.scala.syntax.Data_Eta"
-_Data_Eta_expr = Core.Name "expr"
-data Data_Repeated =
-  Data_Repeated {
-    data_RepeatedExpr :: Data}
+_EtaData = Core.Name "hydra.scala.syntax.EtaData"
+_EtaData_expr = Core.Name "expr"
+data RepeatedData =
+  RepeatedData {
+    repeatedDataExpr :: Data}
   deriving (Eq, Ord, Read, Show)
-_Data_Repeated = Core.Name "hydra.scala.syntax.Data_Repeated"
-_Data_Repeated_expr = Core.Name "expr"
-data Data_Param =
-  Data_Param {
-    data_ParamMods :: [Mod],
-    data_ParamName :: Name,
-    data_ParamDecltpe :: (Maybe Type),
-    data_ParamDefault :: (Maybe Data)}
+_RepeatedData = Core.Name "hydra.scala.syntax.RepeatedData"
+_RepeatedData_expr = Core.Name "expr"
+data ParamData =
+  ParamData {
+    paramDataMods :: [Mod],
+    paramDataName :: Name,
+    paramDataDecltpe :: (Maybe Type),
+    paramDataDefault :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
-_Data_Param = Core.Name "hydra.scala.syntax.Data_Param"
-_Data_Param_mods = Core.Name "mods"
-_Data_Param_name = Core.Name "name"
-_Data_Param_decltpe = Core.Name "decltpe"
-_Data_Param_default = Core.Name "default"
+_ParamData = Core.Name "hydra.scala.syntax.ParamData"
+_ParamData_mods = Core.Name "mods"
+_ParamData_name = Core.Name "name"
+_ParamData_decltpe = Core.Name "decltpe"
+_ParamData_default = Core.Name "default"
 data Type =
-  TypeRef Type_Ref |
-  TypeAnonymousName Type_AnonymousName |
-  TypeApply Type_Apply |
-  TypeApplyInfix Type_ApplyInfix |
-  TypeFunctionType Type_FunctionType |
-  TypePolyFunction Type_PolyFunction |
-  TypeImplicitFunction Type_ImplicitFunction |
-  TypeTuple Type_Tuple |
-  TypeWith Type_With |
-  TypeAnd Type_And |
-  TypeOr Type_Or |
-  TypeRefine Type_Refine |
-  TypeExistential Type_Existential |
-  TypeAnnotate Type_Annotate |
-  TypeLambda Type_Lambda |
-  TypeMacro Type_Macro |
-  TypeMethod Type_Method |
-  TypePlaceholder Type_Placeholder |
-  TypeByName Type_ByName |
-  TypeRepeated Type_Repeated |
-  TypeVar Type_Var |
-  TypeTypedParam Type_TypedParam |
-  TypeMatch Type_Match
+  TypeRef RefType |
+  TypeAnonymousName AnonymousNameType |
+  TypeApply ApplyType |
+  TypeApplyInfix ApplyInfixType |
+  TypeFunctionType FunctionTypeType |
+  TypePolyFunction PolyFunctionType |
+  TypeImplicitFunction ImplicitFunctionType |
+  TypeTuple TupleType |
+  TypeWith WithType |
+  TypeAnd AndType |
+  TypeOr OrType |
+  TypeRefine RefineType |
+  TypeExistential ExistentialType |
+  TypeAnnotate AnnotateType |
+  TypeLambda LambdaType |
+  TypeMacro MacroType |
+  TypeMethod MethodType |
+  TypePlaceholder PlaceholderType |
+  TypeByName ByNameType |
+  TypeRepeated RepeatedType |
+  TypeVar VarType |
+  TypeTypedParam TypedParamType |
+  TypeMatch MatchType
   deriving (Eq, Ord, Read, Show)
 _Type = Core.Name "hydra.scala.syntax.Type"
 _Type_ref = Core.Name "ref"
@@ -552,189 +552,189 @@ _Type_repeated = Core.Name "repeated"
 _Type_var = Core.Name "var"
 _Type_typedParam = Core.Name "typedParam"
 _Type_match = Core.Name "match"
-data Type_Ref =
-  Type_RefName Type_Name |
-  Type_RefSelect Type_Select |
-  Type_RefProject Type_Project |
-  Type_RefSingleton Type_Singleton
+data RefType =
+  RefTypeName NameType |
+  RefTypeSelect SelectType |
+  RefTypeProject ProjectType |
+  RefTypeSingleton SingletonType
   deriving (Eq, Ord, Read, Show)
-_Type_Ref = Core.Name "hydra.scala.syntax.Type_Ref"
-_Type_Ref_name = Core.Name "name"
-_Type_Ref_select = Core.Name "select"
-_Type_Ref_project = Core.Name "project"
-_Type_Ref_singleton = Core.Name "singleton"
-data Type_Name =
-  Type_Name {
-    type_NameValue :: String}
+_RefType = Core.Name "hydra.scala.syntax.RefType"
+_RefType_name = Core.Name "name"
+_RefType_select = Core.Name "select"
+_RefType_project = Core.Name "project"
+_RefType_singleton = Core.Name "singleton"
+data NameType =
+  NameType {
+    nameTypeValue :: String}
   deriving (Eq, Ord, Read, Show)
-_Type_Name = Core.Name "hydra.scala.syntax.Type_Name"
-_Type_Name_value = Core.Name "value"
-newtype Type_AnonymousName =
-  Type_AnonymousName {
-    unType_AnonymousName :: ()}
+_NameType = Core.Name "hydra.scala.syntax.NameType"
+_NameType_value = Core.Name "value"
+newtype AnonymousNameType =
+  AnonymousNameType {
+    unAnonymousNameType :: ()}
   deriving (Eq, Ord, Read, Show)
-_Type_AnonymousName = Core.Name "hydra.scala.syntax.Type_AnonymousName"
-data Type_Select =
-  Type_Select {
-    type_SelectQual :: Data_Ref,
-    type_SelectName :: Type_Name}
+_AnonymousNameType = Core.Name "hydra.scala.syntax.AnonymousNameType"
+data SelectType =
+  SelectType {
+    selectTypeQual :: RefData,
+    selectTypeName :: NameType}
   deriving (Eq, Ord, Read, Show)
-_Type_Select = Core.Name "hydra.scala.syntax.Type_Select"
-_Type_Select_qual = Core.Name "qual"
-_Type_Select_name = Core.Name "name"
-data Type_Project =
-  Type_Project {
-    type_ProjectQual :: Type,
-    type_ProjectName :: Type_Name}
+_SelectType = Core.Name "hydra.scala.syntax.SelectType"
+_SelectType_qual = Core.Name "qual"
+_SelectType_name = Core.Name "name"
+data ProjectType =
+  ProjectType {
+    projectTypeQual :: Type,
+    projectTypeName :: NameType}
   deriving (Eq, Ord, Read, Show)
-_Type_Project = Core.Name "hydra.scala.syntax.Type_Project"
-_Type_Project_qual = Core.Name "qual"
-_Type_Project_name = Core.Name "name"
-data Type_Singleton =
-  Type_Singleton {
-    type_SingletonRef :: Data_Ref}
+_ProjectType = Core.Name "hydra.scala.syntax.ProjectType"
+_ProjectType_qual = Core.Name "qual"
+_ProjectType_name = Core.Name "name"
+data SingletonType =
+  SingletonType {
+    singletonTypeRef :: RefData}
   deriving (Eq, Ord, Read, Show)
-_Type_Singleton = Core.Name "hydra.scala.syntax.Type_Singleton"
-_Type_Singleton_ref = Core.Name "ref"
-data Type_Apply =
-  Type_Apply {
-    type_ApplyTpe :: Type,
-    type_ApplyArgs :: [Type]}
+_SingletonType = Core.Name "hydra.scala.syntax.SingletonType"
+_SingletonType_ref = Core.Name "ref"
+data ApplyType =
+  ApplyType {
+    applyTypeTpe :: Type,
+    applyTypeArgs :: [Type]}
   deriving (Eq, Ord, Read, Show)
-_Type_Apply = Core.Name "hydra.scala.syntax.Type_Apply"
-_Type_Apply_tpe = Core.Name "tpe"
-_Type_Apply_args = Core.Name "args"
-data Type_ApplyInfix =
-  Type_ApplyInfix {
-    type_ApplyInfixLhs :: Type,
-    type_ApplyInfixOp :: Type_Name,
-    type_ApplyInfixRhs :: Type}
+_ApplyType = Core.Name "hydra.scala.syntax.ApplyType"
+_ApplyType_tpe = Core.Name "tpe"
+_ApplyType_args = Core.Name "args"
+data ApplyInfixType =
+  ApplyInfixType {
+    applyInfixTypeLhs :: Type,
+    applyInfixTypeOp :: NameType,
+    applyInfixTypeRhs :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_ApplyInfix = Core.Name "hydra.scala.syntax.Type_ApplyInfix"
-_Type_ApplyInfix_lhs = Core.Name "lhs"
-_Type_ApplyInfix_op = Core.Name "op"
-_Type_ApplyInfix_rhs = Core.Name "rhs"
-data Type_FunctionType =
-  Type_FunctionTypeFunction Type_Function |
-  Type_FunctionTypeContextFunction Type_ContextFunction
+_ApplyInfixType = Core.Name "hydra.scala.syntax.ApplyInfixType"
+_ApplyInfixType_lhs = Core.Name "lhs"
+_ApplyInfixType_op = Core.Name "op"
+_ApplyInfixType_rhs = Core.Name "rhs"
+data FunctionTypeType =
+  FunctionTypeTypeFunction FunctionType |
+  FunctionTypeTypeContextFunction ContextFunctionType
   deriving (Eq, Ord, Read, Show)
-_Type_FunctionType = Core.Name "hydra.scala.syntax.Type_FunctionType"
-_Type_FunctionType_function = Core.Name "function"
-_Type_FunctionType_contextFunction = Core.Name "contextFunction"
-data Type_Function =
-  Type_Function {
-    type_FunctionParams :: [Type],
-    type_FunctionRes :: Type}
+_FunctionTypeType = Core.Name "hydra.scala.syntax.FunctionTypeType"
+_FunctionTypeType_function = Core.Name "function"
+_FunctionTypeType_contextFunction = Core.Name "contextFunction"
+data FunctionType =
+  FunctionType {
+    functionTypeParams :: [Type],
+    functionTypeRes :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_Function = Core.Name "hydra.scala.syntax.Type_Function"
-_Type_Function_params = Core.Name "params"
-_Type_Function_res = Core.Name "res"
-data Type_PolyFunction =
-  Type_PolyFunction {
-    type_PolyFunctionTparams :: [Type_Param],
-    type_PolyFunctionTpe :: Type}
+_FunctionType = Core.Name "hydra.scala.syntax.FunctionType"
+_FunctionType_params = Core.Name "params"
+_FunctionType_res = Core.Name "res"
+data PolyFunctionType =
+  PolyFunctionType {
+    polyFunctionTypeTparams :: [ParamType],
+    polyFunctionTypeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_PolyFunction = Core.Name "hydra.scala.syntax.Type_PolyFunction"
-_Type_PolyFunction_tparams = Core.Name "tparams"
-_Type_PolyFunction_tpe = Core.Name "tpe"
-data Type_ContextFunction =
-  Type_ContextFunction {
-    type_ContextFunctionParams :: [Type],
-    type_ContextFunctionRes :: Type}
+_PolyFunctionType = Core.Name "hydra.scala.syntax.PolyFunctionType"
+_PolyFunctionType_tparams = Core.Name "tparams"
+_PolyFunctionType_tpe = Core.Name "tpe"
+data ContextFunctionType =
+  ContextFunctionType {
+    contextFunctionTypeParams :: [Type],
+    contextFunctionTypeRes :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_ContextFunction = Core.Name "hydra.scala.syntax.Type_ContextFunction"
-_Type_ContextFunction_params = Core.Name "params"
-_Type_ContextFunction_res = Core.Name "res"
-data Type_ImplicitFunction =
-  Type_ImplicitFunction {
-    type_ImplicitFunctionParams :: [Type],
-    type_ImplicitFunctionRes :: Type}
+_ContextFunctionType = Core.Name "hydra.scala.syntax.ContextFunctionType"
+_ContextFunctionType_params = Core.Name "params"
+_ContextFunctionType_res = Core.Name "res"
+data ImplicitFunctionType =
+  ImplicitFunctionType {
+    implicitFunctionTypeParams :: [Type],
+    implicitFunctionTypeRes :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_ImplicitFunction = Core.Name "hydra.scala.syntax.Type_ImplicitFunction"
-_Type_ImplicitFunction_params = Core.Name "params"
-_Type_ImplicitFunction_res = Core.Name "res"
-data Type_Tuple =
-  Type_Tuple {
-    type_TupleArgs :: [Type]}
+_ImplicitFunctionType = Core.Name "hydra.scala.syntax.ImplicitFunctionType"
+_ImplicitFunctionType_params = Core.Name "params"
+_ImplicitFunctionType_res = Core.Name "res"
+data TupleType =
+  TupleType {
+    tupleTypeArgs :: [Type]}
   deriving (Eq, Ord, Read, Show)
-_Type_Tuple = Core.Name "hydra.scala.syntax.Type_Tuple"
-_Type_Tuple_args = Core.Name "args"
-data Type_With =
-  Type_With {
-    type_WithLhs :: Type,
-    type_WithRhs :: Type}
+_TupleType = Core.Name "hydra.scala.syntax.TupleType"
+_TupleType_args = Core.Name "args"
+data WithType =
+  WithType {
+    withTypeLhs :: Type,
+    withTypeRhs :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_With = Core.Name "hydra.scala.syntax.Type_With"
-_Type_With_lhs = Core.Name "lhs"
-_Type_With_rhs = Core.Name "rhs"
-data Type_And =
-  Type_And {
-    type_AndLhs :: Type,
-    type_AndRhs :: Type}
+_WithType = Core.Name "hydra.scala.syntax.WithType"
+_WithType_lhs = Core.Name "lhs"
+_WithType_rhs = Core.Name "rhs"
+data AndType =
+  AndType {
+    andTypeLhs :: Type,
+    andTypeRhs :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_And = Core.Name "hydra.scala.syntax.Type_And"
-_Type_And_lhs = Core.Name "lhs"
-_Type_And_rhs = Core.Name "rhs"
-data Type_Or =
-  Type_Or {
-    type_OrLhs :: Type,
-    type_OrRhs :: Type}
+_AndType = Core.Name "hydra.scala.syntax.AndType"
+_AndType_lhs = Core.Name "lhs"
+_AndType_rhs = Core.Name "rhs"
+data OrType =
+  OrType {
+    orTypeLhs :: Type,
+    orTypeRhs :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_Or = Core.Name "hydra.scala.syntax.Type_Or"
-_Type_Or_lhs = Core.Name "lhs"
-_Type_Or_rhs = Core.Name "rhs"
-data Type_Refine =
-  Type_Refine {
-    type_RefineTpe :: (Maybe Type),
-    type_RefineStats :: [Stat]}
+_OrType = Core.Name "hydra.scala.syntax.OrType"
+_OrType_lhs = Core.Name "lhs"
+_OrType_rhs = Core.Name "rhs"
+data RefineType =
+  RefineType {
+    refineTypeTpe :: (Maybe Type),
+    refineTypeStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
-_Type_Refine = Core.Name "hydra.scala.syntax.Type_Refine"
-_Type_Refine_tpe = Core.Name "tpe"
-_Type_Refine_stats = Core.Name "stats"
-data Type_Existential =
-  Type_Existential {
-    type_ExistentialTpe :: Type,
-    type_ExistentialStats :: [Stat]}
+_RefineType = Core.Name "hydra.scala.syntax.RefineType"
+_RefineType_tpe = Core.Name "tpe"
+_RefineType_stats = Core.Name "stats"
+data ExistentialType =
+  ExistentialType {
+    existentialTypeTpe :: Type,
+    existentialTypeStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
-_Type_Existential = Core.Name "hydra.scala.syntax.Type_Existential"
-_Type_Existential_tpe = Core.Name "tpe"
-_Type_Existential_stats = Core.Name "stats"
-data Type_Annotate =
-  Type_Annotate {
-    type_AnnotateTpe :: Type,
-    type_AnnotateAnnots :: [Mod_Annot]}
+_ExistentialType = Core.Name "hydra.scala.syntax.ExistentialType"
+_ExistentialType_tpe = Core.Name "tpe"
+_ExistentialType_stats = Core.Name "stats"
+data AnnotateType =
+  AnnotateType {
+    annotateTypeTpe :: Type,
+    annotateTypeAnnots :: [AnnotMod]}
   deriving (Eq, Ord, Read, Show)
-_Type_Annotate = Core.Name "hydra.scala.syntax.Type_Annotate"
-_Type_Annotate_tpe = Core.Name "tpe"
-_Type_Annotate_annots = Core.Name "annots"
-data Type_Lambda =
-  Type_Lambda {
-    type_LambdaTparams :: [Type_Param],
-    type_LambdaTpe :: Type}
+_AnnotateType = Core.Name "hydra.scala.syntax.AnnotateType"
+_AnnotateType_tpe = Core.Name "tpe"
+_AnnotateType_annots = Core.Name "annots"
+data LambdaType =
+  LambdaType {
+    lambdaTypeTparams :: [ParamType],
+    lambdaTypeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_Lambda = Core.Name "hydra.scala.syntax.Type_Lambda"
-_Type_Lambda_tparams = Core.Name "tparams"
-_Type_Lambda_tpe = Core.Name "tpe"
-data Type_Macro =
-  Type_Macro {
-    type_MacroBody :: Data}
+_LambdaType = Core.Name "hydra.scala.syntax.LambdaType"
+_LambdaType_tparams = Core.Name "tparams"
+_LambdaType_tpe = Core.Name "tpe"
+data MacroType =
+  MacroType {
+    macroTypeBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Type_Macro = Core.Name "hydra.scala.syntax.Type_Macro"
-_Type_Macro_body = Core.Name "body"
-data Type_Method =
-  Type_Method {
-    type_MethodParamss :: [[Data_Param]],
-    type_MethodTpe :: Type}
+_MacroType = Core.Name "hydra.scala.syntax.MacroType"
+_MacroType_body = Core.Name "body"
+data MethodType =
+  MethodType {
+    methodTypeParamss :: [[ParamData]],
+    methodTypeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_Method = Core.Name "hydra.scala.syntax.Type_Method"
-_Type_Method_paramss = Core.Name "paramss"
-_Type_Method_tpe = Core.Name "tpe"
-data Type_Placeholder =
-  Type_Placeholder {
-    type_PlaceholderBounds :: TypeBounds}
+_MethodType = Core.Name "hydra.scala.syntax.MethodType"
+_MethodType_paramss = Core.Name "paramss"
+_MethodType_tpe = Core.Name "tpe"
+data PlaceholderType =
+  PlaceholderType {
+    placeholderTypeBounds :: TypeBounds}
   deriving (Eq, Ord, Read, Show)
-_Type_Placeholder = Core.Name "hydra.scala.syntax.Type_Placeholder"
-_Type_Placeholder_bounds = Core.Name "bounds"
+_PlaceholderType = Core.Name "hydra.scala.syntax.PlaceholderType"
+_PlaceholderType_bounds = Core.Name "bounds"
 data TypeBounds =
   TypeBounds {
     typeBoundsLo :: (Maybe Type),
@@ -743,71 +743,71 @@ data TypeBounds =
 _TypeBounds = Core.Name "hydra.scala.syntax.TypeBounds"
 _TypeBounds_lo = Core.Name "lo"
 _TypeBounds_hi = Core.Name "hi"
-data Type_ByName =
-  Type_ByName {
-    type_ByNameTpe :: Type}
+data ByNameType =
+  ByNameType {
+    byNameTypeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_ByName = Core.Name "hydra.scala.syntax.Type_ByName"
-_Type_ByName_tpe = Core.Name "tpe"
-data Type_Repeated =
-  Type_Repeated {
-    type_RepeatedTpe :: Type}
+_ByNameType = Core.Name "hydra.scala.syntax.ByNameType"
+_ByNameType_tpe = Core.Name "tpe"
+data RepeatedType =
+  RepeatedType {
+    repeatedTypeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_Repeated = Core.Name "hydra.scala.syntax.Type_Repeated"
-_Type_Repeated_tpe = Core.Name "tpe"
-data Type_Var =
-  Type_Var {
-    type_VarName :: Type_Name}
+_RepeatedType = Core.Name "hydra.scala.syntax.RepeatedType"
+_RepeatedType_tpe = Core.Name "tpe"
+data VarType =
+  VarType {
+    varTypeName :: NameType}
   deriving (Eq, Ord, Read, Show)
-_Type_Var = Core.Name "hydra.scala.syntax.Type_Var"
-_Type_Var_name = Core.Name "name"
-data Type_TypedParam =
-  Type_TypedParam {
-    type_TypedParamName :: Name,
-    type_TypedParamTyp :: Type}
+_VarType = Core.Name "hydra.scala.syntax.VarType"
+_VarType_name = Core.Name "name"
+data TypedParamType =
+  TypedParamType {
+    typedParamTypeName :: Name,
+    typedParamTypeTyp :: Type}
   deriving (Eq, Ord, Read, Show)
-_Type_TypedParam = Core.Name "hydra.scala.syntax.Type_TypedParam"
-_Type_TypedParam_name = Core.Name "name"
-_Type_TypedParam_typ = Core.Name "typ"
-data Type_Param =
-  Type_Param {
-    type_ParamMods :: [Mod],
-    type_ParamName :: Name,
-    type_ParamTparams :: [Type_Param],
-    type_ParamTbounds :: [TypeBounds],
-    type_ParamVbounds :: [Type],
-    type_ParamCbounds :: [Type]}
+_TypedParamType = Core.Name "hydra.scala.syntax.TypedParamType"
+_TypedParamType_name = Core.Name "name"
+_TypedParamType_typ = Core.Name "typ"
+data ParamType =
+  ParamType {
+    paramTypeMods :: [Mod],
+    paramTypeName :: Name,
+    paramTypeTparams :: [ParamType],
+    paramTypeTbounds :: [TypeBounds],
+    paramTypeVbounds :: [Type],
+    paramTypeCbounds :: [Type]}
   deriving (Eq, Ord, Read, Show)
-_Type_Param = Core.Name "hydra.scala.syntax.Type_Param"
-_Type_Param_mods = Core.Name "mods"
-_Type_Param_name = Core.Name "name"
-_Type_Param_tparams = Core.Name "tparams"
-_Type_Param_tbounds = Core.Name "tbounds"
-_Type_Param_vbounds = Core.Name "vbounds"
-_Type_Param_cbounds = Core.Name "cbounds"
-data Type_Match =
-  Type_Match {
-    type_MatchTpe :: Type,
-    type_MatchCases :: [TypeCase]}
+_ParamType = Core.Name "hydra.scala.syntax.ParamType"
+_ParamType_mods = Core.Name "mods"
+_ParamType_name = Core.Name "name"
+_ParamType_tparams = Core.Name "tparams"
+_ParamType_tbounds = Core.Name "tbounds"
+_ParamType_vbounds = Core.Name "vbounds"
+_ParamType_cbounds = Core.Name "cbounds"
+data MatchType =
+  MatchType {
+    matchTypeTpe :: Type,
+    matchTypeCases :: [TypeCase]}
   deriving (Eq, Ord, Read, Show)
-_Type_Match = Core.Name "hydra.scala.syntax.Type_Match"
-_Type_Match_tpe = Core.Name "tpe"
-_Type_Match_cases = Core.Name "cases"
+_MatchType = Core.Name "hydra.scala.syntax.MatchType"
+_MatchType_tpe = Core.Name "tpe"
+_MatchType_cases = Core.Name "cases"
 data Pat =
-  PatVar Pat_Var |
+  PatVar VarPat |
   PatWildcard |
   PatSeqWildcard |
-  PatBind Pat_Bind |
-  PatAlternative Pat_Alternative |
-  PatTuple Pat_Tuple |
-  PatRepeated Pat_Repeated |
-  PatExtract Pat_Extract |
-  PatExtractInfix Pat_ExtractInfix |
-  PatInterpolate Pat_Interpolate |
-  PatXml Pat_Xml |
-  PatTyped Pat_Typed |
-  PatMacro Pat_Macro |
-  PatGiven Pat_Given
+  PatBind BindPat |
+  PatAlternative AlternativePat |
+  PatTuple TuplePat |
+  PatRepeated RepeatedPat |
+  PatExtract ExtractPat |
+  PatExtractInfix ExtractInfixPat |
+  PatInterpolate InterpolatePat |
+  PatXml XmlPat |
+  PatTyped TypedPat |
+  PatMacro MacroPat |
+  PatGiven GivenPat
   deriving (Eq, Ord, Read, Show)
 _Pat = Core.Name "hydra.scala.syntax.Pat"
 _Pat_var = Core.Name "var"
@@ -824,99 +824,99 @@ _Pat_xml = Core.Name "xml"
 _Pat_typed = Core.Name "typed"
 _Pat_macro = Core.Name "macro"
 _Pat_given = Core.Name "given"
-data Pat_Var =
-  Pat_Var {
-    pat_VarName :: Data_Name}
+data VarPat =
+  VarPat {
+    varPatName :: NameData}
   deriving (Eq, Ord, Read, Show)
-_Pat_Var = Core.Name "hydra.scala.syntax.Pat_Var"
-_Pat_Var_name = Core.Name "name"
-data Pat_Bind =
-  Pat_Bind {
-    pat_BindLhs :: Pat,
-    pat_BindRhs :: Pat}
+_VarPat = Core.Name "hydra.scala.syntax.VarPat"
+_VarPat_name = Core.Name "name"
+data BindPat =
+  BindPat {
+    bindPatLhs :: Pat,
+    bindPatRhs :: Pat}
   deriving (Eq, Ord, Read, Show)
-_Pat_Bind = Core.Name "hydra.scala.syntax.Pat_Bind"
-_Pat_Bind_lhs = Core.Name "lhs"
-_Pat_Bind_rhs = Core.Name "rhs"
-data Pat_Alternative =
-  Pat_Alternative {
-    pat_AlternativeLhs :: Pat,
-    pat_AlternativeRhs :: Pat}
+_BindPat = Core.Name "hydra.scala.syntax.BindPat"
+_BindPat_lhs = Core.Name "lhs"
+_BindPat_rhs = Core.Name "rhs"
+data AlternativePat =
+  AlternativePat {
+    alternativePatLhs :: Pat,
+    alternativePatRhs :: Pat}
   deriving (Eq, Ord, Read, Show)
-_Pat_Alternative = Core.Name "hydra.scala.syntax.Pat_Alternative"
-_Pat_Alternative_lhs = Core.Name "lhs"
-_Pat_Alternative_rhs = Core.Name "rhs"
-data Pat_Tuple =
-  Pat_Tuple {
-    pat_TupleArgs :: [Pat]}
+_AlternativePat = Core.Name "hydra.scala.syntax.AlternativePat"
+_AlternativePat_lhs = Core.Name "lhs"
+_AlternativePat_rhs = Core.Name "rhs"
+data TuplePat =
+  TuplePat {
+    tuplePatArgs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
-_Pat_Tuple = Core.Name "hydra.scala.syntax.Pat_Tuple"
-_Pat_Tuple_args = Core.Name "args"
-data Pat_Repeated =
-  Pat_Repeated {
-    pat_RepeatedName :: Data_Name}
+_TuplePat = Core.Name "hydra.scala.syntax.TuplePat"
+_TuplePat_args = Core.Name "args"
+data RepeatedPat =
+  RepeatedPat {
+    repeatedPatName :: NameData}
   deriving (Eq, Ord, Read, Show)
-_Pat_Repeated = Core.Name "hydra.scala.syntax.Pat_Repeated"
-_Pat_Repeated_name = Core.Name "name"
-data Pat_Extract =
-  Pat_Extract {
-    pat_ExtractFun :: Data,
-    pat_ExtractArgs :: [Pat]}
+_RepeatedPat = Core.Name "hydra.scala.syntax.RepeatedPat"
+_RepeatedPat_name = Core.Name "name"
+data ExtractPat =
+  ExtractPat {
+    extractPatFun :: Data,
+    extractPatArgs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
-_Pat_Extract = Core.Name "hydra.scala.syntax.Pat_Extract"
-_Pat_Extract_fun = Core.Name "fun"
-_Pat_Extract_args = Core.Name "args"
-data Pat_ExtractInfix =
-  Pat_ExtractInfix {
-    pat_ExtractInfixLhs :: Pat,
-    pat_ExtractInfixOp :: Data_Name,
-    pat_ExtractInfixRhs :: [Pat]}
+_ExtractPat = Core.Name "hydra.scala.syntax.ExtractPat"
+_ExtractPat_fun = Core.Name "fun"
+_ExtractPat_args = Core.Name "args"
+data ExtractInfixPat =
+  ExtractInfixPat {
+    extractInfixPatLhs :: Pat,
+    extractInfixPatOp :: NameData,
+    extractInfixPatRhs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
-_Pat_ExtractInfix = Core.Name "hydra.scala.syntax.Pat_ExtractInfix"
-_Pat_ExtractInfix_lhs = Core.Name "lhs"
-_Pat_ExtractInfix_op = Core.Name "op"
-_Pat_ExtractInfix_rhs = Core.Name "rhs"
-data Pat_Interpolate =
-  Pat_Interpolate {
-    pat_InterpolatePrefix :: Data_Name,
-    pat_InterpolateParts :: [Lit]}
+_ExtractInfixPat = Core.Name "hydra.scala.syntax.ExtractInfixPat"
+_ExtractInfixPat_lhs = Core.Name "lhs"
+_ExtractInfixPat_op = Core.Name "op"
+_ExtractInfixPat_rhs = Core.Name "rhs"
+data InterpolatePat =
+  InterpolatePat {
+    interpolatePatPrefix :: NameData,
+    interpolatePatParts :: [Lit]}
   deriving (Eq, Ord, Read, Show)
-_Pat_Interpolate = Core.Name "hydra.scala.syntax.Pat_Interpolate"
-_Pat_Interpolate_prefix = Core.Name "prefix"
-_Pat_Interpolate_parts = Core.Name "parts"
-data Pat_Xml =
-  Pat_Xml {
-    pat_XmlParts :: [Lit],
-    pat_XmlArgs :: [Pat]}
+_InterpolatePat = Core.Name "hydra.scala.syntax.InterpolatePat"
+_InterpolatePat_prefix = Core.Name "prefix"
+_InterpolatePat_parts = Core.Name "parts"
+data XmlPat =
+  XmlPat {
+    xmlPatParts :: [Lit],
+    xmlPatArgs :: [Pat]}
   deriving (Eq, Ord, Read, Show)
-_Pat_Xml = Core.Name "hydra.scala.syntax.Pat_Xml"
-_Pat_Xml_parts = Core.Name "parts"
-_Pat_Xml_args = Core.Name "args"
-data Pat_Typed =
-  Pat_Typed {
-    pat_TypedLhs :: Pat,
-    pat_TypedRhs :: Type}
+_XmlPat = Core.Name "hydra.scala.syntax.XmlPat"
+_XmlPat_parts = Core.Name "parts"
+_XmlPat_args = Core.Name "args"
+data TypedPat =
+  TypedPat {
+    typedPatLhs :: Pat,
+    typedPatRhs :: Type}
   deriving (Eq, Ord, Read, Show)
-_Pat_Typed = Core.Name "hydra.scala.syntax.Pat_Typed"
-_Pat_Typed_lhs = Core.Name "lhs"
-_Pat_Typed_rhs = Core.Name "rhs"
-data Pat_Macro =
-  Pat_Macro {
-    pat_MacroBody :: Data}
+_TypedPat = Core.Name "hydra.scala.syntax.TypedPat"
+_TypedPat_lhs = Core.Name "lhs"
+_TypedPat_rhs = Core.Name "rhs"
+data MacroPat =
+  MacroPat {
+    macroPatBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Pat_Macro = Core.Name "hydra.scala.syntax.Pat_Macro"
-_Pat_Macro_body = Core.Name "body"
-data Pat_Given =
-  Pat_Given {
-    pat_GivenTpe :: Type}
+_MacroPat = Core.Name "hydra.scala.syntax.MacroPat"
+_MacroPat_body = Core.Name "body"
+data GivenPat =
+  GivenPat {
+    givenPatTpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Pat_Given = Core.Name "hydra.scala.syntax.Pat_Given"
-_Pat_Given_tpe = Core.Name "tpe"
+_GivenPat = Core.Name "hydra.scala.syntax.GivenPat"
+_GivenPat_tpe = Core.Name "tpe"
 data Member =
-  MemberTerm Member_Data |
-  MemberType Member_Type |
-  MemberTermParam Data_Param |
-  MemberTypeParam Type_Param |
+  MemberTerm DataMember |
+  MemberType TypeMember |
+  MemberTermParam ParamData |
+  MemberTypeParam ParamType |
   MemberSelf Self
   deriving (Eq, Ord, Read, Show)
 _Member = Core.Name "hydra.scala.syntax.Member"
@@ -925,25 +925,25 @@ _Member_type = Core.Name "type"
 _Member_termParam = Core.Name "termParam"
 _Member_typeParam = Core.Name "typeParam"
 _Member_self = Core.Name "self"
-data Member_Data =
-  Member_DataPkg Pkg |
-  Member_DataObject Pkg_Object
+data DataMember =
+  DataMemberPkg Pkg |
+  DataMemberObject ObjectPkg
   deriving (Eq, Ord, Read, Show)
-_Member_Data = Core.Name "hydra.scala.syntax.Member_Data"
-_Member_Data_pkg = Core.Name "pkg"
-_Member_Data_object = Core.Name "object"
-data Member_Type =
-  Member_Type {
-    member_TypeName :: Type_Name}
+_DataMember = Core.Name "hydra.scala.syntax.DataMember"
+_DataMember_pkg = Core.Name "pkg"
+_DataMember_object = Core.Name "object"
+data TypeMember =
+  TypeMember {
+    typeMemberName :: NameType}
   deriving (Eq, Ord, Read, Show)
-_Member_Type = Core.Name "hydra.scala.syntax.Member_Type"
-_Member_Type_name = Core.Name "name"
+_TypeMember = Core.Name "hydra.scala.syntax.TypeMember"
+_TypeMember_name = Core.Name "name"
 data Decl =
-  DeclVal Decl_Val |
-  DeclVar Decl_Var |
-  DeclDef Decl_Def |
-  DeclType Decl_Type |
-  DeclGiven Decl_Given
+  DeclVal ValDecl |
+  DeclVar VarDecl |
+  DeclDef DefDecl |
+  DeclType TypeDecl |
+  DeclGiven GivenDecl
   deriving (Eq, Ord, Read, Show)
 _Decl = Core.Name "hydra.scala.syntax.Decl"
 _Decl_val = Core.Name "val"
@@ -951,81 +951,81 @@ _Decl_var = Core.Name "var"
 _Decl_def = Core.Name "def"
 _Decl_type = Core.Name "type"
 _Decl_given = Core.Name "given"
-data Decl_Val =
-  Decl_Val {
-    decl_ValMods :: [Mod],
-    decl_ValPats :: [Pat],
-    decl_ValDecltpe :: Type}
+data ValDecl =
+  ValDecl {
+    valDeclMods :: [Mod],
+    valDeclPats :: [Pat],
+    valDeclDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Decl_Val = Core.Name "hydra.scala.syntax.Decl_Val"
-_Decl_Val_mods = Core.Name "mods"
-_Decl_Val_pats = Core.Name "pats"
-_Decl_Val_decltpe = Core.Name "decltpe"
-data Decl_Var =
-  Decl_Var {
-    decl_VarMods :: [Mod],
-    decl_VarPats :: [Pat],
-    decl_VarDecltpe :: Type}
+_ValDecl = Core.Name "hydra.scala.syntax.ValDecl"
+_ValDecl_mods = Core.Name "mods"
+_ValDecl_pats = Core.Name "pats"
+_ValDecl_decltpe = Core.Name "decltpe"
+data VarDecl =
+  VarDecl {
+    varDeclMods :: [Mod],
+    varDeclPats :: [Pat],
+    varDeclDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Decl_Var = Core.Name "hydra.scala.syntax.Decl_Var"
-_Decl_Var_mods = Core.Name "mods"
-_Decl_Var_pats = Core.Name "pats"
-_Decl_Var_decltpe = Core.Name "decltpe"
-data Decl_Def =
-  Decl_Def {
-    decl_DefMods :: [Mod],
-    decl_DefName :: Data_Name,
-    decl_DefTparams :: [Type_Param],
-    decl_DefParamss :: [[Data_Param]],
-    decl_DefDecltpe :: Type}
+_VarDecl = Core.Name "hydra.scala.syntax.VarDecl"
+_VarDecl_mods = Core.Name "mods"
+_VarDecl_pats = Core.Name "pats"
+_VarDecl_decltpe = Core.Name "decltpe"
+data DefDecl =
+  DefDecl {
+    defDeclMods :: [Mod],
+    defDeclName :: NameData,
+    defDeclTparams :: [ParamType],
+    defDeclParamss :: [[ParamData]],
+    defDeclDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Decl_Def = Core.Name "hydra.scala.syntax.Decl_Def"
-_Decl_Def_mods = Core.Name "mods"
-_Decl_Def_name = Core.Name "name"
-_Decl_Def_tparams = Core.Name "tparams"
-_Decl_Def_paramss = Core.Name "paramss"
-_Decl_Def_decltpe = Core.Name "decltpe"
-data Decl_Type =
-  Decl_Type {
-    decl_TypeMods :: [Mod],
-    decl_TypeName :: Type_Name,
-    decl_TypeTparams :: [Type_Param],
-    decl_TypeBounds :: TypeBounds}
+_DefDecl = Core.Name "hydra.scala.syntax.DefDecl"
+_DefDecl_mods = Core.Name "mods"
+_DefDecl_name = Core.Name "name"
+_DefDecl_tparams = Core.Name "tparams"
+_DefDecl_paramss = Core.Name "paramss"
+_DefDecl_decltpe = Core.Name "decltpe"
+data TypeDecl =
+  TypeDecl {
+    typeDeclMods :: [Mod],
+    typeDeclName :: NameType,
+    typeDeclTparams :: [ParamType],
+    typeDeclBounds :: TypeBounds}
   deriving (Eq, Ord, Read, Show)
-_Decl_Type = Core.Name "hydra.scala.syntax.Decl_Type"
-_Decl_Type_mods = Core.Name "mods"
-_Decl_Type_name = Core.Name "name"
-_Decl_Type_tparams = Core.Name "tparams"
-_Decl_Type_bounds = Core.Name "bounds"
-data Decl_Given =
-  Decl_Given {
-    decl_GivenMods :: [Mod],
-    decl_GivenName :: Data_Name,
-    decl_GivenTparams :: [Type_Param],
-    decl_GivenSparams :: [[Data_Param]],
-    decl_GivenDecltpe :: Type}
+_TypeDecl = Core.Name "hydra.scala.syntax.TypeDecl"
+_TypeDecl_mods = Core.Name "mods"
+_TypeDecl_name = Core.Name "name"
+_TypeDecl_tparams = Core.Name "tparams"
+_TypeDecl_bounds = Core.Name "bounds"
+data GivenDecl =
+  GivenDecl {
+    givenDeclMods :: [Mod],
+    givenDeclName :: NameData,
+    givenDeclTparams :: [ParamType],
+    givenDeclSparams :: [[ParamData]],
+    givenDeclDecltpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Decl_Given = Core.Name "hydra.scala.syntax.Decl_Given"
-_Decl_Given_mods = Core.Name "mods"
-_Decl_Given_name = Core.Name "name"
-_Decl_Given_tparams = Core.Name "tparams"
-_Decl_Given_sparams = Core.Name "sparams"
-_Decl_Given_decltpe = Core.Name "decltpe"
+_GivenDecl = Core.Name "hydra.scala.syntax.GivenDecl"
+_GivenDecl_mods = Core.Name "mods"
+_GivenDecl_name = Core.Name "name"
+_GivenDecl_tparams = Core.Name "tparams"
+_GivenDecl_sparams = Core.Name "sparams"
+_GivenDecl_decltpe = Core.Name "decltpe"
 data Defn =
-  DefnVal Defn_Val |
-  DefnVar Defn_Var |
-  DefnGiven Defn_Given |
-  DefnEnum Defn_Enum |
-  DefnEnumCase Defn_EnumCase |
-  DefnRepeatedEnumCase Defn_RepeatedEnumCase |
-  DefnGivenAlias Defn_GivenAlias |
-  DefnExtensionGroup Defn_ExtensionGroup |
-  DefnDef Defn_Def |
-  DefnMacro Defn_Macro |
-  DefnType Defn_Type |
-  DefnClass Defn_Class |
-  DefnTrait Defn_Trait |
-  DefnObject Defn_Object
+  DefnVal ValDefn |
+  DefnVar VarDefn |
+  DefnGiven GivenDefn |
+  DefnEnum EnumDefn |
+  DefnEnumCase EnumCaseDefn |
+  DefnRepeatedEnumCase RepeatedEnumCaseDefn |
+  DefnGivenAlias GivenAliasDefn |
+  DefnExtensionGroup ExtensionGroupDefn |
+  DefnDef DefDefn |
+  DefnMacro MacroDefn |
+  DefnType TypeDefn |
+  DefnClass ClassDefn |
+  DefnTrait TraitDefn |
+  DefnObject ObjectDefn
   deriving (Eq, Ord, Read, Show)
 _Defn = Core.Name "hydra.scala.syntax.Defn"
 _Defn_val = Core.Name "val"
@@ -1042,235 +1042,235 @@ _Defn_type = Core.Name "type"
 _Defn_class = Core.Name "class"
 _Defn_trait = Core.Name "trait"
 _Defn_object = Core.Name "object"
-data Defn_Val =
-  Defn_Val {
-    defn_ValMods :: [Mod],
-    defn_ValPats :: [Pat],
-    defn_ValDecltpe :: (Maybe Type),
-    defn_ValRhs :: Data}
+data ValDefn =
+  ValDefn {
+    valDefnMods :: [Mod],
+    valDefnPats :: [Pat],
+    valDefnDecltpe :: (Maybe Type),
+    valDefnRhs :: Data}
   deriving (Eq, Ord, Read, Show)
-_Defn_Val = Core.Name "hydra.scala.syntax.Defn_Val"
-_Defn_Val_mods = Core.Name "mods"
-_Defn_Val_pats = Core.Name "pats"
-_Defn_Val_decltpe = Core.Name "decltpe"
-_Defn_Val_rhs = Core.Name "rhs"
-data Defn_Var =
-  Defn_Var {
-    defn_VarMods :: [Mod],
-    defn_VarPats :: [Pat],
-    defn_VarDecltpe :: Type,
-    defn_VarRhs :: (Maybe Data)}
+_ValDefn = Core.Name "hydra.scala.syntax.ValDefn"
+_ValDefn_mods = Core.Name "mods"
+_ValDefn_pats = Core.Name "pats"
+_ValDefn_decltpe = Core.Name "decltpe"
+_ValDefn_rhs = Core.Name "rhs"
+data VarDefn =
+  VarDefn {
+    varDefnMods :: [Mod],
+    varDefnPats :: [Pat],
+    varDefnDecltpe :: Type,
+    varDefnRhs :: (Maybe Data)}
   deriving (Eq, Ord, Read, Show)
-_Defn_Var = Core.Name "hydra.scala.syntax.Defn_Var"
-_Defn_Var_mods = Core.Name "mods"
-_Defn_Var_pats = Core.Name "pats"
-_Defn_Var_decltpe = Core.Name "decltpe"
-_Defn_Var_rhs = Core.Name "rhs"
-data Defn_Given =
-  Defn_Given {
-    defn_GivenMods :: [Mod],
-    defn_GivenName :: Name,
-    defn_GivenTparams :: [[Type_Param]],
-    defn_GivenSparams :: [[Data_Param]],
-    defn_GivenTempl :: Template}
+_VarDefn = Core.Name "hydra.scala.syntax.VarDefn"
+_VarDefn_mods = Core.Name "mods"
+_VarDefn_pats = Core.Name "pats"
+_VarDefn_decltpe = Core.Name "decltpe"
+_VarDefn_rhs = Core.Name "rhs"
+data GivenDefn =
+  GivenDefn {
+    givenDefnMods :: [Mod],
+    givenDefnName :: Name,
+    givenDefnTparams :: [[ParamType]],
+    givenDefnSparams :: [[ParamData]],
+    givenDefnTempl :: Template}
   deriving (Eq, Ord, Read, Show)
-_Defn_Given = Core.Name "hydra.scala.syntax.Defn_Given"
-_Defn_Given_mods = Core.Name "mods"
-_Defn_Given_name = Core.Name "name"
-_Defn_Given_tparams = Core.Name "tparams"
-_Defn_Given_sparams = Core.Name "sparams"
-_Defn_Given_templ = Core.Name "templ"
-data Defn_Enum =
-  Defn_Enum {
-    defn_EnumMods :: [Mod],
-    defn_EnumName :: Type_Name,
-    defn_EnumTparams :: [Type_Param],
-    defn_EnumCtor :: Ctor_Primary,
-    defn_EnumTemplate :: Template}
+_GivenDefn = Core.Name "hydra.scala.syntax.GivenDefn"
+_GivenDefn_mods = Core.Name "mods"
+_GivenDefn_name = Core.Name "name"
+_GivenDefn_tparams = Core.Name "tparams"
+_GivenDefn_sparams = Core.Name "sparams"
+_GivenDefn_templ = Core.Name "templ"
+data EnumDefn =
+  EnumDefn {
+    enumDefnMods :: [Mod],
+    enumDefnName :: NameType,
+    enumDefnTparams :: [ParamType],
+    enumDefnCtor :: PrimaryCtor,
+    enumDefnTemplate :: Template}
   deriving (Eq, Ord, Read, Show)
-_Defn_Enum = Core.Name "hydra.scala.syntax.Defn_Enum"
-_Defn_Enum_mods = Core.Name "mods"
-_Defn_Enum_name = Core.Name "name"
-_Defn_Enum_tparams = Core.Name "tparams"
-_Defn_Enum_ctor = Core.Name "ctor"
-_Defn_Enum_template = Core.Name "template"
-data Defn_EnumCase =
-  Defn_EnumCase {
-    defn_EnumCaseMods :: [Mod],
-    defn_EnumCaseName :: Data_Name,
-    defn_EnumCaseTparams :: [Type_Param],
-    defn_EnumCaseCtor :: Ctor_Primary,
-    defn_EnumCaseInits :: [Init]}
+_EnumDefn = Core.Name "hydra.scala.syntax.EnumDefn"
+_EnumDefn_mods = Core.Name "mods"
+_EnumDefn_name = Core.Name "name"
+_EnumDefn_tparams = Core.Name "tparams"
+_EnumDefn_ctor = Core.Name "ctor"
+_EnumDefn_template = Core.Name "template"
+data EnumCaseDefn =
+  EnumCaseDefn {
+    enumCaseDefnMods :: [Mod],
+    enumCaseDefnName :: NameData,
+    enumCaseDefnTparams :: [ParamType],
+    enumCaseDefnCtor :: PrimaryCtor,
+    enumCaseDefnInits :: [Init]}
   deriving (Eq, Ord, Read, Show)
-_Defn_EnumCase = Core.Name "hydra.scala.syntax.Defn_EnumCase"
-_Defn_EnumCase_mods = Core.Name "mods"
-_Defn_EnumCase_name = Core.Name "name"
-_Defn_EnumCase_tparams = Core.Name "tparams"
-_Defn_EnumCase_ctor = Core.Name "ctor"
-_Defn_EnumCase_inits = Core.Name "inits"
-data Defn_RepeatedEnumCase =
-  Defn_RepeatedEnumCase {
-    defn_RepeatedEnumCaseMods :: [Mod],
-    defn_RepeatedEnumCaseCases :: [Data_Name]}
+_EnumCaseDefn = Core.Name "hydra.scala.syntax.EnumCaseDefn"
+_EnumCaseDefn_mods = Core.Name "mods"
+_EnumCaseDefn_name = Core.Name "name"
+_EnumCaseDefn_tparams = Core.Name "tparams"
+_EnumCaseDefn_ctor = Core.Name "ctor"
+_EnumCaseDefn_inits = Core.Name "inits"
+data RepeatedEnumCaseDefn =
+  RepeatedEnumCaseDefn {
+    repeatedEnumCaseDefnMods :: [Mod],
+    repeatedEnumCaseDefnCases :: [NameData]}
   deriving (Eq, Ord, Read, Show)
-_Defn_RepeatedEnumCase = Core.Name "hydra.scala.syntax.Defn_RepeatedEnumCase"
-_Defn_RepeatedEnumCase_mods = Core.Name "mods"
-_Defn_RepeatedEnumCase_cases = Core.Name "cases"
-data Defn_GivenAlias =
-  Defn_GivenAlias {
-    defn_GivenAliasMods :: [Mod],
-    defn_GivenAliasName :: Name,
-    defn_GivenAliasTparams :: [[Type_Param]],
-    defn_GivenAliasSparams :: [[Data_Param]],
-    defn_GivenAliasDecltpe :: Type,
-    defn_GivenAliasBody :: Data}
+_RepeatedEnumCaseDefn = Core.Name "hydra.scala.syntax.RepeatedEnumCaseDefn"
+_RepeatedEnumCaseDefn_mods = Core.Name "mods"
+_RepeatedEnumCaseDefn_cases = Core.Name "cases"
+data GivenAliasDefn =
+  GivenAliasDefn {
+    givenAliasDefnMods :: [Mod],
+    givenAliasDefnName :: Name,
+    givenAliasDefnTparams :: [[ParamType]],
+    givenAliasDefnSparams :: [[ParamData]],
+    givenAliasDefnDecltpe :: Type,
+    givenAliasDefnBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Defn_GivenAlias = Core.Name "hydra.scala.syntax.Defn_GivenAlias"
-_Defn_GivenAlias_mods = Core.Name "mods"
-_Defn_GivenAlias_name = Core.Name "name"
-_Defn_GivenAlias_tparams = Core.Name "tparams"
-_Defn_GivenAlias_sparams = Core.Name "sparams"
-_Defn_GivenAlias_decltpe = Core.Name "decltpe"
-_Defn_GivenAlias_body = Core.Name "body"
-data Defn_ExtensionGroup =
-  Defn_ExtensionGroup {
-    defn_ExtensionGroupTparams :: [Type_Param],
-    defn_ExtensionGroupParmss :: [[Data_Param]],
-    defn_ExtensionGroupBody :: Stat}
+_GivenAliasDefn = Core.Name "hydra.scala.syntax.GivenAliasDefn"
+_GivenAliasDefn_mods = Core.Name "mods"
+_GivenAliasDefn_name = Core.Name "name"
+_GivenAliasDefn_tparams = Core.Name "tparams"
+_GivenAliasDefn_sparams = Core.Name "sparams"
+_GivenAliasDefn_decltpe = Core.Name "decltpe"
+_GivenAliasDefn_body = Core.Name "body"
+data ExtensionGroupDefn =
+  ExtensionGroupDefn {
+    extensionGroupDefnTparams :: [ParamType],
+    extensionGroupDefnParmss :: [[ParamData]],
+    extensionGroupDefnBody :: Stat}
   deriving (Eq, Ord, Read, Show)
-_Defn_ExtensionGroup = Core.Name "hydra.scala.syntax.Defn_ExtensionGroup"
-_Defn_ExtensionGroup_tparams = Core.Name "tparams"
-_Defn_ExtensionGroup_parmss = Core.Name "parmss"
-_Defn_ExtensionGroup_body = Core.Name "body"
-data Defn_Def =
-  Defn_Def {
-    defn_DefMods :: [Mod],
-    defn_DefName :: Data_Name,
-    defn_DefTparams :: [Type_Param],
-    defn_DefParamss :: [[Data_Param]],
-    defn_DefDecltpe :: (Maybe Type),
-    defn_DefBody :: Data}
+_ExtensionGroupDefn = Core.Name "hydra.scala.syntax.ExtensionGroupDefn"
+_ExtensionGroupDefn_tparams = Core.Name "tparams"
+_ExtensionGroupDefn_parmss = Core.Name "parmss"
+_ExtensionGroupDefn_body = Core.Name "body"
+data DefDefn =
+  DefDefn {
+    defDefnMods :: [Mod],
+    defDefnName :: NameData,
+    defDefnTparams :: [ParamType],
+    defDefnParamss :: [[ParamData]],
+    defDefnDecltpe :: (Maybe Type),
+    defDefnBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Defn_Def = Core.Name "hydra.scala.syntax.Defn_Def"
-_Defn_Def_mods = Core.Name "mods"
-_Defn_Def_name = Core.Name "name"
-_Defn_Def_tparams = Core.Name "tparams"
-_Defn_Def_paramss = Core.Name "paramss"
-_Defn_Def_decltpe = Core.Name "decltpe"
-_Defn_Def_body = Core.Name "body"
-data Defn_Macro =
-  Defn_Macro {
-    defn_MacroMods :: [Mod],
-    defn_MacroName :: Data_Name,
-    defn_MacroTparams :: [Type_Param],
-    defn_MacroParamss :: [[Data_Param]],
-    defn_MacroDecltpe :: (Maybe Type),
-    defn_MacroBody :: Data}
+_DefDefn = Core.Name "hydra.scala.syntax.DefDefn"
+_DefDefn_mods = Core.Name "mods"
+_DefDefn_name = Core.Name "name"
+_DefDefn_tparams = Core.Name "tparams"
+_DefDefn_paramss = Core.Name "paramss"
+_DefDefn_decltpe = Core.Name "decltpe"
+_DefDefn_body = Core.Name "body"
+data MacroDefn =
+  MacroDefn {
+    macroDefnMods :: [Mod],
+    macroDefnName :: NameData,
+    macroDefnTparams :: [ParamType],
+    macroDefnParamss :: [[ParamData]],
+    macroDefnDecltpe :: (Maybe Type),
+    macroDefnBody :: Data}
   deriving (Eq, Ord, Read, Show)
-_Defn_Macro = Core.Name "hydra.scala.syntax.Defn_Macro"
-_Defn_Macro_mods = Core.Name "mods"
-_Defn_Macro_name = Core.Name "name"
-_Defn_Macro_tparams = Core.Name "tparams"
-_Defn_Macro_paramss = Core.Name "paramss"
-_Defn_Macro_decltpe = Core.Name "decltpe"
-_Defn_Macro_body = Core.Name "body"
-data Defn_Type =
-  Defn_Type {
-    defn_TypeMods :: [Mod],
-    defn_TypeName :: Type_Name,
-    defn_TypeTparams :: [Type_Param],
-    defn_TypeBody :: Type}
+_MacroDefn = Core.Name "hydra.scala.syntax.MacroDefn"
+_MacroDefn_mods = Core.Name "mods"
+_MacroDefn_name = Core.Name "name"
+_MacroDefn_tparams = Core.Name "tparams"
+_MacroDefn_paramss = Core.Name "paramss"
+_MacroDefn_decltpe = Core.Name "decltpe"
+_MacroDefn_body = Core.Name "body"
+data TypeDefn =
+  TypeDefn {
+    typeDefnMods :: [Mod],
+    typeDefnName :: NameType,
+    typeDefnTparams :: [ParamType],
+    typeDefnBody :: Type}
   deriving (Eq, Ord, Read, Show)
-_Defn_Type = Core.Name "hydra.scala.syntax.Defn_Type"
-_Defn_Type_mods = Core.Name "mods"
-_Defn_Type_name = Core.Name "name"
-_Defn_Type_tparams = Core.Name "tparams"
-_Defn_Type_body = Core.Name "body"
-data Defn_Class =
-  Defn_Class {
-    defn_ClassMods :: [Mod],
-    defn_ClassName :: Type_Name,
-    defn_ClassTparams :: [Type_Param],
-    defn_ClassCtor :: Ctor_Primary,
-    defn_ClassTemplate :: Template}
+_TypeDefn = Core.Name "hydra.scala.syntax.TypeDefn"
+_TypeDefn_mods = Core.Name "mods"
+_TypeDefn_name = Core.Name "name"
+_TypeDefn_tparams = Core.Name "tparams"
+_TypeDefn_body = Core.Name "body"
+data ClassDefn =
+  ClassDefn {
+    classDefnMods :: [Mod],
+    classDefnName :: NameType,
+    classDefnTparams :: [ParamType],
+    classDefnCtor :: PrimaryCtor,
+    classDefnTemplate :: Template}
   deriving (Eq, Ord, Read, Show)
-_Defn_Class = Core.Name "hydra.scala.syntax.Defn_Class"
-_Defn_Class_mods = Core.Name "mods"
-_Defn_Class_name = Core.Name "name"
-_Defn_Class_tparams = Core.Name "tparams"
-_Defn_Class_ctor = Core.Name "ctor"
-_Defn_Class_template = Core.Name "template"
-data Defn_Trait =
-  Defn_Trait {
-    defn_TraitMods :: [Mod],
-    defn_TraitName :: Type_Name,
-    defn_TraitTparams :: [Type_Param],
-    defn_TraitCtor :: Ctor_Primary,
-    defn_TraitTemplate :: Template}
+_ClassDefn = Core.Name "hydra.scala.syntax.ClassDefn"
+_ClassDefn_mods = Core.Name "mods"
+_ClassDefn_name = Core.Name "name"
+_ClassDefn_tparams = Core.Name "tparams"
+_ClassDefn_ctor = Core.Name "ctor"
+_ClassDefn_template = Core.Name "template"
+data TraitDefn =
+  TraitDefn {
+    traitDefnMods :: [Mod],
+    traitDefnName :: NameType,
+    traitDefnTparams :: [ParamType],
+    traitDefnCtor :: PrimaryCtor,
+    traitDefnTemplate :: Template}
   deriving (Eq, Ord, Read, Show)
-_Defn_Trait = Core.Name "hydra.scala.syntax.Defn_Trait"
-_Defn_Trait_mods = Core.Name "mods"
-_Defn_Trait_name = Core.Name "name"
-_Defn_Trait_tparams = Core.Name "tparams"
-_Defn_Trait_ctor = Core.Name "ctor"
-_Defn_Trait_template = Core.Name "template"
-data Defn_Object =
-  Defn_Object {
-    defn_ObjectName :: Data_Name}
+_TraitDefn = Core.Name "hydra.scala.syntax.TraitDefn"
+_TraitDefn_mods = Core.Name "mods"
+_TraitDefn_name = Core.Name "name"
+_TraitDefn_tparams = Core.Name "tparams"
+_TraitDefn_ctor = Core.Name "ctor"
+_TraitDefn_template = Core.Name "template"
+data ObjectDefn =
+  ObjectDefn {
+    objectDefnName :: NameData}
   deriving (Eq, Ord, Read, Show)
-_Defn_Object = Core.Name "hydra.scala.syntax.Defn_Object"
-_Defn_Object_name = Core.Name "name"
+_ObjectDefn = Core.Name "hydra.scala.syntax.ObjectDefn"
+_ObjectDefn_name = Core.Name "name"
 data Pkg =
   Pkg {
-    pkgName :: Data_Name,
-    pkgRef :: Data_Ref,
+    pkgName :: NameData,
+    pkgRef :: RefData,
     pkgStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
 _Pkg = Core.Name "hydra.scala.syntax.Pkg"
 _Pkg_name = Core.Name "name"
 _Pkg_ref = Core.Name "ref"
 _Pkg_stats = Core.Name "stats"
-data Pkg_Object =
-  Pkg_Object {
-    pkg_ObjectMods :: [Mod],
-    pkg_ObjectName :: Data_Name,
-    pkg_ObjectTemplate :: Template}
+data ObjectPkg =
+  ObjectPkg {
+    objectPkgMods :: [Mod],
+    objectPkgName :: NameData,
+    objectPkgTemplate :: Template}
   deriving (Eq, Ord, Read, Show)
-_Pkg_Object = Core.Name "hydra.scala.syntax.Pkg_Object"
-_Pkg_Object_mods = Core.Name "mods"
-_Pkg_Object_name = Core.Name "name"
-_Pkg_Object_template = Core.Name "template"
+_ObjectPkg = Core.Name "hydra.scala.syntax.ObjectPkg"
+_ObjectPkg_mods = Core.Name "mods"
+_ObjectPkg_name = Core.Name "name"
+_ObjectPkg_template = Core.Name "template"
 data Ctor =
-  CtorPrimary Ctor_Primary |
-  CtorSecondary Ctor_Secondary
+  CtorPrimary PrimaryCtor |
+  CtorSecondary SecondaryCtor
   deriving (Eq, Ord, Read, Show)
 _Ctor = Core.Name "hydra.scala.syntax.Ctor"
 _Ctor_primary = Core.Name "primary"
 _Ctor_secondary = Core.Name "secondary"
-data Ctor_Primary =
-  Ctor_Primary {
-    ctor_PrimaryMods :: [Mod],
-    ctor_PrimaryName :: Name,
-    ctor_PrimaryParamss :: [[Data_Param]]}
+data PrimaryCtor =
+  PrimaryCtor {
+    primaryCtorMods :: [Mod],
+    primaryCtorName :: Name,
+    primaryCtorParamss :: [[ParamData]]}
   deriving (Eq, Ord, Read, Show)
-_Ctor_Primary = Core.Name "hydra.scala.syntax.Ctor_Primary"
-_Ctor_Primary_mods = Core.Name "mods"
-_Ctor_Primary_name = Core.Name "name"
-_Ctor_Primary_paramss = Core.Name "paramss"
-data Ctor_Secondary =
-  Ctor_Secondary {
-    ctor_SecondaryMods :: [Mod],
-    ctor_SecondaryName :: Name,
-    ctor_SecondaryParamss :: [[Data_Param]],
-    ctor_SecondaryInit :: Init,
-    ctor_SecondaryStats :: [Stat]}
+_PrimaryCtor = Core.Name "hydra.scala.syntax.PrimaryCtor"
+_PrimaryCtor_mods = Core.Name "mods"
+_PrimaryCtor_name = Core.Name "name"
+_PrimaryCtor_paramss = Core.Name "paramss"
+data SecondaryCtor =
+  SecondaryCtor {
+    secondaryCtorMods :: [Mod],
+    secondaryCtorName :: Name,
+    secondaryCtorParamss :: [[ParamData]],
+    secondaryCtorInit :: Init,
+    secondaryCtorStats :: [Stat]}
   deriving (Eq, Ord, Read, Show)
-_Ctor_Secondary = Core.Name "hydra.scala.syntax.Ctor_Secondary"
-_Ctor_Secondary_mods = Core.Name "mods"
-_Ctor_Secondary_name = Core.Name "name"
-_Ctor_Secondary_paramss = Core.Name "paramss"
-_Ctor_Secondary_init = Core.Name "init"
-_Ctor_Secondary_stats = Core.Name "stats"
+_SecondaryCtor = Core.Name "hydra.scala.syntax.SecondaryCtor"
+_SecondaryCtor_mods = Core.Name "mods"
+_SecondaryCtor_name = Core.Name "name"
+_SecondaryCtor_paramss = Core.Name "paramss"
+_SecondaryCtor_init = Core.Name "init"
+_SecondaryCtor_stats = Core.Name "stats"
 data Init =
   Init {
     initTpe :: Type,
@@ -1299,9 +1299,9 @@ _Template_inits = Core.Name "inits"
 _Template_self = Core.Name "self"
 _Template_stats = Core.Name "stats"
 data Mod =
-  ModAnnot Mod_Annot |
-  ModPrivate Mod_Private |
-  ModProtected Mod_Protected |
+  ModAnnot AnnotMod |
+  ModPrivate PrivateMod |
+  ModProtected ProtectedMod |
   ModImplicit |
   ModFinal |
   ModSealed |
@@ -1343,65 +1343,65 @@ _Mod_inline = Core.Name "inline"
 _Mod_using = Core.Name "using"
 _Mod_opaque = Core.Name "opaque"
 _Mod_transparent = Core.Name "transparent"
-data Mod_Annot =
-  Mod_Annot {
-    mod_AnnotInit :: Init}
+data AnnotMod =
+  AnnotMod {
+    annotModInit :: Init}
   deriving (Eq, Ord, Read, Show)
-_Mod_Annot = Core.Name "hydra.scala.syntax.Mod_Annot"
-_Mod_Annot_init = Core.Name "init"
-data Mod_Private =
-  Mod_Private {
-    mod_PrivateWithin :: Ref}
+_AnnotMod = Core.Name "hydra.scala.syntax.AnnotMod"
+_AnnotMod_init = Core.Name "init"
+data PrivateMod =
+  PrivateMod {
+    privateModWithin :: Ref}
   deriving (Eq, Ord, Read, Show)
-_Mod_Private = Core.Name "hydra.scala.syntax.Mod_Private"
-_Mod_Private_within = Core.Name "within"
-data Mod_Protected =
-  Mod_Protected {
-    mod_ProtectedWithin :: Ref}
+_PrivateMod = Core.Name "hydra.scala.syntax.PrivateMod"
+_PrivateMod_within = Core.Name "within"
+data ProtectedMod =
+  ProtectedMod {
+    protectedModWithin :: Ref}
   deriving (Eq, Ord, Read, Show)
-_Mod_Protected = Core.Name "hydra.scala.syntax.Mod_Protected"
-_Mod_Protected_within = Core.Name "within"
+_ProtectedMod = Core.Name "hydra.scala.syntax.ProtectedMod"
+_ProtectedMod_within = Core.Name "within"
 data Enumerator =
-  EnumeratorGenerator Enumerator_Generator |
-  EnumeratorCaseGenerator Enumerator_CaseGenerator |
-  EnumeratorVal Enumerator_Val |
-  EnumeratorGuard Enumerator_Guard
+  EnumeratorGenerator GeneratorEnumerator |
+  EnumeratorCaseGenerator CaseGeneratorEnumerator |
+  EnumeratorVal ValEnumerator |
+  EnumeratorGuard GuardEnumerator
   deriving (Eq, Ord, Read, Show)
 _Enumerator = Core.Name "hydra.scala.syntax.Enumerator"
 _Enumerator_generator = Core.Name "generator"
 _Enumerator_caseGenerator = Core.Name "caseGenerator"
 _Enumerator_val = Core.Name "val"
 _Enumerator_guard = Core.Name "guard"
-data Enumerator_Generator =
-  Enumerator_Generator {
-    enumerator_GeneratorPat :: Pat,
-    enumerator_GeneratorRhs :: Data}
+data GeneratorEnumerator =
+  GeneratorEnumerator {
+    generatorEnumeratorPat :: Pat,
+    generatorEnumeratorRhs :: Data}
   deriving (Eq, Ord, Read, Show)
-_Enumerator_Generator = Core.Name "hydra.scala.syntax.Enumerator_Generator"
-_Enumerator_Generator_pat = Core.Name "pat"
-_Enumerator_Generator_rhs = Core.Name "rhs"
-data Enumerator_CaseGenerator =
-  Enumerator_CaseGenerator {
-    enumerator_CaseGeneratorPat :: Pat,
-    enumerator_CaseGeneratorRhs :: Data}
+_GeneratorEnumerator = Core.Name "hydra.scala.syntax.GeneratorEnumerator"
+_GeneratorEnumerator_pat = Core.Name "pat"
+_GeneratorEnumerator_rhs = Core.Name "rhs"
+data CaseGeneratorEnumerator =
+  CaseGeneratorEnumerator {
+    caseGeneratorEnumeratorPat :: Pat,
+    caseGeneratorEnumeratorRhs :: Data}
   deriving (Eq, Ord, Read, Show)
-_Enumerator_CaseGenerator = Core.Name "hydra.scala.syntax.Enumerator_CaseGenerator"
-_Enumerator_CaseGenerator_pat = Core.Name "pat"
-_Enumerator_CaseGenerator_rhs = Core.Name "rhs"
-data Enumerator_Val =
-  Enumerator_Val {
-    enumerator_ValPat :: Pat,
-    enumerator_ValRhs :: Data}
+_CaseGeneratorEnumerator = Core.Name "hydra.scala.syntax.CaseGeneratorEnumerator"
+_CaseGeneratorEnumerator_pat = Core.Name "pat"
+_CaseGeneratorEnumerator_rhs = Core.Name "rhs"
+data ValEnumerator =
+  ValEnumerator {
+    valEnumeratorPat :: Pat,
+    valEnumeratorRhs :: Data}
   deriving (Eq, Ord, Read, Show)
-_Enumerator_Val = Core.Name "hydra.scala.syntax.Enumerator_Val"
-_Enumerator_Val_pat = Core.Name "pat"
-_Enumerator_Val_rhs = Core.Name "rhs"
-data Enumerator_Guard =
-  Enumerator_Guard {
-    enumerator_GuardCond :: Data}
+_ValEnumerator = Core.Name "hydra.scala.syntax.ValEnumerator"
+_ValEnumerator_pat = Core.Name "pat"
+_ValEnumerator_rhs = Core.Name "rhs"
+data GuardEnumerator =
+  GuardEnumerator {
+    guardEnumeratorCond :: Data}
   deriving (Eq, Ord, Read, Show)
-_Enumerator_Guard = Core.Name "hydra.scala.syntax.Enumerator_Guard"
-_Enumerator_Guard_cond = Core.Name "cond"
+_GuardEnumerator = Core.Name "hydra.scala.syntax.GuardEnumerator"
+_GuardEnumerator_cond = Core.Name "cond"
 data ImportExportStat =
   ImportExportStatImport Import |
   ImportExportStatExport Export
@@ -1423,7 +1423,7 @@ _Export = Core.Name "hydra.scala.syntax.Export"
 _Export_importers = Core.Name "importers"
 data Importer =
   Importer {
-    importerRef :: Data_Ref,
+    importerRef :: RefData,
     importerImportees :: [Importee]}
   deriving (Eq, Ord, Read, Show)
 _Importer = Core.Name "hydra.scala.syntax.Importer"
@@ -1431,11 +1431,11 @@ _Importer_ref = Core.Name "ref"
 _Importer_importees = Core.Name "importees"
 data Importee =
   ImporteeWildcard |
-  ImporteeGiven Importee_Given |
+  ImporteeGiven GivenImportee |
   ImporteeGivenAll |
-  ImporteeName Importee_Name |
-  ImporteeRename Importee_Rename |
-  ImporteeUnimport Importee_Unimport
+  ImporteeName NameImportee |
+  ImporteeRename RenameImportee |
+  ImporteeUnimport UnimportImportee
   deriving (Eq, Ord, Read, Show)
 _Importee = Core.Name "hydra.scala.syntax.Importee"
 _Importee_wildcard = Core.Name "wildcard"
@@ -1444,32 +1444,32 @@ _Importee_givenAll = Core.Name "givenAll"
 _Importee_name = Core.Name "name"
 _Importee_rename = Core.Name "rename"
 _Importee_unimport = Core.Name "unimport"
-data Importee_Given =
-  Importee_Given {
-    importee_GivenTpe :: Type}
+data GivenImportee =
+  GivenImportee {
+    givenImporteeTpe :: Type}
   deriving (Eq, Ord, Read, Show)
-_Importee_Given = Core.Name "hydra.scala.syntax.Importee_Given"
-_Importee_Given_tpe = Core.Name "tpe"
-data Importee_Name =
-  Importee_Name {
-    importee_NameName :: Name}
+_GivenImportee = Core.Name "hydra.scala.syntax.GivenImportee"
+_GivenImportee_tpe = Core.Name "tpe"
+data NameImportee =
+  NameImportee {
+    nameImporteeName :: Name}
   deriving (Eq, Ord, Read, Show)
-_Importee_Name = Core.Name "hydra.scala.syntax.Importee_Name"
-_Importee_Name_name = Core.Name "name"
-data Importee_Rename =
-  Importee_Rename {
-    importee_RenameName :: Name,
-    importee_RenameRename :: Name}
+_NameImportee = Core.Name "hydra.scala.syntax.NameImportee"
+_NameImportee_name = Core.Name "name"
+data RenameImportee =
+  RenameImportee {
+    renameImporteeName :: Name,
+    renameImporteeRename :: Name}
   deriving (Eq, Ord, Read, Show)
-_Importee_Rename = Core.Name "hydra.scala.syntax.Importee_Rename"
-_Importee_Rename_name = Core.Name "name"
-_Importee_Rename_rename = Core.Name "rename"
-data Importee_Unimport =
-  Importee_Unimport {
-    importee_UnimportName :: Name}
+_RenameImportee = Core.Name "hydra.scala.syntax.RenameImportee"
+_RenameImportee_name = Core.Name "name"
+_RenameImportee_rename = Core.Name "rename"
+data UnimportImportee =
+  UnimportImportee {
+    unimportImporteeName :: Name}
   deriving (Eq, Ord, Read, Show)
-_Importee_Unimport = Core.Name "hydra.scala.syntax.Importee_Unimport"
-_Importee_Unimport_name = Core.Name "name"
+_UnimportImportee = Core.Name "hydra.scala.syntax.UnimportImportee"
+_UnimportImportee_name = Core.Name "name"
 data CaseTree =
   CaseTreeCase Case |
   CaseTreeTypeCase TypeCase

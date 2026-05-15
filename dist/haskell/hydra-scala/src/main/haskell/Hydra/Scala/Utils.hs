@@ -33,9 +33,9 @@ qualifyUnionFieldName dlft sname fname =
 -- | Apply a Scala data expression to a list of arguments
 sapply :: Syntax.Data -> [Syntax.Data] -> Syntax.Data
 sapply fun args =
-    Syntax.DataApply (Syntax.Data_Apply {
-      Syntax.data_ApplyFun = fun,
-      Syntax.data_ApplyArgs = args})
+    Syntax.DataApply (Syntax.ApplyData {
+      Syntax.applyDataFun = fun,
+      Syntax.applyDataArgs = args})
 -- | Apply explicit type parameters to a Scala expression (e.g. f[A, B])
 sapplyTypes :: Syntax.Data -> [Syntax.Type] -> Syntax.Data
 sapplyTypes fun typeArgs =
@@ -49,8 +49,8 @@ sapplyTypes fun typeArgs =
                     "]"]
       in case fun of
         Syntax.DataRef v0 -> case v0 of
-          Syntax.Data_RefName v1 ->
-            let nameStr = Syntax.data_NameValue v1
+          Syntax.RefDataName v1 ->
+            let nameStr = Syntax.nameDataValue v1
                 rawName = Syntax.unPredefString nameStr
             in (sname (Strings.cat2 rawName typeArgStr))
           _ -> fun
@@ -58,9 +58,9 @@ sapplyTypes fun typeArgs =
 -- | Create a Scala assignment expression
 sassign :: Syntax.Data -> Syntax.Data -> Syntax.Data
 sassign lhs rhs =
-    Syntax.DataAssign (Syntax.Data_Assign {
-      Syntax.data_AssignLhs = lhs,
-      Syntax.data_AssignRhs = rhs})
+    Syntax.DataAssign (Syntax.AssignData {
+      Syntax.assignDataLhs = lhs,
+      Syntax.assignDataRhs = rhs})
 -- | Sanitize a name for Scala: escape reserved words, replace invalid characters
 scalaEscapeName :: String -> String
 scalaEscapeName s =
@@ -84,18 +84,18 @@ scalaTypeName qualify name =
 -- | Create a Scala lambda (function) expression
 slambda :: String -> Syntax.Data -> Maybe Syntax.Type -> Syntax.Data
 slambda v body sdom =
-    Syntax.DataFunctionData (Syntax.Data_FunctionDataFunction (Syntax.Data_Function {
-      Syntax.data_FunctionParams = [
-        Syntax.Data_Param {
-          Syntax.data_ParamMods = [],
-          Syntax.data_ParamName = (Syntax.NameValue v),
-          Syntax.data_ParamDecltpe = sdom,
-          Syntax.data_ParamDefault = Nothing}],
-      Syntax.data_FunctionBody = body}))
+    Syntax.DataFunctionData (Syntax.FunctionDataDataFunction (Syntax.FunctionData {
+      Syntax.functionDataParams = [
+        Syntax.ParamData {
+          Syntax.paramDataMods = [],
+          Syntax.paramDataName = (Syntax.NameValue v),
+          Syntax.paramDataDecltpe = sdom,
+          Syntax.paramDataDefault = Nothing}],
+      Syntax.functionDataBody = body}))
 -- | Create a Scala name reference
 sname :: String -> Syntax.Data
-sname s = Syntax.DataRef (Syntax.Data_RefName (Syntax.Data_Name {
-  Syntax.data_NameValue = (Syntax.PredefString s)}))
+sname s = Syntax.DataRef (Syntax.RefDataName (Syntax.NameData {
+  Syntax.nameDataValue = (Syntax.PredefString s)}))
 -- | Create a Scala primitive reference from a Hydra name
 sprim :: Core.Name -> Syntax.Data
 sprim name =
@@ -107,9 +107,9 @@ sprim name =
 -- | Apply a Scala type to a list of type arguments
 stapply :: Syntax.Type -> [Syntax.Type] -> Syntax.Type
 stapply t args =
-    Syntax.TypeApply (Syntax.Type_Apply {
-      Syntax.type_ApplyTpe = t,
-      Syntax.type_ApplyArgs = args})
+    Syntax.TypeApply (Syntax.ApplyType {
+      Syntax.applyTypeTpe = t,
+      Syntax.applyTypeArgs = args})
 -- | Apply a Scala type to one type argument
 stapply1 :: Syntax.Type -> Syntax.Type -> Syntax.Type
 stapply1 t1 t2 = stapply t1 [
@@ -121,41 +121,41 @@ stapply2 t1 t2 t3 =
       t2,
       t3]
 -- | Create a Scala type parameter from a Hydra name, capitalizing to avoid collision with value params
-stparam :: Core.Name -> Syntax.Type_Param
+stparam :: Core.Name -> Syntax.ParamType
 stparam name =
 
       let v = Formatting.capitalize (Core.unName name)
-      in Syntax.Type_Param {
-        Syntax.type_ParamMods = [],
-        Syntax.type_ParamName = (Syntax.NameValue v),
-        Syntax.type_ParamTparams = [],
-        Syntax.type_ParamTbounds = [],
-        Syntax.type_ParamVbounds = [],
-        Syntax.type_ParamCbounds = []}
+      in Syntax.ParamType {
+        Syntax.paramTypeMods = [],
+        Syntax.paramTypeName = (Syntax.NameValue v),
+        Syntax.paramTypeTparams = [],
+        Syntax.paramTypeTbounds = [],
+        Syntax.paramTypeVbounds = [],
+        Syntax.paramTypeCbounds = []}
 -- | Create a Scala type reference by name
 stref :: String -> Syntax.Type
-stref s = Syntax.TypeRef (Syntax.Type_RefName (Syntax.Type_Name {
-  Syntax.type_NameValue = s}))
+stref s = Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
+  Syntax.nameTypeValue = s}))
 -- | Create a Scala pattern variable
 svar :: Core.Name -> Syntax.Pat
 svar name =
 
       let v = Core.unName name
-      in (Syntax.PatVar (Syntax.Pat_Var {
-        Syntax.pat_VarName = Syntax.Data_Name {
-          Syntax.data_NameValue = (Syntax.PredefString v)}}))
+      in (Syntax.PatVar (Syntax.VarPat {
+        Syntax.varPatName = Syntax.NameData {
+          Syntax.nameDataValue = (Syntax.PredefString v)}}))
 -- | Convert a Scala type to its string representation
 typeToString :: Syntax.Type -> String
 typeToString t =
     case t of
       Syntax.TypeRef v0 -> case v0 of
-        Syntax.Type_RefName v1 -> Syntax.type_NameValue v1
+        Syntax.RefTypeName v1 -> Syntax.nameTypeValue v1
         _ -> "Any"
-      Syntax.TypeVar v0 -> Syntax.type_NameValue (Syntax.type_VarName v0)
+      Syntax.TypeVar v0 -> Syntax.nameTypeValue (Syntax.varTypeName v0)
       Syntax.TypeFunctionType v0 -> case v0 of
-        Syntax.Type_FunctionTypeFunction v1 ->
-          let params = Lists.map typeToString (Syntax.type_FunctionParams v1)
-              res = typeToString (Syntax.type_FunctionRes v1)
+        Syntax.FunctionTypeTypeFunction v1 ->
+          let params = Lists.map typeToString (Syntax.functionTypeParams v1)
+              res = typeToString (Syntax.functionTypeRes v1)
           in (Strings.cat [
             "(",
             (Strings.intercalate ", " params),
@@ -163,8 +163,8 @@ typeToString t =
             res])
         _ -> "Any"
       Syntax.TypeApply v0 ->
-        let base = typeToString (Syntax.type_ApplyTpe v0)
-            argStrs = Lists.map typeToString (Syntax.type_ApplyArgs v0)
+        let base = typeToString (Syntax.applyTypeTpe v0)
+            argStrs = Lists.map typeToString (Syntax.applyTypeArgs v0)
         in (Strings.cat [
           base,
           "[",
