@@ -139,36 +139,11 @@ public class JavaSelfHostDemo {
             + String.format("%.1f", tImport) + "s)");
 
         // 3. Inference over universe + sources.
-        // Split sources: modules whose ALL definitions are pre-typed (typeScheme.isJust)
-        // are added to the universe and skipped for inference; the rest go through
-        // normal inference as targets. This works around the Java host's slow
-        // inference on very large modules (e.g. hydra.java.coder with 198 deeply-
-        // recursive defs).
-        List<Module> preTypedSources = new ArrayList<>();
-        List<Module> untypedSources = new ArrayList<>();
-        for (Module m : sources) {
-            boolean allTyped = !m.definitions.isEmpty();
-            for (hydra.packaging.Definition d : m.definitions) {
-                if (d instanceof hydra.packaging.Definition.Term) {
-                    hydra.packaging.TermDefinition td =
-                        ((hydra.packaging.Definition.Term) d).value;
-                    if (td.typeScheme.isNothing()) {
-                        allTyped = false;
-                        break;
-                    }
-                }
-            }
-            if (allTyped) {
-                preTypedSources.add(m);
-                System.err.println("    pre-typed (skip inference): " + m.namespace.value);
-            } else {
-                untypedSources.add(m);
-            }
-        }
-
+        // Bindings arrive pre-annotated from module_to_source_module, so inference
+        // is a no-op pass-through for the source modules; we still run it to keep
+        // the pipeline shape identical to other hosts.
         t0 = System.nanoTime();
-        System.err.println("Inferring " + untypedSources.size()
-            + " java source modules (" + preTypedSources.size() + " pre-typed) ...");
+        System.err.println("Inferring " + sources.size() + " java source modules ...");
         Context ctx = new Context(
             Collections.emptyList(),
             Collections.emptyList(),
@@ -177,13 +152,11 @@ public class JavaSelfHostDemo {
         List<Module> universePlusSources = new ArrayList<>(universe);
         universePlusSources.addAll(sources);
         Either<Error_, List<Module>> result =
-            Codegen.inferModulesGiven(ctx, bsGraph, universePlusSources, untypedSources);
+            Codegen.inferModulesGiven(ctx, bsGraph, universePlusSources, sources);
         double tInfer = (System.nanoTime() - t0) / 1e9;
         if (result instanceof Either.Left) {
             Error_ err = ((Either.Left<Error_, List<Module>>) result).value;
             System.err.println("  INFERENCE FAILED: " + err);
-            // Use Show.Errors helper for human-readable output when available;
-            // fall back to reflection-dumped fields otherwise.
             try {
                 String shown = hydra.show.Errors.error(err);
                 System.err.println("  details: " + shown);
@@ -192,10 +165,8 @@ public class JavaSelfHostDemo {
             }
             System.exit(4);
         }
-        // Combine: pre-typed sources pass through unchanged; untyped were inferred.
-        List<Module> inferred = new ArrayList<>(
-            ((Either.Right<Error_, List<Module>>) result).value);
-        inferred.addAll(preTypedSources);
+        List<Module> inferred =
+            ((Either.Right<Error_, List<Module>>) result).value;
         System.err.println("  inferred (" + String.format("%.1f", tInfer) + "s)");
 
         // 4. Build graph + schema_map.
