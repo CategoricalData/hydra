@@ -60,7 +60,7 @@ bin/regenerate-lexicon.sh
 ```
 
 This will update `docs/hydra-lexicon.txt` with the current kernel API.
-The `/lexicon()` shorthand also runs this script. Lexicon regeneration is
+The `/lexicon` shorthand also runs this script. Lexicon regeneration is
 deliberately decoupled from the regular sync flow (it takes ~4 minutes and
 is not consumed by any build step); run it on demand or as part of the
 pre-release preparation flow (`bin/prepare-release.sh`).

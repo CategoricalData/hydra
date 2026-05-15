@@ -148,7 +148,7 @@ is older.
 
 ### Bootstrap "Could not find module" early in compile is usually transient
 
-When `/bootstrap()` reports a path failing at module 1-of-N with
+When `/bootstrap` reports a path failing at module 1-of-N with
 `Could not find module 'Hydra.Core'` or similar dep-not-built errors
 on generated files that clearly exist on disk, the cause is almost
 always transient: parallel stack lock contention or OOM from
@@ -176,7 +176,7 @@ When merging staging into a feature branch, all `dist/**/digest.json`
 and `dist/json/digest.main.json` files conflict if both branches
 touched DSL sources. Both sides' hashes are wrong post-merge — the
 correct hashes depend on the merged source state. Resolution: take
-`--ours` to satisfy git, complete the merge commit, run `/sync()` to
+`--ours` to satisfy git, complete the merge commit, run `/sync` to
 regenerate, then commit the digest deltas as a follow-up
 "Regenerate digests after staging merge" commit. Don't try to merge
 hash maps by hand.
