@@ -29,17 +29,18 @@ caseToExpr c =
 -- | Convert a function-data lambda to an expression
 dataFunctionToExpr :: Syntax.FunctionData -> Ast.Expr
 dataFunctionToExpr f =
-    let params = Syntax.functionDataParams f
-        body = Syntax.functionDataBody f
-        bodyExpr = termToExpr body
-        bodyLen = Serialization.expressionLength bodyExpr
-    in (Logic.ifElse (Equality.gt bodyLen 60) (Serialization.noSep [
-      Serialization.parenListAdaptive (Lists.map dataParamToExpr params),
-      (Serialization.cst " =>\n  "),
-      bodyExpr]) (Serialization.spaceSep [
-      Serialization.parenListAdaptive (Lists.map dataParamToExpr params),
-      (Serialization.cst "=>"),
-      bodyExpr]))
+
+      let params = Syntax.functionDataParams f
+          body = Syntax.functionDataBody f
+          bodyExpr = termToExpr body
+          bodyLen = Serialization.expressionLength bodyExpr
+      in (Logic.ifElse (Equality.gt bodyLen 60) (Serialization.noSep [
+        Serialization.parenListAdaptive (Lists.map dataParamToExpr params),
+        (Serialization.cst " =>\n  "),
+        bodyExpr]) (Serialization.spaceSep [
+        Serialization.parenListAdaptive (Lists.map dataParamToExpr params),
+        (Serialization.cst "=>"),
+        bodyExpr]))
 -- | Convert a data name to an expression
 dataNameToExpr :: Syntax.NameData -> Ast.Expr
 dataNameToExpr dn = Serialization.cst (Syntax.unPredefString (Syntax.nameDataValue dn))

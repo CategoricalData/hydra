@@ -3,31 +3,47 @@
     {
       "type": {
         "name": "hydra.scala.syntax.PredefString",
-        "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}},
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A wrapper for strings used in scala.Predef contexts."}}}],
+              "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.scala.syntax.ScalaSymbol",
-        "typeScheme": {"body": {"record": [{"name": "name", "type": {"literal": {"string": {}}}}]}, "variables": []}}},
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A Scala 2 symbol literal (corresponds to scala.Symbol)."}}}],
+              "body": {"record": [{"name": "name", "type": {"literal": {"string": {}}}}]}}},
+          "variables": []}}},
     {
       "type": {
         "name": "hydra.scala.syntax.Tree",
         "typeScheme": {
           "body": {
-            "union": [
-              {"name": "ref", "type": {"variable": "hydra.scala.syntax.Ref"}},
-              {"name": "stat", "type": {"variable": "hydra.scala.syntax.Stat"}},
-              {"name": "type", "type": {"variable": "hydra.scala.syntax.Type"}},
-              {"name": "bounds", "type": {"variable": "hydra.scala.syntax.TypeBounds"}},
-              {"name": "pat", "type": {"variable": "hydra.scala.syntax.Pat"}},
-              {"name": "member", "type": {"variable": "hydra.scala.syntax.Member"}},
-              {"name": "ctor", "type": {"variable": "hydra.scala.syntax.Ctor"}},
-              {"name": "template", "type": {"variable": "hydra.scala.syntax.Template"}},
-              {"name": "mod", "type": {"variable": "hydra.scala.syntax.Mod"}},
-              {"name": "enumerator", "type": {"variable": "hydra.scala.syntax.Enumerator"}},
-              {"name": "importer", "type": {"variable": "hydra.scala.syntax.Importer"}},
-              {"name": "importee", "type": {"variable": "hydra.scala.syntax.Importee"}},
-              {"name": "caseTree", "type": {"variable": "hydra.scala.syntax.CaseTree"}},
-              {"name": "source", "type": {"variable": "hydra.scala.syntax.Source"}}]},
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "The root of the Scalameta tree hierarchy. Each arm names a major AST category."}}}],
+              "body": {
+                "union": [
+                  {"name": "ref", "type": {"variable": "hydra.scala.syntax.Ref"}},
+                  {"name": "stat", "type": {"variable": "hydra.scala.syntax.Stat"}},
+                  {"name": "type", "type": {"variable": "hydra.scala.syntax.Type"}},
+                  {"name": "bounds", "type": {"variable": "hydra.scala.syntax.TypeBounds"}},
+                  {"name": "pat", "type": {"variable": "hydra.scala.syntax.Pat"}},
+                  {"name": "member", "type": {"variable": "hydra.scala.syntax.Member"}},
+                  {"name": "ctor", "type": {"variable": "hydra.scala.syntax.Ctor"}},
+                  {"name": "template", "type": {"variable": "hydra.scala.syntax.Template"}},
+                  {"name": "mod", "type": {"variable": "hydra.scala.syntax.Mod"}},
+                  {"name": "enumerator", "type": {"variable": "hydra.scala.syntax.Enumerator"}},
+                  {"name": "importer", "type": {"variable": "hydra.scala.syntax.Importer"}},
+                  {"name": "importee", "type": {"variable": "hydra.scala.syntax.Importee"}},
+                  {"name": "caseTree", "type": {"variable": "hydra.scala.syntax.CaseTree"}},
+                  {"name": "source", "type": {"variable": "hydra.scala.syntax.Source"}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1240,5 +1256,5 @@
         "name": "hydra.scala.syntax.Source",
         "typeScheme": {"body": {"record": [{"name": "stats", "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]}, "variables": []}}}],
   "dependencies": ["hydra.core", "hydra.core"],
-  "description": "A Scala syntax model based on Scalameta (https://scalameta.org)",
+  "description": "A Scala syntax model for Hydra, anchored on Scalameta (https://scalameta.org). Departs from Scalameta where Hydra's needs differ: Term is renamed to Data, the FunctionType/FunctionData wrappers are flattened, and arms Hydra never emits (xml literals, quasiquote/macro forms) are omitted.",
   "namespace": "hydra.scala.syntax"}

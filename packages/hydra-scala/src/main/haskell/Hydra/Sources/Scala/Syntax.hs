@@ -7,10 +7,6 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Data.List                       as L
-import qualified Data.Map                        as M
-import qualified Data.Set                        as S
-import qualified Data.Maybe                      as Y
 
 
 ns :: Namespace
@@ -27,7 +23,7 @@ module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = [Core.ns, Core.ns],
-            moduleDescription = Just "A Scala syntax model based on Scalameta (https://scalameta.org)"}
+            moduleDescription = Just "A Scala syntax model for Hydra, anchored on Scalameta (https://scalameta.org). Departs from Scalameta where Hydra's needs differ: Term is renamed to Data, the FunctionType/FunctionData wrappers are flattened, and arms Hydra never emits (xml literals, quasiquote/macro forms) are omitted."}
   where
     definitions = [
       predefString,
@@ -171,16 +167,19 @@ module_ = Module {
       source]
 
 predefString :: Binding
-predefString = def "PredefString" $ --  See scala/Predef.scala
+predefString = def "PredefString" $
+  doc "A wrapper for strings used in scala.Predef contexts." $
   T.wrap T.string
 
 scalaSymbol :: Binding
-scalaSymbol = def "ScalaSymbol" $ --  See scala/Symbol.scala
+scalaSymbol = def "ScalaSymbol" $
+  doc "A Scala 2 symbol literal (corresponds to scala.Symbol)." $
   T.record [
     "name">: T.string]
 
 tree :: Binding
-tree = def "Tree" $ --  Note: ignoring fields of Tree and InternalTree for now
+tree = def "Tree" $
+  doc "The root of the Scalameta tree hierarchy. Each arm names a major AST category." $
   T.union [
     "ref">: meta "Ref",
     "stat">: meta "Stat",
