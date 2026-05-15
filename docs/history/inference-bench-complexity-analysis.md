@@ -218,4 +218,4 @@ bin/run-inference-bench.sh dashboard --run complexity_baseline
 To extend the bench to N > 400, edit
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Bench/LinearChain.hs`
 (and/or `PolymorphicChain.hs`, `FanOut.hs`), bump `numWalkers`, run
-`/sync-haskell()` to regenerate the JSON, then re-run the bench.
+`/sync-haskell` to regenerate the JSON, then re-run the bench.
