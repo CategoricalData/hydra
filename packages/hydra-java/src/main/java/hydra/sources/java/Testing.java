@@ -204,11 +204,15 @@ public class Testing {
             let(
                 Arrays.<hydra.core.Field>asList(
                     field("actual_", apply(
-                        project("hydra.testing.UniversalTestCase", "actual"),
-                        var("ucase"))),
+                        apply(
+                            project("hydra.testing.UniversalTestCase", "actual"),
+                            var("ucase")),
+                        unit())),
                     field("expected_", apply(
-                        project("hydra.testing.UniversalTestCase", "expected"),
-                        var("ucase"))),
+                        apply(
+                            project("hydra.testing.UniversalTestCase", "expected"),
+                            var("ucase")),
+                        unit())),
                     field("fullName", logicIfElse(
                         listsNull(var("groupPath")),
                         var("name_"),
