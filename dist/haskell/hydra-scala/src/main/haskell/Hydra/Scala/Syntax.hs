@@ -31,8 +31,7 @@ data Tree =
   TreeImporter Importer |
   TreeImportee Importee |
   TreeCaseTree CaseTree |
-  TreeSource Source |
-  TreeQuasi Quasi
+  TreeSource Source
   deriving (Eq, Ord, Read, Show)
 _Tree = Core.Name "hydra.scala.syntax.Tree"
 _Tree_ref = Core.Name "ref"
@@ -49,7 +48,6 @@ _Tree_importer = Core.Name "importer"
 _Tree_importee = Core.Name "importee"
 _Tree_caseTree = Core.Name "caseTree"
 _Tree_source = Core.Name "source"
-_Tree_quasi = Core.Name "quasi"
 data Ref =
   RefName Name |
   RefInit Init
@@ -110,7 +108,6 @@ data Data =
   DataLit Lit |
   DataRef RefData |
   DataInterpolate InterpolateData |
-  DataXml XmlData |
   DataApply ApplyData |
   DataApplyUsing ApplyUsingData |
   DataApplyType ApplyTypeData |
@@ -123,9 +120,6 @@ data Data =
   DataBlock BlockData |
   DataEndMarker EndMarkerData |
   DataIf IfData |
-  DataQuotedMacroExpr QuotedMacroExprData |
-  DataQuotedMacroType QuotedMacroTypeData |
-  DataSplicedMacroExpr SplicedMacroExprData |
   DataMatch MatchData |
   DataTry TryData |
   DataTryWithHandler TryWithHandlerData |
@@ -148,7 +142,6 @@ _Data = Core.Name "hydra.scala.syntax.Data"
 _Data_lit = Core.Name "lit"
 _Data_ref = Core.Name "ref"
 _Data_interpolate = Core.Name "interpolate"
-_Data_xml = Core.Name "xml"
 _Data_apply = Core.Name "apply"
 _Data_applyUsing = Core.Name "applyUsing"
 _Data_applyType = Core.Name "applyType"
@@ -161,9 +154,6 @@ _Data_tuple = Core.Name "tuple"
 _Data_block = Core.Name "block"
 _Data_endMarker = Core.Name "endMarker"
 _Data_if = Core.Name "if"
-_Data_quotedMacroExpr = Core.Name "quotedMacroExpr"
-_Data_quotedMacroType = Core.Name "quotedMacroType"
-_Data_splicedMacroExpr = Core.Name "splicedMacroExpr"
 _Data_match = Core.Name "match"
 _Data_try = Core.Name "try"
 _Data_tryWithHandler = Core.Name "tryWithHandler"
@@ -238,14 +228,6 @@ _InterpolateData = Core.Name "hydra.scala.syntax.InterpolateData"
 _InterpolateData_prefix = Core.Name "prefix"
 _InterpolateData_parts = Core.Name "parts"
 _InterpolateData_args = Core.Name "args"
-data XmlData =
-  XmlData {
-    xmlDataParts :: [Lit],
-    xmlDataArgs :: [Data]}
-  deriving (Eq, Ord, Read, Show)
-_XmlData = Core.Name "hydra.scala.syntax.XmlData"
-_XmlData_parts = Core.Name "parts"
-_XmlData_args = Core.Name "args"
 data ApplyData =
   ApplyData {
     applyDataFun :: Data,
@@ -358,24 +340,6 @@ _IfData = Core.Name "hydra.scala.syntax.IfData"
 _IfData_cond = Core.Name "cond"
 _IfData_thenp = Core.Name "thenp"
 _IfData_elsep = Core.Name "elsep"
-data QuotedMacroExprData =
-  QuotedMacroExprData {
-    quotedMacroExprDataBody :: Data}
-  deriving (Eq, Ord, Read, Show)
-_QuotedMacroExprData = Core.Name "hydra.scala.syntax.QuotedMacroExprData"
-_QuotedMacroExprData_body = Core.Name "body"
-data QuotedMacroTypeData =
-  QuotedMacroTypeData {
-    quotedMacroTypeDataTpe :: Type}
-  deriving (Eq, Ord, Read, Show)
-_QuotedMacroTypeData = Core.Name "hydra.scala.syntax.QuotedMacroTypeData"
-_QuotedMacroTypeData_tpe = Core.Name "tpe"
-data SplicedMacroExprData =
-  SplicedMacroExprData {
-    splicedMacroExprDataBody :: Data}
-  deriving (Eq, Ord, Read, Show)
-_SplicedMacroExprData = Core.Name "hydra.scala.syntax.SplicedMacroExprData"
-_SplicedMacroExprData_body = Core.Name "body"
 data MatchData =
   MatchData {
     matchDataExpr :: Data,
@@ -515,7 +479,6 @@ data Type =
   TypeExistential ExistentialType |
   TypeAnnotate AnnotateType |
   TypeLambda LambdaType |
-  TypeMacro MacroType |
   TypeMethod MethodType |
   TypePlaceholder PlaceholderType |
   TypeByName ByNameType |
@@ -541,7 +504,6 @@ _Type_refine = Core.Name "refine"
 _Type_existential = Core.Name "existential"
 _Type_annotate = Core.Name "annotate"
 _Type_lambda = Core.Name "lambda"
-_Type_macro = Core.Name "macro"
 _Type_method = Core.Name "method"
 _Type_placeholder = Core.Name "placeholder"
 _Type_byName = Core.Name "byName"
@@ -705,12 +667,6 @@ data LambdaType =
 _LambdaType = Core.Name "hydra.scala.syntax.LambdaType"
 _LambdaType_tparams = Core.Name "tparams"
 _LambdaType_tpe = Core.Name "tpe"
-data MacroType =
-  MacroType {
-    macroTypeBody :: Data}
-  deriving (Eq, Ord, Read, Show)
-_MacroType = Core.Name "hydra.scala.syntax.MacroType"
-_MacroType_body = Core.Name "body"
 data MethodType =
   MethodType {
     methodTypeParamss :: [[ParamData]],
@@ -794,9 +750,7 @@ data Pat =
   PatExtract ExtractPat |
   PatExtractInfix ExtractInfixPat |
   PatInterpolate InterpolatePat |
-  PatXml XmlPat |
   PatTyped TypedPat |
-  PatMacro MacroPat |
   PatGiven GivenPat
   deriving (Eq, Ord, Read, Show)
 _Pat = Core.Name "hydra.scala.syntax.Pat"
@@ -810,9 +764,7 @@ _Pat_repeated = Core.Name "repeated"
 _Pat_extract = Core.Name "extract"
 _Pat_extractInfix = Core.Name "extractInfix"
 _Pat_interpolate = Core.Name "interpolate"
-_Pat_xml = Core.Name "xml"
 _Pat_typed = Core.Name "typed"
-_Pat_macro = Core.Name "macro"
 _Pat_given = Core.Name "given"
 data VarPat =
   VarPat {
@@ -874,14 +826,6 @@ data InterpolatePat =
 _InterpolatePat = Core.Name "hydra.scala.syntax.InterpolatePat"
 _InterpolatePat_prefix = Core.Name "prefix"
 _InterpolatePat_parts = Core.Name "parts"
-data XmlPat =
-  XmlPat {
-    xmlPatParts :: [Lit],
-    xmlPatArgs :: [Pat]}
-  deriving (Eq, Ord, Read, Show)
-_XmlPat = Core.Name "hydra.scala.syntax.XmlPat"
-_XmlPat_parts = Core.Name "parts"
-_XmlPat_args = Core.Name "args"
 data TypedPat =
   TypedPat {
     typedPatLhs :: Pat,
@@ -890,12 +834,6 @@ data TypedPat =
 _TypedPat = Core.Name "hydra.scala.syntax.TypedPat"
 _TypedPat_lhs = Core.Name "lhs"
 _TypedPat_rhs = Core.Name "rhs"
-data MacroPat =
-  MacroPat {
-    macroPatBody :: Data}
-  deriving (Eq, Ord, Read, Show)
-_MacroPat = Core.Name "hydra.scala.syntax.MacroPat"
-_MacroPat_body = Core.Name "body"
 data GivenPat =
   GivenPat {
     givenPatTpe :: Type}
@@ -1011,7 +949,6 @@ data Defn =
   DefnGivenAlias GivenAliasDefn |
   DefnExtensionGroup ExtensionGroupDefn |
   DefnDef DefDefn |
-  DefnMacro MacroDefn |
   DefnType TypeDefn |
   DefnClass ClassDefn |
   DefnTrait TraitDefn |
@@ -1027,7 +964,6 @@ _Defn_repeatedEnumCase = Core.Name "repeatedEnumCase"
 _Defn_givenAlias = Core.Name "givenAlias"
 _Defn_extensionGroup = Core.Name "extensionGroup"
 _Defn_def = Core.Name "def"
-_Defn_macro = Core.Name "macro"
 _Defn_type = Core.Name "type"
 _Defn_class = Core.Name "class"
 _Defn_trait = Core.Name "trait"
@@ -1148,22 +1084,6 @@ _DefDefn_tparams = Core.Name "tparams"
 _DefDefn_paramss = Core.Name "paramss"
 _DefDefn_decltpe = Core.Name "decltpe"
 _DefDefn_body = Core.Name "body"
-data MacroDefn =
-  MacroDefn {
-    macroDefnMods :: [Mod],
-    macroDefnName :: NameData,
-    macroDefnTparams :: [ParamType],
-    macroDefnParamss :: [[ParamData]],
-    macroDefnDecltpe :: (Maybe Type),
-    macroDefnBody :: Data}
-  deriving (Eq, Ord, Read, Show)
-_MacroDefn = Core.Name "hydra.scala.syntax.MacroDefn"
-_MacroDefn_mods = Core.Name "mods"
-_MacroDefn_name = Core.Name "name"
-_MacroDefn_tparams = Core.Name "tparams"
-_MacroDefn_paramss = Core.Name "paramss"
-_MacroDefn_decltpe = Core.Name "decltpe"
-_MacroDefn_body = Core.Name "body"
 data TypeDefn =
   TypeDefn {
     typeDefnMods :: [Mod],
@@ -1491,8 +1411,3 @@ data Source =
   deriving (Eq, Ord, Read, Show)
 _Source = Core.Name "hydra.scala.syntax.Source"
 _Source_stats = Core.Name "stats"
-newtype Quasi =
-  Quasi {
-    unQuasi :: ()}
-  deriving (Eq, Ord, Read, Show)
-_Quasi = Core.Name "hydra.scala.syntax.Quasi"

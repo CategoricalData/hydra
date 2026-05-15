@@ -45,7 +45,6 @@ module_ = Module {
       anonymousData,
       selectData,
       interpolateData,
-      xmlData,
       applyData,
       applyUsingData,
       applyTypeData,
@@ -60,9 +59,6 @@ module_ = Module {
       blockData,
       endMarkerData,
       ifData,
-      quotedMacroExprData,
-      quotedMacroTypeData,
-      splicedMacroExprData,
       matchData,
       tryData,
       tryWithHandlerData,
@@ -100,7 +96,6 @@ module_ = Module {
       existentialType,
       annotateType,
       lambdaType,
-      macroType,
       methodType,
       placeholderType,
       typeBounds,
@@ -119,9 +114,7 @@ module_ = Module {
       extractPat,
       extractInfixPat,
       interpolatePat,
-      xmlPat,
       typedPat,
-      macroPat,
       givenPat,
       member,
       dataMember,
@@ -142,7 +135,6 @@ module_ = Module {
       givenAliasDefn,
       extensionGroupDefn,
       defDefn,
-      macroDefn,
       typeDefn,
       classDefn,
       traitDefn,
@@ -176,8 +168,7 @@ module_ = Module {
       caseTree,
       case_,
       typeCase,
-      source,
-      quasi]
+      source]
 
 predefString :: Binding
 predefString = def "PredefString" $ --  See scala/Predef.scala
@@ -204,8 +195,7 @@ tree = def "Tree" $ --  Note: ignoring fields of Tree and InternalTree for now
     "importer">: meta "Importer",
     "importee">: meta "Importee",
     "caseTree">: meta "CaseTree",
-    "source">: meta "Source",
-    "quasi">: meta "Quasi"]
+    "source">: meta "Source"]
 
 ref :: Binding
 ref = def "Ref" $
@@ -251,7 +241,6 @@ data_ = def "Data" $
     "lit">: meta "Lit",
     "ref">: meta "RefData",
     "interpolate">: meta "InterpolateData",
-    "xml">: meta "XmlData",
     "apply">: meta "ApplyData",
     "applyUsing">: meta "ApplyUsingData",
     "applyType">: meta "ApplyTypeData",
@@ -264,9 +253,6 @@ data_ = def "Data" $
     "block">: meta "BlockData",
     "endMarker">: meta "EndMarkerData",
     "if">: meta "IfData",
-    "quotedMacroExpr">: meta "QuotedMacroExprData",
-    "quotedMacroType">: meta "QuotedMacroTypeData",
-    "splicedMacroExpr">: meta "SplicedMacroExprData",
     "match">: meta "MatchData",
     "try">: meta "TryData",
     "tryWithHandler">: meta "TryWithHandlerData",
@@ -324,12 +310,6 @@ interpolateData :: Binding
 interpolateData = def "InterpolateData" $
   T.record [
     "prefix">: meta "NameData",
-    "parts">: T.list $ meta "Lit",
-    "args">: T.list $ meta "Data"]
-
-xmlData :: Binding
-xmlData = def "XmlData" $
-  T.record [
     "parts">: T.list $ meta "Lit",
     "args">: T.list $ meta "Data"]
 
@@ -416,21 +396,6 @@ ifData = def "IfData" $
     "cond">: meta "Data",
     "thenp">: meta "Data",
     "elsep">: meta "Data"]
-
-quotedMacroExprData :: Binding
-quotedMacroExprData = def "QuotedMacroExprData" $
-  T.record [
-    "body">: meta "Data"]
-
-quotedMacroTypeData :: Binding
-quotedMacroTypeData = def "QuotedMacroTypeData" $
-  T.record [
-    "tpe">: meta "Type"]
-
-splicedMacroExprData :: Binding
-splicedMacroExprData = def "SplicedMacroExprData" $
-  T.record [
-    "body">: meta "Data"]
 
 matchData :: Binding
 matchData = def "MatchData" $
@@ -544,7 +509,6 @@ type_ = def "Type" $
     "existential">: meta "ExistentialType",
     "annotate">: meta "AnnotateType",
     "lambda">: meta "LambdaType",
-    "macro">: meta "MacroType",
     "method">: meta "MethodType",
     "placeholder">: meta "PlaceholderType",
     "byName">: meta "ByNameType",
@@ -671,11 +635,6 @@ lambdaType = def "LambdaType" $
     "tparams">: T.list $ meta "ParamType",
     "tpe">: meta "Type"]
 
-macroType :: Binding
-macroType = def "MacroType" $
-  T.record [
-    "body">: meta "Data"]
-
 methodType :: Binding
 methodType = def "MethodType" $
   T.record [
@@ -743,9 +702,7 @@ pat = def "Pat" $
     "extract">: meta "ExtractPat",
     "extractInfix">: meta "ExtractInfixPat",
     "interpolate">: meta "InterpolatePat",
-    "xml">: meta "XmlPat",
     "typed">: meta "TypedPat",
-    "macro">: meta "MacroPat",
     "given">: meta "GivenPat"]
 
 varPat :: Binding
@@ -794,22 +751,11 @@ interpolatePat = def "InterpolatePat" $
     "prefix">: meta "NameData",
     "parts">: T.list $ meta "Lit"]
 
-xmlPat :: Binding
-xmlPat = def "XmlPat" $
-  T.record [
-    "parts">: T.list $ meta "Lit",
-    "args">: T.list $ meta "Pat"]
-
 typedPat :: Binding
 typedPat = def "TypedPat" $
   T.record [
     "lhs">: meta "Pat",
     "rhs">: meta "Type"]
-
-macroPat :: Binding
-macroPat = def "MacroPat" $
-  T.record [
-    "body">: meta "Data"]
 
 givenPat :: Binding
 givenPat = def "GivenPat" $
@@ -897,7 +843,6 @@ defn = def "Defn" $
     "givenAlias">: meta "GivenAliasDefn",
     "extensionGroup">: meta "ExtensionGroupDefn",
     "def">: meta "DefDefn",
-    "macro">: meta "MacroDefn",
     "type">: meta "TypeDefn",
     "class">: meta "ClassDefn",
     "trait">: meta "TraitDefn",
@@ -971,16 +916,6 @@ extensionGroupDefn = def "ExtensionGroupDefn" $
 
 defDefn :: Binding
 defDefn = def "DefDefn" $
-  T.record [
-    "mods">: T.list $ meta "Mod",
-    "name">: meta "NameData",
-    "tparams">: T.list $ meta "ParamType",
-    "paramss">: T.list $ T.list $ meta "ParamData",
-    "decltpe">: T.maybe $ meta "Type",
-    "body">: meta "Data"]
-
-macroDefn :: Binding
-macroDefn = def "MacroDefn" $
   T.record [
     "mods">: T.list $ meta "Mod",
     "name">: meta "NameData",
@@ -1222,7 +1157,3 @@ source :: Binding
 source = def "Source" $
   T.record [
     "stats">: T.list $ meta "Stat"]
-
-quasi :: Binding
-quasi = def "Quasi" $ --  TODO
-  T.wrap T.unit
