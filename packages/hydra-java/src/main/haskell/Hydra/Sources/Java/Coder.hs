@@ -666,15 +666,28 @@ bindingsToStatements = def "bindingsToStatements" $
             (Lists.maybeHead (var "names")))
           (var "names"))
       (var "sorted"))) $
-    -- Identify thunked vars
+    -- Identify thunked vars. Mirror the Python coder's rule
+    -- (shouldThunkBinding = isComplexBinding && !isTrivialTerm), with the
+    -- additional Java-specific filter that recursive bindings go through the
+    -- AtomicReference path instead, and function-typed bindings are emitted
+    -- as methods rather than thunked values.
+    --
+    -- This replaces an earlier `needsThunking` heuristic that only thunked
+    -- bindings whose RHS textually contained a let/typeApp/typeLambda. That
+    -- rule missed cases like `dflt = recurse term` (lambda-applied), where
+    -- the value is captured in only one branch of a downstream case-dispatch
+    -- and eagerly evaluating it walks the entire subtree on every visit —
+    -- producing the O(N^2) blowup observed in hydra.java.coder self-host (#344).
     "thunkedVars" <~ Sets.fromList (Lists.concat (Lists.map
       (lambda "b" $
         "bname" <~ Core.bindingName (var "b") $
         Logic.ifElse (Logic.and
           (Logic.not (Sets.member (var "bname") (var "recursiveVars")))
           (Logic.and
-            (needsThunking @@ Core.bindingTerm (var "b"))
-            (Logic.not (bindingIsFunctionType @@ var "b"))))
+            (Predicates.isComplexBinding @@ var "gExtended" @@ var "b")
+            (Logic.and
+              (Logic.not (Predicates.isTrivialTerm @@ Core.bindingTerm (var "b")))
+              (Logic.not (bindingIsFunctionType @@ var "b")))))
           (list [var "bname"])
           (list ([] :: [TTerm Name])))
       (var "flatBindings"))) $

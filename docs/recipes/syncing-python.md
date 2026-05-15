@@ -1,12 +1,40 @@
 # Synchronizing Hydra-Python
 
-This guide explains how to keep Hydra-Python synchronized with the source of truth in Hydra-Haskell.
+This guide explains how to keep Hydra-Python synchronized after changes to the
+**Hydra kernel** (in Hydra-Haskell) or to the **Python coder DSL sources**.
 
 ## Overview
 
-Hydra-Haskell is the bootstrapping implementation and source of truth for Hydra.
-When you make changes to the Hydra kernel, test suite, or eval lib in Hydra-Haskell,
-you need to regenerate the corresponding Python artifacts.
+Hydra-Haskell is the bootstrapping implementation for the Hydra kernel itself.
+The **Python coder DSL sources** (the `hydra.python.*` modules: syntax, language,
+coder, serde, names, utils, environment, testing) are authored in Python and live
+under `packages/hydra-python/src/main/python/hydra/sources/python/`. They are
+the source of truth for `dist/json/hydra-python/`, exported via
+`bin/generate-hydra-python-from-python.sh`.
+
+> A legacy Haskell-DSL copy of these same Python coder modules lives at
+> `packages/hydra-python/src/main/haskell/Hydra/Sources/Python/` and produces
+> byte-identical output. It is kept as a backup through 0.15 and will be deleted
+> before 0.16. Edits to the Python coder should go into the Python sources.
+
+`bin/sync.sh` runs `bin/generate-hydra-python-from-python.sh` automatically in
+Phase 5 on every invocation. The native generator owns `dist/json/hydra-python/`;
+Phase 1 (Haskell DSL → JSON) skips `hydra.python.*` namespaces by default and
+only writes them on a cold-start bootstrap (when `dist/json/hydra-python/` is
+empty), so in any warm state the only writer is the native generator. A diff
+report against the pre-run snapshot reports the number of changed files. The
+Phase 5 skip case is when the native Python host (`dist/python/hydra-python/`)
+isn't built yet — i.e. `python` was not in `--hosts` of a prior sync; in that
+case the JSON remains whatever Phase 1 last wrote.
+
+When you make changes to:
+- **the kernel, eval lib, or test suite** (in Hydra-Haskell): regenerate
+  `dist/json/hydra-kernel/`, then run `bin/sync-python.sh` to refresh
+  `dist/python/`.
+- **the Python coder DSL sources**: run `bin/sync-python.sh`, which now
+  invokes `bin/generate-hydra-python-from-python.sh` in Phase 5. You can
+  also run the native generator directly with `--compare` to verify
+  byte-identical output before the full sync.
 
 The synchronization process generates four categories of Python code:
 

@@ -83,7 +83,17 @@ stack build \
 
 step 2 $TOTAL_STEPS "Exporting kernel + test modules to JSON"
 echo ""
-stack exec update-json-main -- $RTS_FLAGS
+# #344: by default, the legacy Haskell DSL skips hydra.java.* / hydra.python.*
+# JSON (the native generators own those paths). On a cold tree where their
+# JSON is missing, set HYDRA_INCLUDE_JAVA_PYTHON=1 (sync.sh does this
+# automatically) to seed the bootstrap with one Haskell-DSL pass.
+JP_FLAG=""
+if [ "${HYDRA_INCLUDE_JAVA_PYTHON:-0}" = "1" ]; then
+    JP_FLAG="--include-java-python"
+    echo "  (cold-start bootstrap: --include-java-python set; legacy Haskell DSL"
+    echo "   will write hydra.java.*/hydra.python.* JSON this once; see #344)"
+fi
+stack exec update-json-main -- $JP_FLAG $RTS_FLAGS
 stack exec update-json-test -- $RTS_FLAGS
 
 step 3 $TOTAL_STEPS "Verifying JSON kernel and writing manifest"

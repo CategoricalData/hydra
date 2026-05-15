@@ -11,7 +11,7 @@ from hydra.packaging import Module, Namespace
 
 import hydra.dsl.meta.lib.lists as Lists
 import hydra.dsl.meta.lib.sets as Sets
-import hydra.dsl.meta.phantoms as Phantoms
+from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.core as Core
 import hydra.dsl.variants as Variants
 import hydra.dsl.coders as Coders
@@ -22,51 +22,24 @@ import hydra.dsl.coders as Coders
 # kernelTypesNamespaces is the list of all hydra.* type module namespaces in the
 # canonical order from packages/hydra-kernel/.../Hydra/Sources/Kernel/Types/All.hs.
 LEXICAL_NS = Namespace("hydra.lexical")
-KERNEL_TYPES_NAMESPACES = [
-    Namespace("hydra.paths"),
-    Namespace("hydra.ast"),
-    Namespace("hydra.classes"),
-    Namespace("hydra.coders"),
-    Namespace("hydra.context"),
-    Namespace("hydra.core"),
-    Namespace("hydra.error.checking"),
-    Namespace("hydra.error.core"),
-    Namespace("hydra.error.packaging"),
-    Namespace("hydra.errors"),
-    Namespace("hydra.graph"),
-    Namespace("hydra.json.model"),
-    Namespace("hydra.packaging"),
-    Namespace("hydra.parsing"),
-    Namespace("hydra.phantoms"),
-    Namespace("hydra.query"),
-    Namespace("hydra.relational"),
-    Namespace("hydra.tabular"),
-    Namespace("hydra.testing"),
-    Namespace("hydra.topology"),
-    Namespace("hydra.typing"),
-    Namespace("hydra.util"),
-    Namespace("hydra.validation"),
-    Namespace("hydra.variants"),
-]
+from hydra.sources.python._source_dsl import KERNEL_TYPES_NAMESPACES
 
 
 def _python_language_term():
     """The body of the pythonLanguage definition (a TTerm Language)."""
-    return Phantoms.doc(
+    return doc(
         "Language constraints for Python 3",
-        Phantoms.lets(
+        lets(
             [
-                Phantoms.field(
-                    Name("eliminationVariants"),
-                    Sets.from_list(Phantoms.list_([
+                field("eliminationVariants",
+                    Sets.from_list(list_([
                         Variants.elimination_variant_record,
                         Variants.elimination_variant_union,
                         Variants.elimination_variant_wrap,
                     ])),
                 ),
-                Phantoms.field(
-                    Name("literalVariants"),
-                    Sets.from_list(Phantoms.list_([
+                field("literalVariants",
+                    Sets.from_list(list_([
                         Variants.literal_variant_binary,
                         Variants.literal_variant_boolean,
                         Variants.literal_variant_decimal,
@@ -75,28 +48,24 @@ def _python_language_term():
                         Variants.literal_variant_string,
                     ])),
                 ),
-                Phantoms.field(
-                    Name("floatTypes"),
-                    Sets.from_list(Phantoms.list_([
+                field("floatTypes",
+                    Sets.from_list(list_([
                         Core.float_type_float64,
                     ])),
                 ),
-                Phantoms.field(
-                    Name("functionVariants"),
-                    Sets.from_list(Phantoms.list_([
+                field("functionVariants",
+                    Sets.from_list(list_([
                         Variants.function_variant_elimination,
                         Variants.function_variant_lambda,
                     ])),
                 ),
-                Phantoms.field(
-                    Name("integerTypes"),
-                    Sets.from_list(Phantoms.list_([
+                field("integerTypes",
+                    Sets.from_list(list_([
                         Core.integer_type_bigint,
                     ])),
                 ),
-                Phantoms.field(
-                    Name("termVariants"),
-                    Sets.from_list(Phantoms.list_([
+                field("termVariants",
+                    Sets.from_list(list_([
                         Variants.term_variant_annotated,
                         Variants.term_variant_application,
                         Variants.term_variant_either,
@@ -120,9 +89,8 @@ def _python_language_term():
                         Variants.term_variant_wrap,
                     ])),
                 ),
-                Phantoms.field(
-                    Name("typeVariants"),
-                    Sets.from_list(Phantoms.list_([
+                field("typeVariants",
+                    Sets.from_list(list_([
                         Variants.type_variant_annotated,
                         Variants.type_variant_application,
                         Variants.type_variant_either,
@@ -142,22 +110,21 @@ def _python_language_term():
                         Variants.type_variant_wrap,
                     ])),
                 ),
-                Phantoms.field(
-                    Name("typePredicate"),
-                    Phantoms.constant(Phantoms.true()),
+                field("typePredicate",
+                    constant(true()),
                 ),
             ],
             Coders.language(
-                Coders.language_name2(Phantoms.string("hydra.python")),
+                Coders.language_name2(string("hydra.python")),
                 Coders.language_constraints2(
-                    Phantoms.var("eliminationVariants"),
-                    Phantoms.var("literalVariants"),
-                    Phantoms.var("floatTypes"),
-                    Phantoms.var("functionVariants"),
-                    Phantoms.var("integerTypes"),
-                    Phantoms.var("termVariants"),
-                    Phantoms.var("typeVariants"),
-                    Phantoms.var("typePredicate"),
+                    var("eliminationVariants"),
+                    var("literalVariants"),
+                    var("floatTypes"),
+                    var("functionVariants"),
+                    var("integerTypes"),
+                    var("termVariants"),
+                    var("typeVariants"),
+                    var("typePredicate"),
                 ),
             ),
         ),
@@ -174,36 +141,33 @@ def _python_reserved_words_term():
     ]
     builtins = ["range"]
     hydra_specific = ["Node", "FrozenDict"]
-    return Phantoms.doc(
+    return doc(
         "A set of reserved words in Python",
-        Phantoms.lets(
+        lets(
             [
-                Phantoms.field(
-                    Name("pythonKeywords"),
-                    Phantoms.doc(
+                field("pythonKeywords",
+                    doc(
                         "Python keywords, as enumerated at https://docs.python.org/3.13/reference/lexical_analysis.html#keywords",
-                        Phantoms.list_([Phantoms.string(s) for s in keywords]),
+                        list_([string(s) for s in keywords]),
                     ),
                 ),
-                Phantoms.field(
-                    Name("pythonBuiltInFunctions"),
-                    Phantoms.doc(
+                field("pythonBuiltInFunctions",
+                    doc(
                         "Some additional keywords we reserve in order to avoid collision with built-in functions",
-                        Phantoms.list_([Phantoms.string(s) for s in builtins]),
+                        list_([string(s) for s in builtins]),
                     ),
                 ),
-                Phantoms.field(
-                    Name("hydraPythonKeywords"),
-                    Phantoms.doc(
+                field("hydraPythonKeywords",
+                    doc(
                         "Reserved words which are specific to Hydra-Python",
-                        Phantoms.list_([Phantoms.string(s) for s in hydra_specific]),
+                        list_([string(s) for s in hydra_specific]),
                     ),
                 ),
             ],
-            Sets.from_list(Lists.concat(Phantoms.list_([
-                Phantoms.var("pythonKeywords"),
-                Phantoms.var("pythonBuiltInFunctions"),
-                Phantoms.var("hydraPythonKeywords"),
+            Sets.from_list(Lists.concat(list_([
+                var("pythonKeywords"),
+                var("pythonBuiltInFunctions"),
+                var("hydraPythonKeywords"),
             ]))),
         ),
     )
@@ -223,17 +187,17 @@ def _build_module() -> Module:
         [LEXICAL_NS] + KERNEL_TYPES_NAMESPACES,
         (),  # filled in below
     )
-    python_language = Phantoms.definition_in_module(
+    python_language = definition_in_module(
         placeholder, "pythonLanguage", _python_language_term())
-    python_reserved_words = Phantoms.definition_in_module(
+    python_reserved_words = definition_in_module(
         placeholder, "pythonReservedWords", _python_reserved_words_term())
     return Module(
         placeholder.description,
         placeholder.namespace,
         placeholder.dependencies,
         (
-            Phantoms.to_definition(python_language),
-            Phantoms.to_definition(python_reserved_words),
+            to_definition(python_language),
+            to_definition(python_reserved_words),
         ),
     )
 

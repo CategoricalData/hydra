@@ -84,11 +84,32 @@ person = Terms.record(Name("Person"), [
 Wraps raw `Term` construction with `TTerm[A]` phantom types for type tracking.
 
 ```python
-import hydra.dsl.meta.phantoms as P
+# Recommended idiom: star-import for clean call sites
+from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 
-greeting = P.string("hello")
-age = P.int32(42)
-identity = P.lambda_("x", P.var("x"))
+greeting = string("hello")
+age = int32(42)
+identity = lam("x", var("x"))
+```
+
+Phantom-typed functions like `cases`, `match`, `inject`, `wrap`, `field`,
+`project`, etc. accept either a `str` or a `Name` for the type-name argument;
+`str` is auto-coerced. Drop the redundant `Name(...)` wrapper for terseness:
+
+```python
+# Both forms are equivalent — prefer the shorter str form.
+cases("hydra.core.Term", arg, ..., [field("lambda", ...)])
+cases(Name("hydra.core.Term"), arg, ..., [field(Name("lambda"), ...)])
+```
+
+The `@` operator and the call operator are overloaded on `TTerm`, so function
+application reads naturally:
+
+```python
+# All three forms are equivalent:
+apply(apply(apply(f, a), b), c)   # spelled-out
+f @ a @ b @ c                     # Haskell-style @@ operator
+f(a, b, c)                        # Python-native call syntax (preferred)
 ```
 
 ### 4. Domain-specific DSLs
@@ -101,10 +122,10 @@ Provide typed field accessors and constructors for Hydra kernel types.
 import hydra.dsl.meta.core as Core
 
 # Extract the body of a lambda term
-body = Core.lambda_body(P.var("myLambda"))
+body = Core.lambda_body(var("myLambda"))
 
 # Extract the parameter of a lambda
-param = Core.lambda_parameter(P.var("myLambda"))
+param = Core.lambda_parameter(var("myLambda"))
 ```
 
 ### 5. Library wrappers
@@ -134,7 +155,7 @@ folded = Lists.foldl(fn, init, my_list)
 | Simple term construction | Direct Terms DSL | Quick and straightforward |
 | Writing kernel source code | Phantom-typed + Domain-specific | Type tracking + domain accessors |
 | Field access on kernel types | Domain-specific DSLs | `Core.lambda_body(t)` vs manual projection |
-| Primitive function calls | Library wrappers | `Sets.union(a, b)` vs raw `P.primitive2(...)` |
+| Primitive function calls | Library wrappers | `Sets.union(a, b)` vs raw `primitive2(...)` |
 
 **Rule of thumb**:
 - **Type modules** (defining data types): Use `hydra.dsl.types as T` with `T.record()`, `T.union()`, `T.wrap()`
@@ -270,104 +291,110 @@ It wraps raw `Term` values in `TTerm[A]` to provide type tracking.
 ### Import pattern
 
 ```python
-import hydra.core
-import hydra.dsl.meta.phantoms as P
+# Recommended idiom: star-import phantoms so DSL primitives are unqualified.
+from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.meta.core as Core
 from hydra.core import Name
 from hydra.dsl.python import Just, Nothing
-from hydra.phantoms import TBinding, TTerm
 ```
+
+The star import brings `var`, `lam`, `apply`, `lets`, `let_chain`, `field`,
+`cases`, `match`, `inject`, `wrap`, `record`, `string`, `int32`, `nothing`,
+`just`, `left`, `right`, `list_`, `pair`, etc. into the file's namespace.
+Phantoms functions that take a `Name` (cases, match, inject, wrap, record,
+project, field, etc.) also accept `str`, so most call sites can drop the
+`Name(...)` boilerplate.
 
 ### Literals
 
 ```python
-greeting = P.string("hello")
-age = P.int32(42)
-flag = P.boolean(True)
-yes = P.true
-no = P.false
+greeting = string("hello")
+age = int32(42)
+flag = boolean(True)
+yes = true
+no = false
 ```
 
 ### Functions
 
 ```python
 # Lambda (single parameter)
-id_fn = P.lambda_("x", P.var("x"))
+id_fn = lam("x", var("x"))
 
 # Lambda (multiple parameters — curried)
-add = P.lambdas(["x", "y"],
-    P.primitive2(Name("hydra.lib.math.add"), P.var("x"), P.var("y")))
+add = lambdas(["x", "y"], var("x"))  # body uses primitives or var refs
 
-# Function application
-result = P.apply(P.var("f"), P.int32(5))
+# Function application — three equivalent forms:
+result_a = apply(var("f"), int32(5))   # spelled-out
+result_b = var("f") @ int32(5)         # @ operator (Haskell-style @@)
+result_c = var("f")(int32(5))          # native Python call syntax (preferred)
 
 # Composition
-composed = P.compose(P.var("g"), P.var("f"))
+composed = compose(var("g"), var("f"))
 
 # Constant function
-always_true = P.constant(P.true)
+always_true = constant(true)
 
 # Identity
-id_fn2 = P.identity()
+id_fn2 = identity()
 ```
 
 ### Data structures
 
 ```python
 # Lists
-nums = P.list_([P.int32(1), P.int32(2), P.int32(3)])
+nums = list_([int32(1), int32(2), int32(3)])
 
 # Pairs
-kv = P.pair(P.string("key"), P.int32(42))
+kv = pair(string("key"), int32(42))
 
 # Optional values
-some = P.just(P.int32(42))
-none = P.nothing()
+some = just(int32(42))
+none = nothing()
 
 # Either
-ok = P.right(P.int32(42))
-err = P.left(P.string("error"))
+ok = right(int32(42))
+err = left(string("error"))
 ```
 
 ### Records
 
 ```python
-# Construct a record (requires type name + fields)
-person = P.record(hydra.core.PERSON__NAME, [
-    P.field(hydra.core.PERSON__NAME__NAME, P.string("Alice")),
-    P.field(hydra.core.PERSON__AGE__NAME, P.int32(30))])
+# Construct a record — str type names are auto-coerced to Name.
+person = record("my.module.Person", [
+    field("name", string("Alice")),
+    field("age", int32(30)),
+])
 ```
 
 ### Union injection
 
 ```python
 # Inject into a union type
-circle = P.inject(hydra.core.SHAPE__NAME, hydra.core.SHAPE__CIRCLE__NAME,
-    P.float64(3.14))
+circle = inject("my.module.Shape", "circle", float64(3.14))
 
 # Unit injection (for enum-like variants)
-f32 = P.inject_unit(hydra.core.FLOAT_TYPE__NAME,
-    hydra.core.FLOAT_TYPE__FLOAT32__NAME)
+f32 = inject_unit("hydra.core.FloatType", "float32")
 ```
 
 ### Pattern matching (cases/match)
 
 ```python
 # match creates a case elimination (unapplied)
-matcher = P.match(hydra.core.TERM__NAME,
-    Just(P.var("default")),                 # default case
-    [P.field(hydra.core.TERM__LITERAL__NAME,    # case: literal
-        P.lambda_("lit", P.string("found a literal"))),
-     P.field(hydra.core.TERM__VARIABLE__NAME,    # case: variable
-        P.lambda_("v", P.string("found a variable")))])
+matcher = match("hydra.core.Term",
+    Just(var("default")),                 # default case
+    [field("literal",
+        lam("lit", string("found a literal"))),
+     field("variable",
+        lam("v", string("found a variable")))])
 
-# cases applies the match to an argument
-result = P.cases(hydra.core.TERM__NAME, P.var("myTerm"),
-    Nothing(),                              # no default
-    [P.field(hydra.core.TERM__LITERAL__NAME,
-        P.lambda_("lit", P.var("lit"))),
-     P.field(hydra.core.TERM__VARIABLE__NAME,
-        P.lambda_("v", P.var("v")))])
+# cases applies the match to an argument (str type name auto-coerced)
+result = cases("hydra.core.Term", var("myTerm"),
+    Nothing(),                            # no default
+    [field("literal",
+        lam("lit", var("lit"))),
+     field(hydra.core.TERM__VARIABLE__NAME,
+        lam("v", var("v")))])
 ```
 
 **Note**: In Python, case fields are passed as a `list`, not as varargs.
@@ -376,52 +403,66 @@ result = P.cases(hydra.core.TERM__NAME, P.var("myTerm"),
 
 ```python
 # Single let binding
-expr = P.let1("x", P.int32(5),
-    P.apply(P.var("add"), P.var("x")))
+expr = let1("x", int32(5),
+    apply(var("add"), var("x")))
 
 # Multiple let bindings
-expr2 = P.lets([
-    P.field(Name("x"), P.int32(5)),
-    P.field(Name("y"), P.int32(10))],
-    P.apply(P.apply(P.var("add"), P.var("x")), P.var("y")))
+expr2 = lets([
+    field(Name("x"), int32(5)),
+    field(Name("y"), int32(10))],
+    apply(apply(var("add"), var("x")), var("y")))
 ```
 
 ### Projection (field access)
 
 ```python
 # Create a field accessor function
-get_name = P.project(hydra.core.PERSON__NAME, hydra.core.PERSON__NAME__NAME)
+get_name = project(hydra.core.PERSON__NAME, hydra.core.PERSON__NAME__NAME)
 
 # Apply it
-name = P.apply(get_name, P.var("person"))
+name = apply(get_name, var("person"))
 ```
+
+If the field has a thunked type (e.g., `unit -> T`, used to defer
+expression evaluation for benchmarking; see `UniversalTestCase.actual`),
+the projection alone yields the thunk — *not* its forced value. Force with
+an extra application to `unit()`:
+
+```python
+# field type is `unit -> string` — force the thunk
+value = project(_UNIVERSAL_TEST_CASE, Name("actual"))(var("ucase"))(unit())
+```
+
+Missing the trailing `(unit())` causes inference to fail with
+`cannot unify string with (unit → string)` for every binding in the
+containing module, since the inferencer processes them in a shared context.
 
 ### Wrap/unwrap
 
 ```python
 # Wrap a value (create a newtype instance)
-hydra_name = P.wrap(hydra.core.NAME__NAME, P.string("myName"))
+hydra_name = wrap(hydra.core.NAME__NAME, string("myName"))
 
 # Unwrap function
-unwrapper = P.unwrap(hydra.core.NAME__NAME)
+unwrapper = unwrap(hydra.core.NAME__NAME)
 ```
 
 ### Primitive functions
 
 ```python
 # Reference a primitive
-add_prim = P.primitive(Name("hydra.lib.math.add"))
+add_prim = primitive(Name("hydra.lib.math.add"))
 
 # Apply primitives with 1, 2, or 3 arguments
-length = P.primitive1(Name("hydra.lib.strings.length"), P.var("s"))
-sum_ = P.primitive2(Name("hydra.lib.math.add"), P.var("x"), P.var("y"))
+length = primitive1(Name("hydra.lib.strings.length"), var("s"))
+sum_ = primitive2(Name("hydra.lib.math.add"), var("x"), var("y"))
 ```
 
 ### Documentation
 
 ```python
 # Attach documentation to a term
-documented = P.doc("Adds two numbers", P.var("add"))
+documented = doc("Adds two numbers", var("add"))
 ```
 
 ## Domain-specific DSLs
@@ -435,11 +476,11 @@ for Hydra's kernel types.
 import hydra.dsl.meta.core as Core
 
 # Field accessors
-param = Core.lambda_parameter(P.var("lam"))         # Lambda.parameter
-body = Core.lambda_body(P.var("lam"))               # Lambda.body
-at_body = Core.annotated_term_body(P.var("at"))     # AnnotatedTerm.body
-ann = Core.annotated_term_annotation(P.var("at"))   # AnnotatedTerm.annotation
-tname = Core.injection_type_name(P.var("inj"))      # Injection.typeName
+param = Core.lambda_parameter(var("lam"))         # Lambda.parameter
+body = Core.lambda_body(var("lam"))               # Lambda.body
+at_body = Core.annotated_term_body(var("at"))     # AnnotatedTerm.body
+ann = Core.annotated_term_annotation(var("at"))   # AnnotatedTerm.annotation
+tname = Core.injection_type_name(var("inj"))      # Injection.typeName
 ```
 
 ### Generated name constants
@@ -562,7 +603,6 @@ Term-level modules define Hydra functions using the Phantom-typed DSL.
 ```python
 import hydra.core
 import hydra.packaging
-import hydra.dsl.meta.phantoms as P
 import hydra.dsl.meta.core as Core
 from hydra.dsl.python import Just, Nothing
 from hydra.phantoms import TBinding
@@ -570,43 +610,43 @@ from hydra.phantoms import TBinding
 ns = hydra.packaging.Namespace("my.namespace")
 
 def define(lname: str, term) -> TBinding:
-    return P.definition_in_namespace(ns, lname, term)
+    return definition_in_namespace(ns, lname, term)
 
 # Qualified self-reference helper
 def _self(lname: str):
-    return P.var("my.namespace." + lname)
+    return var("my.namespace." + lname)
 
 # Simple function
 deannotate_term: TBinding = define("deannotateTerm",
-    P.doc("Remove annotations from a term",
-    P.lambda_("term",
-        P.cases(hydra.core.TERM__NAME, P.var("term"),
-            Just(P.var("term")),
-            [P.field(hydra.core.TERM__ANNOTATED__NAME,
-                P.lambda_("at",
-                    P.apply(_self("deannotateTerm"),
-                        Core.annotated_term_body(P.var("at")))))]))))
+    doc("Remove annotations from a term",
+    lam("term",
+        cases(hydra.core.TERM__NAME, var("term"),
+            Just(var("term")),
+            [field(hydra.core.TERM__ANNOTATED__NAME,
+                lam("at",
+                    apply(_self("deannotateTerm"),
+                        Core.annotated_term_body(var("at")))))]))))
 ```
 
 ### Self-references in Python
 
 **Important**: Python module-level variables cannot reference themselves during construction
 (unlike Haskell's lazy bindings or Java's interface fields). Use a qualified variable
-reference via `P.var("namespace.functionName")` pattern:
+reference via `var("namespace.functionName")` pattern:
 
 ```python
 # WRONG - Python error: name 'deannotate_term' not referenced yet
 deannotate_term = define("deannotateTerm",
-    P.lambda_("term",
-        P.apply(P.ref(deannotate_term), ...)))  # NameError!
+    lam("term",
+        apply(ref(deannotate_term), ...)))  # NameError!
 
 # RIGHT - use qualified variable reference
 def _self(lname: str):
-    return P.var("my.namespace." + lname)
+    return var("my.namespace." + lname)
 
 deannotate_term = define("deannotateTerm",
-    P.lambda_("term",
-        P.apply(_self("deannotateTerm"), ...)))  # Works!
+    lam("term",
+        apply(_self("deannotateTerm"), ...)))  # Works!
 ```
 
 ### Complete example: hydra.rewriting
@@ -630,12 +670,12 @@ implementation of `hydra.rewriting` demonstrating:
 Match on a union type, handle one variant, pass others through:
 
 ```python
-fn = P.lambda_("term",
-    P.cases(hydra.core.TERM__NAME, P.var("term"),
-        Just(P.var("term")),                        # default: identity
-        [P.field(hydra.core.TERM__ANNOTATED__NAME,  # handle one case
-            P.lambda_("at",
-                Core.annotated_term_body(P.var("at"))))]))
+fn = lam("term",
+    cases(hydra.core.TERM__NAME, var("term"),
+        Just(var("term")),                        # default: identity
+        [field(hydra.core.TERM__ANNOTATED__NAME,  # handle one case
+            lam("at",
+                Core.annotated_term_body(var("at"))))]))
 ```
 
 ### Pattern 2: Let-binding with rewrite
@@ -643,16 +683,16 @@ fn = P.lambda_("term",
 Bind a local transform, pass it to a rewriting function:
 
 ```python
-fn = P.lambda_("typ",
-    P.let1("f",
-        P.lambda_("recurse", P.lambda_("t",
-            P.cases(hydra.core.TYPE__NAME, P.var("t"),
-                Just(P.apply(P.var("recurse"), P.var("t"))),
-                [P.field(hydra.core.TYPE__ANNOTATED__NAME,
-                    P.lambda_("at",
-                        P.apply(P.var("recurse"),
-                            Core.annotated_type_body(P.var("at")))))]))),
-        P.apply(P.apply(_self("rewriteType"), P.var("f")), P.var("typ"))))
+fn = lam("typ",
+    let1("f",
+        lam("recurse", lam("t",
+            cases(hydra.core.TYPE__NAME, var("t"),
+                Just(apply(var("recurse"), var("t"))),
+                [field(hydra.core.TYPE__ANNOTATED__NAME,
+                    lam("at",
+                        apply(var("recurse"),
+                            Core.annotated_type_body(var("at")))))]))),
+        apply(apply(_self("rewriteType"), var("f")), var("typ"))))
 ```
 
 ### Pattern 3: Fold with set operations
@@ -661,36 +701,36 @@ fn = P.lambda_("typ",
 import hydra.dsl.meta.lib.sets as Sets
 import hydra.dsl.meta.lib.lists as Lists
 
-vars = P.let1("dfltVars",
+vars = let1("dfltVars",
     Lists.foldl(
-        P.lambda_("s", P.lambda_("t",
-            Sets.union(P.var("s"),
-                P.apply(_self("freeVariablesInTerm"), P.var("t"))))),
+        lam("s", lam("t",
+            Sets.union(var("s"),
+                apply(_self("freeVariablesInTerm"), var("t"))))),
         Sets.empty(),
-        P.apply(_self("subterms"), P.var("term"))),
+        apply(_self("subterms"), var("term"))),
     # then match on specific cases...
-    P.cases(hydra.core.TERM__NAME, P.var("term"),
-        Just(P.var("dfltVars")),
+    cases(hydra.core.TERM__NAME, var("term"),
+        Just(var("dfltVars")),
         [...]))
 ```
 
 ### Pattern 4: Binding-aware rewriting
 
 ```python
-replace_fn = P.lambda_("recurse", P.lambda_("t",
-    P.cases(hydra.core.TERM__NAME, P.var("t"),
-        Just(P.apply(P.var("recurse"), P.var("t"))),
-        [P.field(hydra.core.TERM__FUNCTION__NAME,
-            P.match(hydra.core.FUNCTION__NAME,
-                Just(P.apply(P.var("recurse"), P.var("t"))),
-                [P.field(hydra.core.FUNCTION__LAMBDA__NAME,
-                    P.lambda_("l",
+replace_fn = lam("recurse", lam("t",
+    cases(hydra.core.TERM__NAME, var("t"),
+        Just(apply(var("recurse"), var("t"))),
+        [field(hydra.core.TERM__FUNCTION__NAME,
+            match(hydra.core.FUNCTION__NAME,
+                Just(apply(var("recurse"), var("t"))),
+                [field(hydra.core.FUNCTION__LAMBDA__NAME,
+                    lam("l",
                         Logic.if_else(
                             Equality.equal_name(
-                                Core.lambda_parameter(P.var("l")),
-                                P.var("name")),
-                            P.var("t"),
-                            P.apply(P.var("recurse"), P.var("t")))))]))])))
+                                Core.lambda_parameter(var("l")),
+                                var("name")),
+                            var("t"),
+                            apply(var("recurse"), var("t")))))]))])))
 ```
 
 ## Working with generated code
