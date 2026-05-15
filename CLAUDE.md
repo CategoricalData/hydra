@@ -215,38 +215,44 @@ Primary entry point — the doc most likely to answer the question by task:
 
 ## Shorthand commands
 
-These commands are **user-invoked only**.
-Do not run them on your own initiative; wait for the user to ask.
-The user may issue them inline (e.g. "now /sync()").
-All commands use `/name()` syntax, with optional arguments inside the parentheses.
-All commands run from the worktree root (e.g. `hydra/worktrees/staging/`).
-If a command fails, investigate and fix the issue, then re-run the failing step
-and all subsequent steps. Do not re-run steps that have already succeeded.
-For long-running commands (sync, bootstrap, or any task exceeding a few minutes),
-give the user a brief status update approximately every 10 minutes.
+Project-specific slash commands live in
+[.claude/commands/](.claude/commands/) and are invoked as `/<name>`
+(e.g. `/sync`, `/bootstrap`, `/improve-docs`). Each command's `.md`
+file is authoritative for its own invocation, arguments, and output
+handling — read the command before running anything you're not
+familiar with.
 
-| Command | Action |
-|---------|--------|
-| `/bootstrap()` | Run `bin/run-bootstrapping-demo.sh` with default hosts and targets (`haskell,java,python` × `haskell,java,python` — the bootstrapping triad, NOT the full matrix). Capture full stdout+stderr to a temp file (do NOT pipe through grep/tail — the dashboard table will be lost). When done, show the script's dashboard output verbatim: the NxM results matrix, per-path timings, and total time. Do not reformat the table. |
-| `/bootstrap(lang1,lang2[,...])` | Run `bin/run-bootstrapping-demo.sh --hosts lang1,lang2[,...] --targets lang1,lang2[,...] --tag lang1_lang2[_...]`. Same output handling as `/bootstrap()`. |
-| `/bootstrap(all)` | Run `bin/run-bootstrapping-demo.sh --hosts all --targets all --tag all`. Full all-hosts × all-targets matrix; long-running (an hour or more) and typically reserved for pre-release verification or overnight runs. |
-| `/bootstrap(others)` | shorthand for `bin/run-bootstrapping-demo.sh --hosts scala,lisp --targets python`. This is a narrow bootstrapping pass which simply checks whether the "other" hosts can bootstrap Python. |
-| `/improve-docs()` | Usually called at the end of a session. If there is anything you have learned during the session which would improve CLAUDE.md, the `claude/` Claude-specific notes, or user documentation, then edit the docs, keeping them concise. Communicate with the user about major changes like splitting one document up into two. |
-| `/lexicon()` | Run `bin/regenerate-lexicon.sh` to refresh `docs/hydra-lexicon.txt` from the current Haskell kernel. Run on demand and as part of the pre-release flow; not part of regular sync. |
-| `/maintenance()` | Run all maintenance checks per the [full maintenance pass](docs/recipes/maintenance.md#full-maintenance-pass) procedure. |
-| `/save()` | Save status to the plan document. Session may terminate. |
-| `/squash()` | Squash WIP commits, per "Commit workflow" section. |
-| `/sync()` | Run `bin/sync.sh --hosts all --targets all`. Full all-hosts × all-targets matrix (note: opposite of `/bootstrap()` default — `/sync()` defaults to "all", `/bootstrap()` defaults to the triad). |
-| `/sync(lang1,lang2[,...])` | Run `bin/sync.sh --hosts <list> --targets <list>` with the same languages on both sides. |
-| `/sync-default()` | Run `bin/sync-default.sh` (the haskell,java,python triad — equivalent to `/bootstrap()`'s default scope). |
-| `/sync-haskell()` | Run `heads/haskell/bin/sync-haskell.sh` (Phase 1 only: DSL → JSON + Haskell kernel + stack test). The lexicon is no longer regenerated as part of sync; use `/lexicon()` to refresh it. |
-| `/sync-java()` | Run `bin/sync-java.sh` (--hosts java --targets java). |
-| `/sync-python()` | Run `bin/sync-python.sh`. |
-| `/sync-scala()` | Run `bin/sync-scala.sh`. |
-| `/sync-go()` | Run `bin/sync-go.sh` — generates kernel into `dist/go/`. Go is a "head bud"; only `hydra-kernel` is targeted (no `hydra-pg`/`hydra-rdf`), and Phase 4 host=go rows are skipped. |
-| `/sync-clojure()` etc. | Run `bin/sync-<dialect>.sh` for clojure / common-lisp / emacs-lisp / scheme. |
-| `/sync-bench()` | Run `bin/sync-bench.sh` — regenerate the hydra-bench package (synthetic inference workloads) for the default haskell/java/python hosts. Pass `--hosts H,...` to scope. Opt-in: the default sync does NOT touch hydra-bench. |
-| `/inference-bench()` | Run `bin/run-inference-bench.sh` — drive the cross-host inference benchmark. The runner now invokes `sync-bench.sh` automatically before measuring so the bench dist is always current. |
+Common rules across all of them:
+
+- **User-invoked only.** Do not run them on your own initiative; wait
+  for the user to ask. The user may issue them inline ("now /sync").
+- **Worktree-root invocation.** Each command assumes the current
+  directory is the worktree root (e.g. `hydra/worktrees/staging/`).
+- **On failure, resume from the failing step.** Investigate and fix the
+  root cause, then re-run the failing step and everything after it. Do
+  not re-run steps that have already succeeded.
+- **Long-running commands (sync, bootstrap, anything over a few minutes)
+  need periodic status.** Give the user a brief update approximately
+  every 10 minutes.
+
+Current commands:
+
+- `/bootstrap` — cross-host bootstrap demo (default: triad; modes
+  include `all`, `others`, and arbitrary scoped lang lists)
+- `/improve-docs` — end-of-session documentation pass
+- `/inference-bench` — cross-host inference benchmark
+- `/lexicon` — regenerate `docs/hydra-lexicon.txt`
+- `/maintenance` — full maintenance pass
+- `/save` — save state to the branch plan document
+- `/squash` — squash WIP commits to focused topic commits
+- `/sync` — full host × target sync (default: all × all; opposite
+  of `/bootstrap`'s default — note the asymmetry)
+- `/sync-default` — the haskell/java/python triad
+- `/sync-haskell`, `/sync-java`, `/sync-python`, `/sync-scala`,
+  `/sync-go` — per-language sync wrappers
+- `/sync-clojure`, `/sync-common-lisp`, `/sync-emacs-lisp`,
+  `/sync-scheme` — Lisp dialect sync wrappers
+- `/sync-bench` — regenerate hydra-bench (opt-in; not part of `/sync`)
 
 ## Coding style (read the full guide!)
 
