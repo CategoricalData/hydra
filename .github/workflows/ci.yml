@@ -39,6 +39,10 @@ jobs:
         with:
           enable-stack: true
           stack-version: latest
+      # uv is required by bin/generate-hydra-python-from-python.sh (Phase 5
+      # native Python self-host, default INTERP=uv) which runs as part of
+      # the sync step below.
+      - uses: astral-sh/setup-uv@v5
       - uses: actions/cache@v4
         with:
           path: ~/.stack
