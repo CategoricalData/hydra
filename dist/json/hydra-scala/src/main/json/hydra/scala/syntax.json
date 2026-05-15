@@ -27,8 +27,7 @@
               {"name": "importer", "type": {"variable": "hydra.scala.syntax.Importer"}},
               {"name": "importee", "type": {"variable": "hydra.scala.syntax.Importee"}},
               {"name": "caseTree", "type": {"variable": "hydra.scala.syntax.CaseTree"}},
-              {"name": "source", "type": {"variable": "hydra.scala.syntax.Source"}},
-              {"name": "quasi", "type": {"variable": "hydra.scala.syntax.Quasi"}}]},
+              {"name": "source", "type": {"variable": "hydra.scala.syntax.Source"}}]},
           "variables": []}}},
     {
       "type": {
@@ -89,7 +88,6 @@
               {"name": "lit", "type": {"variable": "hydra.scala.syntax.Lit"}},
               {"name": "ref", "type": {"variable": "hydra.scala.syntax.RefData"}},
               {"name": "interpolate", "type": {"variable": "hydra.scala.syntax.InterpolateData"}},
-              {"name": "xml", "type": {"variable": "hydra.scala.syntax.XmlData"}},
               {"name": "apply", "type": {"variable": "hydra.scala.syntax.ApplyData"}},
               {"name": "applyUsing", "type": {"variable": "hydra.scala.syntax.ApplyUsingData"}},
               {"name": "applyType", "type": {"variable": "hydra.scala.syntax.ApplyTypeData"}},
@@ -102,9 +100,6 @@
               {"name": "block", "type": {"variable": "hydra.scala.syntax.BlockData"}},
               {"name": "endMarker", "type": {"variable": "hydra.scala.syntax.EndMarkerData"}},
               {"name": "if", "type": {"variable": "hydra.scala.syntax.IfData"}},
-              {"name": "quotedMacroExpr", "type": {"variable": "hydra.scala.syntax.QuotedMacroExprData"}},
-              {"name": "quotedMacroType", "type": {"variable": "hydra.scala.syntax.QuotedMacroTypeData"}},
-              {"name": "splicedMacroExpr", "type": {"variable": "hydra.scala.syntax.SplicedMacroExprData"}},
               {"name": "match", "type": {"variable": "hydra.scala.syntax.MatchData"}},
               {"name": "try", "type": {"variable": "hydra.scala.syntax.TryData"}},
               {"name": "tryWithHandler", "type": {"variable": "hydra.scala.syntax.TryWithHandlerData"}},
@@ -167,15 +162,6 @@
           "body": {
             "record": [
               {"name": "prefix", "type": {"variable": "hydra.scala.syntax.NameData"}},
-              {"name": "parts", "type": {"list": {"variable": "hydra.scala.syntax.Lit"}}},
-              {"name": "args", "type": {"list": {"variable": "hydra.scala.syntax.Data"}}}]},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.scala.syntax.XmlData",
-        "typeScheme": {
-          "body": {
-            "record": [
               {"name": "parts", "type": {"list": {"variable": "hydra.scala.syntax.Lit"}}},
               {"name": "args", "type": {"list": {"variable": "hydra.scala.syntax.Data"}}}]},
           "variables": []}}},
@@ -285,18 +271,6 @@
               {"name": "thenp", "type": {"variable": "hydra.scala.syntax.Data"}},
               {"name": "elsep", "type": {"variable": "hydra.scala.syntax.Data"}}]},
           "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.scala.syntax.QuotedMacroExprData",
-        "typeScheme": {"body": {"record": [{"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.scala.syntax.QuotedMacroTypeData",
-        "typeScheme": {"body": {"record": [{"name": "tpe", "type": {"variable": "hydra.scala.syntax.Type"}}]}, "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.scala.syntax.SplicedMacroExprData",
-        "typeScheme": {"body": {"record": [{"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]}, "variables": []}}},
     {
       "type": {
         "name": "hydra.scala.syntax.MatchData",
@@ -436,7 +410,6 @@
               {"name": "existential", "type": {"variable": "hydra.scala.syntax.ExistentialType"}},
               {"name": "annotate", "type": {"variable": "hydra.scala.syntax.AnnotateType"}},
               {"name": "lambda", "type": {"variable": "hydra.scala.syntax.LambdaType"}},
-              {"name": "macro", "type": {"variable": "hydra.scala.syntax.MacroType"}},
               {"name": "method", "type": {"variable": "hydra.scala.syntax.MethodType"}},
               {"name": "placeholder", "type": {"variable": "hydra.scala.syntax.PlaceholderType"}},
               {"name": "byName", "type": {"variable": "hydra.scala.syntax.ByNameType"}},
@@ -608,10 +581,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.scala.syntax.MacroType",
-        "typeScheme": {"body": {"record": [{"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]}, "variables": []}}},
-    {
-      "type": {
         "name": "hydra.scala.syntax.MethodType",
         "typeScheme": {
           "body": {
@@ -691,9 +660,7 @@
               {"name": "extract", "type": {"variable": "hydra.scala.syntax.ExtractPat"}},
               {"name": "extractInfix", "type": {"variable": "hydra.scala.syntax.ExtractInfixPat"}},
               {"name": "interpolate", "type": {"variable": "hydra.scala.syntax.InterpolatePat"}},
-              {"name": "xml", "type": {"variable": "hydra.scala.syntax.XmlPat"}},
               {"name": "typed", "type": {"variable": "hydra.scala.syntax.TypedPat"}},
-              {"name": "macro", "type": {"variable": "hydra.scala.syntax.MacroPat"}},
               {"name": "given", "type": {"variable": "hydra.scala.syntax.GivenPat"}}]},
           "variables": []}}},
     {
@@ -756,15 +723,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.scala.syntax.XmlPat",
-        "typeScheme": {
-          "body": {
-            "record": [
-              {"name": "parts", "type": {"list": {"variable": "hydra.scala.syntax.Lit"}}},
-              {"name": "args", "type": {"list": {"variable": "hydra.scala.syntax.Pat"}}}]},
-          "variables": []}}},
-    {
-      "type": {
         "name": "hydra.scala.syntax.TypedPat",
         "typeScheme": {
           "body": {
@@ -772,10 +730,6 @@
               {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Pat"}},
               {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Type"}}]},
           "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.scala.syntax.MacroPat",
-        "typeScheme": {"body": {"record": [{"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]}, "variables": []}}},
     {
       "type": {
         "name": "hydra.scala.syntax.GivenPat",
@@ -887,7 +841,6 @@
               {"name": "givenAlias", "type": {"variable": "hydra.scala.syntax.GivenAliasDefn"}},
               {"name": "extensionGroup", "type": {"variable": "hydra.scala.syntax.ExtensionGroupDefn"}},
               {"name": "def", "type": {"variable": "hydra.scala.syntax.DefDefn"}},
-              {"name": "macro", "type": {"variable": "hydra.scala.syntax.MacroDefn"}},
               {"name": "type", "type": {"variable": "hydra.scala.syntax.TypeDefn"}},
               {"name": "class", "type": {"variable": "hydra.scala.syntax.ClassDefn"}},
               {"name": "trait", "type": {"variable": "hydra.scala.syntax.TraitDefn"}},
@@ -986,19 +939,6 @@
     {
       "type": {
         "name": "hydra.scala.syntax.DefDefn",
-        "typeScheme": {
-          "body": {
-            "record": [
-              {"name": "mods", "type": {"list": {"variable": "hydra.scala.syntax.Mod"}}},
-              {"name": "name", "type": {"variable": "hydra.scala.syntax.NameData"}},
-              {"name": "tparams", "type": {"list": {"variable": "hydra.scala.syntax.ParamType"}}},
-              {"name": "paramss", "type": {"list": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}},
-              {"name": "decltpe", "type": {"maybe": {"variable": "hydra.scala.syntax.Type"}}},
-              {"name": "body", "type": {"variable": "hydra.scala.syntax.Data"}}]},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.scala.syntax.MacroDefn",
         "typeScheme": {
           "body": {
             "record": [
@@ -1298,8 +1238,7 @@
     {
       "type": {
         "name": "hydra.scala.syntax.Source",
-        "typeScheme": {"body": {"record": [{"name": "stats", "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]}, "variables": []}}},
-    {"type": {"name": "hydra.scala.syntax.Quasi", "typeScheme": {"body": {"wrap": {"unit": {}}}, "variables": []}}}],
+        "typeScheme": {"body": {"record": [{"name": "stats", "type": {"list": {"variable": "hydra.scala.syntax.Stat"}}}]}, "variables": []}}}],
   "dependencies": ["hydra.core", "hydra.core"],
   "description": "A Scala syntax model based on Scalameta (https://scalameta.org)",
   "namespace": "hydra.scala.syntax"}
