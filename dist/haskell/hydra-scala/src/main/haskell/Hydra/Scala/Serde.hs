@@ -26,22 +26,20 @@ caseToExpr c =
         (patToExpr pat),
         (Serialization.cst "=>"),
         (termToExpr term)])
--- | Convert function data to an expression
-dataFunctionDataToExpr :: Syntax.FunctionDataData -> Ast.Expr
-dataFunctionDataToExpr ft =
-    case ft of
-      Syntax.FunctionDataDataFunction v0 ->
-        let params = Syntax.functionDataParams v0
-            body = Syntax.functionDataBody v0
-            bodyExpr = termToExpr body
-            bodyLen = Serialization.expressionLength bodyExpr
-        in (Logic.ifElse (Equality.gt bodyLen 60) (Serialization.noSep [
-          Serialization.parenListAdaptive (Lists.map dataParamToExpr params),
-          (Serialization.cst " =>\n  "),
-          bodyExpr]) (Serialization.spaceSep [
-          Serialization.parenListAdaptive (Lists.map dataParamToExpr params),
-          (Serialization.cst "=>"),
-          bodyExpr]))
+-- | Convert a function-data lambda to an expression
+dataFunctionToExpr :: Syntax.FunctionData -> Ast.Expr
+dataFunctionToExpr f =
+    let params = Syntax.functionDataParams f
+        body = Syntax.functionDataBody f
+        bodyExpr = termToExpr body
+        bodyLen = Serialization.expressionLength bodyExpr
+    in (Logic.ifElse (Equality.gt bodyLen 60) (Serialization.noSep [
+      Serialization.parenListAdaptive (Lists.map dataParamToExpr params),
+      (Serialization.cst " =>\n  "),
+      bodyExpr]) (Serialization.spaceSep [
+      Serialization.parenListAdaptive (Lists.map dataParamToExpr params),
+      (Serialization.cst "=>"),
+      bodyExpr]))
 -- | Convert a data name to an expression
 dataNameToExpr :: Syntax.NameData -> Ast.Expr
 dataNameToExpr dn = Serialization.cst (Syntax.unPredefString (Syntax.nameDataValue dn))
@@ -349,7 +347,7 @@ termToExpr term =
         let expr = Syntax.matchDataExpr v0
             mCases = Syntax.matchDataCases v0
         in (Serialization.ifx matchOp (termToExpr expr) (Serialization.newlineSep (Lists.map caseToExpr mCases)))
-      Syntax.DataFunctionData v0 -> dataFunctionDataToExpr v0
+      Syntax.DataFunction v0 -> dataFunctionToExpr v0
       Syntax.DataBlock v0 ->
         let stats = Syntax.blockDataStats v0
         in (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map statToExpr stats)))
@@ -371,11 +369,10 @@ typeToExpr typ =
         in (Serialization.noSep [
           typeToExpr fun,
           (Serialization.bracketList Serialization.inlineStyle (Lists.map typeToExpr args))])
-      Syntax.TypeFunctionType v0 -> case v0 of
-        Syntax.FunctionTypeTypeFunction v1 ->
-          let cod = Syntax.functionTypeRes v1
-              dom = Maybes.fromMaybe cod (Lists.maybeHead (Syntax.functionTypeParams v1))
-          in (Serialization.ifx functionArrowOp (typeToExpr dom) (typeToExpr cod))
+      Syntax.TypeFunction v0 ->
+        let cod = Syntax.functionTypeRes v0
+            dom = Maybes.fromMaybe cod (Lists.maybeHead (Syntax.functionTypeParams v0))
+        in (Serialization.ifx functionArrowOp (typeToExpr dom) (typeToExpr cod))
       Syntax.TypeLambda v0 ->
         let params = Syntax.lambdaTypeTparams v0
             body = Syntax.lambdaTypeTpe v0

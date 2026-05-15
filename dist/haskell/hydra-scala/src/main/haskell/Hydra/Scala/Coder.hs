@@ -500,10 +500,10 @@ encodeType cx g t =
       Core.TypeFunction v0 ->
         let dom = Core.functionTypeDomain v0
             cod = Core.functionTypeCodomain v0
-        in (Eithers.bind (encodeType cx g dom) (\sdom -> Eithers.bind (encodeType cx g cod) (\scod -> Right (Syntax.TypeFunctionType (Syntax.FunctionTypeTypeFunction (Syntax.FunctionType {
+        in (Eithers.bind (encodeType cx g dom) (\sdom -> Eithers.bind (encodeType cx g cod) (\scod -> Right (Syntax.TypeFunction (Syntax.FunctionType {
           Syntax.functionTypeParams = [
             sdom],
-          Syntax.functionTypeRes = scod}))))))
+          Syntax.functionTypeRes = scod})))))
       Core.TypeList v0 -> Eithers.bind (encodeType cx g v0) (\slt -> Right (Utils.stapply1 (Syntax.TypeRef (Syntax.RefTypeName (Syntax.NameType {
         Syntax.nameTypeValue = "Seq"}))) slt))
       Core.TypeLiteral v0 -> case v0 of

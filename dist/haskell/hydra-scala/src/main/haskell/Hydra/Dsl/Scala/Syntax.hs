@@ -601,12 +601,20 @@ dataForYield x =
         Core.fieldName = (Core.Name "forYield"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-dataFunctionData :: Phantoms.TTerm Syntax.FunctionDataData -> Phantoms.TTerm Syntax.Data
-dataFunctionData x =
+dataFunction :: Phantoms.TTerm Syntax.FunctionData -> Phantoms.TTerm Syntax.Data
+dataFunction x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Data"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "functionData"),
+        Core.fieldName = (Core.Name "function"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+dataContextFunction :: Phantoms.TTerm Syntax.ContextFunctionData -> Phantoms.TTerm Syntax.Data
+dataContextFunction x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Data"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "contextFunction"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 dataIf :: Phantoms.TTerm Syntax.IfData -> Phantoms.TTerm Syntax.Data
@@ -1760,22 +1768,6 @@ functionDataBody x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.FunctionData"),
         Core.projectionField = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-functionDataDataContextFunction :: Phantoms.TTerm Syntax.ContextFunctionData -> Phantoms.TTerm Syntax.FunctionDataData
-functionDataDataContextFunction x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.FunctionDataData"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "contextFunction"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-functionDataDataFunction :: Phantoms.TTerm Syntax.FunctionData -> Phantoms.TTerm Syntax.FunctionDataData
-functionDataDataFunction x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.FunctionDataData"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "function"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 functionDataParams :: Phantoms.TTerm Syntax.FunctionData -> Phantoms.TTerm [Syntax.ParamData]
 functionDataParams x =
@@ -9717,12 +9709,20 @@ typeExistential x =
         Core.fieldName = (Core.Name "existential"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
-typeFunctionType :: Phantoms.TTerm Syntax.FunctionTypeType -> Phantoms.TTerm Syntax.Type
-typeFunctionType x =
+typeFunction :: Phantoms.TTerm Syntax.FunctionType -> Phantoms.TTerm Syntax.Type
+typeFunction x =
     Phantoms.TTerm (Core.TermInject (Core.Injection {
       Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Type"),
       Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "functionType"),
+        Core.fieldName = (Core.Name "function"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
+
+typeContextFunction :: Phantoms.TTerm Syntax.ContextFunctionType -> Phantoms.TTerm Syntax.Type
+typeContextFunction x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.Type"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "contextFunction"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 typeImplicitFunction :: Phantoms.TTerm Syntax.ImplicitFunctionType -> Phantoms.TTerm Syntax.Type
@@ -10312,22 +10312,6 @@ functionTypeRes x =
         Core.projectionTypeName = (Core.Name "hydra.scala.syntax.FunctionType"),
         Core.projectionField = (Core.Name "res")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
-
-functionTypeTypeContextFunction :: Phantoms.TTerm Syntax.ContextFunctionType -> Phantoms.TTerm Syntax.FunctionTypeType
-functionTypeTypeContextFunction x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.FunctionTypeType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "contextFunction"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
-
-functionTypeTypeFunction :: Phantoms.TTerm Syntax.FunctionType -> Phantoms.TTerm Syntax.FunctionTypeType
-functionTypeTypeFunction x =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.scala.syntax.FunctionTypeType"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "function"),
-        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 
 functionTypeWithParams :: Phantoms.TTerm Syntax.FunctionType -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.FunctionType
 functionTypeWithParams original newVal =

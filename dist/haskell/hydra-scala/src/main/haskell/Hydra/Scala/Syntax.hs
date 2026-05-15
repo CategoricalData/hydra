@@ -129,7 +129,8 @@ data Data =
   DataMatch MatchData |
   DataTry TryData |
   DataTryWithHandler TryWithHandlerData |
-  DataFunctionData FunctionDataData |
+  DataFunction FunctionData |
+  DataContextFunction ContextFunctionData |
   DataPolyFunction PolyFunctionData |
   DataPartialFunction PartialFunctionData |
   DataWhile WhileData |
@@ -166,7 +167,8 @@ _Data_splicedMacroExpr = Core.Name "splicedMacroExpr"
 _Data_match = Core.Name "match"
 _Data_try = Core.Name "try"
 _Data_tryWithHandler = Core.Name "tryWithHandler"
-_Data_functionData = Core.Name "functionData"
+_Data_function = Core.Name "function"
+_Data_contextFunction = Core.Name "contextFunction"
 _Data_polyFunction = Core.Name "polyFunction"
 _Data_partialFunction = Core.Name "partialFunction"
 _Data_while = Core.Name "while"
@@ -402,13 +404,6 @@ _TryWithHandlerData = Core.Name "hydra.scala.syntax.TryWithHandlerData"
 _TryWithHandlerData_expr = Core.Name "expr"
 _TryWithHandlerData_catchp = Core.Name "catchp"
 _TryWithHandlerData_finallyp = Core.Name "finallyp"
-data FunctionDataData =
-  FunctionDataDataContextFunction ContextFunctionData |
-  FunctionDataDataFunction FunctionData
-  deriving (Eq, Ord, Read, Show)
-_FunctionDataData = Core.Name "hydra.scala.syntax.FunctionDataData"
-_FunctionDataData_contextFunction = Core.Name "contextFunction"
-_FunctionDataData_function = Core.Name "function"
 data ContextFunctionData =
   ContextFunctionData {
     contextFunctionDataParams :: [ParamData],
@@ -508,7 +503,8 @@ data Type =
   TypeAnonymousName AnonymousNameType |
   TypeApply ApplyType |
   TypeApplyInfix ApplyInfixType |
-  TypeFunctionType FunctionTypeType |
+  TypeFunction FunctionType |
+  TypeContextFunction ContextFunctionType |
   TypePolyFunction PolyFunctionType |
   TypeImplicitFunction ImplicitFunctionType |
   TypeTuple TupleType |
@@ -533,7 +529,8 @@ _Type_ref = Core.Name "ref"
 _Type_anonymousName = Core.Name "anonymousName"
 _Type_apply = Core.Name "apply"
 _Type_applyInfix = Core.Name "applyInfix"
-_Type_functionType = Core.Name "functionType"
+_Type_function = Core.Name "function"
+_Type_contextFunction = Core.Name "contextFunction"
 _Type_polyFunction = Core.Name "polyFunction"
 _Type_implicitFunction = Core.Name "implicitFunction"
 _Type_tuple = Core.Name "tuple"
@@ -614,13 +611,6 @@ _ApplyInfixType = Core.Name "hydra.scala.syntax.ApplyInfixType"
 _ApplyInfixType_lhs = Core.Name "lhs"
 _ApplyInfixType_op = Core.Name "op"
 _ApplyInfixType_rhs = Core.Name "rhs"
-data FunctionTypeType =
-  FunctionTypeTypeFunction FunctionType |
-  FunctionTypeTypeContextFunction ContextFunctionType
-  deriving (Eq, Ord, Read, Show)
-_FunctionTypeType = Core.Name "hydra.scala.syntax.FunctionTypeType"
-_FunctionTypeType_function = Core.Name "function"
-_FunctionTypeType_contextFunction = Core.Name "contextFunction"
 data FunctionType =
   FunctionType {
     functionTypeParams :: [Type],

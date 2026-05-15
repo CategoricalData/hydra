@@ -108,7 +108,8 @@
               {"name": "match", "type": {"variable": "hydra.scala.syntax.MatchData"}},
               {"name": "try", "type": {"variable": "hydra.scala.syntax.TryData"}},
               {"name": "tryWithHandler", "type": {"variable": "hydra.scala.syntax.TryWithHandlerData"}},
-              {"name": "functionData", "type": {"variable": "hydra.scala.syntax.FunctionDataData"}},
+              {"name": "function", "type": {"variable": "hydra.scala.syntax.FunctionData"}},
+              {"name": "contextFunction", "type": {"variable": "hydra.scala.syntax.ContextFunctionData"}},
               {"name": "polyFunction", "type": {"variable": "hydra.scala.syntax.PolyFunctionData"}},
               {"name": "partialFunction", "type": {"variable": "hydra.scala.syntax.PartialFunctionData"}},
               {"name": "while", "type": {"variable": "hydra.scala.syntax.WhileData"}},
@@ -327,15 +328,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.scala.syntax.FunctionDataData",
-        "typeScheme": {
-          "body": {
-            "union": [
-              {"name": "contextFunction", "type": {"variable": "hydra.scala.syntax.ContextFunctionData"}},
-              {"name": "function", "type": {"variable": "hydra.scala.syntax.FunctionData"}}]},
-          "variables": []}}},
-    {
-      "type": {
         "name": "hydra.scala.syntax.ContextFunctionData",
         "typeScheme": {
           "body": {
@@ -432,7 +424,8 @@
               {"name": "anonymousName", "type": {"variable": "hydra.scala.syntax.AnonymousNameType"}},
               {"name": "apply", "type": {"variable": "hydra.scala.syntax.ApplyType"}},
               {"name": "applyInfix", "type": {"variable": "hydra.scala.syntax.ApplyInfixType"}},
-              {"name": "functionType", "type": {"variable": "hydra.scala.syntax.FunctionTypeType"}},
+              {"name": "function", "type": {"variable": "hydra.scala.syntax.FunctionType"}},
+              {"name": "contextFunction", "type": {"variable": "hydra.scala.syntax.ContextFunctionType"}},
               {"name": "polyFunction", "type": {"variable": "hydra.scala.syntax.PolyFunctionType"}},
               {"name": "implicitFunction", "type": {"variable": "hydra.scala.syntax.ImplicitFunctionType"}},
               {"name": "tuple", "type": {"variable": "hydra.scala.syntax.TupleType"}},
@@ -509,15 +502,6 @@
               {"name": "lhs", "type": {"variable": "hydra.scala.syntax.Type"}},
               {"name": "op", "type": {"variable": "hydra.scala.syntax.NameType"}},
               {"name": "rhs", "type": {"variable": "hydra.scala.syntax.Type"}}]},
-          "variables": []}}},
-    {
-      "type": {
-        "name": "hydra.scala.syntax.FunctionTypeType",
-        "typeScheme": {
-          "body": {
-            "union": [
-              {"name": "function", "type": {"variable": "hydra.scala.syntax.FunctionType"}},
-              {"name": "contextFunction", "type": {"variable": "hydra.scala.syntax.ContextFunctionType"}}]},
           "variables": []}}},
     {
       "type": {
