@@ -423,6 +423,20 @@ get_name = project(hydra.core.PERSON__NAME, hydra.core.PERSON__NAME__NAME)
 name = apply(get_name, var("person"))
 ```
 
+If the field has a thunked type (e.g., `unit -> T`, used to defer
+expression evaluation for benchmarking; see `UniversalTestCase.actual`),
+the projection alone yields the thunk — *not* its forced value. Force with
+an extra application to `unit()`:
+
+```python
+# field type is `unit -> string` — force the thunk
+value = project(_UNIVERSAL_TEST_CASE, Name("actual"))(var("ucase"))(unit())
+```
+
+Missing the trailing `(unit())` causes inference to fail with
+`cannot unify string with (unit → string)` for every binding in the
+containing module, since the inferencer processes them in a shared context.
+
 ### Wrap/unwrap
 
 ```python

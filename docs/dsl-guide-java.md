@@ -389,6 +389,24 @@ TTerm<Object> getName = project(Person.TYPE_NAME, Person.FIELD_NAME_NAME);
 TTerm<Object> name = apply(getName, var("person"));
 ```
 
+If the field has a thunked type (e.g., `unit -> T`, used to defer
+expression evaluation for benchmarking; see `UniversalTestCase.actual`),
+the projection alone yields the thunk — *not* its forced value. Force
+with an extra `apply(..., unit())`:
+
+```java
+// field type is `unit -> string` — force the thunk
+TTerm<Object> value = apply(
+    apply(
+        project("hydra.testing.UniversalTestCase", "actual"),
+        var("ucase")),
+    unit());
+```
+
+Missing the outer `apply(..., unit())` causes inference to fail with
+`cannot unify string with (unit → string)` for every binding in the
+containing module, since the inferencer processes them in a shared context.
+
 ### Wrap/unwrap
 
 ```java

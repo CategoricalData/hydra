@@ -109,6 +109,34 @@ sync first — typically `bin/sync.sh --hosts all --targets all`. Symptom:
 `compileHeadsExtrasJava FAILED` with many "package hydra.lisp.syntax does not
 exist" errors.
 
+### `hydra-java:compileJava` OOM during incremental rebuild
+
+Symptom: `Exception: java.lang.OutOfMemoryError thrown from the
+UncaughtExceptionHandler in thread "Memory manager"` during
+`:hydra-java:compileJava`, triggered by editing any non-trivial Java source
+in the rollup. The Gradle build daemon's `-Xmx` setting (whether configured
+via `org.gradle.jvmargs` or `gradle.properties`) does **not** apply to the
+forked compiler worker, which inherits a 512m default that's insufficient
+for the rollup's ~2000+ classes during incremental analysis.
+
+Fix is in `packages/hydra-java/build.gradle`:
+
+```groovy
+compileJava {
+    options.fork = true
+    options.forkOptions.memoryMaximumSize = '6g'
+}
+```
+
+This was added in commit `b2c046e87` after a Testing.java edit triggered the
+OOM. Adds 6g transient memory pressure only during compile — no runtime cost.
+
+Note: `gradle.properties` at the repo root is gitignored and exists as a
+developer-local escape hatch for `org.gradle.jvmargs` and other per-developer
+Gradle config — useful for local experimentation, but JVM args set there only
+affect the build daemon, not forked compiler workers, so it would not have
+fixed this OOM on its own.
+
 ### Stale per-dialect Lisp `struct-compat.lisp`
 
 `heads/lisp/common-lisp/src/main/common-lisp/hydra/struct-compat.lisp` is

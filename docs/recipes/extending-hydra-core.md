@@ -1534,6 +1534,21 @@ there are two extra concerns:
    refresh will also stop indexing the encoder/decoder of the
    newly-unserializable type — that's expected.
 
+3. **Native Python/Java DSL sources have the same ripple as Haskell DSL
+   sources, and don't share its source-of-truth.** Any DSL source under
+   `packages/hydra-<host>/src/main/{python,java}/hydra/sources/<host>/` that
+   `project`s the now-thunked field must force the result with `unit()` (or
+   the host's equivalent unit builder). When this is missed, **all** defs
+   in the affected DSL module fail inference with `cannot unify string with
+   (unit → string)` — not just the one that projects the field, because the
+   inferencer processes a module's bindings in a shared context. The fix
+   is the per-host syntax for "apply the projection's result to unit":
+   - Python: `project(T, Name("field"))(record)(unit())`
+   - Java: `apply(apply(project("T", "field"), record), unit())`
+   The session that surfaced this had to update Python `testing.py` and Java
+   `Testing.java` in separate commits after the staging merge that introduced
+   the thunked-UTC schema (`6297145dc`, `a4d3c960c`).
+
 Everything else (DSL helper signatures, callers, dist test data construction
 sites, host-side runner code that consumes the field) is the same playbook as
 "Adding Fields to Existing Record Types": identify every site by field name,
