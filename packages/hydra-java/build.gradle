@@ -121,6 +121,8 @@ compileJava {
     exclude '**/hydra/lisp/Coder.java'
     exclude '**/hydra/scala/**'
     exclude '**/hydra/dsl/scala/**'
+    options.fork = true
+    options.forkOptions.memoryMaximumSize = '6g'
 }
 
 // Test-side excludes: tests that imported the cypher/rdf/pg code that has
