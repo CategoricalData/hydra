@@ -6565,16 +6565,11 @@
                                                                                 "right": {
                                                                                   "inject": {
                                                                                     "field": {
-                                                                                      "name": "functionType",
+                                                                                      "name": "function",
                                                                                       "term": {
-                                                                                        "inject": {
-                                                                                          "field": {
-                                                                                            "name": "function",
-                                                                                            "term": {
-                                                                                              "record": {
-                                                                                                "fields": [{"name": "params", "term": {"list": [{"variable": "sdom"}]}}, {"name": "res", "term": {"variable": "scod"}}],
-                                                                                                "typeName": "hydra.scala.syntax.FunctionType"}}},
-                                                                                          "typeName": "hydra.scala.syntax.FunctionTypeType"}}},
+                                                                                        "record": {
+                                                                                          "fields": [{"name": "params", "term": {"list": [{"variable": "sdom"}]}}, {"name": "res", "term": {"variable": "scod"}}],
+                                                                                          "typeName": "hydra.scala.syntax.FunctionType"}}},
                                                                                     "typeName": "hydra.scala.syntax.Type"}}}},
                                                                             "type": {"variable": "hydra.errors.Error"}}},
                                                                         "type": {"variable": "hydra.scala.syntax.Type"}}},

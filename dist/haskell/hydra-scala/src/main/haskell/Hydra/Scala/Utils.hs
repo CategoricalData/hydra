@@ -84,14 +84,14 @@ scalaTypeName qualify name =
 -- | Create a Scala lambda (function) expression
 slambda :: String -> Syntax.Data -> Maybe Syntax.Type -> Syntax.Data
 slambda v body sdom =
-    Syntax.DataFunctionData (Syntax.FunctionDataDataFunction (Syntax.FunctionData {
+    Syntax.DataFunction (Syntax.FunctionData {
       Syntax.functionDataParams = [
         Syntax.ParamData {
           Syntax.paramDataMods = [],
           Syntax.paramDataName = (Syntax.NameValue v),
           Syntax.paramDataDecltpe = sdom,
           Syntax.paramDataDefault = Nothing}],
-      Syntax.functionDataBody = body}))
+      Syntax.functionDataBody = body})
 -- | Create a Scala name reference
 sname :: String -> Syntax.Data
 sname s = Syntax.DataRef (Syntax.RefDataName (Syntax.NameData {
@@ -152,16 +152,14 @@ typeToString t =
         Syntax.RefTypeName v1 -> Syntax.nameTypeValue v1
         _ -> "Any"
       Syntax.TypeVar v0 -> Syntax.nameTypeValue (Syntax.varTypeName v0)
-      Syntax.TypeFunctionType v0 -> case v0 of
-        Syntax.FunctionTypeTypeFunction v1 ->
-          let params = Lists.map typeToString (Syntax.functionTypeParams v1)
-              res = typeToString (Syntax.functionTypeRes v1)
-          in (Strings.cat [
-            "(",
-            (Strings.intercalate ", " params),
-            ") => ",
-            res])
-        _ -> "Any"
+      Syntax.TypeFunction v0 ->
+        let params = Lists.map typeToString (Syntax.functionTypeParams v0)
+            res = typeToString (Syntax.functionTypeRes v0)
+        in (Strings.cat [
+          "(",
+          (Strings.intercalate ", " params),
+          ") => ",
+          res])
       Syntax.TypeApply v0 ->
         let base = typeToString (Syntax.applyTypeTpe v0)
             argStrs = Lists.map typeToString (Syntax.applyTypeArgs v0)

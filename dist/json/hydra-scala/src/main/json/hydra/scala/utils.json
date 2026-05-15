@@ -504,33 +504,28 @@
                         "body": {
                           "inject": {
                             "field": {
-                              "name": "functionData",
+                              "name": "function",
                               "term": {
-                                "inject": {
-                                  "field": {
-                                    "name": "function",
-                                    "term": {
-                                      "record": {
-                                        "fields": [
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "params",
+                                      "term": {
+                                        "list": [
                                           {
-                                            "name": "params",
-                                            "term": {
-                                              "list": [
+                                            "record": {
+                                              "fields": [
+                                                {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
                                                 {
-                                                  "record": {
-                                                    "fields": [
-                                                      {"name": "mods", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.scala.syntax.Mod"}}}},
-                                                      {
-                                                        "name": "name",
-                                                        "term": {"inject": {"field": {"name": "value", "term": {"variable": "v"}}, "typeName": "hydra.scala.syntax.Name"}}},
-                                                      {"name": "decltpe", "term": {"variable": "sdom"}},
-                                                      {
-                                                        "name": "default",
-                                                        "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.scala.syntax.Data"}}}}],
-                                                    "typeName": "hydra.scala.syntax.ParamData"}}]}},
-                                          {"name": "body", "term": {"variable": "body"}}],
-                                        "typeName": "hydra.scala.syntax.FunctionData"}}},
-                                  "typeName": "hydra.scala.syntax.FunctionDataData"}}},
+                                                  "name": "name",
+                                                  "term": {"inject": {"field": {"name": "value", "term": {"variable": "v"}}, "typeName": "hydra.scala.syntax.Name"}}},
+                                                {"name": "decltpe", "term": {"variable": "sdom"}},
+                                                {
+                                                  "name": "default",
+                                                  "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.scala.syntax.Data"}}}}],
+                                              "typeName": "hydra.scala.syntax.ParamData"}}]}},
+                                    {"name": "body", "term": {"variable": "body"}}],
+                                  "typeName": "hydra.scala.syntax.FunctionData"}}},
                             "typeName": "hydra.scala.syntax.Data"}},
                         "domain": {"maybe": {"variable": "hydra.scala.syntax.Type"}},
                         "parameter": "sdom"}},
@@ -874,66 +869,52 @@
                                 "domain": {"variable": "hydra.scala.syntax.VarType"},
                                 "parameter": "tv"}}},
                           {
-                            "name": "functionType",
+                            "name": "function",
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "application": {
-                                    "argument": {"variable": "ft"},
-                                    "function": {
-                                      "cases": {
-                                        "cases": [
-                                          {
-                                            "name": "function",
-                                            "term": {
-                                              "lambda": {
-                                                "body": {
-                                                  "let": {
-                                                    "bindings": [
-                                                      {
-                                                        "name": "params",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "fn"},
-                                                                "function": {"project": {"field": "params", "typeName": "hydra.scala.syntax.FunctionType"}}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.scala.utils.typeToString"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
-                                                                    "type": {"literal": {"string": {}}}}}}}}},
-                                                        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
-                                                      {
-                                                        "name": "res",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "fn"},
-                                                                "function": {"project": {"field": "res", "typeName": "hydra.scala.syntax.FunctionType"}}}},
-                                                            "function": {"variable": "hydra.scala.utils.typeToString"}}},
-                                                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "list": [
-                                                            {"literal": {"string": "("}},
-                                                            {
-                                                              "application": {
-                                                                "argument": {"variable": "params"},
-                                                                "function": {"application": {"argument": {"literal": {"string": ", "}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
-                                                            {"literal": {"string": ") => "}},
-                                                            {"variable": "res"}]},
-                                                        "function": {"variable": "hydra.lib.strings.cat"}}}}},
-                                                "domain": {"variable": "hydra.scala.syntax.FunctionType"},
-                                                "parameter": "fn"}}}],
-                                        "default": {"literal": {"string": "Any"}},
-                                        "typeName": "hydra.scala.syntax.FunctionTypeType"}}}},
-                                "domain": {"variable": "hydra.scala.syntax.FunctionTypeType"},
-                                "parameter": "ft"}}},
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "params",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "fn"},
+                                                "function": {"project": {"field": "params", "typeName": "hydra.scala.syntax.FunctionType"}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "hydra.scala.utils.typeToString"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.Type"}}},
+                                                    "type": {"literal": {"string": {}}}}}}}}},
+                                        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                                      {
+                                        "name": "res",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "fn"},
+                                                "function": {"project": {"field": "res", "typeName": "hydra.scala.syntax.FunctionType"}}}},
+                                            "function": {"variable": "hydra.scala.utils.typeToString"}}},
+                                        "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                                    "body": {
+                                      "application": {
+                                        "argument": {
+                                          "list": [
+                                            {"literal": {"string": "("}},
+                                            {
+                                              "application": {
+                                                "argument": {"variable": "params"},
+                                                "function": {"application": {"argument": {"literal": {"string": ", "}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                            {"literal": {"string": ") => "}},
+                                            {"variable": "res"}]},
+                                        "function": {"variable": "hydra.lib.strings.cat"}}}}},
+                                "domain": {"variable": "hydra.scala.syntax.FunctionType"},
+                                "parameter": "fn"}}},
                           {
                             "name": "apply",
                             "term": {

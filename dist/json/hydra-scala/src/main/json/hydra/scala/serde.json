@@ -187,110 +187,96 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.scala.serde.dataFunctionDataToExpr",
+        "name": "hydra.scala.serde.dataFunctionToExpr",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert function data to an expression"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a function-data lambda to an expression"}}}],
             "body": {
               "lambda": {
                 "body": {
-                  "application": {
-                    "argument": {"variable": "ft"},
-                    "function": {
-                      "cases": {
-                        "cases": [
-                          {
-                            "name": "function",
-                            "term": {
-                              "lambda": {
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "params",
-                                        "term": {
+                  "let": {
+                    "bindings": [
+                      {
+                        "name": "params",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"project": {"field": "params", "typeName": "hydra.scala.syntax.FunctionData"}}}},
+                        "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.ParamData"}}, "variables": []}},
+                      {
+                        "name": "body",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"project": {"field": "body", "typeName": "hydra.scala.syntax.FunctionData"}}}},
+                        "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
+                      {
+                        "name": "bodyExpr",
+                        "term": {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.scala.serde.termToExpr"}}},
+                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                      {
+                        "name": "bodyLen",
+                        "term": {
+                          "application": {"argument": {"variable": "bodyExpr"}, "function": {"variable": "hydra.serialization.expressionLength"}}},
+                        "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
+                    "body": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {
+                              "list": [
+                                {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "params"},
+                                        "function": {
                                           "application": {
-                                            "argument": {"variable": "f"},
-                                            "function": {"project": {"field": "params", "typeName": "hydra.scala.syntax.FunctionData"}}}},
-                                        "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.ParamData"}}, "variables": []}},
-                                      {
-                                        "name": "body",
-                                        "term": {
-                                          "application": {
-                                            "argument": {"variable": "f"},
-                                            "function": {"project": {"field": "body", "typeName": "hydra.scala.syntax.FunctionData"}}}},
-                                        "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
-                                      {
-                                        "name": "bodyExpr",
-                                        "term": {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.scala.serde.termToExpr"}}},
-                                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
-                                      {
-                                        "name": "bodyLen",
-                                        "term": {
-                                          "application": {"argument": {"variable": "bodyExpr"}, "function": {"variable": "hydra.serialization.expressionLength"}}},
-                                        "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
-                                    "body": {
+                                            "argument": {"variable": "hydra.scala.serde.dataParamToExpr"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.ParamData"}}},
+                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                    "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
+                                {"application": {"argument": {"literal": {"string": "=>"}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                {"variable": "bodyExpr"}]},
+                            "function": {"variable": "hydra.serialization.spaceSep"}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {
+                                  "list": [
+                                    {
                                       "application": {
                                         "argument": {
                                           "application": {
-                                            "argument": {
-                                              "list": [
-                                                {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "params"},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.scala.serde.dataParamToExpr"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.ParamData"}}},
-                                                                "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                    "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
-                                                {"application": {"argument": {"literal": {"string": "=>"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                {"variable": "bodyExpr"}]},
-                                            "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {
-                                                  "list": [
-                                                    {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "params"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "hydra.scala.serde.dataParamToExpr"},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.ParamData"}}},
-                                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                                                        "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
-                                                    {"application": {"argument": {"literal": {"string": " =>\n  "}}, "function": {"variable": "hydra.serialization.cst"}}},
-                                                    {"variable": "bodyExpr"}]},
-                                                "function": {"variable": "hydra.serialization.noSep"}}},
+                                            "argument": {"variable": "params"},
                                             "function": {
                                               "application": {
-                                                "argument": {
-                                                  "application": {
-                                                    "argument": {"literal": {"integer": {"int32": 60}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "bodyLen"},
-                                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
-                                "domain": {"variable": "hydra.scala.syntax.FunctionData"},
-                                "parameter": "f"}}}],
-                        "typeName": "hydra.scala.syntax.FunctionDataData"}}}},
-                "domain": {"variable": "hydra.scala.syntax.FunctionDataData"},
-                "parameter": "ft"}}}},
+                                                "argument": {"variable": "hydra.scala.serde.dataParamToExpr"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.scala.syntax.ParamData"}}},
+                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                        "function": {"variable": "hydra.serialization.parenListAdaptive"}}},
+                                    {"application": {"argument": {"literal": {"string": " =>\n  "}}, "function": {"variable": "hydra.serialization.cst"}}},
+                                    {"variable": "bodyExpr"}]},
+                                "function": {"variable": "hydra.serialization.noSep"}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"literal": {"integer": {"int32": 60}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "bodyLen"},
+                                        "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.gt"}, "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
+                "domain": {"variable": "hydra.scala.syntax.FunctionData"},
+                "parameter": "f"}}}},
         "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.scala.syntax.FunctionDataData"}}},
+          "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.scala.syntax.FunctionData"}}},
           "variables": []}}},
     {
       "term": {
@@ -2254,12 +2240,12 @@
                                 "domain": {"variable": "hydra.scala.syntax.MatchData"},
                                 "parameter": "m"}}},
                           {
-                            "name": "functionData",
+                            "name": "function",
                             "term": {
                               "lambda": {
-                                "body": {"application": {"argument": {"variable": "ft"}, "function": {"variable": "hydra.scala.serde.dataFunctionDataToExpr"}}},
-                                "domain": {"variable": "hydra.scala.syntax.FunctionDataData"},
-                                "parameter": "ft"}}},
+                                "body": {"application": {"argument": {"variable": "f"}, "function": {"variable": "hydra.scala.serde.dataFunctionToExpr"}}},
+                                "domain": {"variable": "hydra.scala.syntax.FunctionData"},
+                                "parameter": "f"}}},
                           {
                             "name": "block",
                             "term": {
@@ -2377,60 +2363,47 @@
                                 "domain": {"variable": "hydra.scala.syntax.ApplyType"},
                                 "parameter": "ta"}}},
                           {
-                            "name": "functionType",
+                            "name": "function",
                             "term": {
                               "lambda": {
                                 "body": {
-                                  "application": {
-                                    "argument": {"variable": "ft"},
-                                    "function": {
-                                      "cases": {
-                                        "cases": [
-                                          {
-                                            "name": "function",
-                                            "term": {
-                                              "lambda": {
-                                                "body": {
-                                                  "let": {
-                                                    "bindings": [
-                                                      {
-                                                        "name": "cod",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "tf"},
-                                                            "function": {"project": {"field": "res", "typeName": "hydra.scala.syntax.FunctionType"}}}},
-                                                        "typeScheme": {"body": {"variable": "hydra.scala.syntax.Type"}, "variables": []}},
-                                                      {
-                                                        "name": "dom",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "tf"},
-                                                                    "function": {"project": {"field": "params", "typeName": "hydra.scala.syntax.FunctionType"}}}},
-                                                                "function": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.scala.syntax.Type"}}}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "cod"},
-                                                                "function": {
-                                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.scala.syntax.Type"}}}}}}},
-                                                        "typeScheme": {"body": {"variable": "hydra.scala.syntax.Type"}, "variables": []}}],
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {"application": {"argument": {"variable": "cod"}, "function": {"variable": "hydra.scala.serde.typeToExpr"}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"application": {"argument": {"variable": "dom"}, "function": {"variable": "hydra.scala.serde.typeToExpr"}}},
-                                                            "function": {
-                                                              "application": {"argument": {"variable": "hydra.scala.serde.functionArrowOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}},
-                                                "domain": {"variable": "hydra.scala.syntax.FunctionType"},
-                                                "parameter": "tf"}}}],
-                                        "typeName": "hydra.scala.syntax.FunctionTypeType"}}}},
-                                "domain": {"variable": "hydra.scala.syntax.FunctionTypeType"},
-                                "parameter": "ft"}}},
+                                  "let": {
+                                    "bindings": [
+                                      {
+                                        "name": "cod",
+                                        "term": {
+                                          "application": {
+                                            "argument": {"variable": "tf"},
+                                            "function": {"project": {"field": "res", "typeName": "hydra.scala.syntax.FunctionType"}}}},
+                                        "typeScheme": {"body": {"variable": "hydra.scala.syntax.Type"}, "variables": []}},
+                                      {
+                                        "name": "dom",
+                                        "term": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {"variable": "tf"},
+                                                    "function": {"project": {"field": "params", "typeName": "hydra.scala.syntax.FunctionType"}}}},
+                                                "function": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.scala.syntax.Type"}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "cod"},
+                                                "function": {
+                                                  "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.scala.syntax.Type"}}}}}}},
+                                        "typeScheme": {"body": {"variable": "hydra.scala.syntax.Type"}, "variables": []}}],
+                                    "body": {
+                                      "application": {
+                                        "argument": {"application": {"argument": {"variable": "cod"}, "function": {"variable": "hydra.scala.serde.typeToExpr"}}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "dom"}, "function": {"variable": "hydra.scala.serde.typeToExpr"}}},
+                                            "function": {
+                                              "application": {"argument": {"variable": "hydra.scala.serde.functionArrowOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}}}},
+                                "domain": {"variable": "hydra.scala.syntax.FunctionType"},
+                                "parameter": "tf"}}},
                           {
                             "name": "lambda",
                             "term": {
