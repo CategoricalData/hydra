@@ -248,3 +248,33 @@ Currently only `hydra/scala/**` triggers this — the other languages'
 Java emission type-checks standalone. New coder additions that need
 `hydra/<lang>/**` excluded should add `hydra/dsl/<lang>/**` at the same
 time.
+
+### Background `stack build` exit code is masked by trailing pipes
+
+Running `stack build ...; echo "EXIT=$?"` inside a `run_in_background:true`
+Bash call returns `0` from the wrapper as long as the *final* command in the
+chain succeeds — even if stack itself failed. The task-notification's "exit
+code 0" reflects the wrapper, not stack. Always capture stack's exit into a
+variable before any subsequent command (`stack build ... > /tmp/log; STACK_EXIT=$?; echo "STACK_EXIT=$STACK_EXIT"`),
+then read the variable from the task output. Otherwise red builds look green.
+
+### Union-arm record names can collide with sum-ctor names after rename
+
+Hydra generates two top-level Haskell names per union arm pointing at a record:
+the sum-ctor `<Parent><ArmCamel>` (no underscore) and the arm's referenced
+record type, named verbatim from the DSL source. If the DSL author chose a
+record name like `Data_Apply` to keep it distinct from `DataApply` (the auto-generated
+sum-ctor), stripping the underscore (`Data_Apply` → `DataApply`) causes GHC
+"Multiple declarations" errors. Workaround: rename arm records using the
+arm-then-parent convention (`Data_Apply` → `ApplyData`), matching the existing
+Haskell/Java model style (`ApplicationExpression`, `RecordConstructor`).
+
+### Hydra Core name collisions in target-language coder aliases
+
+Target-language coder modules (e.g. `Hydra.Sources.Scala.Coder`) often re-export
+arm constants via local aliases like `_FunctionType = Scala._FunctionType`. If a
+local alias shadows a `Hydra.Kernel` export of the same name — and Hydra Core
+exports many `_TypeFoo` / `_ExpressionBar` constants — GHC reports
+"Ambiguous occurrence." Affected constants include `_FunctionType`,
+`_LambdaType`, and (after renames in #297) `_Type_function`. Fix: drop the
+local alias and qualify references with `Scala.` at use sites.
