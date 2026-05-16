@@ -42,28 +42,21 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-# Sentinel files signaling each piece of the Java host is present.
-KERNEL_JSON_MANIFEST="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json/manifest.json"
-KERNEL_JAVA_DIR="$HYDRA_ROOT/dist/java/hydra-kernel/src/main/java/hydra/Codegen.java"
-HYDRA_JAVA_DIR="$HYDRA_ROOT/dist/java/hydra-java/src/main/java/hydra/java/Coder.java"
-
-host_present=1
-for f in "$KERNEL_JSON_MANIFEST" "$KERNEL_JAVA_DIR" "$HYDRA_JAVA_DIR"; do
-    if [ ! -f "$f" ]; then
-        host_present=0
-        echo "Missing: $f"
-    fi
-done
-
-if [ "$FORCE_REBUILD" = "1" ] || [ "$host_present" = "0" ]; then
+# Ensure all dist trees this script needs are present and up to date.
+# heads/java's headsExtras source set (compiled below by gradle) imports
+# hydra.{python,haskell,lisp,scala,go}.* from dist/java/hydra-*/, so we
+# need a full sync — not just sync-java. Warm-cache full sync is fast
+# (~3 min); cold-cache is self-healing.
+#
+# HYDRA_IN_SYNC=1 indicates sync.sh is already calling us (Phase 5);
+# don't recurse.
+if [ "${HYDRA_IN_SYNC:-0}" != "1" ]; then
     if [ "$FORCE_REBUILD" = "1" ]; then
-        echo "=== Forcing Java host rebuild via bin/sync-java.sh ==="
+        echo "=== Forcing full sync rebuild via bin/sync.sh ==="
     else
-        echo "=== Java host not fully built; running bin/sync-java.sh ==="
+        echo "=== Running bin/sync.sh to ensure all dist trees are current ==="
     fi
-    "$HYDRA_ROOT/bin/sync-java.sh"
-else
-    echo "=== Java host present; skipping sync ==="
+    "$HYDRA_ROOT/bin/sync.sh"
 fi
 
 # Check whether Java DSL source files exist at all. They live under
