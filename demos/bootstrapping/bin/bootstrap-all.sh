@@ -617,10 +617,12 @@ _invoke_target_tests() {
             fi
             ;;
         common-lisp)
-            HYDRA_BENCHMARK_OUTPUT="$bench_file" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" HYDRA_LISP_DIST_BASE="$demo_dir" \
+                sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
             ;;
         emacs-lisp)
-            HYDRA_BENCHMARK_OUTPUT="$bench_file" emacs --batch --load run-tests.el 2>&1
+            HYDRA_BENCHMARK_OUTPUT="$bench_file" HYDRA_LISP_DIST_BASE="$demo_dir" \
+                emacs --batch --load run-tests.el 2>&1
             ;;
     esac
 }
