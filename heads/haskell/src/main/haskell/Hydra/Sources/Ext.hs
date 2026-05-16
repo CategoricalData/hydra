@@ -122,6 +122,72 @@ hydraWasmModules :: [Module]
 hydraWasmModules = WasmManifest.mainModules
 
 -- ----------------------------------------------------------------------
+-- Per-package DSL-input lists
+-- ----------------------------------------------------------------------
+-- These pull from each package's Manifest.dslInputModules — the curated
+-- subset of mainModules whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/<Lang>/<Name>.hs). Extend each list in
+-- its package's Manifest.hs when a new type-defining module needs DSL
+-- wrappers; the driver picks the change up via allDslInputModules below.
+
+hydraBenchDslInputModules :: [Module]
+hydraBenchDslInputModules = BenchManifest.dslInputModules
+
+hydraCoqDslInputModules :: [Module]
+hydraCoqDslInputModules = CoqManifest.dslInputModules
+
+hydraExtPackageDslInputModules :: [Module]
+hydraExtPackageDslInputModules = ExtManifest.dslInputModules
+
+hydraGoDslInputModules :: [Module]
+hydraGoDslInputModules = GoManifest.dslInputModules
+
+hydraJavaDslInputModules :: [Module]
+hydraJavaDslInputModules = JavaManifest.dslInputModules
+
+hydraJavaScriptDslInputModules :: [Module]
+hydraJavaScriptDslInputModules = JavaScriptManifest.dslInputModules
+
+hydraLispDslInputModules :: [Module]
+hydraLispDslInputModules = LispManifest.dslInputModules
+
+hydraPgDslInputModules :: [Module]
+hydraPgDslInputModules = PgManifest.dslInputModules
+
+hydraPythonDslInputModules :: [Module]
+hydraPythonDslInputModules = PythonManifest.dslInputModules
+
+hydraRdfDslInputModules :: [Module]
+hydraRdfDslInputModules = RdfManifest.dslInputModules
+
+hydraScalaDslInputModules :: [Module]
+hydraScalaDslInputModules = ScalaManifest.dslInputModules
+
+hydraWasmDslInputModules :: [Module]
+hydraWasmDslInputModules = WasmManifest.dslInputModules
+
+-- | Concatenation of every package's dslInputModules. This is what the
+-- DSL wrapper generator consumes (see update-json-main/Main.hs). Replace
+-- this with a different aggregation if a package should be excluded;
+-- extend each package's Manifest.dslInputModules to add a module.
+allDslInputModules :: [Module]
+allDslInputModules =
+  kernelDslInputModules
+  ++ haskellDslInputModules
+  ++ hydraBenchDslInputModules
+  ++ hydraCoqDslInputModules
+  ++ hydraExtPackageDslInputModules
+  ++ hydraGoDslInputModules
+  ++ hydraJavaDslInputModules
+  ++ hydraJavaScriptDslInputModules
+  ++ hydraLispDslInputModules
+  ++ hydraPgDslInputModules
+  ++ hydraPythonDslInputModules
+  ++ hydraRdfDslInputModules
+  ++ hydraScalaDslInputModules
+  ++ hydraWasmDslInputModules
+
+-- ----------------------------------------------------------------------
 -- Overrides for second-order and demo-only modules
 -- ----------------------------------------------------------------------
 

@@ -7,6 +7,7 @@
 module Hydra.Sources.Lisp.Manifest (
   mainModules,
   testModules,
+  dslInputModules,
 ) where
 
 import Hydra.Kernel
@@ -21,6 +22,16 @@ mainModules = [
   LispCoder.module_,
   LispLanguageSource.module_,
   LispSerde.module_,
+  LispSyntax.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/Lisp/<Name>.hs). The DSL generator
+-- consumes this list to emit constructors / accessors / withXxx updaters
+-- for each TypeDefinition. Term-only modules (Coder, Language, Serde)
+-- are deliberately excluded. Extend the list when a new type-defining
+-- module needs DSL wrappers.
+dslInputModules :: [Module]
+dslInputModules = [
   LispSyntax.module_]
 
 testModules :: [Module]

@@ -13,6 +13,7 @@
 module Hydra.Sources.Pg.Manifest (
   mainModules,
   testModules,
+  dslInputModules,
 ) where
 
 import Hydra.Kernel
@@ -72,6 +73,14 @@ mainModules = [
   TinkerpopFeatures.module_,
   TinkerpopLanguage.module_,
   ValidatePg.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules. Empty today — no hydra-pg modules currently
+-- generate DSL wrappers. Candidates if needed in the future include
+-- PgModel, GraphsonSyntax, DotSyntax, OpenCypher, OpenGql,
+-- PathAlgebra*, etc. Add explicitly when the wrappers are wanted.
+dslInputModules :: [Module]
+dslInputModules = []
 
 testModules :: [Module]
 testModules = []

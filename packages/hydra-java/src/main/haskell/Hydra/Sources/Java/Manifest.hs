@@ -6,6 +6,7 @@
 module Hydra.Sources.Java.Manifest (
   mainModules,
   testModules,
+  dslInputModules,
 ) where
 
 import Hydra.Kernel
@@ -29,6 +30,17 @@ mainModules = [
   JavaSyntax.module_,
   JavaTesting.module_,
   JavaUtilsSource.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/Java/<Name>.hs). The DSL generator
+-- consumes this list to emit constructors / accessors / withXxx updaters
+-- for each TypeDefinition. Term-only modules (Coder, Serde, Language,
+-- Names, Testing, Utils) are deliberately excluded. Extend the list when
+-- a new type-defining module needs DSL wrappers.
+dslInputModules :: [Module]
+dslInputModules = [
+  JavaEnvironmentSource.module_,
+  JavaSyntax.module_]
 
 testModules :: [Module]
 testModules = []

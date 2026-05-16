@@ -27,7 +27,8 @@ import Hydra.Sources.Ext (
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
-  hydraExtDecodingModules, hydraExtEncodingModules)
+  hydraExtDecodingModules, hydraExtEncodingModules,
+  allDslInputModules)
 import Hydra.Sources.Kernel.Lib.Defaults.All (defaultLibModules)
 
 import qualified Hydra.Kernel as Kernel
@@ -134,14 +135,14 @@ main = do
 
   putStrLn ""
   putStrLn "Generating DSL wrapper modules to JSON..."
-  -- The DSL generator runs over every package whose syntax model defines types
-  -- (kernel + json + other + haskell coder, plus each coder package). DSL
-  -- wrappers are routed to their owning package's dist/json/<pkg>/.../hydra/dsl/<lang>/
-  -- via PackageRouting, so the resulting Hydra/Dsl/<lang>/Syntax.hs phantom
+  -- The DSL generator runs over each package's curated dslInputModules
+  -- list (see each package's Manifest.hs). DSL wrappers are routed to
+  -- their owning package's dist/json/<pkg>/.../hydra/dsl/<lang>/ via
+  -- PackageRouting, so the resulting Hydra/Dsl/<lang>/<Name>.hs phantom
   -- helpers regenerate whenever the corresponding syntax model changes.
-  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
-                  ++ hydraJavaModules ++ hydraPythonModules ++ hydraScalaModules
-                  ++ hydraLispModules ++ hydraGoModules
+  -- Per-package opt-in: add a module to a package's dslInputModules
+  -- list to start emitting DSL wrappers for it; remove to stop.
+  let dslInputMods = allDslInputModules
   dslResult <- catch
     (writeDslJsonPackageSplit distRoot universe dslInputMods >> return True)
     (\e -> do

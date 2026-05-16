@@ -8,6 +8,7 @@
 module Hydra.Sources.Go.Manifest (
   mainModules,
   testModules,
+  dslInputModules,
 ) where
 
 import Hydra.Kernel
@@ -18,6 +19,16 @@ import qualified Hydra.Sources.Go.Syntax as GoSyntax
 mainModules :: [Module]
 mainModules = [
   GoLanguage.module_,
+  GoSyntax.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/Go/<Name>.hs). The DSL generator
+-- consumes this list to emit constructors / accessors / withXxx updaters
+-- for each TypeDefinition. Term-only modules (Language) are
+-- deliberately excluded. Extend the list when a new type-defining
+-- module needs DSL wrappers.
+dslInputModules :: [Module]
+dslInputModules = [
   GoSyntax.module_]
 
 testModules :: [Module]
