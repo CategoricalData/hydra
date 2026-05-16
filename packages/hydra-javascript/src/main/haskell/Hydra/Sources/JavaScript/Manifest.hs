@@ -9,6 +9,7 @@
 module Hydra.Sources.JavaScript.Manifest (
   mainModules,
   testModules,
+  dslInputModules,
 ) where
 
 import Hydra.Kernel
@@ -24,6 +25,12 @@ mainModules = [
   JavaScriptOperators.module_,
   JavaScriptSerde.module_,
   JavaScriptSyntax.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules. Empty today — JavaScriptSyntax is the natural
+-- candidate if/when the wrappers are wanted.
+dslInputModules :: [Module]
+dslInputModules = []
 
 testModules :: [Module]
 testModules = []
