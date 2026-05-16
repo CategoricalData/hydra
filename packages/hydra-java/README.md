@@ -178,7 +178,11 @@ bin/generate-hydra-java-from-java.sh --force-rebuild
 ```
 
 The script:
-1. Builds the Java host (`bin/sync-java.sh`) if it isn't already present.
+1. Runs `bin/sync.sh` to ensure every per-language `dist/java/hydra-*` tree
+   is current (the gradle rollup imports `hydra.python.*`, `hydra.haskell.*`,
+   etc., so a scoped `sync-java.sh` is not sufficient). Gated by
+   `HYDRA_IN_SYNC=1` so that `sync.sh` Phase 5 invoking us doesn't recurse.
+   Warm-cache sync is ~3 minutes.
 2. Compiles the rollup (`./gradlew :hydra-java:compileHeadsExtrasJava`).
 3. Runs `hydra.JavaSelfHostDemo`, which loads the kernel universe from
    `dist/json/hydra-kernel/`, discovers the Java DSL source modules via reflection,
@@ -186,14 +190,14 @@ The script:
    its schemes pre-computed; see [bin/java-self-host-demo.md](../../bin/java-self-host-demo.md)
    for the rationale), and writes the resulting JSON.
 
-End-to-end is ~30 seconds.
+End-to-end is ~30 seconds once `dist/` is current.
 
-> **Note:** until the main sync sequence is updated to invoke
-> `generate-hydra-java-from-java.sh` automatically, `bin/sync-java.sh` and
-> `bin/sync.sh` still use the legacy Haskell DSL pipeline. The Java DSL output is
-> byte-identical to the Haskell output today (`--compare` confirms it), so running
-> either pipeline produces the same `dist/json/hydra-java/`. The legacy pipeline
-> will be retired before 0.16.
+> **Note:** `bin/sync.sh` Phase 5 invokes `generate-hydra-java-from-java.sh`
+> automatically — the native Java DSL path is authoritative. The legacy
+> Haskell DSL copy at `packages/hydra-java/src/main/haskell/` remains as a
+> bootstrap fallback (used by Phase 1 on a cold checkout) and will be
+> retired before 0.16. See [`claude/pitfalls.md`](../../claude/pitfalls.md)
+> for the `HYDRA_IN_SYNC` convention around wrapper-script self-syncing.
 
 ### Phase 2: regenerate `dist/java/` from the JSON
 

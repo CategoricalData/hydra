@@ -170,21 +170,24 @@ bin/generate-hydra-python-from-python.sh --force-rebuild
 ```
 
 The script:
-1. Builds the Python host (`bin/sync-python.sh`) if it isn't already present.
+1. Runs `bin/sync-python.sh` to ensure `dist/python/hydra-kernel/` and
+   `dist/python/hydra-python/` are current (these are the only trees the
+   Python self-host driver reads). Gated by `HYDRA_IN_SYNC=1` so that
+   `sync.sh` Phase 5 invoking us doesn't recurse.
 2. Runs `bin/python-self-host-demo.py`, which loads the kernel universe from
    `dist/json/hydra-kernel/`, imports the Python DSL source modules, infers types,
    and writes the resulting JSON.
 
 End-to-end is ~110 seconds under PyPy (faster than the Haskell incremental pipeline)
-and ~500 seconds under CPython. See [bin/python-self-host-demo.md](../../bin/python-self-host-demo.md)
-for background.
+and ~500 seconds under CPython, once `dist/` is current. See
+[bin/python-self-host-demo.md](../../bin/python-self-host-demo.md) for background.
 
-> **Note:** until the main sync sequence is updated to invoke
-> `generate-hydra-python-from-python.sh` automatically, `bin/sync-python.sh` and
-> `bin/sync.sh` still use the legacy Haskell DSL pipeline. The Python DSL output is
-> byte-identical to the Haskell output today (`--compare` confirms it), so running
-> either pipeline produces the same `dist/json/hydra-python/`. The legacy pipeline
-> will be retired before 0.16.
+> **Note:** `bin/sync.sh` Phase 5 invokes `generate-hydra-python-from-python.sh`
+> automatically — the native Python DSL path is authoritative. The legacy
+> Haskell DSL copy at `packages/hydra-python/src/main/haskell/` remains as a
+> bootstrap fallback (used by Phase 1 on a cold checkout) and will be
+> retired before 0.16. See [`claude/pitfalls.md`](../../claude/pitfalls.md)
+> for the `HYDRA_IN_SYNC` convention around wrapper-script self-syncing.
 
 ### Phase 2: regenerate `dist/python/` from the JSON
 
