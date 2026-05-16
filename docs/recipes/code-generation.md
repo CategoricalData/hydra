@@ -242,9 +242,16 @@ bin/generate-hydra-python-from-python.sh --force-rebuild
 ```
 
 Both scripts:
-1. Build the corresponding host (`bin/sync-java.sh` / `bin/sync-python.sh`)
-   if it isn't already present, so that the Java / Python runtime is
-   available to load the DSL sources.
+1. Run a prerequisite sync to ensure the `dist/` trees they read from
+   are current: `bin/sync.sh` (full) for the Java generator, because the
+   gradle rollup imports cross-language `dist/java/hydra-{python,haskell,
+   lisp,scala}/`; `bin/sync-python.sh` (scoped) for the Python generator,
+   which only reads `dist/python/hydra-{kernel,python}/`. The sync call
+   is gated by the `HYDRA_IN_SYNC` env var so that `bin/sync.sh` Phase 5
+   invoking these wrappers doesn't recurse. Warm-cache sync is fast
+   (~3 minutes for full, less for scoped); cold-cache is self-healing.
+   See [`claude/pitfalls.md`](../../claude/pitfalls.md) under "Wrapper
+   scripts auto-sync; testers don't" for the full convention.
 2. Run the self-host driver (`hydra.JavaSelfHostDemo` /
    `bin/python-self-host-demo.py`), which loads the kernel universe from
    `dist/json/hydra-kernel/`, imports/reflects on the package's DSL source

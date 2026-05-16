@@ -389,6 +389,19 @@ TTerm<Object> getName = project(Person.TYPE_NAME, Person.FIELD_NAME_NAME);
 TTerm<Object> name = apply(getName, var("person"));
 ```
 
+The combined "project a field, then apply to a named variable" pattern
+is so common that `Phantoms` provides a `proj` shortcut:
+
+```java
+// Equivalent to: apply(project(Person.TYPE_NAME, Person.FIELD_NAME), var("person"))
+TTerm<Object> name = proj(Person.TYPE_NAME, Person.FIELD_NAME, "person");
+```
+
+Overloads accept `String` or `Name` for the type/field arguments, and
+either a `String` variable name (which becomes `var("...")`) or a
+`TTerm<?>` for the receiver. Prefer `proj()` in DSL source modules —
+it's the idiomatic form.
+
 If the field has a thunked type (e.g., `unit -> T`, used to defer
 expression evaluation for benchmarking; see `UniversalTestCase.actual`),
 the projection alone yields the thunk — *not* its forced value. Force

@@ -423,6 +423,21 @@ get_name = project(hydra.core.PERSON__NAME, hydra.core.PERSON__NAME__NAME)
 name = apply(get_name, var("person"))
 ```
 
+In `hydra.sources.python.*` DSL source modules, the combined
+"project a field, then apply to a named variable" pattern is expressed
+via the shared `proj` helper in `_source_dsl.py`:
+
+```python
+from hydra.sources.python._source_dsl import proj as _proj
+# Equivalent to: project(Name("hydra.core.Person"), Name("name"))(var("p"))
+name = _proj("hydra.core.Person", "name", "p")
+```
+
+Source modules with a fixed type-namespace prefix typically wrap this
+with a thinner local helper (e.g., `_env`, `_pygraph`, `_meta_proj` in
+`coder.py`). Prefer the helper form to the long-form `project(...)(var(...))`
+in source modules — it's the idiomatic style.
+
 If the field has a thunked type (e.g., `unit -> T`, used to defer
 expression evaluation for benchmarking; see `UniversalTestCase.actual`),
 the projection alone yields the thunk — *not* its forced value. Force with
