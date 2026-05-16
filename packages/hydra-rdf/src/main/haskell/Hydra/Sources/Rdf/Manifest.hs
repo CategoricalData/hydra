@@ -6,6 +6,7 @@
 module Hydra.Sources.Rdf.Manifest (
   mainModules,
   testModules,
+  dslInputModules,
 ) where
 
 import Hydra.Kernel
@@ -31,6 +32,14 @@ mainModules = [
   ShaclModel.module_,
   ShexSyntax.module_,
   XmlSchema.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules. Empty today — no hydra-rdf modules currently
+-- generate DSL wrappers. Candidates if needed in the future include
+-- RdfSyntax, OwlSyntax, ShexSyntax, ShaclModel, XmlSchema. Add
+-- explicitly when the wrappers are wanted.
+dslInputModules :: [Module]
+dslInputModules = []
 
 testModules :: [Module]
 testModules = []

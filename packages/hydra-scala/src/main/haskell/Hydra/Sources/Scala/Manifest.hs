@@ -9,6 +9,7 @@
 module Hydra.Sources.Scala.Manifest (
   mainModules,
   testModules,
+  dslInputModules,
 ) where
 
 import Hydra.Kernel
@@ -26,6 +27,16 @@ mainModules = [
   ScalaSerdeSource.module_,
   ScalaSyntax.module_,
   ScalaUtilsSource.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/Scala/<Name>.hs). The DSL generator
+-- consumes this list to emit constructors / accessors / withXxx updaters
+-- for each TypeDefinition. Term-only modules (Coder, Language, Serde,
+-- Utils) are deliberately excluded. Extend the list when a new
+-- type-defining module needs DSL wrappers.
+dslInputModules :: [Module]
+dslInputModules = [
+  ScalaSyntax.module_]
 
 testModules :: [Module]
 testModules = []
