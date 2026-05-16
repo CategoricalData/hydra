@@ -331,6 +331,27 @@ public final class Phantoms {
         return tterm(Terms.project(typeName.value, fieldName.value));
     }
 
+    /** {@code project TypeName fieldName @@ var varName} — combined projection + application.
+     *  Collapses the common {@code apply(project(T, F), var("x"))} pattern. */
+    public static <A> TTerm<A> proj(String typeName, String fieldName, String varName) {
+        return apply(project(typeName, fieldName), var(varName));
+    }
+
+    /** {@code project TypeName fieldName @@ var varName} — Name overload. */
+    public static <A> TTerm<A> proj(Name typeName, Name fieldName, String varName) {
+        return apply(project(typeName, fieldName), var(varName));
+    }
+
+    /** {@code project TypeName fieldName @@ term} — Name overload, term argument. */
+    public static <A> TTerm<A> proj(Name typeName, Name fieldName, TTerm<?> term) {
+        return apply(project(typeName, fieldName), term);
+    }
+
+    /** {@code project TypeName fieldName @@ term} — String overload, term argument. */
+    public static <A> TTerm<A> proj(String typeName, String fieldName, TTerm<?> term) {
+        return apply(project(typeName, fieldName), term);
+    }
+
     /** {@code wrap TypeName body}. */
     public static <A> TTerm<A> wrap(String typeName, TTerm<?> body) {
         return tterm(Terms.wrap(typeName, body.value));
