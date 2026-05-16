@@ -215,71 +215,45 @@ public class Utils {
                 record(Aliases.TYPE_,
                     field(
                         Aliases.CURRENT_NAMESPACE,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
                     field(
                         Aliases.PACKAGES,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.PACKAGES),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
                     field(
                         Aliases.BRANCH_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.BRANCH_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
                     field(
                         Aliases.RECURSIVE_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.RECURSIVE_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
                     field(
                         Aliases.IN_SCOPE_TYPE_PARAMS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
                     field(
                         Aliases.POLYMORPHIC_LOCALS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
                     field(
                         Aliases.IN_SCOPE_JAVA_VARS,
                         Sets.insert(
                             var("name"),
-                            apply(
-                                project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                                var("aliases")))),
+                            proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases"))),
                     field(
                         Aliases.VAR_RENAMES,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.VAR_RENAMES),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
                     field(
                         Aliases.LAMBDA_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
                     field(
                         Aliases.TYPE_VAR_SUBST,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
                     field(
                         Aliases.TRUSTED_TYPE_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
                     field(
                         Aliases.METHOD_CODOMAIN,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.METHOD_CODOMAIN),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
                     field(
                         Aliases.THUNKED_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.THUNKED_VARS),
-                            var("aliases"))))));
+                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))));
 
     public static final Def addInScopeVars = def(
         "addInScopeVars",
@@ -314,21 +288,13 @@ public class Utils {
                                                 lambda("ct",
                                                     let(
                                                         field("anns",
-                                                            apply(
-                                                                project(ClassType.TYPE_, ClassType.ANNOTATIONS),
-                                                                var("ct"))),
+                                                            proj(ClassType.TYPE_, ClassType.ANNOTATIONS, "ct")),
                                                         field("qual",
-                                                            apply(
-                                                                project(ClassType.TYPE_, ClassType.QUALIFIER),
-                                                                var("ct"))),
+                                                            proj(ClassType.TYPE_, ClassType.QUALIFIER, "ct")),
                                                         field("id",
-                                                            apply(
-                                                                project(ClassType.TYPE_, ClassType.IDENTIFIER),
-                                                                var("ct"))),
+                                                            proj(ClassType.TYPE_, ClassType.IDENTIFIER, "ct")),
                                                         field("args",
-                                                            apply(
-                                                                project(ClassType.TYPE_, ClassType.ARGUMENTS),
-                                                                var("ct"))),
+                                                            proj(ClassType.TYPE_, ClassType.ARGUMENTS, "ct")),
                                                         right(
                                                             inject(hydra.java.syntax.Type.TYPE_,
                                                                 hydra.java.syntax.Type.REFERENCE,
@@ -396,72 +362,46 @@ public class Utils {
                 record(Aliases.TYPE_,
                     field(
                         Aliases.CURRENT_NAMESPACE,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
                     field(
                         Aliases.PACKAGES,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.PACKAGES),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
                     field(
                         Aliases.BRANCH_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.BRANCH_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
                     field(
                         Aliases.RECURSIVE_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.RECURSIVE_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
                     field(
                         Aliases.IN_SCOPE_TYPE_PARAMS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
                     field(
                         Aliases.POLYMORPHIC_LOCALS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
                     field(
                         Aliases.IN_SCOPE_JAVA_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
                     field(
                         Aliases.VAR_RENAMES,
                         Maps.insert(
                             var("original"),
                             var("renamed"),
-                            apply(
-                                project(Aliases.TYPE_, Aliases.VAR_RENAMES),
-                                var("aliases")))),
+                            proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases"))),
                     field(
                         Aliases.LAMBDA_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
                     field(
                         Aliases.TYPE_VAR_SUBST,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
                     field(
                         Aliases.TRUSTED_TYPE_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
                     field(
                         Aliases.METHOD_CODOMAIN,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.METHOD_CODOMAIN),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
                     field(
                         Aliases.THUNKED_VARS,
-                        apply(
-                            project(Aliases.TYPE_, Aliases.THUNKED_VARS),
-                            var("aliases"))))));
+                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))));
 
     public static final Def fieldExpression = def(
         "fieldExpression",
@@ -586,9 +526,7 @@ public class Utils {
                 record(Aliases.TYPE_,
                     field(
                         Aliases.CURRENT_NAMESPACE,
-                        apply(
-                            project(Module.TYPE_, Module.NAMESPACE),
-                            var("mod"))),
+                        proj(Module.TYPE_, Module.NAMESPACE, "mod")),
                     field(Aliases.PACKAGES, var("hydra.lib.maps.empty")),
                     field(Aliases.BRANCH_VARS, var("hydra.lib.sets.empty")),
                     field(
@@ -2081,17 +2019,11 @@ public class Utils {
                                     lambda("ct",
                                         let(
                                             field("anns",
-                                                apply(
-                                                    project(ClassType.TYPE_, ClassType.ANNOTATIONS),
-                                                    var("ct"))),
+                                                proj(ClassType.TYPE_, ClassType.ANNOTATIONS, "ct")),
                                             field("qual",
-                                                apply(
-                                                    project(ClassType.TYPE_, ClassType.QUALIFIER),
-                                                    var("ct"))),
+                                                proj(ClassType.TYPE_, ClassType.QUALIFIER, "ct")),
                                             field("id",
-                                                apply(
-                                                    project(ClassType.TYPE_, ClassType.IDENTIFIER),
-                                                    var("ct"))),
+                                                proj(ClassType.TYPE_, ClassType.IDENTIFIER, "ct")),
                                             inject(ReferenceType.TYPE_,
                                                 ReferenceType.CLASS_OR_INTERFACE,
                                                 inject(ClassOrInterfaceType.TYPE_,
@@ -2118,17 +2050,11 @@ public class Utils {
                                                     unwrap(InterfaceType.TYPE_),
                                                     var("it"))),
                                             field("anns",
-                                                apply(
-                                                    project(ClassType.TYPE_, ClassType.ANNOTATIONS),
-                                                    var("ct"))),
+                                                proj(ClassType.TYPE_, ClassType.ANNOTATIONS, "ct")),
                                             field("qual",
-                                                apply(
-                                                    project(ClassType.TYPE_, ClassType.QUALIFIER),
-                                                    var("ct"))),
+                                                proj(ClassType.TYPE_, ClassType.QUALIFIER, "ct")),
                                             field("id",
-                                                apply(
-                                                    project(ClassType.TYPE_, ClassType.IDENTIFIER),
-                                                    var("ct"))),
+                                                proj(ClassType.TYPE_, ClassType.IDENTIFIER, "ct")),
                                             inject(ReferenceType.TYPE_,
                                                 ReferenceType.CLASS_OR_INTERFACE,
                                                 inject(ClassOrInterfaceType.TYPE_,
@@ -2543,9 +2469,7 @@ public class Utils {
                 Maybes.cases(
                     Maps.lookup(
                         var("name"),
-                        apply(
-                            project(Aliases.TYPE_, Aliases.VAR_RENAMES),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
                     var("name"),
                     lambda("renamed", var("renamed")))));
 
@@ -2739,13 +2663,9 @@ public class Utils {
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("name"))),
                     field("ns_",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.NAMESPACE),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.NAMESPACE, "qn")),
                     field("local",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.LOCAL),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     Logic.ifElse(
                         apply(
                             ref(Utils.isEscaped),
@@ -2761,9 +2681,7 @@ public class Utils {
                                         Maybes.cases(
                                             Maps.lookup(
                                                 var("gname"),
-                                                apply(
-                                                    project(Aliases.TYPE_, Aliases.PACKAGES),
-                                                    var("aliases"))),
+                                                proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
                                             Strings.splitOn(
                                                 string("."),
                                                 apply(
@@ -2830,13 +2748,9 @@ public class Utils {
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("name"))),
                     field("ns_",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.NAMESPACE),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.NAMESPACE, "qn")),
                     field("local",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.LOCAL),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     field("alias",
                         Maybes.cases(
                             var("ns_"),
@@ -2846,9 +2760,7 @@ public class Utils {
                                     Maybes.cases(
                                         Maps.lookup(
                                             var("n"),
-                                            apply(
-                                                project(Aliases.TYPE_, Aliases.PACKAGES),
-                                                var("aliases"))),
+                                            proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
                                         apply(
                                             ref(Names.javaPackageName),
                                             Strings.splitOn(
@@ -3112,16 +3024,12 @@ public class Utils {
                                             field("oldDims",
                                                 apply(
                                                     unwrap(Dims.TYPE_),
-                                                    apply(
-                                                        project(ArrayType.TYPE_, ArrayType.DIMS),
-                                                        var("at")))),
+                                                    proj(ArrayType.TYPE_, ArrayType.DIMS, "at"))),
                                             field("newDims",
                                                 wrap(Dims.TYPE_,
                                                     Lists.concat2(var("oldDims"), list(list())))),
                                             field("variant",
-                                                apply(
-                                                    project(ArrayType.TYPE_, ArrayType.VARIANT),
-                                                    var("at"))),
+                                                proj(ArrayType.TYPE_, ArrayType.VARIANT, "at")),
                                             right(
                                                 inject(hydra.java.syntax.Type.TYPE_,
                                                     hydra.java.syntax.Type.REFERENCE,
@@ -3160,18 +3068,14 @@ public class Utils {
                         unwrap(Identifier.TYPE_),
                         apply(
                             unwrap(TypeIdentifier.TYPE_),
-                            apply(
-                                project(TypeParameter.TYPE_, TypeParameter.IDENTIFIER),
-                                var("tp")))))));
+                            proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp"))))));
 
     public static final Def typeParameterToTypeArgument = def(
         "typeParameterToTypeArgument",
         () -> lambda("tp",
                 apply(
                     ref(Utils.javaTypeIdentifierToJavaTypeArgument),
-                    apply(
-                        project(TypeParameter.TYPE_, TypeParameter.IDENTIFIER),
-                        var("tp")))));
+                    proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp"))));
 
     public static final Def unTypeParameter = def(
         "unTypeParameter",
@@ -3180,9 +3084,7 @@ public class Utils {
                     unwrap(Identifier.TYPE_),
                     apply(
                         unwrap(TypeIdentifier.TYPE_),
-                        apply(
-                            project(TypeParameter.TYPE_, TypeParameter.IDENTIFIER),
-                            var("tp"))))));
+                        proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp")))));
 
     public static final Def unescape = def(
         "unescape",
@@ -3196,9 +3098,7 @@ public class Utils {
                 Logic.ifElse(
                     Sets.member(
                         var("name"),
-                        apply(
-                            project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
                     apply(
                         ref(Utils.uniqueVarName_go),
                         var("aliases"),
@@ -3218,9 +3118,7 @@ public class Utils {
                     Logic.ifElse(
                         Sets.member(
                             var("candidate"),
-                            apply(
-                                project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                                var("aliases"))),
+                            proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
                         apply(
                             ref(Utils.uniqueVarName_go),
                             var("aliases"),
@@ -3303,13 +3201,9 @@ public class Utils {
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("elName"))),
                     field("ns_",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.NAMESPACE),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.NAMESPACE, "qn")),
                     field("local",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.LOCAL),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     field("flocal",
                         apply(
                             var("hydra.formatting.capitalize"),

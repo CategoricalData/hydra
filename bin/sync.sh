@@ -456,6 +456,11 @@ native_generate_and_report() {
 # accepted because the Haskell DSL never runs.
 banner1 "Phase 5: Native DSL→JSON for self-hosted coders (#344)"
 echo ""
+# HYDRA_IN_SYNC tells the generator scripts not to re-invoke sync.sh
+# (which would recurse). Standalone invocations of those scripts run
+# sync.sh themselves to ensure the cross-language dist trees their
+# gradle compile imports from are populated.
+export HYDRA_IN_SYNC=1
 echo "--- hydra-java (native Java DSL → JSON) ---"
 native_generate_and_report java \
     "$HYDRA_ROOT/bin/generate-hydra-java-from-java.sh" \
@@ -472,5 +477,6 @@ else
         "$HYDRA_ROOT/bin/generate-hydra-python-from-python.sh" \
         "$PYTHON_HOST_SENTINEL"
 fi
+unset HYDRA_IN_SYNC
 
 banner1_done "Sync complete!"

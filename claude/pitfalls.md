@@ -97,17 +97,56 @@ Then sync forward into whatever target language consumes the regenerated coder.
 
 The `hydra-java` Gradle build has two main source sets: `main` (the
 generated kernel + every coder package's generated Java) and `headsExtras`
-(developer drivers like `Generation.java` plus demos). `headsExtras` imports
-`hydra.haskell.*`, `hydra.python.*`, `hydra.scala.*`, `hydra.lisp.*` directly,
-so its compile fails with "package does not exist" if those `dist/java/<pkg>/`
-trees are missing.
+(developer drivers like `Generation.java` plus demos). Both source sets
+import `hydra.haskell.*`, `hydra.python.*`, `hydra.scala.*`, `hydra.lisp.*`
+directly, so the compile fails with "package does not exist" if those
+`dist/java/<pkg>/` trees are missing.
 
-`bin/sync.sh --hosts java --targets java` only populates
-`dist/java/{hydra-kernel, hydra-java, hydra-pg, hydra-rdf}`. To run
-`gradle :hydra-java:test` after a fresh dist, populate the rest with a wider
-sync first — typically `bin/sync.sh --hosts all --targets all`. Symptom:
-`compileHeadsExtrasJava FAILED` with many "package hydra.lisp.syntax does not
-exist" errors.
+`bin/sync.sh --hosts java --targets java` (and by extension
+`bin/sync-java.sh`) only populates
+`dist/java/{hydra-kernel, hydra-java, hydra-pg, hydra-rdf}`, **not** the
+cross-language coder dists `dist/java/hydra-{haskell,python,scala,lisp}/`.
+To produce all the per-language Java dist trees you need
+`bin/sync.sh` (full host × target sync) or
+`bin/sync.sh --hosts java --targets <every-language>`.
+
+User-callable wrapper scripts that compile cross-language Java code
+(`bin/generate-hydra-java-from-java.sh`, `heads/java/bin/inference-bench.sh`)
+**self-heal**: they call `bin/sync.sh` themselves before invoking gradle.
+Warm-cache full sync is ~3 minutes; cold-cache is whatever a real first
+build takes. See the next entry for the convention.
+
+Symptom (without self-heal): `compileHeadsExtrasJava FAILED` with many
+"package hydra.lisp.syntax does not exist" errors.
+
+### Wrapper scripts auto-sync; testers don't
+
+Convention: any **user-callable wrapper script** that invokes a build
+step requiring cross-language `dist/<lang>/hydra-*` trees must call
+`bin/sync.sh` (or the narrowest sufficient `sync-*.sh`) itself, gated
+by the env var `HYDRA_IN_SYNC`. `bin/sync.sh` exports `HYDRA_IN_SYNC=1`
+around its own Phase 5 calls so those wrappers don't recurse.
+
+**Testers** (`heads/<lang>/bin/test-distribution.sh`, anything labeled
+"layer 2.5") deliberately do **not** self-sync — their contract is "the
+distribution is already assembled". Sync responsibility belongs to the
+calling layer.
+
+Scripts following this convention today:
+
+| Script | Prereq sync | Reason |
+|---|---|---|
+| `bin/generate-hydra-java-from-java.sh` | full `bin/sync.sh` | gradle build imports every per-language `dist/java/hydra-*` |
+| `bin/generate-hydra-python-from-python.sh` | `bin/sync-python.sh` | self-host driver only reads `dist/python/hydra-{kernel,python}` |
+| `heads/java/bin/inference-bench.sh` | full `bin/sync.sh` | same gradle task as the Java generator |
+| `bin/sync.sh` itself | n/a | sets `HYDRA_IN_SYNC=1` around its Phase 5 calls |
+| `demos/bootstrapping/bin/bootstrap-all.sh` | scoped `bin/sync.sh` | pre-sync derived from `--hosts`/`--targets` |
+| `bin/run-inference-bench.sh` | `bin/sync-bench.sh` | hydra-bench is opt-in; not part of default sync |
+
+When adding a new wrapper that compiles cross-language code, follow the
+same pattern. When in doubt, prefer a full `bin/sync.sh` call over a
+scoped one — warm-cache sync is cheap and being too narrow is what made
+this bug class possible in the first place.
 
 ### `sbt test` from `packages/hydra-scala/` needs cross-target dist trees
 

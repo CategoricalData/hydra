@@ -42,6 +42,7 @@ from hydra.sources.python._source_dsl import (
     KERNEL_TYPES_NAMESPACES,
     make_def,
     make_local,
+    proj as _proj,
 )
 
 # Mirror Haskell:
@@ -93,11 +94,6 @@ def _lets_flat(bindings, body):
     # Emit a single flat `let` with multiple bindings (matches Haskell `lets [...]`).
     fields = [field_op(name, val) for name, val in bindings]
     return lets(fields, body)
-
-
-def _proj(type_fq: str, field_name: str, var_name: str):
-    """project(typeName, fieldName) @@ var(varName)"""
-    return project(Name(type_fq), Name(field_name))(var(var_name))
 
 
 def _env(field: str, var_name: str):

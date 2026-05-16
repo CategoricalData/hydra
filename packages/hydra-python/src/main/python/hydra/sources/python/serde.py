@@ -48,6 +48,7 @@ from hydra.sources.python._source_dsl import (
     KERNEL_TYPES_NAMESPACES,
     make_def,
     make_local,
+    proj as _proj_fq,
 )
 
 # Mirror Haskell:
@@ -79,8 +80,8 @@ def _flat_let(bindings, body):
 
 
 def _proj(type_name: str, field_name: str, var_name: str):
-    """Apply a project to a variable: project(TypeName, fieldName) @@ var(varName)."""
-    return project(Name(f"hydra.python.syntax.{type_name}"), Name(field_name))(var(var_name))
+    """Apply a project to a variable: project(hydra.python.syntax.TypeName, fieldName) @@ var(varName)."""
+    return _proj_fq(f"hydra.python.syntax.{type_name}", field_name, var_name)
 
 
 def _unwrap(type_name: str, var_name: str):

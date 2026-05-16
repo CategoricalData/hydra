@@ -47,32 +47,20 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-KERNEL_JSON_DIR="$HYDRA_ROOT/dist/json/hydra-kernel/src/main/json"
-KERNEL_PYTHON_DIR="$HYDRA_ROOT/dist/python/hydra-kernel/src/main/python/hydra"
-HYDRA_PYTHON_DIR="$HYDRA_ROOT/dist/python/hydra-python/src/main/python/hydra"
-
-# Sentinel files that signal each piece of the Python host is present.
-KERNEL_JSON_MANIFEST="$KERNEL_JSON_DIR/manifest.json"
-KERNEL_PYTHON_CODEGEN="$KERNEL_PYTHON_DIR/codegen.py"
-HYDRA_PYTHON_SYNTAX="$HYDRA_PYTHON_DIR/dsl/python/syntax.py"
-
-host_present=1
-for f in "$KERNEL_JSON_MANIFEST" "$KERNEL_PYTHON_CODEGEN" "$HYDRA_PYTHON_SYNTAX"; do
-    if [ ! -f "$f" ]; then
-        host_present=0
-        echo "Missing: $f"
-    fi
-done
-
-if [ "$FORCE_REBUILD" = "1" ] || [ "$host_present" = "0" ]; then
+# Ensure the dist trees this script reads (dist/json/hydra-kernel,
+# dist/python/hydra-kernel, dist/python/hydra-python) are present and
+# up to date. sync-python.sh covers all three. Warm-cache is fast;
+# cold-cache is self-healing.
+#
+# HYDRA_IN_SYNC=1 indicates sync.sh is already calling us (Phase 5);
+# don't recurse.
+if [ "${HYDRA_IN_SYNC:-0}" != "1" ]; then
     if [ "$FORCE_REBUILD" = "1" ]; then
         echo "=== Forcing Python host rebuild via bin/sync-python.sh ==="
     else
-        echo "=== Python host not fully built; running bin/sync-python.sh ==="
+        echo "=== Running bin/sync-python.sh to ensure dist trees are current ==="
     fi
     "$HYDRA_ROOT/bin/sync-python.sh"
-else
-    echo "=== Python host present; skipping sync ==="
 fi
 
 # Build PYTHONPATH — same set the demo expects.
