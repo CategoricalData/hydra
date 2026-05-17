@@ -39,10 +39,12 @@ module_ = Module {
       invalidForallParameterNameError,
       invalidLambdaParameterNameError,
       invalidLetBindingNameError,
+      invalidLiteralError,
       invalidTermError,
       invalidTypeError,
       invalidTypeLambdaParameterNameError,
       invalidTypeSchemeVariableNameError,
+      literalTypeMismatchError,
       nestedTermAnnotationError,
       nestedTypeAnnotationError,
       nonComparableMapKeyTypeError,
@@ -250,6 +252,15 @@ invalidLetBindingNameError = define "InvalidLetBindingNameError" $
       doc "The invalid binding name" $
       Core.name]
 
+-- InvalidLiteralError: the union of all literal validation errors
+invalidLiteralError :: Binding
+invalidLiteralError = define "InvalidLiteralError" $
+  doc "An error indicating that a literal value is invalid" $
+  T.union [
+    "typeMismatch">:
+      doc "The literal's type does not match the expected literal type" $
+      literalTypeMismatchError]
+
 -- T19. InvalidTypeLambdaParameterNameError (optional)
 -- InvalidTermError: the union of all term validation errors
 invalidTermError :: Binding
@@ -428,6 +439,18 @@ invalidTypeSchemeVariableNameError = define "InvalidTypeSchemeVariableNameError"
     "name">:
       doc "The invalid variable name" $
       Core.name]
+
+-- LiteralTypeMismatchError: a leaf used by InvalidLiteralError
+literalTypeMismatchError :: Binding
+literalTypeMismatchError = define "LiteralTypeMismatchError" $
+  doc "A mismatch between an expected literal type and the type of an actual literal value" $
+  T.record [
+    "expectedType">:
+      doc "The expected literal type" $
+      Core.literalType,
+    "actualType">:
+      doc "The actual literal type, derived from the value" $
+      Core.literalType]
 
 -- InvalidTypeError: the union of all type validation errors
 -- T20. NestedTermAnnotationError (optional)
