@@ -11,7 +11,7 @@
 module Hydra.Sources.Ext.Manifest (
   mainModules,
   testModules,
-  dslInputModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -135,13 +135,14 @@ mainModules = [
   YamlSerde.module_]
 
 -- | Modules in this package whose type definitions should produce derived
--- DSL wrapper modules. Empty today — many hydra-ext modules are pure
--- type/syntax models (AvroSchema, PdlSyntax, Proto3Syntax, RustSyntax,
--- GraphqlSyntax, TypeScriptModel, JsonSchema, CppSyntax, CsharpSyntax,
--- etc.) and would be candidates for the future if downstream users want
--- typed accessors. Add explicitly per module.
-dslInputModules :: [Module]
-dslInputModules = []
+-- DSL wrapper modules. Empty today — many derived `dist/haskell/hydra-ext/
+-- .../Hydra/Dsl/*.hs` files are tracked in git from earlier broader
+-- generation passes, but none of them are imported by any non-test
+-- source. Most hydra-ext modules are experimental schema / syntax
+-- models, not yet used in an application or demo. Add entries
+-- explicitly per module when downstream consumers materialize.
+dslTypeModules :: [Module]
+dslTypeModules = []
 
 testModules :: [Module]
 testModules = []

@@ -317,7 +317,7 @@ default the list covers `hydra-kernel` and `hydra-haskell`. To enable
 wrappers for an additional package (e.g., enabling `hydra-python` so
 its source-DSL modules can resolve fully-qualified DSL accessors):
 
-1. Add the package's module list to `dslInputMods` in
+1. Add the package's module list to `dslTypeMods` in
    `heads/haskell/src/exec/update-json-main/Main.hs` and
    `heads/haskell/src/exec/update-json-manifest/Main.hs`.
 2. Extend the `packageDslInputModules` dispatch in

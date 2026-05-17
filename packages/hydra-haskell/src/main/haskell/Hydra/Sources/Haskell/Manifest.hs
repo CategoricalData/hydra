@@ -6,7 +6,7 @@
 module Hydra.Sources.Haskell.Manifest (
   mainModules,
   testModules,
-  dslInputModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -37,8 +37,8 @@ mainModules = [
 -- for each TypeDefinition. Term-only modules (Coder, Serde, Operators,
 -- etc.) are deliberately excluded. Extend the list when a new
 -- type-defining module needs DSL wrappers.
-dslInputModules :: [Module]
-dslInputModules = [
+dslTypeModules :: [Module]
+dslTypeModules = [
   HaskellEnvironment.module_,
   HaskellSyntax.module_]
 

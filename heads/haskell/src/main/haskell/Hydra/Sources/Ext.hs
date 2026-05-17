@@ -124,68 +124,68 @@ hydraWasmModules = WasmManifest.mainModules
 -- ----------------------------------------------------------------------
 -- Per-package DSL-input lists
 -- ----------------------------------------------------------------------
--- These pull from each package's Manifest.dslInputModules — the curated
+-- These pull from each package's Manifest.dslTypeModules — the curated
 -- subset of mainModules whose type definitions should produce derived
 -- DSL wrapper modules (Hydra/Dsl/<Lang>/<Name>.hs). Extend each list in
 -- its package's Manifest.hs when a new type-defining module needs DSL
--- wrappers; the driver picks the change up via allDslInputModules below.
+-- wrappers; the driver picks the change up via allDslTypeModules below.
 
-hydraBenchDslInputModules :: [Module]
-hydraBenchDslInputModules = BenchManifest.dslInputModules
+hydraBenchDslTypeModules :: [Module]
+hydraBenchDslTypeModules = BenchManifest.dslTypeModules
 
-hydraCoqDslInputModules :: [Module]
-hydraCoqDslInputModules = CoqManifest.dslInputModules
+hydraCoqDslTypeModules :: [Module]
+hydraCoqDslTypeModules = CoqManifest.dslTypeModules
 
-hydraExtPackageDslInputModules :: [Module]
-hydraExtPackageDslInputModules = ExtManifest.dslInputModules
+hydraExtPackageDslTypeModules :: [Module]
+hydraExtPackageDslTypeModules = ExtManifest.dslTypeModules
 
-hydraGoDslInputModules :: [Module]
-hydraGoDslInputModules = GoManifest.dslInputModules
+hydraGoDslTypeModules :: [Module]
+hydraGoDslTypeModules = GoManifest.dslTypeModules
 
-hydraJavaDslInputModules :: [Module]
-hydraJavaDslInputModules = JavaManifest.dslInputModules
+hydraJavaDslTypeModules :: [Module]
+hydraJavaDslTypeModules = JavaManifest.dslTypeModules
 
-hydraJavaScriptDslInputModules :: [Module]
-hydraJavaScriptDslInputModules = JavaScriptManifest.dslInputModules
+hydraJavaScriptDslTypeModules :: [Module]
+hydraJavaScriptDslTypeModules = JavaScriptManifest.dslTypeModules
 
-hydraLispDslInputModules :: [Module]
-hydraLispDslInputModules = LispManifest.dslInputModules
+hydraLispDslTypeModules :: [Module]
+hydraLispDslTypeModules = LispManifest.dslTypeModules
 
-hydraPgDslInputModules :: [Module]
-hydraPgDslInputModules = PgManifest.dslInputModules
+hydraPgDslTypeModules :: [Module]
+hydraPgDslTypeModules = PgManifest.dslTypeModules
 
-hydraPythonDslInputModules :: [Module]
-hydraPythonDslInputModules = PythonManifest.dslInputModules
+hydraPythonDslTypeModules :: [Module]
+hydraPythonDslTypeModules = PythonManifest.dslTypeModules
 
-hydraRdfDslInputModules :: [Module]
-hydraRdfDslInputModules = RdfManifest.dslInputModules
+hydraRdfDslTypeModules :: [Module]
+hydraRdfDslTypeModules = RdfManifest.dslTypeModules
 
-hydraScalaDslInputModules :: [Module]
-hydraScalaDslInputModules = ScalaManifest.dslInputModules
+hydraScalaDslTypeModules :: [Module]
+hydraScalaDslTypeModules = ScalaManifest.dslTypeModules
 
-hydraWasmDslInputModules :: [Module]
-hydraWasmDslInputModules = WasmManifest.dslInputModules
+hydraWasmDslTypeModules :: [Module]
+hydraWasmDslTypeModules = WasmManifest.dslTypeModules
 
--- | Concatenation of every package's dslInputModules. This is what the
+-- | Concatenation of every package's dslTypeModules. This is what the
 -- DSL wrapper generator consumes (see update-json-main/Main.hs). Replace
 -- this with a different aggregation if a package should be excluded;
--- extend each package's Manifest.dslInputModules to add a module.
-allDslInputModules :: [Module]
-allDslInputModules =
+-- extend each package's Manifest.dslTypeModules to add a module.
+allDslTypeModules :: [Module]
+allDslTypeModules =
   kernelDslInputModules
   ++ haskellDslInputModules
-  ++ hydraBenchDslInputModules
-  ++ hydraCoqDslInputModules
-  ++ hydraExtPackageDslInputModules
-  ++ hydraGoDslInputModules
-  ++ hydraJavaDslInputModules
-  ++ hydraJavaScriptDslInputModules
-  ++ hydraLispDslInputModules
-  ++ hydraPgDslInputModules
-  ++ hydraPythonDslInputModules
-  ++ hydraRdfDslInputModules
-  ++ hydraScalaDslInputModules
-  ++ hydraWasmDslInputModules
+  ++ hydraBenchDslTypeModules
+  ++ hydraCoqDslTypeModules
+  ++ hydraExtPackageDslTypeModules
+  ++ hydraGoDslTypeModules
+  ++ hydraJavaDslTypeModules
+  ++ hydraJavaScriptDslTypeModules
+  ++ hydraLispDslTypeModules
+  ++ hydraPgDslTypeModules
+  ++ hydraPythonDslTypeModules
+  ++ hydraRdfDslTypeModules
+  ++ hydraScalaDslTypeModules
+  ++ hydraWasmDslTypeModules
 
 -- ----------------------------------------------------------------------
 -- Overrides for second-order and demo-only modules

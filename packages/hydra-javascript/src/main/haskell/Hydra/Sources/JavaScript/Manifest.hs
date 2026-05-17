@@ -9,7 +9,7 @@
 module Hydra.Sources.JavaScript.Manifest (
   mainModules,
   testModules,
-  dslInputModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -27,10 +27,12 @@ mainModules = [
   JavaScriptSyntax.module_]
 
 -- | Modules in this package whose type definitions should produce derived
--- DSL wrapper modules. Empty today — JavaScriptSyntax is the natural
--- candidate if/when the wrappers are wanted.
-dslInputModules :: [Module]
-dslInputModules = []
+-- DSL wrapper modules. Empty today — `dist/haskell/hydra-javascript/.../
+-- Hydra/Dsl/JavaScript/Syntax.hs` is tracked in git but no source file
+-- imports it. Add `JavaScriptSyntax.module_` if/when a real consumer
+-- appears.
+dslTypeModules :: [Module]
+dslTypeModules = []
 
 testModules :: [Module]
 testModules = []

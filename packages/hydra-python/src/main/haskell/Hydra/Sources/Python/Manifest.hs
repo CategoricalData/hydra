@@ -6,7 +6,7 @@
 module Hydra.Sources.Python.Manifest (
   mainModules,
   testModules,
-  dslInputModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -37,8 +37,8 @@ mainModules = [
 -- for each TypeDefinition. Term-only modules (Coder, Serde, Language,
 -- Names, Testing, Utils) are deliberately excluded. Extend the list when
 -- a new type-defining module needs DSL wrappers.
-dslInputModules :: [Module]
-dslInputModules = [
+dslTypeModules :: [Module]
+dslTypeModules = [
   PyEnvironmentSource.module_,
   PySyntax.module_]
 

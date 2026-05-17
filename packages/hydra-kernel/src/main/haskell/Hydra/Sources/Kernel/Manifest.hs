@@ -18,7 +18,7 @@ module Hydra.Sources.Kernel.Manifest (
   testModules,
   jsonModules,
   otherModules,
-  dslInputModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -69,8 +69,8 @@ mainModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules ++ otherMo
 -- Formatting, Lexical, Names, Strip, Dsls, etc.) are deliberately
 -- excluded. Extend the list when a new type-defining module needs DSL
 -- wrappers.
-dslInputModules :: [Module]
-dslInputModules = kernelTypesModules ++ jsonModules ++ otherModules
+dslTypeModules :: [Module]
+dslTypeModules = kernelTypesModules ++ jsonModules ++ otherModules
 
 testModules :: [Module]
 testModules = Test.testModules

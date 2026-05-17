@@ -13,7 +13,7 @@
 module Hydra.Sources.Pg.Manifest (
   mainModules,
   testModules,
-  dslInputModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -75,12 +75,20 @@ mainModules = [
   ValidatePg.module_]
 
 -- | Modules in this package whose type definitions should produce derived
--- DSL wrapper modules. Empty today — no hydra-pg modules currently
--- generate DSL wrappers. Candidates if needed in the future include
--- PgModel, GraphsonSyntax, DotSyntax, OpenCypher, OpenGql,
--- PathAlgebra*, etc. Add explicitly when the wrappers are wanted.
-dslInputModules :: [Module]
-dslInputModules = []
+-- DSL wrapper modules (Hydra/Dsl/<Pkg>/<Name>.hs). Only modules whose
+-- derived DSL is actually imported elsewhere are listed — extend the
+-- list as new consumers appear.
+--
+-- Current consumers (as of 2026-05-16):
+--   * Hydra.Dsl.Pg.Model — imported by Hydra.Sources.Pg.Rdf.Mappings
+--
+-- Note: the hand-written DSL modules Hydra.Dsl.Pg.Mappings and
+-- Hydra.Dsl.Pg.Schemas (used by the genpg demos) are NOT derived from
+-- type modules; they live in packages/hydra-pg/.../Hydra/Dsl/Pg/ and
+-- don't go through this list.
+dslTypeModules :: [Module]
+dslTypeModules = [
+  PgModel.module_]
 
 testModules :: [Module]
 testModules = []

@@ -9,7 +9,7 @@
 module Hydra.Sources.Bench.Manifest (
   mainModules,
   testModules,
-  dslInputModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -28,8 +28,8 @@ mainModules = [
 -- DSL wrapper modules. Empty — benchmark workloads are deliberately
 -- stress-shaped term modules, not type modules, and would not benefit
 -- from DSL wrappers.
-dslInputModules :: [Module]
-dslInputModules = []
+dslTypeModules :: [Module]
+dslTypeModules = []
 
 testModules :: [Module]
 testModules = []
