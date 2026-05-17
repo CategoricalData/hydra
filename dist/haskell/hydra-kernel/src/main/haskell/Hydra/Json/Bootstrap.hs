@@ -1403,6 +1403,12 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A type inference error")))])}))},
             Core.FieldType {
+              Core.fieldTypeName = (Core.Name "invalidLiteral"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.error.core.InvalidLiteralError")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A literal value validation error")))])}))},
+            Core.FieldType {
               Core.fieldTypeName = (Core.Name "other"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.errors.OtherError")),

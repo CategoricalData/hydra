@@ -28,6 +28,7 @@
     "hydra.pg.rdf.mappings",
     "hydra.pg.termsToElements",
     "hydra.pg.utils",
+    "hydra.show.error.pg",
     "hydra.tinkerpop.features",
     "hydra.tinkerpop.gremlin",
     "hydra.tinkerpop.language",

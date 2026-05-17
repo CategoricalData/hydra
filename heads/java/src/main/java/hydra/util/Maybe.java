@@ -206,4 +206,25 @@ public class Maybe<T> implements Serializable, Comparable<Maybe> {
     public T orElseGet(Supplier<? extends T> supplier) {
         return present ? value : supplier.get();
     }
+
+    /**
+     * Converts this Maybe to a java.util.Optional. Note: Just(null) maps to Optional.empty(),
+     * since Optional does not support null values.
+     *
+     * @return an Optional containing the value if present and non-null, otherwise empty
+     */
+    public java.util.Optional<T> toOptional() {
+        return present ? java.util.Optional.ofNullable(value) : java.util.Optional.empty();
+    }
+
+    /**
+     * Creates a Maybe from a java.util.Optional.
+     *
+     * @param <T> the type
+     * @param optional the Optional to convert
+     * @return a Maybe containing the value if present, otherwise Nothing
+     */
+    public static <T> Maybe<T> fromOptional(java.util.Optional<T> optional) {
+        return optional.isPresent() ? just(optional.get()) : nothing();
+    }
 }

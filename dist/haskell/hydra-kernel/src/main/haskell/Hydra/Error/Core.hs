@@ -154,6 +154,13 @@ data InvalidLetBindingNameError =
 _InvalidLetBindingNameError = Core.Name "hydra.error.core.InvalidLetBindingNameError"
 _InvalidLetBindingNameError_location = Core.Name "location"
 _InvalidLetBindingNameError_name = Core.Name "name"
+-- | An error indicating that a literal value is invalid
+data InvalidLiteralError =
+  -- | The literal's type does not match the expected literal type
+  InvalidLiteralErrorTypeMismatch LiteralTypeMismatchError
+  deriving (Eq, Ord, Read, Show)
+_InvalidLiteralError = Core.Name "hydra.error.core.InvalidLiteralError"
+_InvalidLiteralError_typeMismatch = Core.Name "typeMismatch"
 -- | An error indicating that a term is invalid
 data InvalidTermError =
   -- | An ifElse with a literal boolean condition (optional)
@@ -292,6 +299,17 @@ data InvalidTypeSchemeVariableNameError =
 _InvalidTypeSchemeVariableNameError = Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"
 _InvalidTypeSchemeVariableNameError_location = Core.Name "location"
 _InvalidTypeSchemeVariableNameError_name = Core.Name "name"
+-- | A mismatch between an expected literal type and the type of an actual literal value
+data LiteralTypeMismatchError =
+  LiteralTypeMismatchError {
+    -- | The expected literal type
+    literalTypeMismatchErrorExpectedType :: Core.LiteralType,
+    -- | The actual literal type, derived from the value
+    literalTypeMismatchErrorActualType :: Core.LiteralType}
+  deriving (Eq, Ord, Read, Show)
+_LiteralTypeMismatchError = Core.Name "hydra.error.core.LiteralTypeMismatchError"
+_LiteralTypeMismatchError_expectedType = Core.Name "expectedType"
+_LiteralTypeMismatchError_actualType = Core.Name "actualType"
 -- | A term annotation directly wrapping another term annotation; annotations should be merged (optional)
 data NestedTermAnnotationError =
   NestedTermAnnotationError {
