@@ -357,15 +357,20 @@ and
 classes are good examples of pattern matching in action, and there are simpler examples in
 [VisitorTest.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/test/java/hydra/VisitorTest.java).
 
-## Future improvements (gated on a Java 21 minimum)
+## Future enhancements
+
+Recommendations from [#233](https://github.com/CategoricalData/hydra/issues/233)
+that haven't been adopted yet. Recorded here so the design intent survives
+any future re-evaluation. These are deliberate non-goals today, not bugs.
+
+### Gated on a Java 21 minimum
 
 The current minimum Java version for `hydra-java` and its generated code is
 **Java 11**. The visitor pattern shown above is the most ergonomic encoding
 of sum types compatible with that floor. Several worthwhile improvements
-become available if the minimum is raised to Java 21; they're recorded here
-so the option survives any future re-evaluation.
+become available if the minimum is raised to Java 21.
 
-### Sealed classes + pattern-matching `switch` (JEP 441, Java 21)
+#### Sealed classes + pattern-matching `switch` (JEP 441, Java 21)
 
 Today's generated union types use an abstract base class with nested
 subclasses and a `Visitor`/`PartialVisitor` for dispatch. Java 21's sealed
@@ -393,7 +398,7 @@ For the trade-off analysis and references to issue #233's
 JAVA-SEALED-SWITCH and JAVA-FUNCTIONAL-MATCH recommendations, see the
 branch plan in `feature_233_edsls-plan.md`.
 
-### Records for product types (Java 14+, refined in 21)
+#### Records for product types (Java 14+, refined in 21)
 
 Generated record types currently use explicit fields plus hand-rolled
 `equals`/`hashCode`/constructors. Java 14+ `record` declarations would
@@ -406,8 +411,6 @@ public record Field(Name name, Term term) { }
 // And in a consumer:
 case Field(var name, var term) -> ...
 ```
-
-### Why we're not doing this now
 
 Raising the floor to Java 21 affects every downstream consumer of
 generated Hydra code (the `bindings/java/*` adapters, hydrapop,
