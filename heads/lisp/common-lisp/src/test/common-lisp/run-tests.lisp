@@ -88,11 +88,42 @@
 (format t "Loading generated main modules...~%")
 (load (hydra-head-path "src/main/common-lisp/hydra/loader.lisp"))
 
-;; Override *hydra-gen-main-dir* to point at the dist/ generated content.
-;; *hydra-cl-head* = heads/lisp/common-lisp/, so ../../../dist = repo-root/dist
+;; Override *hydra-gen-main-dir* to point at the generated content.
+;; Two layouts are supported:
+;;   - Repo default: *hydra-cl-head* = heads/lisp/common-lisp/, generated
+;;     content lives under <repo>/dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/.
+;;   - Bootstrap demo: hand-written and generated content share the same
+;;     <demo>/src/main/common-lisp/hydra/ tree. The demo runner sets
+;;     HYDRA_LISP_DIST_BASE to point at the demo's generated kernel root
+;;     (e.g. <demo>) so we can target <demo>/src/main/common-lisp/hydra/.
+(defvar *hydra-dist-base-env*
+  (let ((v (sb-ext:posix-getenv "HYDRA_LISP_DIST_BASE")))
+    (when (and v (> (length v) 0))
+      ;; Ensure trailing slash so merge-pathnames treats it as a directory.
+      (if (eql (char v (1- (length v))) #\/) v (concatenate 'string v "/")))))
 (setf *hydra-gen-main-dir*
-      (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
-                       *hydra-cl-head*))
+      (if *hydra-dist-base-env*
+          (merge-pathnames "src/main/common-lisp/hydra/" *hydra-dist-base-env*)
+          (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/"
+                           *hydra-cl-head*)))
+
+;; In the bootstrap demo, hand-written files (loader.lisp, prelude.lisp,
+;; prims.lisp, lib/*.lisp, ...) live alongside generated files under the
+;; same hydra/ tree (the demo uses a flat layout). They were already
+;; loaded above via cl:load and must not be re-loaded by
+;; (hydra-load-gen-main) — hydra-load-file rewrites cl:defstruct to the
+;; alist-based hydra-defstruct, which can't represent rich features
+;; (`:constructor`, `:type`, etc.) used by the hand-written primitives.
+(when *hydra-dist-base-env*
+  (setf *hydra-skip-gen-main-files*
+        '("loader.lisp" "prelude.lisp" "prims.lisp" "lazy.lisp"
+          "struct-compat.lisp" "json-reader.lisp"
+          "lib/chars.lisp" "lib/eithers.lisp" "lib/equality.lisp"
+          "lib/libraries.lisp"
+          "lib/lists.lisp" "lib/literals.lisp" "lib/logic.lisp"
+          "lib/maps.lisp" "lib/math.lisp" "lib/maybes.lisp"
+          "lib/pairs.lisp" "lib/regex.lisp" "lib/sets.lisp"
+          "lib/strings.lisp")))
 
 ;; Set function bindings for native library defvars (e.g. hydra_lib_maps_singleton)
 ;; so they can be called in function position in generated code.
@@ -119,8 +150,10 @@
 (format t "Loading generated test data...~%")
 
 (defvar *test-data-base*
-  (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/test/common-lisp/hydra/test/"
-                   *hydra-cl-head*))
+  (if *hydra-dist-base-env*
+      (merge-pathnames "src/test/common-lisp/hydra/test/" *hydra-dist-base-env*)
+      (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/test/common-lisp/hydra/test/"
+                       *hydra-cl-head*)))
 
 (defun load-test-file (relative)
   (let ((path (merge-pathnames relative *test-data-base*)))
@@ -128,8 +161,7 @@
       (hydra-load-file path))))
 
 ;; Load test dependency modules (needed by serialization, sorting tests)
-(let ((ext-path (merge-pathnames "../../../dist/common-lisp/hydra-kernel/src/main/common-lisp/hydra/haskell/operators.lisp"
-                                 *hydra-cl-head*)))
+(let ((ext-path (merge-pathnames "haskell/operators.lisp" *hydra-gen-main-dir*)))
   (when (probe-file ext-path)
     (hydra-load-file ext-path)))
 

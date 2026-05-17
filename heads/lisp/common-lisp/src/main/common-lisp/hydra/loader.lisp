@@ -538,6 +538,15 @@
                                                          subdir-name))))))))
     result))
 
+(defvar *hydra-skip-gen-main-files* nil
+  "List of relative paths (e.g. \"lib/maps.lisp\") to skip when
+   (hydra-load-gen-main) walks the gen-main tree. Used by the bootstrap
+   demo, where hand-written files live alongside generated ones under
+   the same hydra/ directory: the hand-written ones are loaded
+   explicitly by run-tests.lisp via cl:load and must not be re-loaded
+   by hydra-load-file (which only understands the rewriting style used
+   by generated code).")
+
 (defun hydra-load-gen-main ()
   "Load all generated main modules. Uses retry loop to handle forward references."
   ;; Resolve `..` segments in base via probe-file. Without this, SBCL's
@@ -592,11 +601,14 @@
                      "lisp/syntax.lisp" "lisp/language.lisp"
                      "lisp/serde.lisp" "lisp/coder.lisp"
                      "org/json/decoding.lisp"))
-         ;; Collect ALL .lisp files from gen-main
+         ;; Collect ALL .lisp files from gen-main.
          (all-files (collect-lisp-files base))
-         ;; Build ordered list: priority first, then remaining
+         ;; Build ordered list: priority first, then remaining, then drop
+         ;; anything in the caller-supplied skip set (see *hydra-skip-gen-main-files*).
          (remaining (remove-if (lambda (f) (member f priority :test #'equal)) all-files))
-         (ordered (append priority (sort (copy-list remaining) #'string<))))
+         (ordered (remove-if (lambda (f)
+                               (member f *hydra-skip-gen-main-files* :test #'equal))
+                             (append priority (sort (copy-list remaining) #'string<)))))
     (dolist (f ordered)
       (let ((path (merge-pathnames f base)))
         (when (probe-file path)

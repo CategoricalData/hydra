@@ -556,6 +556,15 @@ Signals an error if any form remains unresolved after 10 retry passes."
     "scala/utils.el" "scala/serde.el" "scala/coder.el")
   "Priority ordering for gen-main module loading.")
 
+(defvar hydra-skip-gen-main-files nil
+  "List of relative paths (e.g. \"lib/maps.el\") to skip when
+(hydra-load-gen-main) walks the gen-main tree. Used by the
+bootstrap demo, where hand-written files live alongside generated
+ones under the same hydra/ directory: the hand-written ones are
+loaded explicitly by run-tests.el via `load' and must not be
+re-loaded by hydra-load-file (which only understands the rewriting
+style used by generated code).")
+
 (defun hydra-load-gen-main ()
   "Load all generated main modules, then byte-compile for performance."
   (let* ((base hydra-gen-main-dir)
@@ -563,7 +572,10 @@ Signals an error if any form remains unresolved after 10 retry passes."
          (remaining (cl-remove-if (lambda (f) (or (member f hydra-gen-main-file-order)
                                                    (string-prefix-p "eval/lib/" f)))
                                   all-files))
-         (ordered (append hydra-gen-main-file-order (sort (copy-sequence remaining) #'string<))))
+         (ordered (cl-remove-if
+                   (lambda (f) (member f hydra-skip-gen-main-files))
+                   (append hydra-gen-main-file-order
+                           (sort (copy-sequence remaining) #'string<)))))
     (dolist (f ordered)
       (let ((path (expand-file-name f base)))
         (when (file-exists-p path)
