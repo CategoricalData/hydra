@@ -8,7 +8,7 @@
 module Hydra.Sources.Go.Manifest (
   mainModules,
   testModules,
-  dslInputModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -27,8 +27,8 @@ mainModules = [
 -- for each TypeDefinition. Term-only modules (Language) are
 -- deliberately excluded. Extend the list when a new type-defining
 -- module needs DSL wrappers.
-dslInputModules :: [Module]
-dslInputModules = [
+dslTypeModules :: [Module]
+dslTypeModules = [
   GoSyntax.module_]
 
 testModules :: [Module]
