@@ -56,6 +56,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
+import qualified Hydra.Sources.Kernel.Terms.Reflect   as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Variables as Variables
 
@@ -67,7 +68,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Rewriting.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = [Reflect.ns, Rewriting.ns, Variables.ns] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Validation functions for core terms and types"}
   where
    definitions = [
@@ -76,6 +77,7 @@ module_ = Module {
      toDefinition checkDuplicateBindings,
      toDefinition checkDuplicateFieldTypes,
      toDefinition checkDuplicateFields,
+     toDefinition checkLiteral,
      toDefinition checkShadowing,
      toDefinition checkTerm,
      toDefinition checkUndefinedTypeVariablesInType,
@@ -258,6 +260,19 @@ checkDuplicateFields = define "checkDuplicateFields" $
         _DuplicateFieldError_location>>: var "path",
         _DuplicateFieldError_name>>: var "name"])
     (var "dup")
+
+-- | Check that a literal value's type matches an expected literal type
+checkLiteral :: TTermDefinition (LiteralType -> Literal -> Maybe InvalidLiteralError)
+checkLiteral = define "checkLiteral" $
+  doc "Check that a literal value's type matches an expected literal type" $
+  "expected" ~> "value" ~>
+  "actual" <~ Reflect.literalType @@ var "value" $
+  Logic.ifElse (Equality.equal (var "expected") (var "actual"))
+    nothing
+    (just $ inject _InvalidLiteralError _InvalidLiteralError_typeMismatch $
+      record _LiteralTypeMismatchError [
+        _LiteralTypeMismatchError_expectedType>>: var "expected",
+        _LiteralTypeMismatchError_actualType>>: var "actual"])
 
 -- | Find the first duplicate in a list, if any
 -- | Check a list of names for shadowing against the current graph scope

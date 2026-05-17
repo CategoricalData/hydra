@@ -69,6 +69,9 @@ error_ = define "Error" $
     "inference">:
       doc "A type inference error" $
       inferenceError,
+    "invalidLiteral">:
+      doc "A literal value validation error" $
+      ErrorsCore.invalidLiteralError,
     "other">:
       doc "Any other error" $
       otherError,
