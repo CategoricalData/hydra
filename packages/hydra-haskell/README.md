@@ -382,3 +382,88 @@ brew upgrade stack
 If your builds complete successfully, the warnings are harmless -
 Stack works fine with newer versions even before official testing.
 Upgrading Stack eliminates the warnings.
+
+## Future enhancements
+
+Recommendations from [#233](https://github.com/CategoricalData/hydra/issues/233)
+that haven't been adopted yet. Recorded here so the design intent survives
+any future re-evaluation. These are deliberate non-goals today, not bugs.
+
+#### `do`-notation for Hydra Flow
+
+Today, monadic Hydra computations are sequenced with the custom `<<~`
+either-bind operator:
+
+```haskell
+"x" <<~ someFlowOp $
+"y" <<~ anotherFlowOp $
+useResults (var "x") (var "y")
+```
+
+A proper `Monad` instance for a `TFlow a` wrapper (or for `TTerm` itself,
+specialized to Flow semantics) would allow standard Haskell `do`-notation:
+
+```haskell
+do
+  x <- someFlowOp
+  y <- anotherFlowOp
+  pure (useResults x y)
+```
+
+Trade-off: needs a careful design that doesn't conflate Haskell-level
+monadic operations with Hydra-level ones, since the phantom-typed
+`TTerm` lives at two semantic layers at once.
+
+#### Pattern synonyms for Term/Type deconstruction
+
+Consumers of Hydra terms (coders, reducers, printers) currently match on
+deeply nested constructors:
+
+```haskell
+case term of
+  TermLiteral (LiteralString s) -> ...
+  TermFunction (FunctionLambda (Lambda param _ body)) -> ...
+```
+
+Pattern synonyms (in, e.g., `Hydra.Dsl.Patterns`) would flatten these:
+
+```haskell
+case term of
+  StringTerm s -> ...
+  LambdaTerm param body -> ...
+```
+
+Purely additive; existing matches keep working. Primarily benefits term
+*consumers*, less so the construction-oriented DSLs that are the focus of
+most current source modules.
+
+#### QuasiQuoters for inline term/type expressions
+
+```haskell
+myType = [hydraType| { name: String, age: Int32, email: Optional String } |]
+myTerm = [hydraTerm| \x -> let y = 1 in add x y |]
+```
+
+Requires designing and parsing a Hydra surface syntax, plus a Template
+Haskell expander. Significant implementation effort; QuasiQuoter error
+messages are notoriously difficult to make friendly. Longer-term goal.
+
+#### Template Haskell accessor generation for user-defined types
+
+The kernel's generated `Hydra.Dsl.<Module>` modules give typed accessors
+for kernel types via the code-generation pipeline. User-defined record
+types (in `hydra-ext`, hydrapop, etc.) don't currently get these.
+A TH splice could fill the gap without invoking the full code generator:
+
+```haskell
+$(generateAccessors ''personType)
+-- Produces:
+-- personName     :: TTerm Person -> TTerm String
+-- personAge      :: TTerm Person -> TTerm Int32
+-- personWithName :: TTerm Person -> TTerm String -> TTerm Person
+```
+
+Alternative: extend the existing JSON-driven generator to handle
+user-defined modules as input. Per-package `dslTypeModules` already
+exists for this; see [#347](https://github.com/CategoricalData/hydra/issues/347)
+for the regeneration-pipeline work that would make this end-to-end.
