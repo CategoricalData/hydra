@@ -3,13 +3,12 @@ package hydra.demos.validatepg;
 import hydra.Generation;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
-import hydra.dsl.LiteralTypes;
-import hydra.dsl.Literals;
 import hydra.json.model.Value;
 import hydra.pg.model.Graph;
 import hydra.pg.model.GraphSchema;
 import hydra.error.pg.InvalidGraphError;
 import hydra.error.pg.InvalidValueError;
+import hydra.show.Core;
 import hydra.validate.Pg;
 import hydra.util.Maybe;
 import hydra.validation.ValidationResult;
@@ -31,45 +30,16 @@ import java.util.function.Function;
  */
 public class ValidateDemo {
 
-    // Checks a literal value against a literal type.
-    // Compares the type family (string vs string, integer.int32 vs integer.int32, etc.)
+    // Adapter from hydra.validate.core.checkLiteral (typed InvalidLiteralError) to the
+    // stringified InvalidValueError shape that hydra.validate.pg.validateGraph expects.
     private static final Function<LiteralType, Function<Literal, Maybe<InvalidValueError>>>
             CHECK_LITERAL = type -> value -> {
-        String expected = LiteralTypes.showLiteralType(type);
-        String actual = literalFamily(value);
-        if (expected.equals(actual)) {
+        Maybe<hydra.error.core.InvalidLiteralError> result = hydra.validate.Core.checkLiteral(type, value);
+        if (!result.isJust()) {
             return Maybe.nothing();
         }
-        return Maybe.just(new InvalidValueError(expected, Literals.showLiteral(value)));
+        return Maybe.just(new InvalidValueError(Core.literalType(type), Core.literal(value)));
     };
-
-    private static String literalFamily(Literal lit) {
-        return lit.accept(new Literal.Visitor<String>() {
-            @Override public String visit(Literal.Binary instance) { return "binary"; }
-            @Override public String visit(Literal.Boolean_ instance) { return "boolean"; }
-            @Override public String visit(Literal.Decimal instance) { return "decimal"; }
-            @Override public String visit(Literal.Float_ instance) {
-                return "float:" + instance.value.accept(new hydra.core.FloatValue.Visitor<String>() {
-                    @Override public String visit(hydra.core.FloatValue.Float32 i) { return "float32"; }
-                    @Override public String visit(hydra.core.FloatValue.Float64 i) { return "float64"; }
-                });
-            }
-            @Override public String visit(Literal.Integer_ instance) {
-                return "integer:" + instance.value.accept(new hydra.core.IntegerValue.Visitor<String>() {
-                    @Override public String visit(hydra.core.IntegerValue.Bigint i) { return "bigint"; }
-                    @Override public String visit(hydra.core.IntegerValue.Int8 i) { return "int8"; }
-                    @Override public String visit(hydra.core.IntegerValue.Int16 i) { return "int16"; }
-                    @Override public String visit(hydra.core.IntegerValue.Int32 i) { return "int32"; }
-                    @Override public String visit(hydra.core.IntegerValue.Int64 i) { return "int64"; }
-                    @Override public String visit(hydra.core.IntegerValue.Uint8 i) { return "uint8"; }
-                    @Override public String visit(hydra.core.IntegerValue.Uint16 i) { return "uint16"; }
-                    @Override public String visit(hydra.core.IntegerValue.Uint32 i) { return "uint32"; }
-                    @Override public String visit(hydra.core.IntegerValue.Uint64 i) { return "uint64"; }
-                });
-            }
-            @Override public String visit(Literal.String_ instance) { return "string"; }
-        });
-    }
 
     public static void main(String[] args) throws IOException {
         if (args.length < 1) {

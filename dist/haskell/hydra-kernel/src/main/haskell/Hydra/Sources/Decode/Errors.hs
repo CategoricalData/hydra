@@ -372,6 +372,29 @@ module_ =
                                           (Core.TermPair (
                                             Core.TermWrap (Core.WrappedTerm {
                                               Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "invalidLiteral"))}),
+                                            (Core.TermLambda (Core.Lambda {
+                                              Core.lambdaParameter = (Core.Name "input"),
+                                              Core.lambdaDomain = Nothing,
+                                              Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.map")),
+                                                  Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                                                    Core.lambdaParameter = (Core.Name "t"),
+                                                    Core.lambdaDomain = Nothing,
+                                                    Core.lambdaBody = (Core.TermInject (Core.Injection {
+                                                      Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
+                                                      Core.injectionField = Core.Field {
+                                                        Core.fieldName = (Core.Name "invalidLiteral"),
+                                                        Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))}))})),
+                                                Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.error.core.invalidLiteralError")),
+                                                    Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+                                                  Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))),
+                                          (Core.TermPair (
+                                            Core.TermWrap (Core.WrappedTerm {
+                                              Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                               Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "other"))}),
                                             (Core.TermLambda (Core.Lambda {
                                               Core.lambdaParameter = (Core.Name "input"),

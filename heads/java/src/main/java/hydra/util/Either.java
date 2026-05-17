@@ -1,5 +1,7 @@
 package hydra.util;
 
+import java.util.function.Function;
+
 /**
  * A simple class for disjoint unions (Either types) in Java.
  * Represents a value that can be either a Left or a Right.
@@ -57,6 +59,50 @@ public abstract class Either<L, R> {
      * @return the result of applying the visitor
      */
     public abstract <T> T accept(Visitor<L, R, T> visitor);
+
+    /**
+     * Returns the Right value, or throws an exception mapped from the Left value.
+     *
+     * @param <X> the exception type
+     * @param exceptionMapper a function that converts a Left value to a RuntimeException
+     * @return the Right value
+     * @throws X if this is a Left value
+     */
+    public <X extends RuntimeException> R getOrThrow(Function<L, X> exceptionMapper) {
+        return accept(new Visitor<L, R, R>() {
+            @Override
+            public R visit(Left<L, R> instance) {
+                throw exceptionMapper.apply(instance.value);
+            }
+
+            @Override
+            public R visit(Right<L, R> instance) {
+                return instance.value;
+            }
+        });
+    }
+
+    /**
+     * Applies a function to the Right value if present.
+     *
+     * @param <R2> the new Right type
+     * @param mapper the function to apply
+     * @return an Either with the mapped Right value, or the original Left
+     */
+    @SuppressWarnings("unchecked")
+    public <R2> Either<L, R2> map(Function<R, R2> mapper) {
+        return accept(new Visitor<L, R, Either<L, R2>>() {
+            @Override
+            public Either<L, R2> visit(Left<L, R> instance) {
+                return (Either<L, R2>) instance;
+            }
+
+            @Override
+            public Either<L, R2> visit(Right<L, R> instance) {
+                return right(mapper.apply(instance.value));
+            }
+        });
+    }
 
     /**
      * Visitor interface for pattern matching on Either values.

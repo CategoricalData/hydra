@@ -4904,6 +4904,65 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.error.core.invalidLiteralErrorTypeMismatch",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL injection for the typeMismatch variant of hydra.error.core.InvalidLiteralError"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "inject",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.InvalidLiteralError"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "field",
+                                  "term": {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeMismatch"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                      "typeName": "hydra.core.Field"}}}],
+                              "typeName": "hydra.core.Injection"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [
+                          {"key": "description", "value": {"literal": {"string": "The literal's type does not match the expected literal type"}}}],
+                        "body": {"variable": "hydra.error.core.LiteralTypeMismatchError"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {"argument": {"variable": "hydra.error.core.InvalidLiteralError"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [
+                        {"key": "description", "value": {"literal": {"string": "The literal's type does not match the expected literal type"}}}],
+                      "body": {"variable": "hydra.error.core.LiteralTypeMismatchError"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.dsl.error.core.invalidTermErrorConstantCondition",
         "term": {
           "annotated": {
@@ -7937,6 +7996,432 @@
               "domain": {
                 "application": {
                   "argument": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.core.literalTypeMismatchError",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL constructor for hydra.error.core.LiteralTypeMismatchError"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.LiteralTypeMismatchError"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "expectedType"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "expectedType"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "actualType"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "actualType"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The actual literal type, derived from the value"}}}],
+                            "body": {"variable": "hydra.core.LiteralType"}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "actualType"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expected literal type"}}}],
+                        "body": {"variable": "hydra.core.LiteralType"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "expectedType"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The actual literal type, derived from the value"}}}],
+                          "body": {"variable": "hydra.core.LiteralType"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected literal type"}}}],
+                      "body": {"variable": "hydra.core.LiteralType"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.core.literalTypeMismatchErrorExpectedType",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL accessor for the expectedType field of hydra.error.core.LiteralTypeMismatchError"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.LiteralTypeMismatchError"}}, "typeName": "hydra.core.Name"}}},
+                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "expectedType"}}, "typeName": "hydra.core.Name"}}}],
+                                            "typeName": "hydra.core.Projection"}}},
+                                      "typeName": "hydra.core.Term"}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                              "typeName": "hydra.core.Application"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The expected literal type"}}}],
+                      "body": {"variable": "hydra.core.LiteralType"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.core.literalTypeMismatchErrorActualType",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL accessor for the actualType field of hydra.error.core.LiteralTypeMismatchError"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.LiteralTypeMismatchError"}}, "typeName": "hydra.core.Name"}}},
+                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "actualType"}}, "typeName": "hydra.core.Name"}}}],
+                                            "typeName": "hydra.core.Projection"}}},
+                                      "typeName": "hydra.core.Term"}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                              "typeName": "hydra.core.Application"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The actual literal type, derived from the value"}}}],
+                      "body": {"variable": "hydra.core.LiteralType"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.core.literalTypeMismatchErrorWithExpectedType",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL updater for the expectedType field of hydra.error.core.LiteralTypeMismatchError"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.LiteralTypeMismatchError"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "expectedType"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "actualType"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.LiteralTypeMismatchError"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "actualType"}}, "typeName": "hydra.core.Name"}}}],
+                                                                          "typeName": "hydra.core.Projection"}}},
+                                                                    "typeName": "hydra.core.Term"}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                            "typeName": "hydra.core.Application"}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The expected literal type"}}}],
+                            "body": {"variable": "hydra.core.LiteralType"}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}},
+                "domain": {
+                  "application": {
+                    "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "original"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The expected literal type"}}}],
+                          "body": {"variable": "hydra.core.LiteralType"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.error.core.literalTypeMismatchErrorWithActualType",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL updater for the actualType field of hydra.error.core.LiteralTypeMismatchError"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.LiteralTypeMismatchError"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "expectedType"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.LiteralTypeMismatchError"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "expectedType"}}, "typeName": "hydra.core.Name"}}}],
+                                                                          "typeName": "hydra.core.Projection"}}},
+                                                                    "typeName": "hydra.core.Term"}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                            "typeName": "hydra.core.Application"}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "actualType"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The actual literal type, derived from the value"}}}],
+                            "body": {"variable": "hydra.core.LiteralType"}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}},
+                "domain": {
+                  "application": {
+                    "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "original"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The actual literal type, derived from the value"}}}],
+                          "body": {"variable": "hydra.core.LiteralType"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {

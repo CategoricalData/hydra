@@ -64,6 +64,14 @@ errorInference x =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "inference"),
         Core.fieldTerm = (Phantoms.unTTerm x)}}))
+-- | DSL injection for the invalidLiteral variant of hydra.errors.Error
+errorInvalidLiteral :: Phantoms.TTerm ErrorCore.InvalidLiteralError -> Phantoms.TTerm Errors.Error
+errorInvalidLiteral x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "invalidLiteral"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the other variant of hydra.errors.Error
 errorOther :: Phantoms.TTerm Errors.OtherError -> Phantoms.TTerm Errors.Error
 errorOther x =

@@ -10,6 +10,8 @@ module Hydra.Demos.ValidatePg.Demo where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Model as Pg
+import qualified Hydra.Show.Core as ShowCore
+import qualified Hydra.Validate.Core as ValidateCore
 import qualified Hydra.Validate.Pg as Validation
 import qualified Hydra.Validation as V
 import qualified Hydra.Error.Pg as Err
@@ -95,85 +97,14 @@ graphNames =
   , "missing_required_edge_property"
   ]
 
--- | Check that a literal value matches a literal type.
+-- | Adapter from hydra.validate.core.checkLiteral (typed InvalidLiteralError) to the
+-- stringified InvalidValueError shape that hydra.validate.pg.validateGraph expects.
 checkLiteral :: Core.LiteralType -> Core.Literal -> Maybe Err.InvalidValueError
-checkLiteral lt lv = if showLiteralType lt == literalFamily lv
-  then Nothing
-  else Just $ Err.InvalidValueError {
-    Err.invalidValueErrorExpectedType = showLiteralType lt,
-    Err.invalidValueErrorValue = showLiteral lv }
-
-showLiteralType :: Core.LiteralType -> String
-showLiteralType lt = case lt of
-  Core.LiteralTypeBinary    -> "binary"
-  Core.LiteralTypeBoolean   -> "boolean"
-  Core.LiteralTypeString    -> "string"
-  Core.LiteralTypeFloat ft  -> "float:" ++ showFloatType ft
-  Core.LiteralTypeInteger it -> "integer:" ++ showIntegerType it
-
-showFloatType :: Core.FloatType -> String
-showFloatType ft = case ft of
-  Core.FloatTypeFloat32  -> "float32"
-  Core.FloatTypeFloat64  -> "float64"
-
-showIntegerType :: Core.IntegerType -> String
-showIntegerType it = case it of
-  Core.IntegerTypeBigint -> "bigint"
-  Core.IntegerTypeInt8   -> "int8"
-  Core.IntegerTypeInt16  -> "int16"
-  Core.IntegerTypeInt32  -> "int32"
-  Core.IntegerTypeInt64  -> "int64"
-  Core.IntegerTypeUint8  -> "uint8"
-  Core.IntegerTypeUint16 -> "uint16"
-  Core.IntegerTypeUint32 -> "uint32"
-  Core.IntegerTypeUint64 -> "uint64"
-
-showLiteral :: Core.Literal -> String
-showLiteral l = case l of
-  Core.LiteralBinary _    -> "binary:..."
-  Core.LiteralBoolean b   -> "boolean:" ++ show b
-  Core.LiteralString s    -> "string:\"" ++ s ++ "\""
-  Core.LiteralFloat fv    -> showFloatValue fv
-  Core.LiteralInteger iv  -> showIntegerValue iv
-
-showFloatValue :: Core.FloatValue -> String
-showFloatValue fv = case fv of
-  Core.FloatValueFloat32 f  -> "float:float32:" ++ show f
-  Core.FloatValueFloat64 d  -> "float:float64:" ++ show d
-
-showIntegerValue :: Core.IntegerValue -> String
-showIntegerValue iv = case iv of
-  Core.IntegerValueBigint n  -> "integer:bigint:" ++ show n
-  Core.IntegerValueInt8 n    -> "integer:int8:" ++ show n
-  Core.IntegerValueInt16 n   -> "integer:int16:" ++ show n
-  Core.IntegerValueInt32 n   -> "integer:int32:" ++ show n
-  Core.IntegerValueInt64 n   -> "integer:int64:" ++ show n
-  Core.IntegerValueUint8 n   -> "integer:uint8:" ++ show n
-  Core.IntegerValueUint16 n  -> "integer:uint16:" ++ show n
-  Core.IntegerValueUint32 n  -> "integer:uint32:" ++ show n
-  Core.IntegerValueUint64 n  -> "integer:uint64:" ++ show n
-
-literalFamily :: Core.Literal -> String
-literalFamily l = case l of
-  Core.LiteralBinary _    -> "binary"
-  Core.LiteralBoolean _   -> "boolean"
-  Core.LiteralString _    -> "string"
-  Core.LiteralFloat fv    -> "float:" ++ floatFamily fv
-  Core.LiteralInteger iv  -> "integer:" ++ integerFamily iv
-  where
-    floatFamily fv = case fv of
-      Core.FloatValueFloat32 _  -> "float32"
-      Core.FloatValueFloat64 _  -> "float64"
-    integerFamily iv = case iv of
-      Core.IntegerValueBigint _  -> "bigint"
-      Core.IntegerValueInt8 _    -> "int8"
-      Core.IntegerValueInt16 _   -> "int16"
-      Core.IntegerValueInt32 _   -> "int32"
-      Core.IntegerValueInt64 _   -> "int64"
-      Core.IntegerValueUint8 _   -> "uint8"
-      Core.IntegerValueUint16 _  -> "uint16"
-      Core.IntegerValueUint32 _  -> "uint32"
-      Core.IntegerValueUint64 _  -> "uint64"
+checkLiteral lt lv = case ValidateCore.checkLiteral lt lv of
+  Nothing -> Nothing
+  Just _ -> Just $ Err.InvalidValueError {
+    Err.invalidValueErrorExpectedType = ShowCore.literalType lt,
+    Err.invalidValueErrorValue = ShowCore.literal lv }
 
 
 -- ============================================================================

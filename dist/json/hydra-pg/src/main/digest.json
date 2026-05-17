@@ -23,6 +23,7 @@
     "hydra.pg.rdf.mappings": "f7992dd9e845ba269d876fc4415eacd7880f21ec8c5daadeb534bf3f33fd5641",
     "hydra.pg.termsToElements": "bfb603a8ffebdb06a421fffb091a0b0dd5fc5575bc5eea6abfd6feaee5f34222",
     "hydra.pg.utils": "4c5eeb1437c21e04fc99435adf6e4069cd4d05168ddd8230d614fe684d81ba97",
+    "hydra.show.error.pg": "a108b450a777e955c67655b105f8ee159bcee9c16f92051a2bfc1a6fd4bdd666",
     "hydra.tinkerpop.features": "ae6bd5376af9c9cfff2e0c0423d8a842f833debf6cee8b570e1846908428b5e9",
     "hydra.tinkerpop.gremlin": "0e481ac7ee42a2f4a652d802a2beb97cb6a2a77c6c07aa5e04c64494279ebe99",
     "hydra.tinkerpop.language": "0ade50498f46cf5e491a2f37413e61f60710a57635646263ca8380b4a5d6f87e",
