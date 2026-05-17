@@ -171,6 +171,15 @@ invalidLetBindingNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidLetBindingNameErrorName x))}]})
+-- | Encoder for hydra.error.core.InvalidLiteralError
+invalidLiteralError :: ErrorCore.InvalidLiteralError -> Core.Term
+invalidLiteralError x =
+    case x of
+      ErrorCore.InvalidLiteralErrorTypeMismatch v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidLiteralError"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "typeMismatch"),
+          Core.fieldTerm = (literalTypeMismatchError v0)}})
 -- | Encoder for hydra.error.core.InvalidTermError
 invalidTermError :: ErrorCore.InvalidTermError -> Core.Term
 invalidTermError x =
@@ -383,6 +392,18 @@ invalidTypeSchemeVariableNameError x =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (EncodeCore.name (ErrorCore.invalidTypeSchemeVariableNameErrorName x))}]})
+-- | Encoder for hydra.error.core.LiteralTypeMismatchError
+literalTypeMismatchError :: ErrorCore.LiteralTypeMismatchError -> Core.Term
+literalTypeMismatchError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expectedType"),
+          Core.fieldTerm = (EncodeCore.literalType (ErrorCore.literalTypeMismatchErrorExpectedType x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "actualType"),
+          Core.fieldTerm = (EncodeCore.literalType (ErrorCore.literalTypeMismatchErrorActualType x))}]})
 -- | Encoder for hydra.error.core.NestedTermAnnotationError
 nestedTermAnnotationError :: ErrorCore.NestedTermAnnotationError -> Core.Term
 nestedTermAnnotationError x =

@@ -53,6 +53,11 @@ error x =
         Core.injectionField = Core.Field {
           Core.fieldName = (Core.Name "inference"),
           Core.fieldTerm = (inferenceError v0)}})
+      Errors.ErrorInvalidLiteral v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "invalidLiteral"),
+          Core.fieldTerm = (ErrorCore.invalidLiteralError v0)}})
       Errors.ErrorOther v0 -> Core.TermInject (Core.Injection {
         Core.injectionTypeName = (Core.Name "hydra.errors.Error"),
         Core.injectionField = Core.Field {
