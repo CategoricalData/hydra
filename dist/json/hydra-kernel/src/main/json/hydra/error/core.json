@@ -318,6 +318,23 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.error.core.InvalidLiteralError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "An error indicating that a literal value is invalid"}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "typeMismatch",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {"key": "description", "value": {"literal": {"string": "The literal's type does not match the expected literal type"}}}],
+                        "body": {"variable": "hydra.error.core.LiteralTypeMismatchError"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.error.core.InvalidTermError",
         "typeScheme": {
           "body": {
@@ -625,6 +642,31 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The invalid variable name"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.error.core.LiteralTypeMismatchError",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "A mismatch between an expected literal type and the type of an actual literal value"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "expectedType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expected literal type"}}}],
+                        "body": {"variable": "hydra.core.LiteralType"}}}},
+                  {
+                    "name": "actualType",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The actual literal type, derived from the value"}}}],
+                        "body": {"variable": "hydra.core.LiteralType"}}}}]}}},
           "variables": []}}},
     {
       "type": {

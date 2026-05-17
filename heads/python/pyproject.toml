@@ -1,11 +1,44 @@
 [project]
 name = "hydra"
 version = "0.16.0"
-description = ""
+description = "Hydra: a translingual data and computation framework based on the LambdaGraph data model. Python host runtime: typed schema construction, cross-language code generation, property-graph and RDF validation, and bidirectional coders for Avro / Protobuf / JSON Schema / GraphQL / PDL."
 readme = "../../packages/hydra-python/README.md"
-authors = []
+license = { text = "Apache-2.0" }
+authors = [{ name = "Joshua Shinavier", email = "josh@fortytwo.net" }]
+keywords = [
+    "code-generation",
+    "schema",
+    "property-graph",
+    "rdf",
+    "tinkerpop",
+    "graph",
+    "validation",
+    "type-system",
+    "lambda-calculus",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Software Development :: Compilers",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Database",
+    "Typing :: Typed",
+]
 requires-python = ">=3.12"
 dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/CategoricalData/hydra"
+Documentation = "https://github.com/CategoricalData/hydra/wiki"
+Repository = "https://github.com/CategoricalData/hydra"
+Issues = "https://github.com/CategoricalData/hydra/issues"
+Changelog = "https://github.com/CategoricalData/hydra/blob/main/CHANGELOG.md"
 
 [dependency-groups]
 test = ["pytest>=8.3.4"]

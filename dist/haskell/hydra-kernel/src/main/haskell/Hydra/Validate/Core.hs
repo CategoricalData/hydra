@@ -13,6 +13,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Paths as Paths
+import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Validation as Validation
 import qualified Hydra.Variables as Variables
@@ -69,6 +70,14 @@ checkDuplicateFields path names =
       in (Maybes.map (\name -> ErrorCore.InvalidTermErrorDuplicateField (ErrorCore.DuplicateFieldError {
         ErrorCore.duplicateFieldErrorLocation = path,
         ErrorCore.duplicateFieldErrorName = name})) dup)
+-- | Check that a literal value's type matches an expected literal type
+checkLiteral :: Core.LiteralType -> Core.Literal -> Maybe ErrorCore.InvalidLiteralError
+checkLiteral expected value =
+
+      let actual = Reflect.literalType value
+      in (Logic.ifElse (Equality.equal expected actual) Nothing (Just (ErrorCore.InvalidLiteralErrorTypeMismatch (ErrorCore.LiteralTypeMismatchError {
+        ErrorCore.literalTypeMismatchErrorExpectedType = expected,
+        ErrorCore.literalTypeMismatchErrorActualType = actual}))))
 -- | Check if any name in a list shadows a variable already in scope
 checkShadowing :: Paths.SubtermPath -> Graph.Graph -> [Core.Name] -> Maybe ErrorCore.InvalidTermError
 checkShadowing path cx names =

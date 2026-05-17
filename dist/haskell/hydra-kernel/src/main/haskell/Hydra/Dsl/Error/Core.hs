@@ -705,6 +705,14 @@ invalidLetBindingNameErrorWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL injection for the typeMismatch variant of hydra.error.core.InvalidLiteralError
+invalidLiteralErrorTypeMismatch :: Phantoms.TTerm ErrorCore.LiteralTypeMismatchError -> Phantoms.TTerm ErrorCore.InvalidLiteralError
+invalidLiteralErrorTypeMismatch x =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.error.core.InvalidLiteralError"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "typeMismatch"),
+        Core.fieldTerm = (Phantoms.unTTerm x)}}))
 -- | DSL injection for the constantCondition variant of hydra.error.core.InvalidTermError
 invalidTermErrorConstantCondition :: Phantoms.TTerm ErrorCore.ConstantConditionError -> Phantoms.TTerm ErrorCore.InvalidTermError
 invalidTermErrorConstantCondition x =
@@ -1113,6 +1121,66 @@ invalidTypeSchemeVariableNameErrorWithName original newVal =
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL constructor for hydra.error.core.LiteralTypeMismatchError
+literalTypeMismatchError :: Phantoms.TTerm Core.LiteralType -> Phantoms.TTerm Core.LiteralType -> Phantoms.TTerm ErrorCore.LiteralTypeMismatchError
+literalTypeMismatchError expectedType actualType =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expectedType"),
+          Core.fieldTerm = (Phantoms.unTTerm expectedType)},
+        Core.Field {
+          Core.fieldName = (Core.Name "actualType"),
+          Core.fieldTerm = (Phantoms.unTTerm actualType)}]}))
+-- | DSL accessor for the actualType field of hydra.error.core.LiteralTypeMismatchError
+literalTypeMismatchErrorActualType :: Phantoms.TTerm ErrorCore.LiteralTypeMismatchError -> Phantoms.TTerm Core.LiteralType
+literalTypeMismatchErrorActualType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
+        Core.projectionField = (Core.Name "actualType")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the expectedType field of hydra.error.core.LiteralTypeMismatchError
+literalTypeMismatchErrorExpectedType :: Phantoms.TTerm ErrorCore.LiteralTypeMismatchError -> Phantoms.TTerm Core.LiteralType
+literalTypeMismatchErrorExpectedType x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
+        Core.projectionField = (Core.Name "expectedType")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the actualType field of hydra.error.core.LiteralTypeMismatchError
+literalTypeMismatchErrorWithActualType :: Phantoms.TTerm ErrorCore.LiteralTypeMismatchError -> Phantoms.TTerm Core.LiteralType -> Phantoms.TTerm ErrorCore.LiteralTypeMismatchError
+literalTypeMismatchErrorWithActualType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expectedType"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
+              Core.projectionField = (Core.Name "expectedType")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "actualType"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL updater for the expectedType field of hydra.error.core.LiteralTypeMismatchError
+literalTypeMismatchErrorWithExpectedType :: Phantoms.TTerm ErrorCore.LiteralTypeMismatchError -> Phantoms.TTerm Core.LiteralType -> Phantoms.TTerm ErrorCore.LiteralTypeMismatchError
+literalTypeMismatchErrorWithExpectedType original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "expectedType"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "actualType"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
+              Core.projectionField = (Core.Name "actualType")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.core.NestedTermAnnotationError
 nestedTermAnnotationError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.NestedTermAnnotationError
 nestedTermAnnotationError location =
