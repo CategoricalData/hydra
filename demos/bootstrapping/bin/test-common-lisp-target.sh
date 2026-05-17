@@ -17,4 +17,10 @@ fi
 
 echo "Running Common Lisp tests..."
 cd "$OUTPUT_DIR"
-HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
+# HYDRA_LISP_DIST_BASE tells the (head's) run-tests.lisp to find generated
+# kernel + test modules under <demo>/src/{main,test}/common-lisp/ rather than
+# the head-relative <head>/../../../dist/common-lisp/hydra-kernel/... fallback,
+# which is wrong from /tmp/hydra-bootstrapping-demo-*/haskell-to-common-lisp/.
+HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" \
+HYDRA_LISP_DIST_BASE="$OUTPUT_DIR" \
+    sbcl --noinform --non-interactive --no-userinit --load src/test/common-lisp/run-tests.lisp 2>&1
