@@ -132,6 +132,7 @@ packagePrefixes =
   , ("hydra.graphviz.",             "hydra-pg")
   , ("hydra.tinkerpop.",            "hydra-pg")
   , ("hydra.error.pg",              "hydra-pg")
+  , ("hydra.show.error.pg",         "hydra-pg")
   , ("hydra.validate.pg",           "hydra-pg")
   , ("hydra.decode.pg.",            "hydra-pg")
   , ("hydra.encode.pg.",            "hydra-pg")
