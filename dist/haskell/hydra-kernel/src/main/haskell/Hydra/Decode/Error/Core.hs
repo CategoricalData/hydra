@@ -164,6 +164,24 @@ invalidLetBindingNameError cx raw =
           ErrorCore.invalidLetBindingNameErrorLocation = field_location,
           ErrorCore.invalidLetBindingNameErrorName = field_name}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.core.InvalidLiteralError
+invalidLiteralError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidLiteralError
+invalidLiteralError cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermInject v0 ->
+        let field = Core.injectionField v0
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (
+                        Core.Name "typeMismatch",
+                        (\input -> Eithers.map (\t -> ErrorCore.InvalidLiteralErrorTypeMismatch t) (literalTypeMismatchError cx input)))]
+        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.core.InvalidTermError
 invalidTermError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.InvalidTermError
 invalidTermError cx raw =
@@ -321,6 +339,16 @@ invalidTypeSchemeVariableNameError cx raw =
         in (Eithers.bind (ExtractCore.requireField "location" Paths.subtermPath fieldMap cx) (\field_location -> Eithers.bind (ExtractCore.requireField "name" DecodeCore.name fieldMap cx) (\field_name -> Right (ErrorCore.InvalidTypeSchemeVariableNameError {
           ErrorCore.invalidTypeSchemeVariableNameErrorLocation = field_location,
           ErrorCore.invalidTypeSchemeVariableNameErrorName = field_name}))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.error.core.LiteralTypeMismatchError
+literalTypeMismatchError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.LiteralTypeMismatchError
+literalTypeMismatchError cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "expectedType" DecodeCore.literalType fieldMap cx) (\field_expectedType -> Eithers.bind (ExtractCore.requireField "actualType" DecodeCore.literalType fieldMap cx) (\field_actualType -> Right (ErrorCore.LiteralTypeMismatchError {
+          ErrorCore.literalTypeMismatchErrorExpectedType = field_expectedType,
+          ErrorCore.literalTypeMismatchErrorActualType = field_actualType}))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.error.core.NestedTermAnnotationError
 nestedTermAnnotationError :: Graph.Graph -> Core.Term -> Either Errors.DecodingError ErrorCore.NestedTermAnnotationError
