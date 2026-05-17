@@ -71,6 +71,12 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A type inference error"}}}],
                         "body": {"variable": "hydra.errors.InferenceError"}}}},
                   {
+                    "name": "invalidLiteral",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A literal value validation error"}}}],
+                        "body": {"variable": "hydra.error.core.InvalidLiteralError"}}}},
+                  {
                     "name": "other",
                     "type": {
                       "annotated": {

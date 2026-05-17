@@ -285,6 +285,38 @@ module_ =
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.errors.inferenceError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
                 Core.Field {
+                  Core.fieldName = (Core.Name "invalidLiteral"),
+                  Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                    Core.lambdaParameter = (Core.Name "y"),
+                    Core.lambdaDomain = Nothing,
+                    Core.lambdaBody = (Core.TermInject (Core.Injection {
+                      Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                      Core.injectionField = Core.Field {
+                        Core.fieldName = (Core.Name "inject"),
+                        Core.fieldTerm = (Core.TermRecord (Core.Record {
+                          Core.recordTypeName = (Core.Name "hydra.core.Injection"),
+                          Core.recordFields = [
+                            Core.Field {
+                              Core.fieldName = (Core.Name "typeName"),
+                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.errors.Error"))}))},
+                            Core.Field {
+                              Core.fieldName = (Core.Name "field"),
+                              Core.fieldTerm = (Core.TermRecord (Core.Record {
+                                Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                                Core.recordFields = [
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "name"),
+                                    Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                      Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "invalidLiteral"))}))},
+                                  Core.Field {
+                                    Core.fieldName = (Core.Name "term"),
+                                    Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.core.invalidLiteralError")),
+                                      Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
+                Core.Field {
                   Core.fieldName = (Core.Name "other"),
                   Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
