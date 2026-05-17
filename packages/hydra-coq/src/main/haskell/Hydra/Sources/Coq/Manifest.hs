@@ -12,7 +12,7 @@
 module Hydra.Sources.Coq.Manifest (
   mainModules,
   testModules,
-  dslInputModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -36,11 +36,15 @@ mainModules = [
   CoqUtils.module_]
 
 -- | Modules in this package whose type definitions should produce derived
--- DSL wrapper modules. Empty today — no hydra-coq modules currently
--- generate DSL wrappers. CoqSyntax and CoqEnvironmentSource are the
--- natural candidates if/when the wrappers are wanted.
-dslInputModules :: [Module]
-dslInputModules = []
+-- DSL wrapper modules (Hydra/Dsl/<Pkg>/<Name>.hs). Only modules whose
+-- derived DSL is actually imported elsewhere are listed — extend the
+-- list as new consumers appear.
+--
+-- Current consumers (as of 2026-05-16):
+--   * Hydra.Dsl.Coq.Syntax — imported by Hydra.Sources.Coq.Generate
+dslTypeModules :: [Module]
+dslTypeModules = [
+  CoqSyntax.module_]
 
 testModules :: [Module]
 testModules = []
