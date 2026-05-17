@@ -23,10 +23,15 @@ mkdir -p "$OUTPUT_DIR"
 # Copy static resources
 echo "Copying static resources for Common Lisp target..."
 
-# Hand-written source files (primitives, loader, prelude)
+# Hand-written source files (primitives, loader, prelude).
+# Skip bootstrap.lisp: it is a self-exiting standalone script (sb-ext:exit on
+# missing --target), so when (hydra-load-gen-main) walks the demo's hydra/
+# tree it would terminate the SBCL session. The demo doesn't need it — the
+# bootstrap step is done by the Haskell bootstrap-from-json executable.
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/common-lisp"
 cp -r "$HYDRA_CL_DIR/src/main/common-lisp/hydra" "$OUTPUT_DIR/src/main/common-lisp/"
+rm -f "$OUTPUT_DIR/src/main/common-lisp/hydra/bootstrap.lisp"
 
 # Test infrastructure
 echo "  Copying test infrastructure..."
