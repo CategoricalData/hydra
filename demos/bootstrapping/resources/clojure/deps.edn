@@ -1,0 +1,8 @@
+;; Bootstrap-demo deps.edn. Generated and hand-written Clojure sources both
+;; land under <demo>/src/main/clojure (flat layout), and tests under
+;; <demo>/src/test/clojure. Mirrors heads/lisp/clojure/deps.edn except the
+;; latter routes through ../../../dist/clojure/hydra-kernel/..., which would
+;; resolve outside the demo tree.
+{:paths ["src/main/clojure"
+         "src/test/clojure"]
+ :deps {org.clojure/data.json {:mvn/version "2.5.1"}}}
