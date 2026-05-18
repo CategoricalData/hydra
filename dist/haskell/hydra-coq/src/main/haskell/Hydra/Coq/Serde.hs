@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Coq serializer: converts Coq AST to concrete Coq source code
 
 module Hydra.Coq.Serde where
-
 import qualified Hydra.Ast as Ast
 import qualified Hydra.Coq.Syntax as Syntax
 import qualified Hydra.Lib.Lists as Lists
@@ -14,7 +12,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 applicationToExpr :: Syntax.Application -> Ast.Expr
 applicationToExpr app =
     case app of
@@ -33,7 +30,6 @@ applicationToExpr app =
       Syntax.ApplicationAnnotated v0 -> Serialization.spaceSep [
         Serialization.cst "@",
         (qualidToExpr (Syntax.qualidAnnotatedQualid (Syntax.annotatedApplicationAnnot v0)))]
-
 axiomDeclarationToExpr :: Syntax.AxiomDeclaration -> Ast.Expr
 axiomDeclarationToExpr a =
     Serialization.suffix "." (Serialization.spaceSep [
@@ -41,7 +37,6 @@ axiomDeclarationToExpr a =
       (identToExpr (Syntax.axiomDeclarationName a)),
       (Serialization.cst ":"),
       (typeToExpr (Syntax.axiomDeclarationType a))])
-
 binderToExpr :: Syntax.Binder -> Ast.Expr
 binderToExpr b =
     case b of
@@ -90,14 +85,12 @@ binderToExpr b =
         Syntax.GeneralizingBinderImplicitMaximallyInserted v1 -> Serialization.brackets Serialization.curlyBraces Serialization.inlineStyle (termToExpr (Syntax.typeclassConstraintTerm v1))
         Syntax.GeneralizingBinderImplicitNonMaximallyInserted v1 -> Serialization.brackets Serialization.squareBrackets Serialization.inlineStyle (termToExpr (Syntax.typeclassConstraintTerm v1))
       Syntax.BinderPattern _ -> Serialization.cst "_"
-
 commentToExpr :: Syntax.Comment -> Ast.Expr
 commentToExpr c =
     Serialization.cst (Strings.cat [
       "(* ",
       (Syntax.unComment c),
       " *)"])
-
 constructorToExpr :: Syntax.Constructor -> Ast.Expr
 constructorToExpr c =
 
@@ -113,7 +106,6 @@ constructorToExpr c =
           name],
         binders,
         ty]))
-
 definitionToExpr :: Syntax.Definition -> Ast.Expr
 definitionToExpr d =
 
@@ -136,10 +128,8 @@ definitionToExpr d =
         [
           Serialization.cst ":=",
           body]])))
-
 documentToExpr :: Syntax.Document -> Ast.Expr
 documentToExpr doc = Serialization.doubleNewlineSep (Lists.map (\s -> sentenceToExpr s) (Syntax.documentSentences doc))
-
 fixpointDefinitionToExpr :: Syntax.FixpointDefinition -> Ast.Expr
 fixpointDefinitionToExpr fd =
 
@@ -162,10 +152,8 @@ fixpointDefinitionToExpr fd =
         [
           Serialization.cst ":=",
           body]])))
-
 identToExpr :: Syntax.Ident -> Ast.Expr
 identToExpr ident = Serialization.cst (Syntax.unString (Syntax.unIdent ident))
-
 inductiveBodyToExpr :: Syntax.InductiveBody -> Ast.Expr
 inductiveBodyToExpr ib =
 
@@ -186,7 +174,6 @@ inductiveBodyToExpr ib =
             [
               Serialization.cst ":="]])],
         constrs]))
-
 inductiveDefinitionToExpr :: Syntax.InductiveDefinition -> Ast.Expr
 inductiveDefinitionToExpr id =
 
@@ -207,13 +194,11 @@ inductiveDefinitionToExpr id =
                       kwPart,
                       firstBody]])
       in (Serialization.suffix "." (Serialization.newlineSep (Lists.cons firstLine restBodies)))
-
 localityToExpr :: Syntax.Locality -> Ast.Expr
 localityToExpr loc =
     case loc of
       Syntax.LocalityLocal -> Serialization.cst "Local"
       Syntax.LocalityGlobal -> Serialization.cst "Global"
-
 matchToExpr :: Syntax.Match -> Ast.Expr
 matchToExpr m =
 
@@ -254,7 +239,6 @@ matchToExpr m =
         eqs,
         [
           Serialization.cst "end"]]))
-
 moduleDefinitionToExpr :: Syntax.ModuleDefinition -> Ast.Expr
 moduleDefinitionToExpr md =
 
@@ -270,7 +254,6 @@ moduleDefinitionToExpr md =
           Serialization.suffix "." (Serialization.spaceSep [
             Serialization.cst "End",
             name])]]))
-
 pattern0ToExpr :: Syntax.Pattern0 -> Ast.Expr
 pattern0ToExpr p =
     case p of
@@ -285,7 +268,6 @@ pattern0ToExpr p =
         Serialization.cst "\"",
         (Serialization.cst (Syntax.unString v0)),
         (Serialization.cst "\"")]
-
 pattern10ToExpr :: Syntax.Pattern10 -> Ast.Expr
 pattern10ToExpr p =
     case p of
@@ -301,16 +283,13 @@ pattern10ToExpr p =
         let q = qualidToExpr (Syntax.pattern10_QualidQualid v0)
             args = Lists.map (\p2 -> pattern1ToExpr p2) (Syntax.pattern10_QualidPatterns v0)
         in (Logic.ifElse (Lists.null args) q (Serialization.spaceSep (Lists.cons q args)))
-
 pattern1ToExpr :: Syntax.Pattern1 -> Ast.Expr
 pattern1ToExpr p = pattern0ToExpr (Syntax.pattern1Pattern p)
-
 patternToExpr :: Syntax.Pattern -> Ast.Expr
 patternToExpr p =
     case p of
       Syntax.PatternPattern v0 -> pattern10ToExpr v0
       Syntax.PatternTerm _ -> Serialization.cst "_"
-
 qualidToExpr :: Syntax.Qualid -> Ast.Expr
 qualidToExpr q =
 
@@ -319,7 +298,6 @@ qualidToExpr q =
           fieldExprs = Lists.map (\f -> identToExpr (Syntax.unFieldIdent f)) fieldIds
       in (Logic.ifElse (Lists.null fieldExprs) idExpr (Serialization.dotSep (Lists.concat2 [
         idExpr] fieldExprs)))
-
 recordDefinitionToExpr :: Syntax.RecordDefinition -> Ast.Expr
 recordDefinitionToExpr rd =
 
@@ -353,14 +331,12 @@ recordDefinitionToExpr rd =
         fields,
         [
           Serialization.cst "}"]])))
-
 recordFieldToExpr :: Syntax.RecordField -> Ast.Expr
 recordFieldToExpr rf =
     Serialization.spaceSep [
       identToExpr (Syntax.recordFieldName rf),
       (Serialization.cst ":"),
       (typeToExpr (Syntax.recordFieldType rf))]
-
 requireImportToExpr :: Syntax.RequireImport -> Ast.Expr
 requireImportToExpr ri =
 
@@ -382,7 +358,6 @@ requireImportToExpr ri =
         requirePart,
         qualPart,
         mods])))
-
 sectionDefinitionToExpr :: Syntax.SectionDefinition -> Ast.Expr
 sectionDefinitionToExpr sd =
 
@@ -398,7 +373,6 @@ sectionDefinitionToExpr sd =
           Serialization.suffix "." (Serialization.spaceSep [
             Serialization.cst "End",
             name])]]))
-
 sentenceContentToExpr :: Syntax.SentenceContent -> Ast.Expr
 sentenceContentToExpr sc =
     case sc of
@@ -412,7 +386,6 @@ sentenceContentToExpr sc =
       Syntax.SentenceContentRequireImport v0 -> requireImportToExpr v0
       Syntax.SentenceContentSection v0 -> sectionDefinitionToExpr v0
       Syntax.SentenceContentTheorem v0 -> theoremBodyToExpr v0
-
 sentenceToExpr :: Syntax.Sentence -> Ast.Expr
 sentenceToExpr s =
 
@@ -423,7 +396,6 @@ sentenceToExpr s =
         cmtPart,
         [
           content]]))
-
 sortToExpr :: Syntax.Sort -> Ast.Expr
 sortToExpr s =
     case s of
@@ -436,7 +408,6 @@ sortToExpr s =
         Serialization.cst "Type",
         (Serialization.cst "@{"),
         (Serialization.cst "}")]
-
 term0ToExpr :: Syntax.Term0 -> Ast.Expr
 term0ToExpr t =
     case t of
@@ -456,7 +427,6 @@ term0ToExpr t =
       Syntax.Term0Generalizing -> Serialization.cst "`( )"
       Syntax.Term0Ltac -> Serialization.cst "ltac:( )"
       Syntax.Term0Parens v0 -> Serialization.parens (termToExpr v0)
-
 term100ToExpr :: Syntax.Term100 -> Ast.Expr
 term100ToExpr t =
     case t of
@@ -465,7 +435,6 @@ term100ToExpr t =
         (Serialization.cst ":"),
         (typeToExpr (Syntax.typeCastType v0))]
       Syntax.Term100Term10 v0 -> term10ToExpr v0
-
 term10ToExpr :: Syntax.Term10 -> Ast.Expr
 term10ToExpr t =
     case t of
@@ -473,14 +442,12 @@ term10ToExpr t =
       Syntax.Term10OneTerm v0 -> case v0 of
         Syntax.OneTermExplicit v1 -> qualidToExpr (Syntax.qualidAnnotatedQualid v1)
         Syntax.OneTermTerm1 v1 -> term1ToExpr v1
-
 term1ToExpr :: Syntax.Term1 -> Ast.Expr
 term1ToExpr t =
     case t of
       Syntax.Term1Projection -> Serialization.cst "?projection"
       Syntax.Term1Scope -> Serialization.cst "?scope"
       Syntax.Term1Term0 v0 -> term0ToExpr v0
-
 termToExpr :: Syntax.Term -> Ast.Expr
 termToExpr t =
     case t of
@@ -581,7 +548,6 @@ termToExpr t =
         Serialization.cst "cofix",
         (Serialization.cst "...")]
       Syntax.TermTerm100 v0 -> term100ToExpr v0
-
 theoremBodyToExpr :: Syntax.TheoremBody -> Ast.Expr
 theoremBodyToExpr tb =
 
@@ -610,6 +576,5 @@ theoremBodyToExpr tb =
           Serialization.cst "exact",
           (Serialization.parens proof)]),
         (Serialization.cst "Qed.")])
-
 typeToExpr :: Syntax.Type -> Ast.Expr
 typeToExpr t = termToExpr (Syntax.unType t)
