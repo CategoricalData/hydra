@@ -2,6 +2,8 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
+    "hydra.dsl.python.environment": "fbe3de804e7b998a9e94180c24a5fd0d33a96474d49d8cbc18c87c3836e9db53",
+    "hydra.dsl.python.syntax": "c3f53e9c80c99ff3f89ba552ef6a304c8ceb1c7724c5a2a9eecf90432159ac8f",
     "hydra.python.coder": "c533f55d32fb12a2ebd1f68ca0b6e64a4f74c89abfb7f5710c6faf09ad81a4e7",
     "hydra.python.environment": "1c53ca97ea8db80915325c65254b92861f3bff5567dd7c6d45c11492a9fafeb3",
     "hydra.python.language": "8eb40ea75c86925ceb107f9337c72a5e1e521d2ee7706e1de51916cc257fc109",
