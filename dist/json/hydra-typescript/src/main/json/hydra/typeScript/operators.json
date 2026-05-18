@@ -2,7 +2,7 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.javaScript.operators.appOp",
+        "name": "hydra.typeScript.operators.appOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Function application (whitespace)"}}}],
@@ -28,7 +28,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.memberOp",
+        "name": "hydra.typeScript.operators.memberOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Member access operator (.)"}}}],
@@ -54,7 +54,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.optionalChainOp",
+        "name": "hydra.typeScript.operators.optionalChainOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Optional chaining operator (?.)"}}}],
@@ -80,7 +80,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.exponentiateOp",
+        "name": "hydra.typeScript.operators.exponentiateOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Exponentiation operator (**)"}}}],
@@ -94,7 +94,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.multiplyOp",
+        "name": "hydra.typeScript.operators.multiplyOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Multiplication operator (*)"}}}],
@@ -108,7 +108,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.divideOp",
+        "name": "hydra.typeScript.operators.divideOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Division operator (/)"}}}],
@@ -122,7 +122,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.moduloOp",
+        "name": "hydra.typeScript.operators.moduloOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Modulo operator (%)"}}}],
@@ -136,7 +136,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.addOp",
+        "name": "hydra.typeScript.operators.addOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Addition operator (+)"}}}],
@@ -150,7 +150,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.subtractOp",
+        "name": "hydra.typeScript.operators.subtractOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Subtraction operator (-)"}}}],
@@ -164,7 +164,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.lessThanOp",
+        "name": "hydra.typeScript.operators.lessThanOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Less than operator (<)"}}}],
@@ -178,7 +178,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.lessThanOrEqualOp",
+        "name": "hydra.typeScript.operators.lessThanOrEqualOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Less than or equal operator (<=)"}}}],
@@ -192,7 +192,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.greaterThanOp",
+        "name": "hydra.typeScript.operators.greaterThanOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Greater than operator (>)"}}}],
@@ -206,7 +206,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.greaterThanOrEqualOp",
+        "name": "hydra.typeScript.operators.greaterThanOrEqualOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Greater than or equal operator (>=)"}}}],
@@ -220,7 +220,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.inOp",
+        "name": "hydra.typeScript.operators.inOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "In operator (in)"}}}],
@@ -234,7 +234,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.instanceOfOp",
+        "name": "hydra.typeScript.operators.instanceOfOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Instance of operator (instanceof)"}}}],
@@ -248,7 +248,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.equalOp",
+        "name": "hydra.typeScript.operators.equalOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Equality operator (==)"}}}],
@@ -262,7 +262,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.notEqualOp",
+        "name": "hydra.typeScript.operators.notEqualOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Inequality operator (!=)"}}}],
@@ -276,7 +276,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.strictEqualOp",
+        "name": "hydra.typeScript.operators.strictEqualOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Strict equality operator (===)"}}}],
@@ -290,7 +290,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.strictNotEqualOp",
+        "name": "hydra.typeScript.operators.strictNotEqualOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Strict inequality operator (!==)"}}}],
@@ -304,7 +304,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.bitwiseAndOp",
+        "name": "hydra.typeScript.operators.bitwiseAndOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise AND operator (&)"}}}],
@@ -318,7 +318,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.bitwiseXorOp",
+        "name": "hydra.typeScript.operators.bitwiseXorOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise XOR operator (^)"}}}],
@@ -332,7 +332,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.bitwiseOrOp",
+        "name": "hydra.typeScript.operators.bitwiseOrOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Bitwise OR operator (|)"}}}],
@@ -346,7 +346,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.leftShiftOp",
+        "name": "hydra.typeScript.operators.leftShiftOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Left shift operator (<<)"}}}],
@@ -360,7 +360,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.rightShiftOp",
+        "name": "hydra.typeScript.operators.rightShiftOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Right shift operator (>>)"}}}],
@@ -374,7 +374,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.unsignedRightShiftOp",
+        "name": "hydra.typeScript.operators.unsignedRightShiftOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Unsigned right shift operator (>>>)"}}}],
@@ -388,7 +388,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.logicalAndOp",
+        "name": "hydra.typeScript.operators.logicalAndOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Logical AND operator (&&)"}}}],
@@ -402,7 +402,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.logicalOrOp",
+        "name": "hydra.typeScript.operators.logicalOrOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Logical OR operator (||)"}}}],
@@ -416,7 +416,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.nullishCoalescingOp",
+        "name": "hydra.typeScript.operators.nullishCoalescingOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Nullish coalescing operator (??)"}}}],
@@ -430,7 +430,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.assignOp",
+        "name": "hydra.typeScript.operators.assignOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Assignment operator (=)"}}}],
@@ -444,7 +444,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.arrowOp",
+        "name": "hydra.typeScript.operators.arrowOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Arrow function operator (=>)"}}}],
@@ -458,7 +458,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.ternaryOp",
+        "name": "hydra.typeScript.operators.ternaryOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Ternary operator (?:) - represents the ? part"}}}],
@@ -472,7 +472,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.commaOp",
+        "name": "hydra.typeScript.operators.commaOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Comma operator (,)"}}}],
@@ -486,7 +486,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.defineOp",
+        "name": "hydra.typeScript.operators.defineOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Definition operator (= in const x = ...)"}}}],
@@ -500,7 +500,7 @@
         "typeScheme": {"body": {"variable": "hydra.ast.Op"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.operators.colonOp",
+        "name": "hydra.typeScript.operators.colonOp",
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Type annotation colon (:)"}}}],
@@ -538,5 +538,5 @@
     "hydra.util",
     "hydra.validation",
     "hydra.variants"],
-  "description": "AST operators for JavaScript with precedence and associativity",
-  "namespace": "hydra.javaScript.operators"}
+  "description": "AST operators for TypeScript with precedence and associativity",
+  "namespace": "hydra.typeScript.operators"}

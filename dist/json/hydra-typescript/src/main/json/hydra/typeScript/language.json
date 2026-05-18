@@ -2,10 +2,10 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.javaScript.language.javaScriptLanguage",
+        "name": "hydra.typeScript.language.typeScriptLanguage",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for JavaScript (ECMAScript 2024)"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Language constraints for TypeScript 5.x"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -131,7 +131,7 @@
                     "fields": [
                       {
                         "name": "name",
-                        "term": {"wrap": {"body": {"literal": {"string": "hydra.javaScript"}}, "typeName": "hydra.coders.LanguageName"}}},
+                        "term": {"wrap": {"body": {"literal": {"string": "hydra.typeScript"}}, "typeName": "hydra.coders.LanguageName"}}},
                       {
                         "name": "constraints",
                         "term": {
@@ -152,10 +152,10 @@
         "typeScheme": {"body": {"variable": "hydra.coders.Language"}, "variables": []}}},
     {
       "term": {
-        "name": "hydra.javaScript.language.javaScriptReservedWords",
+        "name": "hydra.typeScript.language.typeScriptReservedWords",
         "term": {
           "annotated": {
-            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in JavaScript"}}}],
+            "annotation": [{"key": "description", "value": {"literal": {"string": "A set of reserved words in TypeScript"}}}],
             "body": {
               "let": {
                 "bindings": [
@@ -163,7 +163,10 @@
                     "name": "keywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "JavaScript keywords per ECMAScript 2024 specification"}}}],
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "TypeScript 5.x keywords (ECMAScript 2024 base + TypeScript-only keywords)"}}}],
                         "body": {
                           "list": [
                             {"literal": {"string": "await"}},
@@ -229,6 +232,46 @@
                         "body": {"list": [{"literal": {"string": "arguments"}}, {"literal": {"string": "eval"}}]}}},
                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
+                    "name": "typeScriptKeywords",
+                    "term": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "TypeScript-only keywords and contextual keywords (TS 5.x)"}}}],
+                        "body": {
+                          "list": [
+                            {"literal": {"string": "abstract"}},
+                            {"literal": {"string": "as"}},
+                            {"literal": {"string": "asserts"}},
+                            {"literal": {"string": "assert"}},
+                            {"literal": {"string": "any"}},
+                            {"literal": {"string": "boolean"}},
+                            {"literal": {"string": "constructor"}},
+                            {"literal": {"string": "declare"}},
+                            {"literal": {"string": "from"}},
+                            {"literal": {"string": "get"}},
+                            {"literal": {"string": "global"}},
+                            {"literal": {"string": "infer"}},
+                            {"literal": {"string": "intrinsic"}},
+                            {"literal": {"string": "is"}},
+                            {"literal": {"string": "keyof"}},
+                            {"literal": {"string": "module"}},
+                            {"literal": {"string": "namespace"}},
+                            {"literal": {"string": "never"}},
+                            {"literal": {"string": "object"}},
+                            {"literal": {"string": "of"}},
+                            {"literal": {"string": "out"}},
+                            {"literal": {"string": "override"}},
+                            {"literal": {"string": "readonly"}},
+                            {"literal": {"string": "require"}},
+                            {"literal": {"string": "satisfies"}},
+                            {"literal": {"string": "set"}},
+                            {"literal": {"string": "string"}},
+                            {"literal": {"string": "symbol"}},
+                            {"literal": {"string": "type"}},
+                            {"literal": {"string": "unique"}},
+                            {"literal": {"string": "unknown"}},
+                            {"literal": {"string": "using"}}]}}},
+                    "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
+                  {
                     "name": "builtIns",
                     "term": {
                       "annotated": {
@@ -285,10 +328,10 @@
                             {"literal": {"string": "window"}}]}}},
                     "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                   {
-                    "name": "hydraJavaScriptKeywords",
+                    "name": "hydraTypeScriptKeywords",
                     "term": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Reserved words specific to Hydra-JavaScript"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Reserved words specific to Hydra-TypeScript"}}}],
                         "body": {
                           "list": [
                             {"literal": {"string": "Name"}},
@@ -321,8 +364,9 @@
                             {"variable": "keywords"},
                             {"variable": "futureReserved"},
                             {"variable": "strictModeReserved"},
+                            {"variable": "typeScriptKeywords"},
                             {"variable": "builtIns"},
-                            {"variable": "hydraJavaScriptKeywords"}]},
+                            {"variable": "hydraTypeScriptKeywords"}]},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.concat"}, "type": {"literal": {"string": {}}}}}}},
                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"literal": {"string": {}}}}}}}}}}},
         "typeScheme": {"body": {"set": {"literal": {"string": {}}}}, "variables": []}}}],
@@ -352,5 +396,5 @@
     "hydra.util",
     "hydra.validation",
     "hydra.variants"],
-  "description": "Language constraints and reserved words for JavaScript (ECMAScript 2024)",
-  "namespace": "hydra.javaScript.language"}
+  "description": "Language constraints and reserved words for TypeScript 5.x (ECMAScript 2024 base)",
+  "namespace": "hydra.typeScript.language"}
