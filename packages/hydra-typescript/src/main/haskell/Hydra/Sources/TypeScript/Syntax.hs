@@ -1,10 +1,21 @@
--- | A JavaScript/ECMAScript syntax model for code generation.
+-- | A TypeScript 5.x syntax model for code generation.
 --
--- This model is based on the ECMAScript 2024 specification and is designed
--- to support Hydra's code generation needs. It focuses on the subset of
--- JavaScript syntax needed for generating functional, type-annotated code.
+-- The expression and statement layers reuse the ECMAScript 2024 grammar
+-- (TypeScript is a superset of modern JavaScript). The type-level grammar
+-- — type aliases, interface declarations, generics, discriminated unions,
+-- tuples, intersections — is TypeScript-only. The model focuses on the
+-- subset of TypeScript needed to emit Hydra-shaped output:
+--
+--   * Hydra records       → readonly `interface` declarations
+--   * Hydra unions        → readonly discriminated-union `type` aliases
+--   * Hydra type params   → generic `<T extends …>` parameters
+--   * Hydra `Maybe<T>`    → `{ tag: "just", value: T } | { tag: "nothing" }`
+--   * Hydra `Pair<A, B>`  → `readonly [A, B]`
+--
+-- Anything not needed for Hydra emission (decorators, namespaces, `enum`,
+-- mapped/conditional types, classes-as-data) is intentionally omitted.
 
-module Hydra.Sources.JavaScript.Syntax where
+module Hydra.Sources.TypeScript.Syntax where
 
 -- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
@@ -20,20 +31,20 @@ import qualified Data.Maybe                      as Y
 
 
 ns :: Namespace
-ns = Namespace "hydra.javaScript.syntax"
+ns = Namespace "hydra.typeScript.syntax"
 
 define :: String -> Type -> Binding
 define = datatype ns
 
-js :: String -> Type
-js = typeref ns
+ts :: String -> Type
+ts = typeref ns
 
 module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = [Core.ns, Core.ns],
-            moduleDescription = Just "A JavaScript/ECMAScript syntax model for code generation"}
+            moduleDescription = Just "A TypeScript 5.x syntax model for Hydra code generation"}
   where
     definitions = [
       -- Identifiers and names
@@ -47,16 +58,20 @@ module_ = Module {
       templateElement,
       numericLiteral,
 
-      -- Types (for JSDoc/TypeScript-style annotations)
+      -- Types (TypeScript type-level grammar)
       typeAnnotation,
       typeExpression,
       functionTypeExpression,
       arrayTypeExpression,
+      tupleTypeExpression,
       unionTypeExpression,
+      intersectionTypeExpression,
       parameterizedTypeExpression,
       objectTypeExpression,
       propertySignature,
       typeParameter,
+      interfaceDeclaration,
+      typeAliasDeclaration,
 
       -- Expressions
       expression,
@@ -153,13 +168,13 @@ module_ = Module {
 
 identifier :: Binding
 identifier = define "Identifier" $
-  doc "A JavaScript identifier (variable, function, class name, etc.)" $
+  doc "A TypeScript identifier (variable, function, class name, etc.)" $
   T.wrap T.string
 
 qualifiedName :: Binding
 qualifiedName = define "QualifiedName" $
   doc "A qualified name like 'module.submodule.name'" $
-  T.list $ js "Identifier"
+  T.list $ ts "Identifier"
 
 -- ============================================================================
 -- Literals
@@ -171,10 +186,10 @@ literal = define "Literal" $
   T.union [
     "string">:
       doc "A string literal" $
-      js "StringLiteral",
+      ts "StringLiteral",
     "number">:
       doc "A numeric literal" $
-      js "NumericLiteral",
+      ts "NumericLiteral",
     "boolean">:
       doc "A boolean literal (true or false)"
       T.boolean,
@@ -189,7 +204,7 @@ literal = define "Literal" $
       T.bigint,
     "template">:
       doc "A template literal" $
-      js "TemplateLiteral"]
+      ts "TemplateLiteral"]
 
 stringLiteral :: Binding
 stringLiteral = define "StringLiteral" $
@@ -208,10 +223,10 @@ templateLiteral = define "TemplateLiteral" $
   T.record [
     "quasis">:
       doc "The static string parts" $
-      T.list $ js "TemplateElement",
+      T.list $ ts "TemplateElement",
     "expressions">:
       doc "The interpolated expressions" $
-      T.list $ js "Expression"]
+      T.list $ ts "Expression"]
 
 templateElement :: Binding
 templateElement = define "TemplateElement" $
@@ -242,7 +257,7 @@ numericLiteral = define "NumericLiteral" $
 typeAnnotation :: Binding
 typeAnnotation = define "TypeAnnotation" $
   doc "A type annotation (for JSDoc comments or TypeScript)" $
-  T.wrap $ js "TypeExpression"
+  T.wrap $ ts "TypeExpression"
 
 typeExpression :: Binding
 typeExpression = define "TypeExpression" $
@@ -250,30 +265,42 @@ typeExpression = define "TypeExpression" $
   T.union [
     "identifier">:
       doc "A named type (e.g., 'string', 'number', 'MyClass')" $
-      js "Identifier",
+      ts "Identifier",
     "literal">:
       doc "A literal type (e.g., 'hello', 42)" $
-      js "Literal",
+      ts "Literal",
     "array">:
       doc "An array type" $
-      js "ArrayTypeExpression",
+      ts "ArrayTypeExpression",
     "function">:
       doc "A function type" $
-      js "FunctionTypeExpression",
+      ts "FunctionTypeExpression",
     "object">:
       doc "An object type" $
-      js "ObjectTypeExpression",
+      ts "ObjectTypeExpression",
+    "tuple">:
+      doc "A tuple type (readonly [A, B, C])" $
+      ts "TupleTypeExpression",
     "union">:
       doc "A union type (A | B)" $
-      js "UnionTypeExpression",
+      ts "UnionTypeExpression",
+    "intersection">:
+      doc "An intersection type (A & B)" $
+      ts "IntersectionTypeExpression",
     "parameterized">:
       doc "A parameterized type (e.g., Array<T>, Map<K, V>)" $
-      js "ParameterizedTypeExpression",
+      ts "ParameterizedTypeExpression",
     "optional">:
-      doc "An optional type (?T)" $
-      js "TypeExpression",
+      doc "An optional type (T | undefined or T?)" $
+      ts "TypeExpression",
+    "readonly">:
+      doc "A readonly modifier (readonly T[], readonly [A, B])" $
+      ts "TypeExpression",
     "any">:
       doc "The 'any' type"
+      T.unit,
+    "unknown">:
+      doc "The 'unknown' type"
       T.unit,
     "void">:
       doc "The 'void' type"
@@ -288,35 +315,45 @@ functionTypeExpression = define "FunctionTypeExpression" $
   T.record [
     "typeParameters">:
       doc "Type parameters (generics)" $
-      T.list $ js "TypeParameter",
+      T.list $ ts "TypeParameter",
     "parameters">:
       doc "Parameter types" $
-      T.list $ js "TypeExpression",
+      T.list $ ts "TypeExpression",
     "returnType">:
       doc "Return type" $
-      js "TypeExpression"]
+      ts "TypeExpression"]
 
 arrayTypeExpression :: Binding
 arrayTypeExpression = define "ArrayTypeExpression" $
   doc "An array type (T[])" $
-  T.wrap $ js "TypeExpression"
+  T.wrap $ ts "TypeExpression"
 
 unionTypeExpression :: Binding
 unionTypeExpression = define "UnionTypeExpression" $
   doc "A union type (A | B | C)" $
-  T.list $ js "TypeExpression"
+  T.list $ ts "TypeExpression"
+
+tupleTypeExpression :: Binding
+tupleTypeExpression = define "TupleTypeExpression" $
+  doc "A tuple type ([A, B] or readonly [A, B])" $
+  T.list $ ts "TypeExpression"
+
+intersectionTypeExpression :: Binding
+intersectionTypeExpression = define "IntersectionTypeExpression" $
+  doc "An intersection type (A & B & C)" $
+  T.list $ ts "TypeExpression"
 
 parameterizedTypeExpression :: Binding
 parameterizedTypeExpression = define "ParameterizedTypeExpression" $
   doc "A parameterized type (e.g., Array<T>, Map<K, V>)" $
   T.record [
-    "base">: js "TypeExpression",
-    "arguments">: T.list $ js "TypeExpression"]
+    "base">: ts "TypeExpression",
+    "arguments">: T.list $ ts "TypeExpression"]
 
 objectTypeExpression :: Binding
 objectTypeExpression = define "ObjectTypeExpression" $
   doc "An object type with property signatures" $
-  T.list $ js "PropertySignature"
+  T.list $ ts "PropertySignature"
 
 propertySignature :: Binding
 propertySignature = define "PropertySignature" $
@@ -324,10 +361,10 @@ propertySignature = define "PropertySignature" $
   T.record [
     "name">:
       doc "Property name" $
-      js "Identifier",
+      ts "Identifier",
     "type">:
       doc "Property type" $
-      js "TypeExpression",
+      ts "TypeExpression",
     "optional">:
       doc "Whether the property is optional"
       T.boolean,
@@ -341,13 +378,44 @@ typeParameter = define "TypeParameter" $
   T.record [
     "name">:
       doc "Parameter name" $
-      js "Identifier",
+      ts "Identifier",
     "constraint">:
       doc "Optional constraint (extends clause)" $
-      T.optional $ js "TypeExpression",
+      T.optional $ ts "TypeExpression",
     "default">:
       doc "Optional default type" $
-      T.optional $ js "TypeExpression"]
+      T.optional $ ts "TypeExpression"]
+
+interfaceDeclaration :: Binding
+interfaceDeclaration = define "InterfaceDeclaration" $
+  doc "A TypeScript interface declaration (interface Foo<T> extends Bar { ... })" $
+  T.record [
+    "name">:
+      doc "Interface name" $
+      ts "Identifier",
+    "typeParameters">:
+      doc "Generic parameters" $
+      T.list $ ts "TypeParameter",
+    "extends">:
+      doc "Interfaces this one extends" $
+      T.list $ ts "TypeExpression",
+    "members">:
+      doc "Property signatures (the interface body)" $
+      T.list $ ts "PropertySignature"]
+
+typeAliasDeclaration :: Binding
+typeAliasDeclaration = define "TypeAliasDeclaration" $
+  doc "A TypeScript type alias declaration (type Foo<T> = ...)" $
+  T.record [
+    "name">:
+      doc "Alias name" $
+      ts "Identifier",
+    "typeParameters">:
+      doc "Generic parameters" $
+      T.list $ ts "TypeParameter",
+    "type">:
+      doc "The right-hand-side type" $
+      ts "TypeExpression"]
 
 -- ============================================================================
 -- Expressions
@@ -355,70 +423,70 @@ typeParameter = define "TypeParameter" $
 
 expression :: Binding
 expression = define "Expression" $
-  doc "A JavaScript expression" $
+  doc "A TypeScript expression" $
   T.union [
     "identifier">:
       doc "A simple identifier" $
-      js "Identifier",
+      ts "Identifier",
     "literal">:
       doc "A literal value" $
-      js "Literal",
+      ts "Literal",
     "array">:
       doc "An array expression [a, b, c]" $
-      js "ArrayExpression",
+      ts "ArrayExpression",
     "object">:
       doc "An object expression {a: 1, b: 2}" $
-      js "ObjectExpression",
+      ts "ObjectExpression",
     "function">:
       doc "A function expression" $
-      js "FunctionExpression",
+      ts "FunctionExpression",
     "arrow">:
       doc "An arrow function expression" $
-      js "ArrowFunctionExpression",
+      ts "ArrowFunctionExpression",
     "call">:
       doc "A function call expression" $
-      js "CallExpression",
+      ts "CallExpression",
     "member">:
       doc "A member access expression (obj.prop or obj[prop])" $
-      js "MemberExpression",
+      ts "MemberExpression",
     "conditional">:
       doc "A conditional (ternary) expression" $
-      js "ConditionalExpression",
+      ts "ConditionalExpression",
     "binary">:
       doc "A binary operation expression" $
-      js "BinaryExpression",
+      ts "BinaryExpression",
     "unary">:
       doc "A unary operation expression" $
-      js "UnaryExpression",
+      ts "UnaryExpression",
     "assignment">:
       doc "An assignment expression" $
-      js "AssignmentExpression",
+      ts "AssignmentExpression",
     "sequence">:
       doc "A sequence expression (a, b, c)" $
-      T.list $ js "Expression",
+      T.list $ ts "Expression",
     "this">:
       doc "The 'this' keyword"
       T.unit,
     "new">:
       doc "A 'new' expression" $
-      js "CallExpression",
+      ts "CallExpression",
     "yield">:
       doc "A yield expression" $
-      T.optional $ js "Expression",
+      T.optional $ ts "Expression",
     "await">:
       doc "An await expression" $
-      js "Expression",
+      ts "Expression",
     "spread">:
       doc "A spread expression (...x)" $
-      js "SpreadElement",
+      ts "SpreadElement",
     "parenthesized">:
       doc "A parenthesized expression" $
-      js "Expression"]
+      ts "Expression"]
 
 arrayExpression :: Binding
 arrayExpression = define "ArrayExpression" $
   doc "An array expression [a, b, c]" $
-  T.list $ js "ArrayElement"
+  T.list $ ts "ArrayElement"
 
 arrayElement :: Binding
 arrayElement = define "ArrayElement" $
@@ -426,10 +494,10 @@ arrayElement = define "ArrayElement" $
   T.union [
     "expression">:
       doc "A regular expression element" $
-      js "Expression",
+      ts "Expression",
     "spread">:
       doc "A spread element ...x" $
-      js "SpreadElement",
+      ts "SpreadElement",
     "hole">:
       doc "An empty slot (elision)"
       T.unit]
@@ -437,7 +505,7 @@ arrayElement = define "ArrayElement" $
 objectExpression :: Binding
 objectExpression = define "ObjectExpression" $
   doc "An object expression {a: 1, b: 2}" $
-  T.list $ js "Property"
+  T.list $ ts "Property"
 
 property :: Binding
 property = define "Property" $
@@ -445,13 +513,13 @@ property = define "Property" $
   T.record [
     "key">:
       doc "Property key (identifier, literal, or computed)" $
-      js "Expression",
+      ts "Expression",
     "value">:
       doc "Property value" $
-      js "Expression",
+      ts "Expression",
     "kind">:
       doc "Property kind (init, get, set)" $
-      js "PropertyKind",
+      ts "PropertyKind",
     "computed">:
       doc "Whether the key is computed [expr]"
       T.boolean,
@@ -479,13 +547,13 @@ functionExpression = define "FunctionExpression" $
   T.record [
     "id">:
       doc "Optional function name" $
-      T.optional $ js "Identifier",
+      T.optional $ ts "Identifier",
     "params">:
       doc "Function parameters" $
-      T.list $ js "Pattern",
+      T.list $ ts "Pattern",
     "body">:
       doc "Function body" $
-      js "BlockStatement",
+      ts "BlockStatement",
     "async">:
       doc "Whether the function is async"
       T.boolean,
@@ -499,10 +567,10 @@ arrowFunctionExpression = define "ArrowFunctionExpression" $
   T.record [
     "params">:
       doc "Function parameters" $
-      T.list $ js "Pattern",
+      T.list $ ts "Pattern",
     "body">:
       doc "Function body (expression or block)" $
-      js "ArrowFunctionBody",
+      ts "ArrowFunctionBody",
     "async">:
       doc "Whether the function is async"
       T.boolean]
@@ -511,8 +579,8 @@ arrowFunctionBody :: Binding
 arrowFunctionBody = define "ArrowFunctionBody" $
   doc "The body of an arrow function (expression or block)" $
   T.union [
-    "expression">: js "Expression",
-    "block">: js "BlockStatement"]
+    "expression">: ts "Expression",
+    "block">: ts "BlockStatement"]
 
 callExpression :: Binding
 callExpression = define "CallExpression" $
@@ -520,10 +588,10 @@ callExpression = define "CallExpression" $
   T.record [
     "callee">:
       doc "The function being called" $
-      js "Expression",
+      ts "Expression",
     "arguments">:
       doc "The arguments" $
-      T.list $ js "Expression",
+      T.list $ ts "Expression",
     "optional">:
       doc "Whether using optional chaining (?.)"
       T.boolean]
@@ -534,10 +602,10 @@ memberExpression = define "MemberExpression" $
   T.record [
     "object">:
       doc "The object" $
-      js "Expression",
+      ts "Expression",
     "property">:
       doc "The property" $
-      js "Expression",
+      ts "Expression",
     "computed">:
       doc "Whether using bracket notation (obj[prop])"
       T.boolean,
@@ -549,24 +617,24 @@ conditionalExpression :: Binding
 conditionalExpression = define "ConditionalExpression" $
   doc "A conditional (ternary) expression: test ? consequent : alternate" $
   T.record [
-    "test">: js "Expression",
-    "consequent">: js "Expression",
-    "alternate">: js "Expression"]
+    "test">: ts "Expression",
+    "consequent">: ts "Expression",
+    "alternate">: ts "Expression"]
 
 binaryExpression :: Binding
 binaryExpression = define "BinaryExpression" $
   doc "A binary operation expression" $
   T.record [
-    "operator">: js "BinaryOperator",
-    "left">: js "Expression",
-    "right">: js "Expression"]
+    "operator">: ts "BinaryOperator",
+    "left">: ts "Expression",
+    "right">: ts "Expression"]
 
 unaryExpression :: Binding
 unaryExpression = define "UnaryExpression" $
   doc "A unary operation expression" $
   T.record [
-    "operator">: js "UnaryOperator",
-    "argument">: js "Expression",
+    "operator">: ts "UnaryOperator",
+    "argument">: ts "Expression",
     "prefix">:
       doc "Whether the operator is prefix (true) or postfix (false)"
       T.boolean]
@@ -575,14 +643,14 @@ assignmentExpression :: Binding
 assignmentExpression = define "AssignmentExpression" $
   doc "An assignment expression" $
   T.record [
-    "operator">: js "AssignmentOperator",
-    "left">: js "Pattern",
-    "right">: js "Expression"]
+    "operator">: ts "AssignmentOperator",
+    "left">: ts "Pattern",
+    "right">: ts "Expression"]
 
 spreadElement :: Binding
 spreadElement = define "SpreadElement" $
   doc "A spread element (...x)" $
-  T.wrap $ js "Expression"
+  T.wrap $ ts "Expression"
 
 -- ============================================================================
 -- Patterns (Destructuring)
@@ -594,19 +662,19 @@ pattern_ = define "Pattern" $
   T.union [
     "identifier">:
       doc "A simple identifier binding" $
-      js "Identifier",
+      ts "Identifier",
     "object">:
       doc "An object destructuring pattern" $
-      js "ObjectPattern",
+      ts "ObjectPattern",
     "array">:
       doc "An array destructuring pattern" $
-      js "ArrayPattern",
+      ts "ArrayPattern",
     "assignment">:
       doc "A pattern with default value" $
-      js "AssignmentPattern",
+      ts "AssignmentPattern",
     "rest">:
       doc "A rest element (...x)" $
-      js "RestElement"]
+      ts "RestElement"]
 
 objectPattern :: Binding
 objectPattern = define "ObjectPattern" $
@@ -614,31 +682,31 @@ objectPattern = define "ObjectPattern" $
   T.record [
     "properties">:
       doc "The property patterns" $
-      T.list $ js "ObjectPatternProperty"]
+      T.list $ ts "ObjectPatternProperty"]
 
 objectPatternProperty :: Binding
 objectPatternProperty = define "ObjectPatternProperty" $
   doc "A property in an object pattern" $
   T.union [
-    "property">: js "Property",
-    "rest">: js "RestElement"]
+    "property">: ts "Property",
+    "rest">: ts "RestElement"]
 
 arrayPattern :: Binding
 arrayPattern = define "ArrayPattern" $
   doc "An array destructuring pattern [a, b, c]" $
-  T.list $ T.optional $ js "Pattern"
+  T.list $ T.optional $ ts "Pattern"
 
 assignmentPattern :: Binding
 assignmentPattern = define "AssignmentPattern" $
   doc "A pattern with default value (param = default)" $
   T.record [
-    "left">: js "Pattern",
-    "right">: js "Expression"]
+    "left">: ts "Pattern",
+    "right">: ts "Expression"]
 
 restElement :: Binding
 restElement = define "RestElement" $
   doc "A rest element pattern (...x)" $
-  T.wrap $ js "Pattern"
+  T.wrap $ ts "Pattern"
 
 -- ============================================================================
 -- Statements
@@ -646,14 +714,14 @@ restElement = define "RestElement" $
 
 statement :: Binding
 statement = define "Statement" $
-  doc "A JavaScript statement" $
+  doc "A TypeScript statement" $
   T.union [
     "expression">:
       doc "An expression statement" $
-      js "Expression",
+      ts "Expression",
     "block">:
       doc "A block statement" $
-      js "BlockStatement",
+      ts "BlockStatement",
     "empty">:
       doc "An empty statement (;)"
       T.unit,
@@ -662,78 +730,78 @@ statement = define "Statement" $
       T.unit,
     "return">:
       doc "A return statement" $
-      js "ReturnStatement",
+      ts "ReturnStatement",
     "break">:
       doc "A break statement" $
-      js "BreakStatement",
+      ts "BreakStatement",
     "continue">:
       doc "A continue statement" $
-      js "ContinueStatement",
+      ts "ContinueStatement",
     "if">:
       doc "An if statement" $
-      js "IfStatement",
+      ts "IfStatement",
     "switch">:
       doc "A switch statement" $
-      js "SwitchStatement",
+      ts "SwitchStatement",
     "throw">:
       doc "A throw statement" $
-      js "ThrowStatement",
+      ts "ThrowStatement",
     "try">:
       doc "A try statement" $
-      js "TryStatement",
+      ts "TryStatement",
     "while">:
       doc "A while statement" $
-      js "WhileStatement",
+      ts "WhileStatement",
     "doWhile">:
       doc "A do-while statement" $
-      js "DoWhileStatement",
+      ts "DoWhileStatement",
     "for">:
       doc "A for statement" $
-      js "ForStatement",
+      ts "ForStatement",
     "forIn">:
       doc "A for-in statement" $
-      js "ForInStatement",
+      ts "ForInStatement",
     "forOf">:
       doc "A for-of statement" $
-      js "ForOfStatement",
+      ts "ForOfStatement",
     "variableDeclaration">:
       doc "A variable declaration" $
-      js "VariableDeclaration",
+      ts "VariableDeclaration",
     "functionDeclaration">:
       doc "A function declaration" $
-      js "FunctionDeclaration",
+      ts "FunctionDeclaration",
     "classDeclaration">:
       doc "A class declaration" $
-      js "ClassDeclaration",
+      ts "ClassDeclaration",
     "labeled">:
       doc "A labeled statement" $
-      js "LabeledStatement"]
+      ts "LabeledStatement"]
 
 labeledStatement :: Binding
 labeledStatement = define "LabeledStatement" $
   doc "A labeled statement" $
   T.record [
-    "label">: js "Identifier",
-    "body">: js "Statement"]
+    "label">: ts "Identifier",
+    "body">: ts "Statement"]
 
 blockStatement :: Binding
 blockStatement = define "BlockStatement" $
   doc "A block statement { ... }" $
-  T.list $ js "Statement"
+  T.list $ ts "Statement"
 
 variableDeclaration :: Binding
 variableDeclaration = define "VariableDeclaration" $
   doc "A variable declaration (var, let, const)" $
   T.record [
-    "kind">: js "VariableKind",
-    "declarations">: T.list $ js "VariableDeclarator"]
+    "kind">: ts "VariableKind",
+    "declarations">: T.list $ ts "VariableDeclarator"]
 
 variableDeclarator :: Binding
 variableDeclarator = define "VariableDeclarator" $
   doc "A variable declarator (id = init)" $
   T.record [
-    "id">: js "Pattern",
-    "init">: T.optional $ js "Expression"]
+    "id">: ts "Pattern",
+    "init">: T.optional $ ts "Expression"]
 
 variableKind :: Binding
 variableKind = define "VariableKind" $
@@ -747,16 +815,16 @@ ifStatement :: Binding
 ifStatement = define "IfStatement" $
   doc "An if statement" $
   T.record [
-    "test">: js "Expression",
-    "consequent">: js "Statement",
-    "alternate">: T.optional $ js "Statement"]
+    "test">: ts "Expression",
+    "consequent">: ts "Statement",
+    "alternate">: T.optional $ ts "Statement"]
 
 switchStatement :: Binding
 switchStatement = define "SwitchStatement" $
   doc "A switch statement" $
   T.record [
-    "discriminant">: js "Expression",
-    "cases">: T.list $ js "SwitchCase"]
+    "discriminant">: ts "Expression",
+    "cases">: T.list $ ts "SwitchCase"]
 
 switchCase :: Binding
 switchCase = define "SwitchCase" $
@@ -764,10 +832,10 @@ switchCase = define "SwitchCase" $
   T.record [
     "test">:
       doc "The test expression (Nothing for default)" $
-      T.optional $ js "Expression",
+      T.optional $ ts "Expression",
     "consequent">:
       doc "The statements to execute" $
-      T.list $ js "Statement"]
+      T.list $ ts "Statement"]
 
 forStatement :: Binding
 forStatement = define "ForStatement" $
@@ -775,36 +843,36 @@ forStatement = define "ForStatement" $
   T.record [
     "init">:
       doc "Initialization" $
-      T.optional $ js "ForInit",
+      T.optional $ ts "ForInit",
     "test">:
       doc "Test condition" $
-      T.optional $ js "Expression",
+      T.optional $ ts "Expression",
     "update">:
       doc "Update expression" $
-      T.optional $ js "Expression",
-    "body">: js "Statement"]
+      T.optional $ ts "Expression",
+    "body">: ts "Statement"]
 
 forInit :: Binding
 forInit = define "ForInit" $
   doc "Initialization clause of a for statement" $
   T.union [
-    "variable">: js "VariableDeclaration",
-    "expression">: js "Expression"]
+    "variable">: ts "VariableDeclaration",
+    "expression">: ts "Expression"]
 
 forInStatement :: Binding
 forInStatement = define "ForInStatement" $
   doc "A for-in statement" $
   T.record [
-    "left">: js "ForInLeft",
-    "right">: js "Expression",
-    "body">: js "Statement"]
+    "left">: ts "ForInLeft",
+    "right">: ts "Expression",
+    "body">: ts "Statement"]
 
 forInLeft :: Binding
 forInLeft = define "ForInLeft" $
   doc "Left-hand side of a for-in or for-of statement" $
   T.union [
-    "variable">: js "VariableDeclaration",
-    "pattern">: js "Pattern"]
+    "variable">: ts "VariableDeclaration",
+    "pattern">: ts "Pattern"]
 
 forOfStatement :: Binding
 forOfStatement = define "ForOfStatement" $
@@ -813,31 +881,31 @@ forOfStatement = define "ForOfStatement" $
     "await">:
       doc "Whether this is a for-await-of"
       T.boolean,
-    "left">: js "ForInLeft",
-    "right">: js "Expression",
-    "body">: js "Statement"]
+    "left">: ts "ForInLeft",
+    "right">: ts "Expression",
+    "body">: ts "Statement"]
 
 whileStatement :: Binding
 whileStatement = define "WhileStatement" $
   doc "A while statement" $
   T.record [
-    "test">: js "Expression",
-    "body">: js "Statement"]
+    "test">: ts "Expression",
+    "body">: ts "Statement"]
 
 doWhileStatement :: Binding
 doWhileStatement = define "DoWhileStatement" $
   doc "A do-while statement" $
   T.record [
-    "body">: js "Statement",
-    "test">: js "Expression"]
+    "body">: ts "Statement",
+    "test">: ts "Expression"]
 
 tryStatement :: Binding
 tryStatement = define "TryStatement" $
   doc "A try statement" $
   T.record [
-    "block">: js "BlockStatement",
-    "handler">: T.optional $ js "CatchClause",
-    "finalizer">: T.optional $ js "BlockStatement"]
+    "block">: ts "BlockStatement",
+    "handler">: T.optional $ ts "CatchClause",
+    "finalizer">: T.optional $ ts "BlockStatement"]
 
 catchClause :: Binding
 catchClause = define "CatchClause" $
@@ -845,28 +913,28 @@ catchClause = define "CatchClause" $
   T.record [
     "param">:
       doc "The catch parameter (can be omitted in ES2019+)" $
-      T.optional $ js "Pattern",
-    "body">: js "BlockStatement"]
+      T.optional $ ts "Pattern",
+    "body">: ts "BlockStatement"]
 
 throwStatement :: Binding
 throwStatement = define "ThrowStatement" $
   doc "A throw statement" $
-  T.wrap $ js "Expression"
+  T.wrap $ ts "Expression"
 
 returnStatement :: Binding
 returnStatement = define "ReturnStatement" $
   doc "A return statement" $
-  T.optional $ js "Expression"
+  T.optional $ ts "Expression"
 
 breakStatement :: Binding
 breakStatement = define "BreakStatement" $
   doc "A break statement" $
-  T.optional $ js "Identifier"
+  T.optional $ ts "Identifier"
 
 continueStatement :: Binding
 continueStatement = define "ContinueStatement" $
   doc "A continue statement" $
-  T.optional $ js "Identifier"
+  T.optional $ ts "Identifier"
 
 -- ============================================================================
 -- Declarations
@@ -878,13 +946,13 @@ functionDeclaration = define "FunctionDeclaration" $
   T.record [
     "id">:
       doc "Function name" $
-      js "Identifier",
+      ts "Identifier",
     "params">:
       doc "Function parameters" $
-      T.list $ js "Pattern",
+      T.list $ ts "Pattern",
     "body">:
       doc "Function body" $
-      js "BlockStatement",
+      ts "BlockStatement",
     "async">:
       doc "Whether the function is async"
       T.boolean,
@@ -898,18 +966,18 @@ classDeclaration = define "ClassDeclaration" $
   T.record [
     "id">:
       doc "Class name" $
-      js "Identifier",
+      ts "Identifier",
     "superClass">:
       doc "Optional superclass" $
-      T.optional $ js "Expression",
+      T.optional $ ts "Expression",
     "body">:
       doc "Class body" $
-      js "ClassBody"]
+      ts "ClassBody"]
 
 classBody :: Binding
 classBody = define "ClassBody" $
   doc "A class body" $
-  T.list $ js "MethodDefinition"
+  T.list $ ts "MethodDefinition"
 
 methodDefinition :: Binding
 methodDefinition = define "MethodDefinition" $
@@ -917,13 +985,13 @@ methodDefinition = define "MethodDefinition" $
   T.record [
     "key">:
       doc "Method name" $
-      js "Expression",
+      ts "Expression",
     "value">:
       doc "Method function" $
-      js "FunctionExpression",
+      ts "FunctionExpression",
     "kind">:
       doc "Method kind" $
-      js "MethodKind",
+      ts "MethodKind",
     "computed">:
       doc "Whether the key is computed"
       T.boolean,
@@ -946,14 +1014,14 @@ methodKind = define "MethodKind" $
 
 program :: Binding
 program = define "Program" $
-  doc "A JavaScript program (module)" $
+  doc "A TypeScript program (module)" $
   T.record [
     "body">:
       doc "The module items" $
-      T.list $ js "ModuleItem",
+      T.list $ ts "ModuleItem",
     "sourceType">:
       doc "Whether this is a module or script" $
-      js "SourceType"]
+      ts "SourceType"]
 
 sourceType :: Binding
 sourceType = define "SourceType" $
@@ -966,9 +1034,15 @@ moduleItem :: Binding
 moduleItem = define "ModuleItem" $
   doc "A top-level item in a module" $
   T.union [
-    "statement">: js "Statement",
-    "import">: js "ImportDeclaration",
-    "export">: js "ExportDeclaration"]
+    "statement">: ts "Statement",
+    "import">: ts "ImportDeclaration",
+    "export">: ts "ExportDeclaration",
+    "interface">:
+      doc "A top-level interface declaration" $
+      ts "InterfaceDeclaration",
+    "typeAlias">:
+      doc "A top-level type alias declaration" $
+      ts "TypeAliasDeclaration"]
 
 importDeclaration :: Binding
 importDeclaration = define "ImportDeclaration" $
@@ -976,35 +1050,35 @@ importDeclaration = define "ImportDeclaration" $
   T.record [
     "specifiers">:
       doc "What to import" $
-      T.list $ js "ImportClause",
+      T.list $ ts "ImportClause",
     "source">:
       doc "The module to import from" $
-      js "StringLiteral"]
+      ts "StringLiteral"]
 
 importClause :: Binding
 importClause = define "ImportClause" $
   doc "An import clause (named, default, or namespace import)" $
   T.union [
-    "named">: js "ImportSpecifier",
-    "default">: js "ImportDefaultSpecifier",
-    "namespace">: js "ImportNamespaceSpecifier"]
+    "named">: ts "ImportSpecifier",
+    "default">: ts "ImportDefaultSpecifier",
+    "namespace">: ts "ImportNamespaceSpecifier"]
 
 importSpecifier :: Binding
 importSpecifier = define "ImportSpecifier" $
   doc "A named import specifier (import {x as y} from ...)" $
   T.record [
-    "imported">: js "Identifier",
-    "local">: js "Identifier"]
+    "imported">: ts "Identifier",
+    "local">: ts "Identifier"]
 
 importDefaultSpecifier :: Binding
 importDefaultSpecifier = define "ImportDefaultSpecifier" $
   doc "A default import specifier (import x from ...)" $
-  T.wrap $ js "Identifier"
+  T.wrap $ ts "Identifier"
 
 importNamespaceSpecifier :: Binding
 importNamespaceSpecifier = define "ImportNamespaceSpecifier" $
   doc "A namespace import specifier (import * as x from ...)" $
-  T.wrap $ js "Identifier"
+  T.wrap $ ts "Identifier"
 
 exportDeclaration :: Binding
 exportDeclaration = define "ExportDeclaration" $
@@ -1012,37 +1086,37 @@ exportDeclaration = define "ExportDeclaration" $
   T.union [
     "named">:
       doc "Named exports (export {x, y as z})" $
-      js "NamedExport",
+      ts "NamedExport",
     "default">:
       doc "Default export (export default ...)" $
-      js "Expression",
+      ts "Expression",
     "declaration">:
       doc "Export a declaration (export const x = ...)" $
-      js "Statement",
+      ts "Statement",
     "all">:
       doc "Export all (export * from ...)" $
-      js "ExportAllDeclaration"]
+      ts "ExportAllDeclaration"]
 
 namedExport :: Binding
 namedExport = define "NamedExport" $
   doc "Named exports (export {x, y as z})" $
   T.record [
-    "specifiers">: T.list $ js "ExportSpecifier",
-    "source">: T.optional $ js "StringLiteral"]
+    "specifiers">: T.list $ ts "ExportSpecifier",
+    "source">: T.optional $ ts "StringLiteral"]
 
 exportAllDeclaration :: Binding
 exportAllDeclaration = define "ExportAllDeclaration" $
   doc "Export all declaration (export * from ...)" $
   T.record [
-    "exported">: T.optional $ js "Identifier",
-    "source">: js "StringLiteral"]
+    "exported">: T.optional $ ts "Identifier",
+    "source">: ts "StringLiteral"]
 
 exportSpecifier :: Binding
 exportSpecifier = define "ExportSpecifier" $
   doc "An export specifier (x as y)" $
   T.record [
-    "local">: js "Identifier",
-    "exported">: js "Identifier"]
+    "local">: ts "Identifier",
+    "exported">: ts "Identifier"]
 
 -- ============================================================================
 -- Operators
@@ -1124,7 +1198,7 @@ assignmentOperator = define "AssignmentOperator" $
 
 comment :: Binding
 comment = define "Comment" $
-  doc "A JavaScript comment" $
+  doc "A TypeScript comment" $
   T.union [
     "line">:
       doc "A single-line comment (// ...)"
@@ -1134,7 +1208,7 @@ comment = define "Comment" $
       T.string,
     "documentation">:
       doc "A documentation comment (/** ... */, i.e. JSDoc)" $
-      js "DocumentationComment"]
+      ts "DocumentationComment"]
 
 documentationComment :: Binding
 documentationComment = define "DocumentationComment" $
@@ -1145,7 +1219,7 @@ documentationComment = define "DocumentationComment" $
       T.string,
     "tags">:
       doc "Documentation tags (@param, @returns, etc.)" $
-      T.list $ js "DocumentationTag"]
+      T.list $ ts "DocumentationTag"]
 
 documentationTag :: Binding
 documentationTag = define "DocumentationTag" $
@@ -1156,10 +1230,10 @@ documentationTag = define "DocumentationTag" $
       T.string,
     "type">:
       doc "Optional type expression" $
-      T.optional $ js "TypeExpression",
+      T.optional $ ts "TypeExpression",
     "paramName">:
       doc "Optional parameter name (for @param)" $
-      T.optional $ js "Identifier",
+      T.optional $ ts "Identifier",
     "description">:
       doc "Tag description"
       T.string]
@@ -1174,10 +1248,10 @@ moduleItemWithComments = define "ModuleItemWithComments" $
   T.record [
     "body">:
       doc "The module item" $
-      js "ModuleItem",
+      ts "ModuleItem",
     "comments">:
       doc "Optional documentation comment" $
-      T.optional $ js "DocumentationComment"]
+      T.optional $ ts "DocumentationComment"]
 
 statementWithComments :: Binding
 statementWithComments = define "StatementWithComments" $
@@ -1185,10 +1259,10 @@ statementWithComments = define "StatementWithComments" $
   T.record [
     "body">:
       doc "The statement" $
-      js "Statement",
+      ts "Statement",
     "comments">:
       doc "Optional documentation comment" $
-      T.optional $ js "DocumentationComment"]
+      T.optional $ ts "DocumentationComment"]
 
 functionDeclarationWithComments :: Binding
 functionDeclarationWithComments = define "FunctionDeclarationWithComments" $
@@ -1196,10 +1270,10 @@ functionDeclarationWithComments = define "FunctionDeclarationWithComments" $
   T.record [
     "body">:
       doc "The function declaration" $
-      js "FunctionDeclaration",
+      ts "FunctionDeclaration",
     "comments">:
       doc "Optional JSDoc comment" $
-      T.optional $ js "DocumentationComment"]
+      T.optional $ ts "DocumentationComment"]
 
 classDeclarationWithComments :: Binding
 classDeclarationWithComments = define "ClassDeclarationWithComments" $
@@ -1207,7 +1281,7 @@ classDeclarationWithComments = define "ClassDeclarationWithComments" $
   T.record [
     "body">:
       doc "The class declaration" $
-      js "ClassDeclaration",
+      ts "ClassDeclaration",
     "comments">:
       doc "Optional JSDoc comment" $
-      T.optional $ js "DocumentationComment"]
+      T.optional $ ts "DocumentationComment"]
