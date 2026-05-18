@@ -33,9 +33,7 @@ fi
 
 BATCH_PACKAGES=$(batch_emit_packages)
 
-# Stale-file warning: see #357. bootstrap-from-json writes only the
-# modules currently in dist/json; deleted/renamed source modules leave
-# stale .scala files behind that are silently picked up by the build.
+# Stale-file pruning is handled by bootstrap-from-json --prune-stale (#357).
 
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json hydra:exe:digest-check >/dev/null 2>&1
@@ -53,6 +51,7 @@ stack exec bootstrap-from-json -- \
     --target scala \
     --all-packages \
     --include-coders --include-dsls \
+    --prune-stale \
     --output "$DIST_ROOT"
 
 echo ""
@@ -61,6 +60,7 @@ stack exec bootstrap-from-json -- \
     --target scala \
     --all-packages \
     --include-coders --include-dsls --include-tests \
+    --prune-stale \
     --output "$DIST_ROOT"
 
 cd "$HYDRA_ROOT_DIR"
