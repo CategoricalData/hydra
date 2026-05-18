@@ -30,6 +30,7 @@ module Main where
 import Hydra.Kernel
 import Hydra.Generation
 import Hydra.PackageRouting (groupByPackage, namespaceToPackage, packagePrefixes)
+import qualified Hydra.TargetFilePaths as TargetFilePaths
 import qualified Hydra.Digest as Digest
 import Hydra.Sources.All (kernelModules)
 import Hydra.ExtGeneration (moduleToLispDialect, wrapLongScalaText, generateSourcesWithTransform)
@@ -51,10 +52,13 @@ import Control.Exception (catch, IOException)
 import Control.Monad (when, forM)
 import qualified Control.Monad as CM
 import qualified Data.Char as C
+import Data.IORef (IORef, newIORef, modifyIORef', readIORef)
 import Data.List (isPrefixOf, partition)
 import qualified Data.List as L
 import qualified Data.List.Split as LS
 import qualified Data.Map as M
+import qualified Data.Maybe as Y
+import qualified Data.Set as S
 import Data.Time.Clock (getCurrentTime, diffUTCTime, UTCTime)
 import System.Directory (listDirectory, doesFileExist)
 import qualified System.Directory as SD
@@ -120,6 +124,8 @@ data Options = Options
   , optDistJsonRoot       :: Maybe FilePath
   , optPackage            :: Maybe String  -- Layer 1: narrow generation to one package
   , optAllPackages        :: Bool          -- Batch mode: generate every package in one run
+  , optPruneStale         :: Bool          -- #357: delete files in per-package output dirs not just-written
+  , optKeepPathsFiles     :: [FilePath]    -- #357: each file lists "<sourceSetDir>\t<relPath>" pairs to keep
   }
 
 defaultOptions :: Options
@@ -136,6 +142,8 @@ defaultOptions = Options
   , optDistJsonRoot       = Nothing
   , optPackage            = Nothing
   , optAllPackages        = False
+  , optPruneStale         = False
+  , optKeepPathsFiles     = []
   }
 
 parseArgs :: [String] -> Either String Options
@@ -156,6 +164,9 @@ parseArgs = go defaultOptions
     go opts ("--dist-json-root" : d : rest) = go (opts { optDistJsonRoot = Just d }) rest
     go opts ("--package" : p : rest) = go (opts { optPackage = Just p }) rest
     go opts ("--all-packages" : rest) = go (opts { optAllPackages = True }) rest
+    go opts ("--prune-stale" : rest) = go (opts { optPruneStale = True }) rest
+    go opts ("--keep-paths-from" : f : rest) =
+      go (opts { optKeepPathsFiles = optKeepPathsFiles opts ++ [f] }) rest
     go _ (arg : _) = Left $ "Unknown argument: " ++ arg
 
 usage :: String
@@ -180,6 +191,18 @@ usage = unlines
   , "  --package <pkg>          Narrow generation to modules owned by <pkg>."
   , "                           The full universe is still loaded so cross-"
   , "                           package type references resolve."
+  , "  --prune-stale            After generation, delete files in each per-package"
+  , "                           output dir that are not in the owned-module path set."
+  , "                           Removes stale outputs left by deleted/renamed source"
+  , "                           modules. See issue #357. Compatible with Stage 7"
+  , "                           freshness filtering — the keep-set comes from"
+  , "                           Hydra.TargetFilePaths.moduleFilePaths over the owned"
+  , "                           module list, not from what was just written."
+  , "  --keep-paths-from <file> Extend the prune keep-set from a manifest file. Each"
+  , "                           line is '<sourceSetDir>\\t<relPath>'. Used to tell"
+  , "                           the pruner about hand-written files (e.g. the"
+  , "                           copy-kernel-runtime payload) that share the dir."
+  , "                           May be passed multiple times."
   ]
 
 main :: IO ()
@@ -502,9 +525,13 @@ main = do
   -- are generated separately via testMods.)
   let sourceSetForFilter = if optIncludeTests opts then "test" else "main"
 
+  -- Stage 7 freshness filtering stays active with or without --prune-stale
+  -- (#357). The prune step's keep-set is derived from the *owned* module
+  -- set (moduleFilePaths over modsToGenerateScoped), so Stage-7-skipped
+  -- modules' files are protected without re-running the coder for them.
   modsToGenerateScopedFiltered <- case optPackage opts of
-    Nothing  -> return modsToGenerateScoped
     Just pkg -> filterByTargetDigest outBase pkg sourceSetForFilter modsToGenerateScoped
+    Nothing  -> return modsToGenerateScoped
 
   -- Prepend synthesized source modules to modsToGenerate (deduping by namespace
   -- to keep ordering stable). They go into the same universe as the main modules.
@@ -540,7 +567,7 @@ main = do
   -- emits files only for the modsToGenerate argument (per the existing
   -- typeModulesToGenerate / termModulesToGenerate filters in
   -- Hydra.Codegen). No expansion, no prune.
-  let genForDir :: FilePath -> [Module] -> IO Int
+  let genForDir :: FilePath -> [Module] -> IO [FilePath]
       genForDir dir mods = case target of
         "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allModsFinal' mods
         "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allModsFinal' mods
@@ -552,6 +579,42 @@ main = do
         _ -> do
           putStrLn $ "Unknown target: " ++ target
           exitFailure
+
+  -- Per-dir keep-set for the #357 prune step. Keys are absolute output
+  -- dirs; values are relative paths joinable with the key. Populated
+  -- from moduleFilePaths over the *owned* module set (BEFORE Stage 7
+  -- filtering) so that fresh-skipped modules' files are protected
+  -- without re-running their coder. Flat-output mode is deliberately
+  -- not recorded — pruning a /tmp demo dir would be surprising.
+  keepRef <- newIORef (M.empty :: M.Map FilePath (S.Set FilePath))
+  let recordKeep dir paths = modifyIORef' keepRef $
+        M.insertWith S.union dir (S.fromList paths)
+  let recordOwnedPaths dir mods =
+        recordKeep dir [p | m <- mods, p <- TargetFilePaths.moduleFilePaths target m]
+
+  -- Populate the main-set keep-set from the OWNED modules (pre-filter),
+  -- grouped by package. This runs before generation so the keep-set is
+  -- exhaustive whether or not Stage 7 ends up skipping individual modules
+  -- as fresh.
+  --
+  -- Exception: in per-package mode AND --include-tests is set, the caller
+  -- is a test-only invocation (see assemble-distribution.sh: the test
+  -- pass omits --include-dsls, so the loaded universe is a subset of
+  -- what's on disk under the main dir). Pruning main against that subset
+  -- would delete legitimate DSL files. Batch mode (--all-packages) is OK
+  -- because it loads the full universe.
+  let testOnlyInvocation =
+        optIncludeTests opts && Y.isJust (optPackage opts) && not (optAllPackages opts)
+  let ownedMainGroups = groupByPackage (modsToGenerateScoped ++ synthesizedSourceMods)
+  CM.unless testOnlyInvocation $
+    case (optPackage opts, optAllPackages opts) of
+      (Just pkgArg, _) ->
+        CM.forM_ ownedMainGroups $ \(pkg, pkgMods) ->
+          CM.when (pkg == pkgArg) $ recordOwnedPaths (packageOutMain pkg) pkgMods
+      (Nothing, True)  ->
+        CM.forM_ ownedMainGroups $ \(pkg, pkgMods) ->
+          recordOwnedPaths (packageOutMain pkg) pkgMods
+      (Nothing, False) -> return ()  -- flat-output mode: no prune
 
   -- Partition modules by owning package and generate each group to its own dir.
   -- Routing via PackageRouting.groupByPackage is unconditional: every module
@@ -568,18 +631,21 @@ main = do
       counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
         let dir = packageOutMain pkg
         putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
-        genForDir dir pkgMods
+        paths <- genForDir dir pkgMods
+        return (length paths)
       return (sum counts)
     (Nothing, True) -> do
       let groups = groupByPackage modsToGenerate'
       counts <- CM.forM groups $ \(pkg, pkgMods) -> do
         let dir = packageOutMain pkg
         putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " modules → " ++ dir
-        genForDir dir pkgMods
+        paths <- genForDir dir pkgMods
+        return (length paths)
       return (sum counts)
     (Nothing, False) -> do
       putStrLn $ "  " ++ show (length modsToGenerate') ++ " modules → " ++ outMain
-      genForDir outMain modsToGenerate'
+      paths <- genForDir outMain modsToGenerate'
+      return (length paths)
   genEnd <- getCurrentTime
 
   putStrLn $ "  Generated " ++ show mainFileCount ++ " files."
@@ -603,12 +669,17 @@ main = do
       -- counterparts are the source of truth; emitting them would
       -- overwrite hand-written code.
       let notSkipEmit m = moduleNamespace m `notElem` testSkipEmitNamespaces
-      let testMods = Prelude.filter notSkipEmit $ case optPackage opts of
+      -- Package-scoped test modules including skip-emit ones — used to
+      -- populate the prune keep-set (skip-emit files are hand-written and
+      -- must survive prune). Generation itself filters skip-emit out via
+      -- testMods below.
+      let testModsForKeep = case optPackage opts of
             Nothing  -> testModsAll
             Just pkg ->
               Prelude.filter
                 (\m -> namespaceToPackage (moduleNamespace m) == pkg)
                 testModsAll
+      let testMods = Prelude.filter notSkipEmit testModsForKeep
       case optPackage opts of
         Just pkg | length testMods /= length testModsAll ->
           putStrLn $ "  Scoping to package " ++ pkg ++ ": "
@@ -639,8 +710,23 @@ main = do
 
       putStrLn $ "Mapping test modules to " ++ targetCap ++ "..."
 
+      -- Populate the test-set keep-set from the OWNED test modules.
+      -- Use testModsForKeep (package-scoped, NOT skip-emit-filtered) so
+      -- that hand-written skip-emit files (e.g. Hydra/Test/TestEnv.hs)
+      -- are protected from prune. See the main-set keep-set population
+      -- earlier for the Stage-7 rationale.
+      let ownedTestGroups = groupByPackage testModsForKeep
+      case (optPackage opts, optAllPackages opts) of
+        (Just pkgArg, _) ->
+          CM.forM_ ownedTestGroups $ \(pkg, pkgMods) ->
+            CM.when (pkg == pkgArg) $ recordOwnedPaths (packageOutTest pkg) pkgMods
+        (Nothing, True)  ->
+          CM.forM_ ownedTestGroups $ \(pkg, pkgMods) ->
+            recordOwnedPaths (packageOutTest pkg) pkgMods
+        (Nothing, False) -> return ()
+
       -- Dispatch helper for the test source set.
-      let genTestForDir :: FilePath -> [Module] -> IO Int
+      let genTestForDir :: FilePath -> [Module] -> IO [FilePath]
           genTestForDir dir mods = case target of
             "haskell" -> generateSources moduleToHaskell haskellLanguage False False False False dir allUniverse mods
             "java"    -> generateSources moduleToJava    javaLanguage    False True False True   dir allUniverse mods
@@ -648,7 +734,7 @@ main = do
             "scala"   -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allUniverse mods
             "go"      -> generateSources moduleToGoAdapted goLanguage    False False False False dir allUniverse mods
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False dir allUniverse mods
-            _ -> return 0
+            _ -> return []
 
       testStart <- getCurrentTime
       count <- case (optPackage opts, optAllPackages opts) of
@@ -658,18 +744,21 @@ main = do
           counts <- CM.forM scopedGroups $ \(pkg, pkgMods) -> do
             let dir = packageOutTest pkg
             putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
-            genTestForDir dir pkgMods
+            paths <- genTestForDir dir pkgMods
+            return (length paths)
           return (sum counts)
         (Nothing, True) -> do
           let groups = groupByPackage testMods
           counts <- CM.forM groups $ \(pkg, pkgMods) -> do
             let dir = packageOutTest pkg
             putStrLn $ "  " ++ pkg ++ ": " ++ show (length pkgMods) ++ " test modules → " ++ dir
-            genTestForDir dir pkgMods
+            paths <- genTestForDir dir pkgMods
+            return (length paths)
           return (sum counts)
         (Nothing, False) -> do
           putStrLn $ "  " ++ show (length testMods) ++ " test modules → " ++ outTest
-          genTestForDir outTest testMods
+          paths <- genTestForDir outTest testMods
+          return (length paths)
       testEnd <- getCurrentTime
 
       putStrLn $ "  Generated " ++ show count ++ " test files."
@@ -684,6 +773,37 @@ main = do
   -- transform on each file before write. See generateSourcesWithTransform
   -- in Hydra.Generation; the scala dispatch in genForDir/genTestForDir
   -- above passes wrapLongScalaText.)
+
+  -- #357: After all generation passes, prune each recorded output dir.
+  -- A file is considered current iff it is in the just-written set for
+  -- that dir OR in a keep-paths manifest the caller passed for that dir.
+  -- Anything else (a leftover from a deleted/renamed source module) is
+  -- deleted. Skips the digest.json sibling in case it sits inside the
+  -- source set (defensive: in the current layout it does not).
+  CM.when (optPruneStale opts) $ do
+    owned <- readIORef keepRef
+    extra <- readKeepPathsFiles (optKeepPathsFiles opts)
+    -- We walk only dirs that 'owned' (the path-set from moduleFilePaths
+    -- over the owned modules) claims responsibility for. The keep-paths
+    -- manifest extends what counts as "kept" within those dirs (e.g.
+    -- hand-written runtime files), but it does NOT add new dirs to the
+    -- walk-set. Adding manifest-only dirs would let an external caller
+    -- accidentally trigger a prune of a dir whose owned-paths weren't
+    -- populated — e.g. a test-only invocation whose manifest mentions
+    -- the main dir, in which case the manifest is the only entry for
+    -- main and prune would delete every generated main file.
+    let merged = M.mapWithKey (\dir ks -> S.union ks (M.findWithDefault S.empty dir extra)) owned
+    if M.null merged
+      then putStrLn "Prune: no per-package output dirs recorded; skipping."
+      else do
+        putStrLn ""
+        putStrLn "Pruning stale outputs (#357)..."
+        totalDeleted <- CM.foldM (\acc (dir, keep) -> do
+            n <- pruneDir dir keep
+            return (acc + n)
+          ) 0 (M.toList merged)
+        putStrLn $ "  Pruned " ++ show totalDeleted ++ " stale file(s)."
+        putStrLn ""
 
   putStrLn "=========================================="
   putStrLn $ "Done: " ++ show mainFileCount ++ " main"
@@ -763,3 +883,85 @@ filterByTargetDigest outBase pkg sourceSet mods = do
                   ++ " dirty; excluding fresh from generation"
                 return dirty
 
+-- | #357: Load keep-paths manifests. Each manifest file holds lines of
+-- the form '<sourceSetDir>\t<relPath>'. Lines that are empty, start with
+-- '#', or lack a tab are skipped. The resulting map merges all manifest
+-- contents keyed by source-set dir.
+readKeepPathsFiles :: [FilePath] -> IO (M.Map FilePath (S.Set FilePath))
+readKeepPathsFiles paths = do
+  pairs <- fmap concat $ CM.forM paths $ \p -> do
+    exists <- SD.doesFileExist p
+    if not exists
+      then do
+        putStrLn $ "Warning: --keep-paths-from file not found: " ++ p
+        return []
+      else do
+        contents <- readFile p
+        return $ Y.mapMaybe parseLine (lines contents)
+  return $ M.fromListWith S.union [(d, S.singleton r) | (d, r) <- pairs]
+  where
+    parseLine s = case dropWhile (== ' ') s of
+      ""         -> Nothing
+      '#' : _    -> Nothing
+      s'         -> case break (== '\t') s' of
+                      (_, [])    -> Nothing  -- no tab
+                      (d, _ : r) -> Just (d, r)
+
+-- | #357: Walk 'dir' recursively and delete every regular file whose path
+-- (relative to 'dir') is not in 'keep'. The keep set holds relative paths
+-- (e.g. "Hydra/Adapt.hs"), matching what 'generateSources' returns. Empty
+-- directories left behind by deleted files are also removed. Returns the
+-- number of files deleted.
+--
+-- Safety: the caller chose 'dir' (it's an output dir we just wrote to),
+-- so we don't second-guess scope here. We do skip the 'digest.json'
+-- sibling at the source-set root if it happens to live inside the
+-- walked dir (defensive — in the current layout digest.json sits one
+-- level up from the source set, so this is belt-and-suspenders).
+pruneDir :: FilePath -> S.Set FilePath -> IO Int
+pruneDir dir keep = do
+  exists <- SD.doesDirectoryExist dir
+  if not exists
+    then return 0
+    else do
+      onDisk <- listFilesRecursivePrune dir
+      let stale = Prelude.filter (\rel -> not (S.member rel keep)) onDisk
+      CM.forM_ stale $ \rel -> do
+        let p = dir FP.</> rel
+        putStrLn $ "  - " ++ p
+        SD.removeFile p
+      -- Best-effort: remove empty directories left behind.
+      pruneEmptyDirs dir
+      return (length stale)
+
+-- | List regular files under 'dir', returning paths relative to 'dir'.
+-- Skips a top-level 'digest.json' (cf. note in pruneDir).
+listFilesRecursivePrune :: FilePath -> IO [FilePath]
+listFilesRecursivePrune root = go ""
+  where
+    go relDir = do
+      let absDir = if Prelude.null relDir then root else root FP.</> relDir
+      entries <- listDirectory absDir `catch` \(_ :: IOException) -> return []
+      fmap concat $ CM.forM entries $ \e -> do
+        let relP = if Prelude.null relDir then e else relDir FP.</> e
+            absP = absDir FP.</> e
+        isFile <- doesFileExist absP
+        if isFile
+          then return [relP | not (Prelude.null relDir) || e /= "digest.json"]
+          else do
+            isDir <- SD.doesDirectoryExist absP
+            if isDir then go relP else return []
+
+-- | Remove any empty subdirectories (depth-first). 'dir' itself is left
+-- alone; only its descendants are pruned.
+pruneEmptyDirs :: FilePath -> IO ()
+pruneEmptyDirs dir = do
+  entries <- listDirectory dir `catch` \(_ :: IOException) -> return []
+  CM.forM_ entries $ \e -> do
+    let p = dir FP.</> e
+    isDir <- SD.doesDirectoryExist p
+    CM.when isDir $ do
+      pruneEmptyDirs p
+      children <- listDirectory p `catch` \(_ :: IOException) -> return []
+      CM.when (Prelude.null children) $
+        SD.removeDirectory p `catch` \(_ :: IOException) -> return ()
