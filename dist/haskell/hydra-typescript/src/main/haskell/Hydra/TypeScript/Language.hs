@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
+-- | Language constraints and reserved words for TypeScript 5.x (ECMAScript 2024 base)
 
--- | Language constraints and reserved words for JavaScript (ECMAScript 2024)
-
-module Hydra.JavaScript.Language where
-
+module Hydra.TypeScript.Language where
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Lists as Lists
@@ -12,12 +10,11 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
--- | Language constraints for JavaScript (ECMAScript 2024)
-javaScriptLanguage :: Coders.Language
-javaScriptLanguage =
+-- | Language constraints for TypeScript 5.x
+typeScriptLanguage :: Coders.Language
+typeScriptLanguage =
     Coders.Language {
-      Coders.languageName = (Coders.LanguageName "hydra.javaScript"),
+      Coders.languageName = (Coders.LanguageName "hydra.typeScript"),
       Coders.languageConstraints = Coders.LanguageConstraints {
         Coders.languageConstraintsEliminationVariants = eliminationVariants,
         Coders.languageConstraintsLiteralVariants = literalVariants,
@@ -93,16 +90,16 @@ javaScriptLanguage =
           Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
-
--- | A set of reserved words in JavaScript
-javaScriptReservedWords :: S.Set String
-javaScriptReservedWords =
+-- | A set of reserved words in TypeScript
+typeScriptReservedWords :: S.Set String
+typeScriptReservedWords =
     Sets.fromList (Lists.concat [
       keywords,
       futureReserved,
       strictModeReserved,
+      typeScriptKeywords,
       builtIns,
-      hydraJavaScriptKeywords])
+      hydraTypeScriptKeywords])
   where
     keywords =
         [
@@ -158,6 +155,40 @@ javaScriptReservedWords =
         [
           "arguments",
           "eval"]
+    typeScriptKeywords =
+        [
+          "abstract",
+          "as",
+          "asserts",
+          "assert",
+          "any",
+          "boolean",
+          "constructor",
+          "declare",
+          "from",
+          "get",
+          "global",
+          "infer",
+          "intrinsic",
+          "is",
+          "keyof",
+          "module",
+          "namespace",
+          "never",
+          "object",
+          "of",
+          "out",
+          "override",
+          "readonly",
+          "require",
+          "satisfies",
+          "set",
+          "string",
+          "symbol",
+          "type",
+          "unique",
+          "unknown",
+          "using"]
     builtIns =
         [
           "Array",
@@ -208,7 +239,7 @@ javaScriptReservedWords =
           "process",
           "require",
           "window"]
-    hydraJavaScriptKeywords =
+    hydraTypeScriptKeywords =
         [
           "Name",
           "FrozenMap",
