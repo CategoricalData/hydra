@@ -37,10 +37,6 @@ fi
 
 BATCH_PACKAGES=$(batch_emit_packages)
 
-# Stale-file warning: see #357. bootstrap-from-json writes only the
-# modules currently in dist/json; deleted/renamed source modules leave
-# stale .py files behind that are silently picked up by the build.
-
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json hydra:exe:digest-check >/dev/null 2>&1
 
@@ -52,11 +48,32 @@ for pkg in $BATCH_PACKAGES; do
     rm -f "$DIST_ROOT/$pkg/src/main/digest.json" "$DIST_ROOT/$pkg/src/test/digest.json"
 done
 
+# Step 0a + 0b: Drop hand-written files BEFORE generation so #357 prune
+# (bootstrap-from-json --prune-stale below) can be told which files to
+# preserve via a keep-paths manifest.
+KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-python.XXXXXX)"
+trap 'rm -f "$KEEP_MANIFEST"' EXIT
+
+TEST_ENV_SRC="$HEAD_DIR/src/test/python/hydra/test/test_env.py"
+TEST_ENV_DST_DIR="$DIST_ROOT/hydra-kernel/src/test/python"
+TEST_ENV_DST="$TEST_ENV_DST_DIR/hydra/test/test_env.py"
+if [ -f "$TEST_ENV_SRC" ]; then
+    echo "Step 0a: Copying test_env.py from heads/python/..."
+    mkdir -p "$(dirname "$TEST_ENV_DST")"
+    cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
+    printf "%s\thydra/test/test_env.py\n" "$TEST_ENV_DST_DIR" >> "$KEEP_MANIFEST"
+fi
+
+echo "Step 0b: Copying hand-written Python runtime into hydra-kernel dist..."
+"$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+echo ""
+
 echo "Step 1: Generating main python modules for every package..."
 stack exec bootstrap-from-json -- \
     --target python \
     --all-packages \
     --include-coders --include-dsls \
+    --prune-stale --keep-paths-from "$KEEP_MANIFEST" \
     --output "$DIST_ROOT"
 
 echo ""
@@ -65,29 +82,10 @@ stack exec bootstrap-from-json -- \
     --target python \
     --all-packages \
     --include-coders --include-dsls --include-tests \
+    --prune-stale --keep-paths-from "$KEEP_MANIFEST" \
     --output "$DIST_ROOT"
 
 cd "$HYDRA_ROOT_DIR"
-
-# Per-package post-processing for hydra-kernel: copy test_env.py and
-# the hand-written Python runtime. Must mirror
-# heads/python/bin/assemble-distribution.sh Step 3 — both entrypoints
-# (sync.sh per-package and sync-packages.sh batch) must produce the
-# same dist tree.
-TEST_ENV_SRC="$HEAD_DIR/src/test/python/hydra/test/test_env.py"
-TEST_ENV_DST="$DIST_ROOT/hydra-kernel/src/test/python/hydra/test/test_env.py"
-if [ -f "$TEST_ENV_SRC" ]; then
-    echo ""
-    echo "Step 3a: Copying test_env.py from heads/python/..."
-    mkdir -p "$(dirname "$TEST_ENV_DST")"
-    cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
-fi
-
-# Copy hand-written Python runtime so the published kernel wheel is
-# self-contained.
-echo ""
-echo "Step 3b: Copying hand-written Python runtime into hydra-kernel dist..."
-"$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
 
 # Step 4: Generate per-package pyproject.toml so each dist/python/<pkg>/
 # is a standalone publishable wheel build. Mirrors

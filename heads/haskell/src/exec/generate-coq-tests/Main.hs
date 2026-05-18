@@ -32,8 +32,8 @@ main = do
   let outputDir = "../../dist/coq/hydra-kernel/src/test/coq"
       universe  = mainModules ++ testModules
   putStrLn "Generating Coq (.v) files from Hydra test modules..."
-  n <- writeCoq outputDir universe testModules
-  putStrLn $ "Generated " ++ show n ++ " test .v files"
+  paths <- writeCoq outputDir universe testModules
+  putStrLn $ "Generated " ++ show (length paths) ++ " test .v files"
   putStrLn "Copying hand-written test support files..."
   copyCoqTestFiles outputDir
   -- Kernel modules are in dist/coq/hydra-kernel/src/main/coq. The generated

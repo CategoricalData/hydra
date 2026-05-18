@@ -20,7 +20,7 @@ import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writeHaskell :: FilePath -> [Module] -> [Module] -> IO Int
+writeHaskell :: FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeHaskell = generateSources moduleToHaskell haskellLanguage True False False False
 
 ----------------------------------------

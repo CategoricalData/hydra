@@ -55,7 +55,10 @@ showError :: Error.Error -> String
 showError = ShowError.error
 
 -- | Generate source files and write them to disk.
--- This is a thin I/O wrapper around 'generateSourceFiles'.
+-- Returns the relative paths the run wrote (joinable with the basePath argument
+-- to get full paths). Callers that only care about the count can take 'length'
+-- of the result; callers driving stale-output pruning (#357) use the path set
+-- as the keep-set for their post-generation walk.
 generateSources
   :: (Module -> [Definition] -> Context.Context -> Graph -> Either Error.Error (M.Map FilePath String))
   -> Language
@@ -66,7 +69,7 @@ generateSources
   -> FilePath
   -> [Module]  -- ^ Universe
   -> [Module]  -- ^ Modules to generate
-  -> IO Int  -- ^ Number of files written
+  -> IO [FilePath]  -- ^ Relative paths written (relative to basePath)
 generateSources = generateSourcesWithTransform id
 
 -- | Like 'generateSources' but applies a 'String -> String' transform to
@@ -86,14 +89,14 @@ generateSourcesWithTransform
   -> FilePath
   -> [Module]
   -> [Module]
-  -> IO Int
+  -> IO [FilePath]
 generateSourcesWithTransform transform printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
     let cx = Context.Context [] [] M.empty
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
       Left err -> fail $ "Failed to generate source files: " ++ showError err
       Right files -> do
         mapM_ writePair files
-        return $ length files
+        return $ map fst files
   where
     writePair (path, raw) = do
         let fullPath = FP.combine basePath path
