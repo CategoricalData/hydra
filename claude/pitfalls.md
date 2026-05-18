@@ -58,7 +58,7 @@ shell's `ulimit` blocks.
 by default re-run the per-package `assemble-distribution.sh` for any other
 package. Every coder package is non-baseline: `hydra-java`, `hydra-python`,
 `hydra-scala`, `hydra-lisp`, `hydra-go`, `hydra-pg`, `hydra-rdf`, `hydra-coq`,
-`hydra-javascript`, `hydra-wasm`, `hydra-ext`, `hydra-bench`.
+`hydra-typescript`, `hydra-wasm`, `hydra-ext`, `hydra-bench`.
 
 Note that `hydra-bench` is also opt-in for the JSON regen — it requires
 `--include-bench` on `update-json-main` and `update-json-manifest` (set by
