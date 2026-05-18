@@ -233,14 +233,10 @@ public class Serde {
                                 string("+"),
                                 apply(
                                     ref(Serde.additiveExpressionToExpr),
-                                    apply(
-                                        project(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.multiplicativeExpressionToExpr),
-                                    apply(
-                                        project(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.RHS),
-                                        var("b")))))),
+                                    proj(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.RHS, "b"))))),
                     field(
                         AdditiveExpression.MINUS,
                         lambda("b",
@@ -249,14 +245,10 @@ public class Serde {
                                 string("-"),
                                 apply(
                                     ref(Serde.additiveExpressionToExpr),
-                                    apply(
-                                        project(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.multiplicativeExpressionToExpr),
-                                    apply(
-                                        project(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.RHS),
-                                        var("b")))))))));
+                                    proj(AdditiveExpression_Binary.TYPE_, AdditiveExpression_Binary.RHS, "b"))))))));
 
     public static final Def ambiguousNameToExpr = def(
         "ambiguousNameToExpr",
@@ -282,9 +274,7 @@ public class Serde {
         () -> lambda("ai",
                 apply(
                     ref(Serde.identifierToExpr),
-                    apply(
-                        project(AnnotatedIdentifier.TYPE_, AnnotatedIdentifier.IDENTIFIER),
-                        var("ai")))));
+                    proj(AnnotatedIdentifier.TYPE_, AnnotatedIdentifier.IDENTIFIER, "ai"))));
 
     public static final Def annotationToExpr = def(
         "annotationToExpr",
@@ -331,13 +321,9 @@ public class Serde {
                                     lambda("pa",
                                         let(
                                             field("pt",
-                                                apply(
-                                                    project(ArrayCreationExpressionWithInitializer_Primitive.TYPE_, ArrayCreationExpressionWithInitializer_Primitive.TYPE),
-                                                    var("pa"))),
+                                                proj(ArrayCreationExpressionWithInitializer_Primitive.TYPE_, ArrayCreationExpressionWithInitializer_Primitive.TYPE, "pa")),
                                             field("ai",
-                                                apply(
-                                                    project(ArrayCreationExpressionWithInitializer_Primitive.TYPE_, ArrayCreationExpressionWithInitializer_Primitive.ARRAY),
-                                                    var("pa"))),
+                                                proj(ArrayCreationExpressionWithInitializer_Primitive.TYPE_, ArrayCreationExpressionWithInitializer_Primitive.ARRAY, "pa")),
                                             apply(
                                                 var("hydra.serialization.spaceSep"),
                                                 list(
@@ -393,13 +379,9 @@ public class Serde {
         () -> lambda("at",
                 let(
                     field("dims",
-                        apply(
-                            project(ArrayType.TYPE_, ArrayType.DIMS),
-                            var("at"))),
+                        proj(ArrayType.TYPE_, ArrayType.DIMS, "at")),
                     field("variant",
-                        apply(
-                            project(ArrayType.TYPE_, ArrayType.VARIANT),
-                            var("at"))),
+                        proj(ArrayType.TYPE_, ArrayType.VARIANT, "at")),
                     field("varExpr",
                         cases(ArrayType_Variant.TYPE_,
                             var("variant"),
@@ -439,17 +421,11 @@ public class Serde {
         () -> lambda("a",
                 let(
                     field("lhs",
-                        apply(
-                            project(Assignment.TYPE_, Assignment.LHS),
-                            var("a"))),
+                        proj(Assignment.TYPE_, Assignment.LHS, "a")),
                     field("op",
-                        apply(
-                            project(Assignment.TYPE_, Assignment.OP),
-                            var("a"))),
+                        proj(Assignment.TYPE_, Assignment.OP, "a")),
                     field("rhs",
-                        apply(
-                            project(Assignment.TYPE_, Assignment.EXPRESSION),
-                            var("a"))),
+                        proj(Assignment.TYPE_, Assignment.EXPRESSION, "a")),
                     field("ctop",
                         cases(AssignmentOperator.TYPE_,
                             var("op"),
@@ -548,13 +524,9 @@ public class Serde {
         () -> lambda("npm",
                 let(
                     field("rb",
-                        apply(
-                            project(CastExpression_NotPlusMinus.TYPE_, CastExpression_NotPlusMinus.REF_AND_BOUNDS),
-                            var("npm"))),
+                        proj(CastExpression_NotPlusMinus.TYPE_, CastExpression_NotPlusMinus.REF_AND_BOUNDS, "npm")),
                     field("ex",
-                        apply(
-                            project(CastExpression_NotPlusMinus.TYPE_, CastExpression_NotPlusMinus.EXPRESSION),
-                            var("npm"))),
+                        proj(CastExpression_NotPlusMinus.TYPE_, CastExpression_NotPlusMinus.EXPRESSION, "npm")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         list(
@@ -566,13 +538,9 @@ public class Serde {
         () -> lambda("cp",
                 let(
                     field("pt",
-                        apply(
-                            project(CastExpression_Primitive.TYPE_, CastExpression_Primitive.TYPE),
-                            var("cp"))),
+                        proj(CastExpression_Primitive.TYPE_, CastExpression_Primitive.TYPE, "cp")),
                     field("ex",
-                        apply(
-                            project(CastExpression_Primitive.TYPE_, CastExpression_Primitive.EXPRESSION),
-                            var("cp"))),
+                        proj(CastExpression_Primitive.TYPE_, CastExpression_Primitive.EXPRESSION, "cp")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         list(
@@ -588,13 +556,9 @@ public class Serde {
         () -> lambda("rab",
                 let(
                     field("rt",
-                        apply(
-                            project(CastExpression_RefAndBounds.TYPE_, CastExpression_RefAndBounds.TYPE),
-                            var("rab"))),
+                        proj(CastExpression_RefAndBounds.TYPE_, CastExpression_RefAndBounds.TYPE, "rab")),
                     field("adds",
-                        apply(
-                            project(CastExpression_RefAndBounds.TYPE_, CastExpression_RefAndBounds.BOUNDS),
-                            var("rab"))),
+                        proj(CastExpression_RefAndBounds.TYPE_, CastExpression_RefAndBounds.BOUNDS, "rab")),
                     apply(
                         var("hydra.serialization.parenList"),
                         bool(false),
@@ -653,13 +617,9 @@ public class Serde {
         () -> lambda("cbdwc",
                 let(
                     field("d",
-                        apply(
-                            project(ClassBodyDeclarationWithComments.TYPE_, ClassBodyDeclarationWithComments.VALUE),
-                            var("cbdwc"))),
+                        proj(ClassBodyDeclarationWithComments.TYPE_, ClassBodyDeclarationWithComments.VALUE, "cbdwc")),
                     field("mc",
-                        apply(
-                            project(ClassBodyDeclarationWithComments.TYPE_, ClassBodyDeclarationWithComments.COMMENTS),
-                            var("cbdwc"))),
+                        proj(ClassBodyDeclarationWithComments.TYPE_, ClassBodyDeclarationWithComments.COMMENTS, "cbdwc")),
                     apply(
                         ref(Serde.withComments),
                         var("mc"),
@@ -706,13 +666,9 @@ public class Serde {
         () -> lambda("cice",
                 let(
                     field("mqual",
-                        apply(
-                            project(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.QUALIFIER),
-                            var("cice"))),
+                        proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.QUALIFIER, "cice")),
                     field("e",
-                        apply(
-                            project(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.EXPRESSION),
-                            var("cice"))),
+                        proj(ClassInstanceCreationExpression.TYPE_, ClassInstanceCreationExpression.EXPRESSION, "cice")),
                     Maybes.maybe(
                         apply(ref(Serde.unqualifiedClassInstanceCreationExpressionToExpr), var("e")),
                         lambda("q",
@@ -799,13 +755,9 @@ public class Serde {
         () -> lambda("coitti",
                 let(
                     field("ids",
-                        apply(
-                            project(ClassOrInterfaceTypeToInstantiate.TYPE_, ClassOrInterfaceTypeToInstantiate.IDENTIFIERS),
-                            var("coitti"))),
+                        proj(ClassOrInterfaceTypeToInstantiate.TYPE_, ClassOrInterfaceTypeToInstantiate.IDENTIFIERS, "coitti")),
                     field("margs",
-                        apply(
-                            project(ClassOrInterfaceTypeToInstantiate.TYPE_, ClassOrInterfaceTypeToInstantiate.TYPE_ARGUMENTS),
-                            var("coitti"))),
+                        proj(ClassOrInterfaceTypeToInstantiate.TYPE_, ClassOrInterfaceTypeToInstantiate.TYPE_ARGUMENTS, "coitti")),
                     apply(
                         var("hydra.serialization.noSep"),
                         Maybes.cat(
@@ -821,21 +773,13 @@ public class Serde {
         () -> lambda("ct",
                 let(
                     field("anns",
-                        apply(
-                            project(ClassType.TYPE_, ClassType.ANNOTATIONS),
-                            var("ct"))),
+                        proj(ClassType.TYPE_, ClassType.ANNOTATIONS, "ct")),
                     field("qual",
-                        apply(
-                            project(ClassType.TYPE_, ClassType.QUALIFIER),
-                            var("ct"))),
+                        proj(ClassType.TYPE_, ClassType.QUALIFIER, "ct")),
                     field("id",
-                        apply(
-                            project(ClassType.TYPE_, ClassType.IDENTIFIER),
-                            var("ct"))),
+                        proj(ClassType.TYPE_, ClassType.IDENTIFIER, "ct")),
                     field("args",
-                        apply(
-                            project(ClassType.TYPE_, ClassType.ARGUMENTS),
-                            var("ct"))),
+                        proj(ClassType.TYPE_, ClassType.ARGUMENTS, "ct")),
                     field("qualifiedId",
                         cases(ClassTypeQualifier.TYPE_,
                             var("qual"),
@@ -897,17 +841,11 @@ public class Serde {
                         lambda("ocu",
                             let(
                                 field("mpkg",
-                                    apply(
-                                        project(OrdinaryCompilationUnit.TYPE_, OrdinaryCompilationUnit.PACKAGE),
-                                        var("ocu"))),
+                                    proj(OrdinaryCompilationUnit.TYPE_, OrdinaryCompilationUnit.PACKAGE, "ocu")),
                                 field("imports",
-                                    apply(
-                                        project(OrdinaryCompilationUnit.TYPE_, OrdinaryCompilationUnit.IMPORTS),
-                                        var("ocu"))),
+                                    proj(OrdinaryCompilationUnit.TYPE_, OrdinaryCompilationUnit.IMPORTS, "ocu")),
                                 field("types",
-                                    apply(
-                                        project(OrdinaryCompilationUnit.TYPE_, OrdinaryCompilationUnit.TYPES),
-                                        var("ocu"))),
+                                    proj(OrdinaryCompilationUnit.TYPE_, OrdinaryCompilationUnit.TYPES, "ocu")),
                                 field("warning",
                                     just(
                                         apply(
@@ -1000,17 +938,11 @@ public class Serde {
         () -> lambda("cd",
                 let(
                     field("mods",
-                        apply(
-                            project(ConstantDeclaration.TYPE_, ConstantDeclaration.MODIFIERS),
-                            var("cd"))),
+                        proj(ConstantDeclaration.TYPE_, ConstantDeclaration.MODIFIERS, "cd")),
                     field("typ",
-                        apply(
-                            project(ConstantDeclaration.TYPE_, ConstantDeclaration.TYPE),
-                            var("cd"))),
+                        proj(ConstantDeclaration.TYPE_, ConstantDeclaration.TYPE, "cd")),
                     field("vars",
-                        apply(
-                            project(ConstantDeclaration.TYPE_, ConstantDeclaration.VARIABLES),
-                            var("cd"))),
+                        proj(ConstantDeclaration.TYPE_, ConstantDeclaration.VARIABLES, "cd")),
                     apply(
                         var("hydra.serialization.withSemi"),
                         apply(
@@ -1044,13 +976,9 @@ public class Serde {
         () -> lambda("cb",
                 let(
                     field("minvoc",
-                        apply(
-                            project(ConstructorBody.TYPE_, ConstructorBody.INVOCATION),
-                            var("cb"))),
+                        proj(ConstructorBody.TYPE_, ConstructorBody.INVOCATION, "cb")),
                     field("stmts",
-                        apply(
-                            project(ConstructorBody.TYPE_, ConstructorBody.STATEMENTS),
-                            var("cb"))),
+                        proj(ConstructorBody.TYPE_, ConstructorBody.STATEMENTS, "cb")),
                     apply(
                         var("hydra.serialization.curlyBlock"),
                         var("hydra.serialization.fullBlockStyle"),
@@ -1071,21 +999,13 @@ public class Serde {
         () -> lambda("cd",
                 let(
                     field("mods",
-                        apply(
-                            project(ConstructorDeclaration.TYPE_, ConstructorDeclaration.MODIFIERS),
-                            var("cd"))),
+                        proj(ConstructorDeclaration.TYPE_, ConstructorDeclaration.MODIFIERS, "cd")),
                     field("cons",
-                        apply(
-                            project(ConstructorDeclaration.TYPE_, ConstructorDeclaration.CONSTRUCTOR),
-                            var("cd"))),
+                        proj(ConstructorDeclaration.TYPE_, ConstructorDeclaration.CONSTRUCTOR, "cd")),
                     field("mthrows",
-                        apply(
-                            project(ConstructorDeclaration.TYPE_, ConstructorDeclaration.THROWS),
-                            var("cd"))),
+                        proj(ConstructorDeclaration.TYPE_, ConstructorDeclaration.THROWS, "cd")),
                     field("body",
-                        apply(
-                            project(ConstructorDeclaration.TYPE_, ConstructorDeclaration.BODY),
-                            var("cd"))),
+                        proj(ConstructorDeclaration.TYPE_, ConstructorDeclaration.BODY, "cd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -1108,17 +1028,11 @@ public class Serde {
         () -> lambda("cd",
                 let(
                     field("tparams",
-                        apply(
-                            project(ConstructorDeclarator.TYPE_, ConstructorDeclarator.PARAMETERS),
-                            var("cd"))),
+                        proj(ConstructorDeclarator.TYPE_, ConstructorDeclarator.PARAMETERS, "cd")),
                     field("name",
-                        apply(
-                            project(ConstructorDeclarator.TYPE_, ConstructorDeclarator.NAME),
-                            var("cd"))),
+                        proj(ConstructorDeclarator.TYPE_, ConstructorDeclarator.NAME, "cd")),
                     field("fparams",
-                        apply(
-                            project(ConstructorDeclarator.TYPE_, ConstructorDeclarator.FORMAL_PARAMETERS),
-                            var("cd"))),
+                        proj(ConstructorDeclarator.TYPE_, ConstructorDeclarator.FORMAL_PARAMETERS, "cd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -1189,13 +1103,9 @@ public class Serde {
         () -> lambda("evp",
                 let(
                     field("k",
-                        apply(
-                            project(ElementValuePair.TYPE_, ElementValuePair.KEY),
-                            var("evp"))),
+                        proj(ElementValuePair.TYPE_, ElementValuePair.KEY, "evp")),
                     field("v",
-                        apply(
-                            project(ElementValuePair.TYPE_, ElementValuePair.VALUE),
-                            var("evp"))),
+                        proj(ElementValuePair.TYPE_, ElementValuePair.VALUE, "evp")),
                     apply(
                         var("hydra.serialization.infixWs"),
                         string("="),
@@ -1245,14 +1155,10 @@ public class Serde {
                                 string("=="),
                                 apply(
                                     ref(Serde.equalityExpressionToExpr),
-                                    apply(
-                                        project(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.relationalExpressionToExpr),
-                                    apply(
-                                        project(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.RHS),
-                                        var("b")))))),
+                                    proj(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.RHS, "b"))))),
                     field(
                         EqualityExpression.NOT_EQUAL,
                         lambda("b",
@@ -1261,14 +1167,10 @@ public class Serde {
                                 string("!="),
                                 apply(
                                     ref(Serde.equalityExpressionToExpr),
-                                    apply(
-                                        project(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.relationalExpressionToExpr),
-                                    apply(
-                                        project(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.RHS),
-                                        var("b")))))))));
+                                    proj(EqualityExpression_Binary.TYPE_, EqualityExpression_Binary.RHS, "b"))))))));
 
     public static final Def escapeJavaChar = def(
         "escapeJavaChar",
@@ -1329,13 +1231,9 @@ public class Serde {
         () -> lambda("en",
                 let(
                     field("mqual",
-                        apply(
-                            project(ExpressionName.TYPE_, ExpressionName.QUALIFIER),
-                            var("en"))),
+                        proj(ExpressionName.TYPE_, ExpressionName.QUALIFIER, "en")),
                     field("id",
-                        apply(
-                            project(ExpressionName.TYPE_, ExpressionName.IDENTIFIER),
-                            var("en"))),
+                        proj(ExpressionName.TYPE_, ExpressionName.IDENTIFIER, "en")),
                     apply(
                         var("hydra.serialization.dotSep"),
                         Maybes.cat(
@@ -1369,13 +1267,9 @@ public class Serde {
         () -> lambda("fa",
                 let(
                     field("qual",
-                        apply(
-                            project(FieldAccess.TYPE_, FieldAccess.QUALIFIER),
-                            var("fa"))),
+                        proj(FieldAccess.TYPE_, FieldAccess.QUALIFIER, "fa")),
                     field("id",
-                        apply(
-                            project(FieldAccess.TYPE_, FieldAccess.IDENTIFIER),
-                            var("fa"))),
+                        proj(FieldAccess.TYPE_, FieldAccess.IDENTIFIER, "fa")),
                     cases(FieldAccess_Qualifier.TYPE_,
                         var("qual"),
                         field(
@@ -1409,17 +1303,11 @@ public class Serde {
         () -> lambda("fd",
                 let(
                     field("mods",
-                        apply(
-                            project(FieldDeclaration.TYPE_, FieldDeclaration.MODIFIERS),
-                            var("fd"))),
+                        proj(FieldDeclaration.TYPE_, FieldDeclaration.MODIFIERS, "fd")),
                     field("typ",
-                        apply(
-                            project(FieldDeclaration.TYPE_, FieldDeclaration.UNANN_TYPE),
-                            var("fd"))),
+                        proj(FieldDeclaration.TYPE_, FieldDeclaration.UNANN_TYPE, "fd")),
                     field("vars",
-                        apply(
-                            project(FieldDeclaration.TYPE_, FieldDeclaration.VARIABLE_DECLARATORS),
-                            var("fd"))),
+                        proj(FieldDeclaration.TYPE_, FieldDeclaration.VARIABLE_DECLARATORS, "fd")),
                     apply(
                         var("hydra.serialization.withSemi"),
                         apply(
@@ -1505,17 +1393,11 @@ public class Serde {
         () -> lambda("fps",
                 let(
                     field("mods",
-                        apply(
-                            project(FormalParameter_Simple.TYPE_, FormalParameter_Simple.MODIFIERS),
-                            var("fps"))),
+                        proj(FormalParameter_Simple.TYPE_, FormalParameter_Simple.MODIFIERS, "fps")),
                     field("typ",
-                        apply(
-                            project(FormalParameter_Simple.TYPE_, FormalParameter_Simple.TYPE),
-                            var("fps"))),
+                        proj(FormalParameter_Simple.TYPE_, FormalParameter_Simple.TYPE, "fps")),
                     field("id",
-                        apply(
-                            project(FormalParameter_Simple.TYPE_, FormalParameter_Simple.ID),
-                            var("fps"))),
+                        proj(FormalParameter_Simple.TYPE_, FormalParameter_Simple.ID, "fps")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -1568,13 +1450,9 @@ public class Serde {
         () -> lambda("its",
                 let(
                     field("cond",
-                        apply(
-                            project(IfThenStatement.TYPE_, IfThenStatement.EXPRESSION),
-                            var("its"))),
+                        proj(IfThenStatement.TYPE_, IfThenStatement.EXPRESSION, "its")),
                     field("thn",
-                        apply(
-                            project(IfThenStatement.TYPE_, IfThenStatement.STATEMENT),
-                            var("its"))),
+                        proj(IfThenStatement.TYPE_, IfThenStatement.STATEMENT, "its")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         list(
@@ -1729,13 +1607,9 @@ public class Serde {
         () -> lambda("imdwc",
                 let(
                     field("d",
-                        apply(
-                            project(InterfaceMemberDeclarationWithComments.TYPE_, InterfaceMemberDeclarationWithComments.VALUE),
-                            var("imdwc"))),
+                        proj(InterfaceMemberDeclarationWithComments.TYPE_, InterfaceMemberDeclarationWithComments.VALUE, "imdwc")),
                     field("mc",
-                        apply(
-                            project(InterfaceMemberDeclarationWithComments.TYPE_, InterfaceMemberDeclarationWithComments.COMMENTS),
-                            var("imdwc"))),
+                        proj(InterfaceMemberDeclarationWithComments.TYPE_, InterfaceMemberDeclarationWithComments.COMMENTS, "imdwc")),
                     apply(
                         ref(Serde.withComments),
                         var("mc"),
@@ -1746,17 +1620,11 @@ public class Serde {
         () -> lambda("imd",
                 let(
                     field("mods",
-                        apply(
-                            project(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.MODIFIERS),
-                            var("imd"))),
+                        proj(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.MODIFIERS, "imd")),
                     field("header",
-                        apply(
-                            project(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.HEADER),
-                            var("imd"))),
+                        proj(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.HEADER, "imd")),
                     field("body",
-                        apply(
-                            project(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.BODY),
-                            var("imd"))),
+                        proj(InterfaceMethodDeclaration.TYPE_, InterfaceMethodDeclaration.BODY, "imd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -1890,13 +1758,9 @@ public class Serde {
         () -> lambda("le",
                 let(
                     field("params",
-                        apply(
-                            project(LambdaExpression.TYPE_, LambdaExpression.PARAMETERS),
-                            var("le"))),
+                        proj(LambdaExpression.TYPE_, LambdaExpression.PARAMETERS, "le")),
                     field("body",
-                        apply(
-                            project(LambdaExpression.TYPE_, LambdaExpression.BODY),
-                            var("le"))),
+                        proj(LambdaExpression.TYPE_, LambdaExpression.BODY, "le")),
                     apply(
                         var("hydra.serialization.infixWs"),
                         string("->"),
@@ -2025,17 +1889,11 @@ public class Serde {
         () -> lambda("lvd",
                 let(
                     field("mods",
-                        apply(
-                            project(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.MODIFIERS),
-                            var("lvd"))),
+                        proj(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.MODIFIERS, "lvd")),
                     field("t",
-                        apply(
-                            project(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.TYPE),
-                            var("lvd"))),
+                        proj(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.TYPE, "lvd")),
                     field("decls",
-                        apply(
-                            project(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.DECLARATORS),
-                            var("lvd"))),
+                        proj(LocalVariableDeclaration.TYPE_, LocalVariableDeclaration.DECLARATORS, "lvd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -2083,21 +1941,13 @@ public class Serde {
         () -> lambda("md",
                 let(
                     field("anns",
-                        apply(
-                            project(MethodDeclaration.TYPE_, MethodDeclaration.ANNOTATIONS),
-                            var("md"))),
+                        proj(MethodDeclaration.TYPE_, MethodDeclaration.ANNOTATIONS, "md")),
                     field("mods",
-                        apply(
-                            project(MethodDeclaration.TYPE_, MethodDeclaration.MODIFIERS),
-                            var("md"))),
+                        proj(MethodDeclaration.TYPE_, MethodDeclaration.MODIFIERS, "md")),
                     field("header",
-                        apply(
-                            project(MethodDeclaration.TYPE_, MethodDeclaration.HEADER),
-                            var("md"))),
+                        proj(MethodDeclaration.TYPE_, MethodDeclaration.HEADER, "md")),
                     field("body",
-                        apply(
-                            project(MethodDeclaration.TYPE_, MethodDeclaration.BODY),
-                            var("md"))),
+                        proj(MethodDeclaration.TYPE_, MethodDeclaration.BODY, "md")),
                     field("headerAndBody",
                         apply(
                             var("hydra.serialization.spaceSep"),
@@ -2132,13 +1982,9 @@ public class Serde {
         () -> lambda("md",
                 let(
                     field("id",
-                        apply(
-                            project(MethodDeclarator.TYPE_, MethodDeclarator.IDENTIFIER),
-                            var("md"))),
+                        proj(MethodDeclarator.TYPE_, MethodDeclarator.IDENTIFIER, "md")),
                     field("params",
-                        apply(
-                            project(MethodDeclarator.TYPE_, MethodDeclarator.FORMAL_PARAMETERS),
-                            var("md"))),
+                        proj(MethodDeclarator.TYPE_, MethodDeclarator.FORMAL_PARAMETERS, "md")),
                     apply(
                         var("hydra.serialization.noSep"),
                         list(
@@ -2152,21 +1998,13 @@ public class Serde {
         () -> lambda("mh",
                 let(
                     field("params",
-                        apply(
-                            project(MethodHeader.TYPE_, MethodHeader.PARAMETERS),
-                            var("mh"))),
+                        proj(MethodHeader.TYPE_, MethodHeader.PARAMETERS, "mh")),
                     field("result",
-                        apply(
-                            project(MethodHeader.TYPE_, MethodHeader.RESULT),
-                            var("mh"))),
+                        proj(MethodHeader.TYPE_, MethodHeader.RESULT, "mh")),
                     field("decl",
-                        apply(
-                            project(MethodHeader.TYPE_, MethodHeader.DECLARATOR),
-                            var("mh"))),
+                        proj(MethodHeader.TYPE_, MethodHeader.DECLARATOR, "mh")),
                     field("mthrows",
-                        apply(
-                            project(MethodHeader.TYPE_, MethodHeader.THROWS),
-                            var("mh"))),
+                        proj(MethodHeader.TYPE_, MethodHeader.THROWS, "mh")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -2188,13 +2026,9 @@ public class Serde {
         () -> lambda("mi",
                 let(
                     field("header",
-                        apply(
-                            project(MethodInvocation.TYPE_, MethodInvocation.HEADER),
-                            var("mi"))),
+                        proj(MethodInvocation.TYPE_, MethodInvocation.HEADER, "mi")),
                     field("args",
-                        apply(
-                            project(MethodInvocation.TYPE_, MethodInvocation.ARGUMENTS),
-                            var("mi"))),
+                        proj(MethodInvocation.TYPE_, MethodInvocation.ARGUMENTS, "mi")),
                     field("argSec",
                         apply(
                             var("hydra.serialization.parenListAdaptive"),
@@ -2210,17 +2044,11 @@ public class Serde {
                                 lambda("cx",
                                     let(
                                         field("cvar",
-                                            apply(
-                                                project(MethodInvocation_Complex.TYPE_, MethodInvocation_Complex.VARIANT),
-                                                var("cx"))),
+                                            proj(MethodInvocation_Complex.TYPE_, MethodInvocation_Complex.VARIANT, "cx")),
                                         field("targs",
-                                            apply(
-                                                project(MethodInvocation_Complex.TYPE_, MethodInvocation_Complex.TYPE_ARGUMENTS),
-                                                var("cx"))),
+                                            proj(MethodInvocation_Complex.TYPE_, MethodInvocation_Complex.TYPE_ARGUMENTS, "cx")),
                                         field("cid",
-                                            apply(
-                                                project(MethodInvocation_Complex.TYPE_, MethodInvocation_Complex.IDENTIFIER),
-                                                var("cx"))),
+                                            proj(MethodInvocation_Complex.TYPE_, MethodInvocation_Complex.IDENTIFIER, "cx")),
                                         field("idSec",
                                             apply(
                                                 var("hydra.serialization.noSep"),
@@ -2357,14 +2185,10 @@ public class Serde {
                                 string("*"),
                                 apply(
                                     ref(Serde.multiplicativeExpressionToExpr),
-                                    apply(
-                                        project(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.unaryExpressionToExpr),
-                                    apply(
-                                        project(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.RHS),
-                                        var("b")))))),
+                                    proj(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.RHS, "b"))))),
                     field(
                         MultiplicativeExpression.DIVIDE,
                         lambda("b",
@@ -2373,14 +2197,10 @@ public class Serde {
                                 string("/"),
                                 apply(
                                     ref(Serde.multiplicativeExpressionToExpr),
-                                    apply(
-                                        project(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.unaryExpressionToExpr),
-                                    apply(
-                                        project(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.RHS),
-                                        var("b")))))),
+                                    proj(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.RHS, "b"))))),
                     field(
                         MultiplicativeExpression.MOD,
                         lambda("b",
@@ -2389,27 +2209,19 @@ public class Serde {
                                 string("%"),
                                 apply(
                                     ref(Serde.multiplicativeExpressionToExpr),
-                                    apply(
-                                        project(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.unaryExpressionToExpr),
-                                    apply(
-                                        project(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.RHS),
-                                        var("b")))))))));
+                                    proj(MultiplicativeExpression_Binary.TYPE_, MultiplicativeExpression_Binary.RHS, "b"))))))));
 
     public static final Def normalAnnotationToExpr = def(
         "normalAnnotationToExpr",
         () -> lambda("na",
                 let(
                     field("tname",
-                        apply(
-                            project(NormalAnnotation.TYPE_, NormalAnnotation.TYPE_NAME),
-                            var("na"))),
+                        proj(NormalAnnotation.TYPE_, NormalAnnotation.TYPE_NAME, "na")),
                     field("pairs",
-                        apply(
-                            project(NormalAnnotation.TYPE_, NormalAnnotation.PAIRS),
-                            var("na"))),
+                        proj(NormalAnnotation.TYPE_, NormalAnnotation.PAIRS, "na")),
                     apply(
                         var("hydra.serialization.prefix"),
                         string("@"),
@@ -2427,29 +2239,17 @@ public class Serde {
         () -> lambda("ncd",
                 let(
                     field("mods",
-                        apply(
-                            project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.MODIFIERS),
-                            var("ncd"))),
+                        proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.MODIFIERS, "ncd")),
                     field("id",
-                        apply(
-                            project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.IDENTIFIER),
-                            var("ncd"))),
+                        proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.IDENTIFIER, "ncd")),
                     field("tparams",
-                        apply(
-                            project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.PARAMETERS),
-                            var("ncd"))),
+                        proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.PARAMETERS, "ncd")),
                     field("msuperc",
-                        apply(
-                            project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.EXTENDS),
-                            var("ncd"))),
+                        proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.EXTENDS, "ncd")),
                     field("superi",
-                        apply(
-                            project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.IMPLEMENTS),
-                            var("ncd"))),
+                        proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.IMPLEMENTS, "ncd")),
                     field("body",
-                        apply(
-                            project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.BODY),
-                            var("ncd"))),
+                        proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.BODY, "ncd")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -2514,25 +2314,15 @@ public class Serde {
         () -> lambda("nid",
                 let(
                     field("mods",
-                        apply(
-                            project(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.MODIFIERS),
-                            var("nid"))),
+                        proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.MODIFIERS, "nid")),
                     field("id",
-                        apply(
-                            project(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.IDENTIFIER),
-                            var("nid"))),
+                        proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.IDENTIFIER, "nid")),
                     field("tparams",
-                        apply(
-                            project(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.PARAMETERS),
-                            var("nid"))),
+                        proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.PARAMETERS, "nid")),
                     field("extends",
-                        apply(
-                            project(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.EXTENDS),
-                            var("nid"))),
+                        proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.EXTENDS, "nid")),
                     field("body",
-                        apply(
-                            project(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.BODY),
-                            var("nid"))),
+                        proj(NormalInterfaceDeclaration.TYPE_, NormalInterfaceDeclaration.BODY, "nid")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -2601,13 +2391,9 @@ public class Serde {
         () -> lambda("pd",
                 let(
                     field("mods",
-                        apply(
-                            project(PackageDeclaration.TYPE_, PackageDeclaration.MODIFIERS),
-                            var("pd"))),
+                        proj(PackageDeclaration.TYPE_, PackageDeclaration.MODIFIERS, "pd")),
                     field("ids",
-                        apply(
-                            project(PackageDeclaration.TYPE_, PackageDeclaration.IDENTIFIERS),
-                            var("pd"))),
+                        proj(PackageDeclaration.TYPE_, PackageDeclaration.IDENTIFIERS, "pd")),
                     apply(
                         var("hydra.serialization.withSemi"),
                         apply(
@@ -2799,13 +2585,9 @@ public class Serde {
         () -> lambda("ptwa",
                 let(
                     field("pt",
-                        apply(
-                            project(PrimitiveTypeWithAnnotations.TYPE_, PrimitiveTypeWithAnnotations.TYPE),
-                            var("ptwa"))),
+                        proj(PrimitiveTypeWithAnnotations.TYPE_, PrimitiveTypeWithAnnotations.TYPE, "ptwa")),
                     field("anns",
-                        apply(
-                            project(PrimitiveTypeWithAnnotations.TYPE_, PrimitiveTypeWithAnnotations.ANNOTATIONS),
-                            var("ptwa"))),
+                        proj(PrimitiveTypeWithAnnotations.TYPE_, PrimitiveTypeWithAnnotations.ANNOTATIONS, "ptwa")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -2846,14 +2628,10 @@ public class Serde {
                     string(">="),
                     apply(
                         ref(Serde.relationalExpressionToExpr),
-                        apply(
-                            project(RelationalExpression_GreaterThanEqual.TYPE_, RelationalExpression_GreaterThanEqual.LHS),
-                            var("gte"))),
+                        proj(RelationalExpression_GreaterThanEqual.TYPE_, RelationalExpression_GreaterThanEqual.LHS, "gte")),
                     apply(
                         ref(Serde.shiftExpressionToExpr),
-                        apply(
-                            project(RelationalExpression_GreaterThanEqual.TYPE_, RelationalExpression_GreaterThanEqual.RHS),
-                            var("gte"))))));
+                        proj(RelationalExpression_GreaterThanEqual.TYPE_, RelationalExpression_GreaterThanEqual.RHS, "gte")))));
 
     public static final Def relationalExpressionGreaterThanToExpr = def(
         "relationalExpressionGreaterThanToExpr",
@@ -2863,23 +2641,17 @@ public class Serde {
                     string(">"),
                     apply(
                         ref(Serde.relationalExpressionToExpr),
-                        apply(
-                            project(RelationalExpression_GreaterThan.TYPE_, RelationalExpression_GreaterThan.LHS),
-                            var("gt"))),
+                        proj(RelationalExpression_GreaterThan.TYPE_, RelationalExpression_GreaterThan.LHS, "gt")),
                     apply(
                         ref(Serde.shiftExpressionToExpr),
-                        apply(
-                            project(RelationalExpression_GreaterThan.TYPE_, RelationalExpression_GreaterThan.RHS),
-                            var("gt"))))));
+                        proj(RelationalExpression_GreaterThan.TYPE_, RelationalExpression_GreaterThan.RHS, "gt")))));
 
     public static final Def relationalExpressionInstanceOfToExpr = def(
         "relationalExpressionInstanceOfToExpr",
         () -> lambda("io",
                 let("rhsExpr",
                     cases(InstanceofExpression_Rhs.TYPE_,
-                        apply(
-                            project(InstanceofExpression.TYPE_, InstanceofExpression.RHS),
-                            var("io")),
+                        proj(InstanceofExpression.TYPE_, InstanceofExpression.RHS, "io"),
                         field(
                             InstanceofExpression_Rhs.REFERENCE_TYPE,
                             lambda("rt", apply(ref(Serde.referenceTypeToExpr), var("rt")))),
@@ -2891,9 +2663,7 @@ public class Serde {
                         string("instanceof"),
                         apply(
                             ref(Serde.relationalExpressionToExpr),
-                            apply(
-                                project(InstanceofExpression.TYPE_, InstanceofExpression.LHS),
-                                var("io"))),
+                            proj(InstanceofExpression.TYPE_, InstanceofExpression.LHS, "io")),
                         var("rhsExpr")))));
 
     public static final Def relationalExpressionLessThanEqualToExpr = def(
@@ -2904,14 +2674,10 @@ public class Serde {
                     string("<="),
                     apply(
                         ref(Serde.relationalExpressionToExpr),
-                        apply(
-                            project(RelationalExpression_LessThanEqual.TYPE_, RelationalExpression_LessThanEqual.LHS),
-                            var("lte"))),
+                        proj(RelationalExpression_LessThanEqual.TYPE_, RelationalExpression_LessThanEqual.LHS, "lte")),
                     apply(
                         ref(Serde.shiftExpressionToExpr),
-                        apply(
-                            project(RelationalExpression_LessThanEqual.TYPE_, RelationalExpression_LessThanEqual.RHS),
-                            var("lte"))))));
+                        proj(RelationalExpression_LessThanEqual.TYPE_, RelationalExpression_LessThanEqual.RHS, "lte")))));
 
     public static final Def relationalExpressionLessThanToExpr = def(
         "relationalExpressionLessThanToExpr",
@@ -2921,14 +2687,10 @@ public class Serde {
                     string("<"),
                     apply(
                         ref(Serde.relationalExpressionToExpr),
-                        apply(
-                            project(RelationalExpression_LessThan.TYPE_, RelationalExpression_LessThan.LHS),
-                            var("lt"))),
+                        proj(RelationalExpression_LessThan.TYPE_, RelationalExpression_LessThan.LHS, "lt")),
                     apply(
                         ref(Serde.shiftExpressionToExpr),
-                        apply(
-                            project(RelationalExpression_LessThan.TYPE_, RelationalExpression_LessThan.RHS),
-                            var("lt"))))));
+                        proj(RelationalExpression_LessThan.TYPE_, RelationalExpression_LessThan.RHS, "lt")))));
 
     public static final Def relationalExpressionToExpr = def(
         "relationalExpressionToExpr",
@@ -3013,14 +2775,10 @@ public class Serde {
                                 string("<<"),
                                 apply(
                                     ref(Serde.shiftExpressionToExpr),
-                                    apply(
-                                        project(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.additiveExpressionToExpr),
-                                    apply(
-                                        project(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.RHS),
-                                        var("b")))))),
+                                    proj(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.RHS, "b"))))),
                     field(
                         ShiftExpression.SHIFT_RIGHT,
                         lambda("b",
@@ -3029,14 +2787,10 @@ public class Serde {
                                 string(">>"),
                                 apply(
                                     ref(Serde.shiftExpressionToExpr),
-                                    apply(
-                                        project(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.additiveExpressionToExpr),
-                                    apply(
-                                        project(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.RHS),
-                                        var("b")))))),
+                                    proj(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.RHS, "b"))))),
                     field(
                         ShiftExpression.SHIFT_RIGHT_ZERO_FILL,
                         lambda("b",
@@ -3045,14 +2799,10 @@ public class Serde {
                                 string(">>>"),
                                 apply(
                                     ref(Serde.shiftExpressionToExpr),
-                                    apply(
-                                        project(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.LHS),
-                                        var("b"))),
+                                    proj(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.LHS, "b")),
                                 apply(
                                     ref(Serde.additiveExpressionToExpr),
-                                    apply(
-                                        project(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.RHS),
-                                        var("b")))))))));
+                                    proj(ShiftExpression_Binary.TYPE_, ShiftExpression_Binary.RHS, "b"))))))));
 
     public static final Def simpleTypeNameToExpr = def(
         "simpleTypeNameToExpr",
@@ -3066,13 +2816,9 @@ public class Serde {
         () -> lambda("sea",
                 let(
                     field("tname",
-                        apply(
-                            project(SingleElementAnnotation.TYPE_, SingleElementAnnotation.NAME),
-                            var("sea"))),
+                        proj(SingleElementAnnotation.TYPE_, SingleElementAnnotation.NAME, "sea")),
                     field("mv",
-                        apply(
-                            project(SingleElementAnnotation.TYPE_, SingleElementAnnotation.VALUE),
-                            var("sea"))),
+                        proj(SingleElementAnnotation.TYPE_, SingleElementAnnotation.VALUE, "sea")),
                     Maybes.maybe(
                         apply(
                             ref(Serde.markerAnnotationToExpr),
@@ -3288,13 +3034,9 @@ public class Serde {
                         lambda("ci",
                             let(
                                 field("cit",
-                                    apply(
-                                        project(TypeBound_ClassOrInterface.TYPE_, TypeBound_ClassOrInterface.TYPE),
-                                        var("ci"))),
+                                    proj(TypeBound_ClassOrInterface.TYPE_, TypeBound_ClassOrInterface.TYPE, "ci")),
                                 field("additional",
-                                    apply(
-                                        project(TypeBound_ClassOrInterface.TYPE_, TypeBound_ClassOrInterface.ADDITIONAL),
-                                        var("ci"))),
+                                    proj(TypeBound_ClassOrInterface.TYPE_, TypeBound_ClassOrInterface.ADDITIONAL, "ci")),
                                 Logic.ifElse(
                                     Lists.null_(var("additional")),
                                     apply(ref(Serde.classOrInterfaceTypeToExpr), var("cit")),
@@ -3326,13 +3068,9 @@ public class Serde {
         () -> lambda("tdwc",
                 let(
                     field("d",
-                        apply(
-                            project(TopLevelClassOrInterfaceDeclarationWithComments.TYPE_, TopLevelClassOrInterfaceDeclarationWithComments.VALUE),
-                            var("tdwc"))),
+                        proj(TopLevelClassOrInterfaceDeclarationWithComments.TYPE_, TopLevelClassOrInterfaceDeclarationWithComments.VALUE, "tdwc")),
                     field("mc",
-                        apply(
-                            project(TopLevelClassOrInterfaceDeclarationWithComments.TYPE_, TopLevelClassOrInterfaceDeclarationWithComments.COMMENTS),
-                            var("tdwc"))),
+                        proj(TopLevelClassOrInterfaceDeclarationWithComments.TYPE_, TopLevelClassOrInterfaceDeclarationWithComments.COMMENTS, "tdwc")),
                     apply(
                         ref(Serde.withComments),
                         var("mc"),
@@ -3350,13 +3088,9 @@ public class Serde {
         () -> lambda("tn",
                 let(
                     field("id",
-                        apply(
-                            project(TypeName.TYPE_, TypeName.IDENTIFIER),
-                            var("tn"))),
+                        proj(TypeName.TYPE_, TypeName.IDENTIFIER, "tn")),
                     field("mqual",
-                        apply(
-                            project(TypeName.TYPE_, TypeName.QUALIFIER),
-                            var("tn"))),
+                        proj(TypeName.TYPE_, TypeName.QUALIFIER, "tn")),
                     apply(
                         var("hydra.serialization.dotSep"),
                         Maybes.cat(
@@ -3376,17 +3110,11 @@ public class Serde {
         () -> lambda("tp",
                 let(
                     field("mods",
-                        apply(
-                            project(TypeParameter.TYPE_, TypeParameter.MODIFIERS),
-                            var("tp"))),
+                        proj(TypeParameter.TYPE_, TypeParameter.MODIFIERS, "tp")),
                     field("id",
-                        apply(
-                            project(TypeParameter.TYPE_, TypeParameter.IDENTIFIER),
-                            var("tp"))),
+                        proj(TypeParameter.TYPE_, TypeParameter.IDENTIFIER, "tp")),
                     field("bound",
-                        apply(
-                            project(TypeParameter.TYPE_, TypeParameter.BOUND),
-                            var("tp"))),
+                        proj(TypeParameter.TYPE_, TypeParameter.BOUND, "tp")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -3430,13 +3158,9 @@ public class Serde {
         () -> lambda("tv",
                 let(
                     field("anns",
-                        apply(
-                            project(TypeVariable.TYPE_, TypeVariable.ANNOTATIONS),
-                            var("tv"))),
+                        proj(TypeVariable.TYPE_, TypeVariable.ANNOTATIONS, "tv")),
                     field("id",
-                        apply(
-                            project(TypeVariable.TYPE_, TypeVariable.IDENTIFIER),
-                            var("tv"))),
+                        proj(TypeVariable.TYPE_, TypeVariable.IDENTIFIER, "tv")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -3521,21 +3245,13 @@ public class Serde {
         () -> lambda("ucice",
                 let(
                     field("targs",
-                        apply(
-                            project(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.TYPE_ARGUMENTS),
-                            var("ucice"))),
+                        proj(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.TYPE_ARGUMENTS, "ucice")),
                     field("cit",
-                        apply(
-                            project(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.CLASS_OR_INTERFACE),
-                            var("ucice"))),
+                        proj(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.CLASS_OR_INTERFACE, "ucice")),
                     field("args",
-                        apply(
-                            project(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.ARGUMENTS),
-                            var("ucice"))),
+                        proj(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.ARGUMENTS, "ucice")),
                     field("mbody",
-                        apply(
-                            project(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.BODY),
-                            var("ucice"))),
+                        proj(UnqualifiedClassInstanceCreationExpression.TYPE_, UnqualifiedClassInstanceCreationExpression.BODY, "ucice")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(
@@ -3571,13 +3287,9 @@ public class Serde {
         () -> lambda("vdi",
                 let(
                     field("id",
-                        apply(
-                            project(VariableDeclaratorId.TYPE_, VariableDeclaratorId.IDENTIFIER),
-                            var("vdi"))),
+                        proj(VariableDeclaratorId.TYPE_, VariableDeclaratorId.IDENTIFIER, "vdi")),
                     field("mdims",
-                        apply(
-                            project(VariableDeclaratorId.TYPE_, VariableDeclaratorId.DIMS),
-                            var("vdi"))),
+                        proj(VariableDeclaratorId.TYPE_, VariableDeclaratorId.DIMS, "vdi")),
                     apply(
                         var("hydra.serialization.noSep"),
                         Maybes.cat(
@@ -3590,13 +3302,9 @@ public class Serde {
         () -> lambda("vd",
                 let(
                     field("id",
-                        apply(
-                            project(VariableDeclarator.TYPE_, VariableDeclarator.ID),
-                            var("vd"))),
+                        proj(VariableDeclarator.TYPE_, VariableDeclarator.ID, "vd")),
                     field("minit",
-                        apply(
-                            project(VariableDeclarator.TYPE_, VariableDeclarator.INITIALIZER),
-                            var("vd"))),
+                        proj(VariableDeclarator.TYPE_, VariableDeclarator.INITIALIZER, "vd")),
                     field("idSec",
                         apply(ref(Serde.variableDeclaratorIdToExpr), var("id"))),
                     Maybes.maybe(
@@ -3638,13 +3346,9 @@ public class Serde {
         () -> lambda("ws",
                 let(
                     field("mcond",
-                        apply(
-                            project(WhileStatement.TYPE_, WhileStatement.COND),
-                            var("ws"))),
+                        proj(WhileStatement.TYPE_, WhileStatement.COND, "ws")),
                     field("body",
-                        apply(
-                            project(WhileStatement.TYPE_, WhileStatement.BODY),
-                            var("ws"))),
+                        proj(WhileStatement.TYPE_, WhileStatement.BODY, "ws")),
                     field("condSer",
                         Maybes.maybe(
                             apply(var("hydra.serialization.cst"), string("true")),
@@ -3690,13 +3394,9 @@ public class Serde {
         () -> lambda("w",
                 let(
                     field("anns",
-                        apply(
-                            project(Wildcard.TYPE_, Wildcard.ANNOTATIONS),
-                            var("w"))),
+                        proj(Wildcard.TYPE_, Wildcard.ANNOTATIONS, "w")),
                     field("mbounds",
-                        apply(
-                            project(Wildcard.TYPE_, Wildcard.WILDCARD),
-                            var("w"))),
+                        proj(Wildcard.TYPE_, Wildcard.WILDCARD, "w")),
                     apply(
                         var("hydra.serialization.spaceSep"),
                         Maybes.cat(

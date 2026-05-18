@@ -170,21 +170,24 @@ bin/generate-hydra-python-from-python.sh --force-rebuild
 ```
 
 The script:
-1. Builds the Python host (`bin/sync-python.sh`) if it isn't already present.
+1. Runs `bin/sync-python.sh` to ensure `dist/python/hydra-kernel/` and
+   `dist/python/hydra-python/` are current (these are the only trees the
+   Python self-host driver reads). Gated by `HYDRA_IN_SYNC=1` so that
+   `sync.sh` Phase 5 invoking us doesn't recurse.
 2. Runs `bin/python-self-host-demo.py`, which loads the kernel universe from
    `dist/json/hydra-kernel/`, imports the Python DSL source modules, infers types,
    and writes the resulting JSON.
 
 End-to-end is ~110 seconds under PyPy (faster than the Haskell incremental pipeline)
-and ~500 seconds under CPython. See [bin/python-self-host-demo.md](../../bin/python-self-host-demo.md)
-for background.
+and ~500 seconds under CPython, once `dist/` is current. See
+[bin/python-self-host-demo.md](../../bin/python-self-host-demo.md) for background.
 
-> **Note:** until the main sync sequence is updated to invoke
-> `generate-hydra-python-from-python.sh` automatically, `bin/sync-python.sh` and
-> `bin/sync.sh` still use the legacy Haskell DSL pipeline. The Python DSL output is
-> byte-identical to the Haskell output today (`--compare` confirms it), so running
-> either pipeline produces the same `dist/json/hydra-python/`. The legacy pipeline
-> will be retired before 0.16.
+> **Note:** `bin/sync.sh` Phase 5 invokes `generate-hydra-python-from-python.sh`
+> automatically — the native Python DSL path is authoritative. The legacy
+> Haskell DSL copy at `packages/hydra-python/src/main/haskell/` remains as a
+> bootstrap fallback (used by Phase 1 on a cold checkout) and will be
+> retired before 0.16. See [`claude/pitfalls.md`](../../claude/pitfalls.md)
+> for the `HYDRA_IN_SYNC` convention around wrapper-script self-syncing.
 
 ### Phase 2: regenerate `dist/python/` from the JSON
 
@@ -330,3 +333,88 @@ hit term-level workloads measured in seconds or minutes.
 
 Set `HYDRA_PYTHON_INTERPRETER=pypy3` (or any path/name) in the environment
 to force a specific interpreter for the bootstrap demo.
+
+## Future enhancements
+
+Recommendations from [#233](https://github.com/CategoricalData/hydra/issues/233)
+that haven't been adopted yet. Recorded here so the design intent survives
+any future re-evaluation. These are deliberate non-goals today, not bugs.
+
+#### `__match_args__` for structural pattern matching
+
+Python 3.10's `match`/`case` can destructure objects that declare
+`__match_args__`. The Python coder could emit this attribute on every
+generated dataclass-like type, letting consumers write:
+
+```python
+match lit:
+    case LiteralString(value=v):
+        return v
+    case LiteralInteger(value=iv):
+        match iv:
+            case IntegerValueInt32(value=n):
+                return n
+```
+
+instead of today's `isinstance()` chains. Cheap codegen tweak; purely
+additive (existing `isinstance` code continues to work). Should ship
+after other in-flight Python work is stable so the coder edit lands on
+a quiet baseline.
+
+#### Kwargs syntax for record construction
+
+```python
+# Today
+record(Name("Person"), [field(Name("name"), string("Alice")),
+                        field(Name("age"), int32(30))])
+
+# Proposed (combined with the existing str→Name auto-coercion)
+record("Person", name=string("Alice"), age=int32(30))
+```
+
+Python's `**kwargs` preserves insertion order (3.7+), so field order is
+stable. List-of-`field()` form would remain as an overload for the
+programmatic case. Edge case: field names that are Python keywords
+(`class`, `type`) need either trailing-underscore convention or a mix
+of kwargs + explicit `field()`.
+
+#### Decorator-based element definitions
+
+```python
+@hydra_element(my_module, type_=T.function(T.int32(), T.string()))
+def show_number(x):
+    return Strings.show_int32(x)
+```
+
+Idiomatic Python metadata mechanism. Risk: users may expect the
+decorator to "compile" arbitrary Python into Hydra terms, which it
+can't — the decorated body still has to be a `TTerm` expression. Clear
+docs required.
+
+#### Context managers for module scoping
+
+```python
+with hydra_module("myModule", namespace="com.example") as m:
+    m.define("Person", T.record(name=T.string(), age=T.int32()))
+    m.define("greet", lam("p", Strings.cat2(string("Hello, "),
+                                            project("Person", "name") @ var("p"))))
+```
+
+Tension with Hydra's functional philosophy (modules are declarative
+data, not imperative side-effects). Mitigation: the context manager
+collects definitions and produces an immutable `Module` on `__exit__`.
+
+#### Dataclass-style decorator for record type definitions
+
+```python
+@hydra_record("com.example.Person")
+class Person:
+    name: str             # → T.string()
+    age: int              # → T.int32()
+    email: Optional[str]  # → T.optional(T.string())
+```
+
+Familiar to anyone who's used `@dataclass`. Significant scope limits:
+mapping Python annotations to Hydra types only works for records with
+simple fields; unions, wrapped types, polymorphic types have no
+natural Python-annotation equivalent. Would cover a subset only.

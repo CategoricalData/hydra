@@ -9,6 +9,7 @@
 module Hydra.Sources.Bench.Manifest (
   mainModules,
   testModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -22,6 +23,13 @@ mainModules = [
   BenchFanOut.module_,
   BenchLinearChain.module_,
   BenchPolymorphicChain.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules. Empty — benchmark workloads are deliberately
+-- stress-shaped term modules, not type modules, and would not benefit
+-- from DSL wrappers.
+dslTypeModules :: [Module]
+dslTypeModules = []
 
 testModules :: [Module]
 testModules = []

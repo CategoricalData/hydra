@@ -13,6 +13,7 @@
 module Hydra.Sources.Pg.Manifest (
   mainModules,
   testModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -39,6 +40,7 @@ import qualified Hydra.Sources.Pg.Rdf.Environment as PgRdfEnvironment
 import qualified Hydra.Sources.Pg.Rdf.Mappings as PgRdfMappings
 import qualified Hydra.Sources.Pg.TermsToElements as TermsToElements
 import qualified Hydra.Sources.Pg.Utils as PgUtils
+import qualified Hydra.Sources.Show.Error.Pg as ShowErrorPg
 import qualified Hydra.Sources.Tinkerpop.Features as TinkerpopFeatures
 import qualified Hydra.Sources.Tinkerpop.Gremlin as Gremlin
 import qualified Hydra.Sources.Tinkerpop.Language as TinkerpopLanguage
@@ -69,9 +71,26 @@ mainModules = [
   PgRdfMappings.module_,
   TermsToElements.module_,
   PgUtils.module_,
+  ShowErrorPg.module_,
   TinkerpopFeatures.module_,
   TinkerpopLanguage.module_,
   ValidatePg.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/<Pkg>/<Name>.hs). Only modules whose
+-- derived DSL is actually imported elsewhere are listed — extend the
+-- list as new consumers appear.
+--
+-- Current consumers (as of 2026-05-16):
+--   * Hydra.Dsl.Pg.Model — imported by Hydra.Sources.Pg.Rdf.Mappings
+--
+-- Note: the hand-written DSL modules Hydra.Dsl.Pg.Mappings and
+-- Hydra.Dsl.Pg.Schemas (used by the genpg demos) are NOT derived from
+-- type modules; they live in packages/hydra-pg/.../Hydra/Dsl/Pg/ and
+-- don't go through this list.
+dslTypeModules :: [Module]
+dslTypeModules = [
+  PgModel.module_]
 
 testModules :: [Module]
 testModules = []

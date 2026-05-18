@@ -25,4 +25,10 @@ fi
 
 echo "Running Emacs Lisp tests..."
 cd "$OUTPUT_DIR"
-HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" emacs --batch --load run-tests.el 2>&1
+# HYDRA_LISP_DIST_BASE tells the (head's) run-tests.el to find generated
+# content under <demo>/src/{main,test}/emacs-lisp/ rather than the
+# head-relative <head>/../../../dist/emacs-lisp/hydra-kernel/... fallback,
+# which is wrong from /tmp/hydra-bootstrapping-demo-*/haskell-to-emacs-lisp/.
+HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" \
+HYDRA_LISP_DIST_BASE="$OUTPUT_DIR" \
+    emacs --batch --load run-tests.el 2>&1

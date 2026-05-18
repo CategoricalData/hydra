@@ -122,6 +122,72 @@ hydraWasmModules :: [Module]
 hydraWasmModules = WasmManifest.mainModules
 
 -- ----------------------------------------------------------------------
+-- Per-package DSL-input lists
+-- ----------------------------------------------------------------------
+-- These pull from each package's Manifest.dslTypeModules — the curated
+-- subset of mainModules whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/<Lang>/<Name>.hs). Extend each list in
+-- its package's Manifest.hs when a new type-defining module needs DSL
+-- wrappers; the driver picks the change up via allDslTypeModules below.
+
+hydraBenchDslTypeModules :: [Module]
+hydraBenchDslTypeModules = BenchManifest.dslTypeModules
+
+hydraCoqDslTypeModules :: [Module]
+hydraCoqDslTypeModules = CoqManifest.dslTypeModules
+
+hydraExtPackageDslTypeModules :: [Module]
+hydraExtPackageDslTypeModules = ExtManifest.dslTypeModules
+
+hydraGoDslTypeModules :: [Module]
+hydraGoDslTypeModules = GoManifest.dslTypeModules
+
+hydraJavaDslTypeModules :: [Module]
+hydraJavaDslTypeModules = JavaManifest.dslTypeModules
+
+hydraTypeScriptDslTypeModules :: [Module]
+hydraTypeScriptDslTypeModules = TypeScriptManifest.dslTypeModules
+
+hydraLispDslTypeModules :: [Module]
+hydraLispDslTypeModules = LispManifest.dslTypeModules
+
+hydraPgDslTypeModules :: [Module]
+hydraPgDslTypeModules = PgManifest.dslTypeModules
+
+hydraPythonDslTypeModules :: [Module]
+hydraPythonDslTypeModules = PythonManifest.dslTypeModules
+
+hydraRdfDslTypeModules :: [Module]
+hydraRdfDslTypeModules = RdfManifest.dslTypeModules
+
+hydraScalaDslTypeModules :: [Module]
+hydraScalaDslTypeModules = ScalaManifest.dslTypeModules
+
+hydraWasmDslTypeModules :: [Module]
+hydraWasmDslTypeModules = WasmManifest.dslTypeModules
+
+-- | Concatenation of every package's dslTypeModules. This is what the
+-- DSL wrapper generator consumes (see update-json-main/Main.hs). Replace
+-- this with a different aggregation if a package should be excluded;
+-- extend each package's Manifest.dslTypeModules to add a module.
+allDslTypeModules :: [Module]
+allDslTypeModules =
+  kernelDslInputModules
+  ++ haskellDslInputModules
+  ++ hydraBenchDslTypeModules
+  ++ hydraCoqDslTypeModules
+  ++ hydraExtPackageDslTypeModules
+  ++ hydraGoDslTypeModules
+  ++ hydraJavaDslTypeModules
+  ++ hydraTypeScriptDslTypeModules
+  ++ hydraLispDslTypeModules
+  ++ hydraPgDslTypeModules
+  ++ hydraPythonDslTypeModules
+  ++ hydraRdfDslTypeModules
+  ++ hydraScalaDslTypeModules
+  ++ hydraWasmDslTypeModules
+
+-- ----------------------------------------------------------------------
 -- Overrides for second-order and demo-only modules
 -- ----------------------------------------------------------------------
 

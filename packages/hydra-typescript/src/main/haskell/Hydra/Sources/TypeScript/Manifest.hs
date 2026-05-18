@@ -6,6 +6,7 @@
 module Hydra.Sources.TypeScript.Manifest (
   mainModules,
   testModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -23,6 +24,13 @@ mainModules = [
   TypeScriptOperators.module_,
   TypeScriptSerde.module_,
   TypeScriptSyntax.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules. Empty today — no source file imports
+-- `Hydra.Dsl.TypeScript.*` wrappers. Add `TypeScriptSyntax.module_` if/when
+-- a real consumer appears.
+dslTypeModules :: [Module]
+dslTypeModules = []
 
 testModules :: [Module]
 testModules = []
