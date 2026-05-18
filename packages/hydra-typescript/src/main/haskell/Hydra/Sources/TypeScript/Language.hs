@@ -1,6 +1,7 @@
--- | Language constraints and reserved words for JavaScript/ECMAScript
+-- | Language constraints and reserved words for TypeScript 5.x
+--   (ECMAScript 2024 base + the TypeScript type system).
 
-module Hydra.Sources.JavaScript.Language where
+module Hydra.Sources.TypeScript.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -85,13 +86,13 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.javaScript.language"),
-            moduleDefinitions = [toDefinition javaScriptLanguage, toDefinition javaScriptReservedWords],
+            moduleNamespace = (Namespace "hydra.typeScript.language"),
+            moduleDefinitions = [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords],
             moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
-            moduleDescription = Just "Language constraints and reserved words for JavaScript (ECMAScript 2024)"}
-javaScriptLanguage :: TTermDefinition Language
-javaScriptLanguage = define "javaScriptLanguage" $
-    doc "Language constraints for JavaScript (ECMAScript 2024)" $ lets [
+            moduleDescription = Just "Language constraints and reserved words for TypeScript 5.x (ECMAScript 2024 base)"}
+typeScriptLanguage :: TTermDefinition Language
+typeScriptLanguage = define "typeScriptLanguage" $
+    doc "Language constraints for TypeScript 5.x" $ lets [
     "eliminationVariants">: Sets.fromList $ list [
       Variants.eliminationVariantRecord,
       Variants.eliminationVariantUnion,
@@ -103,13 +104,13 @@ javaScriptLanguage = define "javaScriptLanguage" $
       Variants.literalVariantInteger, -- number/BigInt (see integer types)
       Variants.literalVariantString], -- string
     "floatTypes">: Sets.fromList $ list [
-      -- JavaScript's number is IEEE 754 double precision (float64)
+      -- TypeScript's number is IEEE 754 double precision (float64)
       Core.floatTypeFloat64],
     "functionVariants">: Sets.fromList $ list [
       Variants.functionVariantElimination,
       Variants.functionVariantLambda],
     "integerTypes">: Sets.fromList $ list [
-      -- JavaScript number can safely represent integers up to 2^53-1
+      -- TypeScript number can safely represent integers up to 2^53-1
       -- For larger integers, BigInt must be used
       Core.integerTypeInt32, -- Most integer operations use 32-bit
       Core.integerTypeBigint], -- BigInt for arbitrary precision
@@ -159,7 +160,7 @@ javaScriptLanguage = define "javaScriptLanguage" $
       Variants.typeVariantWrap],
     "typePredicate">: constant true] $ -- All types supported via runtime representation
     Coders.language
-      (Coders.languageName2 $ string "hydra.javaScript")
+      (Coders.languageName2 $ string "hydra.typeScript")
       (Coders.languageConstraints2
         (var "eliminationVariants")
         (var "literalVariants")
@@ -170,12 +171,12 @@ javaScriptLanguage = define "javaScriptLanguage" $
         (var "typeVariants")
         (var "typePredicate"))
 
-javaScriptReservedWords :: TTermDefinition (S.Set String)
-javaScriptReservedWords = define "javaScriptReservedWords" $
-  doc "A set of reserved words in JavaScript" $
+typeScriptReservedWords :: TTermDefinition (S.Set String)
+typeScriptReservedWords = define "typeScriptReservedWords" $
+  doc "A set of reserved words in TypeScript" $
   lets [
     "keywords">:
-      doc "JavaScript keywords per ECMAScript 2024 specification" $
+      doc "TypeScript 5.x keywords (ECMAScript 2024 base + TypeScript-only keywords)" $
       list $ string <$> [
         -- Keywords
         "await", "break", "case", "catch", "class", "const", "continue",
@@ -192,6 +193,14 @@ javaScriptReservedWords = define "javaScriptReservedWords" $
       doc "Additional words reserved in strict mode" $
       list $ string <$> [
         "arguments", "eval"],
+    "typeScriptKeywords">:
+      doc "TypeScript-only keywords and contextual keywords (TS 5.x)" $
+      list $ string <$> [
+        "abstract", "as", "asserts", "assert", "any", "boolean", "constructor",
+        "declare", "from", "get", "global", "infer", "intrinsic", "is", "keyof",
+        "module", "namespace", "never", "object", "of", "out", "override",
+        "readonly", "require", "satisfies", "set", "string", "symbol", "type",
+        "unique", "unknown", "using"],
     "builtIns">:
       doc "Common built-in identifiers we should avoid" $
       list $ string <$> [
@@ -208,8 +217,8 @@ javaScriptReservedWords = define "javaScriptReservedWords" $
         -- Common identifiers in Node.js and browsers
         "console", "document", "global", "globalThis", "module", "process",
         "require", "window"],
-    "hydraJavaScriptKeywords">:
-      doc "Reserved words specific to Hydra-JavaScript" $
+    "hydraTypeScriptKeywords">:
+      doc "Reserved words specific to Hydra-TypeScript" $
       list $ string <$> [
         -- Core utilities
         "Name", "FrozenMap",
@@ -222,5 +231,6 @@ javaScriptReservedWords = define "javaScriptReservedWords" $
       var "keywords",
       var "futureReserved",
       var "strictModeReserved",
+      var "typeScriptKeywords",
       var "builtIns",
-      var "hydraJavaScriptKeywords"]
+      var "hydraTypeScriptKeywords"]
