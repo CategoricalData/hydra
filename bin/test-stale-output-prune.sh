@@ -37,6 +37,7 @@ run_one_target() {
         java)    lang_ext="java";    ext_for_sentinel="java" ;;
         python)  lang_ext="python";  ext_for_sentinel="py" ;;
         scala)   lang_ext="scala";   ext_for_sentinel="scala" ;;
+        scheme)  return 0 ;;  # exercised separately by run_scheme_runtime_check
         *)       echo "unknown target: $target" >&2; return 1 ;;
     esac
 
@@ -158,6 +159,53 @@ EOF
     echo "[$target] PASS"
     PASS=$((PASS + 1))
 }
+
+# Scheme runtime libs: verify the keep-paths manifest emitted by
+# scheme_keep_paths protects the hand-copied runtime files from prune.
+# Runs the full scheme assembler (not bootstrap-from-json directly) so
+# the manifest path is exercised end-to-end. Only fires when the scheme
+# dist is already populated.
+#
+# Run BEFORE the per-target loop because run_one_target "scheme" invokes
+# bootstrap-from-json directly (no manifest), which WOULD delete the
+# runtime libs and corrupt the dist tree for this check.
+run_scheme_runtime_check() {
+    local dist_root="$HYDRA_ROOT_DIR/dist/scheme"
+    local lib_dir="$dist_root/hydra-kernel/src/main/scheme/hydra/lib"
+    local probe="$lib_dir/eithers.scm"
+    if [ ! -f "$probe" ]; then
+        echo "[scheme-runtime] SKIP: $probe missing (run sync first)"
+        return 0
+    fi
+    local before_count
+    before_count=$(find "$lib_dir" -maxdepth 1 -name "*.scm" -type f 2>/dev/null | wc -l | tr -d ' ')
+    echo "[scheme-runtime] Setup: $before_count runtime *.scm files before run"
+
+    # Invalidate the main digest so the assembler doesn't short-circuit.
+    rm -f "$dist_root/hydra-kernel/src/main/digest.json"
+
+    local log=/tmp/test-prune-scheme-runtime.log
+    if ! "$HYDRA_ROOT_DIR/heads/lisp/scheme/bin/assemble-distribution.sh" hydra-kernel >"$log" 2>&1; then
+        echo "[scheme-runtime] FAIL: scheme assemble-distribution.sh exit nonzero (log: $log)"
+        tail -20 "$log"
+        FAIL=$((FAIL + 1))
+        return
+    fi
+    local after_count
+    after_count=$(find "$lib_dir" -maxdepth 1 -name "*.scm" -type f 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$after_count" != "$before_count" ]; then
+        echo "[scheme-runtime] FAIL: runtime lib count changed ($before_count -> $after_count)"
+        FAIL=$((FAIL + 1))
+        return
+    fi
+    echo "[scheme-runtime] PASS ($after_count runtime libs survived prune)"
+    PASS=$((PASS + 1))
+}
+
+# Only run the scheme-runtime check when "all" or "scheme" was requested.
+case " ${TARGETS[*]} " in
+    *" all "*|*" scheme "*) run_scheme_runtime_check ;;
+esac
 
 for t in "${TARGETS[@]}"; do
     run_one_target "$t" || true
