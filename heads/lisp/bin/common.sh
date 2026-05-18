@@ -74,6 +74,16 @@ lisp_assemble_main() {
 
     local haskell_bin="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
+    # #357: optional --keep-paths-from forwarded from the dialect wrapper.
+    # The Scheme wrapper builds a manifest (via scheme_keep_paths) listing
+    # the runtime libs + stubs that scheme_post_kernel_extras drops in
+    # after Step 3; without --keep-paths-from, bootstrap-from-json's prune
+    # would delete them.
+    local keep_paths_flag=""
+    if [ -n "${LISP_KEEP_MANIFEST:-}" ] && [ -f "${LISP_KEEP_MANIFEST}" ]; then
+        keep_paths_flag="--keep-paths-from ${LISP_KEEP_MANIFEST}"
+    fi
+
     # Step 1: Main modules.
     if assemble_check_fresh "$input_digest_main" "$out_main" "$output_digest_main"; then
         echo "Step 1: Main modules unchanged; skipping main regeneration."
@@ -82,7 +92,7 @@ lisp_assemble_main() {
         echo "Step 1: Generating main $LISP_PRETTY_NAME modules..."
         "$haskell_bin/transform-json-to-lisp.sh" "$PACKAGE" "$LISP_DIALECT" main \
             --output "$DIST_ROOT" \
-            --prune-stale
+            --prune-stale $keep_paths_flag
         assemble_refresh_digest "$input_digest_main" "$out_main" "$output_digest_main"
     fi
 
@@ -101,7 +111,7 @@ lisp_assemble_main() {
             echo "Step 2: Generating test $LISP_PRETTY_NAME modules..."
             "$haskell_bin/transform-json-to-lisp.sh" "$PACKAGE" "$LISP_DIALECT" test \
                 --output "$DIST_ROOT" \
-                --prune-stale
+                --prune-stale $keep_paths_flag
             assemble_refresh_digest "$input_digest_test" "$out_test" "$output_digest_test"
         fi
     fi
@@ -124,9 +134,47 @@ lisp_assemble_main() {
     fi
 }
 
+# #357: enumerate the paths scheme_post_kernel_extras WILL drop, into a manifest
+# for bootstrap-from-json --keep-paths-from. Called by the Scheme wrapper
+# BEFORE lisp_assemble_main so the manifest exists when bootstrap-from-json
+# prunes. Args: <manifest-file> <PACKAGE> [--dist-root <dir>]
+#
+# The paths emitted here MUST match what scheme_post_kernel_extras actually
+# copies/writes — keep the two in sync.
+scheme_keep_paths() {
+    local manifest_file="$1"
+    local pkg="$2"
+    shift 2
+    [ "$pkg" = "hydra-kernel" ] || return 0
+    local dist_root="$HYDRA_ROOT_DIR/dist/scheme"
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            --dist-root) dist_root="$2"; shift 2 ;;
+            *) shift ;;
+        esac
+    done
+    local out_dir="$dist_root/$pkg"
+    local scheme_main_dir="$out_dir/src/main/scheme"
+    local scheme_lib_src="$LISP_HEAD_DIR/src/main/scheme/hydra/lib"
+    # Runtime libs: every *.scm under heads/lisp/scheme/src/main/scheme/hydra/lib/
+    # gets copied to <out>/src/main/scheme/hydra/lib/<name>.scm.
+    if [ -d "$scheme_lib_src" ]; then
+        for lib_file in "$scheme_lib_src"/*.scm; do
+            [ -e "$lib_file" ] || continue
+            printf "%s\thydra/lib/%s\n" "$scheme_main_dir" "$(basename "$lib_file")" >> "$manifest_file"
+        done
+    fi
+    # Stub modules: must match the list in scheme_post_kernel_extras Step 3b.
+    for stub in decode/graph decode/compute encode/graph encode/compute; do
+        printf "%s\thydra/%s.scm\n" "$scheme_main_dir" "$stub" >> "$manifest_file"
+    done
+}
+
 # Scheme-specific extras for hydra-kernel: copy runtime libs and write
 # empty define-library stubs. Called by the Scheme wrapper after
-# lisp_assemble_main returns (only when PACKAGE = hydra-kernel).
+# lisp_assemble_main returns (only when PACKAGE = hydra-kernel). Paired
+# with scheme_keep_paths above, which emits a #357 keep-paths manifest
+# enumerating the same files BEFORE generation.
 #
 # Historical note: maps.scm and sets.scm were previously skipped here
 # because two implementations existed — an alist-backed portable version
