@@ -329,3 +329,20 @@ exports many `_TypeFoo` / `_ExpressionBar` constants — GHC reports
 "Ambiguous occurrence." Affected constants include `_FunctionType`,
 `_LambdaType`, and (after renames in #297) `_Type_function`. Fix: drop the
 local alias and qualify references with `Scala.` at use sites.
+
+### Lazy primitives: detect head through TypeApplication erasure
+
+When adding a new target-language coder, you'll need to wrap the lazy positions
+of `ifElse`/`cases`/`maybe`/`fromMaybe`/`fromLeft`/`fromRight`/`findWithDefault`
+in nullary thunks at call sites (see [Lazy evaluation and thunking](../docs/recipes/new-implementation.md#lazy-evaluation-and-thunking)).
+To do that, your coder needs to identify the primitive being called by walking
+the application spine and asking "is the head a `Term_variable` with one of these names?"
+
+The catch: polymorphic primitives are wrapped in `Term_typeApplication` (and
+sometimes `Term_annotated`) layers in the kernel JSON. A naive `Term_variable`-only
+matcher will skip nearly every kernel call to `ifElse` (which is `forall a. Bool ->
+a -> a -> a`) because the head is actually `TypeApp(Var "ifElse", T)`, not
+`Var "ifElse"`. Your head-finder must erase those wrappers. Symptom if you forget:
+debug markers show `name=NONAME argc=3` for every ifElse call and zero LAZY wrappings
+get emitted, even though detection "works" for monomorphic functions like
+`hydra.inference.inferTypeOfTerm`.
