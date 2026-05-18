@@ -1,9 +1,10 @@
--- | AST operators for JavaScript, defining precedence and associativity.
+-- | AST operators for TypeScript, defining precedence and associativity.
 --
--- Operator precedence is based on:
+-- TypeScript is a superset of JavaScript; operator precedence follows JavaScript.
+-- Reference:
 -- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_precedence
 
-module Hydra.Sources.JavaScript.Operators where
+module Hydra.Sources.TypeScript.Operators where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -90,14 +91,14 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 ns :: Namespace
-ns = Namespace "hydra.javaScript.operators"
+ns = Namespace "hydra.typeScript.operators"
 
 module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
             moduleDependencies = [Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces,
-            moduleDescription = Just "AST operators for JavaScript with precedence and associativity"}
+            moduleDescription = Just "AST operators for TypeScript with precedence and associativity"}
   where
     definitions = [
       -- Function application
@@ -155,10 +156,10 @@ module_ = Module {
       -- Definition (for const x = ...)
       toDefinition defineOp,
 
-      -- Type annotation (for JSDoc/TypeScript)
+      -- Type annotation (TypeScript)
       toDefinition colonOp]
 
--- Note: JavaScript precedence levels (MDN):
+-- Note: JavaScript precedence levels (MDN); TypeScript inherits these:
 -- 1 = comma, 2 = assignment, 3 = conditional, 4 = nullish coalescing,
 -- 5 = logical or, 6 = logical and, 7-10 = bitwise, 11 = equality,
 -- 12 = relational, 13 = shift, 14 = additive, 15 = multiplicative,

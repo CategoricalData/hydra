@@ -1,7 +1,7 @@
--- | A DSL for constructing JavaScript syntax trees in Haskell.
-module Hydra.Dsl.JavaScript.Helpers where
+-- | A DSL for constructing TypeScript syntax trees in Haskell.
+module Hydra.Dsl.TypeScript.Helpers where
 
-import Hydra.JavaScript.Syntax
+import Hydra.TypeScript.Syntax
 import qualified Data.Int as I
 
 
