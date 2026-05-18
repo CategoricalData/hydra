@@ -6,6 +6,7 @@
 module Hydra.Sources.Python.Manifest (
   mainModules,
   testModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -29,6 +30,17 @@ mainModules = [
   PySyntax.module_,
   PythonTesting.module_,
   PyUtils.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/Python/<Name>.hs). The DSL generator
+-- consumes this list to emit constructors / accessors / withXxx updaters
+-- for each TypeDefinition. Term-only modules (Coder, Serde, Language,
+-- Names, Testing, Utils) are deliberately excluded. Extend the list when
+-- a new type-defining module needs DSL wrappers.
+dslTypeModules :: [Module]
+dslTypeModules = [
+  PyEnvironmentSource.module_,
+  PySyntax.module_]
 
 testModules :: [Module]
 testModules = []

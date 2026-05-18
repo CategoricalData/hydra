@@ -31,6 +31,8 @@ data Error =
   ErrorExtraction ExtractionError |
   -- | A type inference error
   ErrorInference InferenceError |
+  -- | A literal value validation error
+  ErrorInvalidLiteral ErrorCore.InvalidLiteralError |
   -- | Any other error
   ErrorOther OtherError |
   -- | A name-resolution error
@@ -55,6 +57,7 @@ _Error_duplicateBinding = Core.Name "duplicateBinding"
 _Error_duplicateField = Core.Name "duplicateField"
 _Error_extraction = Core.Name "extraction"
 _Error_inference = Core.Name "inference"
+_Error_invalidLiteral = Core.Name "invalidLiteral"
 _Error_other = Core.Name "other"
 _Error_resolution = Core.Name "resolution"
 _Error_undefinedField = Core.Name "undefinedField"

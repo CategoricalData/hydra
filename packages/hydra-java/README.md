@@ -178,7 +178,11 @@ bin/generate-hydra-java-from-java.sh --force-rebuild
 ```
 
 The script:
-1. Builds the Java host (`bin/sync-java.sh`) if it isn't already present.
+1. Runs `bin/sync.sh` to ensure every per-language `dist/java/hydra-*` tree
+   is current (the gradle rollup imports `hydra.python.*`, `hydra.haskell.*`,
+   etc., so a scoped `sync-java.sh` is not sufficient). Gated by
+   `HYDRA_IN_SYNC=1` so that `sync.sh` Phase 5 invoking us doesn't recurse.
+   Warm-cache sync is ~3 minutes.
 2. Compiles the rollup (`./gradlew :hydra-java:compileHeadsExtrasJava`).
 3. Runs `hydra.JavaSelfHostDemo`, which loads the kernel universe from
    `dist/json/hydra-kernel/`, discovers the Java DSL source modules via reflection,
@@ -186,14 +190,14 @@ The script:
    its schemes pre-computed; see [bin/java-self-host-demo.md](../../bin/java-self-host-demo.md)
    for the rationale), and writes the resulting JSON.
 
-End-to-end is ~30 seconds.
+End-to-end is ~30 seconds once `dist/` is current.
 
-> **Note:** until the main sync sequence is updated to invoke
-> `generate-hydra-java-from-java.sh` automatically, `bin/sync-java.sh` and
-> `bin/sync.sh` still use the legacy Haskell DSL pipeline. The Java DSL output is
-> byte-identical to the Haskell output today (`--compare` confirms it), so running
-> either pipeline produces the same `dist/json/hydra-java/`. The legacy pipeline
-> will be retired before 0.16.
+> **Note:** `bin/sync.sh` Phase 5 invokes `generate-hydra-java-from-java.sh`
+> automatically — the native Java DSL path is authoritative. The legacy
+> Haskell DSL copy at `packages/hydra-java/src/main/haskell/` remains as a
+> bootstrap fallback (used by Phase 1 on a cold checkout) and will be
+> retired before 0.16. See [`claude/pitfalls.md`](../../claude/pitfalls.md)
+> for the `HYDRA_IN_SYNC` convention around wrapper-script self-syncing.
 
 ### Phase 2: regenerate `dist/java/` from the JSON
 
@@ -352,3 +356,65 @@ and
 [Reduction](https://github.com/CategoricalData/hydra/blob/main/dist/java/hydra-kernel/src/main/java/hydra/reduction/Reduction.java)
 classes are good examples of pattern matching in action, and there are simpler examples in
 [VisitorTest.java](https://github.com/CategoricalData/hydra/blob/main/heads/java/src/test/java/hydra/VisitorTest.java).
+
+## Future enhancements
+
+Recommendations from [#233](https://github.com/CategoricalData/hydra/issues/233)
+that haven't been adopted yet. Recorded here so the design intent survives
+any future re-evaluation. These are deliberate non-goals today, not bugs.
+
+### Gated on a Java 21 minimum
+
+The current minimum Java version for `hydra-java` and its generated code is
+**Java 11**. The visitor pattern shown above is the most ergonomic encoding
+of sum types compatible with that floor. Several worthwhile improvements
+become available if the minimum is raised to Java 21.
+
+#### Sealed classes + pattern-matching `switch` (JEP 441, Java 21)
+
+Today's generated union types use an abstract base class with nested
+subclasses and a `Visitor`/`PartialVisitor` for dispatch. Java 21's sealed
+hierarchies combined with pattern-matching `switch` expressions would let
+consumers write:
+
+```java
+String label = switch (term) {
+    case Term.Literal l    -> "literal: " + l.value;
+    case Term.Variable v   -> "var: "     + v.value;
+    case Term.Function f   -> "function";
+    case Term.Application a -> "app";
+    // ... compiler enforces exhaustiveness; missing cases are a compile error
+};
+```
+
+Compared to today's `PartialVisitor` (which throws at runtime on
+unhandled cases), this would give compile-time exhaustiveness checking,
+remove the `accept`/`visit` boilerplate from every consumer site, and
+align the Java emission with what equivalent Hydra code looks like in
+Haskell, Scala, Python (`match`/`case`), and the Lisp dialects. The
+generated classes would need `sealed`/`permits` keywords; downstream
+code would migrate from visitor implementations to `switch` blocks.
+For the trade-off analysis and references to issue #233's
+JAVA-SEALED-SWITCH and JAVA-FUNCTIONAL-MATCH recommendations, see the
+branch plan in `feature_233_edsls-plan.md`.
+
+#### Records for product types (Java 14+, refined in 21)
+
+Generated record types currently use explicit fields plus hand-rolled
+`equals`/`hashCode`/constructors. Java 14+ `record` declarations would
+collapse those into a single line per type, with structural
+deconstruction available in `switch` patterns:
+
+```java
+public record Field(Name name, Term term) { }
+
+// And in a consumer:
+case Field(var name, var term) -> ...
+```
+
+Raising the floor to Java 21 affects every downstream consumer of
+generated Hydra code (the `bindings/java/*` adapters, hydrapop,
+demo projects, external integrations that haven't been surveyed).
+The benefit is substantial but the cost is a coordinated platform
+bump that needs explicit buy-in. Until then, `hydra-java` stays on
+Java 11 and the visitor pattern remains the canonical encoding.

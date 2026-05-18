@@ -73,10 +73,10 @@ main = do
         ]
   -- DSL generator input: every package whose syntax model defines types.
   -- Matches update-json-main; keep these two lists in sync.
-  let dslInputMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
+  let dslTypeMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
                   ++ hydraJavaModules ++ hydraPythonModules ++ hydraScalaModules
                   ++ hydraLispModules ++ hydraGoModules
 
-  writePerPackageManifestsJson defaultDistJsonRoot mainUniverse dslInputMods mainUniverse testModules
+  writePerPackageManifestsJson defaultDistJsonRoot mainUniverse dslTypeMods mainUniverse testModules
   putStrLn ""
   putStrLn "=== Done! ==="

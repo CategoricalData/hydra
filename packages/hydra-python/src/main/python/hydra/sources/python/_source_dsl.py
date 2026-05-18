@@ -12,6 +12,7 @@ Conventions:
 """
 
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.core import Name
 from hydra.packaging import Namespace
 import hydra.dsl.python.syntax as PySyn
 
@@ -87,3 +88,15 @@ def lets_flat(bindings_pairs, body):
     """Build a single flat `let` from (name, value) pairs (matches Haskell `lets [...]`)."""
     fields = [field_op(n, v) for n, v in bindings_pairs]
     return lets(fields, body)
+
+
+def proj(type_fq: str, field_name: str, var_name: str):
+    """`project(typeName, fieldName) @@ var(varName)` — collapses the common
+    project-then-apply pattern. Java analogue: `Phantoms.proj(...)`.
+
+    Source modules with a fixed type-namespace prefix typically wrap this
+    with a thinner local helper, e.g. in coder.py:
+        def _env(field, var_name):
+            return proj("hydra.python.environment.PythonEnvironment", field, var_name)
+    """
+    return project(Name(type_fq), Name(field_name))(var(var_name))

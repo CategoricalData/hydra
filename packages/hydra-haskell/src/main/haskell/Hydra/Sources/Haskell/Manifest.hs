@@ -6,6 +6,7 @@
 module Hydra.Sources.Haskell.Manifest (
   mainModules,
   testModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -29,6 +30,17 @@ mainModules = [
   HaskellSyntax.module_,
   HaskellTesting.module_,
   HaskellUtilsSource.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/Haskell/<Name>.hs). The DSL generator
+-- consumes this list to emit constructors / accessors / withXxx updaters
+-- for each TypeDefinition. Term-only modules (Coder, Serde, Operators,
+-- etc.) are deliberately excluded. Extend the list when a new
+-- type-defining module needs DSL wrappers.
+dslTypeModules :: [Module]
+dslTypeModules = [
+  HaskellEnvironment.module_,
+  HaskellSyntax.module_]
 
 testModules :: [Module]
 testModules = []

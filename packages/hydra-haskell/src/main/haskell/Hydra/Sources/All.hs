@@ -32,6 +32,16 @@ mainModules = kernelModules ++ haskellModules ++ jsonModules ++ otherModules
 dslSourceModules :: [Module]
 dslSourceModules = [Dsls.module_]
 
+-- | Per-package list of modules whose type definitions become derived
+-- DSL wrapper modules (Hydra/Dsl/<Lang>/<Name>.hs). These thin aliases
+-- pull from each package's Manifest.dslTypeModules. The driver
+-- concatenates them into the input set for the DSL generator.
+kernelDslInputModules :: [Module]
+kernelDslInputModules = KernelManifest.dslTypeModules
+
+haskellDslInputModules :: [Module]
+haskellDslInputModules = HaskellManifest.dslTypeModules
+
 -- | Kernel types and terms plus JSON runtime.
 --
 -- Note: this is the subset used by update-json-kernel. It is a strict subset

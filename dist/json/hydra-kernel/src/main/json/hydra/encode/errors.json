@@ -235,6 +235,35 @@
                         "domain": {"variable": "hydra.errors.InferenceError"},
                         "parameter": "y"}}},
                   {
+                    "name": "invalidLiteral",
+                    "term": {
+                      "lambda": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "inject",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.errors.Error"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "invalidLiteral"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {"argument": {"variable": "y"}, "function": {"variable": "hydra.encode.error.core.invalidLiteralError"}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": {"variable": "hydra.error.core.InvalidLiteralError"},
+                        "parameter": "y"}}},
+                  {
                     "name": "other",
                     "term": {
                       "lambda": {

@@ -3,6 +3,7 @@
 module Hydra.Sources.Wasm.Manifest (
   mainModules,
   testModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -18,6 +19,12 @@ mainModules = [
   WasmLanguageSource.module_,
   WasmSerdeSource.module_,
   WasmSyntax.module_]
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules. Empty today — WasmSyntax is the natural
+-- candidate if/when the wrappers are wanted.
+dslTypeModules :: [Module]
+dslTypeModules = []
 
 testModules :: [Module]
 testModules = []
