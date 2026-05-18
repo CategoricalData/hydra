@@ -58,13 +58,13 @@ The authoring host language varies per package:
 Generated code is partitioned across per-package `dist/<lang>/<pkg>/`
 trees rather than a single flat `dist/<lang>/` directory. Each package
 (hydra-kernel, hydra-haskell, hydra-java, hydra-python, hydra-scala,
-hydra-lisp, hydra-pg, hydra-rdf, hydra-coq, hydra-javascript, hydra-wasm,
+hydra-lisp, hydra-pg, hydra-rdf, hydra-coq, hydra-typescript, hydra-wasm,
 hydra-ext) owns a range of namespaces, and the generated output for
 those namespaces lands under that package's directory.
 
 Each package's `package.json` may declare a `targetLanguages` field
 restricting which target languages the package is regenerated to. For
-example, `hydra-coq` and `hydra-javascript` are coder libraries
+example, `hydra-coq` and `hydra-typescript` are coder libraries
 implemented only against the Haskell runtime, so their
 `targetLanguages` is `["haskell"]`.
 
@@ -384,7 +384,7 @@ JSON modules are exported per package under `dist/json/`:
 | `dist/json/hydra-pg/src/main/json/` | Property graph, TinkerPop, Cypher, GraphSON |
 | `dist/json/hydra-rdf/src/main/json/` | RDF, OWL, SHACL, ShEx, XML Schema |
 | `dist/json/hydra-coq/src/main/json/` | Coq coder modules |
-| `dist/json/hydra-javascript/src/main/json/` | JavaScript coder modules |
+| `dist/json/hydra-typescript/src/main/json/` | TypeScript coder modules |
 | `dist/json/hydra-wasm/src/main/json/` | WebAssembly coder modules |
 | `dist/json/hydra-ext/src/main/json/` | Avro, Protobuf, GraphQL, Pegasus, etc. |
 

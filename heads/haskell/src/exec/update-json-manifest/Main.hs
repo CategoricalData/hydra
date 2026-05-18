@@ -12,7 +12,7 @@ import Hydra.PackageRouting (defaultDistJsonRoot)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
   hydraBenchModules,
-  hydraCoqModules, hydraGoModules, hydraJavaModules, hydraJavaScriptModules,
+  hydraCoqModules, hydraGoModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
@@ -60,7 +60,7 @@ main = do
         , hydraCoqModules
         , hydraGoModules
         , hydraJavaModules
-        , hydraJavaScriptModules
+        , hydraTypeScriptModules
         , hydraPythonModules
         , hydraScalaModules
         , hydraLispModules

@@ -98,7 +98,7 @@ for sub in \
     dist/haskell/hydra-kernel/src/main/haskell \
     dist/haskell/hydra-haskell/src/main/haskell \
     dist/haskell/hydra-coq/src/main/haskell \
-    dist/haskell/hydra-javascript/src/main/haskell \
+    dist/haskell/hydra-typescript/src/main/haskell \
     dist/haskell/hydra-java/src/main/haskell \
     dist/haskell/hydra-python/src/main/haskell \
     dist/haskell/hydra-scala/src/main/haskell \
@@ -110,7 +110,7 @@ for sub in \
     packages/hydra-coq/src/main/haskell \
     packages/hydra-haskell/src/main/haskell \
     packages/hydra-java/src/main/haskell \
-    packages/hydra-javascript/src/main/haskell \
+    packages/hydra-typescript/src/main/haskell \
     packages/hydra-kernel/src/main/haskell \
     packages/hydra-lisp/src/main/haskell \
     packages/hydra-ext/src/main/haskell \

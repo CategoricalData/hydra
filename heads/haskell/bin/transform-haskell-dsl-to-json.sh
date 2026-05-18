@@ -22,7 +22,7 @@ if [ $# -lt 1 ]; then
     echo "       $0 --all      [main|test] [--dist-json-root <dir>]" >&2
     echo "" >&2
     echo "Packages: hydra-kernel, hydra-haskell, hydra-java, hydra-python," >&2
-    echo "          hydra-scala, hydra-lisp, hydra-coq, hydra-javascript," >&2
+    echo "          hydra-scala, hydra-lisp, hydra-coq, hydra-typescript," >&2
     echo "          hydra-wasm, hydra-pg, hydra-rdf, hydra-ext." >&2
     exit 1
 fi

@@ -391,10 +391,12 @@ The following primitives require thunking in eager languages:
 | Primitive | Which arguments are lazy | Why |
 |-----------|--------------------------|-----|
 | `hydra.lib.logic.ifElse` | both `then` and `else` branches | Only the chosen branch should be evaluated |
+| `hydra.lib.maybes.cases` | the `nothing`-case default value | Only evaluated when the Maybe is Nothing |
 | `hydra.lib.maybes.maybe` | the `nothing`-case default value | Only evaluated when the Maybe is Nothing |
 | `hydra.lib.maybes.fromMaybe` | the default value | Only evaluated when the Maybe is Nothing |
 | `hydra.lib.eithers.fromLeft` | the default value | Only evaluated when the Either is Right |
 | `hydra.lib.eithers.fromRight` | the default value | Only evaluated when the Either is Left |
+| `hydra.lib.maps.findWithDefault` | the default value | Only evaluated when the key is absent |
 
 The implementation strategy varies by language:
 
@@ -403,9 +405,15 @@ The implementation strategy varies by language:
 - **Python**: Uses `callable()` checks at runtime — if an argument is a zero-argument callable,
   it is called only when needed; otherwise it is used as-is. The generated Python coder wraps lazy
   arguments in `lambda: expr`.
+- **Scala**: By-name parameters (`def ifElse[A](cond)(t: => A)(e: => A): A`) give you laziness
+  for free — the compiler inserts the thunk at every call site. No coder-side wrapping needed.
 - **Clojure**: Clojure's `if` special form is already lazy, so `ifElse` can map to native `if`.
   For other primitives, the implementation should check `(fn? x)` and call the thunk when needed,
   similar to Python's approach.
+- **TypeScript**: Same shape as Python — `typeof x === "function"` checks at runtime; the coder
+  wraps lazy positions in `() => expr`. See
+  [`packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript/Coder.hs`](https://github.com/CategoricalData/hydra/blob/main/packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript/Coder.hs)
+  (the `_Term_application` arm and the `flattenApplication` / `termHeadVariable` / `encodeLazyCall` helpers).
 
 If your host language is eager by default (which includes most languages other than Haskell),
 you **must** implement this thunking strategy. Omitting it will cause severe performance degradation
@@ -445,6 +453,16 @@ in the Lisp coder for examples. The coder must detect specific primitive names (
 When auto-detecting type variables from primitive type schemes, be aware that type variable names
 containing dots (e.g. `hydra.util.Comparison`) are nominal type references, not universally
 quantified type parameters. Exclude qualified names to avoid incorrect generalization.
+
+**Important: erase type-application wrappers when matching the application head.**
+Polymorphic primitives like `ifElse` are typically wrapped in one or more `Term_typeApplication`
+layers in the kernel JSON. The head of `App(App(App(TypeApp(Var "ifElse", T)), c), t), e)` is
+*not* `Var "ifElse"` — your `termHeadVariable`-equivalent helper must recurse through
+`Term_typeApplication` (and `Term_annotated`) to find the underlying variable name. If you skip
+this, your detection will fire only for monomorphic primitives and silently miss most of the
+kernel's `ifElse`/`cases`/`fromMaybe` call sites. The Python coder handles this in
+`flatten_application` (which also unwraps annotations); the TypeScript coder does the same in
+`termHeadVariable`.
 
 ### Primitive infrastructure
 
@@ -507,6 +525,12 @@ Test runners should produce structured benchmark JSON with per-group timing data
 pass/fail counts) so results appear in the benchmark dashboard. Each group needs `path`,
 `totalTimeMs`, `passed`, `failed`, `skipped`, and `subgroups`. The JSON must include a `metadata`
 object with `language`, `commit`, `branch`, `timestamp`, and `commitMessage`.
+
+Test cases tagged `{value: "disabled"}` exercise unresolved upstream inference limitations
+(let-polymorphism over-generalization, Y-combinator typing, etc.) and should be skipped rather than
+counted as failures, matching Python's `is_disabled(tcase)` behavior. The related
+`disabledForMinimalInference` tag is *not* a universal skip — it only applies to heads using the
+minimal inference variant.
 
 **Passing all test cases in the common test suite (both kernel and generation evaluation) is the
 criterion for a complete Hydra implementation.**

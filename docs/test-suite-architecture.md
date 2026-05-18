@@ -195,9 +195,17 @@ an appropriate unit argument:
 - Common Lisp / Emacs Lisp: `(funcall <fn> nil)`
 - Scheme: `(<fn> '())` (`(lambda (_) body)`)
 - Coq: `universalTestCase_actual tc tt` (Coq `unit -> string`)
+- TypeScript: `u.actual(undefined as unknown as void)` (TS `(_: void) => string`)
 
 The argument value is irrelevant — the lambda body ignores it — but the call
 *must* pass one argument, since the lambda is one-arg in every target.
+
+Runners should also honor a couple of tag conventions on
+`TestCaseWithMetadata.tags`:
+
+- `{value: "disabled"}` — skip; exercises an unresolved upstream limitation.
+- `{value: "disabledForMinimalInference"}` — only skip in heads running the
+  minimal-inference variant; full-inference heads should still run these.
 
 ### Benchmark JSON
 

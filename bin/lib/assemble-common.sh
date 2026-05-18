@@ -48,7 +48,7 @@ assemble_refresh_digest() {
 #     hydra-lisp), loaded by --include-coders
 #
 # It does NOT include the ext / ext-demo packages (hydra-pg, hydra-rdf,
-# hydra-coq, hydra-javascript, hydra-wasm, hydra-ext) — those are
+# hydra-coq, hydra-typescript, hydra-wasm, hydra-ext) — those are
 # auto-loaded only when explicitly named via --package <pkg>, so they
 # go through the per-package assemble-distribution.sh path instead.
 # See heads/haskell/src/exec/bootstrap-from-json/Main.hs around

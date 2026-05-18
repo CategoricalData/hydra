@@ -53,8 +53,6 @@
     "hydra.rust.syntax": "94d676d6e9bafc8040a4f6ad5cd82e025beb2b22d68dbd2cb0733dce61419de4",
     "hydra.sql.syntax": "a0869adda7f7021aeed7c50d545a3d6f5d7541d7354594af5bb677b5f62fbfd2",
     "hydra.stac.items": "a51e84d9db4e5f7be34af203d5f02e9aef834e5c6a983b897f9134d10dfa21d0",
-    "hydra.typeScript.language": "d10cc1a936188101230388f19cd25151016de89c2dfaf3a5736547d51e0ed7ed",
-    "hydra.typeScript.model": "fde852d87f4cfdb65b609f9551bc69814b2456d9c3d98ff1ff2661d0ddbfcac1",
     "hydra.workflow": "e330996826224caadfb45ecc1e749abf064de9dc8568e74a3ef9463b0349642d",
     "hydra.yaml.coder": "8c0edb37e6621eb127df0b66b081a56c0a868d7985195cd97f56485b4bb53e01",
     "hydra.yaml.language": "5addcc136228cd911fffe73412969429f1a94c599fd5ca9456afd2736041c996",

@@ -1,0 +1,11 @@
+{
+  "defaultLibModules": [],
+  "dslModules": [],
+  "mainModules": [
+    "hydra.typeScript.coder",
+    "hydra.typeScript.language",
+    "hydra.typeScript.operators",
+    "hydra.typeScript.serde",
+    "hydra.typeScript.syntax"],
+  "package": "hydra-typescript",
+  "testModules": []}

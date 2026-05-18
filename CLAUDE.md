@@ -257,6 +257,8 @@ Current commands:
 - `/sync-default` — the haskell/java/python triad
 - `/sync-haskell`, `/sync-java`, `/sync-python`, `/sync-scala`,
   `/sync-go` — per-language sync wrappers
+- `/sync-typescript` — transitional TypeScript sync (DSL → Haskell only,
+  until the TypeScript coder lands; #126)
 - `/sync-clojure`, `/sync-common-lisp`, `/sync-emacs-lisp`,
   `/sync-scheme` — Lisp dialect sync wrappers
 - `/sync-bench` — regenerate hydra-bench (opt-in; not part of `/sync`)

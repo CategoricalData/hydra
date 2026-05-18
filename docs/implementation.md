@@ -893,10 +893,10 @@ dist/haskell/hydra-ext/src/main/haskell/Hydra/                # Long-tail coders
 │   ├── Graphql/                                              # GraphQL
 │   ├── Pegasus/                                              # LinkedIn PDL
 │   ├── Json/Schema/                                          # JSON Schema
-│   ├── Cpp/, Csharp/, Go/, Rust/, TypeScript/, Yaml/, ...    # Other languages
+│   ├── Cpp/, Csharp/, Go/, Rust/, Yaml/, ...                # Other languages
 │   └── Atlas/, Azure/, Datalog/, Delta/, Geojson/, Iana/, Kusto/, Osv/, Parquet/, Sql/, Stac/, Workflow/
 dist/haskell/hydra-coq/src/main/haskell/Hydra/Coq/            # Coq coder
-dist/haskell/hydra-javascript/src/main/haskell/Hydra/JavaScript/  # JavaScript (in progress)
+dist/haskell/hydra-typescript/src/main/haskell/Hydra/TypeScript/  # TypeScript (in progress)
 dist/haskell/hydra-wasm/src/main/haskell/Hydra/Wasm/          # WebAssembly (in progress)
 ```
 
@@ -1141,7 +1141,7 @@ The `Serde.hs` files bridge language AST to formatted source code:
 - **Naming.** Every per-syntax-element writer is named `*ToExpr` —
   e.g. `expressionToExpr`, `statementToExpr`, `typeToExpr` — uniformly
   across Java, Python, Haskell, Scala, the four Lisp dialects, Cpp,
-  JavaScript, Rust, Go, and the Pegasus / GraphQL / Protobuf /
+  TypeScript, Rust, Go, and the Pegasus / GraphQL / Protobuf /
   JsonSchema / RDF / Graphviz extension coders.
 - **Layout.** Writers compose output through shared helpers in
   `hydra.serialization`: `chooseLayout` selects between vertical and
@@ -1476,9 +1476,10 @@ Per-language DSL sources live in `packages/hydra-<lang>/src/main/haskell/Hydra/S
 - [`packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-lisp/src/main/haskell/Hydra/Sources/Lisp)
 - [`packages/hydra-pg/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-pg/src/main/haskell/Hydra/Sources) — property graphs (Pg, Cypher, Tinkerpop, Graphviz)
 - [`packages/hydra-rdf/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-rdf/src/main/haskell/Hydra/Sources) — RDF, SHACL, OWL, ShEx, XML schema
-- [`packages/hydra-ext/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Sources) — long-tail: Avro, Cpp, Csharp, Datalog, Geojson, Go, GraphQL, JsonSchema, Pegasus, Protobuf, Rust, TypeScript, Yaml, ...
+- [`packages/hydra-ext/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-ext/src/main/haskell/Hydra/Sources) — long-tail: Avro, Cpp, Csharp, Datalog, Geojson, Go, GraphQL, JsonSchema, Pegasus, Protobuf, Rust, Yaml, ...
 - [`packages/hydra-bench/src/main/haskell/Hydra/Sources/Bench/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-bench/src/main/haskell/Hydra/Sources/Bench) — synthetic inference benchmark workloads (opt-in via `bin/sync-bench.sh`)
 - [`packages/hydra-coq/src/main/haskell/Hydra/Sources/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-coq/src/main/haskell/Hydra/Sources) — Coq
+- [`packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript/`](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-typescript/src/main/haskell/Hydra/Sources/TypeScript) — TypeScript
 
 Generated coder output lands under `dist/haskell/<pkg>/` for each source package.
 The long-tail [`dist/haskell/hydra-ext/`](https://github.com/CategoricalData/hydra/tree/main/dist/haskell/hydra-ext/src/main/haskell/Hydra)

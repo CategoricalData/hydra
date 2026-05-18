@@ -99,7 +99,7 @@ packagePrefixes =
   , ("hydra.scala.",                "hydra-scala")
   , ("hydra.lisp.",                 "hydra-lisp")
   , ("hydra.coq.",                  "hydra-coq")
-  , ("hydra.javaScript.",           "hydra-javascript")
+  , ("hydra.typeScript.",           "hydra-typescript")
   , ("hydra.go.",                   "hydra-go")
     -- DSL wrapper modules for coder packages
   , ("hydra.dsl.haskell.",          "hydra-haskell")
@@ -108,7 +108,7 @@ packagePrefixes =
   , ("hydra.dsl.scala.",            "hydra-scala")
   , ("hydra.dsl.lisp.",             "hydra-lisp")
   , ("hydra.dsl.coq.",              "hydra-coq")
-  , ("hydra.dsl.javaScript.",       "hydra-javascript")
+  , ("hydra.dsl.typeScript.",       "hydra-typescript")
   , ("hydra.dsl.go.",               "hydra-go")
     -- Synthesized decoder source modules for coder packages
   , ("hydra.sources.decode.haskell.",    "hydra-haskell")
@@ -117,7 +117,7 @@ packagePrefixes =
   , ("hydra.sources.decode.scala.",      "hydra-scala")
   , ("hydra.sources.decode.lisp.",       "hydra-lisp")
   , ("hydra.sources.decode.coq.",        "hydra-coq")
-  , ("hydra.sources.decode.javaScript.", "hydra-javascript")
+  , ("hydra.sources.decode.typeScript.", "hydra-typescript")
     -- Synthesized encoder source modules for coder packages
   , ("hydra.sources.encode.haskell.",    "hydra-haskell")
   , ("hydra.sources.encode.java.",       "hydra-java")
@@ -125,7 +125,7 @@ packagePrefixes =
   , ("hydra.sources.encode.scala.",      "hydra-scala")
   , ("hydra.sources.encode.lisp.",       "hydra-lisp")
   , ("hydra.sources.encode.coq.",        "hydra-coq")
-  , ("hydra.sources.encode.javaScript.", "hydra-javascript")
+  , ("hydra.sources.encode.typeScript.", "hydra-typescript")
     -- Property graph package
   , ("hydra.pg.",                   "hydra-pg")
   , ("hydra.cypher.",               "hydra-pg")
