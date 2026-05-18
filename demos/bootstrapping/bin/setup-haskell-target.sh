@@ -98,6 +98,11 @@ cp -r "$HYDRA_HASKELL_HEAD_DIR/src/main/haskell/Hydra" "$OUTPUT_DIR/src/main/has
 # Remove ext-related sources not needed for the bootstrap target
 rm -f "$OUTPUT_DIR/src/main/haskell/Hydra/ExtGeneration.hs"
 rm -f "$OUTPUT_DIR/src/main/haskell/Hydra/Sources/Ext.hs"
+# Hydra.TargetFilePaths is only used by the bootstrap-from-json exec
+# (which the demo invokes from the parent project, not from this copy),
+# and hard-imports Hydra.Java.Coder — absent from this demo's tree since
+# only the Haskell coder is copied. Strip it so the demo library builds.
+rm -f "$OUTPUT_DIR/src/main/haskell/Hydra/TargetFilePaths.hs"
 # Hydra.Coq.GenerateDriver imports the DSL-generated Hydra.Coq.Generate module,
 # which lives under dist/haskell/hydra-ext/ and is not part of the kernel
 # bootstrap. Drop the whole directory — the Coq target is not reachable
