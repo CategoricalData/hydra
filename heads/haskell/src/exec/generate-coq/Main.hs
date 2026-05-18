@@ -10,5 +10,5 @@ main = do
   putStrLn "Generating Coq (.v) files from Hydra kernel modules..."
   writeCoqProject outputDir
   copyCoqLibFiles outputDir
-  n <- writeCoq outputDir kernelModules kernelModules
-  putStrLn $ "Generated " ++ show n ++ " .v files"
+  paths <- writeCoq outputDir kernelModules kernelModules
+  putStrLn $ "Generated " ++ show (length paths) ++ " .v files"

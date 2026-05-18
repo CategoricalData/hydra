@@ -42,10 +42,6 @@ fi
 
 BATCH_PACKAGES=$(batch_emit_packages)
 
-# Stale-file warning: see #357. bootstrap-from-json writes only the
-# modules currently in dist/json; deleted/renamed source modules leave
-# stale .java files behind that are silently picked up by the build.
-
 # Invalidate per-target digests so Stage 7 per-module freshness filter
 # cannot trust records against potentially-missing output files. Scoped
 # to $BATCH_PACKAGES — packages outside the batch emit set (e.g.
@@ -55,6 +51,16 @@ for pkg in $BATCH_PACKAGES; do
     rm -f "$DIST_ROOT/$pkg/src/main/digest.json" "$DIST_ROOT/$pkg/src/test/digest.json"
 done
 
+# Step 0: Copy hand-written Java runtime into hydra-kernel dist BEFORE
+# generation. This used to run after Step 3; moved up so that #357 prune
+# (in bootstrap-from-json --prune-stale below) can be told via a manifest
+# which files are hand-written and must be preserved.
+KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-java.XXXXXX)"
+trap 'rm -f "$KEEP_MANIFEST"' EXIT
+echo "Step 0: Copying hand-written Java runtime into hydra-kernel dist..."
+"$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+echo ""
+
 echo "Step 1: Generating main Java modules for every package..."
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json hydra:exe:digest-check >/dev/null 2>&1
@@ -62,6 +68,7 @@ stack exec bootstrap-from-json -- \
     --target java \
     --all-packages \
     --include-coders --include-dsls \
+    --prune-stale --keep-paths-from "$KEEP_MANIFEST" \
     --output "$DIST_ROOT"
 
 echo ""
@@ -70,19 +77,10 @@ stack exec bootstrap-from-json -- \
     --target java \
     --all-packages \
     --include-coders --include-dsls --include-tests \
+    --prune-stale --keep-paths-from "$KEEP_MANIFEST" \
     --output "$DIST_ROOT"
 
 cd "$HYDRA_ROOT_DIR"
-
-# Step 3: Per-package post-processing. Mirrors assemble-distribution.sh
-# Step 3 — hydra-kernel only today. Must run BEFORE the digest refresh
-# below: copy-kernel-runtime.sh writes into dist/java/hydra-kernel/src/main/java/,
-# which the digest tracks; running it after refresh would leave those
-# hand-written files unrecorded and trigger a needless re-run on the
-# next 'fresh' check.
-echo ""
-echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
-"$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
 
 # Step 4: Generate per-package build.gradle + settings.gradle. Mirrors
 # assemble-distribution.sh Step 4. The build files live at
