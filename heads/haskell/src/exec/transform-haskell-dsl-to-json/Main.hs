@@ -28,7 +28,7 @@ import Hydra.PackageRouting (defaultDistJsonRoot, namespaceToPackage)
 import Hydra.Sources.Ext (
   mainModules, dslSourceModules,
   kernelModules, haskellModules, jsonModules, otherModules,
-  hydraCoqModules, hydraGoModules, hydraJavaModules, hydraJavaScriptModules,
+  hydraCoqModules, hydraGoModules, hydraJavaModules, hydraTypeScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
@@ -88,7 +88,7 @@ fullMainUniverse = dedupByNamespace $ L.concat
   , hydraCoqModules
   , hydraGoModules
   , hydraJavaModules
-  , hydraJavaScriptModules
+  , hydraTypeScriptModules
   , hydraPythonModules
   , hydraScalaModules
   , hydraLispModules
@@ -144,7 +144,7 @@ usage = unlines
   , "                           single Haskell-universe load."
   , "                           Packages: hydra-kernel, hydra-haskell,"
   , "                           hydra-java, hydra-python, hydra-scala,"
-  , "                           hydra-lisp, hydra-coq, hydra-javascript,"
+  , "                           hydra-lisp, hydra-coq, hydra-typescript,"
   , "                           hydra-pg, hydra-rdf, hydra-ext, hydra-wasm."
   , "  --all                    Batch mode: transform every package."
   , "  --source-set <main|test> Source set to transform (default: main)."
@@ -170,7 +170,7 @@ allPackages =
   , "hydra-go"
   , "hydra-lisp"
   , "hydra-coq"
-  , "hydra-javascript"
+  , "hydra-typescript"
   , "hydra-wasm"
   , "hydra-pg"
   , "hydra-rdf"
