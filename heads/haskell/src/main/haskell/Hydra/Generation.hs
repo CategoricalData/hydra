@@ -629,11 +629,56 @@ writeDslJson basePath universeModules typeModules = do
 
 -- | Write DSL modules to JSON files, routed per package. Like 'writeDslJson'
 -- but uses 'writeModulesJsonPackageSplit' under the hood.
+--
+-- After writing, augment each touched package's input digest with one entry
+-- per DSL namespace, keyed on the just-written JSON file's content hash. DSL
+-- namespaces are synthesized and have no source file, so they cannot be
+-- hashed via 'hashUniverse' (which looks them up in packages/.../Sources/).
+-- Without these entries, downstream per-target caches (digest-check) cannot
+-- detect when DSL JSON content changes — e.g. when the synthesizer in
+-- Hydra/Sources/Kernel/Terms/Dsls.hs re-emits a binding under a new name,
+-- the per-package input digest is unchanged and the .hs stays stale.
+-- See feature_347_merkle_trees for the broader transform-fingerprint story.
 writeDslJsonPackageSplit :: FilePath -> [Module] -> [Module] -> IO ()
 writeDslJsonPackageSplit distJsonRoot universeModules typeModules = do
     dslMods <- generateDslModules universeModules typeModules
     let nonEmpty = filter (not . null . moduleDefinitions) dslMods
     writeModulesJsonPackageSplit False distJsonRoot universeModules nonEmpty
+    mergeDslJsonIntoPerPackageDigests distJsonRoot nonEmpty
+
+-- | For each package owning at least one of the given DSL modules, read its
+-- per-package input digest, add an entry per DSL namespace whose value is
+-- the SHA-256 of the just-written DSL JSON file, and write the merged
+-- digest back. Type/term entries already present in the digest are
+-- preserved — this is purely additive.
+--
+-- The JSON file path is derived the same way 'writeModuleJson' derives it:
+-- <distJsonRoot>/<pkg>/src/main/json/<namespaceToPath ns>.json.
+mergeDslJsonIntoPerPackageDigests :: FilePath -> [Module] -> IO ()
+mergeDslJsonIntoPerPackageDigests distJsonRoot dslMods = do
+    let groups = groupByPackage dslMods
+    CM.forM_ groups $ \(pkg, pkgMods) -> do
+      let pkgJsonDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+      newEntries <- fmap (M.fromList . Y.catMaybes) $ CM.forM pkgMods $ \m -> do
+        let ns      = moduleNamespace m
+            jsonFp  = pkgJsonDir FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
+        exists <- SD.doesFileExist jsonFp
+        if not exists
+          then return Nothing
+          else do
+            h <- Digest.hashFile jsonFp
+            return $ Just (ns, h)
+      CM.when (not (M.null newEntries)) $ do
+        let dpath = perPackageDigestPath distJsonRoot pkg
+        existing <- do
+          dExists <- SD.doesFileExist dpath
+          if dExists then Digest.readDigest dpath else return M.empty
+        let merged = M.union newEntries existing
+        CM.when (merged /= existing) $ do
+          Digest.writeDigest dpath merged
+          putStrLn $ "  Per-package digest augmented with DSL entries: " ++ dpath
+            ++ " (+" ++ show (M.size newEntries - M.size (M.intersection existing newEntries))
+            ++ " new, " ++ show (M.size newEntries) ++ " total DSL)"
 
 -- | Write a manifest.json listing module namespaces for kernelModules, mainModules, and testModules.
 -- This allows Java and Python hosts to load the correct set of modules without directory scanning.
