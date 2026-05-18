@@ -6,6 +6,7 @@
     "com.gdblab.pathAlgebra.syntax": "1c2941b9707e3d48899e5e8805c96a62bbe522dfd06bb6422fdc592844608874",
     "hydra.cypher.features": "4c55322e05210a9738d1b500947fdd5117ade26fb40cb5fa35a930f8a40d5095",
     "hydra.cypher.openCypher": "ab6337fd324bf0c41489aea22aa514c61c8661827326212d868967972ec907d3",
+    "hydra.dsl.pg.model": "2f722c73bdb6ec3993afa87307e4690930ded65dd3139f4f93348934ac2ac20d",
     "hydra.error.pg": "c6726ec89c1cd2832bb5c1e66eee666230f0063341a8cc5cd6b18ee674c02053",
     "hydra.graphviz.coder": "fc9374ec4972b7b29aa9ad96193ed0bb0dea3522d34658f076d571f473ae93bd",
     "hydra.graphviz.dot": "6ddcec66e1fb7afb776562b7b51b32c354c2d655ab6bf3c72eae6b7bdc165a29",

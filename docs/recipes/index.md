@@ -28,6 +28,7 @@ Step-by-step guides for common Hydra development tasks. These recipes provide pr
 ### Code Generation
 
 - **[Generating code with Hydra](code-generation.md)** - End-to-end guide to generating source code from Hydra modules: DSL vs JSON paths, the writeXxx functions, bootstrap CLI, sync scripts, and troubleshooting
+- For the build/sync/cache *model* (phases, what each cache keys on, the path to #347), see **[The Hydra build system](../build-system.md)** at the top level of `docs/`.
 
 ### Benchmarking
 

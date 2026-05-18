@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Language constraints for Coq code generation
 
 module Hydra.Coq.Language where
-
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Core as Core
 import qualified Hydra.Lib.Sets as Sets
@@ -11,7 +9,6 @@ import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
-
 coqLanguage :: Coders.Language
 coqLanguage =
     Coders.Language {
@@ -87,7 +84,6 @@ coqLanguage =
           Variants.TypeVariantVoid,
           Variants.TypeVariantWrap]
     typePredicate = \_ -> True
-
 coqReservedWords :: S.Set String
 coqReservedWords =
     Sets.fromList [
@@ -156,7 +152,6 @@ coqReservedWords =
       "literal",
       "graph",
       "element"]
-
 coqStrippedReservedWords :: S.Set String
 coqStrippedReservedWords =
     Sets.fromList [

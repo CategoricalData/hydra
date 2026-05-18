@@ -124,6 +124,7 @@ termLabel compact namespaces term =
           Core.LiteralFloat v1 -> case v1 of
             Core.FloatValueFloat32 v2 -> Literals.showFloat32 v2
             Core.FloatValueFloat64 v2 -> Literals.showFloat64 v2
+            _ -> "?"
           Core.LiteralString v1 -> v1
           _ -> "?")
         Core.TermMap _ -> simpleLabel (Logic.ifElse compact "<,>" "map")

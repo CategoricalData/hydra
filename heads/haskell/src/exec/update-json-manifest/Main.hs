@@ -10,13 +10,14 @@ module Main where
 import Hydra.Generation (writePerPackageManifestsJson)
 import Hydra.PackageRouting (defaultDistJsonRoot)
 import Hydra.Sources.Ext (
-  mainModules, dslSourceModules, kernelModules, haskellModules, jsonModules, otherModules,
+  mainModules, dslSourceModules,
   hydraBenchModules,
   hydraCoqModules, hydraGoModules, hydraJavaModules, hydraJavaScriptModules,
   hydraPythonModules, hydraScalaModules, hydraLispModules,
   hydraPgModules, hydraRdfModules, hydraWasmModules,
   hydraExtPackageModules,
-  hydraExtDecodingModules, hydraExtEncodingModules)
+  hydraExtDecodingModules, hydraExtEncodingModules,
+  allDslTypeModules)
 import Hydra.Sources.Kernel.Lib.Defaults.All (defaultLibModules)
 import Hydra.Sources.Test.All (testModules)
 
@@ -72,10 +73,15 @@ main = do
         , [GenPGTransform.module_]
         ]
   -- DSL generator input: every package whose syntax model defines types.
-  -- Matches update-json-main; keep these two lists in sync.
-  let dslTypeMods = kernelModules ++ jsonModules ++ otherModules ++ haskellModules
-                  ++ hydraJavaModules ++ hydraPythonModules ++ hydraScalaModules
-                  ++ hydraLispModules ++ hydraGoModules
+  -- Use the same canonical list as update-json-main's caller in
+  -- Hydra.Sources.Ext, so the manifest's dslModules field matches the
+  -- DSL JSON files update-json-main actually writes. Previously this
+  -- script hand-built a subset that omitted hydra-pg, hydra-rdf,
+  -- hydra-coq, and hydra-ext, causing those packages' manifests to
+  -- report "dslModules": [] even when their DSL JSON existed on disk.
+  -- bootstrap-from-json reads the manifest to decide which DSL modules
+  -- to load, so a missing manifest entry left downstream .hs stale.
+  let dslTypeMods = allDslTypeModules
 
   writePerPackageManifestsJson defaultDistJsonRoot mainUniverse dslTypeMods mainUniverse testModules
   putStrLn ""

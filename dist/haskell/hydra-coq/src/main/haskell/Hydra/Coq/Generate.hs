@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Coq code generation driver — pre-passes, sentence producers, and per-module pipeline
 
 module Hydra.Coq.Generate where
-
 import qualified Hydra.Coq.Coder as Coder
 import qualified Hydra.Coq.Environment as Environment
 import qualified Hydra.Coq.Serde as Serde
@@ -27,7 +25,6 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
-
 -- | Render an axiom-only Coq module: imports + dependency imports + Axiom declarations
 buildAxiomOnlyContent :: Environment.CoqEnvironment -> String -> t0 -> [(String, t1)] -> [(String, (t2, ([Core.Name], (Maybe Core.Type))))] -> Packaging.Module -> String
 buildAxiomOnlyContent env desc nsStr typeDefs termDefs mod_ =
@@ -55,7 +52,6 @@ buildAxiomOnlyContent env desc nsStr typeDefs termDefs mod_ =
         desc,
         body,
         "\n"])
-
 -- | Assemble the full (non-axiom) Coq source for a module
 buildFullModule :: Ord t1 => (Environment.CoqEnvironment -> M.Map (String, String) String -> t0 -> String -> t1 -> String -> [(String, Core.Type)] -> [(String, (Core.Term, ([Core.Name], (Maybe Core.Type))))] -> M.Map t1 String)
 buildFullModule env fieldMap mod_ nsStr path desc typeDefs termDefs =
@@ -147,7 +143,6 @@ buildFullModule env fieldMap mod_ nsStr path desc typeDefs termDefs =
                     "\n"]
       in (Maps.fromList [
         (path, content)])
-
 -- | Emit a Require Import sentence for the given dependency namespaces; empty list yields no sentence
 dependencyImports :: [String] -> [Syntax.Sentence]
 dependencyImports deps =
@@ -159,7 +154,6 @@ dependencyImports deps =
           Syntax.requireImportRequire = True,
           Syntax.requireImportQualification = (Just Syntax.ImportQualificationImport),
           Syntax.requireImportModules = (Lists.map (\d -> Coder.coqQualid d) deps)}))}]
-
 -- | Render a mutually recursive term group as a hydra_fix bundle plus projection Definitions
 encodeMutualGroupText :: Environment.CoqEnvironment -> [(String, (Core.Term, ([Core.Name], (Maybe Core.Type))))] -> String
 encodeMutualGroupText env group =
@@ -262,7 +256,6 @@ encodeMutualGroupText env group =
         bundleDef,
         "\n",
         projDefs])
-
 -- | Encode a non-cyclic term definition as a Coq Definition sentence
 encodeTermGroupSingleton :: Environment.CoqEnvironment -> (String, (Core.Term, ([Core.Name], (Maybe Core.Type)))) -> [Syntax.Sentence]
 encodeTermGroupSingleton env td =
@@ -292,7 +285,6 @@ encodeTermGroupSingleton env td =
             Syntax.definitionBinders = typeBinders,
             Syntax.definitionType = returnType,
             Syntax.definitionBody = coqBody}))}]
-
 -- | Produce Arguments {p} declarations for every parameterized type's constructor and field accessors
 generateArgumentsDecls :: [(String, Core.Type)] -> String
 generateArgumentsDecls typeDefs =
@@ -349,7 +341,6 @@ generateArgumentsDecls typeDefs =
         "\n",
         (Strings.intercalate "\n" allLines),
         "\n"]))
-
 -- | Emit Coq sentences for a type-definition SCC group, handling mutual recursion and positivity
 generateTypeGroup :: Environment.CoqEnvironment -> (Bool, [(String, Core.Type)]) -> [Syntax.Sentence]
 generateTypeGroup env group =
@@ -372,7 +363,6 @@ generateTypeGroup env group =
                           Syntax.inductiveDefinitionCoinductive = False,
                           Syntax.inductiveDefinitionBodies = bodies}))}]
         in (Lists.concat2 inductiveSent accessors)))
-
 -- | Generate the Coq sentence(s) for a non-cyclic type definition
 generateTypeSentence :: Environment.CoqEnvironment -> String -> Core.Type -> [Syntax.Sentence]
 generateTypeSentence env name ty =
@@ -438,7 +428,6 @@ generateTypeSentence env name ty =
                     Syntax.recordFieldType = (Syntax.Type ftCoq)}) v0)}}))}]
         _ -> [
           mkDef name paramBinders (Coder.encodeType env bodyTy)]
-
 -- | Collect local names that occur in more than one module's type or term definitions
 globalAmbiguousNames :: [Packaging.Module] -> S.Set String
 globalAmbiguousNames modules =
@@ -459,7 +448,6 @@ globalAmbiguousNames modules =
                         existing = Maybes.fromMaybe Sets.empty (Maps.lookup n acc)
                     in (Maps.insert n (Sets.insert nsVal existing) acc)) Maps.empty allNames
       in (Sets.fromList (Maybes.cat (Lists.map (\entry -> Logic.ifElse (Equality.gte (Lists.length (Sets.toList (Pairs.second entry))) 2) (Just (Pairs.first entry)) Nothing) (Maps.toList nameToNs))))
-
 -- | Collect all type definitions from every module and run buildConstructorCounts over them
 globalConstructorCounts :: [Packaging.Module] -> M.Map String Int
 globalConstructorCounts modules =
@@ -469,11 +457,9 @@ globalConstructorCounts modules =
                 Packaging.DefinitionType v0 -> Just (Utils.localName (Core.unName (Packaging.typeDefinitionName v0)), (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
                 _ -> Nothing) (Packaging.moduleDefinitions m))) modules)
       in (Utils.buildConstructorCounts allTypeDefs)
-
 -- | Delegate to CoqUtils.buildFieldMapping across all supplied modules
 globalFieldMapping :: [Packaging.Module] -> M.Map (String, String) String
 globalFieldMapping modules = Utils.buildFieldMapping modules
-
 -- | Collect sanitized accessor names by SCC-sorting every module's type defs and folding collectSanitizedAccessors
 globalSanitizedAccessors :: [Packaging.Module] -> S.Set String
 globalSanitizedAccessors modules =
@@ -486,7 +472,6 @@ globalSanitizedAccessors modules =
                           _ -> Nothing) (Packaging.moduleDefinitions m))
                 in (Utils.sortTypeDefsSCC typeDefs)) modules)
       in (Utils.collectSanitizedAccessors allTypeGroups)
-
 -- | Emit an Arguments line marking every type parameter of a definition as implicit
 implicitArgsLine :: String -> [String] -> String
 implicitArgsLine name typeVarNames =
@@ -499,7 +484,6 @@ implicitArgsLine name typeVarNames =
         v,
         "}"]) typeVarNames)),
       ".\n"])
-
 -- | Build one Definition per record field, pattern-matching on Build_T
 makeAccessorDefs :: (String, Core.Type) -> [Syntax.Sentence]
 makeAccessorDefs nt =
@@ -526,7 +510,6 @@ makeAccessorDefs nt =
               indexed = Lists.zip (Math.range 0 (Math.sub nFields 1)) v0
           in (Lists.map (\ift -> makeOneAccessor name constrPat fieldVars (Pairs.first ift) (Pairs.second ift)) indexed))
         _ -> []
-
 -- | Build a Coq Constructor from a union field (prepended with the type name and capitalized field name)
 makeConstructor :: Environment.CoqEnvironment -> String -> [String] -> Core.FieldType -> Syntax.Constructor
 makeConstructor env typeName params ft =
@@ -544,7 +527,6 @@ makeConstructor env typeName params ft =
         Syntax.constructorName = (Coder.coqIdent constrName),
         Syntax.constructorBinders = [],
         Syntax.constructorType = (Just (Syntax.Type (Coder.coqArrow argType returnType)))}
-
 -- | Build an Inductive body for a union or record type in a mutual group
 makeInductiveBody :: Environment.CoqEnvironment -> String -> Core.Type -> [Syntax.InductiveBody]
 makeInductiveBody env name ty =
@@ -591,7 +573,6 @@ makeInductiveBody env name ty =
                   Syntax.constructorBinders = [],
                   Syntax.constructorType = (Just (Syntax.Type constrType))}]}])
         _ -> []
-
 -- | Emit a Definition for a record field accessor, keyed by the Build_T pattern
 makeOneAccessor :: String -> Syntax.Pattern10_Qualid -> [String] -> Int -> Core.FieldType -> Syntax.Sentence
 makeOneAccessor typeName constrPat fieldVars idx ft =
@@ -633,7 +614,6 @@ makeOneAccessor typeName constrPat fieldVars idx ft =
               Syntax.typeBindersType = (Syntax.Type (Coder.coqTermQualid typeName))})],
           Syntax.definitionType = Nothing,
           Syntax.definitionBody = matchExpr}))}
-
 -- | Emit nested `prod (T1) (prod ...)` textual type expression
 makeProdType :: [String] -> String
 makeProdType ts =
@@ -643,7 +623,6 @@ makeProdType ts =
       ") (",
       (makeProdType (Pairs.second p)),
       ")"])) (Lists.uncons ts))
-
 -- | Emit a nested `(pair (b1) (...))` textual value expression
 makeProdVal :: [String] -> String
 makeProdVal bs =
@@ -653,7 +632,6 @@ makeProdVal bs =
       ") (",
       (makeProdVal (Pairs.second p)),
       "))"])) (Lists.uncons bs))
-
 -- | Emit the n projection expressions extracting each member of a nested pair bundle
 makeProjectionExprs :: Int -> String -> [String]
 makeProjectionExprs n bvar =
@@ -673,12 +651,10 @@ makeProjectionExprs n bvar =
                     ")"]))
       in (Logic.ifElse (Equality.lte n 0) [] (Logic.ifElse (Equality.equal n 1) [
         bvar] (Lists.map (\i -> mkProj i n bvar) (Math.range 0 (Math.sub n 1)))))
-
 -- | Return-type Coq term: `TypeName` or `TypeName p1 p2 ...`
 makeReturnType :: String -> [String] -> Syntax.Term
 makeReturnType typeName params =
     Logic.ifElse (Lists.null params) (Coder.coqTermQualid typeName) (Coder.coqTermApp (Coder.coqTermQualid typeName) (Lists.map (\p -> Coder.coqTermQualid p) params))
-
 -- | Build a Coq `(p : Type)` binder for a type parameter
 makeTypeBinder :: String -> Syntax.Binder
 makeTypeBinder p =
@@ -686,7 +662,6 @@ makeTypeBinder p =
       Syntax.typeBindersNames = [
         Coder.coqName p],
       Syntax.typeBindersType = (Syntax.Type (Coder.coqTermQualid "Type"))})
-
 -- | Collect type-variable names and the Coq binders needed for a term definition
 mkTypeBinders :: Core.Term -> [Core.Name] -> ([String], [Syntax.Binder])
 mkTypeBinders body typeVars =
@@ -698,7 +673,6 @@ mkTypeBinders body typeVars =
           allTypeVarNames = Lists.nub (Lists.concat2 explicit extras)
           binders = Lists.map (\v -> makeTypeBinder v) allTypeVarNames
       in (allTypeVarNames, binders)
-
 -- | Top-level driver: dispatch a module to either full-emission or axiom-only emission, producing (path, content) pairs
 moduleToCoq :: M.Map (String, String) String -> M.Map String Int -> S.Set String -> S.Set String -> Packaging.Module -> [Packaging.Definition] -> M.Map String String
 moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod_ defs =
@@ -738,7 +712,6 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod_ defs =
                     Environment.coqEnvironmentSanitizedAccessors = globalSanitizedAcc}
       in (Logic.ifElse isAxiomOnly (Maps.fromList [
         (path, (buildAxiomOnlyContent env desc nsStr typeDefs termDefs mod_))]) (buildFullModule env fieldMap mod_ nsStr path desc typeDefs termDefs))
-
 -- | Convert a Hydra namespace string (e.g. hydra.show.core) into a relative .v file path
 namespaceToPath :: String -> String
 namespaceToPath ns =
@@ -753,17 +726,14 @@ namespaceToPath ns =
         Strings.intercalate "/" dirParts,
         "/",
         fileName]))
-
 -- | Pretty-print the standard-imports sentence followed by additional dependency imports
 renderRequireImports :: [Syntax.Sentence] -> String
 renderRequireImports depSentences = renderSentences (Lists.cons Coder.standardImports depSentences)
-
 -- | Pretty-print a Document containing the given Coq sentences
 renderSentences :: [Syntax.Sentence] -> String
 renderSentences sentences =
     Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Syntax.Document {
       Syntax.documentSentences = sentences})))
-
 -- | Replace literal `bundle_` with the given replacement string
 replaceBundle :: String -> String -> String
 replaceBundle s bname = Strings.intercalate bname (Strings.splitOn "bundle_" s)

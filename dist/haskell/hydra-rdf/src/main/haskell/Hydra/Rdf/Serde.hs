@@ -25,7 +25,7 @@ escapeIriChar :: Int -> String
 escapeIriChar c =
     Logic.ifElse (Logic.or (Equality.lte c 32) (Logic.or (Equality.equal c 60) (Logic.or (Equality.equal c 62) (Logic.or (Equality.equal c 34) (Logic.or (Equality.equal c 123) (Logic.or (Equality.equal c 125) (Logic.or (Equality.equal c 124) (Logic.or (Equality.equal c 94) (Logic.or (Equality.equal c 96) (Equality.equal c 92)))))))))) (uchar4 c) (Strings.fromList [
       c])
--- | Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as UCHAR (\uXXXX).
+-- | Escape a string for use in an N-Triples IRI. Disallowed characters are emitted as 4-digit UCHAR escapes.
 escapeIriStr :: String -> String
 escapeIriStr s = Strings.cat (Lists.map escapeIriChar (Strings.toList s))
 -- | Escape a single literal character code to a string
