@@ -33,12 +33,7 @@ fi
 
 BATCH_PACKAGES=$(batch_emit_packages)
 
-# Stale-file warning: bootstrap-from-json writes only the modules
-# currently in the dist/json universe; if a previously-generated
-# module has been deleted or renamed at the source, the old
-# dist/<lang>/.../<Module>.<ext> stays on disk. The digest refresh
-# below will hash it and silently include it in the build. See #357
-# for the generator-side fix.
+# Stale-file pruning is handled by bootstrap-from-json --prune-stale (#357).
 cd "$HYDRA_ROOT_DIR/heads/haskell"
 stack build hydra:exe:bootstrap-from-json hydra:exe:digest-check >/dev/null 2>&1
 
@@ -58,6 +53,7 @@ stack exec bootstrap-from-json -- \
     --target haskell \
     --all-packages \
     --include-coders --include-dsls --synthesize-sources \
+    --prune-stale \
     --output "$DIST_ROOT"
 
 echo ""
@@ -66,6 +62,7 @@ stack exec bootstrap-from-json -- \
     --target haskell \
     --all-packages \
     --include-coders --include-dsls --include-tests \
+    --prune-stale \
     --output "$DIST_ROOT"
 
 # No per-package post-processing today — the generator emits

@@ -63,6 +63,22 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
+# Step 0 (hydra-kernel only): drop hand-written runtime files BEFORE
+# generation, recording them in a keep-paths manifest so #357 prune in
+# bootstrap-from-json --prune-stale below won't remove them. Was Step 3
+# in the pre-#357 layout; moving it up preserves the published Maven
+# artifact's runtime support while letting the prune step delete stale
+# generated classes from removed modules.
+KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-java.XXXXXX)"
+trap 'rm -f "$KEEP_MANIFEST"' EXIT
+case "$PACKAGE" in
+    hydra-kernel)
+        echo "Step 0: Copying hand-written Java runtime into hydra-kernel dist..."
+        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+        echo ""
+        ;;
+esac
+
 # Step 1: Main modules.
 if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN_DIR" "$OUTPUT_DIGEST_MAIN"; then
     echo "Step 1: Main modules unchanged; skipping main regeneration."
@@ -70,7 +86,8 @@ else
     rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Java modules..."
     "$HASKELL_BIN/transform-json-to-java.sh" "$PACKAGE" main \
-        --output "$DIST_ROOT" --include-dsls
+        --output "$DIST_ROOT" --include-dsls \
+        --prune-stale --keep-paths-from "$KEEP_MANIFEST"
     assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN_DIR" "$OUTPUT_DIGEST_MAIN"
 fi
 
@@ -88,24 +105,11 @@ else
         rm -f "$OUTPUT_DIGEST_TEST"
         echo "Step 2: Generating test Java modules..."
         "$HASKELL_BIN/transform-json-to-java.sh" "$PACKAGE" test \
-            --output "$DIST_ROOT"
+            --output "$DIST_ROOT" \
+            --prune-stale --keep-paths-from "$KEEP_MANIFEST"
         assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST_DIR" "$OUTPUT_DIGEST_TEST"
     fi
 fi
-
-# Step 3: Package-specific post-processing.
-# - hydra-kernel: copy hand-written runtime support (heads/java/src/main/java/
-#   hydra/{util,lib,dsl,json,tools}/ + top-level kernel utility classes) into
-#   dist/java/hydra-kernel/src/main/java/ so the published Maven artifact is
-#   self-contained. Cypher/GQL/RDF native bindings are NOT copied (they belong
-#   in bindings/ once that subtree exists).
-case "$PACKAGE" in
-    hydra-kernel)
-        echo ""
-        echo "Step 3: Copying hand-written Java runtime into hydra-kernel dist..."
-        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
-        ;;
-esac
 
 # Step 4: Generate per-package build.gradle + settings.gradle so each
 # dist/java/<pkg>/ is a standalone publishable Gradle build.

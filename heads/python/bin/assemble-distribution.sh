@@ -63,6 +63,31 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
+# Step 0 (hydra-kernel only): drop hand-written runtime files BEFORE
+# generation, recording them in a keep-paths manifest so #357 prune in
+# bootstrap-from-json --prune-stale below won't remove them. Was Step
+# 3a/3b in the pre-#357 layout.
+KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-python.XXXXXX)"
+trap 'rm -f "$KEEP_MANIFEST"' EXIT
+case "$PACKAGE" in
+    hydra-kernel)
+        # Copy test_env.py from heads/python into dist/. The generated
+        # test_graph.py imports hydra.test.test_env, which must resolve
+        # under the dist tree at test time.
+        TEST_ENV_SRC="$HYDRA_PYTHON_HEAD/src/test/python/hydra/test/test_env.py"
+        TEST_ENV_DST="$OUT_TEST/hydra/test/test_env.py"
+        if [ -f "$TEST_ENV_SRC" ]; then
+            echo "Step 0a: Copying test_env.py from heads/python/..."
+            mkdir -p "$(dirname "$TEST_ENV_DST")"
+            cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
+            printf "%s\thydra/test/test_env.py\n" "$OUT_TEST" >> "$KEEP_MANIFEST"
+        fi
+        echo "Step 0b: Copying hand-written Python runtime into hydra-kernel dist..."
+        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT" --manifest "$KEEP_MANIFEST"
+        echo ""
+        ;;
+esac
+
 # Step 1: Main modules.
 if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"; then
     echo "Step 1: Main modules unchanged; skipping main regeneration."
@@ -70,7 +95,8 @@ else
     rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Python modules..."
     "$HASKELL_BIN/transform-json-to-python.sh" "$PACKAGE" main \
-        --output "$DIST_ROOT" --include-dsls
+        --output "$DIST_ROOT" --include-dsls \
+        --prune-stale --keep-paths-from "$KEEP_MANIFEST"
     assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"
 fi
 
@@ -88,38 +114,11 @@ else
         rm -f "$OUTPUT_DIGEST_TEST"
         echo "Step 2: Generating test Python modules..."
         "$HASKELL_BIN/transform-json-to-python.sh" "$PACKAGE" test \
-            --output "$DIST_ROOT"
+            --output "$DIST_ROOT" \
+            --prune-stale --keep-paths-from "$KEEP_MANIFEST"
         assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"
     fi
 fi
-
-# Step 3: Package-specific post-processing.
-# - hydra-kernel: copy test_env.py (the Python runtime counterpart of
-#   hydra.test.testEnv, filtered from emitted output by
-#   testSkipEmitNamespaces) into the dist test tree, then copy the
-#   hand-written runtime support (lib/, dsl/, sources/, tools.py,
-#   py.typed) into dist/python/hydra-kernel/ so the published wheel is
-#   self-contained.
-case "$PACKAGE" in
-    hydra-kernel)
-        # Copy test_env.py from heads/python into dist/. The generated
-        # test_graph.py imports hydra.test.test_env, which must resolve
-        # under the dist tree at test time.
-        TEST_ENV_SRC="$HYDRA_PYTHON_HEAD/src/test/python/hydra/test/test_env.py"
-        TEST_ENV_DST="$OUT_TEST/hydra/test/test_env.py"
-        if [ -f "$TEST_ENV_SRC" ]; then
-            echo ""
-            echo "Step 3a: Copying test_env.py from heads/python/..."
-            mkdir -p "$(dirname "$TEST_ENV_DST")"
-            cp "$TEST_ENV_SRC" "$TEST_ENV_DST"
-        fi
-
-        # Step 3b: Copy hand-written Python runtime so the published kernel
-        # wheel is self-contained.
-        echo "Step 3b: Copying hand-written Python runtime into hydra-kernel dist..."
-        "$SCRIPT_DIR/copy-kernel-runtime.sh" --dist-root "$DIST_ROOT"
-        ;;
-esac
 
 # Step 4: Generate per-package pyproject.toml so each dist/python/<pkg>/
 # is a standalone publishable wheel build.
