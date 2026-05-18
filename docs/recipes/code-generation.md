@@ -227,7 +227,7 @@ in a few seconds.
 | Phase 1 | `bin/lib/check-dsl-fresh.py` | Every DSL source file's hash matches the recorded digest at `dist/json/digest.main.json`. Skips stack startup + JSON regeneration entirely. |
 | Phase 2 (batch) | `bin/lib/batch-cache.sh` | Every `dist/<lang>/<pkg>/digest.json`'s recorded input hashes match the current `dist/json/<pkg>/digest.json`. Skips stack startup + `bootstrap-from-json`. |
 | Phase 2 (per-pkg) | `heads/haskell/bin/digest-check fresh` + Python pre-check | Per-package input hashes match and every recorded output file exists with its recorded hash. |
-| Phase 2 (generator) | Stage 7 per-module DSL-hash skip inside `bootstrap-from-json` | Modules with unchanged DSL-source hashes are excluded from regeneration even when overall cache missed. |
+| Phase 2 (generator) | Stage 7 per-module DSL-hash skip inside `bootstrap-from-json` | Modules with unchanged DSL-source hashes are excluded from regeneration even when overall cache missed. Active only when the per-target digest exists; the per-package `assemble-distribution.sh` deletes it before invoking the generator, so Stage 7 currently benefits direct callers (`sync-haskell.sh`, batch `assemble-all.sh`) only. |
 | Phase 3 | `bin/lib/test-cache.sh` (`dist/<lang>/test-cache.json`) | Every generated source under `dist/<lang>/*` plus every hand-written test helper under `heads/<lang>/src/test/*` plus the runner script are byte-identical since the last successful run. Skips `stack test` / `gradle test` / `pytest` / `sbt test` / lisp runners entirely. |
 
 Any single file change invalidates the relevant cache. For example,

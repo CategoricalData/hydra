@@ -368,3 +368,49 @@ exports many `_TypeFoo` / `_ExpressionBar` constants — GHC reports
 "Ambiguous occurrence." Affected constants include `_FunctionType`,
 `_LambdaType`, and (after renames in #297) `_Type_function`. Fix: drop the
 local alias and qualify references with `Scala.` at use sites.
+
+### Stage 7 freshness filter is defeated by per-package assemblers
+
+`bootstrap-from-json`'s Stage 7 reads the per-target digest at
+`<outBase>/<pkg>/src/<sourceSet>/digest.json` to skip re-inferring fresh
+modules. But every per-package `assemble-distribution.sh` runs
+`rm -f "$OUTPUT_DIGEST_MAIN"` (and the test analog) immediately before
+invoking bootstrap-from-json, so Stage 7 always sees an empty digest and
+keeps all modules. Stage 7 only delivers its speedup to direct callers like
+`heads/haskell/bin/sync-haskell.sh`. If you're trying to make a per-package
+sync faster by leaning on Stage 7, you're chasing a ghost — fix the digest
+ordering or the upstream cache instead.
+
+### `dist/` is mixed generated + hand-written content
+
+Three categories of files coexist under `dist/<lang>/<pkg>/src/{main,test}/<lang>/`:
+
+1. Generator output from `bootstrap-from-json` (most files).
+2. Hand-written runtime support copied in by `copy-kernel-runtime.sh`
+   (Java + Python only): `hydra/Adapters.java`, `hydra/util/...`,
+   `hydra/dsl/...`, etc.
+3. Hand-written skip-emit stubs whose namespace appears in
+   `testSkipEmitNamespaces` (currently `hydra.test.testEnv`):
+   `dist/haskell/.../Hydra/Test/TestEnv.hs` and per-Lisp-dialect
+   `test_env.<ext>`. The generator deliberately does NOT write these;
+   they're committed in git as hand-written bridge modules that the
+   generated test_graph imports.
+
+Any pass that walks the dist tree (prune, manifest, copy) has to keep all
+three categories alive. The mechanism for protecting (2) is the
+`--keep-paths-from` manifest emitted by `copy-kernel-runtime.sh --manifest`;
+the mechanism for (3) is to include skip-emit namespaces in the keep set
+(via the pre-filter `testModsForKeep` in bootstrap-from-json).
+
+### `moduleFilePaths` is target-specific; Java is not 1-to-1
+
+`Hydra.TargetFilePaths.moduleFilePaths target m` returns the paths a coder
+would write for module `m`. Most targets (haskell, python, scala, go, all
+lisp dialects) emit one file per namespace via `Names.namespaceToFilePath`
+with a target-specific case convention. **Java is the outlier:** it emits
+one file per top-level definition that passes `Predicates.isNominalType`
+(filtering out type-only aliases) plus an `<Module>Elements` interface file
+when the module has any term defs. Code that needs the path set for a
+module — prune, manifest generation, future cache work — has to either call
+`moduleFilePaths` or replicate this filter. Don't assume one path per
+module.
