@@ -1,6 +1,6 @@
 {
   "defaultLibModules": [],
-  "dslModules": [],
+  "dslModules": ["hydra.dsl.coq.syntax"],
   "mainModules": [
     "hydra.coq.coder",
     "hydra.coq.environment",
