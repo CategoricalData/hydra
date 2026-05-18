@@ -526,6 +526,12 @@ pass/fail counts) so results appear in the benchmark dashboard. Each group needs
 `totalTimeMs`, `passed`, `failed`, `skipped`, and `subgroups`. The JSON must include a `metadata`
 object with `language`, `commit`, `branch`, `timestamp`, and `commitMessage`.
 
+Test cases tagged `{value: "disabled"}` exercise unresolved upstream inference limitations
+(let-polymorphism over-generalization, Y-combinator typing, etc.) and should be skipped rather than
+counted as failures, matching Python's `is_disabled(tcase)` behavior. The related
+`disabledForMinimalInference` tag is *not* a universal skip — it only applies to heads using the
+minimal inference variant.
+
 **Passing all test cases in the common test suite (both kernel and generation evaluation) is the
 criterion for a complete Hydra implementation.**
 
