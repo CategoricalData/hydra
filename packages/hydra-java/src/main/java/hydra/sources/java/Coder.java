@@ -236,13 +236,9 @@ public class Coder {
                             lambda("app",
                                 let(
                                     field("lhs",
-                                        apply(
-                                            project(Application.TYPE_, Application.FUNCTION),
-                                            var("app"))),
+                                        proj(Application.TYPE_, Application.FUNCTION, "app")),
                                     field("rhs",
-                                        apply(
-                                            project(Application.TYPE_, Application.ARGUMENT),
-                                            var("app"))),
+                                        proj(Application.TYPE_, Application.ARGUMENT, "app")),
                                     field("annotatedRhs",
                                         casesWithDefault(Term.TYPE_,
                                             apply(var("hydra.strip.deannotateTerm"), var("rhs")),
@@ -287,19 +283,13 @@ public class Coder {
                                     right(
                                         Maybes.map(
                                             lambda("prim",
-                                                apply(
-                                                    project(Primitive.TYPE_, Primitive.TYPE_SCHEME),
-                                                    var("prim"))),
+                                                proj(Primitive.TYPE_, Primitive.TYPE_SCHEME, "prim")),
                                             Maps.lookup(
                                                 var("cname"),
-                                                apply(
-                                                    project(Graph.TYPE_, Graph.PRIMITIVES),
-                                                    var("g"))))),
+                                                proj(Graph.TYPE_, Graph.PRIMITIVES, "g")))),
                                     lambda("el",
                                         right(
-                                            apply(
-                                                project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                                var("el"))))))),
+                                            proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el")))))),
                         lambda("mts",
                             Maybes.cases(
                                 var("mts"),
@@ -307,18 +297,14 @@ public class Coder {
                                 lambda("ts",
                                     let(
                                         field("schemeType",
-                                            apply(
-                                                project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                var("ts"))),
+                                            proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
                                         field("schemeTypeVars",
                                             apply(ref(Coder.collectTypeVars), var("schemeType"))),
                                         field("schemeVars",
                                             Lists.filter(
                                                 lambda("v",
                                                     Sets.member(var("v"), var("schemeTypeVars"))),
-                                                apply(
-                                                    project(TypeScheme.TYPE_, TypeScheme.VARIABLES),
-                                                    var("ts")))),
+                                                proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                                         Logic.ifElse(
                                             Logic.or_(
                                                 Lists.null_(var("schemeVars")),
@@ -366,13 +352,9 @@ public class Coder {
                 "g",
                 let(
                     field("trusted",
-                        apply(
-                            project(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
                     field("inScope",
-                        apply(
-                            project(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
                     field("castVars",
                         apply(ref(Coder.collectTypeVars), var("castType"))),
                     field("javaTypeVars",
@@ -463,13 +445,9 @@ public class Coder {
                         lambda("at",
                             let(
                                 field("inner",
-                                    apply(
-                                        project(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY),
-                                        var("at"))),
+                                    proj(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY, "at")),
                                 field("ann",
-                                    apply(
-                                        project(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION),
-                                        var("at"))),
+                                    proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at")),
                                 field("ann'",
                                     Maybes.cases(
                                         Maps.lookup(var("hydra.constants.keyType"), var("ann")),
@@ -516,18 +494,14 @@ public class Coder {
                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                             var("subst"),
                                             var("cx"),
-                                            apply(
-                                                project(Application.TYPE_, Application.FUNCTION),
-                                                var("app")))),
+                                            proj(Application.TYPE_, Application.FUNCTION, "app"))),
                                     field(
                                         Application.ARGUMENT,
                                         apply(
                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                             var("subst"),
                                             var("cx"),
-                                            apply(
-                                                project(Application.TYPE_, Application.ARGUMENT),
-                                                var("app")))))))),
+                                            proj(Application.TYPE_, Application.ARGUMENT, "app"))))))),
                     field(
                         Term.LAMBDA,
                         lambda("lam",
@@ -536,9 +510,7 @@ public class Coder {
                                 record(Lambda.TYPE_,
                                     field(
                                         Lambda.PARAMETER,
-                                        apply(
-                                            project(Lambda.TYPE_, Lambda.PARAMETER),
-                                            var("lam"))),
+                                        proj(Lambda.TYPE_, Lambda.PARAMETER, "lam")),
                                     field(
                                         Lambda.DOMAIN,
                                         Maybes.map(
@@ -547,18 +519,14 @@ public class Coder {
                                                     ref(Coder.substituteTypeVarsWithTypes),
                                                     var("subst"),
                                                     var("d"))),
-                                            apply(
-                                                project(Lambda.TYPE_, Lambda.DOMAIN),
-                                                var("lam")))),
+                                            proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"))),
                                     field(
                                         Lambda.BODY,
                                         apply(
                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                             var("subst"),
                                             var("cx"),
-                                            apply(
-                                                project(Lambda.TYPE_, Lambda.BODY),
-                                                var("lam")))))))),
+                                            proj(Lambda.TYPE_, Lambda.BODY, "lam"))))))),
                     field(
                         Term.CASES,
                         lambda("cs",
@@ -567,9 +535,7 @@ public class Coder {
                                 record(CaseStatement.TYPE_,
                                     field(
                                         CaseStatement.TYPE_NAME,
-                                        apply(
-                                            project(CaseStatement.TYPE_, CaseStatement.TYPE_NAME),
-                                            var("cs"))),
+                                        proj(CaseStatement.TYPE_, CaseStatement.TYPE_NAME, "cs")),
                                     field(
                                         CaseStatement.DEFAULT,
                                         Maybes.map(
@@ -579,9 +545,7 @@ public class Coder {
                                                     var("subst"),
                                                     var("cx"),
                                                     var("d"))),
-                                            apply(
-                                                project(CaseStatement.TYPE_, CaseStatement.DEFAULT),
-                                                var("cs")))),
+                                            proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs"))),
                                     field(
                                         CaseStatement.CASES,
                                         Lists.map(
@@ -589,21 +553,15 @@ public class Coder {
                                                 record(Field.TYPE_,
                                                     field(
                                                         Field.NAME,
-                                                        apply(
-                                                            project(Field.TYPE_, Field.NAME),
-                                                            var("fld"))),
+                                                        proj(Field.TYPE_, Field.NAME, "fld")),
                                                     field(
                                                         Field.TERM,
                                                         apply(
                                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                                             var("subst"),
                                                             var("cx"),
-                                                            apply(
-                                                                project(Field.TYPE_, Field.TERM),
-                                                                var("fld")))))),
-                                            apply(
-                                                project(CaseStatement.TYPE_, CaseStatement.CASES),
-                                                var("cs")))))))),
+                                                            proj(Field.TYPE_, Field.TERM, "fld"))))),
+                                            proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs"))))))),
                     field(
                         Term.LET,
                         lambda("lt",
@@ -617,35 +575,25 @@ public class Coder {
                                                 record(Binding.TYPE_,
                                                     field(
                                                         Binding.NAME,
-                                                        apply(
-                                                            project(Binding.TYPE_, Binding.NAME),
-                                                            var("b"))),
+                                                        proj(Binding.TYPE_, Binding.NAME, "b")),
                                                     field(
                                                         Binding.TERM,
                                                         apply(
                                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                                             var("subst"),
                                                             var("cx"),
-                                                            apply(
-                                                                project(Binding.TYPE_, Binding.TERM),
-                                                                var("b")))),
+                                                            proj(Binding.TYPE_, Binding.TERM, "b"))),
                                                     field(
                                                         Binding.TYPE_SCHEME,
-                                                        apply(
-                                                            project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                                            var("b"))))),
-                                            apply(
-                                                project(Let.TYPE_, Let.BINDINGS),
-                                                var("lt")))),
+                                                        proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b")))),
+                                            proj(Let.TYPE_, Let.BINDINGS, "lt"))),
                                     field(
                                         Let.BODY,
                                         apply(
                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                             var("subst"),
                                             var("cx"),
-                                            apply(
-                                                project(Let.TYPE_, Let.BODY),
-                                                var("lt")))))))),
+                                            proj(Let.TYPE_, Let.BODY, "lt"))))))),
                     field(
                         Term.TYPE_APPLICATION,
                         lambda("ta",
@@ -658,17 +606,13 @@ public class Coder {
                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                             var("subst"),
                                             var("cx"),
-                                            apply(
-                                                project(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY),
-                                                var("ta")))),
+                                            proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY, "ta"))),
                                     field(
                                         TypeApplicationTerm.TYPE,
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes),
                                             var("subst"),
-                                            apply(
-                                                project(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE),
-                                                var("ta")))))))),
+                                            proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE, "ta"))))))),
                     field(
                         Term.TYPE_LAMBDA,
                         lambda("tl",
@@ -677,18 +621,14 @@ public class Coder {
                                 record(TypeLambda.TYPE_,
                                     field(
                                         TypeLambda.PARAMETER,
-                                        apply(
-                                            project(TypeLambda.TYPE_, TypeLambda.PARAMETER),
-                                            var("tl"))),
+                                        proj(TypeLambda.TYPE_, TypeLambda.PARAMETER, "tl")),
                                     field(
                                         TypeLambda.BODY,
                                         apply(
                                             ref(Coder.applyOvergenSubstToTermAnnotations_go),
                                             var("subst"),
                                             var("cx"),
-                                            apply(
-                                                project(TypeLambda.TYPE_, TypeLambda.BODY),
-                                                var("tl")))))))))));
+                                            proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"))))))))));
 
     public static final Def applySubstFull = def(
         "applySubstFull",
@@ -712,17 +652,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                var("ft")))),
+                                            proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"))),
                                     field(
                                         FunctionType.CODOMAIN,
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                var("ft")))))))),
+                                            proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"))))))),
                     field(
                         Type.APPLICATION,
                         lambda("at",
@@ -734,17 +670,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                                var("at")))),
+                                            proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at"))),
                                     field(
                                         ApplicationType.ARGUMENT,
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                                var("at")))))))),
+                                            proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at"))))))),
                     field(
                         Type.LIST,
                         lambda("inner",
@@ -774,17 +706,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(MapType.TYPE_, MapType.KEYS),
-                                                var("mt")))),
+                                            proj(MapType.TYPE_, MapType.KEYS, "mt"))),
                                     field(
                                         MapType.VALUES,
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(MapType.TYPE_, MapType.VALUES),
-                                                var("mt")))))))),
+                                            proj(MapType.TYPE_, MapType.VALUES, "mt"))))))),
                     field(
                         Type.PAIR,
                         lambda("pt",
@@ -796,17 +724,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(PairType.TYPE_, PairType.FIRST),
-                                                var("pt")))),
+                                            proj(PairType.TYPE_, PairType.FIRST, "pt"))),
                                     field(
                                         PairType.SECOND,
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(PairType.TYPE_, PairType.SECOND),
-                                                var("pt")))))))),
+                                            proj(PairType.TYPE_, PairType.SECOND, "pt"))))))),
                     field(
                         Type.EITHER,
                         lambda("et",
@@ -818,17 +742,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(EitherType.TYPE_, EitherType.LEFT),
-                                                var("et")))),
+                                            proj(EitherType.TYPE_, EitherType.LEFT, "et"))),
                                     field(
                                         EitherType.RIGHT,
                                         apply(
                                             ref(Coder.applySubstFull),
                                             var("s"),
-                                            apply(
-                                                project(EitherType.TYPE_, EitherType.RIGHT),
-                                                var("et")))))))),
+                                            proj(EitherType.TYPE_, EitherType.RIGHT, "et"))))))),
                     field(
                         Type.FORALL,
                         lambda("ft",
@@ -837,21 +757,15 @@ public class Coder {
                                 record(ForallType.TYPE_,
                                     field(
                                         ForallType.PARAMETER,
-                                        apply(
-                                            project(ForallType.TYPE_, ForallType.PARAMETER),
-                                            var("ft"))),
+                                        proj(ForallType.TYPE_, ForallType.PARAMETER, "ft")),
                                     field(
                                         ForallType.BODY,
                                         apply(
                                             ref(Coder.applySubstFull),
                                             Maps.delete(
-                                                apply(
-                                                    project(ForallType.TYPE_, ForallType.PARAMETER),
-                                                    var("ft")),
+                                                proj(ForallType.TYPE_, ForallType.PARAMETER, "ft"),
                                                 var("s")),
-                                            apply(
-                                                project(ForallType.TYPE_, ForallType.BODY),
-                                                var("ft")))))))))));
+                                            proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))))));
 
     public static final Def applySubstSimple = def(
         "applySubstSimple",
@@ -1005,9 +919,7 @@ public class Coder {
                                             ClassModifier.FINAL,
                                             unit()))),
                                 field("oldBody",
-                                    apply(
-                                        project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.BODY),
-                                        var("ncd"))),
+                                    proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.BODY, "ncd")),
                                 field("oldDecls",
                                     apply(unwrap(ClassBody.TYPE_), var("oldBody"))),
                                 field("acceptDecl",
@@ -1029,9 +941,7 @@ public class Coder {
                                             var("newMods")),
                                         field(
                                             NormalClassDeclaration.IDENTIFIER,
-                                            apply(
-                                                project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.IDENTIFIER),
-                                                var("ncd"))),
+                                            proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.IDENTIFIER, "ncd")),
                                         field(
                                             NormalClassDeclaration.PARAMETERS,
                                             var("tparams")),
@@ -1040,14 +950,10 @@ public class Coder {
                                             just(var("extendsPart"))),
                                         field(
                                             NormalClassDeclaration.IMPLEMENTS,
-                                            apply(
-                                                project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.IMPLEMENTS),
-                                                var("ncd"))),
+                                            proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.IMPLEMENTS, "ncd")),
                                         field(
                                             NormalClassDeclaration.PERMITS,
-                                            apply(
-                                                project(NormalClassDeclaration.TYPE_, NormalClassDeclaration.PERMITS),
-                                                var("ncd"))),
+                                            proj(NormalClassDeclaration.TYPE_, NormalClassDeclaration.PERMITS, "ncd")),
                                         field(
                                             NormalClassDeclaration.BODY,
                                             var("newBody"))))))))));
@@ -1059,9 +965,7 @@ public class Coder {
                     casesWithDefault(Term.TYPE_,
                         apply(
                             var("hydra.strip.deannotateTerm"),
-                            apply(
-                                project(Binding.TYPE_, Binding.TERM),
-                                var("b"))),
+                            proj(Binding.TYPE_, Binding.TERM, "b")),
                         bool(false),
                         field(Term.LAMBDA, constant(bool(true))),
                         field(Term.PROJECT, constant(bool(true))),
@@ -1071,9 +975,7 @@ public class Coder {
                         casesWithDefault(Type.TYPE_,
                             apply(
                                 var("hydra.strip.deannotateType"),
-                                apply(
-                                    project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                    var("ts"))),
+                                proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
                             bool(false),
                             field(Type.FUNCTION, constant(bool(true))),
                             field(
@@ -1082,14 +984,10 @@ public class Coder {
                                     casesWithDefault(Type.TYPE_,
                                         apply(
                                             var("hydra.strip.deannotateType"),
-                                            apply(
-                                                project(ForallType.TYPE_, ForallType.BODY),
-                                                var("fa"))),
+                                            proj(ForallType.TYPE_, ForallType.BODY, "fa")),
                                         bool(false),
                                         field(Type.FUNCTION, constant(bool(true)))))))),
-                    apply(
-                        project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                        var("b")))));
+                    proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"))));
 
     public static final Def bindingNameToFilePath = def(
         "bindingNameToFilePath",
@@ -1098,13 +996,9 @@ public class Coder {
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("name"))),
                     field("ns_",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.NAMESPACE),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.NAMESPACE, "qn")),
                     field("local",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.LOCAL),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     field("sanitized",
                         apply(
                             var("hydra.formatting.sanitizeWithUnderscores"),
@@ -1137,19 +1031,13 @@ public class Coder {
                 let(
                     java.util.Arrays.asList(
     field("aliases",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
     field("g",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env")),
     field("flatBindings",
                         apply(
                             ref(Coder.dedupBindings),
-                            apply(
-                                project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                                var("aliases")),
+                            proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases"),
                             apply(ref(Coder.flattenBindings), var("bindings")))),
     field("gExtended",
                         apply(
@@ -1181,9 +1069,7 @@ public class Coder {
                         Sets.fromList(
                             Lists.map(
                                 lambda("b",
-                                    apply(
-                                        project(Binding.TYPE_, Binding.NAME),
-                                        var("b"))),
+                                    proj(Binding.TYPE_, Binding.NAME, "b")),
                                 var("flatBindings")))),
     field("allDeps",
                         Maps.fromList(
@@ -1191,17 +1077,13 @@ public class Coder {
                                 lambda("b",
                                     let(
                                         field("key",
-                                            apply(
-                                                project(Binding.TYPE_, Binding.NAME),
-                                                var("b"))),
+                                            proj(Binding.TYPE_, Binding.NAME, "b")),
                                         field("deps",
                                             Sets.intersection(
                                                 var("bindingVars"),
                                                 apply(
                                                     var("hydra.variables.freeVariablesInTerm"),
-                                                    apply(
-                                                        project(Binding.TYPE_, Binding.TERM),
-                                                        var("b"))))),
+                                                    proj(Binding.TYPE_, Binding.TERM, "b")))),
                                         pair(var("key"), var("deps")))),
                                 var("flatBindings")))),
     field("sorted",
@@ -1247,9 +1129,7 @@ public class Coder {
                                 Lists.map(
                                     lambda("b",
                                         let("bname",
-                                            apply(
-                                                project(Binding.TYPE_, Binding.NAME),
-                                                var("b")),
+                                            proj(Binding.TYPE_, Binding.NAME, "b"),
                                             Logic.ifElse(
                                                 Logic.and_(
                                                     Logic.not_(
@@ -1259,9 +1139,7 @@ public class Coder {
                                                     Logic.and_(
                                                         apply(
                                                             ref(Coder.needsThunking),
-                                                            apply(
-                                                                project(Binding.TYPE_, Binding.TERM),
-                                                                var("b"))),
+                                                            proj(Binding.TYPE_, Binding.TERM, "b")),
                                                         Logic.not_(
                                                             apply(
                                                                 ref(Coder.bindingIsFunctionType),
@@ -1273,74 +1151,48 @@ public class Coder {
                         record(Aliases.TYPE_,
                             field(
                                 Aliases.CURRENT_NAMESPACE,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
                             field(
                                 Aliases.PACKAGES,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.PACKAGES),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
                             field(
                                 Aliases.BRANCH_VARS,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.BRANCH_VARS),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
                             field(
                                 Aliases.RECURSIVE_VARS,
                                 Sets.union(
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.RECURSIVE_VARS),
-                                        var("aliases")),
+                                    proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases"),
                                     var("recursiveVars"))),
                             field(
                                 Aliases.IN_SCOPE_TYPE_PARAMS,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
                             field(
                                 Aliases.POLYMORPHIC_LOCALS,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
                             field(
                                 Aliases.IN_SCOPE_JAVA_VARS,
                                 Sets.union(
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                                        var("aliases")),
+                                    proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases"),
                                     var("bindingVars"))),
                             field(
                                 Aliases.VAR_RENAMES,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.VAR_RENAMES),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
                             field(
                                 Aliases.LAMBDA_VARS,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
                             field(
                                 Aliases.TYPE_VAR_SUBST,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
                             field(
                                 Aliases.TRUSTED_TYPE_VARS,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
                             field(
                                 Aliases.METHOD_CODOMAIN,
-                                apply(
-                                    project(Aliases.TYPE_, Aliases.METHOD_CODOMAIN),
-                                    var("aliases"))),
+                                proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
                             field(
                                 Aliases.THUNKED_VARS,
                                 Sets.union(
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.THUNKED_VARS),
-                                        var("aliases")),
+                                    proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases"),
                                     var("thunkedVars"))))),
     field("envExtended",
                         record(JavaEnvironment.TYPE_,
@@ -1403,21 +1255,15 @@ public class Coder {
                         lambda("at",
                             apply(
                                 ref(Coder.boundTypeVariables),
-                                apply(
-                                    project(AnnotatedType.TYPE_, AnnotatedType.BODY),
-                                    var("at"))))),
+                                proj(AnnotatedType.TYPE_, AnnotatedType.BODY, "at")))),
                     field(
                         Type.FORALL,
                         lambda("ft",
                             Lists.cons(
-                                apply(
-                                    project(ForallType.TYPE_, ForallType.PARAMETER),
-                                    var("ft")),
+                                proj(ForallType.TYPE_, ForallType.PARAMETER, "ft"),
                                 apply(
                                     ref(Coder.boundTypeVariables),
-                                    apply(
-                                        project(ForallType.TYPE_, ForallType.BODY),
-                                        var("ft")))))))));
+                                    proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))));
 
     public static final Def buildArgSubst = def(
         "buildArgSubst",
@@ -1486,13 +1332,9 @@ public class Coder {
                         lambda("at",
                             let(
                                 field("body",
-                                    apply(
-                                        project(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY),
-                                        var("at"))),
+                                    proj(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY, "at")),
                                 field("anns",
-                                    apply(
-                                        project(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION),
-                                        var("at"))),
+                                    proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at")),
                                 field("bodySubst",
                                     apply(
                                         ref(Coder.buildSubstFromAnnotations_go),
@@ -1516,9 +1358,7 @@ public class Coder {
                                                             Term.LAMBDA,
                                                             lambda("lam",
                                                                 Maybes.cases(
-                                                                    apply(
-                                                                        project(Lambda.TYPE_, Lambda.DOMAIN),
-                                                                        var("lam")),
+                                                                    proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                                                     var("hydra.lib.maps.empty"),
                                                                     lambda("dom",
                                                                         casesWithDefault(
@@ -1533,9 +1373,7 @@ public class Coder {
                                                                                     apply(
                                                                                         ref(Coder.buildTypeVarSubst),
                                                                                         var("schemeVarSet"),
-                                                                                        apply(
-                                                                                            project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                                                            var("ft")),
+                                                                                        proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
                                                                                         var("dom"))))))))))),
                                                 apply(
                                                     var("hydra.decode.core.type"),
@@ -1550,16 +1388,12 @@ public class Coder {
                                     ref(Coder.buildSubstFromAnnotations_go),
                                     var("schemeVarSet"),
                                     var("g"),
-                                    apply(
-                                        project(Application.TYPE_, Application.FUNCTION),
-                                        var("app"))),
+                                    proj(Application.TYPE_, Application.FUNCTION, "app")),
                                 apply(
                                     ref(Coder.buildSubstFromAnnotations_go),
                                     var("schemeVarSet"),
                                     var("g"),
-                                    apply(
-                                        project(Application.TYPE_, Application.ARGUMENT),
-                                        var("app")))))),
+                                    proj(Application.TYPE_, Application.ARGUMENT, "app"))))),
                     field(
                         Term.LAMBDA,
                         lambda("lam",
@@ -1567,18 +1401,14 @@ public class Coder {
                                 ref(Coder.buildSubstFromAnnotations_go),
                                 var("schemeVarSet"),
                                 var("g"),
-                                apply(
-                                    project(Lambda.TYPE_, Lambda.BODY),
-                                    var("lam"))))),
+                                proj(Lambda.TYPE_, Lambda.BODY, "lam")))),
                     field(
                         Term.CASES,
                         lambda("cs",
                             let(
                                 field("defSubst",
                                     Maybes.cases(
-                                        apply(
-                                            project(CaseStatement.TYPE_, CaseStatement.DEFAULT),
-                                            var("cs")),
+                                        proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs"),
                                         var("hydra.lib.maps.empty"),
                                         lambda("d",
                                             apply(
@@ -1597,13 +1427,9 @@ public class Coder {
                                                     ref(Coder.buildSubstFromAnnotations_go),
                                                     var("schemeVarSet"),
                                                     var("g"),
-                                                    apply(
-                                                        project(Field.TYPE_, Field.TERM),
-                                                        var("fld"))))),
+                                                    proj(Field.TYPE_, Field.TERM, "fld")))),
                                         var("hydra.lib.maps.empty"),
-                                        apply(
-                                            project(CaseStatement.TYPE_, CaseStatement.CASES),
-                                            var("cs")))),
+                                        proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs"))),
                                 Maps.union(var("defSubst"), var("caseSubsts"))))),
                     field(
                         Term.LET,
@@ -1619,22 +1445,16 @@ public class Coder {
                                                 ref(Coder.buildSubstFromAnnotations_go),
                                                 var("schemeVarSet"),
                                                 var("g"),
-                                                apply(
-                                                    project(Binding.TYPE_, Binding.TERM),
-                                                    var("b"))))),
+                                                proj(Binding.TYPE_, Binding.TERM, "b")))),
                                     var("hydra.lib.maps.empty"),
-                                    apply(
-                                        project(Let.TYPE_, Let.BINDINGS),
-                                        var("lt"))),
+                                    proj(Let.TYPE_, Let.BINDINGS, "lt")),
                                 Maps.union(
                                     var("bindingSubst"),
                                     apply(
                                         ref(Coder.buildSubstFromAnnotations_go),
                                         var("schemeVarSet"),
                                         var("g"),
-                                        apply(
-                                            project(Let.TYPE_, Let.BODY),
-                                            var("lt"))))))),
+                                        proj(Let.TYPE_, Let.BODY, "lt")))))),
                     field(
                         Term.LIST,
                         lambda("terms",
@@ -1690,13 +1510,9 @@ public class Coder {
                                             ref(Coder.buildSubstFromAnnotations_go),
                                             var("schemeVarSet"),
                                             var("g"),
-                                            apply(
-                                                project(Field.TYPE_, Field.TERM),
-                                                var("fld"))))),
+                                            proj(Field.TYPE_, Field.TERM, "fld")))),
                                 var("hydra.lib.maps.empty"),
-                                apply(
-                                    project(Record.TYPE_, Record.FIELDS),
-                                    var("r"))))),
+                                proj(Record.TYPE_, Record.FIELDS, "r")))),
                     field(
                         Term.SET,
                         lambda("terms",
@@ -1720,9 +1536,7 @@ public class Coder {
                                 ref(Coder.buildSubstFromAnnotations_go),
                                 var("schemeVarSet"),
                                 var("g"),
-                                apply(
-                                    project(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY),
-                                    var("ta"))))),
+                                proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY, "ta")))),
                     field(
                         Term.TYPE_LAMBDA,
                         lambda("tl",
@@ -1730,9 +1544,7 @@ public class Coder {
                                 ref(Coder.buildSubstFromAnnotations_go),
                                 var("schemeVarSet"),
                                 var("g"),
-                                apply(
-                                    project(TypeLambda.TYPE_, TypeLambda.BODY),
-                                    var("tl"))))),
+                                proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl")))),
                     field(
                         Term.EITHER,
                         lambda("e",
@@ -1800,20 +1612,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                        var("sft")),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                        var("aft"))),
+                                                    proj(FunctionType.TYPE_, FunctionType.DOMAIN, "sft"),
+                                                    proj(FunctionType.TYPE_, FunctionType.DOMAIN, "aft")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                        var("sft")),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                        var("aft"))))))))),
+                                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "sft"),
+                                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "aft")))))))),
                         field(
                             Type.APPLICATION,
                             lambda("sat",
@@ -1826,20 +1630,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                                        var("sat")),
-                                                    apply(
-                                                        project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                                        var("aat"))),
+                                                    proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "sat"),
+                                                    proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "aat")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                                        var("sat")),
-                                                    apply(
-                                                        project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                                        var("aat"))))))))),
+                                                    proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "sat"),
+                                                    proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "aat")))))))),
                         field(
                             Type.LIST,
                             lambda("sl",
@@ -1879,20 +1675,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.KEYS),
-                                                        var("smt")),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.KEYS),
-                                                        var("amt"))),
+                                                    proj(MapType.TYPE_, MapType.KEYS, "smt"),
+                                                    proj(MapType.TYPE_, MapType.KEYS, "amt")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.VALUES),
-                                                        var("smt")),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.VALUES),
-                                                        var("amt"))))))))),
+                                                    proj(MapType.TYPE_, MapType.VALUES, "smt"),
+                                                    proj(MapType.TYPE_, MapType.VALUES, "amt")))))))),
                         field(
                             Type.PAIR,
                             lambda("spt",
@@ -1905,20 +1693,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(PairType.TYPE_, PairType.FIRST),
-                                                        var("spt")),
-                                                    apply(
-                                                        project(PairType.TYPE_, PairType.FIRST),
-                                                        var("apt"))),
+                                                    proj(PairType.TYPE_, PairType.FIRST, "spt"),
+                                                    proj(PairType.TYPE_, PairType.FIRST, "apt")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(PairType.TYPE_, PairType.SECOND),
-                                                        var("spt")),
-                                                    apply(
-                                                        project(PairType.TYPE_, PairType.SECOND),
-                                                        var("apt"))))))))),
+                                                    proj(PairType.TYPE_, PairType.SECOND, "spt"),
+                                                    proj(PairType.TYPE_, PairType.SECOND, "apt")))))))),
                         field(
                             Type.EITHER,
                             lambda("set'",
@@ -1931,20 +1711,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(EitherType.TYPE_, EitherType.LEFT),
-                                                        var("set'")),
-                                                    apply(
-                                                        project(EitherType.TYPE_, EitherType.LEFT),
-                                                        var("aet"))),
+                                                    proj(EitherType.TYPE_, EitherType.LEFT, "set'"),
+                                                    proj(EitherType.TYPE_, EitherType.LEFT, "aet")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(EitherType.TYPE_, EitherType.RIGHT),
-                                                        var("set'")),
-                                                    apply(
-                                                        project(EitherType.TYPE_, EitherType.RIGHT),
-                                                        var("aet"))))))))),
+                                                    proj(EitherType.TYPE_, EitherType.RIGHT, "set'"),
+                                                    proj(EitherType.TYPE_, EitherType.RIGHT, "aet")))))))),
                         field(
                             Type.FORALL,
                             lambda("sfa",
@@ -1952,21 +1724,15 @@ public class Coder {
                                     var("at"),
                                     apply(
                                         var("goSub"),
-                                        apply(
-                                            project(ForallType.TYPE_, ForallType.BODY),
-                                            var("sfa")),
+                                        proj(ForallType.TYPE_, ForallType.BODY, "sfa"),
                                         var("at")),
                                     field(
                                         Type.FORALL,
                                         lambda("afa",
                                             apply(
                                                 var("goSub"),
-                                                apply(
-                                                    project(ForallType.TYPE_, ForallType.BODY),
-                                                    var("sfa")),
-                                                apply(
-                                                    project(ForallType.TYPE_, ForallType.BODY),
-                                                    var("afa"))))))))))));
+                                                proj(ForallType.TYPE_, ForallType.BODY, "sfa"),
+                                                proj(ForallType.TYPE_, ForallType.BODY, "afa")))))))))));
 
     public static final Def buildTypeVarSubst = def(
         "buildTypeVarSubst",
@@ -2009,9 +1775,7 @@ public class Coder {
                                         var("ft"),
                                         apply(
                                             var("hydra.strip.deannotateType"),
-                                            apply(
-                                                project(ForallType.TYPE_, ForallType.BODY),
-                                                var("cfa"))))))),
+                                            proj(ForallType.TYPE_, ForallType.BODY, "cfa")))))),
                         field(
                             Type.VARIABLE,
                             lambda("fn",
@@ -2039,20 +1803,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                        var("fft")),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                        var("cft"))),
+                                                    proj(FunctionType.TYPE_, FunctionType.DOMAIN, "fft"),
+                                                    proj(FunctionType.TYPE_, FunctionType.DOMAIN, "cft")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                        var("fft")),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                        var("cft"))))))))),
+                                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "fft"),
+                                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "cft")))))))),
                         field(
                             Type.APPLICATION,
                             lambda("fat",
@@ -2065,20 +1821,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                                        var("fat")),
-                                                    apply(
-                                                        project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                                        var("cat"))),
+                                                    proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "fat"),
+                                                    proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "cat")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                                        var("fat")),
-                                                    apply(
-                                                        project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                                        var("cat"))))))))),
+                                                    proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "fat"),
+                                                    proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "cat")))))))),
                         field(
                             Type.LIST,
                             lambda("fl",
@@ -2118,20 +1866,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.KEYS),
-                                                        var("fmt")),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.KEYS),
-                                                        var("cmt"))),
+                                                    proj(MapType.TYPE_, MapType.KEYS, "fmt"),
+                                                    proj(MapType.TYPE_, MapType.KEYS, "cmt")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.VALUES),
-                                                        var("fmt")),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.VALUES),
-                                                        var("cmt"))))))))),
+                                                    proj(MapType.TYPE_, MapType.VALUES, "fmt"),
+                                                    proj(MapType.TYPE_, MapType.VALUES, "cmt")))))))),
                         field(
                             Type.PAIR,
                             lambda("fpt",
@@ -2144,20 +1884,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(PairType.TYPE_, PairType.FIRST),
-                                                        var("fpt")),
-                                                    apply(
-                                                        project(PairType.TYPE_, PairType.FIRST),
-                                                        var("cpt"))),
+                                                    proj(PairType.TYPE_, PairType.FIRST, "fpt"),
+                                                    proj(PairType.TYPE_, PairType.FIRST, "cpt")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(PairType.TYPE_, PairType.SECOND),
-                                                        var("fpt")),
-                                                    apply(
-                                                        project(PairType.TYPE_, PairType.SECOND),
-                                                        var("cpt"))))))))),
+                                                    proj(PairType.TYPE_, PairType.SECOND, "fpt"),
+                                                    proj(PairType.TYPE_, PairType.SECOND, "cpt")))))))),
                         field(
                             Type.EITHER,
                             lambda("fet",
@@ -2170,20 +1902,12 @@ public class Coder {
                                             Maps.union(
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(EitherType.TYPE_, EitherType.LEFT),
-                                                        var("fet")),
-                                                    apply(
-                                                        project(EitherType.TYPE_, EitherType.LEFT),
-                                                        var("cet"))),
+                                                    proj(EitherType.TYPE_, EitherType.LEFT, "fet"),
+                                                    proj(EitherType.TYPE_, EitherType.LEFT, "cet")),
                                                 apply(
                                                     var("goSub"),
-                                                    apply(
-                                                        project(EitherType.TYPE_, EitherType.RIGHT),
-                                                        var("fet")),
-                                                    apply(
-                                                        project(EitherType.TYPE_, EitherType.RIGHT),
-                                                        var("cet"))))))))),
+                                                    proj(EitherType.TYPE_, EitherType.RIGHT, "fet"),
+                                                    proj(EitherType.TYPE_, EitherType.RIGHT, "cet")))))))),
                         field(
                             Type.FORALL,
                             lambda("ffa",
@@ -2194,21 +1918,15 @@ public class Coder {
                                         var("svs"),
                                         apply(
                                             var("hydra.strip.deannotateType"),
-                                            apply(
-                                                project(ForallType.TYPE_, ForallType.BODY),
-                                                var("ffa"))),
+                                            proj(ForallType.TYPE_, ForallType.BODY, "ffa")),
                                         var("ct")),
                                     field(
                                         Type.FORALL,
                                         lambda("cfa",
                                             apply(
                                                 var("goSub"),
-                                                apply(
-                                                    project(ForallType.TYPE_, ForallType.BODY),
-                                                    var("ffa")),
-                                                apply(
-                                                    project(ForallType.TYPE_, ForallType.BODY),
-                                                    var("cfa"))))))))))));
+                                                proj(ForallType.TYPE_, ForallType.BODY, "ffa"),
+                                                proj(ForallType.TYPE_, ForallType.BODY, "cfa")))))))))));
 
     public static final Def classModsPublic = def(
         "classModsPublic",
@@ -2234,9 +1952,7 @@ public class Coder {
                                     unit())),
                             lambda("el",
                                 Maybes.cases(
-                                    apply(
-                                        project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                        var("el")),
+                                    proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                     left(
                                         inject(Error_.TYPE_,
                                             Error_.OTHER,
@@ -2245,17 +1961,13 @@ public class Coder {
                                                     string("no type scheme for element "),
                                                     apply(
                                                         unwrap(Name.TYPE_),
-                                                        apply(
-                                                            project(Binding.TYPE_, Binding.NAME),
-                                                            var("el"))))))),
+                                                        proj(Binding.TYPE_, Binding.NAME, "el")))))),
                                     lambda("ts",
                                         right(
                                             apply(
                                                 ref(Coder.classifyDataTerm),
                                                 var("ts"),
-                                                apply(
-                                                    project(Binding.TYPE_, Binding.TERM),
-                                                    var("el"))))))))))));
+                                                proj(Binding.TYPE_, Binding.TERM, "el")))))))))));
 
     public static final Def classifyDataTerm = def(
         "classifyDataTerm",
@@ -2277,9 +1989,7 @@ public class Coder {
                     let("hasTypeParams",
                         Logic.not_(
                             Lists.null_(
-                                apply(
-                                    project(TypeScheme.TYPE_, TypeScheme.VARIABLES),
-                                    var("ts")))),
+                                proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                         Logic.ifElse(
                             var("hasTypeParams"),
                             let("n2",
@@ -2311,15 +2021,13 @@ public class Coder {
                                 int32(1),
                                 apply(
                                     ref(Coder.classifyDataTerm_countLambdaParams),
-                                    apply(
-                                        project(Lambda.TYPE_, Lambda.BODY),
-                                        var("lam")))))),
+                                    proj(Lambda.TYPE_, Lambda.BODY, "lam"))))),
                     field(
                         Term.LET,
                         lambda("lt",
                             apply(
                                 ref(Coder.classifyDataTerm_countLambdaParams),
-                                apply(project(Let.TYPE_, Let.BODY), var("lt"))))))));
+                                proj(Let.TYPE_, Let.BODY, "lt")))))));
 
     public static final Def classifyDataTerm_stripTypeLambdas = def(
         "classifyDataTerm_stripTypeLambdas",
@@ -2332,9 +2040,7 @@ public class Coder {
                         lambda("tl",
                             apply(
                                 ref(Coder.classifyDataTerm_stripTypeLambdas),
-                                apply(
-                                    project(TypeLambda.TYPE_, TypeLambda.BODY),
-                                    var("tl"))))))));
+                                proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl")))))));
 
     public static final Def cmpDeclStatement = def(
         "cmpDeclStatement",
@@ -2393,14 +2099,10 @@ public class Coder {
                         Type.FORALL,
                         lambda("fa",
                             Lists.cons(
-                                apply(
-                                    project(ForallType.TYPE_, ForallType.PARAMETER),
-                                    var("fa")),
+                                proj(ForallType.TYPE_, ForallType.PARAMETER, "fa"),
                                 apply(
                                     ref(Coder.collectForallParams),
-                                    apply(
-                                        project(ForallType.TYPE_, ForallType.BODY),
-                                        var("fa")))))))));
+                                    proj(ForallType.TYPE_, ForallType.BODY, "fa"))))))));
 
     public static final Def collectLambdaDomains = def(
         "collectLambdaDomains",
@@ -2412,17 +2114,13 @@ public class Coder {
                         Term.LAMBDA,
                         lambda("lam",
                             Maybes.cases(
-                                apply(
-                                    project(Lambda.TYPE_, Lambda.DOMAIN),
-                                    var("lam")),
+                                proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                 pair(list(), var("t")),
                                 lambda("dom",
                                     let("rest",
                                         apply(
                                             ref(Coder.collectLambdaDomains),
-                                            apply(
-                                                project(Lambda.TYPE_, Lambda.BODY),
-                                                var("lam"))),
+                                            proj(Lambda.TYPE_, Lambda.BODY, "lam")),
                                         pair(
                                             Lists.cons(var("dom"), Pairs.first(var("rest"))),
                                             Pairs.second(var("rest")))))))))));
@@ -2440,13 +2138,9 @@ public class Coder {
                         lambda("ta",
                             apply(
                                 ref(Coder.collectTypeApps),
-                                apply(
-                                    project(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY),
-                                    var("ta")),
+                                proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY, "ta"),
                                 Lists.cons(
-                                    apply(
-                                        project(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE),
-                                        var("ta")),
+                                    proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE, "ta"),
                                     var("acc"))))))));
 
     public static final Def collectTypeApps0 = def(
@@ -2462,13 +2156,9 @@ public class Coder {
                         lambda("ta",
                             apply(
                                 ref(Coder.collectTypeApps0),
-                                apply(
-                                    project(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY),
-                                    var("ta")),
+                                proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY, "ta"),
                                 Lists.cons(
-                                    apply(
-                                        project(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE),
-                                        var("ta")),
+                                    proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE, "ta"),
                                     var("acc"))))))));
 
     public static final Def collectTypeVars = def(
@@ -2493,16 +2183,12 @@ public class Coder {
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                            var("ft")))),
+                                        proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"))),
                                 apply(
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                            var("ft"))))))),
+                                        proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")))))),
                     field(
                         Type.APPLICATION,
                         lambda("at",
@@ -2511,16 +2197,12 @@ public class Coder {
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                            var("at")))),
+                                        proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at"))),
                                 apply(
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                            var("at"))))))),
+                                        proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at")))))),
                     field(
                         Type.LIST,
                         lambda("inner",
@@ -2547,16 +2229,12 @@ public class Coder {
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(MapType.TYPE_, MapType.KEYS),
-                                            var("mt")))),
+                                        proj(MapType.TYPE_, MapType.KEYS, "mt"))),
                                 apply(
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(MapType.TYPE_, MapType.VALUES),
-                                            var("mt"))))))),
+                                        proj(MapType.TYPE_, MapType.VALUES, "mt")))))),
                     field(
                         Type.PAIR,
                         lambda("pt",
@@ -2565,16 +2243,12 @@ public class Coder {
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(PairType.TYPE_, PairType.FIRST),
-                                            var("pt")))),
+                                        proj(PairType.TYPE_, PairType.FIRST, "pt"))),
                                 apply(
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(PairType.TYPE_, PairType.SECOND),
-                                            var("pt"))))))),
+                                        proj(PairType.TYPE_, PairType.SECOND, "pt")))))),
                     field(
                         Type.EITHER,
                         lambda("et",
@@ -2583,16 +2257,12 @@ public class Coder {
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(EitherType.TYPE_, EitherType.LEFT),
-                                            var("et")))),
+                                        proj(EitherType.TYPE_, EitherType.LEFT, "et"))),
                                 apply(
                                     ref(Coder.collectTypeVars_go),
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(EitherType.TYPE_, EitherType.RIGHT),
-                                            var("et"))))))),
+                                        proj(EitherType.TYPE_, EitherType.RIGHT, "et")))))),
                     field(
                         Type.FORALL,
                         lambda("ft",
@@ -2600,9 +2270,7 @@ public class Coder {
                                 ref(Coder.collectTypeVars_go),
                                 apply(
                                     var("hydra.strip.deannotateType"),
-                                    apply(
-                                        project(ForallType.TYPE_, ForallType.BODY),
-                                        var("ft")))))))));
+                                    proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))));
 
     public static final Def comparableCompareExpr = def(
         "comparableCompareExpr",
@@ -2684,13 +2352,9 @@ public class Coder {
                     field("fname",
                         apply(
                             unwrap(Name.TYPE_),
-                            apply(
-                                project(FieldType.TYPE_, FieldType.NAME),
-                                var("ft")))),
+                            proj(FieldType.TYPE_, FieldType.NAME, "ft"))),
                     field("ftype",
-                        apply(
-                            project(FieldType.TYPE_, FieldType.TYPE),
-                            var("ft"))),
+                        proj(FieldType.TYPE_, FieldType.TYPE, "ft")),
                     Logic.ifElse(
                         apply(ref(Coder.isBinaryType), var("ftype")),
                         apply(ref(Coder.arraysCompareExpr), var("otherVar"), var("fname")),
@@ -2923,9 +2587,7 @@ public class Coder {
                 "g",
                 let(
                     field("name",
-                        apply(
-                            project(FieldType.TYPE_, FieldType.NAME),
-                            var("ftyp"))),
+                        proj(FieldType.TYPE_, FieldType.NAME, "ftyp")),
                     field("javaName",
                         apply(
                             var("hydra.formatting.nonAlnumToUnderscores"),
@@ -2985,9 +2647,7 @@ public class Coder {
                 let(
                     java.util.Arrays.asList(
     field("ns",
-                        apply(
-                            project(Module.TYPE_, Module.NAMESPACE),
-                            var("mod"))),
+                        proj(Module.TYPE_, Module.NAMESPACE, "mod")),
     field("parentNs",
                         apply(ref(Coder.namespaceParent), var("ns"))),
     field("pkg",
@@ -3043,9 +2703,7 @@ public class Coder {
                                 var("itf")),
                             field(
                                 TopLevelClassOrInterfaceDeclarationWithComments.COMMENTS,
-                                apply(
-                                    project(Module.TYPE_, Module.DESCRIPTION),
-                                    var("mod")))))),
+                                proj(Module.TYPE_, Module.DESCRIPTION, "mod"))))),
                     pair(
                         var("elName"),
                         inject(CompilationUnit.TYPE_,
@@ -3108,24 +2766,18 @@ public class Coder {
                             right(var("fallbackTypeApps")),
                             lambda("el",
                                 Maybes.cases(
-                                    apply(
-                                        project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                        var("el")),
+                                    proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                     right(var("fallbackTypeApps")),
                                     lambda("ts",
                                         let(
                                             java.util.Arrays.asList(
     field("schemeType",
-                                                apply(
-                                                    project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                    var("ts"))),
+                                                proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
     field("allSchemeVars",
                                                 Lists.filter(
                                                     lambda("v",
                                                         apply(ref(Coder.isSimpleName), var("v"))),
-                                                    apply(
-                                                        project(TypeScheme.TYPE_, TypeScheme.VARIABLES),
-                                                        var("ts")))),
+                                                    proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
     field("schemeTypeVars",
                                                 apply(ref(Coder.collectTypeVars), var("schemeType"))),
     field("usedFlags",
@@ -3318,9 +2970,7 @@ public class Coder {
                                 int32(1),
                                 apply(
                                     ref(Coder.countFunctionParams),
-                                    apply(
-                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                        var("ft")))))))));
+                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"))))))));
 
     public static final Def declarationForRecordType = def(
         "declarationForRecordType",
@@ -3390,9 +3040,7 @@ public class Coder {
                                                                 field("fname",
                                                                     apply(
                                                                         unwrap(Name.TYPE_),
-                                                                        apply(
-                                                                            project(FieldType.TYPE_, FieldType.NAME),
-                                                                            var("f")))),
+                                                                        proj(FieldType.TYPE_, FieldType.NAME, "f"))),
                                                                 field("comment",
                                                                     Strings.cat(
                                                                         list(
@@ -3424,9 +3072,7 @@ public class Coder {
                                                                 let("fname",
                                                                     apply(
                                                                         unwrap(Name.TYPE_),
-                                                                        apply(
-                                                                            project(FieldType.TYPE_, FieldType.NAME),
-                                                                            var("f"))),
+                                                                        proj(FieldType.TYPE_, FieldType.NAME, "f")),
                                                                     Eithers.bind(
                                                                         apply(
                                                                             var("hydra.annotations.commentsFromFieldType"),
@@ -3604,13 +3250,9 @@ public class Coder {
                         lambda("ft",
                             let(
                                 field("fname",
-                                    apply(
-                                        project(FieldType.TYPE_, FieldType.NAME),
-                                        var("ft"))),
+                                    proj(FieldType.TYPE_, FieldType.NAME, "ft")),
                                 field("ftype",
-                                    apply(
-                                        project(FieldType.TYPE_, FieldType.TYPE),
-                                        var("ft"))),
+                                    proj(FieldType.TYPE_, FieldType.TYPE, "ft")),
                                 field("rfields",
                                     Logic.ifElse(
                                         apply(
@@ -3710,9 +3352,7 @@ public class Coder {
                                                     let(
                                                         java.util.Arrays.asList(
     field("fname",
-                                                            apply(
-                                                                project(FieldType.TYPE_, FieldType.NAME),
-                                                                var("ft"))),
+                                                            proj(FieldType.TYPE_, FieldType.NAME, "ft")),
     field("fnameStr",
                                                             apply(
                                                                 unwrap(Name.TYPE_),
@@ -3899,9 +3539,7 @@ public class Coder {
                                                     let(
                                                         java.util.Arrays.asList(
     field("fname",
-                                                            apply(
-                                                                project(FieldType.TYPE_, FieldType.NAME),
-                                                                var("ft"))),
+                                                            proj(FieldType.TYPE_, FieldType.NAME, "ft")),
     field("varName",
                                                             apply(
                                                                 ref(Utils.variantClassName),
@@ -4124,9 +3762,7 @@ public class Coder {
                         lambda("inj",
                             Logic.ifElse(
                                 Equality.equal(
-                                    apply(
-                                        project(Injection.TYPE_, Injection.TYPE_NAME),
-                                        var("inj")),
+                                    proj(Injection.TYPE_, Injection.TYPE_NAME, "inj"),
                                     wrap(Name.TYPE_, string("hydra.core.Type"))),
                                 let(
                                     field("fname",
@@ -4134,15 +3770,11 @@ public class Coder {
                                             unwrap(Name.TYPE_),
                                             apply(
                                                 project(Field.TYPE_, Field.NAME),
-                                                apply(
-                                                    project(Injection.TYPE_, Injection.FIELD),
-                                                    var("inj"))))),
+                                                proj(Injection.TYPE_, Injection.FIELD, "inj")))),
                                     field("fterm",
                                         apply(
                                             project(Field.TYPE_, Field.TERM),
-                                            apply(
-                                                project(Injection.TYPE_, Injection.FIELD),
-                                                var("inj")))),
+                                            proj(Injection.TYPE_, Injection.FIELD, "inj"))),
                                     Logic.ifElse(
                                         Equality.equal(var("fname"), string("variable")),
                                         casesWithDefault(Term.TYPE_,
@@ -4152,9 +3784,7 @@ public class Coder {
                                                 Term.WRAP,
                                                 lambda("wt",
                                                     casesWithDefault(Term.TYPE_,
-                                                        apply(
-                                                            project(WrappedTerm.TYPE_, WrappedTerm.BODY),
-                                                            var("wt")),
+                                                        proj(WrappedTerm.TYPE_, WrappedTerm.BODY, "wt"),
                                                         nothing(),
                                                         field(
                                                             Term.LITERAL,
@@ -4186,21 +3816,15 @@ public class Coder {
                                                                 Lists.filter(
                                                                     lambda("f",
                                                                         Equality.equal(
-                                                                            apply(
-                                                                                project(Field.TYPE_, Field.NAME),
-                                                                                var("f")),
+                                                                            proj(Field.TYPE_, Field.NAME, "f"),
                                                                             wrap(
                                                                                 Name.TYPE_,
                                                                                 string("body")))),
-                                                                    apply(
-                                                                        project(Record.TYPE_, Record.FIELDS),
-                                                                        var("rec")))),
+                                                                    proj(Record.TYPE_, Record.FIELDS, "rec"))),
                                                             lambda("bodyField",
                                                                 apply(
                                                                     ref(Coder.decodeTypeFromTerm),
-                                                                    apply(
-                                                                        project(Field.TYPE_, Field.TERM),
-                                                                        var("bodyField")))))))),
+                                                                    proj(Field.TYPE_, Field.TERM, "bodyField"))))))),
                                             Logic.ifElse(
                                                 Equality.equal(var("fname"), string("application")),
                                                 casesWithDefault(Term.TYPE_,
@@ -4214,37 +3838,27 @@ public class Coder {
                                                                     Lists.filter(
                                                                         lambda("f",
                                                                             Equality.equal(
-                                                                                apply(
-                                                                                    project(Field.TYPE_, Field.NAME),
-                                                                                    var("f")),
+                                                                                proj(Field.TYPE_, Field.NAME, "f"),
                                                                                 wrap(
                                                                                     Name.TYPE_,
                                                                                     string("function")))),
-                                                                        apply(
-                                                                            project(Record.TYPE_, Record.FIELDS),
-                                                                            var("rec")))),
+                                                                        proj(Record.TYPE_, Record.FIELDS, "rec"))),
                                                                 lambda("funcField",
                                                                     Maybes.bind(
                                                                         apply(
                                                                             ref(Coder.decodeTypeFromTerm),
-                                                                            apply(
-                                                                                project(Field.TYPE_, Field.TERM),
-                                                                                var("funcField"))),
+                                                                            proj(Field.TYPE_, Field.TERM, "funcField")),
                                                                         lambda("func",
                                                                             Maybes.bind(
                                                                                 Lists.maybeHead(
                                                                                     Lists.filter(
                                                                                         lambda("f",
                                                                                             Equality.equal(
-                                                                                                apply(
-                                                                                                    project(Field.TYPE_, Field.NAME),
-                                                                                                    var("f")),
+                                                                                                proj(Field.TYPE_, Field.NAME, "f"),
                                                                                                 wrap(
                                                                                                     Name.TYPE_,
                                                                                                     string("argument")))),
-                                                                                        apply(
-                                                                                            project(Record.TYPE_, Record.FIELDS),
-                                                                                            var("rec")))),
+                                                                                        proj(Record.TYPE_, Record.FIELDS, "rec"))),
                                                                                 lambda("argField",
                                                                                     Maybes.map(
                                                                                         lambda(
@@ -4262,9 +3876,7 @@ public class Coder {
                                                                                                         var("arg"))))),
                                                                                         apply(
                                                                                             ref(Coder.decodeTypeFromTerm),
-                                                                                            apply(
-                                                                                                project(Field.TYPE_, Field.TERM),
-                                                                                                var("argField"))))))))))))),
+                                                                                            proj(Field.TYPE_, Field.TERM, "argField")))))))))))),
                                                 Logic.ifElse(
                                                     Equality.equal(var("fname"), string("function")),
                                                     casesWithDefault(Term.TYPE_,
@@ -4278,22 +3890,16 @@ public class Coder {
                                                                         Lists.filter(
                                                                             lambda("f",
                                                                                 Equality.equal(
-                                                                                    apply(
-                                                                                        project(Field.TYPE_, Field.NAME),
-                                                                                        var("f")),
+                                                                                    proj(Field.TYPE_, Field.NAME, "f"),
                                                                                     wrap(
                                                                                         Name.TYPE_,
                                                                                         string("domain")))),
-                                                                            apply(
-                                                                                project(Record.TYPE_, Record.FIELDS),
-                                                                                var("rec")))),
+                                                                            proj(Record.TYPE_, Record.FIELDS, "rec"))),
                                                                     lambda("domField",
                                                                         Maybes.bind(
                                                                             apply(
                                                                                 ref(Coder.decodeTypeFromTerm),
-                                                                                apply(
-                                                                                    project(Field.TYPE_, Field.TERM),
-                                                                                    var("domField"))),
+                                                                                proj(Field.TYPE_, Field.TERM, "domField")),
                                                                             lambda("dom",
                                                                                 Maybes.bind(
                                                                                     Lists.maybeHead(
@@ -4301,15 +3907,11 @@ public class Coder {
                                                                                             lambda(
                                                                                                 "f",
                                                                                                 Equality.equal(
-                                                                                                    apply(
-                                                                                                        project(Field.TYPE_, Field.NAME),
-                                                                                                        var("f")),
+                                                                                                    proj(Field.TYPE_, Field.NAME, "f"),
                                                                                                     wrap(
                                                                                                         Name.TYPE_,
                                                                                                         string("codomain")))),
-                                                                                            apply(
-                                                                                                project(Record.TYPE_, Record.FIELDS),
-                                                                                                var("rec")))),
+                                                                                            proj(Record.TYPE_, Record.FIELDS, "rec"))),
                                                                                     lambda(
                                                                                         "codField",
                                                                                         Maybes.map(
@@ -4328,9 +3930,7 @@ public class Coder {
                                                                                                             var("cod"))))),
                                                                                             apply(
                                                                                                 ref(Coder.decodeTypeFromTerm),
-                                                                                                apply(
-                                                                                                    project(Field.TYPE_, Field.TERM),
-                                                                                                    var("codField"))))))))))))),
+                                                                                                proj(Field.TYPE_, Field.TERM, "codField")))))))))))),
                                                     Logic.ifElse(
                                                         Equality.equal(
                                                             var("fname"),
@@ -4347,9 +3947,7 @@ public class Coder {
                                                                                 unwrap(Name.TYPE_),
                                                                                 apply(
                                                                                     project(Field.TYPE_, Field.NAME),
-                                                                                    apply(
-                                                                                        project(Injection.TYPE_, Injection.FIELD),
-                                                                                        var("litInj")))),
+                                                                                    proj(Injection.TYPE_, Injection.FIELD, "litInj"))),
                                                                             string("string")),
                                                                         just(
                                                                             inject(
@@ -4378,9 +3976,7 @@ public class Coder {
                                 field("rest",
                                     Pairs.second(var("p"))),
                                 field("name",
-                                    apply(
-                                        project(Binding.TYPE_, Binding.NAME),
-                                        var("b"))),
+                                    proj(Binding.TYPE_, Binding.NAME, "b")),
                                 Logic.ifElse(
                                     Sets.member(var("name"), var("inScope")),
                                     let(
@@ -4397,36 +3993,26 @@ public class Coder {
                                                     record(Binding.TYPE_,
                                                         field(
                                                             Binding.NAME,
-                                                            apply(
-                                                                project(Binding.TYPE_, Binding.NAME),
-                                                                var("b2"))),
+                                                            proj(Binding.TYPE_, Binding.NAME, "b2")),
                                                         field(
                                                             Binding.TERM,
                                                             apply(
                                                                 var("hydra.variables.substituteVariables"),
                                                                 var("subst"),
-                                                                apply(
-                                                                    project(Binding.TYPE_, Binding.TERM),
-                                                                    var("b2")))),
+                                                                proj(Binding.TYPE_, Binding.TERM, "b2"))),
                                                         field(
                                                             Binding.TYPE_SCHEME,
-                                                            apply(
-                                                                project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                                                var("b2"))))),
+                                                            proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b2")))),
                                                 var("rest"))),
                                         Lists.cons(
                                             record(Binding.TYPE_,
                                                 field(Binding.NAME, var("newName")),
                                                 field(
                                                     Binding.TERM,
-                                                    apply(
-                                                        project(Binding.TYPE_, Binding.TERM),
-                                                        var("b"))),
+                                                    proj(Binding.TYPE_, Binding.TERM, "b")),
                                                 field(
                                                     Binding.TYPE_SCHEME,
-                                                    apply(
-                                                        project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                                        var("b")))),
+                                                    proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"))),
                                             apply(
                                                 ref(Coder.dedupBindings),
                                                 Sets.insert(var("newName"), var("inScope")),
@@ -4628,13 +4214,9 @@ public class Coder {
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("name"))),
                     field("ns_",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.NAMESPACE),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.NAMESPACE, "qn")),
                     field("local",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.LOCAL),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     field("sep",
                         Logic.ifElse(var("isMethod"), string("::"), string("."))),
                     Logic.ifElse(
@@ -4721,13 +4303,9 @@ public class Coder {
                 "g0",
                 let(
                     field("aliases",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
                     field("g",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env")),
                     field("gathered",
                         apply(
                             var("hydra.analysis.gatherArgsWithTypeApps"),
@@ -4796,12 +4374,8 @@ public class Coder {
                                                         var("aliases"),
                                                         var("g"),
                                                         var("typeApps"),
-                                                        apply(
-                                                            project(Application.TYPE_, Application.FUNCTION),
-                                                            var("app")),
-                                                        apply(
-                                                            project(Application.TYPE_, Application.ARGUMENT),
-                                                            var("app")),
+                                                        proj(Application.TYPE_, Application.FUNCTION, "app"),
+                                                        proj(Application.TYPE_, Application.ARGUMENT, "app"),
                                                         var("cx"),
                                                         var("g")),
                                                     field(
@@ -4811,9 +4385,7 @@ public class Coder {
                                                                 Maybes.isJust(
                                                                     Maps.lookup(
                                                                         var("name"),
-                                                                        apply(
-                                                                            project(Graph.TYPE_, Graph.PRIMITIVES),
-                                                                            var("g")))),
+                                                                        proj(Graph.TYPE_, Graph.PRIMITIVES, "g"))),
                                                                 let(
                                                                     field("hargs",
                                                                         Lists.take(
@@ -4864,21 +4436,15 @@ public class Coder {
                                                                             apply(
                                                                                 ref(Coder.isLambdaBoundIn),
                                                                                 var("name"),
-                                                                                apply(
-                                                                                    project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                                                                    var("aliases"))))),
+                                                                                proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")))),
                                                                     apply(
                                                                         ref(Coder.encodeApplication_fallback),
                                                                         var("env"),
                                                                         var("aliases"),
                                                                         var("g"),
                                                                         var("typeApps"),
-                                                                        apply(
-                                                                            project(Application.TYPE_, Application.FUNCTION),
-                                                                            var("app")),
-                                                                        apply(
-                                                                            project(Application.TYPE_, Application.ARGUMENT),
-                                                                            var("app")),
+                                                                        proj(Application.TYPE_, Application.FUNCTION, "app"),
+                                                                        proj(Application.TYPE_, Application.ARGUMENT, "app"),
                                                                         var("cx"),
                                                                         var("g")),
                                                                     Eithers.bind(
@@ -4908,13 +4474,9 @@ public class Coder {
                                                                                         var("methodArity"),
                                                                                         var("annotatedArgs"))),
                                                                                 field("trusted",
-                                                                                    apply(
-                                                                                        project(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS),
-                                                                                        var("aliases"))),
+                                                                                    proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
                                                                                 field("inScope",
-                                                                                    apply(
-                                                                                        project(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS),
-                                                                                        var("aliases"))),
+                                                                                    proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
                                                                                 field(
                                                                                     "filteredTypeApps",
                                                                                     Logic.ifElse(
@@ -5063,13 +4625,9 @@ public class Coder {
                                         lambda("ft",
                                             let(
                                                 field("dom",
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                        var("ft"))),
+                                                    proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft")),
                                                 field("cod",
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                        var("ft"))),
+                                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
                                                 field("defaultExpr",
                                                     Eithers.bind(
                                                         apply(
@@ -5201,9 +4759,7 @@ public class Coder {
                     field("pkg",
                         apply(
                             ref(Utils.javaPackageDeclaration),
-                            apply(
-                                project(Module.TYPE_, Module.NAMESPACE),
-                                var("mod")))),
+                            proj(Module.TYPE_, Module.NAMESPACE, "mod"))),
                     field("partitioned",
                         apply(var("hydra.environment.partitionDefinitions"), var("defs"))),
                     field("typeDefs",
@@ -5216,9 +4772,7 @@ public class Coder {
                                 let("typ",
                                     apply(
                                         project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                        apply(
-                                            project(TypeDefinition.TYPE_, TypeDefinition.TYPE_SCHEME),
-                                            var("td"))),
+                                        proj(TypeDefinition.TYPE_, TypeDefinition.TYPE_SCHEME, "td")),
                                     apply(ref(Coder.isSerializableJavaType), var("typ")))),
                             var("typeDefs"))),
                     Eithers.bind(
@@ -5270,9 +4824,7 @@ public class Coder {
                 "cx",
                 "g",
                 let("aliases",
-                    apply(
-                        project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                        var("env")),
+                    proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env"),
                     casesWithDefault(Term.TYPE_,
                         apply(var("hydra.strip.deannotateAndDetypeTerm"), var("elimTerm")),
                         left(
@@ -5290,9 +4842,7 @@ public class Coder {
                             Term.PROJECT,
                             lambda("proj",
                                 let("fname",
-                                    apply(
-                                        project(Projection.TYPE_, Projection.FIELD),
-                                        var("proj")),
+                                    proj(Projection.TYPE_, Projection.FIELD, "proj"),
                                     Eithers.bind(
                                         apply(
                                             ref(Coder.encodeType),
@@ -5360,17 +4910,11 @@ public class Coder {
                             lambda("cs",
                                 let(
                                     field("tname",
-                                        apply(
-                                            project(CaseStatement.TYPE_, CaseStatement.TYPE_NAME),
-                                            var("cs"))),
+                                        proj(CaseStatement.TYPE_, CaseStatement.TYPE_NAME, "cs")),
                                     field("def_",
-                                        apply(
-                                            project(CaseStatement.TYPE_, CaseStatement.DEFAULT),
-                                            var("cs"))),
+                                        proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs")),
                                     field("fields",
-                                        apply(
-                                            project(CaseStatement.TYPE_, CaseStatement.CASES),
-                                            var("cs"))),
+                                        proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs")),
                                     Maybes.cases(
                                         var("marg"),
                                         let(
@@ -5390,13 +4934,9 @@ public class Coder {
                                                             lambda("atyp",
                                                                 apply(
                                                                     var("domTypeArgs0"),
-                                                                    apply(
-                                                                        project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                                                        var("atyp")),
+                                                                    proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "atyp"),
                                                                     Lists.cons(
-                                                                        apply(
-                                                                            project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                                                            var("atyp")),
+                                                                        proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "atyp"),
                                                                         var("acc")))))))),
                                             field("domTypeArgs",
                                                 apply(var("domTypeArgs0"), var("dom"), list())),
@@ -5624,22 +5164,16 @@ public class Coder {
                 "g",
                 let(
                     field("aliases",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
                     field("encodeLambdaFallback",
                         lambda(
                             "env2",
                             "lam",
                             let(
                                 field("lambdaVar",
-                                    apply(
-                                        project(Lambda.TYPE_, Lambda.PARAMETER),
-                                        var("lam"))),
+                                    proj(Lambda.TYPE_, Lambda.PARAMETER, "lam")),
                                 field("body",
-                                    apply(
-                                        project(Lambda.TYPE_, Lambda.BODY),
-                                        var("lam"))),
+                                    proj(Lambda.TYPE_, Lambda.BODY, "lam")),
                                 Eithers.bind(
                                     apply(
                                         ref(Coder.analyzeJavaFunction),
@@ -5650,17 +5184,11 @@ public class Coder {
                                     lambda("fs",
                                         let(
                                             field("bindings",
-                                                apply(
-                                                    project(FunctionStructure.TYPE_, FunctionStructure.BINDINGS),
-                                                    var("fs"))),
+                                                proj(FunctionStructure.TYPE_, FunctionStructure.BINDINGS, "fs")),
                                             field("innerBody",
-                                                apply(
-                                                    project(FunctionStructure.TYPE_, FunctionStructure.BODY),
-                                                    var("fs"))),
+                                                proj(FunctionStructure.TYPE_, FunctionStructure.BODY, "fs")),
                                             field("env3",
-                                                apply(
-                                                    project(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT),
-                                                    var("fs"))),
+                                                proj(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT, "fs")),
                                             Eithers.bind(
                                                 apply(
                                                     ref(Coder.bindingsToStatements),
@@ -5779,13 +5307,9 @@ public class Coder {
                                     lambda("env2",
                                         let(
                                             field("lambdaVar",
-                                                apply(
-                                                    project(Lambda.TYPE_, Lambda.PARAMETER),
-                                                    var("lam"))),
+                                                proj(Lambda.TYPE_, Lambda.PARAMETER, "lam")),
                                             field("body",
-                                                apply(
-                                                    project(Lambda.TYPE_, Lambda.BODY),
-                                                    var("lam"))),
+                                                proj(Lambda.TYPE_, Lambda.BODY, "lam")),
                                             casesWithDefault(Term.TYPE_,
                                                 apply(
                                                     var("hydra.strip.deannotateTerm"),
@@ -5816,13 +5340,9 @@ public class Coder {
                                                                 lambda("ft",
                                                                     let(
                                                                         field("dom2",
-                                                                            apply(
-                                                                                project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                                                var("ft"))),
+                                                                            proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft")),
                                                                         field("cod2",
-                                                                            apply(
-                                                                                project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                                                var("ft"))),
+                                                                            proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
                                                                         Eithers.bind(
                                                                             apply(
                                                                                 ref(Coder.encodeFunction),
@@ -5911,12 +5431,8 @@ public class Coder {
                                                 apply(
                                                     ref(Coder.encodeFunction),
                                                     var("env"),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                        var("ft")),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                        var("ft")),
+                                                    proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
+                                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"),
                                                     var("term"),
                                                     var("cx"),
                                                     var("g"))))))))))));
@@ -5932,9 +5448,7 @@ public class Coder {
                 "g",
                 let(
                     field("aliases",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
                     field("classWithApply",
                         apply(
                             unwrap(Identifier.TYPE_),
@@ -6665,9 +6179,7 @@ public class Coder {
                                     ref(Coder.encodeType),
                                     var("aliases"),
                                     var("hydra.lib.sets.empty"),
-                                    apply(
-                                        project(MapType.TYPE_, MapType.KEYS),
-                                        var("mp")),
+                                    proj(MapType.TYPE_, MapType.KEYS, "mp"),
                                     var("cx"),
                                     var("g")),
                                 lambda("jkt",
@@ -6682,9 +6194,7 @@ public class Coder {
                                                     ref(Coder.encodeType),
                                                     var("aliases"),
                                                     var("hydra.lib.sets.empty"),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.VALUES),
-                                                        var("mp")),
+                                                    proj(MapType.TYPE_, MapType.VALUES, "mp"),
                                                     var("cx"),
                                                     var("g")),
                                                 lambda("jvt",
@@ -6714,9 +6224,7 @@ public class Coder {
                 "cx",
                 "g",
                 let("aliases",
-                    apply(
-                        project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                        var("env")),
+                    proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env"),
                     Eithers.bind(
                         apply(
                             ref(Coder.encodeNullaryConstant_typeArgsFromReturnType),
@@ -6806,13 +6314,9 @@ public class Coder {
                 "g",
                 let(
                     field("name",
-                        apply(
-                            project(TermDefinition.TYPE_, TermDefinition.NAME),
-                            var("tdef"))),
+                        proj(TermDefinition.TYPE_, TermDefinition.NAME, "tdef")),
                     field("term0",
-                        apply(
-                            project(TermDefinition.TYPE_, TermDefinition.TERM),
-                            var("tdef"))),
+                        proj(TermDefinition.TYPE_, TermDefinition.TERM, "tdef")),
                     Eithers.bind(
                         apply(
                             var("hydra.annotations.getTermDescription"),
@@ -6833,9 +6337,7 @@ public class Coder {
                                                         string("hydra.core.Unit")))),
                                             field(TypeScheme.CONSTRAINTS, nothing())),
                                         lambda("x", var("x")),
-                                        apply(
-                                            project(TermDefinition.TYPE_, TermDefinition.TYPE_SCHEME),
-                                            var("tdef")))),
+                                        proj(TermDefinition.TYPE_, TermDefinition.TYPE_SCHEME, "tdef"))),
                                 field("term",
                                     apply(var("hydra.variables.unshadowVariables"), var("term0"))),
                                 Eithers.bind(
@@ -6852,19 +6354,13 @@ public class Coder {
                                                 Lists.filter(
                                                     lambda("v",
                                                         apply(ref(Coder.isSimpleName), var("v"))),
-                                                    apply(
-                                                        project(TypeScheme.TYPE_, TypeScheme.VARIABLES),
-                                                        var("ts")))),
+                                                    proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
     field("termVars",
-                                                apply(
-                                                    project(FunctionStructure.TYPE_, FunctionStructure.TYPE_PARAMS),
-                                                    var("fs"))),
+                                                proj(FunctionStructure.TYPE_, FunctionStructure.TYPE_PARAMS, "fs")),
     field("schemeTypeVars",
                                                 apply(
                                                     ref(Coder.collectTypeVars),
-                                                    apply(
-                                                        project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                        var("ts")))),
+                                                    proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts"))),
     field("usedSchemeVars",
                                                 Lists.filter(
                                                     lambda("v",
@@ -6876,29 +6372,17 @@ public class Coder {
                                                     var("termVars"),
                                                     var("usedSchemeVars"))),
     field("params",
-                                                apply(
-                                                    project(FunctionStructure.TYPE_, FunctionStructure.PARAMS),
-                                                    var("fs"))),
+                                                proj(FunctionStructure.TYPE_, FunctionStructure.PARAMS, "fs")),
     field("bindings",
-                                                apply(
-                                                    project(FunctionStructure.TYPE_, FunctionStructure.BINDINGS),
-                                                    var("fs"))),
+                                                proj(FunctionStructure.TYPE_, FunctionStructure.BINDINGS, "fs")),
     field("body",
-                                                apply(
-                                                    project(FunctionStructure.TYPE_, FunctionStructure.BODY),
-                                                    var("fs"))),
+                                                proj(FunctionStructure.TYPE_, FunctionStructure.BODY, "fs")),
     field("doms",
-                                                apply(
-                                                    project(FunctionStructure.TYPE_, FunctionStructure.DOMAINS),
-                                                    var("fs"))),
+                                                proj(FunctionStructure.TYPE_, FunctionStructure.DOMAINS, "fs")),
     field("env2",
-                                                apply(
-                                                    project(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT),
-                                                    var("fs"))),
+                                                proj(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT, "fs")),
     field("schemeType",
-                                                apply(
-                                                    project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                    var("ts"))),
+                                                proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
     field("numParams",
                                                 Lists.length(var("params"))),
     field("peelResult",
@@ -6989,9 +6473,7 @@ public class Coder {
     field("constraints",
                                                             Maybes.fromMaybe(
                                                                 var("hydra.lib.maps.empty"),
-                                                                apply(
-                                                                    project(TypeScheme.TYPE_, TypeScheme.CONSTRAINTS),
-                                                                    var("ts")))),
+                                                                proj(TypeScheme.TYPE_, TypeScheme.CONSTRAINTS, "ts"))),
     field("jparams",
                                                             Lists.map(
                                                                 lambda("v",
@@ -7004,9 +6486,7 @@ public class Coder {
                                                                                 var("v"))))),
                                                                 var("fixedTparams"))),
     field("aliases2base",
-                                                            apply(
-                                                                project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                                                                var("env2"))),
+                                                            proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env2")),
     field("trustedVars",
                                                             Sets.unions(
                                                                 Lists.map(
@@ -7024,48 +6504,32 @@ public class Coder {
                                                                 Aliases.TYPE_,
                                                                 field(
                                                                     Aliases.CURRENT_NAMESPACE,
-                                                                    apply(
-                                                                        project(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE),
-                                                                        var("aliases2base"))),
+                                                                    proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases2base")),
                                                                 field(
                                                                     Aliases.PACKAGES,
-                                                                    apply(
-                                                                        project(Aliases.TYPE_, Aliases.PACKAGES),
-                                                                        var("aliases2base"))),
+                                                                    proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases2base")),
                                                                 field(
                                                                     Aliases.BRANCH_VARS,
-                                                                    apply(
-                                                                        project(Aliases.TYPE_, Aliases.BRANCH_VARS),
-                                                                        var("aliases2base"))),
+                                                                    proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases2base")),
                                                                 field(
                                                                     Aliases.RECURSIVE_VARS,
-                                                                    apply(
-                                                                        project(Aliases.TYPE_, Aliases.RECURSIVE_VARS),
-                                                                        var("aliases2base"))),
+                                                                    proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases2base")),
                                                                 field(
                                                                     Aliases.IN_SCOPE_TYPE_PARAMS,
                                                                     var("fixedSchemeVarSet")),
                                                                 field(
                                                                     Aliases.POLYMORPHIC_LOCALS,
-                                                                    apply(
-                                                                        project(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS),
-                                                                        var("aliases2base"))),
+                                                                    proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases2base")),
                                                                 field(
                                                                     Aliases.IN_SCOPE_JAVA_VARS,
-                                                                    apply(
-                                                                        project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                                                                        var("aliases2base"))),
+                                                                    proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases2base")),
                                                                 field(
                                                                     Aliases.VAR_RENAMES,
-                                                                    apply(
-                                                                        project(Aliases.TYPE_, Aliases.VAR_RENAMES),
-                                                                        var("aliases2base"))),
+                                                                    proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases2base")),
                                                                 field(
                                                                     Aliases.LAMBDA_VARS,
                                                                     Sets.union(
-                                                                        apply(
-                                                                            project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                                                            var("aliases2base")),
+                                                                        proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases2base"),
                                                                         Sets.fromList(var("params")))),
                                                                 field(
                                                                     Aliases.TYPE_VAR_SUBST,
@@ -7082,9 +6546,7 @@ public class Coder {
                                                                     just(var("fixedCod"))),
                                                                 field(
                                                                     Aliases.THUNKED_VARS,
-                                                                    apply(
-                                                                        project(Aliases.TYPE_, Aliases.THUNKED_VARS),
-                                                                        var("aliases2base"))))),
+                                                                    proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases2base")))),
     field("env2WithTypeParams",
                                                             record(
                                                                 JavaEnvironment.TYPE_,
@@ -7093,9 +6555,7 @@ public class Coder {
                                                                     var("aliases2")),
                                                                 field(
                                                                     JavaEnvironment.GRAPH,
-                                                                    apply(
-                                                                        project(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH),
-                                                                        var("env2")))))),
+                                                                    proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env2"))))),
                                                         Eithers.bind(
                                                             apply(
                                                                 ref(Coder.bindingsToStatements),
@@ -7365,13 +6825,9 @@ public class Coder {
                 "g0",
                 let(
                     field("aliases",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
                     field("g",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env")),
                     field("encode",
                         lambda("t",
                             apply(ref(Coder.encodeTerm), var("env"), var("t"), var("cx"), var("g")))),
@@ -7390,14 +6846,10 @@ public class Coder {
                                     ref(Coder.encodeTermInternal),
                                     var("env"),
                                     Lists.cons(
-                                        apply(
-                                            project(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION),
-                                            var("at")),
+                                        proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at"),
                                         var("anns")),
                                     var("tyapps"),
-                                    apply(
-                                        project(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY),
-                                        var("at")),
+                                    proj(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY, "at"),
                                     var("cx"),
                                     var("g")))),
                         field(
@@ -7465,12 +6917,8 @@ public class Coder {
                                                                             lambda("et2",
                                                                                 just(
                                                                                     pair(
-                                                                                        apply(
-                                                                                            project(EitherType.TYPE_, EitherType.LEFT),
-                                                                                            var("et2")),
-                                                                                        apply(
-                                                                                            project(EitherType.TYPE_, EitherType.RIGHT),
-                                                                                            var("et2")))))))))),
+                                                                                        proj(EitherType.TYPE_, EitherType.LEFT, "et2"),
+                                                                                        proj(EitherType.TYPE_, EitherType.RIGHT, "et2"))))))))),
                                                         field("encodeWithType",
                                                             lambda(
                                                                 "branchType",
@@ -7607,13 +7055,9 @@ public class Coder {
                             lambda("lt",
                                 let(
                                     field("bindings",
-                                        apply(
-                                            project(Let.TYPE_, Let.BINDINGS),
-                                            var("lt"))),
+                                        proj(Let.TYPE_, Let.BINDINGS, "lt")),
                                     field("body",
-                                        apply(
-                                            project(Let.TYPE_, Let.BODY),
-                                            var("lt"))),
+                                        proj(Let.TYPE_, Let.BODY, "lt")),
                                     Logic.ifElse(
                                         Lists.null_(var("bindings")),
                                         apply(
@@ -7690,13 +7134,9 @@ public class Coder {
                                                                         var("hydra.lib.maps.empty"),
                                                                         var("anns"))),
                                                                 field("g2",
-                                                                    apply(
-                                                                        project(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH),
-                                                                        var("env2"))),
+                                                                    proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env2")),
                                                                 field("aliases2",
-                                                                    apply(
-                                                                        project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                                                                        var("env2"))),
+                                                                    proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env2")),
                                                                 Eithers.bind(
                                                                     Eithers.bimap(
                                                                         lambda("__de",
@@ -8008,9 +7448,7 @@ public class Coder {
                             lambda("rec",
                                 let(
                                     field("recName",
-                                        apply(
-                                            project(Record.TYPE_, Record.TYPE_NAME),
-                                            var("rec"))),
+                                        proj(Record.TYPE_, Record.TYPE_NAME, "rec")),
                                     field("mRecordType",
                                         Eithers.either_(
                                             constant(nothing()),
@@ -8044,12 +7482,8 @@ public class Coder {
                                                                     Lists.map(
                                                                         lambda("ft",
                                                                             pair(
-                                                                                apply(
-                                                                                    project(FieldType.TYPE_, FieldType.NAME),
-                                                                                    var("ft")),
-                                                                                apply(
-                                                                                    project(FieldType.TYPE_, FieldType.TYPE),
-                                                                                    var("ft")))),
+                                                                                proj(FieldType.TYPE_, FieldType.NAME, "ft"),
+                                                                                proj(FieldType.TYPE_, FieldType.TYPE, "ft"))),
                                                                         var("rt")))))))))),
                                     field("combinedAnnsRec",
                                         Lists.foldl(
@@ -8117,23 +7551,17 @@ public class Coder {
                                                             var("mFieldTypeMap"),
                                                             apply(
                                                                 var("encode"),
-                                                                apply(
-                                                                    project(Field.TYPE_, Field.TERM),
-                                                                    var("fld"))),
+                                                                proj(Field.TYPE_, Field.TERM, "fld")),
                                                             lambda("ftmap",
                                                                 let("mftyp",
                                                                     Maps.lookup(
-                                                                        apply(
-                                                                            project(Field.TYPE_, Field.NAME),
-                                                                            var("fld")),
+                                                                        proj(Field.TYPE_, Field.NAME, "fld"),
                                                                         var("ftmap")),
                                                                     Maybes.cases(
                                                                         var("mftyp"),
                                                                         apply(
                                                                             var("encode"),
-                                                                            apply(
-                                                                                project(Field.TYPE_, Field.TERM),
-                                                                                var("fld"))),
+                                                                            proj(Field.TYPE_, Field.TERM, "fld")),
                                                                         lambda("ftyp",
                                                                             let(
                                                                                 field(
@@ -8156,9 +7584,7 @@ public class Coder {
                                                                                             apply(
                                                                                                 var("hydra.encode.core.type"),
                                                                                                 var("resolvedType"))),
-                                                                                        apply(
-                                                                                            project(Field.TYPE_, Field.TERM),
-                                                                                            var("fld")))),
+                                                                                        proj(Field.TYPE_, Field.TERM, "fld"))),
                                                                                 apply(
                                                                                     ref(Coder.encodeTermInternal),
                                                                                     var("env"),
@@ -8170,9 +7596,7 @@ public class Coder {
                                                 Eithers.bind(
                                                     Eithers.mapList(
                                                         var("encodeField"),
-                                                        apply(
-                                                            project(Record.TYPE_, Record.FIELDS),
-                                                            var("rec"))),
+                                                        proj(Record.TYPE_, Record.FIELDS, "rec")),
                                                     lambda("fieldExprs",
                                                         let("consId",
                                                             apply(
@@ -8379,16 +7803,12 @@ public class Coder {
                                                     let("annotatedBody",
                                                         Maybes.cases(
                                                             var("mtyp"),
-                                                            apply(
-                                                                project(TypeLambda.TYPE_, TypeLambda.BODY),
-                                                                var("tl")),
+                                                            proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"),
                                                             lambda("t",
                                                                 casesWithDefault(
                                                                     Type.TYPE_,
                                                                     var("t"),
-                                                                    apply(
-                                                                        project(TypeLambda.TYPE_, TypeLambda.BODY),
-                                                                        var("tl")),
+                                                                    proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"),
                                                                     field(
                                                                         Type.FORALL,
                                                                         lambda("fa",
@@ -8398,12 +7818,8 @@ public class Coder {
                                                                                 just(
                                                                                     apply(
                                                                                         var("hydra.encode.core.type"),
-                                                                                        apply(
-                                                                                            project(ForallType.TYPE_, ForallType.BODY),
-                                                                                            var("fa")))),
-                                                                                apply(
-                                                                                    project(TypeLambda.TYPE_, TypeLambda.BODY),
-                                                                                    var("tl")))))))),
+                                                                                        proj(ForallType.TYPE_, ForallType.BODY, "fa"))),
+                                                                                proj(TypeLambda.TYPE_, TypeLambda.BODY, "tl"))))))),
                                                         apply(
                                                             ref(Coder.encodeTerm),
                                                             var("env2"),
@@ -8415,21 +7831,13 @@ public class Coder {
                             lambda("inj",
                                 let(
                                     field("injTypeName",
-                                        apply(
-                                            project(Injection.TYPE_, Injection.TYPE_NAME),
-                                            var("inj"))),
+                                        proj(Injection.TYPE_, Injection.TYPE_NAME, "inj")),
                                     field("injField",
-                                        apply(
-                                            project(Injection.TYPE_, Injection.FIELD),
-                                            var("inj"))),
+                                        proj(Injection.TYPE_, Injection.FIELD, "inj")),
                                     field("injFieldName",
-                                        apply(
-                                            project(Field.TYPE_, Field.NAME),
-                                            var("injField"))),
+                                        proj(Field.TYPE_, Field.NAME, "injField")),
                                     field("injFieldTerm",
-                                        apply(
-                                            project(Field.TYPE_, Field.TERM),
-                                            var("injField"))),
+                                        proj(Field.TYPE_, Field.TERM, "injField")),
                                     field("typeId",
                                         apply(
                                             unwrap(Identifier.TYPE_),
@@ -8487,9 +7895,7 @@ public class Coder {
                                 Maybes.cases(
                                     Maps.lookup(
                                         var("name"),
-                                        apply(
-                                            project(Graph.TYPE_, Graph.PRIMITIVES),
-                                            var("g"))),
+                                        proj(Graph.TYPE_, Graph.PRIMITIVES, "g")),
                                     apply(
                                         ref(Coder.encodeVariable),
                                         var("env"),
@@ -8547,12 +7953,8 @@ public class Coder {
                                                                         apply(
                                                                             ref(Coder.encodeFunctionPrimitiveByName),
                                                                             var("env"),
-                                                                            apply(
-                                                                                project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                                                var("ft")),
-                                                                            apply(
-                                                                                project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                                                var("ft")),
+                                                                            proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
+                                                                            proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"),
                                                                             var("name"),
                                                                             var("cx"),
                                                                             var("g")))))))))))))),
@@ -8571,9 +7973,7 @@ public class Coder {
                                 Eithers.bind(
                                     apply(
                                         var("encode"),
-                                        apply(
-                                            project(WrappedTerm.TYPE_, WrappedTerm.BODY),
-                                            var("wt"))),
+                                        proj(WrappedTerm.TYPE_, WrappedTerm.BODY, "wt")),
                                     lambda("jarg",
                                         right(
                                             apply(
@@ -8583,9 +7983,7 @@ public class Coder {
                                                     apply(
                                                         ref(Utils.nameToJavaName),
                                                         var("aliases"),
-                                                        apply(
-                                                            project(WrappedTerm.TYPE_, WrappedTerm.TYPE_NAME),
-                                                            var("wt"))),
+                                                        proj(WrappedTerm.TYPE_, WrappedTerm.TYPE_NAME, "wt")),
                                                     nothing()),
                                                 list(var("jarg")),
                                                 nothing())))))),
@@ -8594,13 +7992,9 @@ public class Coder {
                             lambda("ta",
                                 let(
                                     field("atyp",
-                                        apply(
-                                            project(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE),
-                                            var("ta"))),
+                                        proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.TYPE, "ta")),
                                     field("body",
-                                        apply(
-                                            project(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY),
-                                            var("ta"))),
+                                        proj(TypeApplicationTerm.TYPE_, TypeApplicationTerm.BODY, "ta")),
                                     Eithers.bind(
                                         apply(
                                             ref(Coder.encodeType),
@@ -8864,9 +8258,7 @@ public class Coder {
                 let(
                     java.util.Arrays.asList(
     field("aliases0",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                            var("env0"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env0")),
     field("env",
                         record(JavaEnvironment.TYPE_,
                             field(
@@ -8874,76 +8266,48 @@ public class Coder {
                                 record(Aliases.TYPE_,
                                     field(
                                         Aliases.CURRENT_NAMESPACE,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases0")),
                                     field(
                                         Aliases.PACKAGES,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.PACKAGES),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases0")),
                                     field(
                                         Aliases.BRANCH_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.BRANCH_VARS),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases0")),
                                     field(
                                         Aliases.RECURSIVE_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.RECURSIVE_VARS),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases0")),
                                     field(
                                         Aliases.IN_SCOPE_TYPE_PARAMS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases0")),
                                     field(
                                         Aliases.POLYMORPHIC_LOCALS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases0")),
                                     field(
                                         Aliases.IN_SCOPE_JAVA_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases0")),
                                     field(
                                         Aliases.VAR_RENAMES,
                                         Maps.union(
                                             var("tcoVarRenames"),
-                                            apply(
-                                                project(Aliases.TYPE_, Aliases.VAR_RENAMES),
-                                                var("aliases0")))),
+                                            proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases0"))),
                                     field(
                                         Aliases.LAMBDA_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases0")),
                                     field(
                                         Aliases.TYPE_VAR_SUBST,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases0")),
                                     field(
                                         Aliases.TRUSTED_TYPE_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases0")),
                                     field(
                                         Aliases.METHOD_CODOMAIN,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.METHOD_CODOMAIN),
-                                            var("aliases0"))),
+                                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases0")),
                                     field(
                                         Aliases.THUNKED_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.THUNKED_VARS),
-                                            var("aliases0"))))),
+                                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases0")))),
                             field(
                                 JavaEnvironment.GRAPH,
-                                apply(
-                                    project(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH),
-                                    var("env0"))))),
+                                proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env0")))),
     field("stripped",
                         apply(var("hydra.strip.deannotateAndDetypeTerm"), var("term"))),
     field("gathered",
@@ -9078,21 +8442,13 @@ public class Coder {
                                                 lambda("cs",
                                                     let(
                                                         field("aliases",
-                                                            apply(
-                                                                project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                                                                var("env"))),
+                                                            proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
                                                         field("tname",
-                                                            apply(
-                                                                project(CaseStatement.TYPE_, CaseStatement.TYPE_NAME),
-                                                                var("cs"))),
+                                                            proj(CaseStatement.TYPE_, CaseStatement.TYPE_NAME, "cs")),
                                                         field("dflt",
-                                                            apply(
-                                                                project(CaseStatement.TYPE_, CaseStatement.DEFAULT),
-                                                                var("cs"))),
+                                                            proj(CaseStatement.TYPE_, CaseStatement.DEFAULT, "cs")),
                                                         field("cases_",
-                                                            apply(
-                                                                project(CaseStatement.TYPE_, CaseStatement.CASES),
-                                                                var("cs"))),
+                                                            proj(CaseStatement.TYPE_, CaseStatement.CASES, "cs")),
                                                         Eithers.bind(
                                                             apply(
                                                                 ref(Coder.domTypeArgs),
@@ -9148,9 +8504,7 @@ public class Coder {
                                                                                         let(
                                                                                             field(
                                                                                                 "fieldName",
-                                                                                                apply(
-                                                                                                    project(Field.TYPE_, Field.NAME),
-                                                                                                    var("field"))),
+                                                                                                proj(Field.TYPE_, Field.NAME, "field")),
                                                                                             field(
                                                                                                 "variantRefType",
                                                                                                 apply(
@@ -9169,9 +8523,7 @@ public class Coder {
                                                                                                 Term.TYPE_,
                                                                                                 apply(
                                                                                                     var("hydra.strip.deannotateTerm"),
-                                                                                                    apply(
-                                                                                                        project(Field.TYPE_, Field.TERM),
-                                                                                                        var("field"))),
+                                                                                                    proj(Field.TYPE_, Field.TERM, "field")),
                                                                                                 left(
                                                                                                     inject(
                                                                                                         Error_.TYPE_,
@@ -9192,14 +8544,10 @@ public class Coder {
                                                                                                                 let(
                                                                                                                     field(
                                                                                                                         "lambdaParam",
-                                                                                                                        apply(
-                                                                                                                            project(Lambda.TYPE_, Lambda.PARAMETER),
-                                                                                                                            var("lam"))),
+                                                                                                                        proj(Lambda.TYPE_, Lambda.PARAMETER, "lam")),
                                                                                                                     field(
                                                                                                                         "branchBody",
-                                                                                                                        apply(
-                                                                                                                            project(Lambda.TYPE_, Lambda.BODY),
-                                                                                                                            var("lam"))),
+                                                                                                                        proj(Lambda.TYPE_, Lambda.BODY, "lam")),
                                                                                                                     field(
                                                                                                                         "env3",
                                                                                                                         apply(
@@ -9260,19 +8608,13 @@ public class Coder {
                                                                                                                                     let(
                                                                                                                                         field(
                                                                                                                                             "bindings",
-                                                                                                                                            apply(
-                                                                                                                                                project(FunctionStructure.TYPE_, FunctionStructure.BINDINGS),
-                                                                                                                                                var("fs"))),
+                                                                                                                                            proj(FunctionStructure.TYPE_, FunctionStructure.BINDINGS, "fs")),
                                                                                                                                         field(
                                                                                                                                             "innerBody",
-                                                                                                                                            apply(
-                                                                                                                                                project(FunctionStructure.TYPE_, FunctionStructure.BODY),
-                                                                                                                                                var("fs"))),
+                                                                                                                                            proj(FunctionStructure.TYPE_, FunctionStructure.BODY, "fs")),
                                                                                                                                         field(
                                                                                                                                             "env4",
-                                                                                                                                            apply(
-                                                                                                                                                project(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT),
-                                                                                                                                                var("fs"))),
+                                                                                                                                            proj(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT, "fs")),
                                                                                                                                         Eithers.bind(
                                                                                                                                             apply(
                                                                                                                                                 ref(Coder.bindingsToStatements),
@@ -9426,13 +8768,9 @@ public class Coder {
                                 lambda("lt",
                                     let(
                                         field("letBindings",
-                                            apply(
-                                                project(Let.TYPE_, Let.BINDINGS),
-                                                var("lt"))),
+                                            proj(Let.TYPE_, Let.BINDINGS, "lt")),
                                         field("letBody",
-                                            apply(
-                                                project(Let.TYPE_, Let.BODY),
-                                                var("lt"))),
+                                            proj(Let.TYPE_, Let.BODY, "lt")),
                                         Eithers.bind(
                                             apply(
                                                 ref(Coder.bindingsToStatements),
@@ -9473,13 +8811,9 @@ public class Coder {
                 "g",
                 let(
                     field("inScopeTypeParams",
-                        apply(
-                            project(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
                     field("typeVarSubst",
-                        apply(
-                            project(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST),
-                            var("aliases"))),
+                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
                     casesWithDefault(Type.TYPE_,
                         apply(var("hydra.strip.deannotateType"), var("t")),
                         left(
@@ -9497,9 +8831,7 @@ public class Coder {
                                         ref(Coder.encodeType),
                                         var("aliases"),
                                         var("boundVars"),
-                                        apply(
-                                            project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                            var("at")),
+                                        proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at"),
                                         var("cx"),
                                         var("g")),
                                     lambda("jlhs",
@@ -9509,9 +8841,7 @@ public class Coder {
                                                     ref(Coder.encodeType),
                                                     var("aliases"),
                                                     var("boundVars"),
-                                                    apply(
-                                                        project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                                        var("at")),
+                                                    proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at"),
                                                     var("cx"),
                                                     var("g")),
                                                 lambda("jt_",
@@ -9534,9 +8864,7 @@ public class Coder {
                                             ref(Coder.encodeType),
                                             var("aliases"),
                                             var("boundVars"),
-                                            apply(
-                                                project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                var("ft")),
+                                            proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
                                             var("cx"),
                                             var("g")),
                                         lambda("jt_",
@@ -9551,9 +8879,7 @@ public class Coder {
                                                     ref(Coder.encodeType),
                                                     var("aliases"),
                                                     var("boundVars"),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                        var("ft")),
+                                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"),
                                                     var("cx"),
                                                     var("g")),
                                                 lambda("jt_",
@@ -9576,13 +8902,9 @@ public class Coder {
                                         ref(Coder.encodeType),
                                         var("aliases"),
                                         Sets.insert(
-                                            apply(
-                                                project(ForallType.TYPE_, ForallType.PARAMETER),
-                                                var("fa")),
+                                            proj(ForallType.TYPE_, ForallType.PARAMETER, "fa"),
                                             var("boundVars")),
-                                        apply(
-                                            project(ForallType.TYPE_, ForallType.BODY),
-                                            var("fa")),
+                                        proj(ForallType.TYPE_, ForallType.BODY, "fa"),
                                         var("cx"),
                                         var("g")),
                                     lambda("jbody",
@@ -9592,9 +8914,7 @@ public class Coder {
                                                 ref(Utils.javaTypeVariable),
                                                 apply(
                                                     unwrap(Name.TYPE_),
-                                                    apply(
-                                                        project(ForallType.TYPE_, ForallType.PARAMETER),
-                                                        var("fa")))),
+                                                    proj(ForallType.TYPE_, ForallType.PARAMETER, "fa"))),
                                             var("jbody"),
                                             var("cx")))))),
                         field(
@@ -9637,9 +8957,7 @@ public class Coder {
                                             ref(Coder.encodeType),
                                             var("aliases"),
                                             var("boundVars"),
-                                            apply(
-                                                project(EitherType.TYPE_, EitherType.LEFT),
-                                                var("et")),
+                                            proj(EitherType.TYPE_, EitherType.LEFT, "et"),
                                             var("cx"),
                                             var("g")),
                                         lambda("jt_",
@@ -9654,9 +8972,7 @@ public class Coder {
                                                     ref(Coder.encodeType),
                                                     var("aliases"),
                                                     var("boundVars"),
-                                                    apply(
-                                                        project(EitherType.TYPE_, EitherType.RIGHT),
-                                                        var("et")),
+                                                    proj(EitherType.TYPE_, EitherType.RIGHT, "et"),
                                                     var("cx"),
                                                     var("g")),
                                                 lambda("jt_",
@@ -9680,9 +8996,7 @@ public class Coder {
                                             ref(Coder.encodeType),
                                             var("aliases"),
                                             var("boundVars"),
-                                            apply(
-                                                project(MapType.TYPE_, MapType.KEYS),
-                                                var("mt")),
+                                            proj(MapType.TYPE_, MapType.KEYS, "mt"),
                                             var("cx"),
                                             var("g")),
                                         lambda("jt_",
@@ -9697,9 +9011,7 @@ public class Coder {
                                                     ref(Coder.encodeType),
                                                     var("aliases"),
                                                     var("boundVars"),
-                                                    apply(
-                                                        project(MapType.TYPE_, MapType.VALUES),
-                                                        var("mt")),
+                                                    proj(MapType.TYPE_, MapType.VALUES, "mt"),
                                                     var("cx"),
                                                     var("g")),
                                                 lambda("jt_",
@@ -9723,9 +9035,7 @@ public class Coder {
                                             ref(Coder.encodeType),
                                             var("aliases"),
                                             var("boundVars"),
-                                            apply(
-                                                project(PairType.TYPE_, PairType.FIRST),
-                                                var("pt")),
+                                            proj(PairType.TYPE_, PairType.FIRST, "pt"),
                                             var("cx"),
                                             var("g")),
                                         lambda("jt_",
@@ -9740,9 +9050,7 @@ public class Coder {
                                                     ref(Coder.encodeType),
                                                     var("aliases"),
                                                     var("boundVars"),
-                                                    apply(
-                                                        project(PairType.TYPE_, PairType.SECOND),
-                                                        var("pt")),
+                                                    proj(PairType.TYPE_, PairType.SECOND, "pt"),
                                                     var("cx"),
                                                     var("g")),
                                                 lambda("jt_",
@@ -9937,15 +9245,11 @@ public class Coder {
                 "g",
                 let(
                     field("name",
-                        apply(
-                            project(TypeDefinition.TYPE_, TypeDefinition.NAME),
-                            var("tdef"))),
+                        proj(TypeDefinition.TYPE_, TypeDefinition.NAME, "tdef")),
                     field("typ",
                         apply(
                             project(TypeScheme.TYPE_, TypeScheme.BODY),
-                            apply(
-                                project(TypeDefinition.TYPE_, TypeDefinition.TYPE_SCHEME),
-                                var("tdef")))),
+                            proj(TypeDefinition.TYPE_, TypeDefinition.TYPE_SCHEME, "tdef"))),
                     field("serializable",
                         apply(ref(Coder.isSerializableJavaType), var("typ"))),
                     field("imports",
@@ -10026,9 +9330,7 @@ public class Coder {
                         apply(ref(Coder.isLambdaBoundVariable), var("name")),
                         right(nothing()),
                         let("schemaTypes",
-                            apply(
-                                project(Graph.TYPE_, Graph.SCHEMA_TYPES),
-                                var("g")),
+                            proj(Graph.TYPE_, Graph.SCHEMA_TYPES, "g"),
                             Maybes.cases(
                                 Maps.lookup(var("name"), var("schemaTypes")),
                                 right(nothing()),
@@ -10036,21 +9338,15 @@ public class Coder {
                                     Logic.ifElse(
                                         Logic.not_(
                                             Lists.null_(
-                                                apply(
-                                                    project(TypeScheme.TYPE_, TypeScheme.VARIABLES),
-                                                    var("ts")))),
+                                                proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
                                         right(nothing()),
                                         casesWithDefault(Type.TYPE_,
                                             apply(
                                                 var("hydra.strip.deannotateType"),
-                                                apply(
-                                                    project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                    var("ts"))),
+                                                proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
                                             right(
                                                 just(
-                                                    apply(
-                                                        project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                        var("ts")))),
+                                                    proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts"))),
                                             field(
                                                 Type.RECORD,
                                                 constant(right(nothing()))),
@@ -10066,9 +9362,7 @@ public class Coder {
                 "g",
                 let(
                     field("aliases",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
                     field("resolvedName",
                         apply(
                             ref(Utils.lookupJavaVarName),
@@ -10081,9 +9375,7 @@ public class Coder {
                     Logic.ifElse(
                         Sets.member(
                             var("name"),
-                            apply(
-                                project(Aliases.TYPE_, Aliases.BRANCH_VARS),
-                                var("aliases"))),
+                            proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
                         right(
                             apply(
                                 ref(Utils.javaFieldAccessToJavaExpression),
@@ -10146,9 +9438,7 @@ public class Coder {
                                         apply(
                                             ref(Coder.isLambdaBoundIn),
                                             var("name"),
-                                            apply(
-                                                project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                                var("aliases"))))),
+                                            proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")))),
                                 right(
                                     apply(
                                         ref(Utils.javaMethodInvocationToJavaExpression),
@@ -10170,16 +9460,12 @@ public class Coder {
                                     Logic.and_(
                                         Sets.member(
                                             var("name"),
-                                            apply(
-                                                project(Aliases.TYPE_, Aliases.THUNKED_VARS),
-                                                var("aliases"))),
+                                            proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")),
                                         Logic.not_(
                                             apply(
                                                 ref(Coder.isLambdaBoundIn),
                                                 var("name"),
-                                                apply(
-                                                    project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                                    var("aliases"))))),
+                                                proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")))),
                                     right(
                                         apply(
                                             ref(Utils.javaMethodInvocationToJavaExpression),
@@ -10202,17 +9488,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.isLambdaBoundIn),
                                             var("name"),
-                                            apply(
-                                                project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                                var("aliases"))),
+                                            proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
                                         let(
                                             field("actualName",
                                                 apply(
                                                     ref(Coder.findMatchingLambdaVar),
                                                     var("name"),
-                                                    apply(
-                                                        project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                                        var("aliases")))),
+                                                    proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases"))),
                                             field("resolvedActual",
                                                 apply(
                                                     ref(Utils.lookupJavaVarName),
@@ -10227,9 +9509,7 @@ public class Coder {
                                         Logic.ifElse(
                                             Sets.member(
                                                 var("name"),
-                                                apply(
-                                                    project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                                                    var("aliases"))),
+                                                proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
                                             right(
                                                 apply(
                                                     ref(Utils.javaIdentifierToJavaExpression),
@@ -10380,15 +9660,11 @@ public class Coder {
                                 right(var("lam")),
                                 lambda("el",
                                     Maybes.cases(
-                                        apply(
-                                            project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                            var("el")),
+                                        proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                         right(var("lam")),
                                         lambda("ts",
                                             let("typ",
-                                                apply(
-                                                    project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                    var("ts")),
+                                                proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts"),
                                                 Eithers.bind(
                                                     apply(
                                                         ref(Coder.encodeType),
@@ -10423,13 +9699,9 @@ public class Coder {
                     field("fname",
                         apply(
                             unwrap(Name.TYPE_),
-                            apply(
-                                project(FieldType.TYPE_, FieldType.NAME),
-                                var("ft")))),
+                            proj(FieldType.TYPE_, FieldType.NAME, "ft"))),
                     field("ftype",
-                        apply(
-                            project(FieldType.TYPE_, FieldType.TYPE),
-                            var("ft"))),
+                        proj(FieldType.TYPE_, FieldType.TYPE, "ft")),
                     Logic.ifElse(
                         apply(ref(Coder.isBinaryType), var("ftype")),
                         apply(ref(Coder.arraysEqualsClause), var("tmpName"), var("fname")),
@@ -10499,16 +9771,12 @@ public class Coder {
                         Type.APPLICATION,
                         lambda("at1",
                             casesWithDefault(Type.TYPE_,
-                                apply(
-                                    project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                    var("at1")),
+                                proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at1"),
                                 var("typ"),
                                 field(
                                     Type.APPLICATION,
                                     constant(
-                                        apply(
-                                            project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                            var("at1"))))))))));
+                                        proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at1")))))))));
 
     public static final Def extractDirectReturn = def(
         "extractDirectReturn",
@@ -10532,13 +9800,9 @@ public class Coder {
                                 field("dom",
                                     apply(
                                         var("hydra.strip.deannotateType"),
-                                        apply(
-                                            project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                            var("ft")))),
+                                        proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"))),
                                 field("cod",
-                                    apply(
-                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                        var("ft"))),
+                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
                                 casesWithDefault(Type.TYPE_,
                                     var("dom"),
                                     apply(
@@ -10562,15 +9826,11 @@ public class Coder {
                                                                 field("midArg",
                                                                     apply(
                                                                         var("hydra.strip.deannotateType"),
-                                                                        apply(
-                                                                            project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                                            var("ft2")))),
+                                                                        proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft2"))),
                                                                 field("retPart",
                                                                     apply(
                                                                         var("hydra.strip.deannotateType"),
-                                                                        apply(
-                                                                            project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                                            var("ft2")))),
+                                                                        proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft2"))),
                                                                 casesWithDefault(
                                                                     Type.TYPE_,
                                                                     var("midArg"),
@@ -10632,9 +9892,7 @@ public class Coder {
                             casesWithDefault(Type.TYPE_,
                                 apply(
                                     var("hydra.strip.deannotateType"),
-                                    apply(
-                                        project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                        var("ft"))),
+                                    proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft")),
                                 list(),
                                 field(
                                     Type.VARIABLE,
@@ -10642,9 +9900,7 @@ public class Coder {
                                         let("retType",
                                             apply(
                                                 ref(Coder.unwrapReturnType),
-                                                apply(
-                                                    project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                    var("ft"))),
+                                                proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
                                             casesWithDefault(Type.TYPE_,
                                                 apply(
                                                     var("hydra.strip.deannotateType"),
@@ -10656,9 +9912,7 @@ public class Coder {
                                                         casesWithDefault(Type.TYPE_,
                                                             apply(
                                                                 var("hydra.strip.deannotateType"),
-                                                                apply(
-                                                                    project(PairType.TYPE_, PairType.FIRST),
-                                                                    var("pt"))),
+                                                                proj(PairType.TYPE_, PairType.FIRST, "pt")),
                                                             list(),
                                                             field(
                                                                 Type.VARIABLE,
@@ -10683,14 +9937,10 @@ public class Coder {
                         Type.APPLICATION,
                         lambda("at",
                             Lists.cons(
-                                apply(
-                                    project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                    var("at")),
+                                proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at"),
                                 apply(
                                     ref(Coder.extractTypeApplicationArgs_go),
-                                    apply(
-                                        project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                        var("at")))))))));
+                                    proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at"))))))));
 
     public static final Def fieldTypeToFormalParam = def(
         "fieldTypeToFormalParam",
@@ -10704,9 +9954,7 @@ public class Coder {
                         ref(Coder.encodeType),
                         var("aliases"),
                         var("hydra.lib.sets.empty"),
-                        apply(
-                            project(FieldType.TYPE_, FieldType.TYPE),
-                            var("ft")),
+                        proj(FieldType.TYPE_, FieldType.TYPE, "ft"),
                         var("cx"),
                         var("g")),
                     lambda("jt",
@@ -10714,9 +9962,7 @@ public class Coder {
                             apply(
                                 ref(Utils.javaTypeToJavaFormalParameter),
                                 var("jt"),
-                                apply(
-                                    project(FieldType.TYPE_, FieldType.NAME),
-                                    var("ft"))))))));
+                                proj(FieldType.TYPE_, FieldType.NAME, "ft")))))));
 
     public static final Def filterByFlags = def(
         "filterByFlags",
@@ -10744,9 +9990,7 @@ public class Coder {
                             right(var("allTypeArgs")),
                             lambda("el",
                                 Maybes.cases(
-                                    apply(
-                                        project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                        var("el")),
+                                    proj(Binding.TYPE_, Binding.TYPE_SCHEME, "el"),
                                     right(var("allTypeArgs")),
                                     lambda("ts",
                                         let(
@@ -10755,19 +9999,13 @@ public class Coder {
                                                 Lists.filter(
                                                     lambda("v",
                                                         apply(ref(Coder.isSimpleName), var("v"))),
-                                                    apply(
-                                                        project(TypeScheme.TYPE_, TypeScheme.VARIABLES),
-                                                        var("ts")))),
+                                                    proj(TypeScheme.TYPE_, TypeScheme.VARIABLES, "ts"))),
     field("schemeTypeVars",
                                                 apply(
                                                     ref(Coder.collectTypeVars),
-                                                    apply(
-                                                        project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                        var("ts")))),
+                                                    proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts"))),
     field("schemeType",
-                                                apply(
-                                                    project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                    var("ts"))),
+                                                proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
     field("nParams",
                                                 apply(
                                                     ref(Coder.countFunctionParams),
@@ -10876,9 +10114,7 @@ public class Coder {
                             casesWithDefault(Type.TYPE_,
                                 apply(
                                     var("hydra.strip.deannotateType"),
-                                    apply(
-                                        project(PairType.TYPE_, PairType.FIRST),
-                                        var("pt"))),
+                                    proj(PairType.TYPE_, PairType.FIRST, "pt")),
                                 nothing(),
                                 field(Type.VARIABLE, lambda("v", just(var("v"))))))))));
 
@@ -10931,13 +10167,9 @@ public class Coder {
                         lambda("app",
                             apply(
                                 ref(Coder.flattenApps),
-                                apply(
-                                    project(Application.TYPE_, Application.FUNCTION),
-                                    var("app")),
+                                proj(Application.TYPE_, Application.FUNCTION, "app"),
                                 Lists.cons(
-                                    apply(
-                                        project(Application.TYPE_, Application.ARGUMENT),
-                                        var("app")),
+                                    proj(Application.TYPE_, Application.ARGUMENT, "app"),
                                     var("acc"))))))));
 
     public static final Def flattenBindings = def(
@@ -10949,9 +10181,7 @@ public class Coder {
                         casesWithDefault(Term.TYPE_,
                             apply(
                                 var("hydra.strip.deannotateTerm"),
-                                apply(
-                                    project(Binding.TYPE_, Binding.TERM),
-                                    var("b"))),
+                                proj(Binding.TYPE_, Binding.TERM, "b")),
                             list(var("b")),
                             field(
                                 Term.LET,
@@ -10959,26 +10189,18 @@ public class Coder {
                                     Lists.concat2(
                                         apply(
                                             ref(Coder.flattenBindings),
-                                            apply(
-                                                project(Let.TYPE_, Let.BINDINGS),
-                                                var("lt"))),
+                                            proj(Let.TYPE_, Let.BINDINGS, "lt")),
                                         list(
                                             record(Binding.TYPE_,
                                                 field(
                                                     Binding.NAME,
-                                                    apply(
-                                                        project(Binding.TYPE_, Binding.NAME),
-                                                        var("b"))),
+                                                    proj(Binding.TYPE_, Binding.NAME, "b")),
                                                 field(
                                                     Binding.TERM,
-                                                    apply(
-                                                        project(Let.TYPE_, Let.BODY),
-                                                        var("lt"))),
+                                                    proj(Let.TYPE_, Let.BODY, "lt")),
                                                 field(
                                                     Binding.TYPE_SCHEME,
-                                                    apply(
-                                                        project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                                        var("b")))))))))))));
+                                                    proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"))))))))))));
 
     public static final Def freshJavaName = def(
         "freshJavaName",
@@ -11019,16 +10241,12 @@ public class Coder {
                 "g",
                 let(
                     field("aliases",
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
                     field("isLambdaBound",
                         apply(
                             ref(Coder.isLambdaBoundIn),
                             var("name"),
-                            apply(
-                                project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                var("aliases")))),
+                            proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases"))),
                     Eithers.bind(
                         Eithers.mapList(
                             lambda("arg",
@@ -11122,13 +10340,9 @@ public class Coder {
                                                         var("hydra.names.qualifyName"),
                                                         var("name"))),
                                                 field("mns",
-                                                    apply(
-                                                        project(QualifiedName.TYPE_, QualifiedName.NAMESPACE),
-                                                        var("qn"))),
+                                                    proj(QualifiedName.TYPE_, QualifiedName.NAMESPACE, "qn")),
                                                 field("localName",
-                                                    apply(
-                                                        project(QualifiedName.TYPE_, QualifiedName.LOCAL),
-                                                        var("qn"))),
+                                                    proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                                                 Maybes.cases(
                                                     var("mns"),
                                                     let("header",
@@ -11241,9 +10455,7 @@ public class Coder {
                 "g",
                 Eithers.map(
                     lambda("ft",
-                        apply(
-                            project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                            var("ft"))),
+                        proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
                     apply(ref(Coder.getFunctionType), var("ann"), var("cx"), var("g")))));
 
     public static final Def getFunctionType = def(
@@ -11484,81 +10696,53 @@ public class Coder {
                 "name",
                 "env",
                 let("aliases",
-                    apply(
-                        project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                        var("env")),
+                    proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env"),
                     record(JavaEnvironment.TYPE_,
                         field(
                             JavaEnvironment.ALIASES,
                             record(Aliases.TYPE_,
                                 field(
                                     Aliases.CURRENT_NAMESPACE,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
                                 field(
                                     Aliases.PACKAGES,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.PACKAGES),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
                                 field(
                                     Aliases.BRANCH_VARS,
                                     Sets.insert(
                                         var("name"),
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.BRANCH_VARS),
-                                            var("aliases")))),
+                                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases"))),
                                 field(
                                     Aliases.RECURSIVE_VARS,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.RECURSIVE_VARS),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
                                 field(
                                     Aliases.IN_SCOPE_TYPE_PARAMS,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
                                 field(
                                     Aliases.POLYMORPHIC_LOCALS,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
                                 field(
                                     Aliases.IN_SCOPE_JAVA_VARS,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
                                 field(
                                     Aliases.VAR_RENAMES,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.VAR_RENAMES),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
                                 field(
                                     Aliases.LAMBDA_VARS,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases")),
                                 field(
                                     Aliases.TYPE_VAR_SUBST,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
                                 field(
                                     Aliases.TRUSTED_TYPE_VARS,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS),
-                                        var("aliases"))),
+                                    proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
                                 field(Aliases.METHOD_CODOMAIN, nothing()),
                                 field(
                                     Aliases.THUNKED_VARS,
-                                    apply(
-                                        project(Aliases.TYPE_, Aliases.THUNKED_VARS),
-                                        var("aliases"))))),
+                                    proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))),
                         field(
                             JavaEnvironment.GRAPH,
-                            apply(
-                                project(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH),
-                                var("env")))))));
+                            proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env"))))));
 
     public static final Def interfaceTypes = def(
         "interfaceTypes",
@@ -11665,9 +10849,7 @@ public class Coder {
                 "cx",
                 "g",
                 let("schemaTypes",
-                    apply(
-                        project(Graph.TYPE_, Graph.SCHEMA_TYPES),
-                        var("g")),
+                    proj(Graph.TYPE_, Graph.SCHEMA_TYPES, "g"),
                     Maybes.cases(
                         Maps.lookup(var("typeName"), var("schemaTypes")),
                         right(bool(false)),
@@ -11675,9 +10857,7 @@ public class Coder {
                             casesWithDefault(Type.TYPE_,
                                 apply(
                                     var("hydra.strip.deannotateType"),
-                                    apply(
-                                        project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                        var("ts"))),
+                                    proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")),
                                 right(bool(false)),
                                 field(
                                     Type.UNION,
@@ -11687,9 +10867,7 @@ public class Coder {
                                                 Lists.find(
                                                     lambda("ft",
                                                         Equality.equal(
-                                                            apply(
-                                                                project(FieldType.TYPE_, FieldType.NAME),
-                                                                var("ft")),
+                                                            proj(FieldType.TYPE_, FieldType.NAME, "ft"),
                                                             var("fieldName"))),
                                                     var("rt")),
                                                 bool(false),
@@ -11698,9 +10876,7 @@ public class Coder {
                                                         var("hydra.predicates.isUnitType"),
                                                         apply(
                                                             var("hydra.strip.deannotateType"),
-                                                            apply(
-                                                                project(FieldType.TYPE_, FieldType.TYPE),
-                                                                var("ft")))))))))))))));
+                                                            proj(FieldType.TYPE_, FieldType.TYPE, "ft"))))))))))))));
 
     public static final Def isLambdaBoundIn = def(
         "isLambdaBoundIn",
@@ -11772,9 +10948,7 @@ public class Coder {
                         lambda("ft",
                             apply(
                                 ref(Coder.isNonComparableType),
-                                apply(
-                                    project(ForallType.TYPE_, ForallType.BODY),
-                                    var("ft"))))))));
+                                proj(ForallType.TYPE_, ForallType.BODY, "ft")))))));
 
     public static final Def isRecursiveVariable = def(
         "isRecursiveVariable",
@@ -11783,9 +10957,7 @@ public class Coder {
                 "name",
                 Sets.member(
                     var("name"),
-                    apply(
-                        project(Aliases.TYPE_, Aliases.RECURSIVE_VARS),
-                        var("aliases")))));
+                    proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases"))));
 
     public static final Def isSerializableJavaType = def(
         "isSerializableJavaType",
@@ -11868,9 +11040,7 @@ public class Coder {
     public static final Def javaEnvGetGraph = def(
         "javaEnvGetGraph",
         () -> lambda("env",
-                apply(
-                    project(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH),
-                    var("env"))));
+                proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env")));
 
     public static final Def javaEnvSetGraph = def(
         "javaEnvSetGraph",
@@ -11880,9 +11050,7 @@ public class Coder {
                 record(JavaEnvironment.TYPE_,
                     field(
                         JavaEnvironment.ALIASES,
-                        apply(
-                            project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                            var("env"))),
+                        proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env")),
                     field(JavaEnvironment.GRAPH, var("g")))));
 
     public static final Def javaFeatures = def(
@@ -11950,14 +11118,10 @@ public class Coder {
                         Type.FORALL,
                         lambda("ft",
                             Lists.cons(
-                                apply(
-                                    project(ForallType.TYPE_, ForallType.PARAMETER),
-                                    var("ft")),
+                                proj(ForallType.TYPE_, ForallType.PARAMETER, "ft"),
                                 apply(
                                     ref(Coder.javaTypeParametersForType_bvars),
-                                    apply(
-                                        project(ForallType.TYPE_, ForallType.BODY),
-                                        var("ft")))))))));
+                                    proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))));
 
     public static final Def moduleToJava = def(
         "moduleToJava",
@@ -12093,22 +11257,16 @@ public class Coder {
                         lambda("fs",
                             let(
                                 field("bindings",
-                                    apply(
-                                        project(FunctionStructure.TYPE_, FunctionStructure.BINDINGS),
-                                        var("fs"))),
+                                    proj(FunctionStructure.TYPE_, FunctionStructure.BINDINGS, "fs")),
                                 field("rawBody",
-                                    apply(
-                                        project(FunctionStructure.TYPE_, FunctionStructure.BODY),
-                                        var("fs"))),
+                                    proj(FunctionStructure.TYPE_, FunctionStructure.BODY, "fs")),
                                 field("innerBody",
                                     apply(
                                         ref(Coder.annotateBodyWithCod),
                                         var("cod"),
                                         var("rawBody"))),
                                 field("env2",
-                                    apply(
-                                        project(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT),
-                                        var("fs"))),
+                                    proj(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT, "fs")),
                                 Eithers.bind(
                                     apply(
                                         ref(Coder.bindingsToStatements),
@@ -12173,14 +11331,10 @@ public class Coder {
                                     apply(
                                         ref(Coder.peelDomainTypes),
                                         Math_.sub(var("n"), int32(1)),
-                                        apply(
-                                            project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                            var("ft"))),
+                                        proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
                                     pair(
                                         Lists.cons(
-                                            apply(
-                                                project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                var("ft")),
+                                            proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
                                             Pairs.first(var("rest"))),
                                         Pairs.second(var("rest"))))))))));
 
@@ -12202,14 +11356,10 @@ public class Coder {
                                     apply(
                                         ref(Coder.peelDomainsAndCod),
                                         Math_.sub(var("n"), int32(1)),
-                                        apply(
-                                            project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                            var("ft"))),
+                                        proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
                                     pair(
                                         Lists.cons(
-                                            apply(
-                                                project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                var("ft")),
+                                            proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"),
                                             Pairs.first(var("rest"))),
                                         Pairs.second(var("rest"))))))))));
 
@@ -12232,16 +11382,12 @@ public class Coder {
                                     apply(
                                         ref(Coder.applySubstFull),
                                         var("subst"),
-                                        apply(
-                                            project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                            var("ft"))),
+                                        proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft")),
                                     apply(
                                         ref(Coder.peelExpectedTypes),
                                         var("subst"),
                                         Math_.sub(var("n"), int32(1)),
-                                        apply(
-                                            project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                            var("ft"))))))))));
+                                        proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")))))))));
 
     public static final Def propagateType = def(
         "propagateType",
@@ -12271,9 +11417,7 @@ public class Coder {
                                             lambda("ft",
                                                 apply(
                                                     ref(Coder.propagateType_propagateIntoLambda),
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                        var("ft")),
+                                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"),
                                                     var("annotated")))))))),
                         field(
                             Term.LET,
@@ -12287,30 +11431,18 @@ public class Coder {
                                                     record(Binding.TYPE_,
                                                         field(
                                                             Binding.NAME,
-                                                            apply(
-                                                                project(Binding.TYPE_, Binding.NAME),
-                                                                var("b"))),
+                                                            proj(Binding.TYPE_, Binding.NAME, "b")),
                                                         field(
                                                             Binding.TERM,
                                                             apply(
                                                                 ref(Coder.propagateType),
-                                                                apply(
-                                                                    project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                                                    var("ts")),
-                                                                apply(
-                                                                    project(Binding.TYPE_, Binding.TERM),
-                                                                    var("b")))),
+                                                                proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts"),
+                                                                proj(Binding.TYPE_, Binding.TERM, "b"))),
                                                         field(
                                                             Binding.TYPE_SCHEME,
-                                                            apply(
-                                                                project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                                                var("b"))))),
-                                                apply(
-                                                    project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                                    var("b")))),
-                                        apply(
-                                            project(Let.TYPE_, Let.BINDINGS),
-                                            var("lt"))),
+                                                            proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b")))),
+                                                proj(Binding.TYPE_, Binding.TYPE_SCHEME, "b"))),
+                                        proj(Let.TYPE_, Let.BINDINGS, "lt")),
                                     apply(
                                         var("setTypeAnn"),
                                         apply(
@@ -12320,21 +11452,15 @@ public class Coder {
                                             apply(
                                                 ref(Coder.propagateType),
                                                 var("typ"),
-                                                apply(
-                                                    project(Let.TYPE_, Let.BODY),
-                                                    var("lt")))))))),
+                                                proj(Let.TYPE_, Let.BODY, "lt"))))))),
                         field(
                             Term.APPLICATION,
                             lambda("app",
                                 let(
                                     field("fun",
-                                        apply(
-                                            project(Application.TYPE_, Application.FUNCTION),
-                                            var("app"))),
+                                        proj(Application.TYPE_, Application.FUNCTION, "app")),
                                     field("arg",
-                                        apply(
-                                            project(Application.TYPE_, Application.ARGUMENT),
-                                            var("app"))),
+                                        proj(Application.TYPE_, Application.ARGUMENT, "app")),
                                     field("annotatedFun",
                                         casesWithDefault(Term.TYPE_,
                                             apply(var("hydra.strip.deannotateTerm"), var("fun")),
@@ -12346,9 +11472,7 @@ public class Coder {
                                                         field("dom",
                                                             apply(
                                                                 var("hydra.resolution.nominalApplication"),
-                                                                apply(
-                                                                    project(CaseStatement.TYPE_, CaseStatement.TYPE_NAME),
-                                                                    var("cs")),
+                                                                proj(CaseStatement.TYPE_, CaseStatement.TYPE_NAME, "cs"),
                                                                 list())),
                                                         field("ft",
                                                             inject(Type.TYPE_,
@@ -12398,14 +11522,10 @@ public class Coder {
                                         apply(
                                             ref(Coder.propagateType_propagateIntoLambda),
                                             var("cod"),
-                                            apply(
-                                                project(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY),
-                                                var("at")))),
+                                            proj(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY, "at"))),
                                     field(
                                         AnnotatedTerm.ANNOTATION,
-                                        apply(
-                                            project(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION),
-                                            var("at"))))))),
+                                        proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at")))))),
                     field(
                         Term.LAMBDA,
                         lambda("lam",
@@ -12414,22 +11534,16 @@ public class Coder {
                                 record(Lambda.TYPE_,
                                     field(
                                         Lambda.PARAMETER,
-                                        apply(
-                                            project(Lambda.TYPE_, Lambda.PARAMETER),
-                                            var("lam"))),
+                                        proj(Lambda.TYPE_, Lambda.PARAMETER, "lam")),
                                     field(
                                         Lambda.DOMAIN,
-                                        apply(
-                                            project(Lambda.TYPE_, Lambda.DOMAIN),
-                                            var("lam"))),
+                                        proj(Lambda.TYPE_, Lambda.DOMAIN, "lam")),
                                     field(
                                         Lambda.BODY,
                                         apply(
                                             ref(Coder.propagateType),
                                             var("cod"),
-                                            apply(
-                                                project(Lambda.TYPE_, Lambda.BODY),
-                                                var("lam")))))))))));
+                                            proj(Lambda.TYPE_, Lambda.BODY, "lam"))))))))));
 
     public static final Def propagateType_rebuildLet = def(
         "propagateType_rebuildLet",
@@ -12450,16 +11564,12 @@ public class Coder {
                                         AnnotatedTerm.BODY,
                                         apply(
                                             ref(Coder.propagateType_rebuildLet),
-                                            apply(
-                                                project(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY),
-                                                var("at")),
+                                            proj(AnnotatedTerm.TYPE_, AnnotatedTerm.BODY, "at"),
                                             var("bindings"),
                                             var("newBody"))),
                                     field(
                                         AnnotatedTerm.ANNOTATION,
-                                        apply(
-                                            project(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION),
-                                            var("at"))))))),
+                                        proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at")))))),
                     field(
                         Term.LET,
                         constant(
@@ -12536,13 +11646,9 @@ public class Coder {
                                 lambda("app",
                                     let(
                                         field("lhs",
-                                            apply(
-                                                project(Application.TYPE_, Application.FUNCTION),
-                                                var("app"))),
+                                            proj(Application.TYPE_, Application.FUNCTION, "app")),
                                         field("rhs",
-                                            apply(
-                                                project(Application.TYPE_, Application.ARGUMENT),
-                                                var("app"))),
+                                            proj(Application.TYPE_, Application.ARGUMENT, "app")),
                                         field("annotatedLhs",
                                             casesWithDefault(Term.TYPE_,
                                                 apply(var("hydra.strip.deannotateTerm"), var("lhs")),
@@ -12554,9 +11660,7 @@ public class Coder {
                                                             field("dom",
                                                                 apply(
                                                                     var("hydra.resolution.nominalApplication"),
-                                                                    apply(
-                                                                        project(CaseStatement.TYPE_, CaseStatement.TYPE_NAME),
-                                                                        var("cs")),
+                                                                    proj(CaseStatement.TYPE_, CaseStatement.TYPE_NAME, "cs"),
                                                                     list())),
                                                             field("ft",
                                                                 inject(Type.TYPE_,
@@ -12629,9 +11733,7 @@ public class Coder {
                                                 field("rest",
                                                     Pairs.second(var("p"))),
                                                 field("remainingType",
-                                                    apply(
-                                                        project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                        var("ft"))),
+                                                    proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")),
                                                 field("app",
                                                     inject(Term.TYPE_,
                                                         Term.APPLICATION,
@@ -12718,9 +11820,7 @@ public class Coder {
                                 BlockStatement.STATEMENT,
                                 apply(
                                     ref(Utils.toAssignStmt),
-                                    apply(
-                                        project(FieldType.TYPE_, FieldType.NAME),
-                                        var("f"))))),
+                                    proj(FieldType.TYPE_, FieldType.NAME, "f")))),
                         var("fields")),
                     Eithers.bind(
                         Eithers.mapList(
@@ -12911,9 +12011,7 @@ public class Coder {
                                                     ref(Coder.first20Primes),
                                                     Lists.map(
                                                         lambda("f",
-                                                            apply(
-                                                                project(FieldType.TYPE_, FieldType.NAME),
-                                                                var("f"))),
+                                                            proj(FieldType.TYPE_, FieldType.NAME, "f")),
                                                         var("fields")))))))))),
                     apply(
                         ref(Utils.methodDeclaration),
@@ -12942,13 +12040,9 @@ public class Coder {
                                 FieldModifier.FINAL,
                                 unit()))),
                     field("fname",
-                        apply(
-                            project(FieldType.TYPE_, FieldType.NAME),
-                            var("ft"))),
+                        proj(FieldType.TYPE_, FieldType.NAME, "ft")),
                     field("ftype",
-                        apply(
-                            project(FieldType.TYPE_, FieldType.TYPE),
-                            var("ft"))),
+                        proj(FieldType.TYPE_, FieldType.TYPE, "ft")),
                     Eithers.bind(
                         apply(
                             ref(Coder.encodeType),
@@ -12993,9 +12087,7 @@ public class Coder {
                                     var("hydra.formatting.capitalize"),
                                     apply(
                                         unwrap(Name.TYPE_),
-                                        apply(
-                                            project(FieldType.TYPE_, FieldType.NAME),
-                                            var("field"))))))),
+                                        proj(FieldType.TYPE_, FieldType.NAME, "field")))))),
                     field("result",
                         apply(
                             ref(Utils.referenceTypeToResult),
@@ -13016,9 +12108,7 @@ public class Coder {
                             lambda("f",
                                 apply(
                                     ref(Utils.fieldNameToJavaExpression),
-                                    apply(
-                                        project(FieldType.TYPE_, FieldType.NAME),
-                                        var("f")))),
+                                    proj(FieldType.TYPE_, FieldType.NAME, "f"))),
                             var("fields"))),
                     field("returnStmt",
                         inject(BlockStatement.TYPE_,
@@ -13149,17 +12239,11 @@ public class Coder {
                         InterfaceMemberDeclaration.CONSTANT,
                         lambda("cd",
                             Lists.bind(
-                                apply(
-                                    project(ConstantDeclaration.TYPE_, ConstantDeclaration.VARIABLES),
-                                    var("cd")),
+                                proj(ConstantDeclaration.TYPE_, ConstantDeclaration.VARIABLES, "cd"),
                                 apply(
                                     ref(Coder.splitConstantInitializer_splitVar),
-                                    apply(
-                                        project(ConstantDeclaration.TYPE_, ConstantDeclaration.MODIFIERS),
-                                        var("cd")),
-                                    apply(
-                                        project(ConstantDeclaration.TYPE_, ConstantDeclaration.TYPE),
-                                        var("cd")))))))));
+                                    proj(ConstantDeclaration.TYPE_, ConstantDeclaration.MODIFIERS, "cd"),
+                                    proj(ConstantDeclaration.TYPE_, ConstantDeclaration.TYPE, "cd"))))))));
 
     public static final Def splitConstantInitializer_splitVar = def(
         "splitConstantInitializer_splitVar",
@@ -13169,13 +12253,9 @@ public class Coder {
                 "vd",
                 let(
                     field("vid",
-                        apply(
-                            project(VariableDeclarator.TYPE_, VariableDeclarator.ID),
-                            var("vd"))),
+                        proj(VariableDeclarator.TYPE_, VariableDeclarator.ID, "vd")),
                     field("mInit",
-                        apply(
-                            project(VariableDeclarator.TYPE_, VariableDeclarator.INITIALIZER),
-                            var("vd"))),
+                        proj(VariableDeclarator.TYPE_, VariableDeclarator.INITIALIZER, "vd")),
                     Maybes.cases(
                         var("mInit"),
                         list(
@@ -13212,9 +12292,7 @@ public class Coder {
                                             field("varName",
                                                 apply(
                                                     ref(Coder.javaIdentifierToString),
-                                                    apply(
-                                                        project(VariableDeclaratorId.TYPE_, VariableDeclaratorId.IDENTIFIER),
-                                                        var("vid")))),
+                                                    proj(VariableDeclaratorId.TYPE_, VariableDeclaratorId.IDENTIFIER, "vid"))),
                                             field("helperName",
                                                 Strings.cat2(string("_init_"), var("varName"))),
                                             field("callExpr",
@@ -13293,9 +12371,7 @@ public class Coder {
                         lambda("fa",
                             apply(
                                 ref(Coder.stripForalls),
-                                apply(
-                                    project(ForallType.TYPE_, ForallType.BODY),
-                                    var("fa"))))))));
+                                proj(ForallType.TYPE_, ForallType.BODY, "fa")))))));
 
     public static final Def substituteTypeVarsWithTypes = def(
         "substituteTypeVarsWithTypes",
@@ -13333,17 +12409,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(FunctionType.TYPE_, FunctionType.DOMAIN),
-                                                var("ft")))),
+                                            proj(FunctionType.TYPE_, FunctionType.DOMAIN, "ft"))),
                                     field(
                                         FunctionType.CODOMAIN,
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                                var("ft")))))))),
+                                            proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft"))))))),
                     field(
                         Type.APPLICATION,
                         lambda("at",
@@ -13355,17 +12427,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(ApplicationType.TYPE_, ApplicationType.FUNCTION),
-                                                var("at")))),
+                                            proj(ApplicationType.TYPE_, ApplicationType.FUNCTION, "at"))),
                                     field(
                                         ApplicationType.ARGUMENT,
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                                var("at")))))))),
+                                            proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at"))))))),
                     field(
                         Type.LIST,
                         lambda("inner",
@@ -13404,17 +12472,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(MapType.TYPE_, MapType.KEYS),
-                                                var("mt")))),
+                                            proj(MapType.TYPE_, MapType.KEYS, "mt"))),
                                     field(
                                         MapType.VALUES,
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(MapType.TYPE_, MapType.VALUES),
-                                                var("mt")))))))),
+                                            proj(MapType.TYPE_, MapType.VALUES, "mt"))))))),
                     field(
                         Type.PAIR,
                         lambda("pt",
@@ -13426,17 +12490,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(PairType.TYPE_, PairType.FIRST),
-                                                var("pt")))),
+                                            proj(PairType.TYPE_, PairType.FIRST, "pt"))),
                                     field(
                                         PairType.SECOND,
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(PairType.TYPE_, PairType.SECOND),
-                                                var("pt")))))))),
+                                            proj(PairType.TYPE_, PairType.SECOND, "pt"))))))),
                     field(
                         Type.EITHER,
                         lambda("et",
@@ -13448,17 +12508,13 @@ public class Coder {
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(EitherType.TYPE_, EitherType.LEFT),
-                                                var("et")))),
+                                            proj(EitherType.TYPE_, EitherType.LEFT, "et"))),
                                     field(
                                         EitherType.RIGHT,
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(EitherType.TYPE_, EitherType.RIGHT),
-                                                var("et")))))))),
+                                            proj(EitherType.TYPE_, EitherType.RIGHT, "et"))))))),
                     field(
                         Type.FORALL,
                         lambda("ft",
@@ -13467,17 +12523,13 @@ public class Coder {
                                 record(ForallType.TYPE_,
                                     field(
                                         ForallType.PARAMETER,
-                                        apply(
-                                            project(ForallType.TYPE_, ForallType.PARAMETER),
-                                            var("ft"))),
+                                        proj(ForallType.TYPE_, ForallType.PARAMETER, "ft")),
                                     field(
                                         ForallType.BODY,
                                         apply(
                                             ref(Coder.substituteTypeVarsWithTypes_go),
                                             var("subst"),
-                                            apply(
-                                                project(ForallType.TYPE_, ForallType.BODY),
-                                                var("ft")))))))))));
+                                            proj(ForallType.TYPE_, ForallType.BODY, "ft"))))))))));
 
     public static final Def tagCmpNotZeroExpr = def(
         "tagCmpNotZeroExpr",
@@ -13724,13 +12776,9 @@ public class Coder {
                             lambda("fa",
                                 let(
                                     field("v",
-                                        apply(
-                                            project(ForallType.TYPE_, ForallType.PARAMETER),
-                                            var("fa"))),
+                                        proj(ForallType.TYPE_, ForallType.PARAMETER, "fa")),
                                     field("body",
-                                        apply(
-                                            project(ForallType.TYPE_, ForallType.BODY),
-                                            var("fa"))),
+                                        proj(ForallType.TYPE_, ForallType.BODY, "fa")),
                                     field("param",
                                         apply(
                                             ref(Utils.javaTypeParameter),
@@ -13791,20 +12839,14 @@ public class Coder {
                                     Lists.filter(
                                         lambda("b",
                                             Equality.equal(
-                                                apply(
-                                                    project(Binding.TYPE_, Binding.NAME),
-                                                    var("b")),
+                                                proj(Binding.TYPE_, Binding.NAME, "b"),
                                                 var("name"))),
                                         var("flatBindings"))))),
                         field("value",
-                            apply(
-                                project(Binding.TYPE_, Binding.TERM),
-                                var("binding"))),
+                            proj(Binding.TYPE_, Binding.TERM, "binding")),
                         Eithers.bind(
                             Maybes.cases(
-                                apply(
-                                    project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                    var("binding")),
+                                proj(Binding.TYPE_, Binding.TYPE_SCHEME, "binding"),
                                 apply(
                                     var("hydra.checking.typeOfTerm"),
                                     var("cx"),
@@ -13812,9 +12854,7 @@ public class Coder {
                                     var("value")),
                                 lambda("ts",
                                     right(
-                                        apply(
-                                            project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                            var("ts"))))),
+                                        proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")))),
                             lambda("typ",
                                 Eithers.bind(
                                     apply(
@@ -13912,20 +12952,14 @@ public class Coder {
                                 Lists.filter(
                                     lambda("b",
                                         Equality.equal(
-                                            apply(
-                                                project(Binding.TYPE_, Binding.NAME),
-                                                var("b")),
+                                            proj(Binding.TYPE_, Binding.NAME, "b"),
                                             var("name"))),
                                     var("flatBindings"))))),
                     field("value",
-                        apply(
-                            project(Binding.TYPE_, Binding.TERM),
-                            var("binding"))),
+                        proj(Binding.TYPE_, Binding.TERM, "binding")),
                     Eithers.bind(
                         Maybes.cases(
-                            apply(
-                                project(Binding.TYPE_, Binding.TYPE_SCHEME),
-                                var("binding")),
+                            proj(Binding.TYPE_, Binding.TYPE_SCHEME, "binding"),
                             apply(
                                 var("hydra.checking.typeOfTerm"),
                                 var("cx"),
@@ -13933,9 +12967,7 @@ public class Coder {
                                 var("value")),
                             lambda("ts",
                                 right(
-                                    apply(
-                                        project(TypeScheme.TYPE_, TypeScheme.BODY),
-                                        var("ts"))))),
+                                    proj(TypeScheme.TYPE_, TypeScheme.BODY, "ts")))),
                         lambda("typ",
                             Eithers.bind(
                                 apply(
@@ -14070,15 +13102,11 @@ public class Coder {
                         Term.LAMBDA,
                         lambda("lam",
                             Maybes.bind(
-                                apply(
-                                    project(Lambda.TYPE_, Lambda.DOMAIN),
-                                    var("lam")),
+                                proj(Lambda.TYPE_, Lambda.DOMAIN, "lam"),
                                 lambda("dom",
                                     let("mCod",
                                         casesWithDefault(Term.TYPE_,
-                                            apply(
-                                                project(Lambda.TYPE_, Lambda.BODY),
-                                                var("lam")),
+                                            proj(Lambda.TYPE_, Lambda.BODY, "lam"),
                                             nothing(),
                                             field(
                                                 Term.ANNOTATED,
@@ -14086,9 +13114,7 @@ public class Coder {
                                                     Maybes.bind(
                                                         Maps.lookup(
                                                             var("hydra.constants.keyType"),
-                                                            apply(
-                                                                project(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION),
-                                                                var("at"))),
+                                                            proj(AnnotatedTerm.TYPE_, AnnotatedTerm.ANNOTATION, "at")),
                                                         lambda("typeTerm",
                                                             apply(
                                                                 ref(Coder.decodeTypeFromTerm),
@@ -14098,9 +13124,7 @@ public class Coder {
                                                 constant(
                                                     apply(
                                                         ref(Coder.tryInferFunctionType),
-                                                        apply(
-                                                            project(Lambda.TYPE_, Lambda.BODY),
-                                                            var("lam")))))),
+                                                        proj(Lambda.TYPE_, Lambda.BODY, "lam"))))),
                                         Maybes.map(
                                             lambda("cod",
                                                 inject(Type.TYPE_,
@@ -14167,13 +13191,9 @@ public class Coder {
                     field("qn",
                         apply(var("hydra.names.qualifyName"), var("varName"))),
                     field("mns",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.NAMESPACE),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.NAMESPACE, "qn")),
                     field("localName",
-                        apply(
-                            project(QualifiedName.TYPE_, QualifiedName.LOCAL),
-                            var("qn"))),
+                        proj(QualifiedName.TYPE_, QualifiedName.LOCAL, "qn")),
                     casesWithDefault(JavaSymbolClass.TYPE_,
                         var("cls"),
                         apply(
@@ -14413,17 +13433,13 @@ public class Coder {
                         lambda("ft",
                             apply(
                                 ref(Coder.unwrapReturnType),
-                                apply(
-                                    project(FunctionType.TYPE_, FunctionType.CODOMAIN),
-                                    var("ft"))))),
+                                proj(FunctionType.TYPE_, FunctionType.CODOMAIN, "ft")))),
                     field(
                         Type.APPLICATION,
                         lambda("at",
                             apply(
                                 ref(Coder.unwrapReturnType),
-                                apply(
-                                    project(ApplicationType.TYPE_, ApplicationType.ARGUMENT),
-                                    var("at"))))))));
+                                proj(ApplicationType.TYPE_, ApplicationType.ARGUMENT, "at")))))));
 
     public static final Def variantCompareToMethod = def(
         "variantCompareToMethod",
@@ -14573,9 +13589,7 @@ public class Coder {
                                         var("hydra.formatting.capitalize"),
                                         apply(
                                             unwrap(Name.TYPE_),
-                                            apply(
-                                                project(Field.TYPE_, Field.NAME),
-                                                var("field")))))))),
+                                            proj(Field.TYPE_, Field.NAME, "field"))))))),
                     field("mods",
                         list(
                             inject(MethodModifier.TYPE_,
@@ -14590,9 +13604,7 @@ public class Coder {
                     casesWithDefault(Term.TYPE_,
                         apply(
                             var("hydra.strip.deannotateTerm"),
-                            apply(
-                                project(Field.TYPE_, Field.TERM),
-                                var("field"))),
+                            proj(Field.TYPE_, Field.TERM, "field")),
                         left(
                             inject(Error_.TYPE_,
                                 Error_.OTHER,
@@ -14601,9 +13613,7 @@ public class Coder {
                                         string("visitBranch: field term is not a lambda: "),
                                         apply(
                                             var("hydra.show.core.term"),
-                                            apply(
-                                                project(Field.TYPE_, Field.TERM),
-                                                var("field"))))))),
+                                            proj(Field.TYPE_, Field.TERM, "field")))))),
                         field(
                             Term.LAMBDA,
                             lambda("lam",
@@ -14614,13 +13624,9 @@ public class Coder {
                                     lambda("env2",
                                         let(
                                             field("lambdaParam",
-                                                apply(
-                                                    project(Lambda.TYPE_, Lambda.PARAMETER),
-                                                    var("lam"))),
+                                                proj(Lambda.TYPE_, Lambda.PARAMETER, "lam")),
                                             field("body",
-                                                apply(
-                                                    project(Lambda.TYPE_, Lambda.BODY),
-                                                    var("lam"))),
+                                                proj(Lambda.TYPE_, Lambda.BODY, "lam")),
                                             field("env3",
                                                 apply(
                                                     ref(Coder.insertBranchVar),
@@ -14636,17 +13642,11 @@ public class Coder {
                                                 lambda("fs",
                                                     let(
                                                         field("bindings",
-                                                            apply(
-                                                                project(FunctionStructure.TYPE_, FunctionStructure.BINDINGS),
-                                                                var("fs"))),
+                                                            proj(FunctionStructure.TYPE_, FunctionStructure.BINDINGS, "fs")),
                                                         field("innerBody",
-                                                            apply(
-                                                                project(FunctionStructure.TYPE_, FunctionStructure.BODY),
-                                                                var("fs"))),
+                                                            proj(FunctionStructure.TYPE_, FunctionStructure.BODY, "fs")),
                                                         field("env4",
-                                                            apply(
-                                                                project(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT),
-                                                                var("fs"))),
+                                                            proj(FunctionStructure.TYPE_, FunctionStructure.ENVIRONMENT, "fs")),
                                                         Eithers.bind(
                                                             apply(
                                                                 ref(Coder.bindingsToStatements),
@@ -14743,80 +13743,50 @@ public class Coder {
                     lambda("env1",
                         let(
                             field("aliases",
-                                apply(
-                                    project(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES),
-                                    var("env1"))),
+                                proj(JavaEnvironment.TYPE_, JavaEnvironment.ALIASES, "env1")),
                             field("aliases2",
                                 record(Aliases.TYPE_,
                                     field(
                                         Aliases.CURRENT_NAMESPACE,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.CURRENT_NAMESPACE, "aliases")),
                                     field(
                                         Aliases.PACKAGES,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.PACKAGES),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.PACKAGES, "aliases")),
                                     field(
                                         Aliases.BRANCH_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.BRANCH_VARS),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.BRANCH_VARS, "aliases")),
                                     field(
                                         Aliases.RECURSIVE_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.RECURSIVE_VARS),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.RECURSIVE_VARS, "aliases")),
                                     field(
                                         Aliases.IN_SCOPE_TYPE_PARAMS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_TYPE_PARAMS, "aliases")),
                                     field(
                                         Aliases.POLYMORPHIC_LOCALS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.POLYMORPHIC_LOCALS, "aliases")),
                                     field(
                                         Aliases.IN_SCOPE_JAVA_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.IN_SCOPE_JAVA_VARS, "aliases")),
                                     field(
                                         Aliases.VAR_RENAMES,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.VAR_RENAMES),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.VAR_RENAMES, "aliases")),
                                     field(
                                         Aliases.LAMBDA_VARS,
                                         Sets.insert(
-                                            apply(
-                                                project(Lambda.TYPE_, Lambda.PARAMETER),
-                                                var("lam")),
-                                            apply(
-                                                project(Aliases.TYPE_, Aliases.LAMBDA_VARS),
-                                                var("aliases")))),
+                                            proj(Lambda.TYPE_, Lambda.PARAMETER, "lam"),
+                                            proj(Aliases.TYPE_, Aliases.LAMBDA_VARS, "aliases"))),
                                     field(
                                         Aliases.TYPE_VAR_SUBST,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.TYPE_VAR_SUBST, "aliases")),
                                     field(
                                         Aliases.TRUSTED_TYPE_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.TRUSTED_TYPE_VARS, "aliases")),
                                     field(
                                         Aliases.METHOD_CODOMAIN,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.METHOD_CODOMAIN),
-                                            var("aliases"))),
+                                        proj(Aliases.TYPE_, Aliases.METHOD_CODOMAIN, "aliases")),
                                     field(
                                         Aliases.THUNKED_VARS,
-                                        apply(
-                                            project(Aliases.TYPE_, Aliases.THUNKED_VARS),
-                                            var("aliases"))))),
+                                        proj(Aliases.TYPE_, Aliases.THUNKED_VARS, "aliases")))),
                             field("env2",
                                 record(JavaEnvironment.TYPE_,
                                     field(
@@ -14824,9 +13794,7 @@ public class Coder {
                                         var("aliases2")),
                                     field(
                                         JavaEnvironment.GRAPH,
-                                        apply(
-                                            project(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH),
-                                            var("env1"))))),
+                                        proj(JavaEnvironment.TYPE_, JavaEnvironment.GRAPH, "env1")))),
                             apply(var("k"), var("env2")))))));
 
     public static final Def withTypeLambda = def(

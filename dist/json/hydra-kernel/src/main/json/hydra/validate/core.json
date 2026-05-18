@@ -672,6 +672,67 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.validate.core.checkLiteral",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "Check that a literal value's type matches an expected literal type"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "actual",
+                            "term": {"application": {"argument": {"variable": "value"}, "function": {"variable": "hydra.reflect.literalType"}}},
+                            "typeScheme": {"body": {"variable": "hydra.core.LiteralType"}, "variables": []}}],
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "maybe": {
+                                "inject": {
+                                  "field": {
+                                    "name": "typeMismatch",
+                                    "term": {
+                                      "record": {
+                                        "fields": [{"name": "expectedType", "term": {"variable": "expected"}}, {"name": "actualType", "term": {"variable": "actual"}}],
+                                        "typeName": "hydra.error.core.LiteralTypeMismatchError"}}},
+                                  "typeName": "hydra.error.core.InvalidLiteralError"}}},
+                            "function": {
+                              "application": {
+                                "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.core.InvalidLiteralError"}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "actual"},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"variable": "expected"},
+                                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"variable": "hydra.core.LiteralType"}}}}}}},
+                                    "function": {
+                                      "typeApplication": {
+                                        "body": {"variable": "hydra.lib.logic.ifElse"},
+                                        "type": {"maybe": {"variable": "hydra.error.core.InvalidLiteralError"}}}}}}}}}}}},
+                    "domain": {"variable": "hydra.core.Literal"},
+                    "parameter": "value"}},
+                "domain": {"variable": "hydra.core.LiteralType"},
+                "parameter": "expected"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"maybe": {"variable": "hydra.error.core.InvalidLiteralError"}},
+                  "domain": {"variable": "hydra.core.Literal"}}},
+              "domain": {"variable": "hydra.core.LiteralType"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.validate.core.checkShadowing",
         "term": {
           "annotated": {
@@ -6699,6 +6760,7 @@
               "domain": {"variable": "hydra.validation.ValidationProfile"}}},
           "variables": []}}}],
   "dependencies": [
+    "hydra.reflect",
     "hydra.rewriting",
     "hydra.variables",
     "hydra.paths",

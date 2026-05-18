@@ -49,6 +49,9 @@ error cx raw =
                         (\input -> Eithers.map (\t -> Errors.ErrorDuplicateField t) (ErrorCore.duplicateFieldError cx input))),
                       (Core.Name "extraction", (\input -> Eithers.map (\t -> Errors.ErrorExtraction t) (extractionError cx input))),
                       (Core.Name "inference", (\input -> Eithers.map (\t -> Errors.ErrorInference t) (inferenceError cx input))),
+                      (
+                        Core.Name "invalidLiteral",
+                        (\input -> Eithers.map (\t -> Errors.ErrorInvalidLiteral t) (ErrorCore.invalidLiteralError cx input))),
                       (Core.Name "other", (\input -> Eithers.map (\t -> Errors.ErrorOther t) (otherError cx input))),
                       (Core.Name "resolution", (\input -> Eithers.map (\t -> Errors.ErrorResolution t) (resolutionError cx input))),
                       (

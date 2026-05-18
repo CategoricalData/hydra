@@ -23,10 +23,15 @@ mkdir -p "$OUTPUT_DIR"
 # Copy static resources
 echo "Copying static resources for Emacs Lisp target..."
 
-# Hand-written source files (primitives, loader, prims)
+# Hand-written source files (primitives, loader, prims).
+# Skip bootstrap.el: it is a self-exiting standalone script, so when
+# (hydra-load-gen-main) walks the demo's hydra/ tree it would terminate
+# the Emacs session. The demo doesn't need it — the bootstrap step is
+# done by the Haskell bootstrap-from-json executable.
 echo "  Copying hand-written source files..."
 mkdir -p "$OUTPUT_DIR/src/main/emacs-lisp"
 cp -r "$HYDRA_ELISP_DIR/src/main/emacs-lisp/hydra" "$OUTPUT_DIR/src/main/emacs-lisp/"
+rm -f "$OUTPUT_DIR/src/main/emacs-lisp/hydra/bootstrap.el"
 
 # Test infrastructure
 echo "  Copying test infrastructure..."

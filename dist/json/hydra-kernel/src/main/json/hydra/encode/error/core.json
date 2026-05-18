@@ -818,6 +818,49 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.encode.error.core.invalidLiteralError",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.InvalidLiteralError"}}}],
+            "body": {
+              "cases": {
+                "cases": [
+                  {
+                    "name": "typeMismatch",
+                    "term": {
+                      "lambda": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "inject",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.InvalidLiteralError"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "typeMismatch"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {"argument": {"variable": "y"}, "function": {"variable": "hydra.encode.error.core.literalTypeMismatchError"}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                        "parameter": "y"}}}],
+                "typeName": "hydra.error.core.InvalidLiteralError"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.error.core.InvalidLiteralError"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.encode.error.core.invalidTermError",
         "term": {
           "annotated": {
@@ -2081,6 +2124,64 @@
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.error.core.InvalidTypeSchemeVariableNameError"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.encode.error.core.literalTypeMismatchError",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.error.core.LiteralTypeMismatchError"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.error.core.LiteralTypeMismatchError"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "fields",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "expectedType"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"field": "expectedType", "typeName": "hydra.error.core.LiteralTypeMismatchError"}}}},
+                                              "function": {"variable": "hydra.encode.core.literalType"}}}}],
+                                      "typeName": "hydra.core.Field"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "actualType"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"field": "actualType", "typeName": "hydra.error.core.LiteralTypeMismatchError"}}}},
+                                              "function": {"variable": "hydra.encode.core.literalType"}}}}],
+                                      "typeName": "hydra.core.Field"}}]}}],
+                          "typeName": "hydra.core.Record"}}},
+                    "typeName": "hydra.core.Term"}},
+                "domain": {"variable": "hydra.error.core.LiteralTypeMismatchError"},
+                "parameter": "x"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.error.core.LiteralTypeMismatchError"}}},
           "variables": []}}},
     {
       "term": {

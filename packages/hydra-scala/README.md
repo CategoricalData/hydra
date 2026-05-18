@@ -99,6 +99,58 @@ or replace it with a red-black tree (slower in practice — `log₂` vs `log₃�
 If asked again whether Scala needs persistent-collection helpers like the
 Java head's: no.
 
+## Future enhancements
+
+Recommendations from [#233](https://github.com/CategoricalData/hydra/issues/233)
+that haven't been adopted yet. Scala wasn't in the original priority
+scope of that issue (the focus was Haskell/Java/Python), but the
+language has several mechanisms that would make Hydra Scala code
+substantially more idiomatic. Recorded here so the design intent
+survives any future re-evaluation. These are deliberate non-goals
+today, not bugs.
+
+#### String interpolators for inline types and terms
+
+```scala
+val myType = type"{ name: String, age: Int32, email: Optional String }"
+val myTerm = term"let x = 5 in x + y"
+```
+
+Scala interpolators are simpler to implement than Haskell QuasiQuoters
+(no Template Haskell equivalent needed) but raise the same parser-design
+question. Useful for inline definitions in tests and demos.
+
+#### Given/using for context-bearing DSL operations
+
+Hydra's `Flow` and graph operations carry implicit context (the graph,
+the namespace, the trace stack). Scala 3's `given`/`using` would let
+these thread invisibly through DSL code, replacing explicit context
+parameters:
+
+```scala
+def transformPerson(p: TTerm[Person])(using Graph, Namespace): TTerm[Person] = ...
+```
+
+#### Infix notation for binary DSL operations
+
+Scala's infix calling convention naturally supports method-as-operator
+forms:
+
+```scala
+val applied = function @@ argument
+val piped = source |> transform
+val annotated = term @: annotation
+```
+
+Most useful for function application, composition, and pipeline
+operators. Aligns with the Haskell DSL's `@@`/`<.>` operators.
+
+#### Macros for compile-time term construction
+
+Scala 3 inline + quoted macros could generate term/type definitions
+from declarative class definitions, similar to the Template Haskell
+recommendation for the Haskell DSL.
+
 ## Contributing
 
 Hydra is an open-source project and welcomes contributors. Resources:

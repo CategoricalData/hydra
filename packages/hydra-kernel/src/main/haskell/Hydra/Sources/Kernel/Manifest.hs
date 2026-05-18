@@ -18,6 +18,7 @@ module Hydra.Sources.Kernel.Manifest (
   testModules,
   jsonModules,
   otherModules,
+  dslTypeModules,
 ) where
 
 import Hydra.Kernel
@@ -60,6 +61,16 @@ otherModules = [
 
 mainModules :: [Module]
 mainModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules ++ otherModules
+
+-- | Modules in this package whose type definitions should produce derived
+-- DSL wrapper modules (Hydra/Dsl/<Name>.hs). The DSL generator consumes
+-- this list to emit constructors / accessors / withXxx updaters for each
+-- TypeDefinition. Term-only modules (kernelTermsModules: Annotations,
+-- Formatting, Lexical, Names, Strip, Dsls, etc.) are deliberately
+-- excluded. Extend the list when a new type-defining module needs DSL
+-- wrappers.
+dslTypeModules :: [Module]
+dslTypeModules = kernelTypesModules ++ jsonModules ++ otherModules
 
 testModules :: [Module]
 testModules = Test.testModules
