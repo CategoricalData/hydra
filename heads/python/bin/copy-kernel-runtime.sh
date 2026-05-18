@@ -13,7 +13,12 @@
 # developer rollup and demos.
 #
 # Usage:
-#   copy-kernel-runtime.sh [--dist-root <dir>]
+#   copy-kernel-runtime.sh [--dist-root <dir>] [--manifest <file>]
+#
+# --manifest <file> appends '<OUT_DIR>\t<relPath>' lines (tab-separated) for
+# every file currently under OUT_DIR. Consumed by bootstrap-from-json
+# --keep-paths-from to protect hand-copied runtime files from --prune-stale
+# (#357).
 
 set -euo pipefail
 
@@ -22,10 +27,12 @@ HYDRA_PYTHON_HEAD="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "$HYDRA_PYTHON_HEAD/../.." && pwd )"
 
 DIST_ROOT="$HYDRA_ROOT_DIR/dist/python"
+MANIFEST_FILE=""
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --dist-root) DIST_ROOT="$2"; shift 2 ;;
+        --manifest)  MANIFEST_FILE="$2"; shift 2 ;;
         *) shift ;;
     esac
 done
@@ -67,5 +74,13 @@ done
 
 # Don't carry __pycache__ directories into the published artifact.
 find "$OUT_DIR" -type d -name __pycache__ -prune -exec rm -rf {} +
+
+if [ -n "$MANIFEST_FILE" ]; then
+    # Emit '<OUT_DIR>\t<relPath>' for every regular file currently under
+    # OUT_DIR (see note in heads/java/bin/copy-kernel-runtime.sh).
+    ( cd "$OUT_DIR" && find . -type f -print | sed 's|^\./||' \
+        | awk -v dir="$OUT_DIR" '{ printf "%s\t%s\n", dir, $0 }' \
+        >> "$MANIFEST_FILE" )
+fi
 
 echo "  Copied hand-written Python runtime into $OUT_DIR/hydra/"

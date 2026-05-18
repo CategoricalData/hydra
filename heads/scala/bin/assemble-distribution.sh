@@ -57,7 +57,8 @@ else
     rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Scala modules..."
     "$HASKELL_BIN/transform-json-to-scala.sh" "$PACKAGE" main \
-        --output "$DIST_ROOT" --include-dsls
+        --output "$DIST_ROOT" --include-dsls \
+        --prune-stale
     assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"
 fi
 
@@ -75,7 +76,8 @@ else
         rm -f "$OUTPUT_DIGEST_TEST"
         echo "Step 2: Generating test Scala modules..."
         "$HASKELL_BIN/transform-json-to-scala.sh" "$PACKAGE" test \
-            --output "$DIST_ROOT"
+            --output "$DIST_ROOT" \
+            --prune-stale
         assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"
     fi
 fi

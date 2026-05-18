@@ -81,7 +81,8 @@ lisp_assemble_main() {
         rm -f "$output_digest_main"
         echo "Step 1: Generating main $LISP_PRETTY_NAME modules..."
         "$haskell_bin/transform-json-to-lisp.sh" "$PACKAGE" "$LISP_DIALECT" main \
-            --output "$DIST_ROOT"
+            --output "$DIST_ROOT" \
+            --prune-stale
         assemble_refresh_digest "$input_digest_main" "$out_main" "$output_digest_main"
     fi
 
@@ -99,7 +100,8 @@ lisp_assemble_main() {
             rm -f "$output_digest_test"
             echo "Step 2: Generating test $LISP_PRETTY_NAME modules..."
             "$haskell_bin/transform-json-to-lisp.sh" "$PACKAGE" "$LISP_DIALECT" test \
-                --output "$DIST_ROOT"
+                --output "$DIST_ROOT" \
+                --prune-stale
             assemble_refresh_digest "$input_digest_test" "$out_test" "$output_digest_test"
         fi
     fi
