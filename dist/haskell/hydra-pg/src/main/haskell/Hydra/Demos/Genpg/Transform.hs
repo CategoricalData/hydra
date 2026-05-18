@@ -52,6 +52,9 @@ decodeCell colType mvalue =
                         Core.LiteralTypeFloat v1 -> case v1 of
                           Core.FloatTypeFloat32 -> Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat32 parsed))))) (Literals.readFloat32 value)
                           Core.FloatTypeFloat64 -> Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralFloat (Core.FloatValueFloat64 parsed))))) (Literals.readFloat64 value)
+                          _ -> Left (Strings.cat [
+                            "Unsupported float type for column ",
+                            cname])
                         Core.LiteralTypeInteger v1 -> case v1 of
                           Core.IntegerTypeInt32 -> Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 parsed))))) (Literals.readInt32 value)
                           Core.IntegerTypeInt64 -> Maybes.maybe (Left parseError) (\parsed -> Right (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt64 parsed))))) (Literals.readInt64 value)
