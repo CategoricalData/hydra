@@ -30,7 +30,7 @@ worktrees/<branch>/
     hydra-ext/        # Miscellaneous extension DSL sources (Avro, Protobuf, GraphQL, ...)
     hydra-bench/      # Synthetic inference benchmark workloads (opt-in via bin/sync-bench.sh)
     hydra-coq/        # Coq coder DSL sources
-    hydra-javascript/ # JavaScript coder DSL sources
+    hydra-typescript/ # TypeScript coder DSL sources
   heads/              # Per-host build infrastructure: primitives, DSL runtime, generation
     haskell/          # Stack package ("hydra"), exec binaries, Hydra.Dsl/Lib/Generation
     java/             # Hand-written Java primitives, DSL, utils; gradle source-set crossover
