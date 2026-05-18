@@ -481,6 +481,7 @@ by the per-target `assemble-distribution.sh`. The pattern, target by target:
 - Java: `heads/java/src/test/java/hydra/test/TestEnv.java`
 - Python: `heads/python/src/test/python/hydra/test/test_env.py`
 - Scala: `heads/scala/src/test/scala/hydra/test/testEnv.scala`
+- TypeScript: `heads/typescript/src/test/typescript/hydra/test/testEnv.ts`
 - Clojure: `heads/lisp/clojure/src/test/clojure/hydra/test/testEnv.clj`
 - Common Lisp: `heads/lisp/common-lisp/src/test/common-lisp/hydra/test/test_env.lisp`
 - Emacs Lisp: `heads/lisp/emacs-lisp/src/test/emacs-lisp/hydra/test/test_env.el`
@@ -609,6 +610,7 @@ Each implementation has a registration file that maps primitive names to impleme
 | Java | `heads/java/src/main/java/hydra/lib/Libraries.java` |
 | Python | `heads/python/src/main/python/hydra/sources/libraries.py` |
 | Scala | `heads/scala/src/main/scala/hydra/lib/Libraries.scala` |
+| TypeScript | `heads/typescript/src/test/typescript/hydra/test/libraries.ts` |
 | Clojure | `heads/lisp/clojure/src/main/clojure/hydra/lib/libraries.clj` |
 
 ### Checking primitive coverage
