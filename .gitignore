@@ -74,6 +74,7 @@ dist/java/
 dist/python/
 dist/scala/
 dist/scheme/
+dist/typescript/
 dist/wasm/
 
 # Test-cache artifacts written by Layer 2.5 testers. Per-target
@@ -90,6 +91,10 @@ dist/haskell/*/.test-input-hash.txt
 # Other
 *.log
 *.swp
+# TypeScript incremental-build outputs (heads/typescript)
+*.tsbuildinfo
+heads/typescript/build/
+heads/typescript/node_modules/
 # Per-user Claude state (settings, session caches, etc.) is gitignored,
 # but the in-repo slash commands live under .claude/commands/ and ARE
 # tracked. Pattern: exclude .claude contents but re-include .claude/commands/.

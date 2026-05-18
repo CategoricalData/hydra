@@ -107,7 +107,7 @@ runModules spec = do
                        not ("hydra.ext." `L.isPrefixOf` ns),
                        not ("hydra.wasm." `L.isPrefixOf` ns),
                        not ("hydra.coq." `L.isPrefixOf` ns),
-                       not ("hydra.javascript." `L.isPrefixOf` ns)]
+                       not ("hydra.typeScript." `L.isPrefixOf` ns)]
       half = length allKernelNss `div` 2
       dirtyNss = case spec of
         "ALL"   -> allKernelNss
