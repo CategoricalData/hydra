@@ -22,6 +22,19 @@ LISP_TEST_ENV="test_env.scm"
 
 source "$SCRIPT_DIR/../../bin/common.sh"
 
+# #357: for hydra-kernel, build a keep-paths manifest BEFORE lisp_assemble_main
+# so that bootstrap-from-json --prune-stale won't delete the runtime libs +
+# stubs that scheme_post_kernel_extras drops in after the common steps. The
+# manifest enumerates paths only; the actual copy still happens in the
+# post-extras call. lisp_assemble_main forwards LISP_KEEP_MANIFEST to
+# bootstrap-from-json's --keep-paths-from when set.
+LISP_KEEP_MANIFEST=""
+if [ "${1-}" = "hydra-kernel" ]; then
+    LISP_KEEP_MANIFEST="$(mktemp -t hydra-keep-paths-scheme.XXXXXX)"
+    trap 'rm -f "$LISP_KEEP_MANIFEST"' EXIT
+    scheme_keep_paths "$LISP_KEEP_MANIFEST" "$@"
+fi
+
 lisp_assemble_main "$@"
 
 if [ "$PACKAGE" = "hydra-kernel" ]; then
