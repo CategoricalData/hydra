@@ -26,7 +26,7 @@ if [ $# -lt 1 ]; then
     echo "" >&2
     echo "Packages: hydra-kernel, hydra-haskell, hydra-java, hydra-python," >&2
     echo "          hydra-scala, hydra-lisp, hydra-pg, hydra-rdf," >&2
-    echo "          hydra-coq, hydra-javascript, hydra-ext" >&2
+    echo "          hydra-coq, hydra-typescript, hydra-ext" >&2
     exit 1
 fi
 

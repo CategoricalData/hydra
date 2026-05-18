@@ -31,6 +31,8 @@ import Hydra.Protobuf.Coder (moduleToProtobuf)
 import Hydra.Python.Coder (moduleToPython)
 import Hydra.Rust.Coder (moduleToRust)
 import Hydra.Rust.Language (rustLanguage)
+import Hydra.TypeScript.Coder (moduleToTypeScript)
+import Hydra.TypeScript.Language (typeScriptLanguage)
 import Hydra.Wasm.Coder (moduleToWasm)
 import Hydra.Wasm.Language (wasmLanguage)
 import Hydra.Lisp.Coder (moduleToLisp)
@@ -117,6 +119,16 @@ writePython = generateSources moduleToPython pythonLanguage True True True False
 -- Third argument: modules to transform and generate
 writeRust :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeRust = generateSources moduleToRust rustLanguage True False False False
+
+-- | Generate TypeScript source files from modules.
+-- First argument: output directory
+-- Second argument: universe modules (all modules for type/term resolution)
+-- Third argument: modules to transform and generate
+-- Note: today the TypeScript coder emits only type declarations (records →
+-- interfaces, unions → discriminated-union type aliases). Term-level
+-- definitions are deferred to a later iteration; #126.
+writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage True False False False
 
 -- | Generate Coq (.v) source files from modules.
 -- First argument: output directory
