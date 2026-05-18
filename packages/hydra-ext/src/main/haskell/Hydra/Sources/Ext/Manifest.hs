@@ -2,11 +2,12 @@
 --
 -- Owns DSL sources for the "truly-ext" coders and formats: Avro, Protobuf,
 -- GraphQL, Pegasus/PDL, Yaml, Atlas, Cpp, Csharp, Json Schema, Rust,
--- TypeScript, and various miscellaneous domain modules. See
+-- and various miscellaneous domain modules. See
 -- feature_290_packaging-plan.md, "Sync system redesign / Package manifests".
 --
 -- Note: Go DSL sources moved out of hydra-ext into the hydra-go package
--- as part of issue #289 (Go head).
+-- as part of issue #289 (Go head). TypeScript moved out into hydra-typescript
+-- as part of issue #126.
 
 module Hydra.Sources.Ext.Manifest (
   mainModules,
@@ -67,8 +68,6 @@ import qualified Hydra.Sources.Rust.Operators as RustOperators
 import qualified Hydra.Sources.Rust.Serde as RustSerdeSource
 import qualified Hydra.Sources.Rust.Syntax as RustSyntax
 import qualified Hydra.Sources.Sql.Ansi as SqlAnsi
-import qualified Hydra.Sources.TypeScript.Language as TypeScriptLanguage
-import qualified Hydra.Sources.TypeScript.Model as TypeScriptModel
 import qualified Hydra.Sources.Workflow as Workflow
 import qualified Hydra.Sources.Yaml.Coder as YamlCoder
 import qualified Hydra.Sources.Yaml.Language as YamlLanguage
@@ -127,8 +126,6 @@ mainModules = [
   RustSyntax.module_,
   SqlAnsi.module_,
   StacItems.module_,
-  TypeScriptLanguage.module_,
-  TypeScriptModel.module_,
   Workflow.module_,
   YamlCoder.module_,
   YamlLanguage.module_,

@@ -53,8 +53,6 @@
     "hydra.rust.syntax",
     "hydra.sql.syntax",
     "hydra.stac.items",
-    "hydra.typeScript.language",
-    "hydra.typeScript.model",
     "hydra.workflow",
     "hydra.yaml.coder",
     "hydra.yaml.language",
