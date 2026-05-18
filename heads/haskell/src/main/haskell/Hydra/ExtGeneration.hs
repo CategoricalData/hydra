@@ -127,7 +127,7 @@ writeRust = generateSources moduleToRust rustLanguage True False False False
 -- Note: today the TypeScript coder emits only type declarations (records →
 -- interfaces, unions → discriminated-union type aliases). Term-level
 -- definitions are deferred to a later iteration; #126.
-writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
 writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage True False False False
 
 -- | Generate Coq (.v) source files from modules.
