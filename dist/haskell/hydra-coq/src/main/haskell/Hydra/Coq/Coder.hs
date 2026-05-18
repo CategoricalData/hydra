@@ -1,9 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
-
 -- | Coq code generator: converts Hydra modules to Coq source
 
 module Hydra.Coq.Coder where
-
 import qualified Hydra.Coq.Environment as Environment
 import qualified Hydra.Coq.Language as Language
 import qualified Hydra.Coq.Syntax as Syntax
@@ -22,7 +20,6 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-
 -- | Build the Coq dependent-function term `forall (_ : dom), cod` used as the arrow type
 coqArrow :: Syntax.Term -> Syntax.Term -> Syntax.Term
 coqArrow dom cod =
@@ -33,26 +30,21 @@ coqArrow dom cod =
             Syntax.Name Nothing],
           Syntax.typeBindersType = (coqTypeTerm dom)})]),
       Syntax.forallType = (coqTypeTerm cod)}))
-
 coqIdent :: String -> Syntax.Ident
 coqIdent s = Syntax.Ident (Syntax.String_ s)
-
 coqName :: String -> Syntax.Name
 coqName s = Syntax.Name (Just (coqIdent s))
-
 coqQualid :: String -> Syntax.Qualid
 coqQualid s =
     Syntax.Qualid {
       Syntax.qualidId = (coqIdent s),
       Syntax.qualidFieldIds = []}
-
 -- | Apply a Coq term to a list of argument terms, parenthesising each
 coqTermApp :: Syntax.Term -> [Syntax.Term] -> Syntax.Term
 coqTermApp f args =
     Logic.ifElse (Lists.null args) f (Syntax.TermTerm100 (Syntax.Term100Term10 (Syntax.Term10Application (Syntax.ApplicationNormal (Syntax.NormalApplication {
       Syntax.normalApplicationLhs = (Syntax.Term1Term0 (Syntax.Term0Parens f)),
       Syntax.normalApplicationRhs = (Lists.map (\a -> Syntax.ArgTerm (Syntax.Term1Term0 (Syntax.Term0Parens a))) args)})))))
-
 -- | Build a Coq Term expressing `(t : T)` with the normal cast operator
 coqTermCast :: Syntax.Term -> Syntax.Type -> Syntax.Term
 coqTermCast t ty =
@@ -60,17 +52,14 @@ coqTermCast t ty =
       Syntax.typeCastTerm = (Syntax.Term10OneTerm (Syntax.OneTermTerm1 (Syntax.Term1Term0 (Syntax.Term0Parens t)))),
       Syntax.typeCastType = ty,
       Syntax.typeCastOperator = Syntax.TypeCastOperatorNormal}))
-
 -- | Build a Coq Term that references a (possibly qualified) identifier
 coqTermQualid :: String -> Syntax.Term
 coqTermQualid s =
     Syntax.TermTerm100 (Syntax.Term100Term10 (Syntax.Term10OneTerm (Syntax.OneTermExplicit (Syntax.QualidAnnotated {
       Syntax.qualidAnnotatedQualid = (coqQualid s),
       Syntax.qualidAnnotatedUnivAnnot = Nothing}))))
-
 coqTypeTerm :: Syntax.Term -> Syntax.Type
 coqTypeTerm t = Syntax.Type t
-
 -- | Produce `Axiom name : type.` from a (name, Hydra type) pair
 encodeAxiomDefinitionPair :: Environment.CoqEnvironment -> (String, Core.Type) -> Syntax.Sentence
 encodeAxiomDefinitionPair env nt =
@@ -79,7 +68,6 @@ encodeAxiomDefinitionPair env nt =
       Syntax.sentenceContent = (Syntax.SentenceContentAxiom (Syntax.AxiomDeclaration {
         Syntax.axiomDeclarationName = (coqIdent (Pairs.first nt)),
         Syntax.axiomDeclarationType = (coqTypeTerm (encodeType env (Pairs.second nt)))}))}
-
 -- | Map a Haskell-`show`n Double/Scientific to a Coq term, routing NaN/Inf to base-lib axioms
 encodeFloatLiteral :: String -> Syntax.Term
 encodeFloatLiteral s =
@@ -87,7 +75,6 @@ encodeFloatLiteral s =
       "(",
       s,
       ")"]))))
-
 -- | Encode a Lambda into a Coq `fun` expression, sanitising the parameter name
 encodeLambdaTerm :: Environment.CoqEnvironment -> Core.Lambda -> Syntax.Term
 encodeLambdaTerm env lam =
@@ -102,7 +89,6 @@ encodeLambdaTerm env lam =
         Syntax.funBinders = (Syntax.OpenBindersBinders [
           binder]),
         Syntax.funBody = (encodeTerm env (Core.lambdaBody lam))})))
-
 -- | Translate a Hydra literal into its Coq stdlib form, with disambiguating parentheses
 encodeLiteral :: Core.Literal -> Syntax.Term
 encodeLiteral lit =
@@ -113,7 +99,7 @@ encodeLiteral lit =
         (Literals.showDecimal v0),
         ")"])
       Core.LiteralFloat v0 -> case v0 of
-        Core.FloatValueFloat32 v1 -> encodeFloatLiteral (Literals.showFloat32 v1)
+        Core.FloatValueFloat32 v1 -> encodeFloatLiteral (Literals.showFloat64 (Literals.float32ToFloat64 v1))
         Core.FloatValueFloat64 v1 -> encodeFloatLiteral (Literals.showFloat64 v1)
       Core.LiteralInteger v0 -> case v0 of
         Core.IntegerValueBigint v1 -> coqTermQualid (Strings.cat [
@@ -157,7 +143,6 @@ encodeLiteral lit =
         (escapeCoqString v0),
         "\"%string"])
       Core.LiteralBinary _ -> coqTermQualid "\"\""
-
 -- | Map a Hydra LiteralType to its Coq stdlib counterpart
 encodeLiteralType :: Core.LiteralType -> Syntax.Term
 encodeLiteralType lt =
@@ -177,7 +162,6 @@ encodeLiteralType lt =
         Core.IntegerTypeUint64 -> coqTermQualid "nat"
       Core.LiteralTypeString -> coqTermQualid "string"
       Core.LiteralTypeBinary -> coqTermQualid "string"
-
 -- | Translate a Hydra record projection into a Coq lambda that pulls out the field
 encodeProjectionElim :: Environment.CoqEnvironment -> Core.Projection -> Syntax.Term
 encodeProjectionElim env p =
@@ -193,7 +177,6 @@ encodeProjectionElim env p =
           Syntax.BinderName (coqName "r_")]),
         Syntax.funBody = (coqTermApp (coqTermQualid rawFname) [
           coqTermQualid "r_"])}))))
-
 -- | Translate a Hydra Term into its Coq Term counterpart. The environment provides the constructor-count map used by encodeUnionElim (to decide whether a match is exhaustive) and the ambiguous-name set used by resolveQualifiedName (to decide whether cross-module references need to stay fully qualified).
 encodeTerm :: Environment.CoqEnvironment -> Core.Term -> Syntax.Term
 encodeTerm env tm =
@@ -299,7 +282,6 @@ encodeTerm env tm =
       Core.TermUnwrap v0 -> encodeWrapElim v0
       Core.TermVariable v0 -> coqTermQualid (resolveQualifiedName env (Core.unName v0))
       Core.TermWrap v0 -> encodeTerm env (Core.wrappedTermBody v0)
-
 -- | Build a Coq `Definition name := body.` sentence from a Hydra term
 encodeTermDefinition :: Environment.CoqEnvironment -> String -> Core.Term -> Syntax.SentenceContent
 encodeTermDefinition env name body =
@@ -309,14 +291,12 @@ encodeTermDefinition env name body =
       Syntax.definitionBinders = [],
       Syntax.definitionType = Nothing,
       Syntax.definitionBody = (encodeTerm env body)})
-
 -- | Wrap encodeTermDefinition in a Coq Sentence with no leading comment
 encodeTermDefinitionPair :: Environment.CoqEnvironment -> (String, Core.Term) -> Syntax.Sentence
 encodeTermDefinitionPair env ed =
     Syntax.Sentence {
       Syntax.sentenceComment = Nothing,
       Syntax.sentenceContent = (encodeTermDefinition env (Pairs.first ed) (Pairs.second ed))}
-
 -- | Translate a Hydra Type into a Coq Term representing that type. The environment is consulted to resolve qualified type variable references
 encodeType :: Environment.CoqEnvironment -> Core.Type -> Syntax.Term
 encodeType env ty =
@@ -358,7 +338,6 @@ encodeType env ty =
         in (Logic.ifElse (Logic.or (Equality.equal headSeg "hydra") (Equality.equal headSeg "Build_hydra")) (coqTermQualid (resolveQualifiedName env raw)) (coqTermQualid raw))
       Core.TypeVoid -> coqTermQualid "Empty_set"
       Core.TypeWrap v0 -> encodeType env v0
-
 -- | Build a Coq `Definition name : Type := body.` sentence from a Hydra type
 encodeTypeDefinition :: Environment.CoqEnvironment -> String -> Core.Type -> Syntax.SentenceContent
 encodeTypeDefinition env name ty =
@@ -368,14 +347,12 @@ encodeTypeDefinition env name ty =
       Syntax.definitionBinders = [],
       Syntax.definitionType = (Just (coqTypeTerm (coqTermQualid "Type"))),
       Syntax.definitionBody = (encodeType env ty)})
-
 -- | Wrap encodeTypeDefinition in a Coq Sentence with no leading comment
 encodeTypeDefinitionPair :: Environment.CoqEnvironment -> (String, Core.Type) -> Syntax.Sentence
 encodeTypeDefinitionPair env td =
     Syntax.Sentence {
       Syntax.sentenceComment = Nothing,
       Syntax.sentenceContent = (encodeTypeDefinition env (Pairs.first td) (Pairs.second td))}
-
 -- | Construct a Coq Inductive Constructor line `Name_Tag : body -> Name` for a union variant
 encodeUnionConstructor :: Environment.CoqEnvironment -> String -> Core.FieldType -> Syntax.Constructor
 encodeUnionConstructor env typeName f =
@@ -391,7 +368,6 @@ encodeUnionConstructor env typeName f =
         Syntax.constructorName = (coqIdent constrName),
         Syntax.constructorBinders = [],
         Syntax.constructorType = (Just (coqTypeTerm (coqArrow (encodeType env uft) (coqTermQualid typeName))))}
-
 -- | Build a Coq match expression from a Hydra union eliminator. Uses the constructor-count map in the environment to decide whether the match is exhaustive: if so, an explicit default is suppressed; if not and the kernel didn't provide one, inserts `| _ => hydra_unreachable`.
 encodeUnionElim :: Environment.CoqEnvironment -> Core.CaseStatement -> Syntax.Term
 encodeUnionElim env cs =
@@ -454,7 +430,6 @@ encodeUnionElim env cs =
           Syntax.matchReturn = Nothing,
           Syntax.matchPipe = True,
           Syntax.matchEquations = allEqs})))))))})))
-
 -- | A Hydra wrap eliminator is just the identity on the wrapped object in Coq
 encodeWrapElim :: t0 -> Syntax.Term
 encodeWrapElim _n =
@@ -462,11 +437,9 @@ encodeWrapElim _n =
       Syntax.funBinders = (Syntax.OpenBindersBinders [
         Syntax.BinderName (coqName "w_")]),
       Syntax.funBody = (coqTermQualid "w_")}))
-
 -- | Escape a string for Coq string literals: double any embedded quotes
 escapeCoqString :: String -> String
 escapeCoqString s = Strings.intercalate "\"\"" (Strings.splitOn "\"" s)
-
 -- | Collect a chain of leading lambdas as Coq binders, converting type annotations as well
 extractLambdaBinders :: Environment.CoqEnvironment -> Core.Term -> [Syntax.Binder]
 extractLambdaBinders env tm =
@@ -482,7 +455,6 @@ extractLambdaBinders env tm =
                       Syntax.typeBindersType = (coqTypeTerm (encodeType env domTy))})) mDomain
         in (Lists.cons binder (extractLambdaBinders env (Core.lambdaBody v0)))
       _ -> []
-
 -- | True if the Maybe Type is the unit type, looking through annotations
 isUnitDomain :: Maybe Core.Type -> Bool
 isUnitDomain mty =
@@ -491,7 +463,6 @@ isUnitDomain mty =
       Core.TypeRecord v0 -> Lists.null v0
       Core.TypeAnnotated v0 -> isUnitDomain (Just (Core.annotatedTypeBody v0))
       _ -> False) mty
-
 -- | Detect a lambda over the unit type whose parameter is not referenced in the body
 isUnitLambda :: Core.Term -> Bool
 isUnitLambda tm =
@@ -501,7 +472,6 @@ isUnitLambda tm =
         let unused = Logic.not (termReferencesVar (Core.lambdaParameter v0) (Core.lambdaBody v0))
         in (Logic.and (isUnitDomain (Core.lambdaDomain v0)) unused)
       _ -> False
-
 -- | Take the last dot-separated segment of a (possibly) qualified Hydra name and sanitize it
 localTypeName :: String -> String
 localTypeName s =
@@ -509,7 +479,6 @@ localTypeName s =
       let parts = Strings.splitOn "." s
           localPart = Maybes.fromMaybe s (Lists.maybeLast parts)
       in (sanitizeVar localPart)
-
 -- | Build a Coq Document from lists of type definitions and term definitions
 moduleToCoq :: Environment.CoqEnvironment -> [(String, Core.Type)] -> [(String, Core.Term)] -> Syntax.Document
 moduleToCoq env typeDefs termDefs =
@@ -522,12 +491,10 @@ moduleToCoq env typeDefs termDefs =
             standardImports],
           typesSentences,
           termsSentences])}
-
 -- | Rewrite a stripped hydra.lib.<mod>.<func> name to avoid Coq keyword collisions
 renameLibKeyword :: String -> String
 renameLibKeyword s =
     Logic.ifElse (Equality.equal s "lists.at") "lists.at_" (Logic.ifElse (Equality.equal s "math.mod") "math.mod_" s)
-
 -- | Emit a Coq `Require Import m1 m2 ...` sentence with a `Standard library imports` comment
 requireImportSentence :: [String] -> Syntax.Sentence
 requireImportSentence mods =
@@ -538,7 +505,6 @@ requireImportSentence mods =
         Syntax.requireImportRequire = True,
         Syntax.requireImportQualification = (Just Syntax.ImportQualificationImport),
         Syntax.requireImportModules = (Lists.map (\m -> coqQualid m) mods)}))}
-
 -- | Resolve a (possibly qualified) Hydra identifier to the form that should appear in Coq source
 resolveQualifiedName :: Environment.CoqEnvironment -> String -> String
 resolveQualifiedName env s =
@@ -565,15 +531,12 @@ resolveQualifiedName env s =
             sanitizeStripped head2,
             ".",
             (sanitizeStripped localRaw)]) localN))))) (sanitizeVar s))))
-
 -- | Append an underscore if a stripped-local-name reference collides with a Coq reserved word
 sanitizeStripped :: String -> String
 sanitizeStripped s = Formatting.escapeWithUnderscore Language.coqStrippedReservedWords s
-
 -- | Append an underscore if the name collides with a Coq reserved word
 sanitizeVar :: String -> String
 sanitizeVar s = Formatting.escapeWithUnderscore Language.coqReservedWords s
-
 -- | The Coq stdlib modules plus the hand-written hydra.lib.base axioms
 standardImports :: Syntax.Sentence
 standardImports =
@@ -583,7 +546,6 @@ standardImports =
       "Stdlib.ZArith.ZArith",
       "Stdlib.QArith.QArith",
       "hydra.lib.base"]
-
 -- | Peel off leading lambdas and annotations, returning the first non-lambda body
 stripLambdas :: Core.Term -> Core.Term
 stripLambdas tm =
@@ -591,7 +553,6 @@ stripLambdas tm =
       Core.TermAnnotated v0 -> stripLambdas (Core.annotatedTermBody v0)
       Core.TermLambda v0 -> stripLambdas (Core.lambdaBody v0)
       _ -> tm
-
 -- | Syntactic free-variable check over the shapes encodeTerm walks through
 termReferencesVar :: Core.Name -> Core.Term -> Bool
 termReferencesVar name tm =
@@ -612,7 +573,6 @@ termReferencesVar name tm =
       Core.TermTypeLambda v0 -> termReferencesVar name (Core.typeLambdaBody v0)
       Core.TermWrap v0 -> termReferencesVar name (Core.wrappedTermBody v0)
       _ -> False
-
 -- | Combine a type name and field name into a constructor identifier, preserving the namespace prefix
 unionConstructorName :: String -> String -> String
 unionConstructorName typeName fieldName =
@@ -627,7 +587,6 @@ unionConstructorName typeName fieldName =
         sanitized,
         "_",
         (Formatting.capitalize fieldName)])
-
 -- | Peel the outer unit lambda off a term, returning the body
 unitLambdaBody :: Core.Term -> Core.Term
 unitLambdaBody tm =
