@@ -45,16 +45,16 @@ collectTermImports currentNs t =
 
       let vars = Variables.freeVariablesInTerm t
       in (filterNonLocalNames currentNs vars)
-encodeLazyCall :: Packaging.Namespace -> Core.Term -> [Core.Term] -> [Bool] -> String
-encodeLazyCall currentNs headTerm args lazyFlags =
+encodeLazyCall :: t0 -> t1 -> Packaging.Namespace -> Core.Term -> [Core.Term] -> [Bool] -> String
+encodeLazyCall cx g currentNs headTerm args lazyFlags =
 
-      let headExpr = encodeTerm currentNs headTerm
+      let headExpr = encodeTerm cx g currentNs headTerm
           paired = Lists.zip args lazyFlags
           renderArg =
                   \p ->
                     let argTerm = Pairs.first p
                         isLazy = Pairs.second p
-                        expr = encodeTerm currentNs argTerm
+                        expr = encodeTerm cx g currentNs argTerm
                     in (Logic.ifElse isLazy (Strings.cat [
                       "(() => (",
                       expr,
@@ -110,10 +110,10 @@ encodeLiteralType lt =
         Core.IntegerTypeUint32 -> tsNamedType "number"
         Core.IntegerTypeUint64 -> tsNamedType "bigint"
       Core.LiteralTypeString -> tsNamedType "string"
-encodeTerm :: Packaging.Namespace -> Core.Term -> String
-encodeTerm currentNs term =
+encodeTerm :: t0 -> t1 -> Packaging.Namespace -> Core.Term -> String
+encodeTerm cx g currentNs term =
     case term of
-      Core.TermAnnotated v0 -> encodeTerm currentNs (Core.annotatedTermBody v0)
+      Core.TermAnnotated v0 -> encodeTerm cx g currentNs (Core.annotatedTermBody v0)
       Core.TermLiteral v0 -> encodeLiteral v0
       Core.TermVariable v0 ->
         let local = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf v0)
@@ -126,10 +126,16 @@ encodeTerm currentNs term =
             local]))))
       Core.TermLambda v0 ->
         let p = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf (Core.lambdaParameter v0))
-            b = encodeTerm currentNs (Core.lambdaBody v0)
+            b = encodeTerm cx g currentNs (Core.lambdaBody v0)
+            domMaybe = Core.lambdaDomain v0
+            paramText =
+                    Maybes.cases domMaybe p (\dom -> Eithers.either (\_e -> p) (\te -> Strings.cat [
+                      p,
+                      ": ",
+                      (printTypeExpression te)]) (encodeType cx g dom))
         in (Strings.cat [
           "(",
-          p,
+          paramText,
           ") => (",
           b,
           ")"])
@@ -143,23 +149,23 @@ encodeTerm currentNs term =
             lazyMaybe =
                     Maybes.cases mName Nothing (\n ->
                       let qn = Core.unName n
-                      in (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.logic.ifElse") (Equality.equal argc 3)) (Just (encodeLazyCall currentNs headTerm args [
+                      in (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.logic.ifElse") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
                         False,
                         True,
-                        True])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maybes.cases") (Equality.equal argc 3)) (Just (encodeLazyCall currentNs headTerm args [
+                        True])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maybes.cases") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
                         False,
                         True,
-                        False])) (Logic.ifElse (Logic.and (Logic.or (Equality.equal qn "hydra.lib.maybes.maybe") (Equality.equal qn "hydra.lib.maybes.fromMaybe")) (Equality.equal argc 2)) (Just (encodeLazyCall currentNs headTerm args [
+                        False])) (Logic.ifElse (Logic.and (Logic.or (Equality.equal qn "hydra.lib.maybes.maybe") (Equality.equal qn "hydra.lib.maybes.fromMaybe")) (Equality.equal argc 2)) (Just (encodeLazyCall cx g currentNs headTerm args [
                         True,
-                        False])) (Logic.ifElse (Logic.and (Logic.or (Equality.equal qn "hydra.lib.eithers.fromLeft") (Equality.equal qn "hydra.lib.eithers.fromRight")) (Equality.equal argc 2)) (Just (encodeLazyCall currentNs headTerm args [
+                        False])) (Logic.ifElse (Logic.and (Logic.or (Equality.equal qn "hydra.lib.eithers.fromLeft") (Equality.equal qn "hydra.lib.eithers.fromRight")) (Equality.equal argc 2)) (Just (encodeLazyCall cx g currentNs headTerm args [
                         True,
-                        False])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maps.findWithDefault") (Equality.equal argc 3)) (Just (encodeLazyCall currentNs headTerm args [
+                        False])) (Logic.ifElse (Logic.and (Equality.equal qn "hydra.lib.maps.findWithDefault") (Equality.equal argc 3)) (Just (encodeLazyCall cx g currentNs headTerm args [
                         True,
                         False,
                         False])) Nothing))))))
         in (Maybes.cases lazyMaybe (
-          let fn = encodeTerm currentNs (Core.applicationFunction v0)
-              ag = encodeTerm currentNs (Core.applicationArgument v0)
+          let fn = encodeTerm cx g currentNs (Core.applicationFunction v0)
+              ag = encodeTerm cx g currentNs (Core.applicationArgument v0)
           in (Strings.cat [
             "(",
             fn,
@@ -169,30 +175,30 @@ encodeTerm currentNs term =
       Core.TermUnit -> "undefined"
       Core.TermList v0 -> Strings.cat [
         "[",
-        (Strings.intercalate ", " (Lists.map (encodeTerm currentNs) v0)),
+        (Strings.intercalate ", " (Lists.map (encodeTerm cx g currentNs) v0)),
         "]"]
       Core.TermSet v0 -> Strings.cat [
         "new Set([",
-        (Strings.intercalate ", " (Lists.map (encodeTerm currentNs) (Sets.toList v0))),
+        (Strings.intercalate ", " (Lists.map (encodeTerm cx g currentNs) (Sets.toList v0))),
         "])"]
       Core.TermMap v0 -> Strings.cat [
         "new Map([",
         (Strings.intercalate ", " (Lists.map (\entry -> Strings.cat [
           "[",
-          (encodeTerm currentNs (Pairs.first entry)),
+          (encodeTerm cx g currentNs (Pairs.first entry)),
           ", ",
-          (encodeTerm currentNs (Pairs.second entry)),
+          (encodeTerm cx g currentNs (Pairs.second entry)),
           "]"]) (Maps.toList v0))),
         "])"]
       Core.TermPair v0 -> Strings.cat [
         "[",
-        (encodeTerm currentNs (Pairs.first v0)),
+        (encodeTerm cx g currentNs (Pairs.first v0)),
         ", ",
-        (encodeTerm currentNs (Pairs.second v0)),
+        (encodeTerm cx g currentNs (Pairs.second v0)),
         "] as const"]
       Core.TermMaybe v0 -> Maybes.cases v0 "{ tag: \"nothing\" }" (\v -> Strings.cat [
         "{ tag: \"just\", value: ",
-        (encodeTerm currentNs v),
+        (encodeTerm cx g currentNs v),
         " }"])
       Core.TermRecord v0 ->
         let fields = Core.recordFields v0
@@ -201,7 +207,7 @@ encodeTerm currentNs term =
           (Strings.intercalate ", " (Lists.map (\f -> Strings.cat [
             Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.fieldName f)),
             ": ",
-            (encodeTerm currentNs (Core.fieldTerm f))]) fields)),
+            (encodeTerm cx g currentNs (Core.fieldTerm f))]) fields)),
           " }"])
       Core.TermInject v0 ->
         let fname = Core.unName (Core.fieldName (Core.injectionField v0))
@@ -218,11 +224,11 @@ encodeTerm currentNs term =
           "{ tag: ",
           fnameLit,
           ", value: ",
-          (encodeTerm currentNs fterm),
+          (encodeTerm cx g currentNs fterm),
           " }"]))
       Core.TermWrap v0 -> Strings.cat [
         "{ value: ",
-        (encodeTerm currentNs (Core.wrappedTermBody v0)),
+        (encodeTerm cx g currentNs (Core.wrappedTermBody v0)),
         " }"]
       Core.TermLet v0 ->
         let bindings = Core.letBindings v0
@@ -238,18 +244,18 @@ encodeTerm currentNs term =
               "function ",
               lname,
               "(__a0) { return (",
-              (encodeTerm currentNs bterm),
+              (encodeTerm cx g currentNs bterm),
               ")(__a0); } "]) (Strings.cat [
               "const ",
               lname,
               " = ",
-              (encodeTerm currentNs bterm),
+              (encodeTerm cx g currentNs bterm),
               "; "]))) bindings)),
           "return ",
-          (encodeTerm currentNs body),
+          (encodeTerm cx g currentNs body),
           "; })()"])
-      Core.TermTypeApplication v0 -> encodeTerm currentNs (Core.typeApplicationTermBody v0)
-      Core.TermTypeLambda v0 -> encodeTerm currentNs (Core.typeLambdaBody v0)
+      Core.TermTypeApplication v0 -> encodeTerm cx g currentNs (Core.typeApplicationTermBody v0)
+      Core.TermTypeLambda v0 -> encodeTerm cx g currentNs (Core.typeLambdaBody v0)
       Core.TermProject v0 ->
         let fname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.projectionField v0))
         in (Strings.cat [
@@ -265,12 +271,12 @@ encodeTerm currentNs term =
                       "__u.tag === ",
                       (tsEscapeString (Core.unName (Core.fieldName f))),
                       " ? (",
-                      (encodeTerm currentNs (Core.fieldTerm f)),
+                      (encodeTerm cx g currentNs (Core.fieldTerm f)),
                       ")(__u.value) : "]) armFields)
             tailText =
                     Maybes.cases defaultMaybe "(() => { throw new Error(\"unmatched case\"); })()" (\dt -> Strings.cat [
                       "(",
-                      (encodeTerm currentNs dt),
+                      (encodeTerm cx g currentNs dt),
                       ")"])
         in (Strings.cat [
           "((__u) => (",
@@ -279,14 +285,14 @@ encodeTerm currentNs term =
           "))"])
       Core.TermEither v0 -> Eithers.either (\l -> Strings.cat [
         "{ tag: \"left\", value: ",
-        (encodeTerm currentNs l),
+        (encodeTerm cx g currentNs l),
         " }"]) (\r -> Strings.cat [
         "{ tag: \"right\", value: ",
-        (encodeTerm currentNs r),
+        (encodeTerm cx g currentNs r),
         " }"]) v0
       _ -> "/* unsupported term */ null"
-encodeTermDefinition :: Packaging.Namespace -> Packaging.TermDefinition -> String
-encodeTermDefinition currentNs td =
+encodeTermDefinition :: t0 -> t1 -> Packaging.Namespace -> Packaging.TermDefinition -> String
+encodeTermDefinition cx g currentNs td =
 
       let name = Packaging.termDefinitionName td
           lname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf name)
@@ -296,19 +302,25 @@ encodeTermDefinition currentNs td =
         Core.TermLambda v0 ->
           let p = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf (Core.lambdaParameter v0))
               body = Core.lambdaBody v0
+              domMaybe = Core.lambdaDomain v0
+              paramText =
+                      Maybes.cases domMaybe p (\dom -> Eithers.either (\_e -> p) (\te -> Strings.cat [
+                        p,
+                        ": ",
+                        (printTypeExpression te)]) (encodeType cx g dom))
           in (Strings.cat [
             "export function ",
             lname,
             "(",
-            p,
+            paramText,
             ") { return ",
-            (encodeTerm currentNs body),
+            (encodeTerm cx g currentNs body),
             "; }\n"])
         _ -> Strings.cat [
           "export const ",
           lname,
           " = ",
-          (encodeTerm currentNs rawTerm),
+          (encodeTerm cx g currentNs rawTerm),
           ";\n"]
 encodeType :: t0 -> t1 -> Core.Type -> Either t2 Syntax.TypeExpression
 encodeType cx g t =
@@ -503,7 +515,7 @@ moduleToTypeScript mod defs cx g =
       in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\items ->
         let header = "// Note: this is an automatically generated file. Do not edit.\n\n"
             typeBody = Strings.intercalate "\n" (Lists.map printModuleItem items)
-            termBody = Strings.cat (Lists.map (encodeTermDefinition currentNs) termDefs)
+            termBody = Strings.cat (Lists.map (encodeTermDefinition cx g currentNs) termDefs)
             filePath = Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "ts") (Packaging.moduleNamespace mod)
         in (Right (Maps.singleton filePath (Strings.cat [
           header,

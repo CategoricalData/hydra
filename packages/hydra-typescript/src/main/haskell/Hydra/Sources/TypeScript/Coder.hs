@@ -587,15 +587,15 @@ flattenApplication = def "flattenApplication" $
 -- in `() => expr` thunks. The `lazyFlags` list parallels `args`:
 -- True positions are wrapped, False positions are emitted normally.
 -- Forward-declared as a record-of-strings so encodeTerm can use it.
-encodeLazyCall :: TTermDefinition (Namespace -> Term -> [Term] -> [Bool] -> String)
+encodeLazyCall :: TTermDefinition (Context -> Graph -> Namespace -> Term -> [Term] -> [Bool] -> String)
 encodeLazyCall = def "encodeLazyCall" $
-  lambda "currentNs" $ lambda "headTerm" $ lambda "args" $ lambda "lazyFlags" $
-    "headExpr" <~ (encodeTerm @@ var "currentNs" @@ var "headTerm") $
+  lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "headTerm" $ lambda "args" $ lambda "lazyFlags" $
+    "headExpr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm") $
     "paired" <~ Lists.zip (var "args") (var "lazyFlags") $
     "renderArg" <~ (lambda "p" $
       "argTerm" <~ Pairs.first (var "p") $
       "isLazy" <~ Pairs.second (var "p") $
-      "expr" <~ (encodeTerm @@ var "currentNs" @@ var "argTerm") $
+      "expr" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "argTerm") $
       Logic.ifElse (var "isLazy")
         (Strings.cat (list [string "(() => (", var "expr", string "))"]))
         (Strings.cat (list [string "(", var "expr", string ")"]))) $
@@ -795,12 +795,12 @@ encodeLiteral = def "encodeLiteral" $
 -- The first argument is the current module's namespace; it's used to decide
 -- whether a `Term_variable` reference is local (emit bare name) or external
 -- (emit `<alias>.<name>` matching the namespace-style import).
-encodeTerm :: TTermDefinition (Namespace -> Term -> String)
+encodeTerm :: TTermDefinition (Context -> Graph -> Namespace -> Term -> String)
 encodeTerm = def "encodeTerm" $
-  lambda "currentNs" $ lambda "term" $ cases _Term (var "term")
+  lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "term" $ cases _Term (var "term")
     (Just $ string "/* unsupported term */ null")
     [_Term_annotated>>: lambda "at" $
-       encodeTerm @@ var "currentNs" @@ Core.annotatedTermBody (var "at"),
+       encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.annotatedTermBody (var "at"),
      _Term_literal>>: lambda "lit" $
        encodeLiteral @@ var "lit",
      _Term_variable>>: lambda "n" $
@@ -824,12 +824,28 @@ encodeTerm = def "encodeTerm" $
               "alias" <~ Strings.cat2 (string "$mod_")
                 (Strings.intercalate (string "_") (var "nsSegs")) $
               Strings.cat (list [var "alias", string ".", var "local"]))),
+     -- Lambda emission: if the parameter has a declared domain type
+     -- (Hydra `Lambda.domain :: Maybe Type`), emit `(p: <encoded type>) =>
+     -- (body)` so the generated TS code has a typed parameter. If domain
+     -- is absent or encoding the type fails, fall back to `(p) => (body)`
+     -- — TS `--noImplicitAny: false` accepts this. Domain types appear
+     -- on top-level lambdas after Hydra's eta-expansion + inference
+     -- pass; nested lambdas and synthesized helpers often lack them.
      _Term_lambda>>: lambda "lam" $
        "p" <~ (Formatting.sanitizeWithUnderscores @@ TypeScriptLanguageSource.typeScriptReservedWords
          @@ (Names.localNameOf @@ Core.lambdaParameter (var "lam"))) $
-       "b" <~ (encodeTerm @@ var "currentNs" @@ Core.lambdaBody (var "lam")) $
+       "b" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.lambdaBody (var "lam")) $
+       "domMaybe" <~ Core.lambdaDomain (var "lam") $
+       "paramText" <~ Maybes.cases (var "domMaybe")
+         (var "p")
+         (lambda "dom" $
+           Eithers.either_
+             (lambda "_e" $ var "p")
+             (lambda "te" $ Strings.cat (list [
+               var "p", string ": ", printTypeExpression @@ var "te"]))
+             (encodeType @@ var "cx" @@ var "g" @@ var "dom")) $
        Strings.cat (list [
-         string "(", var "p", string ") => (", var "b", string ")"]),
+         string "(", var "paramText", string ") => (", var "b", string ")"]),
      _Term_application>>: lambda "app" $
        -- Flatten the application spine and check whether the head is a
        -- known-lazy primitive. If so, wrap the lazy-positioned arg(s)
@@ -853,13 +869,13 @@ encodeTerm = def "encodeTerm" $
              (Logic.and (Equality.equal (var "qn") (string "hydra.lib.logic.ifElse"))
                         (Equality.equal (var "argc") (int32 3)))
              (just (encodeLazyCall
-                     @@ var "currentNs" @@ var "headTerm" @@ var "args"
+                     @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
                      @@ list [false, true, true]))
              (Logic.ifElse
                (Logic.and (Equality.equal (var "qn") (string "hydra.lib.maybes.cases"))
                           (Equality.equal (var "argc") (int32 3)))
                (just (encodeLazyCall
-                       @@ var "currentNs" @@ var "headTerm" @@ var "args"
+                       @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
                        @@ list [false, true, false]))
                (Logic.ifElse
                  (Logic.and
@@ -867,7 +883,7 @@ encodeTerm = def "encodeTerm" $
                              (Equality.equal (var "qn") (string "hydra.lib.maybes.fromMaybe")))
                    (Equality.equal (var "argc") (int32 2)))
                  (just (encodeLazyCall
-                         @@ var "currentNs" @@ var "headTerm" @@ var "args"
+                         @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
                          @@ list [true, false]))
                  (Logic.ifElse
                    (Logic.and
@@ -875,19 +891,19 @@ encodeTerm = def "encodeTerm" $
                                (Equality.equal (var "qn") (string "hydra.lib.eithers.fromRight")))
                      (Equality.equal (var "argc") (int32 2)))
                    (just (encodeLazyCall
-                           @@ var "currentNs" @@ var "headTerm" @@ var "args"
+                           @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
                            @@ list [true, false]))
                    (Logic.ifElse
                      (Logic.and (Equality.equal (var "qn") (string "hydra.lib.maps.findWithDefault"))
                                 (Equality.equal (var "argc") (int32 3)))
                      (just (encodeLazyCall
-                             @@ var "currentNs" @@ var "headTerm" @@ var "args"
+                             @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "headTerm" @@ var "args"
                              @@ list [true, false, false]))
                      (nothing :: TTerm (Maybe String))))))) $
        Maybes.cases (var "lazyMaybe")
          -- Default eager emission.
-         ("fn" <~ (encodeTerm @@ var "currentNs" @@ Core.applicationFunction (var "app")) $
-          "ag" <~ (encodeTerm @@ var "currentNs" @@ Core.applicationArgument (var "app")) $
+         ("fn" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.applicationFunction (var "app")) $
+          "ag" <~ (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.applicationArgument (var "app")) $
           Strings.cat (list [
             string "(", var "fn", string ")(", var "ag", string ")"]))
          (lambda "s" $ var "s"),
@@ -895,12 +911,12 @@ encodeTerm = def "encodeTerm" $
      _Term_list>>: lambda "els" $
        Strings.cat (list [
          string "[",
-         Strings.intercalate (string ", ") (Lists.map (encodeTerm @@ var "currentNs") (var "els")),
+         Strings.intercalate (string ", ") (Lists.map (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs") (var "els")),
          string "]"]),
      _Term_set>>: lambda "s" $
        Strings.cat (list [
          string "new Set([",
-         Strings.intercalate (string ", ") (Lists.map (encodeTerm @@ var "currentNs") (Sets.toList (var "s"))),
+         Strings.intercalate (string ", ") (Lists.map (encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs") (Sets.toList (var "s"))),
          string "])"]),
      _Term_map>>: lambda "m" $
        Strings.cat (list [
@@ -909,18 +925,18 @@ encodeTerm = def "encodeTerm" $
            (Lists.map
              (lambda "entry" $ Strings.cat (list [
                string "[",
-               encodeTerm @@ var "currentNs" @@ Pairs.first (var "entry"),
+               encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Pairs.first (var "entry"),
                string ", ",
-               encodeTerm @@ var "currentNs" @@ Pairs.second (var "entry"),
+               encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Pairs.second (var "entry"),
                string "]"]))
              (Maps.toList (var "m"))),
          string "])"]),
      _Term_pair>>: lambda "p" $
        Strings.cat (list [
          string "[",
-         encodeTerm @@ var "currentNs" @@ Pairs.first (var "p"),
+         encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Pairs.first (var "p"),
          string ", ",
-         encodeTerm @@ var "currentNs" @@ Pairs.second (var "p"),
+         encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Pairs.second (var "p"),
          string "] as const"]),
      -- A Hydra Maybe term encodes to the runtime Maybe shape:
      --   Nothing → { tag: "nothing" }
@@ -932,7 +948,7 @@ encodeTerm = def "encodeTerm" $
          (string "{ tag: \"nothing\" }")
          (lambda "v" $ Strings.cat (list [
            string "{ tag: \"just\", value: ",
-           encodeTerm @@ var "currentNs" @@ var "v",
+           encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "v",
            string " }"])),
      _Term_record>>: lambda "rec" $
        "fields" <~ Core.recordFields (var "rec") $
@@ -943,7 +959,7 @@ encodeTerm = def "encodeTerm" $
              (lambda "f" $ Strings.cat (list [
                Formatting.sanitizeWithUnderscores @@ TypeScriptLanguageSource.typeScriptReservedWords @@ Core.unName (Core.fieldName (var "f")),
                string ": ",
-               encodeTerm @@ var "currentNs" @@ Core.fieldTerm (var "f")]))
+               encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.fieldTerm (var "f")]))
              (var "fields")),
          string " }"]),
      _Term_inject>>: lambda "inj" $
@@ -959,7 +975,7 @@ encodeTerm = def "encodeTerm" $
          (Strings.cat (list [
            string "{ tag: ", var "fnameLit",
            string ", value: ",
-           encodeTerm @@ var "currentNs" @@ var "fterm",
+           encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "fterm",
            string " }"])),
      -- A Hydra wrap (newtype) term encodes as `{ value: <body> }`. The
      -- kernel routinely reads the body via `(.value)` projections, so the
@@ -967,7 +983,7 @@ encodeTerm = def "encodeTerm" $
      _Term_wrap>>: lambda "wt" $
        Strings.cat (list [
          string "{ value: ",
-         encodeTerm @@ var "currentNs" @@ Core.wrappedTermBody (var "wt"),
+         encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.wrappedTermBody (var "wt"),
          string " }"]),
      _Term_let>>: lambda "lt" $
        -- Encode a let as an IIFE with sequentially-evaluated bindings:
@@ -1002,21 +1018,21 @@ encodeTerm = def "encodeTerm" $
                -- first arg; the curry chain unfolds at the call site.
                (Strings.cat (list [
                  string "function ", var "lname", string "(__a0) { return (",
-                 encodeTerm @@ var "currentNs" @@ var "bterm",
+                 encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "bterm",
                  string ")(__a0); } "]))
                (Strings.cat (list [
                  string "const ", var "lname", string " = ",
-                 encodeTerm @@ var "currentNs" @@ var "bterm",
+                 encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "bterm",
                  string "; "])))
            (var "bindings")),
          string "return ",
-         encodeTerm @@ var "currentNs" @@ var "body",
+         encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "body",
          string "; })()"]),
      -- TypeApplication and TypeLambda are erased at the value level.
      _Term_typeApplication>>: lambda "ta" $
-       encodeTerm @@ var "currentNs" @@ Core.typeApplicationTermBody (var "ta"),
+       encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.typeApplicationTermBody (var "ta"),
      _Term_typeLambda>>: lambda "tl" $
-       encodeTerm @@ var "currentNs" @@ Core.typeLambdaBody (var "tl"),
+       encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.typeLambdaBody (var "tl"),
      -- Record projection: emit `(x) => x.fname`. The Hydra projection knows
      -- only the typeName and field; the value is supplied at the call site.
      _Term_project>>: lambda "proj" $
@@ -1043,7 +1059,7 @@ encodeTerm = def "encodeTerm" $
            string "__u.tag === ",
            tsEscapeString @@ Core.unName (Core.fieldName (var "f")),
            string " ? (",
-           encodeTerm @@ var "currentNs" @@ Core.fieldTerm (var "f"),
+           encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ Core.fieldTerm (var "f"),
            string ")(__u.value) : "]))
          (var "armFields")) $
        -- Hydra's `cases _Type t (Just defaultTerm) arms`: the default is a
@@ -1052,7 +1068,7 @@ encodeTerm = def "encodeTerm" $
        "tailText" <~ Maybes.cases (var "defaultMaybe")
          (string "(() => { throw new Error(\"unmatched case\"); })()")
          (lambda "dt" $ Strings.cat (list [
-           string "(", encodeTerm @@ var "currentNs" @@ var "dt", string ")"])) $
+           string "(", encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "dt", string ")"])) $
        Strings.cat (list [
          string "((__u) => (",
          var "armsText",
@@ -1065,18 +1081,18 @@ encodeTerm = def "encodeTerm" $
        Eithers.either_
          (lambda "l" $ Strings.cat (list [
            string "{ tag: \"left\", value: ",
-           encodeTerm @@ var "currentNs" @@ var "l",
+           encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "l",
            string " }"]))
          (lambda "r" $ Strings.cat (list [
            string "{ tag: \"right\", value: ",
-           encodeTerm @@ var "currentNs" @@ var "r",
+           encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "r",
            string " }"]))
          (var "e")]
 
 -- | Render a Hydra term definition as a TypeScript `export const` statement.
-encodeTermDefinition :: TTermDefinition (Namespace -> TermDefinition -> String)
+encodeTermDefinition :: TTermDefinition (Context -> Graph -> Namespace -> TermDefinition -> String)
 encodeTermDefinition = def "encodeTermDefinition" $
-  lambda "currentNs" $ lambda "td" $
+  lambda "cx" $ lambda "g" $ lambda "currentNs" $ lambda "td" $
     "name" <~ Packaging.termDefinitionName (var "td") $
     "lname" <~ (Formatting.sanitizeWithUnderscores @@ TypeScriptLanguageSource.typeScriptReservedWords
       @@ (Names.localNameOf @@ var "name")) $
@@ -1092,20 +1108,32 @@ encodeTermDefinition = def "encodeTermDefinition" $
         string "export const ",
         var "lname",
         string " = ",
-        encodeTerm @@ var "currentNs" @@ var "rawTerm",
+        encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "rawTerm",
         string ";\n"])) [
       _Term_lambda>>: lambda "lam" $
         "p" <~ (Formatting.sanitizeWithUnderscores
           @@ TypeScriptLanguageSource.typeScriptReservedWords
           @@ (Names.localNameOf @@ Core.lambdaParameter (var "lam"))) $
         "body" <~ Core.lambdaBody (var "lam") $
+        -- Top-level lambda definitions: emit a typed parameter if a
+        -- domain type is declared on this lambda. Falls back to untyped
+        -- on encodeType failure (e.g. unresolved forall vars).
+        "domMaybe" <~ Core.lambdaDomain (var "lam") $
+        "paramText" <~ Maybes.cases (var "domMaybe")
+          (var "p")
+          (lambda "dom" $
+            Eithers.either_
+              (lambda "_e" $ var "p")
+              (lambda "te" $ Strings.cat (list [
+                var "p", string ": ", printTypeExpression @@ var "te"]))
+              (encodeType @@ var "cx" @@ var "g" @@ var "dom")) $
         Strings.cat (list [
           string "export function ",
           var "lname",
           string "(",
-          var "p",
+          var "paramText",
           string ") { return ",
-          encodeTerm @@ var "currentNs" @@ var "body",
+          encodeTerm @@ var "cx" @@ var "g" @@ var "currentNs" @@ var "body",
           string "; }\n"])]
 
 -- =============================================================================
@@ -1368,7 +1396,7 @@ moduleToTypeScript = def "moduleToTypeScript" $
     "typeBody" <~ (Strings.intercalate (string "\n")
       (Lists.map (asTerm printModuleItem) (var "items"))) $
     "termBody" <~ (Strings.cat
-      (Lists.map (encodeTermDefinition @@ var "currentNs") (var "termDefs"))) $
+      (Lists.map (encodeTermDefinition @@ var "cx" @@ var "g" @@ var "currentNs") (var "termDefs"))) $
     "filePath" <~ (Names.namespaceToFilePath
       @@ Util.caseConventionCamel
       @@ wrap _FileExtension (string "ts")

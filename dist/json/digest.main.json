@@ -213,7 +213,7 @@
     "hydra.tinkerpop.gremlin": "0e481ac7ee42a2f4a652d802a2beb97cb6a2a77c6c07aa5e04c64494279ebe99",
     "hydra.tinkerpop.language": "0ade50498f46cf5e491a2f37413e61f60710a57635646263ca8380b4a5d6f87e",
     "hydra.topology": "a469ee851eaf86adf589f8dc8b6754595df6bc893ae75d152f23a6fcf53c834f",
-    "hydra.typeScript.coder": "4cf0e878a56544085bbc9437a385401ae5f52b87915537721d6f4d1a9f9b007d",
+    "hydra.typeScript.coder": "a3409a4ea2af8987f1b5e2db0ace0800ead1540fe2b6f118826f7edbdea59b52",
     "hydra.typeScript.language": "33ed950689561dd3df7df5e4e50c43b28e1be1e2f37dacb108e577cd811ee6cc",
     "hydra.typeScript.operators": "8b6da32e547cb6606e092dbf897c2b588e7f3d192d586b72680d2b45de7d721e",
     "hydra.typeScript.serde": "5ae61e7bb77abd2b94c4f24451f31b4209f3031d44160691e885399d27353716",
