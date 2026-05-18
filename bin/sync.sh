@@ -3,9 +3,16 @@
 #
 # Computes the (package, target) sync matrix needed to bootstrap from a
 # given set of hosts into a given set of targets, then regenerates each
-# entry. The matrix mirrors run-bootstrapping-demo.sh's --hosts/--targets
-# semantics, so a sync-all run with the same flags prepares dist/ for the
-# corresponding demo run.
+# entry. A sync run with flags `--hosts X --targets Y` produces the
+# dist/ state that `run-bootstrapping-demo.sh --hosts X --targets Y`
+# consumes; the flag names match so the two commands compose. Note
+# that the flag semantics are inverted between the two scripts:
+# sync.sh's --hosts names languages whose host capability is to be
+# *built* (Phase 4 emits each target's coder into host's language),
+# while bootstrap's --hosts names existing hosts to *use* as
+# generators. Likewise, sync.sh's --targets names languages to emit
+# into (an output), while bootstrap's --targets names targets to
+# generate into during the demo (an input expectation about dist/).
 #
 # Usage:
 #   bin/sync.sh                                  # all × all (every language)

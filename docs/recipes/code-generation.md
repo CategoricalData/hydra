@@ -177,6 +177,22 @@ bin/sync-packages.sh hydra-pg --targets java
 bin/sync-all.sh --no-tests
 ```
 
+> **Note on `--hosts` semantics.**
+> `bin/sync.sh` and `run-bootstrapping-demo.sh` both accept
+> `--hosts` and `--targets` as comma-separated language lists, and
+> the flag names line up so the two commands compose — but they
+> mean opposite things.
+> In `sync.sh`, `--hosts L` names a language whose host capability
+> is to be *built*: Phase 4 emits each target's coder into L's
+> language, so that after the run L can drive code generation.
+> L is an *output* of the script.
+> In `run-bootstrapping-demo.sh`, `--hosts L` names an existing
+> host to *use* as a generator during the demo. L must already be
+> built; it is an *input*.
+> The same inversion applies to `--targets`: an emission output
+> in `sync.sh`, an expectation about pre-existing dist/ state in
+> `bootstrap`.
+
 ### Phases
 
 Each `sync-packages.sh` (and therefore each `sync-all.sh`) invocation
