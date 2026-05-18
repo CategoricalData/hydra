@@ -191,6 +191,7 @@ Primary entry point — the doc most likely to answer the question by task:
 | Task | Start here |
 |------|------------|
 | Understand the kernel API | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) — **most important LLM reference**, all kernel types + ~180 primitive signatures |
+| Understand the build/sync/cache system | [docs/build-system.md](docs/build-system.md) — pipeline phases, cache layers, what invalidates what, gap to #347 |
 | Understand architecture | [docs/implementation.md](docs/implementation.md) |
 | Write Haskell / Java / Python DSL code | [docs/dsl-guide.md](docs/dsl-guide.md) / [-java.md](docs/dsl-guide-java.md) / [-python.md](docs/dsl-guide-python.md) |
 | Add a primitive | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) |
