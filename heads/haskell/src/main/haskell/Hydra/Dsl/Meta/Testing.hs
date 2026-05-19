@@ -92,13 +92,13 @@ showTermRef = TTerm $ TermVariable $ Name "hydra.show.core.term"
 showTypeRef :: TTerm (Type -> String)
 showTypeRef = TTerm $ TermVariable $ Name "hydra.show.core.type"
 
-inferTypeOfRef :: TTerm (Context -> Graph -> Term -> Either (InContext Error) ((Term, TypeScheme), Context))
+inferTypeOfRef :: TTerm (Context -> Graph -> Term -> Either Error ((Term, TypeScheme), Context))
 inferTypeOfRef = TTerm $ TermVariable $ Name "hydra.inference.inferTypeOf"
 
 alphaConvertRef :: TTerm (Name -> Name -> Term -> Term)
 alphaConvertRef = TTerm $ TermVariable $ Name "hydra.reduction.alphaConvert"
 
-betaReduceTypeRef :: TTerm (Context -> Graph -> Type -> Either (InContext Error) Type)
+betaReduceTypeRef :: TTerm (Context -> Graph -> Type -> Either Error Type)
 betaReduceTypeRef = TTerm $ TermVariable $ Name "hydra.reduction.betaReduceType"
 
 -- | Reference to the profile-aware core term validator. Used by
@@ -184,7 +184,7 @@ showInvalidPackageErrorRef = TTerm $ TermVariable $ Name "hydra.show.error.packa
 showTypeSchemeRef :: TTerm (TypeScheme -> String)
 showTypeSchemeRef = TTerm $ TermVariable $ Name "hydra.show.core.typeScheme"
 
-reduceTermRef :: TTerm (Context -> Graph -> Bool -> Term -> Either (InContext Error) Term)
+reduceTermRef :: TTerm (Context -> Graph -> Bool -> Term -> Either Error Term)
 reduceTermRef = TTerm $ TermVariable $ Name "hydra.reduction.reduceTerm"
 
 removeTypesFromTermRef :: TTerm (Term -> Term)

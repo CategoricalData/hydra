@@ -70,16 +70,6 @@ import System.IO (hSetBuffering, BufferMode(NoBuffering), stdout)
 import qualified System.FilePath as FP
 
 
--- | Adapter: 'moduleToGo' returns 'Either (InContext Error) ...' (the older
--- coder-internal error shape), but 'generateSources' expects 'Either Error ...'.
--- Strip the InContext wrapper, preserving only the underlying Error so that
--- Go fits the same generation pipeline as Java, Python, Scala, etc.
-moduleToGoAdapted :: Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String)
-moduleToGoAdapted m defs cx g =
-  case moduleToGo m defs cx g of
-    Left ic   -> Left (inContextObject ic)
-    Right out -> Right out
-
 -- | True if the module contains at least one type definition.
 moduleHasTypeDefinition :: Module -> Bool
 moduleHasTypeDefinition m = any isType (moduleDefinitions m)
@@ -576,7 +566,7 @@ main = do
         "java"       -> generateSources moduleToJava       javaLanguage       False True  False True  dir allModsFinal' mods
         "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False dir allModsFinal' mods
         "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allModsFinal' mods
-        "go"         -> generateSources moduleToGoAdapted  goLanguage         False False False False dir allModsFinal' mods
+        "go"         -> generateSources moduleToGo  goLanguage         False False False False dir allModsFinal' mods
         "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False False False False dir allModsFinal' mods
         _ | Just g <- lispGenerator ->
               generateSources g lispLanguage True False False False dir allModsFinal' mods
@@ -707,7 +697,7 @@ main = do
             "haskell"    -> generateSources moduleToHaskell    haskellLanguage    False False False False outMain allUniverse extModsForTests >> return ()
             "java"       -> generateSources moduleToJava       javaLanguage       False True  False True  outMain allUniverse extModsForTests >> return ()
             "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False outMain allUniverse extModsForTests >> return ()
-            "go"         -> generateSources moduleToGoAdapted  goLanguage         False False False False outMain allUniverse extModsForTests >> return ()
+            "go"         -> generateSources moduleToGo  goLanguage         False False False False outMain allUniverse extModsForTests >> return ()
             "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False False False False outMain allUniverse extModsForTests >> return ()
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False outMain allUniverse extModsForTests >> return ()
             _ -> return ()
@@ -737,7 +727,7 @@ main = do
             "java"       -> generateSources moduleToJava       javaLanguage       False True  False True  dir allUniverse mods
             "python"     -> generateSources moduleToPython     pythonLanguage     False True  True  False dir allUniverse mods
             "scala"      -> generateSourcesWithTransform wrapLongScalaText moduleToScala scalaLanguage False True False False dir allUniverse mods
-            "go"         -> generateSources moduleToGoAdapted  goLanguage         False False False False dir allUniverse mods
+            "go"         -> generateSources moduleToGo  goLanguage         False False False False dir allUniverse mods
             "typescript" -> generateSources moduleToTypeScript typeScriptLanguage False False False False dir allUniverse mods
             _ | Just gen <- lispGenerator -> generateSources gen lispLanguage False False False False dir allUniverse mods
             _ -> return []

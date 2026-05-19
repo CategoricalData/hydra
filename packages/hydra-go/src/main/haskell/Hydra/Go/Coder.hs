@@ -41,7 +41,7 @@ data GoState = GoState {
 }
 
 -- | Result of encoding: a value paired with updated state.
-type GoResult a = Either (InContext Error) (a, GoState)
+type GoResult a = Either Error (a, GoState)
 
 addImport :: String -> GoState -> GoState
 addImport imp st = st { goStateImports = S.insert imp (goStateImports st) }
@@ -2614,7 +2614,7 @@ encodeTypes cx g (t:ts) st = do
 
 -- | Convert a Hydra module to a map of file paths to Go source code strings.
 moduleToGo :: Module -> [Definition] -> Context -> Graph
-  -> Either (InContext Error) (M.Map FilePath String)
+  -> Either Error (M.Map FilePath String)
 moduleToGo mod_ defs cx g = do
   let (typeDefs, termDefs) = partitionDefinitions defs
       st0 = initState mod_
@@ -2715,14 +2715,10 @@ goNamespaceToFilePath (Namespace ns) =
 -- ============================================================================
 
 failGo :: Context -> String -> GoResult a
-failGo cx msg = Left $ InContext {
-  inContextObject = ErrorOther (OtherError msg),
-  inContextContext = cx }
+failGo _ msg = Left $ ErrorOther (OtherError msg)
 
 failGoSimple :: String -> GoResult a
-failGoSimple msg = Left $ InContext {
-  inContextObject = ErrorOther (OtherError msg),
-  inContextContext = Context [] [] M.empty }
+failGoSimple msg = Left $ ErrorOther (OtherError msg)
 
 -- ============================================================================
 -- Language definition
