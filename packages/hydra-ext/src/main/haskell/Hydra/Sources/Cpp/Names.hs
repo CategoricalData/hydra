@@ -164,7 +164,7 @@ encodeNameQualified = def "encodeNameQualified" $
     "boundVars">: Pairs.second $
       project CppUtils._CppEnvironment CppUtils._CppEnvironment_boundTypeVariables @@ var "env",
     "focusNs">: Pairs.first $
-      Packaging.namespacesFocus
+      Util.namespacesFocus
         (project CppUtils._CppEnvironment CppUtils._CppEnvironment_namespaces @@ var "env"),
     "qualName">: Names.qualifyName @@ var "name",
     "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
@@ -184,7 +184,7 @@ encodeName = def "encodeName" $
   doc "Encode a name with specified convention" $
   lambdas ["isQualified", "conv", "env", "name"] $ lets [
     "focusNs">: Pairs.first $
-      Packaging.namespacesFocus
+      Util.namespacesFocus
         (project CppUtils._CppEnvironment CppUtils._CppEnvironment_namespaces @@ var "env"),
     "boundVars">: Pairs.second $
       project CppUtils._CppEnvironment CppUtils._CppEnvironment_boundTypeVariables @@ var "env",

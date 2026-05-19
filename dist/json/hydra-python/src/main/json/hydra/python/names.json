@@ -146,7 +146,7 @@
                                         "function": {"project": {"field": "namespaces", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                                     "typeScheme": {
                                       "body": {
-                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}},
+                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}},
                                       "variables": []}},
                                   {
                                     "name": "focusPair",
@@ -155,7 +155,7 @@
                                         "argument": {"variable": "namespaces"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
+                                            "body": {"project": {"field": "focus", "typeName": "hydra.util.Namespaces"}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                     "typeScheme": {
                                       "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "hydra.python.syntax.DottedName"}}},
@@ -382,7 +382,7 @@
                                 "function": {"project": {"field": "namespaces", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                             "typeScheme": {
                               "body": {
-                                "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}},
+                                "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}},
                               "variables": []}},
                           {
                             "name": "focusPair",
@@ -391,7 +391,7 @@
                                 "argument": {"variable": "namespaces"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
+                                    "body": {"project": {"field": "focus", "typeName": "hydra.util.Namespaces"}},
                                     "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                             "typeScheme": {
                               "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "hydra.python.syntax.DottedName"}}},
@@ -798,7 +798,7 @@
                                         "function": {"project": {"field": "namespaces", "typeName": "hydra.python.environment.PythonEnvironment"}}}},
                                     "typeScheme": {
                                       "body": {
-                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}},
+                                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}},
                                       "variables": []}},
                                   {
                                     "name": "focusPair",
@@ -807,7 +807,7 @@
                                         "argument": {"variable": "namespaces"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}},
+                                            "body": {"project": {"field": "focus", "typeName": "hydra.util.Namespaces"}},
                                             "type": {"variable": "hydra.python.syntax.DottedName"}}}}},
                                     "typeScheme": {
                                       "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "hydra.python.syntax.DottedName"}}},

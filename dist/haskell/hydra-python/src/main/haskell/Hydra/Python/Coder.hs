@@ -246,7 +246,7 @@ eliminateUnitVar v term0 =
           go = \term -> rewrite go term
       in (go term0)
 -- | Create an initial empty metadata record with given namespaces
-emptyMetadata :: Packaging.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata
+emptyMetadata :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata
 emptyMetadata ns =
     PythonEnvironment.PythonModuleMetadata {
       PythonEnvironment.pythonModuleMetadataNamespaces = ns,
@@ -1598,7 +1598,7 @@ genericArg tparamList =
                         Syntax.powerRhs = Nothing}))}}}}}},
           Syntax.comparisonRhs = []})]])) tparamList))))
 -- | Create an initial Python environment for code generation
-initialEnvironment :: Packaging.Namespaces Syntax.DottedName -> Graph.Graph -> PythonEnvironment.PythonEnvironment
+initialEnvironment :: Util.Namespaces Syntax.DottedName -> Graph.Graph -> PythonEnvironment.PythonEnvironment
 initialEnvironment namespaces tcontext =
     PythonEnvironment.PythonEnvironment {
       PythonEnvironment.pythonEnvironmentNamespaces = namespaces,
@@ -1614,9 +1614,9 @@ initialMetadata ns =
 
       let dottedNs = PythonNames.encodeNamespace ns
           emptyNs =
-                  Packaging.Namespaces {
-                    Packaging.namespacesFocus = (ns, dottedNs),
-                    Packaging.namespacesMapping = Maps.empty}
+                  Util.Namespaces {
+                    Util.namespacesFocus = (ns, dottedNs),
+                    Util.namespacesMapping = Maps.empty}
       in PythonEnvironment.PythonModuleMetadata {
         PythonEnvironment.pythonModuleMetadataNamespaces = emptyNs,
         PythonEnvironment.pythonModuleMetadataTypeVariables = Sets.empty,
@@ -1754,16 +1754,16 @@ makeUncurriedLambda params body =
         Syntax.lambdaParametersStarEtc = Nothing},
       Syntax.lambdaBody = body})
 -- | Generate domain import statements from namespace mappings
-moduleDomainImports :: Packaging.Namespaces Syntax.DottedName -> [Syntax.ImportStatement]
+moduleDomainImports :: Util.Namespaces Syntax.DottedName -> [Syntax.ImportStatement]
 moduleDomainImports namespaces =
 
-      let names = Lists.sort (Maps.elems (Packaging.namespacesMapping namespaces))
+      let names = Lists.sort (Maps.elems (Util.namespacesMapping namespaces))
       in (Lists.map (\ns -> Syntax.ImportStatementName (Syntax.ImportName [
         Syntax.DottedAsName {
           Syntax.dottedAsNameName = ns,
           Syntax.dottedAsNameAs = Nothing}])) names)
 -- | Generate all import statements for a Python module
-moduleImports :: Packaging.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> [Syntax.Statement]
+moduleImports :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> [Syntax.Statement]
 moduleImports namespaces meta =
     Lists.map (\imp -> Utils.pySimpleStatementToPyStatement (Syntax.SimpleStatementImport imp)) (Lists.concat [
       moduleStandardImports meta,
@@ -1857,7 +1857,7 @@ pythonEnvironmentSetGraph tc env =
       PythonEnvironment.pythonEnvironmentVersion = (PythonEnvironment.pythonEnvironmentVersion env),
       PythonEnvironment.pythonEnvironmentSkipCasts = (PythonEnvironment.pythonEnvironmentSkipCasts env),
       PythonEnvironment.pythonEnvironmentInlineVariables = (PythonEnvironment.pythonEnvironmentInlineVariables env)}
-setMetaNamespaces :: Packaging.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
+setMetaNamespaces :: Util.Namespaces Syntax.DottedName -> PythonEnvironment.PythonModuleMetadata -> PythonEnvironment.PythonModuleMetadata
 setMetaNamespaces ns m =
     PythonEnvironment.PythonModuleMetadata {
       PythonEnvironment.pythonModuleMetadataNamespaces = ns,

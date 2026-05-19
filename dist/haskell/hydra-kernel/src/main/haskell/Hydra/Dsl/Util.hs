@@ -3,10 +3,12 @@
 
 module Hydra.Dsl.Util where
 import qualified Hydra.Core as Core
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+import qualified Data.Map as M
 -- | DSL injection for the camel variant of hydra.util.CaseConvention
 caseConventionCamel :: Phantoms.TTerm Util.CaseConvention
 caseConventionCamel =
@@ -63,6 +65,66 @@ comparisonLessThan =
       Core.injectionField = Core.Field {
         Core.fieldName = (Core.Name "lessThan"),
         Core.fieldTerm = Core.TermUnit}}))
+-- | DSL constructor for hydra.util.Namespaces
+namespaces :: Phantoms.TTerm (Packaging.Namespace, n) -> Phantoms.TTerm (M.Map Packaging.Namespace n) -> Phantoms.TTerm (Util.Namespaces n)
+namespaces focus mapping =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "focus"),
+          Core.fieldTerm = (Phantoms.unTTerm focus)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapping"),
+          Core.fieldTerm = (Phantoms.unTTerm mapping)}]}))
+-- | DSL accessor for the focus field of hydra.util.Namespaces
+namespacesFocus :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (Packaging.Namespace, n)
+namespacesFocus x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+        Core.projectionField = (Core.Name "focus")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the mapping field of hydra.util.Namespaces
+namespacesMapping :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (M.Map Packaging.Namespace n)
+namespacesMapping x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+        Core.projectionField = (Core.Name "mapping")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the focus field of hydra.util.Namespaces
+namespacesWithFocus :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (Packaging.Namespace, n) -> Phantoms.TTerm (Util.Namespaces n)
+namespacesWithFocus original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "focus"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapping"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+              Core.projectionField = (Core.Name "mapping")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the mapping field of hydra.util.Namespaces
+namespacesWithMapping :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (M.Map Packaging.Namespace n) -> Phantoms.TTerm (Util.Namespaces n)
+namespacesWithMapping original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "focus"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
+              Core.projectionField = (Core.Name "focus")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "mapping"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL injection for the arbitrary variant of hydra.util.Precision
 precisionArbitrary :: Phantoms.TTerm Util.Precision
 precisionArbitrary =
