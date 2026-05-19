@@ -1048,6 +1048,6 @@
               {"name": "greater", "type": {"unit": {}}},
               {"name": "greaterEqual", "type": {"unit": {}}}]},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.core"],
+  "dependencies": ["hydra.core"],
   "description": "A Go syntax model, based on the Go Language Specification retrieved on 2025-02-05 from https://go.dev/ref/spec",
   "namespace": "hydra.go.syntax"}
