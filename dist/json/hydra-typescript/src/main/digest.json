@@ -1,6 +1,8 @@
 {
   "formatVersion": 1,
   "version": 1,
+  "selfHash": "a3d0de7141bd660cba0d1176f8b407fdc641da60d7793c5558df18e90a9afd76",
+  "depHash:hydra-kernel": "151619049e4eb96e28efc60cd7b05e845f3a44faedae31fe62744e02ad644890",
   "hashes": {
     "hydra.typeScript.coder": "a3409a4ea2af8987f1b5e2db0ace0800ead1540fe2b6f118826f7edbdea59b52",
     "hydra.typeScript.language": "33ed950689561dd3df7df5e4e50c43b28e1be1e2f37dacb108e577cd811ee6cc",
