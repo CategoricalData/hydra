@@ -21,7 +21,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Paths.ns, Typing.ns, Variants.ns, Core.ns, Paths.ns, Typing.ns, Variants.ns],
+            moduleDependencies = [Core.ns, Paths.ns, Typing.ns, Variants.ns],
             moduleDescription = Just "Error types for type checking"}
   where
     definitions = [

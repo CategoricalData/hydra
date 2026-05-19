@@ -29,7 +29,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just ("A Rust syntax model, based on the Rust Reference grammar"
       ++ " (https://doc.rust-lang.org/reference/), retrieved 2025-01-29")}
   where

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generator": "v0-unstamped",
+  "generator": "4b6ec17924edbd54",
   "inputs": {
     "hydra.dsl.java.environment": { "kind": "Other", "hash": "2c713230f49e08cc13d85b2bfb93a628d8dfb14e50e1dc5d4674f65e6d0e857f" },
     "hydra.dsl.java.syntax": { "kind": "Other", "hash": "0512ff68306fd0e99866aab8967a5382f2f5a2a5dfcbd5afd5df02dcd6a1875d" },
