@@ -26,7 +26,7 @@ if [ $# -lt 1 ]; then
     echo "" >&2
     echo "Packages: hydra-kernel, hydra-haskell, hydra-java, hydra-python," >&2
     echo "          hydra-scala, hydra-lisp, hydra-pg, hydra-rdf," >&2
-    echo "          hydra-coq, hydra-javascript, hydra-ext" >&2
+    echo "          hydra-coq, hydra-typescript, hydra-ext" >&2
     exit 1
 fi
 
@@ -90,7 +90,8 @@ else
     rm -f "$OUTPUT_DIGEST_MAIN"
     echo "Step 1: Generating main Haskell modules..."
     "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" main \
-        --output "$DIST_ROOT" --include-dsls $SYNTH_FLAG
+        --output "$DIST_ROOT" --include-dsls $SYNTH_FLAG \
+        --prune-stale
     assemble_refresh_digest "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"
 fi
 
@@ -108,7 +109,8 @@ else
         rm -f "$OUTPUT_DIGEST_TEST"
         echo "Step 2: Generating test Haskell modules..."
         "$SCRIPT_DIR/transform-json-to-haskell.sh" "$PACKAGE" test \
-            --output "$DIST_ROOT"
+            --output "$DIST_ROOT" \
+            --prune-stale
         assemble_refresh_digest "$INPUT_DIGEST_TEST" "$OUT_TEST" "$OUTPUT_DIGEST_TEST"
     fi
 fi

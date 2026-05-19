@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "lib": ["ES2022"],
+    "types": ["node"],
+
+    "strict": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": true,
+
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "incremental": true,
+
+    "rootDir": "src/main/typescript",
+    "outDir": "build/main",
+
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    "resolveJsonModule": true
+  },
+  "include": ["src/main/typescript/**/*.ts"],
+  "exclude": ["build", "node_modules", "src/test"]
+}
