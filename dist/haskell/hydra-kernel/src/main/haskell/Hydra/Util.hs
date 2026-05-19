@@ -3,8 +3,10 @@
 
 module Hydra.Util where
 import qualified Hydra.Core as Core
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+import qualified Data.Map as M
 -- | A naming convention for symbols, such as camelCase or snake_case
 data CaseConvention =
   CaseConventionCamel |
@@ -27,6 +29,17 @@ _Comparison = Core.Name "hydra.util.Comparison"
 _Comparison_lessThan = Core.Name "lessThan"
 _Comparison_equalTo = Core.Name "equalTo"
 _Comparison_greaterThan = Core.Name "greaterThan"
+-- | A mapping from namespaces to values of type n, with a focus on one namespace
+data Namespaces n =
+  Namespaces {
+    -- | The namespace in focus, together with its associated value
+    namespacesFocus :: (Packaging.Namespace, n),
+    -- | A mapping of namespaces to values
+    namespacesMapping :: (M.Map Packaging.Namespace n)}
+  deriving (Eq, Ord, Read, Show)
+_Namespaces = Core.Name "hydra.util.Namespaces"
+_Namespaces_focus = Core.Name "focus"
+_Namespaces_mapping = Core.Name "mapping"
 -- | Numeric precision: arbitrary precision, or precision to a specified number of bits
 data Precision =
   -- | Arbitrary precision

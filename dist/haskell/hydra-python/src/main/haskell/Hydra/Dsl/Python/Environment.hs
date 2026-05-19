@@ -5,6 +5,7 @@ module Hydra.Dsl.Python.Environment where
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Util as Util
 import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Python.Environment as Environment
 import qualified Hydra.Python.Syntax as Syntax
@@ -73,7 +74,7 @@ pyGraphWithMetadata original newVal =
           Core.fieldName = (Core.Name "metadata"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.python.environment.PythonEnvironment
-pythonEnvironment :: Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name Syntax.Name)) -> Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonVersion -> Phantoms.TTerm Bool -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonEnvironment
+pythonEnvironment :: Phantoms.TTerm (Util.Namespaces Syntax.DottedName) -> Phantoms.TTerm ([Core.Name], (M.Map Core.Name Syntax.Name)) -> Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonVersion -> Phantoms.TTerm Bool -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironment namespaces boundTypeVariables graph nullaryBindings version skipCasts inlineVariables =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
@@ -124,7 +125,7 @@ pythonEnvironmentInlineVariables x =
         Core.projectionField = (Core.Name "inlineVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the namespaces field of hydra.python.environment.PythonEnvironment
-pythonEnvironmentNamespaces :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName)
+pythonEnvironmentNamespaces :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (Util.Namespaces Syntax.DottedName)
 pythonEnvironmentNamespaces x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -309,7 +310,7 @@ pythonEnvironmentWithInlineVariables original newVal =
           Core.fieldName = (Core.Name "inlineVariables"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL updater for the namespaces field of hydra.python.environment.PythonEnvironment
-pythonEnvironmentWithNamespaces :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm Environment.PythonEnvironment
+pythonEnvironmentWithNamespaces :: Phantoms.TTerm Environment.PythonEnvironment -> Phantoms.TTerm (Util.Namespaces Syntax.DottedName) -> Phantoms.TTerm Environment.PythonEnvironment
 pythonEnvironmentWithNamespaces original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.environment.PythonEnvironment"),
@@ -513,7 +514,7 @@ pythonEnvironmentWithVersion original newVal =
               Core.projectionField = (Core.Name "inlineVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.python.environment.PythonModuleMetadata
-pythonModuleMetadata :: Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
+pythonModuleMetadata :: Phantoms.TTerm (Util.Namespaces Syntax.DottedName) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCast usesLruCache usesTypeAlias usesDataclass usesDecimal usesEither usesEnum usesFrozenDict usesFrozenList usesFrozenSet usesGeneric usesJust usesLeft usesMaybe usesName usesNode usesNothing usesRight usesTypeVar =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
@@ -588,7 +589,7 @@ pythonModuleMetadata namespaces typeVariables usesAnnotated usesCallable usesCas
           Core.fieldName = (Core.Name "usesTypeVar"),
           Core.fieldTerm = (Phantoms.unTTerm usesTypeVar)}]}))
 -- | DSL accessor for the namespaces field of hydra.python.environment.PythonModuleMetadata
-pythonModuleMetadataNamespaces :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName)
+pythonModuleMetadataNamespaces :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (Util.Namespaces Syntax.DottedName)
 pythonModuleMetadataNamespaces x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -772,7 +773,7 @@ pythonModuleMetadataUsesTypeVar x =
         Core.projectionField = (Core.Name "usesTypeVar")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the namespaces field of hydra.python.environment.PythonModuleMetadata
-pythonModuleMetadataWithNamespaces :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (Packaging.Namespaces Syntax.DottedName) -> Phantoms.TTerm Environment.PythonModuleMetadata
+pythonModuleMetadataWithNamespaces :: Phantoms.TTerm Environment.PythonModuleMetadata -> Phantoms.TTerm (Util.Namespaces Syntax.DottedName) -> Phantoms.TTerm Environment.PythonModuleMetadata
 pythonModuleMetadataWithNamespaces original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.python.environment.PythonModuleMetadata"),
