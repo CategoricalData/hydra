@@ -114,8 +114,9 @@ doFresh opts = do
       exitFailure
     else return ()
 
-  inputDigest  <- Hydra.Digest.readDigest (optInputDigest opts)
+  inputPpd     <- Hydra.Digest.readPerPackageDigest (optInputDigest opts)
   outputDigest <- Hydra.Digest.readDigestV2 (optOutputDigest opts)
+  let inputDigest = Hydra.Digest.ppHashes inputPpd
 
   -- Compare: each input hash from the v1 input digest must appear,
   -- with the same hash, in the v2 output digest's inputs map. (We
@@ -139,6 +140,25 @@ doFresh opts = do
       putStrLn $ "  digest-check: generator stamp mismatch ("
         ++ digestGenerator outputDigest ++ " vs " ++ currentGen
         ++ "); cache miss"
+      exitFailure
+    else return ()
+
+  -- #347 transitive invalidation: the input digest's selfHash captures
+  -- "any module in this package changed", and its deps map captures
+  -- "any module in a transitive dep package changed." A mismatch on
+  -- either field means a transitive source change happened since the
+  -- last refresh, even when this package's own per-namespace hashes
+  -- happen to match.
+  if Hydra.Digest.ppSelfHash inputPpd /= digestRecordedSelfHash outputDigest
+    then do
+      putStrLn $ "  digest-check: package selfHash mismatch ("
+        ++ digestRecordedSelfHash outputDigest ++ " vs "
+        ++ Hydra.Digest.ppSelfHash inputPpd ++ "); cache miss"
+      exitFailure
+    else return ()
+  if Hydra.Digest.ppDeps inputPpd /= digestRecordedDeps outputDigest
+    then do
+      putStrLn $ "  digest-check: package deps mismatch; cache miss"
       exitFailure
     else return ()
 
@@ -169,8 +189,13 @@ doRefresh opts = do
   -- Read the input digest. May be absent if the inputs themselves
   -- aren't cached yet; that's OK, we'll just record an empty inputs
   -- map and the next 'fresh' check will miss until inputs settle.
-  inputDigest <- Hydra.Digest.readDigest (optInputDigest opts)
-  let inputsAsMap = M.fromList
+  --
+  -- We read the full PerPackageDigest (not just the v1 map) so the
+  -- per-package selfHash and depHash:<pkg> entries get copied into the
+  -- output digest's recorded-* slots for #347 transitive comparison.
+  inputPpd <- Hydra.Digest.readPerPackageDigest (optInputDigest opts)
+  let inputDigest = Hydra.Digest.ppHashes inputPpd
+      inputsAsMap = M.fromList
         [ (k, DigestEntry KindOther v)
         | (Namespace k, v) <- M.toList inputDigest
         ]
@@ -196,15 +221,18 @@ doRefresh opts = do
   gen <- generatorStamp
 
   let d = Digest
-        { digestInputs    = inputsAsMap
-        , digestOutputs   = outputs
-        , digestGenerator = gen
+        { digestInputs           = inputsAsMap
+        , digestOutputs          = outputs
+        , digestGenerator        = gen
+        , digestRecordedSelfHash = Hydra.Digest.ppSelfHash inputPpd
+        , digestRecordedDeps     = Hydra.Digest.ppDeps inputPpd
         }
 
   Hydra.Digest.writeDigestV2 (optOutputDigest opts) d
   putStrLn $ "  digest-check: wrote " ++ optOutputDigest opts
     ++ " (" ++ show (M.size inputsAsMap) ++ " inputs, "
-    ++ show (M.size outputs) ++ " outputs)"
+    ++ show (M.size outputs) ++ " outputs, "
+    ++ show (M.size (Hydra.Digest.ppDeps inputPpd)) ++ " deps)"
 
 -- | Recursively list every regular file under a directory.
 -- Skips dotfiles and dot-directories.
