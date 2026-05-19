@@ -30,13 +30,3 @@ context cx raw =
           Context.contextMessages = field_messages,
           Context.contextOther = field_other})))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
--- | Decoder for hydra.context.InContext
-inContext :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Context.InContext t0)
-inContext e cx raw =
-    Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermRecord v0 ->
-        let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "object" e fieldMap cx) (\field_object -> Eithers.bind (ExtractCore.requireField "context" context fieldMap cx) (\field_context -> Right (Context.InContext {
-          Context.inContextObject = field_object,
-          Context.inContextContext = field_context}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
