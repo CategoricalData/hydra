@@ -27,7 +27,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
       "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")}
   where

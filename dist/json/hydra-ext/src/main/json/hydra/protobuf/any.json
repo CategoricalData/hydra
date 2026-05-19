@@ -34,6 +34,6 @@
                             "value": {"literal": {"string": "Must be a valid serialized protocol buffer of the above specified type."}}}],
                         "body": {"literal": {"binary": {}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.core"],
+  "dependencies": ["hydra.core"],
   "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto",
   "namespace": "hydra.protobuf.any"}

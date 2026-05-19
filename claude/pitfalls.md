@@ -504,3 +504,43 @@ test runner reports these as failures, masking real regressions. The Python
 runner skips them via `is_disabled(tcase)`; new heads should mirror that
 behavior. The related `disabledForMinimalInference` tag is *not* a universal
 skip — it only applies to heads using the minimal inference variant.
+
+### `tryIncrementalInference` dirty set must be filtered by `targetMods`
+
+`Hydra.Generation.tryIncrementalInference` takes two `[Module]` arguments:
+`universeMods` (full type-resolution context) and `targetMods` (the
+modules the caller is authorized to write). The two are not the same —
+`update-json-main` deliberately excludes native-owned namespaces from
+`targetMods` (currently `hydra.java.*` and `hydra.python.*` per #344;
+those are produced by native generators under `bin/generate-hydra-{java,
+python}-from-{java,python}.sh`, not by the Haskell DSL).
+
+When extending the dirty-detection logic in `tryIncrementalInference`,
+intersect the final dirty set with `targetMods` before partitioning. The
+transitive-closure walk over `moduleDependencies` (added in #347) runs
+on `universeMods` for correctness — modules outside `targetMods` can be
+upstream of dirty modules — but only modules in both the closure *and*
+`targetMods` should be re-inferred and re-written. Without this filter,
+the legacy Haskell-DSL copies of native-owned packages clobber the
+native generators' canonical JSON output on disk.
+
+The `cleanMods` set (modules whose typed JSON is loaded for inference
+context) should still span `universeMods \\ dirtyMods` — wider than
+`targetMods` — so cross-package type references resolve.
+
+### Lazy `readFile` keeps the handle open across a subsequent `writeFile`
+
+Standard Haskell pitfall, but it specifically bit `readPerPackageDigest`
+during #347: `readFile` returns a lazy String backed by an open handle,
+which isn't closed until the string is fully consumed. If the caller
+then immediately calls `writeFile` on the same path, the write fails
+with "resource busy (file is locked)".
+
+Fix: force evaluation of the read content before returning, e.g.
+`length s \`seq\` return (parse s)`. The `parse` call alone is not
+enough — laziness in the parser means the underlying string may not
+be fully consumed even after parsing nominally completes.
+
+Affects any `readDigest`/`readPerPackageDigest`/`readDigestV2`-style
+function in `Hydra.Digest` that might be followed by `writeFile` to
+the same path during a single `update-json-main` run.

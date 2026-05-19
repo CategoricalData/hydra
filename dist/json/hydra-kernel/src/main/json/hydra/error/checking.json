@@ -383,14 +383,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the untyped variable"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}}],
-  "dependencies": [
-    "hydra.core",
-    "hydra.paths",
-    "hydra.typing",
-    "hydra.variants",
-    "hydra.core",
-    "hydra.paths",
-    "hydra.typing",
-    "hydra.variants"],
+  "dependencies": ["hydra.core", "hydra.paths", "hydra.typing", "hydra.variants"],
   "description": "Error types for type checking",
   "namespace": "hydra.error.checking"}
