@@ -1468,6 +1468,6 @@
                             "value": {"literal": {"string": "Retrieval metadata of key used for encryption of footer, and (possibly) columns"}}}],
                         "body": {"maybe": {"literal": {"binary": {}}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.core"],
+  "dependencies": ["hydra.core"],
   "description": "A model for the Parquet format. Based on the Thrift-based specification at:\n  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift",
   "namespace": "hydra.parquet.format"}
