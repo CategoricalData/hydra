@@ -8,6 +8,6 @@
     "hydra.lisp.coder": "8c221addcaea55efd1f377c1fd5b9d36435e4168e7fbe57f388c1fa2ff59c5d2",
     "hydra.lisp.language": "21d069b16ab367b1ff2b152414041cd6921a6a32fd83de570de77b254b046444",
     "hydra.lisp.serde": "712986fba2b7f61e5281055d3057b77ce426b4b079f3b2e4f80069bd647576d5",
-    "hydra.lisp.syntax": "7c9b4c505164f2582894dddef8dc3839a7fbe1a254ec7d3ebe7604d489ef7dba"
+    "hydra.lisp.syntax": "1d7ef92ae8e5ea307ba28945f3823f664f91c9c6a74c6d44ff491c53e4ba7c36"
   }
 }

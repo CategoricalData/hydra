@@ -19,7 +19,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just "Phantom types for use with Hydra DSLs"}
   where
     definitions = [

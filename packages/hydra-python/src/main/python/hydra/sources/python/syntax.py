@@ -18,7 +18,7 @@ import hydra.dsl.types as T
 
 
 NS = Namespace("hydra.python.syntax")
-DEPENDENCIES = [Namespace("hydra.core"), Namespace("hydra.core")]
+DEPENDENCIES = [Namespace("hydra.core")]
 DESCRIPTION = (
     "A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
     "  https://docs.python.org/3.14/reference/grammar.html"

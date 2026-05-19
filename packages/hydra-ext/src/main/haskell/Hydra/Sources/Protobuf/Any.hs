@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto"}
   where
     definitions = [any_]

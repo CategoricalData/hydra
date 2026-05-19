@@ -414,6 +414,6 @@
       "type": {
         "name": "hydra.kusto.kql.UnionKind",
         "typeScheme": {"body": {"union": [{"name": "inner", "type": {"unit": {}}}, {"name": "outer", "type": {"unit": {}}}]}, "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.core"],
+  "dependencies": ["hydra.core"],
   "description": "A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.",
   "namespace": "hydra.kusto.kql"}
