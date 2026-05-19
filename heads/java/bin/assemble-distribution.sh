@@ -63,6 +63,11 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
+# Per-target generator stamp: invalidates output digests when the
+# Java-emit transform's sources change without the per-package JSON
+# inputs themselves changing. See assemble-common.sh and #347.
+export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp java)
+
 # Step 0 (hydra-kernel only): drop hand-written runtime files BEFORE
 # generation, recording them in a keep-paths manifest so #357 prune in
 # bootstrap-from-json --prune-stale below won't remove them. Was Step 3
