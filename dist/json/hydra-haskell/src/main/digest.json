@@ -1,14 +1,14 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "6434d4a6eab850562b0d247b30b7243f841bdcd1831a246f5a86e806695eaf1d",
-  "depHash:hydra-kernel": "932435460c02fd2f215eecb920f4a34a84db6a52806405bb1f8960f306acc383",
+  "selfHash": "ba305d63b698f5a47fdf3fd359bc099ba26a0398de79c5a6045d86d71150b0f9",
+  "depHash:hydra-kernel": "caea45e45fe8930dff5e1b20787911e93902453e36ae80282590d1550178c579",
   "hashes": {
     "hydra.dsl.haskell.environment": "d54db8aa64c0bb6c42682ed3d275023f82db2e98782dd734292c98a0783b83fa",
     "hydra.dsl.haskell.syntax": "129d4d1b3f780e464e468b618ab595a43a4b3e0da63d0f1b8b8face65523881a",
     "hydra.haskell.coder": "901c192b938d66dd9325b86e6ff3b90907d8f0291962bdff94b5610dda440070",
     "hydra.haskell.environment": "75ff0a28ef41a6048ba5ac53c2721dcdd3dba6bb190dc7e9d96155d16f33acbe",
-    "hydra.haskell.language": "731be7825087fb72bd6f5bd35b13e839eadfb36b3c7bed187312224a75721322",
+    "hydra.haskell.language": "baa1be85a1baaa22383e87e7ae05d711ea3a111767b5f6164b745daef5b21b01",
     "hydra.haskell.operators": "a0cb4db2c3d0ef490ec7d50c08d058e0b2395f67fae3c3c6ea036f931ad1b0b3",
     "hydra.haskell.serde": "4cca85d9efb8f23d99f3ac1e328bce614e21d2d1d937313968d7cb46a542c334",
     "hydra.haskell.syntax": "25bde4040f43b2d9b46fcb766bb33e923a38beeef5304bd8db9a84ee19c0a282",
