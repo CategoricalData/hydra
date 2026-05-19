@@ -7,6 +7,7 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
+import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 
 
 ns :: Namespace
@@ -19,7 +20,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Core.ns],
+            moduleDependencies = [Core.ns, Packaging.ns],
             moduleDescription = Just "General-purpose utility types used across Hydra."}
   where
     -- Note: either_ and pair are NOT included here because they correspond to built-in
@@ -29,6 +30,7 @@ module_ = Module {
     definitions = [
       caseConvention,
       comparison,
+      namespaces,
       precision]
 
 caseConvention :: Binding
@@ -43,6 +45,17 @@ comparison = define "Comparison" $
     "lessThan",
     "equalTo",
     "greaterThan"]
+
+namespaces :: Binding
+namespaces = define "Namespaces" $
+  doc "A mapping from namespaces to values of type n, with a focus on one namespace" $
+  T.forAll "n" $ T.record [
+    "focus">:
+      doc "The namespace in focus, together with its associated value" $
+      T.pair Packaging.namespace "n",
+    "mapping">:
+      doc "A mapping of namespaces to values" $
+      T.map Packaging.namespace "n"]
 
 either_ :: Binding
 either_ = define "Either" $

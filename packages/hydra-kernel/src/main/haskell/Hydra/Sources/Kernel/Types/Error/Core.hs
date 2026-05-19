@@ -20,7 +20,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Paths.ns, Core.ns, Variants.ns, Paths.ns, Core.ns, Variants.ns],
+            moduleDependencies = [Paths.ns, Core.ns, Variants.ns],
             moduleDescription = Just "Error types for core type and term validation"}
   where
     definitions = [
