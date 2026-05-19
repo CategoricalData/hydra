@@ -24,8 +24,8 @@ set -euo pipefail
 if [ $# -lt 2 ]; then
     echo "Usage: $0 <target> <package> [main|test] [OPTIONS]" >&2
     echo "" >&2
-    echo "Targets:  haskell, java, python, scala, go, clojure, scheme," >&2
-    echo "          common-lisp, emacs-lisp" >&2
+    echo "Targets:  haskell, java, python, scala, go, typescript, clojure," >&2
+    echo "          scheme, common-lisp, emacs-lisp" >&2
     echo "Packages: hydra-kernel, hydra-haskell, hydra-java, hydra-python," >&2
     echo "          hydra-scala, hydra-go, hydra-lisp, hydra-pg, hydra-rdf" >&2
     echo "" >&2
@@ -61,7 +61,7 @@ stack build hydra:exe:bootstrap-from-json >/dev/null 2>&1
 # Choose load flags based on which package we're scoping to:
 #   - Baseline (hydra-kernel/hydra-haskell): always loaded.
 #   - Coder packages (hydra-java/python/scala/lisp): loaded via --include-coders.
-#   - Other packages (hydra-pg/hydra-rdf/hydra-coq/hydra-javascript/hydra-ext/
+#   - Other packages (hydra-pg/hydra-rdf/hydra-coq/hydra-typescript/hydra-ext/
 #     hydra-wasm): auto-loaded by bootstrap-from-json based on --package.
 # The --package <pkg> flag narrows modsToGenerate to that package and (for
 # non-baseline non-coder packages) auto-loads its main+DSL modules.
@@ -72,7 +72,7 @@ case "$PACKAGE" in
     hydra-java|hydra-python|hydra-scala|hydra-lisp|hydra-go)
         LOAD_FLAGS="--include-coders"
         ;;
-    hydra-pg|hydra-rdf|hydra-coq|hydra-javascript|hydra-ext|hydra-wasm|hydra-bench)
+    hydra-pg|hydra-rdf|hydra-coq|hydra-typescript|hydra-ext|hydra-wasm|hydra-bench)
         # --include-coders is also needed because ext modules reference
         # coder-package types. The package itself is auto-loaded via --package.
         LOAD_FLAGS="--include-coders"

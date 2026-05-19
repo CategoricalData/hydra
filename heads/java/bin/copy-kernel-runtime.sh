@@ -12,7 +12,11 @@
 # subtree exists; they are explicitly NOT copied here.
 #
 # Usage:
-#   copy-kernel-runtime.sh [--dist-root <dir>]
+#   copy-kernel-runtime.sh [--dist-root <dir>] [--manifest <file>]
+#
+# --manifest <file> appends '<OUT_DIR>\t<relPath>' lines (tab-separated) for
+# every file copied. Consumed by bootstrap-from-json --keep-paths-from to
+# protect hand-copied runtime files from --prune-stale (#357).
 
 set -euo pipefail
 
@@ -21,10 +25,12 @@ HYDRA_JAVA_HEAD="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_ROOT_DIR="$( cd "$HYDRA_JAVA_HEAD/../.." && pwd )"
 
 DIST_ROOT="$HYDRA_ROOT_DIR/dist/java"
+MANIFEST_FILE=""
 
 while [ $# -gt 0 ]; do
     case "$1" in
         --dist-root) DIST_ROOT="$2"; shift 2 ;;
+        --manifest)  MANIFEST_FILE="$2"; shift 2 ;;
         *) shift ;;
     esac
 done
@@ -87,5 +93,17 @@ done
 rm -f "$OUT_DIR/hydra/tools/AntlrReaderBase.java"
 rm -f "$OUT_DIR/hydra/json/JsonIoCoder.java"
 rm -f "$OUT_DIR/hydra/json/JsonSerde.java"
+
+if [ -n "$MANIFEST_FILE" ]; then
+    # Emit '<OUT_DIR>\t<relPath>' for every regular file currently under
+    # OUT_DIR. Includes generated files too — harmless, since pruning only
+    # deletes files NOT in the merged keep-set, and the generated files are
+    # already in the bootstrap-from-json just-written set. Emitting them
+    # here makes the manifest self-contained in case copy-kernel-runtime is
+    # ever run independently of generation.
+    ( cd "$OUT_DIR" && find . -type f -print | sed 's|^\./||' \
+        | awk -v dir="$OUT_DIR" '{ printf "%s\t%s\n", dir, $0 }' \
+        >> "$MANIFEST_FILE" )
+fi
 
 echo "  Copied hand-written Java runtime into $OUT_DIR/hydra/"

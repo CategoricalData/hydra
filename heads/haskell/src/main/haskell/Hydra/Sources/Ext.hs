@@ -39,7 +39,7 @@ import qualified Hydra.Sources.Coq.Manifest as CoqManifest
 import qualified Hydra.Sources.Ext.Manifest as ExtManifest
 import qualified Hydra.Sources.Go.Manifest as GoManifest
 import qualified Hydra.Sources.Java.Manifest as JavaManifest
-import qualified Hydra.Sources.JavaScript.Manifest as JavaScriptManifest
+import qualified Hydra.Sources.TypeScript.Manifest as TypeScriptManifest
 import qualified Hydra.Sources.Lisp.Manifest as LispManifest
 import qualified Hydra.Sources.Pg.Manifest as PgManifest
 import qualified Hydra.Sources.Python.Manifest as PythonManifest
@@ -100,8 +100,8 @@ hydraGoModules = GoManifest.mainModules
 hydraJavaModules :: [Module]
 hydraJavaModules = JavaManifest.mainModules
 
-hydraJavaScriptModules :: [Module]
-hydraJavaScriptModules = JavaScriptManifest.mainModules
+hydraTypeScriptModules :: [Module]
+hydraTypeScriptModules = TypeScriptManifest.mainModules
 
 hydraLispModules :: [Module]
 hydraLispModules = LispManifest.mainModules
@@ -145,8 +145,8 @@ hydraGoDslTypeModules = GoManifest.dslTypeModules
 hydraJavaDslTypeModules :: [Module]
 hydraJavaDslTypeModules = JavaManifest.dslTypeModules
 
-hydraJavaScriptDslTypeModules :: [Module]
-hydraJavaScriptDslTypeModules = JavaScriptManifest.dslTypeModules
+hydraTypeScriptDslTypeModules :: [Module]
+hydraTypeScriptDslTypeModules = TypeScriptManifest.dslTypeModules
 
 hydraLispDslTypeModules :: [Module]
 hydraLispDslTypeModules = LispManifest.dslTypeModules
@@ -179,7 +179,7 @@ allDslTypeModules =
   ++ hydraExtPackageDslTypeModules
   ++ hydraGoDslTypeModules
   ++ hydraJavaDslTypeModules
-  ++ hydraJavaScriptDslTypeModules
+  ++ hydraTypeScriptDslTypeModules
   ++ hydraLispDslTypeModules
   ++ hydraPgDslTypeModules
   ++ hydraPythonDslTypeModules
@@ -270,7 +270,7 @@ hydraExtModules =
   ++ hydraExtPackageModules
   ++ hydraGoModules
   ++ hydraJavaModules
-  ++ hydraJavaScriptModules
+  ++ hydraTypeScriptModules
   ++ hydraLispModules
   ++ hydraPgModules
   ++ hydraPythonModules

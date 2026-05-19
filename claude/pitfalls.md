@@ -58,7 +58,7 @@ shell's `ulimit` blocks.
 by default re-run the per-package `assemble-distribution.sh` for any other
 package. Every coder package is non-baseline: `hydra-java`, `hydra-python`,
 `hydra-scala`, `hydra-lisp`, `hydra-go`, `hydra-pg`, `hydra-rdf`, `hydra-coq`,
-`hydra-javascript`, `hydra-wasm`, `hydra-ext`, `hydra-bench`.
+`hydra-typescript`, `hydra-wasm`, `hydra-ext`, `hydra-bench`.
 
 Note that `hydra-bench` is also opt-in for the JSON regen — it requires
 `--include-bench` on `update-json-main` and `update-json-manifest` (set by
@@ -368,3 +368,139 @@ exports many `_TypeFoo` / `_ExpressionBar` constants — GHC reports
 "Ambiguous occurrence." Affected constants include `_FunctionType`,
 `_LambdaType`, and (after renames in #297) `_Type_function`. Fix: drop the
 local alias and qualify references with `Scala.` at use sites.
+
+### Stage 7 freshness filter is defeated by per-package assemblers
+
+`bootstrap-from-json`'s Stage 7 reads the per-target digest at
+`<outBase>/<pkg>/src/<sourceSet>/digest.json` to skip re-inferring fresh
+modules. But every per-package `assemble-distribution.sh` runs
+`rm -f "$OUTPUT_DIGEST_MAIN"` (and the test analog) immediately before
+invoking bootstrap-from-json, so Stage 7 always sees an empty digest and
+keeps all modules. Stage 7 only delivers its speedup to direct callers like
+`heads/haskell/bin/sync-haskell.sh`. If you're trying to make a per-package
+sync faster by leaning on Stage 7, you're chasing a ghost — fix the digest
+ordering or the upstream cache instead.
+
+### `dist/` is mixed generated + hand-written content
+
+Three categories of files coexist under `dist/<lang>/<pkg>/src/{main,test}/<lang>/`:
+
+1. Generator output from `bootstrap-from-json` (most files).
+2. Hand-written runtime support copied in by `copy-kernel-runtime.sh`
+   (Java + Python only): `hydra/Adapters.java`, `hydra/util/...`,
+   `hydra/dsl/...`, etc.
+3. Hand-written skip-emit stubs whose namespace appears in
+   `testSkipEmitNamespaces` (currently `hydra.test.testEnv`):
+   `dist/haskell/.../Hydra/Test/TestEnv.hs` and per-Lisp-dialect
+   `test_env.<ext>`. The generator deliberately does NOT write these;
+   they're committed in git as hand-written bridge modules that the
+   generated test_graph imports.
+
+Any pass that walks the dist tree (prune, manifest, copy) has to keep all
+three categories alive. The mechanism for protecting (2) is the
+`--keep-paths-from` manifest emitted by `copy-kernel-runtime.sh --manifest`;
+the mechanism for (3) is to include skip-emit namespaces in the keep set
+(via the pre-filter `testModsForKeep` in bootstrap-from-json).
+
+### `moduleFilePaths` is target-specific; Java is not 1-to-1
+
+`Hydra.TargetFilePaths.moduleFilePaths target m` returns the paths a coder
+would write for module `m`. Most targets (haskell, python, scala, go, all
+lisp dialects) emit one file per namespace via `Names.namespaceToFilePath`
+with a target-specific case convention. **Java is the outlier:** it emits
+one file per top-level definition that passes `Predicates.isNominalType`
+(filtering out type-only aliases) plus an `<Module>Elements` interface file
+when the module has any term defs. Code that needs the path set for a
+module — prune, manifest generation, future cache work — has to either call
+`moduleFilePaths` or replicate this filter. Don't assume one path per
+module.
+### Lazy primitives: detect head through TypeApplication erasure
+
+When adding a new target-language coder, you'll need to wrap the lazy positions
+of `ifElse`/`cases`/`maybe`/`fromMaybe`/`fromLeft`/`fromRight`/`findWithDefault`
+in nullary thunks at call sites (see [Lazy evaluation and thunking](../docs/recipes/new-implementation.md#lazy-evaluation-and-thunking)).
+To do that, your coder needs to identify the primitive being called by walking
+the application spine and asking "is the head a `Term_variable` with one of these names?"
+
+The catch: polymorphic primitives are wrapped in `Term_typeApplication` (and
+sometimes `Term_annotated`) layers in the kernel JSON. A naive `Term_variable`-only
+matcher will skip nearly every kernel call to `ifElse` (which is `forall a. Bool ->
+a -> a -> a`) because the head is actually `TypeApp(Var "ifElse", T)`, not
+`Var "ifElse"`. Your head-finder must erase those wrappers. Symptom if you forget:
+debug markers show `name=NONAME argc=3` for every ifElse call and zero LAZY wrappings
+get emitted, even though detection "works" for monomorphic functions like
+`hydra.inference.inferTypeOfTerm`.
+
+### Porting `hydra.lib.math.range` to a new host: it's inclusive
+
+Haskell's `[a..b]` is **inclusive on both ends** and Hydra's `math.range`
+follows that: `range 1 3 = [1, 2, 3]`, `range 1 1 = [1]`, `range 2 1 = []`.
+The natural JS/Python loop `for i in a..<b` produces the exclusive variant,
+which silently breaks anything that depends on it. The biggest surprise: the
+kernel's `etaExpandTypedTerm` uses `range(1)(needed)` to generate fresh
+variable names — an exclusive impl makes eta expansion a no-op for partial
+applications, which in turn fails ~25 eta-expansion tests and any downstream
+reduction that depends on canonical forms. Always derive the loop bound from
+`<= b`, not `< b`.
+
+### Porting CanonMap/CanonSet: `toList` must sort by original key, not by canonical string
+
+The CanonMap/CanonSet trick stores entries keyed by a string canonicalization
+(JSON-stringified). When implementing `toList`/`keys`/`values`, the temptation
+is to sort entries by their canonical string for stability. This is wrong for
+numeric keys: lex-sorting `"n:10"` and `"n:2"` puts `10` before `2`. Sort by
+the original key (numeric for numbers, lex for strings) and only fall back to
+the canonical string for object/structural keys. Symptom: topological sort
+output and any `Map<Int, _>` test fixture comes out in lex order instead of
+numeric order; downstream algorithms (SCC, eta expansion) that consume `keys`
+also produce subtly wrong output.
+
+### Primitive type schemes must carry class constraints
+
+The kernel inference reads `typeScheme.constraints :: Maybe (Map TypeVariable
+ConstraintSet)` for each primitive and threads those constraints through
+unification. Built-in primitives like `hydra.lib.maps.lookup` carry
+`(ordering k) =>`; `hydra.lib.lists.sort` carries `(ordering a) =>`;
+`hydra.lib.equality.equal` carries `(equality a) =>`. Omit them (`constraints:
+{tag: "nothing"}`) and inference still *runs*, but emits the wrong scheme
+(no constraints) for downstream uses — tests like `(forall t0. (ordering t0)
+=> ...)` fail because the actual scheme is missing the constraint clause. See
+`heads/java/src/main/java/hydra/dsl/Types.java` (`ORD`, `EQ`, `NONE`,
+`constrained1..4`, `schemeOrd`, `schemeEq`) for the canonical per-primitive
+constraint assignments to mirror.
+
+### Kernel-loaded TypeSchemes encode polymorphism in the body, not the variables list
+
+When loading TypeSchemes from `dist/json/hydra-kernel/`, polymorphic types
+like `hydra.coders.Coder` arrive as `{variables: [], body: annotated(forall t0.
+forall t1. record {...})}`. Inference reads `ts.variables` to know how many
+type vars to instantiate, so a `variables: []` scheme is treated as
+monomorphic and downstream nominal-type lookups fail with confusing errors.
+At load time, walk `ts.body` through `annotated`/`forall` layers and promote
+any forall-bound parameters up to `ts.variables`. Python does this via
+`f_type_to_type_scheme`; TypeScript via `testEnv.collectForallVars`. Without
+this step you'll see `<<inference error>>` for any term that case-matches on
+a kernel union type (CoderDirection, etc.).
+
+### Coder `encodeLiteral` must cover all six Literal arms
+
+A `Literal` has six arms: `binary`, `boolean`, `decimal`, `float`, `integer`,
+`string`. When writing a new target-language coder's `encodeLiteral`, you
+must handle all of them (or at minimum, set the default to something that
+crashes loudly rather than emitting a sentinel like `null` or `0`). The
+binary and decimal arms are the easy ones to forget — most test fixtures use
+strings/ints/floats. Symptom: source emission silently drops binary content
+or decimal precision, and the runtime sees `value: null` (or `0`) instead of
+the actual literal. Round-trip tests like `binaryToString (binary "hello")`
+fail with empty output. The TypeScript coder shipped this bug initially —
+see commit `8a91da78e` for the fix template.
+
+### Test runner should honor the `disabled` tag
+
+The Hydra test fixtures include several inference tests intentionally tagged
+`{value: "disabled"}` because they exercise unresolved upstream limitations
+(let-polymorphism over-generalization, Y-combinator typing, etc.). A naive
+test runner reports these as failures, masking real regressions. The Python
+runner skips them via `is_disabled(tcase)`; new heads should mirror that
+behavior. The related `disabledForMinimalInference` tag is *not* a universal
+skip — it only applies to heads using the minimal inference variant.
