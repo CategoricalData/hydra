@@ -35,18 +35,18 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 -- | Add namespaces from a set of names to existing namespaces
-addNamespacesToNamespaces :: Packaging.Namespaces Syntax.ModuleName -> S.Set Core.Name -> Packaging.Namespaces Syntax.ModuleName
+addNamespacesToNamespaces :: Util.Namespaces Syntax.ModuleName -> S.Set Core.Name -> Util.Namespaces Syntax.ModuleName
 addNamespacesToNamespaces ns0 names =
 
       let newNamespaces = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
           toModuleName =
                   \namespace -> Syntax.ModuleName (Formatting.capitalize (Maybes.fromMaybe (Packaging.unNamespace namespace) (Lists.maybeLast (Strings.splitOn "." (Packaging.unNamespace namespace)))))
           newMappings = Maps.fromList (Lists.map (\ns_ -> (ns_, (toModuleName ns_))) (Sets.toList newNamespaces))
-      in Packaging.Namespaces {
-        Packaging.namespacesFocus = (Packaging.namespacesFocus ns0),
-        Packaging.namespacesMapping = (Maps.union (Packaging.namespacesMapping ns0) newMappings)}
+      in Util.Namespaces {
+        Util.namespacesFocus = (Util.namespacesFocus ns0),
+        Util.namespacesMapping = (Maps.union (Util.namespacesMapping ns0) newMappings)}
 -- | Build namespaces for a test group including encoded term references
-buildNamespacesForTestGroup :: Packaging.Module -> Testing.TestGroup -> Graph.Graph -> Either String (Packaging.Namespaces Syntax.ModuleName)
+buildNamespacesForTestGroup :: Packaging.Module -> Testing.TestGroup -> Graph.Graph -> Either String (Util.Namespaces Syntax.ModuleName)
 buildNamespacesForTestGroup mod tgroup graph_ =
 
       let testCases_ = collectTestCases tgroup
@@ -69,7 +69,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
         in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))
 -- | Build the complete test module for Haskell HSpec
-buildTestModule :: Packaging.Module -> Testing.TestGroup -> String -> Packaging.Namespaces Syntax.ModuleName -> String
+buildTestModule :: Packaging.Module -> Testing.TestGroup -> String -> Util.Namespaces Syntax.ModuleName -> String
 buildTestModule testModule testGroup testBody namespaces =
 
       let ns_ = Packaging.moduleNamespace testModule
@@ -127,10 +127,10 @@ extractEncodedTermVariableNames graf term =
 extractTestTerms :: t0 -> [t1]
 extractTestTerms tcm = []
 -- | Find necessary imports for Haskell based on referenced names
-findHaskellImports :: Packaging.Namespaces Syntax.ModuleName -> t0 -> [String]
+findHaskellImports :: Util.Namespaces Syntax.ModuleName -> t0 -> [String]
 findHaskellImports namespaces names_ =
 
-      let mapping_ = Packaging.namespacesMapping namespaces
+      let mapping_ = Util.namespacesMapping namespaces
           filtered =
                   Maps.filterWithKey (\ns_ -> \_v -> Logic.not (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead (Strings.splitOn "hydra.test." (Packaging.unNamespace ns_)))) "")) mapping_
       in (Lists.map (\entry -> Strings.cat [
@@ -167,7 +167,7 @@ generateTestCase depth tcm =
           expected_,
           ")"])])
 -- | Generate a complete Haskell test file
-generateTestFile :: Packaging.Module -> Testing.TestGroup -> Packaging.Namespaces Syntax.ModuleName -> Either t0 (String, String)
+generateTestFile :: Packaging.Module -> Testing.TestGroup -> Util.Namespaces Syntax.ModuleName -> Either t0 (String, String)
 generateTestFile testModule testGroup namespaces =
     Eithers.map (\testBody ->
       let testModuleContent = buildTestModule testModule testGroup testBody namespaces
