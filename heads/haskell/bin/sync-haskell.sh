@@ -126,16 +126,29 @@ step 4 $TOTAL_STEPS "Generating Haskell from JSON"
 echo ""
 
 # Warm-cache short-circuit for bootstrap-from-json: skip when the JSON
-# inputs under dist/json/ AND the bootstrap-from-json source are unchanged
-# since the last successful run. Step 4 is pure given those inputs (parses
-# JSON modules, routes per package, writes Haskell sources), so a cache
-# hit guarantees the Haskell output on disk is identical to what would
-# be regenerated.
+# inputs under dist/json/ AND every hand-written source bootstrap-from-json
+# can transitively use to produce its output are unchanged since the last
+# successful run. Step 4 is pure given those inputs (parses JSON modules,
+# routes per package, writes Haskell sources), so a cache hit guarantees
+# the on-disk output is identical to what would be regenerated.
+#
+# Sources hashed:
+#   * dist/json/**/*.json — the module inputs
+#   * heads/haskell/src/exec/bootstrap-from-json/** — the driver
+#   * heads/haskell/src/main/haskell/**.hs — hand-written runtime,
+#     including Hydra.Generation, Hydra.Haskell.Generation,
+#     Hydra.PackageRouting, etc. Editing any of these can change what
+#     the binary emits without changing JSON inputs or the driver source;
+#     omitting them left dist/haskell/ stale until a forced rebuild.
+#     Matches the scope of bin/lib/check-phase1-fresh.py for consistency.
+#     The right end-state is a per-transform Merkle hash of the exec's
+#     transitive import closure — see #347.
 BFJ_CACHE="$HYDRA_HASKELL_DIR/.stack-work/bootstrap-from-json-cache.txt"
 BFJ_HASH=$(
     {
         find "$HYDRA_ROOT_DIR/dist/json" -type f -name '*.json' 2>/dev/null
         find "$HYDRA_ROOT_DIR/heads/haskell/src/exec/bootstrap-from-json" -type f 2>/dev/null
+        find "$HYDRA_ROOT_DIR/heads/haskell/src/main/haskell" -type f -name '*.hs' 2>/dev/null
     } | LC_ALL=C sort | xargs shasum -a 256 2>/dev/null | shasum -a 256 | awk '{print $1}'
 )
 
