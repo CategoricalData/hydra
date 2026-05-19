@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "generator": "f64771030353ac6d",
+  "generator": "e74231349eb76dcf",
   "selfHash": "57ba87fdf24728f08bd9175567eed0a333e06ac9402819aa00ece578a96b6587",
-  "depHash:hydra-kernel": "932435460c02fd2f215eecb920f4a34a84db6a52806405bb1f8960f306acc383",
+  "depHash:hydra-kernel": "1efed46b49cf35f3aff6d5bdc2b65bf7f60753c90d59989b69180922b16685b7",
   "inputs": {
     "hydra.dsl.scala.syntax": { "kind": "Other", "hash": "8ae2a2791edbb5b50fc5e7758e6f74a1f5e2d6e898e918d531b1057179877136" },
     "hydra.scala.coder": { "kind": "Other", "hash": "3724a37925f93472f9816c2c640150823f845a7424405d00456c385f2f15d3ef" },
