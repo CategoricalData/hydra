@@ -257,12 +257,6 @@
               "body": {
                 "record": [
                   {
-                    "name": "eliminationVariants",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All supported elimination variants"}}}],
-                        "body": {"set": {"variable": "hydra.variants.EliminationVariant"}}}}},
-                  {
                     "name": "literalVariants",
                     "type": {
                       "annotated": {
@@ -274,12 +268,6 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "All supported float types"}}}],
                         "body": {"set": {"variable": "hydra.core.FloatType"}}}}},
-                  {
-                    "name": "functionVariants",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "All supported function variants"}}}],
-                        "body": {"set": {"variable": "hydra.variants.FunctionVariant"}}}}},
                   {
                     "name": "integerTypes",
                     "type": {

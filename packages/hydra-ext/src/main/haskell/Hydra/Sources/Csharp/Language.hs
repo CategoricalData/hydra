@@ -90,10 +90,6 @@ module_ = Module {
 csharpLanguage :: TTermDefinition Language
 csharpLanguage = define "csharpLanguage" $
   doc "Language constraints for C Sharp (C#)" $ lets [
-  "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
-    Variants.eliminationVariantRecord,
-    Variants.eliminationVariantUnion,
-    Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBinary, -- byte[]
     Variants.literalVariantBoolean, -- bool
@@ -105,9 +101,6 @@ csharpLanguage = define "csharpLanguage" $
     -- Note: the other C# floating point type, decimal, has no equivalent in Hydra
     Core.floatTypeFloat32,
     Core.floatTypeFloat64],
-  "functionVariants">: Sets.fromList $ list [
-    Variants.functionVariantElimination,
-    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     -- See https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/integral-numeric-types
     -- Note: the other two C# integral types, nint and nuint, have no equivalents in Hydra
@@ -161,10 +154,8 @@ csharpLanguage = define "csharpLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.csharp")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")
