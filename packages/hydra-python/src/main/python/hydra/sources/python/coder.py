@@ -27,6 +27,7 @@ import hydra.dsl.meta.core as MetaCore
 import hydra.dsl.meta.lib.literals as Literals
 import hydra.dsl.meta.lib.math as Math
 import hydra.dsl.packaging as Pkg
+import hydra.dsl.util as Util  # #369: Namespaces moved here from Pkg
 
 from hydra.sources.python import _kernel_refs as _kref
 from hydra.sources.python import _python_helpers as PyDsl  # noqa: F401
@@ -6621,7 +6622,7 @@ def _initial_metadata():
                 ("dottedNs", _kref.names_encode_namespace(var("ns"))),
                 (
                     "emptyNs",
-                    Pkg.namespaces(
+                    Util.namespaces(
                         pair(var("ns"), var("dottedNs")),
                         Maps.empty(),
                     ),
@@ -7132,7 +7133,7 @@ def _module_domain_imports():
                 (
                     "names",
                     Lists.sort(
-                        Maps.elems(Pkg.namespaces_mapping(var("namespaces")))
+                        Maps.elems(Util.namespaces_mapping(var("namespaces")))
                     ),
                 ),
             ],
