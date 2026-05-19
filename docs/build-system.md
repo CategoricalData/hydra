@@ -90,9 +90,9 @@ The caches form a hierarchy: a hit at a coarser layer skips a finer one.
 | Cache | Location | Granularity | What it gates |
 |-------|----------|-------------|---------------|
 | Phase 1 input cache | `heads/haskell/.stack-work/phase1-input-cache.txt` | Universe-wide | Skips all of Phase 1 (no stack startup, no JSON regen) |
-| Universe digest | `dist/json/digest.main.json` | Per-namespace + `encoderId` | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
+| Universe digest | `dist/json/digest.main.json` | Per-namespace | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
 | Per-package input digest | `dist/json/<pkg>/src/<set>/digest.json` | Per-namespace, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
-| Per-package output digest | `dist/<lang>/<pkg>/src/<set>/digest.json` | Per-namespace, per-target | Compared against input digest to skip Layer 1 + Layer 2 for one package |
+| Per-package output digest | `dist/<lang>/<pkg>/src/<set>/digest.json` | Per-namespace + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
 | Step caches | `heads/haskell/.stack-work/{verify-json-kernel,bootstrap-from-json,haskell-test}-cache.txt` | Universe-wide hash of inputs + exec source | Skips `verify-json-kernel`, `bootstrap-from-json`, or `stack test` |
 | Per-target test cache | `dist/<lang>/test-cache.json` | Universe of generated sources + test infra + runner | Skips the target's `test-distribution.sh` |
 
@@ -108,59 +108,85 @@ There are four notable exceptions where the cause-and-effect chain is incomplete
 All four are tracked under [#347](https://github.com/CategoricalData/hydra/issues/347).
 See [Gaps and the path to #347](#gaps-and-the-path-to-347).
 
-### The `encoderId` mechanism
+### The per-target generator stamp
 
-`encoderId` is the one fingerprint we currently take of a *transform* (not a source).
-It is a SHA-256 over the four files that govern the JSON wire format:
+The Layer 2 cache is keyed on (a) per-namespace input hashes and (b) a per-target
+**generator stamp** — a fingerprint of the transform that produced the output. Without
+the stamp, edits to the transform (the per-target coder, the kernel orchestrator code,
+the assembler script) would change downstream emission without changing any tracked
+input, and the cache would erroneously hit.
 
-- `Hydra/Sources/Json/Encode.hs` — Term → Value
-- `Hydra/Sources/Json/Decode.hs` — Value → Term
-- `Hydra/Sources/Json/Model.hs` — the `Value` type
-- `Hydra/Sources/Json/Writer.hs` — Value → bytes on disk
+The stamp is computed by `compute_generator_stamp <lang>` in `bin/lib/assemble-common.sh`
+and exported as `HYDRA_GENERATOR_STAMP` before each Layer 2 freshness check. `digest-check
+fresh` reads it and compares against the recorded stamp in the per-target output digest;
+mismatches force a cache miss.
 
-It is stamped into `dist/json/digest.main.json` next to the per-namespace hashes.
-On the next sync, `Hydra.Generation` re-computes it and compares; a mismatch forces full
-re-inference of every module, because a change to any of those four files might have
-altered the bytes produced for every namespace.
+The stamp is **compositional**, mirroring the actual structure of a host transform:
 
-`encoderId` was introduced for [#343](https://github.com/CategoricalData/hydra/issues/343)
-(JSON-format finalization). It is the prototype for the Merkle-style transform
-fingerprinting #347 is about — but it covers only the JSON encode/decode layer. The
-broader generator stack (the synthesizers under `Hydra/Sources/Kernel/Terms/Dsls.hs`,
-the per-language coders, the `bootstrap-from-json` driver itself) is not fingerprinted.
+```
+stamp(L) = hash(
+    kernel-id  = component_identity hydra-kernel,
+    coder-id   = component_identity hydra-L,
+    runtime-id = runtime_identity L
+)
+```
 
-If you ever need to manually invalidate the universe-wide cache without editing a real
-source, the canonical trick is to zero out `encoderId` in `dist/json/digest.main.json`
-(documented in [recipes/refactoring.md](recipes/refactoring.md) and
-[recipes/maintenance.md](recipes/maintenance.md)).
+Each component is independent. A `hydra-kernel` change invalidates every target's stamp;
+a Java-coder change invalidates only Java; an edit to `heads/python/src/main/` invalidates
+only Python. This is the desired precision: the dependency graph determines the
+invalidation graph.
+
+`component_identity` is the swappable layer. Today every host is built from local source,
+so it returns a content hash of `packages/<pkg>/src/main/haskell/**`. After
+[#370](https://github.com/CategoricalData/hydra/issues/370) (external versioned hosts),
+it will branch on published-vs-local and return the pinned version string for published
+hosts. The composition above is unchanged either way; only the leaf computation differs.
+
+#### Retired: `encoderId`
+
+Pre-#347 universe digests carried a top-level `encoderId` field — a SHA-256 over four
+hardcoded JSON-coder DSL source files (`Hydra/Sources/Json/{Encode,Decode,Model,Writer}.hs`).
+It was introduced for [#343](https://github.com/CategoricalData/hydra/issues/343) as a
+prototype transform fingerprint and triggered a universal cache miss when any of those
+files changed.
+
+`encoderId` is retired by the compositional stamp above. The four files it fingerprinted
+are namespaces in the kernel package, so they're covered by `component_identity
+hydra-kernel`. Their effect on output bytes now invalidates the cache through the standard
+per-namespace path (in Phase 1) plus the kernel-id leaf of every target's stamp
+(in Layer 2).
+
+Legacy on-disk digests carrying `encoderId` are tolerated: `parseDigest` silently ignores
+the field. They'll naturally fade out the next time any source change triggers a digest
+refresh.
+
+If you ever need to manually invalidate a per-target cache without editing real source,
+delete `dist/<lang>/<pkg>/src/<set>/digest.json` — the next assemble will report a missing
+output digest and regenerate.
 
 ## What the cache currently keys on
 
 For each generated file `dist/<lang>/<pkg>/.../foo.<ext>`:
 
 - ✅ Content hash of the DSL source `packages/<pkg>/.../Foo.hs` (or `.java` / `.py`).
-- ✅ Content hash of upstream DSL modules transitively reachable from `Foo`.
-- ✅ `encoderId` (covers the JSON wire format).
+- ✅ Content hash of upstream DSL modules reachable from `Foo` (per-package input
+  digest includes every namespace owned by `<pkg>`).
+- ✅ Per-target generator stamp covering the kernel + per-target coder + host runtime
+  (see [The per-target generator stamp](#the-per-target-generator-stamp) above). A
+  change to any of these three components invalidates the cache for that target.
 - ✅ For Phase 1 step caches: the source of the relevant exec (`verify-json-kernel`,
-  `bootstrap-from-json`).
-- ⚠️ Partial: the compiled binary of the generator (`bootstrap-from-json`,
-  `update-json-main`, `transform-json-to-<lang>`). The Phase 1 input cache hashes
-  every `.hs` file under `heads/haskell/src/{main,test,exec}/haskell/`, so edits to a
-  synthesizer's Haskell source *do* invalidate Phase 1. The step caches for
-  `verify-json-kernel` and `bootstrap-from-json` independently hash those execs'
-  source. What's missing is a single fingerprint covering each generator's full
-  transitive import closure — today's caches mix exec source and runtime source into
-  one universe-wide hash, so every exec invalidates whenever any of them changes.
-  See [#347 §1](#1-generator-binaries-are-not-fingerprinted).
-- ❌ Per-target language coders (e.g., `Hydra/Sources/Haskell/Coder.hs`). When the
-  Haskell coder changes, the `dist/haskell/**.hs` output it produces *is* re-generated
-  (Phase 1 cache invalidates), but for non-Haskell targets the per-target coder is its
-  own binary that isn't fingerprinted.
-- ❌ The version of any *published* host package the build depends on. Today the
-  Haskell head builds Hydra from source; once 0.16/0.17 ships hosts as published
-  dependencies, the "host changed" signal becomes a per-package version bump rather
-  than a per-file content hash. See
-  [Implications of published hosts in 0.16/0.17](#implications-of-published-hosts-in-0-16-0-17).
+  `bootstrap-from-json`) plus, for `bootstrap-from-json`'s BFJ step, every file under
+  `heads/haskell/src/main/haskell/**.hs`.
+- ⚠️ Coarse-grained on the source side. A change to one source file invalidates only
+  its own per-namespace hash, but the *consumers* of that namespace aren't automatically
+  invalidated unless they themselves changed. The current design treats the per-package
+  digest as the unit of invalidation, not the file-level dependency DAG. See [Remaining
+  gaps](#remaining-gaps).
+- ❌ Version-pin path for hosts. Today every host is built from local source, so the
+  generator stamp uses content hashes. Once [#370](https://github.com/CategoricalData/hydra/issues/370)
+  ships hosts as published artifacts, `component_identity` will branch on
+  published-vs-local and return the version string for published hosts. The composition
+  is unchanged; only the leaf computation differs.
 
 ## Operational entry points
 
@@ -179,120 +205,50 @@ For slash-command shortcuts: `/sync`, `/sync-default`, `/sync-haskell`, `/sync-j
 `/sync-emacs-lisp`, `/sync-scheme`, `/sync-go`, `/sync-bench`. Each is a thin wrapper
 around the corresponding `bin/` script; see [CLAUDE.md §Shorthand commands](../CLAUDE.md#shorthand-commands).
 
-## Gaps and the path to #347
+## Remaining gaps
 
-The current cache is "source A → output B" keyed only on A. The end-state of
-[#347](https://github.com/CategoricalData/hydra/issues/347) is "source A + transform T
-→ output B" keyed on both A and a Merkle hash of T. The four gaps:
+### 1. File-level source-dependency Merkle (A-side)
 
-### 1. Generator binaries are not fingerprinted at the right granularity
+Today the per-package input digest treats each package as an opaque bag of namespaces.
+A change to one source file `Foo.hs` invalidates the per-package digest's entry for
+`Foo`'s namespace — but consumers of `Foo` in *other* packages aren't automatically
+flagged for regen unless they themselves changed. The current design relies on the
+universe-wide invalidation cascade for cross-package propagation, which is correct but
+coarse: a kernel-type edit may invalidate everything even though only a handful of
+downstream namespaces consume the changed type.
 
-Editing `Hydra/Sources/Kernel/Terms/Dsls.hs` (the DSL-wrapper synthesizer) or
-`Hydra/Sources/Haskell/Coder.hs` changes the *behavior* of `bootstrap-from-json`
-without changing any *direct input* to it. The Phase 1 universe-wide caches do
-invalidate (these files live under `packages/`, which Phase 1 hashes), so a `/sync`
-will rerun Phase 1 — but the cache key is "did the universe change", not "did the
-specific transform that produces this output change". So:
+The proper Merkle structure on the A side is the file-level dependency DAG: each
+namespace's cache key is `hash(its source content, its transitive deps' cache keys)`. A
+change at the root propagates exactly to dependents. Substantially overlaps with
+[#329 (definition-level change detection)](https://github.com/CategoricalData/hydra/issues/329);
+worth treating as one piece of work.
 
-- Phase 1 reruns even for kernel edits that have nothing to do with code generation
-  (over-invalidation).
-- The workaround for synthesizer edits — documented in
-  [recipes/code-generation.md](recipes/code-generation.md#editing-the-synthesizer-itself-dslshs-the-haskell-coder-etc) —
-  is still to run `/sync-haskell` twice. The first rebuilds the binary; the second
-  runs the new binary against the now-updated JSON sources (under-invalidation: the
-  per-source-set caches downstream don't notice the binary changed).
+### 2. Version-pin path for published hosts (T-side)
 
-`encoderId` partially closes this for the JSON wire format by hashing four specific
-files, but it is a per-feature special case rather than a general mechanism. The
-generalization needed for #347: a per-transform Merkle subtree hashing exactly the
-sources that determine that transform's output bytes — not the universe, not a
-hand-picked four files.
+The compositional generator stamp is in place, but every `component_identity` call still
+returns a content hash because no host is published yet. After
+[#370](https://github.com/CategoricalData/hydra/issues/370) lands the publishing
+machinery, `component_identity` needs a branch: when the package has a pinned published
+version in this build's manifest, return that version string; otherwise fall back to the
+current content hash (the migration-shim case).
 
-### 2. The `writeDsl*` per-target wrappers are not in the sync pipeline
-
-`writeDslJsonPackageSplit` (the JSON layer) IS called from `update-json-main` in
-Phase 1, driven by each package's `Manifest.dslTypeModules`. That works correctly:
-adding a module to `dslTypeModules` starts emitting `dist/json/<pkg>/.../dsl/<x>.json`
-on the next sync.
-
-But `writeDslHaskell` — the function that produces the consumer-facing
-`dist/haskell/<pkg>/.../Hydra/Dsl/<X>.hs` from those JSON files — has no caller in any
-sync script. The checked-in `.hs` files were generated by a one-off run and have
-drifted. The same gap applies to the per-target wrappers in Java, Python, Scala, etc.
-See the cross-reference comment on
-[#347](https://github.com/CategoricalData/hydra/issues/347) from #233 for the concrete
-example (`Hydra.Dsl.Pg.Model` is missing 3 of 107 definitions because the JSON layer
-regenerated but the `.hs` layer didn't).
-
-### 3. The cache structure is flat, not hierarchical
-
-`encoderId` is universe-wide: when it changes, *every* namespace gets re-inferred,
-even those whose generation path doesn't touch the affected files. A Merkle tree would
-let us invalidate only the affected subtree — e.g., a change to
-`Hydra/Sources/Json/Decode.hs` should invalidate any namespace whose generation reads
-JSON back, but not necessarily one that only writes it.
+This is a small, well-scoped change — one function body — gated on #370.
 
 ## The end-state design
 
-The #347 vision: every generated artifact is keyed on a Merkle hash that transitively
-covers (a) its DSL source, (b) the source's transitive DSL deps, (c) the generator
-binary that produced it, and (d) the generator binary's transitive DSL/code deps.
+Two pieces, one per side:
 
-The generator-binary hash is itself a small Merkle subtree:
+**A-side: file-level Merkle over the source DAG.**
+Per-namespace cache key = `hash(source content, dep1 cache key, dep2 cache key, ...)`.
+A change at the root propagates exactly to dependents. Combines naturally with #329's
+definition-level checksums.
 
-- For an exec like `bootstrap-from-json`: hash of its `Main.hs`, plus hashes of every
-  Haskell module it transitively imports, plus the GHC version, plus the resolver
-  pinned in `stack.yaml`.
-- For a target-language coder (Java, Python, …) once those hosts are published
-  dependencies (0.16/0.17): hash of the *published package version* of the host. No
-  per-file scan needed; the version pin is the fingerprint.
+**T-side: compositional transform identity.**
+Per-target generator stamp = `hash(kernel-id, coder-id, runtime-id)`. Each component
+is a version pin when published, a content hash when local. Already shipped in its
+content-hash form; the version-pin path activates with #370.
 
-With this scheme:
-
-- Editing a synthesizer invalidates exactly the outputs that synthesizer produces.
-- A host version bump invalidates exactly the outputs that host generates.
-- A DSL source edit invalidates exactly the namespaces transitively depending on it
-  (already true today via #329-style definition-level checksums; see
-  [#329](https://github.com/CategoricalData/hydra/issues/329)).
-- The "two-sync workaround" disappears.
-- `encoderId` is subsumed: it becomes one of many transform fingerprints rather than
-  a special case.
-
-## Implications of published hosts in 0.16/0.17
-
-The 0.16/0.17 transition makes the transform-fingerprinting problem *smaller*, not
-larger. Today, every host runs from source — so "the host changed" is potentially
-"any file in `heads/<lang>/src/` changed", which is a wide content-hash surface. Once
-hosts publish as ordinary package-manager dependencies (Hackage, Maven Central, PyPI,
-etc.), the dependent build's "did the host change" check becomes:
-
-> Did the pinned host version in this build's manifest change?
-
-That's a single string compare per host. The Merkle subtree for a target's coder
-collapses to a leaf node holding `("hydra-java", "0.16.2")`. No file scan, no transitive
-import graph, no source watching — the package manager already did that work and
-canonicalized it into a version number.
-
-This shifts where Merkle-tree mechanics are needed:
-
-- **Per-package level (necessary):** track host-version-as-leaf in the cache. Whenever
-  the host version pin changes, every generated artifact produced by that host is
-  invalidated.
-- **Per-file level (sufficient only for `heads/haskell/` and the Haskell-resident
-  generators):** the bootstrap Haskell pipeline still needs the file-level Merkle
-  subtree, because that's the one host we don't have the option to depend on as a
-  published artifact (it would need to be `hydra-haskell` building itself).
-
-In practice this means #347's implementation needs two flavors of transform hash:
-
-1. **Binary-content hash** for in-tree Haskell generators (everything under
-   `heads/haskell/src/{main,exec}/`). Computed during Stack build, stored alongside
-   the digest.
-2. **Version-pin hash** for every other host once 0.16/0.17 lands. Read from the
-   manifest (package.yaml, pyproject.toml, build.gradle, project.clj, …).
-
-`encoderId` is the prototype for flavor (1). Flavor (2) does not yet exist in any form
-and only becomes meaningful once the host-as-published-dependency work is in place.
+Both pieces are independent and can land separately. The T-side is closer to done.
 
 ## See also
 

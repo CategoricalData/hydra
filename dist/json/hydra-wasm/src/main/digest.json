@@ -1,6 +1,8 @@
 {
   "formatVersion": 1,
   "version": 1,
+  "selfHash": "9145c352c4bdb5af3cb61c60a9dabbf383d90c8d4064beed2cd8cd2a38cc0e2f",
+  "depHash:hydra-kernel": "151619049e4eb96e28efc60cd7b05e845f3a44faedae31fe62744e02ad644890",
   "hashes": {
     "hydra.wasm.coder": "bde239beec76cae92ea8978b5e957f7f35ed868da77efbb21a9e13bb7553122f",
     "hydra.wasm.language": "657a00c39bd7e6186800818c47ecd503964e3ec51280a4cfa187ea0d41286539",
