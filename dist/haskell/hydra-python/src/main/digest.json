@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generator": "v0-unstamped",
+  "generator": "4b6ec17924edbd54",
   "inputs": {
     "hydra.dsl.python.environment": { "kind": "Other", "hash": "fbe3de804e7b998a9e94180c24a5fd0d33a96474d49d8cbc18c87c3836e9db53" },
     "hydra.dsl.python.syntax": { "kind": "Other", "hash": "c3f53e9c80c99ff3f89ba552ef6a304c8ceb1c7724c5a2a9eecf90432159ac8f" },
