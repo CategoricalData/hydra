@@ -13,7 +13,7 @@
     "hydra-go",
     "hydra-lisp",
     "hydra-coq",
-    "hydra-javascript",
+    "hydra-typescript",
     "hydra-wasm",
     "hydra-pg",
     "hydra-rdf",

@@ -162,6 +162,7 @@ else
         --include-dsls \
         --include-tests \
         --synthesize-sources \
+        --prune-stale \
         $RTS_FLAGS
     step_cache_record "$BFJ_CACHE" "$BFJ_HASH"
 fi

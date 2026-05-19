@@ -58,13 +58,13 @@ The authoring host language varies per package:
 Generated code is partitioned across per-package `dist/<lang>/<pkg>/`
 trees rather than a single flat `dist/<lang>/` directory. Each package
 (hydra-kernel, hydra-haskell, hydra-java, hydra-python, hydra-scala,
-hydra-lisp, hydra-pg, hydra-rdf, hydra-coq, hydra-javascript, hydra-wasm,
+hydra-lisp, hydra-pg, hydra-rdf, hydra-coq, hydra-typescript, hydra-wasm,
 hydra-ext) owns a range of namespaces, and the generated output for
 those namespaces lands under that package's directory.
 
 Each package's `package.json` may declare a `targetLanguages` field
 restricting which target languages the package is regenerated to. For
-example, `hydra-coq` and `hydra-javascript` are coder libraries
+example, `hydra-coq` and `hydra-typescript` are coder libraries
 implemented only against the Haskell runtime, so their
 `targetLanguages` is `["haskell"]`.
 
@@ -177,6 +177,22 @@ bin/sync-packages.sh hydra-pg --targets java
 bin/sync-all.sh --no-tests
 ```
 
+> **Note on `--hosts` semantics.**
+> `bin/sync.sh` and `run-bootstrapping-demo.sh` both accept
+> `--hosts` and `--targets` as comma-separated language lists, and
+> the flag names line up so the two commands compose — but they
+> mean opposite things.
+> In `sync.sh`, `--hosts L` names a language whose host capability
+> is to be *built*: Phase 4 emits each target's coder into L's
+> language, so that after the run L can drive code generation.
+> L is an *output* of the script.
+> In `run-bootstrapping-demo.sh`, `--hosts L` names an existing
+> host to *use* as a generator during the demo. L must already be
+> built; it is an *input*.
+> The same inversion applies to `--targets`: an emission output
+> in `sync.sh`, an expectation about pre-existing dist/ state in
+> `bootstrap`.
+
 ### Phases
 
 Each `sync-packages.sh` (and therefore each `sync-all.sh`) invocation
@@ -211,7 +227,7 @@ in a few seconds.
 | Phase 1 | `bin/lib/check-dsl-fresh.py` | Every DSL source file's hash matches the recorded digest at `dist/json/digest.main.json`. Skips stack startup + JSON regeneration entirely. |
 | Phase 2 (batch) | `bin/lib/batch-cache.sh` | Every `dist/<lang>/<pkg>/digest.json`'s recorded input hashes match the current `dist/json/<pkg>/digest.json`. Skips stack startup + `bootstrap-from-json`. |
 | Phase 2 (per-pkg) | `heads/haskell/bin/digest-check fresh` + Python pre-check | Per-package input hashes match and every recorded output file exists with its recorded hash. |
-| Phase 2 (generator) | Stage 7 per-module DSL-hash skip inside `bootstrap-from-json` | Modules with unchanged DSL-source hashes are excluded from regeneration even when overall cache missed. |
+| Phase 2 (generator) | Stage 7 per-module DSL-hash skip inside `bootstrap-from-json` | Modules with unchanged DSL-source hashes are excluded from regeneration even when overall cache missed. Active only when the per-target digest exists; the per-package `assemble-distribution.sh` deletes it before invoking the generator, so Stage 7 currently benefits direct callers (`sync-haskell.sh`, batch `assemble-all.sh`) only. |
 | Phase 3 | `bin/lib/test-cache.sh` (`dist/<lang>/test-cache.json`) | Every generated source under `dist/<lang>/*` plus every hand-written test helper under `heads/<lang>/src/test/*` plus the runner script are byte-identical since the last successful run. Skips `stack test` / `gradle test` / `pytest` / `sbt test` / lisp runners entirely. |
 
 Any single file change invalidates the relevant cache. For example,
@@ -368,7 +384,7 @@ JSON modules are exported per package under `dist/json/`:
 | `dist/json/hydra-pg/src/main/json/` | Property graph, TinkerPop, Cypher, GraphSON |
 | `dist/json/hydra-rdf/src/main/json/` | RDF, OWL, SHACL, ShEx, XML Schema |
 | `dist/json/hydra-coq/src/main/json/` | Coq coder modules |
-| `dist/json/hydra-javascript/src/main/json/` | JavaScript coder modules |
+| `dist/json/hydra-typescript/src/main/json/` | TypeScript coder modules |
 | `dist/json/hydra-wasm/src/main/json/` | WebAssembly coder modules |
 | `dist/json/hydra-ext/src/main/json/` | Avro, Protobuf, GraphQL, Pegasus, etc. |
 
