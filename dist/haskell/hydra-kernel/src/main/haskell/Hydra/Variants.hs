@@ -5,24 +5,6 @@ module Hydra.Variants where
 import qualified Hydra.Core as Core
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | The identifier of an elimination constructor (legacy)
-data EliminationVariant =
-  EliminationVariantRecord |
-  EliminationVariantUnion |
-  EliminationVariantWrap
-  deriving (Eq, Ord, Read, Show)
-_EliminationVariant = Core.Name "hydra.variants.EliminationVariant"
-_EliminationVariant_record = Core.Name "record"
-_EliminationVariant_union = Core.Name "union"
-_EliminationVariant_wrap = Core.Name "wrap"
--- | The identifier of a function constructor (legacy)
-data FunctionVariant =
-  FunctionVariantElimination |
-  FunctionVariantLambda
-  deriving (Eq, Ord, Read, Show)
-_FunctionVariant = Core.Name "hydra.variants.FunctionVariant"
-_FunctionVariant_elimination = Core.Name "elimination"
-_FunctionVariant_lambda = Core.Name "lambda"
 -- | The identifier of a literal constructor
 data LiteralVariant =
   LiteralVariantBinary |

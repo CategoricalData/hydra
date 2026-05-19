@@ -19,19 +19,13 @@ wasmLanguage =
     Coders.Language {
       Coders.languageName = (Coders.LanguageName "hydra.wasm"),
       Coders.languageConstraints = Coders.LanguageConstraints {
-        Coders.languageConstraintsEliminationVariants = eliminationVariants,
         Coders.languageConstraintsLiteralVariants = literalVariants,
         Coders.languageConstraintsFloatTypes = floatTypes,
-        Coders.languageConstraintsFunctionVariants = functionVariants,
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
         Coders.languageConstraintsTypes = typePredicate}}
   where
-    eliminationVariants =
-        Sets.fromList [
-          Variants.EliminationVariantRecord,
-          Variants.EliminationVariantUnion]
     literalVariants =
         Sets.fromList [
           Variants.LiteralVariantBoolean,
@@ -42,10 +36,6 @@ wasmLanguage =
         Sets.fromList [
           Core.FloatTypeFloat32,
           Core.FloatTypeFloat64]
-    functionVariants =
-        Sets.fromList [
-          Variants.FunctionVariantElimination,
-          Variants.FunctionVariantLambda]
     integerTypes =
         Sets.fromList [
           Core.IntegerTypeInt8,
