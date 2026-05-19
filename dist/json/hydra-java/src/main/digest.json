@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "bcf07b20d05872844b260bd14dab8ad29371995e6a531c323bf77d851d560faa",
-  "depHash:hydra-kernel": "151619049e4eb96e28efc60cd7b05e845f3a44faedae31fe62744e02ad644890",
+  "selfHash": "2720ff9adc7c47187faa6211feaf47ab129d80a2376a964297748a1f8045a810",
+  "depHash:hydra-kernel": "932435460c02fd2f215eecb920f4a34a84db6a52806405bb1f8960f306acc383",
   "hashes": {
     "hydra.dsl.java.environment": "2c713230f49e08cc13d85b2bfb93a628d8dfb14e50e1dc5d4674f65e6d0e857f",
     "hydra.dsl.java.syntax": "0512ff68306fd0e99866aab8967a5382f2f5a2a5dfcbd5afd5df02dcd6a1875d",
