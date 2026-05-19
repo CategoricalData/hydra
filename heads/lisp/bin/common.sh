@@ -74,6 +74,12 @@ lisp_assemble_main() {
 
     local haskell_bin="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
+    # Per-target generator stamp; see bin/lib/assemble-common.sh and #347.
+    # All four Lisp dialects share dist/json/hydra-lisp/ (the dialect is a
+    # runtime parameter, not a separate coder package), so the stamp scope
+    # is "lisp" regardless of LISP_DIALECT.
+    export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp lisp)
+
     # #357: optional --keep-paths-from forwarded from the dialect wrapper.
     # The Scheme wrapper builds a manifest (via scheme_keep_paths) listing
     # the runtime libs + stubs that scheme_post_kernel_extras drops in
