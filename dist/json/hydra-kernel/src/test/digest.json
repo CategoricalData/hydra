@@ -1,7 +1,6 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "encoderId": "a8896a46a4ab31a4d6ed1c27b0854eccb6b66716ba104cc3f32a99cf276b5a32",
   "hashes": {
     "hydra.adapt": "4bb22ed7a8c9d3032dc363d0934cc0017b56b95939798897cbda89389252cda8",
     "hydra.analysis": "9359648d0c388210e30bde3a5d4f88d8a8db6f0d9d5221defb42504e14e19924",
