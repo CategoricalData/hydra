@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "198813c333bfaef079a0de5d29bd8ec1720d5134799a7efb3bd480e5dda329a5",
-  "depHash:hydra-kernel": "151619049e4eb96e28efc60cd7b05e845f3a44faedae31fe62744e02ad644890",
+  "selfHash": "ee5f4900da2e7dfe6f3ee8913f86a476228824847184c9ba44eee8d4aecc917a",
+  "depHash:hydra-kernel": "932435460c02fd2f215eecb920f4a34a84db6a52806405bb1f8960f306acc383",
   "hashes": {
     "hydra.dsl.lisp.syntax": "623f011bf0048ef3bf42bcc46e9ef193ee6288f068e3abe27c5cf56c7bd8968a",
     "hydra.lisp.coder": "8c221addcaea55efd1f377c1fd5b9d36435e4168e7fbe57f388c1fa2ff59c5d2",

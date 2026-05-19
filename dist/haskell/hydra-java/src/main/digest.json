@@ -1,6 +1,8 @@
 {
   "version": 2,
-  "generator": "4b6ec17924edbd54",
+  "generator": "f64771030353ac6d",
+  "selfHash": "2720ff9adc7c47187faa6211feaf47ab129d80a2376a964297748a1f8045a810",
+  "depHash:hydra-kernel": "932435460c02fd2f215eecb920f4a34a84db6a52806405bb1f8960f306acc383",
   "inputs": {
     "hydra.dsl.java.environment": { "kind": "Other", "hash": "2c713230f49e08cc13d85b2bfb93a628d8dfb14e50e1dc5d4674f65e6d0e857f" },
     "hydra.dsl.java.syntax": { "kind": "Other", "hash": "0512ff68306fd0e99866aab8967a5382f2f5a2a5dfcbd5afd5df02dcd6a1875d" },
@@ -9,7 +11,7 @@
     "hydra.java.language": { "kind": "Other", "hash": "906c19f70955d05607cb180b94e680d3c83f3ac387f668e34372431099fcea19" },
     "hydra.java.names": { "kind": "Other", "hash": "73023aae0beeb040142bad1d9694d7f45f8fe141052339aeb63f0edafe95980f" },
     "hydra.java.serde": { "kind": "Other", "hash": "0e548f04426d0a3e8bac956c414ce13b62d5698b25324a573d0656c9f7d16456" },
-    "hydra.java.syntax": { "kind": "Other", "hash": "b7f048e09af0ee0257361484c39e42ba5e5be05861cafdf00b127c95dbadf6ea" },
+    "hydra.java.syntax": { "kind": "Other", "hash": "9f61a25afd02fb2ba30f8648e2bc7cb4b421f01e3805e0ac60fb079bf56322f9" },
     "hydra.java.testing": { "kind": "Other", "hash": "fb989e31f752e3e07db2eb200d6b97e8b364ccd06be9fc4b12ea2f621ad6b21b" },
     "hydra.java.utils": { "kind": "Other", "hash": "09cf205b67f83f4d985420694da17a08b0b03115f11021ed30e17e6a3f25edfb" }
   },
