@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generator": "v0-unstamped",
+  "generator": "4b6ec17924edbd54",
   "inputs": {
     "hydra.dsl.go.syntax": { "kind": "Other", "hash": "d0ed83316e0374e3603009b18b4a786df9f859a01b7639a6297b709993d117f7" },
     "hydra.go.language": { "kind": "Other", "hash": "4df72bcc3a1f9bc22edc8ae52e062824a469baecc5c7a802ce1a1f3d58daa542" },
