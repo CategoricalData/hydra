@@ -1,10 +1,12 @@
 {
   "formatVersion": 1,
   "version": 1,
+  "selfHash": "ae8862b089fb61b4f2a4ac2e09a1bf56201591d6458764be490c611838057e29",
+  "depHash:hydra-kernel": "5de092d4e1fb2e13c9544f46afa61928a326907698f43dd0d8ceb8881a826e8c",
   "hashes": {
     "hydra.wasm.coder": "46fbb1db4f898ebf4f783bb895f5b8872665c4dd95af6ab19d3ad91822a121f3",
     "hydra.wasm.language": "657a00c39bd7e6186800818c47ecd503964e3ec51280a4cfa187ea0d41286539",
     "hydra.wasm.serde": "a72b59c331c7731e6c713081f646012912e2d6b9d1a632b65baf5bc757e42973",
-    "hydra.wasm.syntax": "0c67415941e248bb40c547064a3bf06074363179de4917687da034bd7ea22c7c"
+    "hydra.wasm.syntax": "c3565c7fb02ab4dc46d0533bc063d5a9bfce8a627adbe2953c090d0d77f11e71"
   }
 }

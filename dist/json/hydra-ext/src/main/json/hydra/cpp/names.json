@@ -155,7 +155,7 @@
                                                 "argument": {"variable": "env"},
                                                 "function": {"project": {"field": "namespaces", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
                                             "function": {
-                                              "typeApplication": {"body": {"project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}}, "type": {"literal": {"string": {}}}}}}},
+                                              "typeApplication": {"body": {"project": {"field": "focus", "typeName": "hydra.util.Namespaces"}}, "type": {"literal": {"string": {}}}}}}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.packaging.Namespace"}}},
@@ -352,7 +352,7 @@
                                         "argument": {"variable": "env"},
                                         "function": {"project": {"field": "namespaces", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "focus", "typeName": "hydra.packaging.Namespaces"}}, "type": {"literal": {"string": {}}}}}}},
+                                      "typeApplication": {"body": {"project": {"field": "focus", "typeName": "hydra.util.Namespaces"}}, "type": {"literal": {"string": {}}}}}}},
                                 "function": {
                                   "typeApplication": {
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.packaging.Namespace"}}},

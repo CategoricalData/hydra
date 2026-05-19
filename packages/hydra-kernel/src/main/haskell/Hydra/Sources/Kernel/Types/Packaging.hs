@@ -29,7 +29,6 @@ module_ = Module {
       library,
       module',
       namespace,
-      namespaces,
       package,
       packageName,
       qualifiedName,
@@ -87,17 +86,6 @@ namespace :: Binding
 namespace = define "Namespace" $
   doc "A prefix for element names" $
   T.wrap T.string
-
-namespaces :: Binding
-namespaces = define "Namespaces" $
-  doc "A mapping from namespaces to values of type n, with a focus on one namespace" $
-  T.forAll "n" $ T.record [
-    "focus">:
-      doc "The namespace in focus, together with its associated value" $
-      T.pair namespace "n",
-    "mapping">:
-      doc "A mapping of namespaces to values" $
-      T.map namespace "n"]
 
 package :: Binding
 package = define "Package" $
