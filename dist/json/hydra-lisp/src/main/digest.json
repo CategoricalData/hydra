@@ -1,12 +1,12 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "faa3ce8587d886b81fcaa61beb1ed680fa9a33c94927ce8a25f0115d9f696671",
-  "depHash:hydra-kernel": "caea45e45fe8930dff5e1b20787911e93902453e36ae80282590d1550178c579",
+  "selfHash": "ee5f4900da2e7dfe6f3ee8913f86a476228824847184c9ba44eee8d4aecc917a",
+  "depHash:hydra-kernel": "932435460c02fd2f215eecb920f4a34a84db6a52806405bb1f8960f306acc383",
   "hashes": {
     "hydra.dsl.lisp.syntax": "623f011bf0048ef3bf42bcc46e9ef193ee6288f068e3abe27c5cf56c7bd8968a",
     "hydra.lisp.coder": "8c221addcaea55efd1f377c1fd5b9d36435e4168e7fbe57f388c1fa2ff59c5d2",
-    "hydra.lisp.language": "ea092e75e18392266b2785c78f81810cd36f67607e68f36a01522a7ed497d8c9",
+    "hydra.lisp.language": "21d069b16ab367b1ff2b152414041cd6921a6a32fd83de570de77b254b046444",
     "hydra.lisp.serde": "712986fba2b7f61e5281055d3057b77ce426b4b079f3b2e4f80069bd647576d5",
     "hydra.lisp.syntax": "1d7ef92ae8e5ea307ba28945f3823f664f91c9c6a74c6d44ff491c53e4ba7c36"
   }
