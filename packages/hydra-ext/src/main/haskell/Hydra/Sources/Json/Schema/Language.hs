@@ -93,14 +93,12 @@ define = definitionInModule module_
 jsonSchemaLanguage :: TTermDefinition Language
 jsonSchemaLanguage = define "jsonSchemaLanguage" $
   doc "Language constraints for JSON Schema" $ lets [
-  "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBoolean,
     Variants.literalVariantFloat,
     Variants.literalVariantInteger,
     Variants.literalVariantString],
   "floatTypes">: Sets.fromList $ list [Core.floatTypeFloat64],
-  "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [Core.integerTypeBigint],
   "termVariants">: Sets.fromList Reflect.termVariants,
   "typeVariants">: Sets.fromList $ list [
@@ -122,10 +120,8 @@ jsonSchemaLanguage = define "jsonSchemaLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.json.schema")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

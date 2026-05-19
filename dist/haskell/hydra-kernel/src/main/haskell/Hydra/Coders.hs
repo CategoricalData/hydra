@@ -81,14 +81,10 @@ _Language_constraints = Core.Name "constraints"
 -- | A set of constraints on valid type and term expressions, characterizing a language
 data LanguageConstraints =
   LanguageConstraints {
-    -- | All supported elimination variants
-    languageConstraintsEliminationVariants :: (S.Set Variants.EliminationVariant),
     -- | All supported literal variants
     languageConstraintsLiteralVariants :: (S.Set Variants.LiteralVariant),
     -- | All supported float types
     languageConstraintsFloatTypes :: (S.Set Core.FloatType),
-    -- | All supported function variants
-    languageConstraintsFunctionVariants :: (S.Set Variants.FunctionVariant),
     -- | All supported integer types
     languageConstraintsIntegerTypes :: (S.Set Core.IntegerType),
     -- | All supported term variants
@@ -98,10 +94,8 @@ data LanguageConstraints =
     -- | A logical set of types, as a predicate which tests a type for inclusion
     languageConstraintsTypes :: (Core.Type -> Bool)}
 _LanguageConstraints = Core.Name "hydra.coders.LanguageConstraints"
-_LanguageConstraints_eliminationVariants = Core.Name "eliminationVariants"
 _LanguageConstraints_literalVariants = Core.Name "literalVariants"
 _LanguageConstraints_floatTypes = Core.Name "floatTypes"
-_LanguageConstraints_functionVariants = Core.Name "functionVariants"
 _LanguageConstraints_integerTypes = Core.Name "integerTypes"
 _LanguageConstraints_termVariants = Core.Name "termVariants"
 _LanguageConstraints_typeVariants = Core.Name "typeVariants"
