@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "generator": "v0-unstamped",
+  "generator": "1c8ef3046828cb77",
   "inputs": {
     "com.gdblab.pathAlgebra.expressions": { "kind": "Other", "hash": "d3f31158fb7ebe6129c9d869c0b80b6cea57a293be2cebcea6857def0179e027" },
     "com.gdblab.pathAlgebra.syntax": { "kind": "Other", "hash": "1c2941b9707e3d48899e5e8805c96a62bbe522dfd06bb6422fdc592844608874" },
