@@ -74,6 +74,12 @@ lisp_assemble_main() {
 
     local haskell_bin="$HYDRA_ROOT_DIR/heads/haskell/bin"
 
+    # Per-target generator stamp; see bin/lib/assemble-common.sh and #347.
+    # All four Lisp dialects share dist/json/hydra-lisp/ (the dialect is a
+    # runtime parameter, not a separate coder package), so the stamp scope
+    # is "lisp" regardless of LISP_DIALECT.
+    export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp lisp)
+
     # Step 1: Main modules.
     if assemble_check_fresh "$input_digest_main" "$out_main" "$output_digest_main"; then
         echo "Step 1: Main modules unchanged; skipping main regeneration."

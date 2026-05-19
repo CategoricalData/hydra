@@ -34,6 +34,7 @@ HASKELL_BIN="$HYDRA_ROOT_DIR/heads/haskell/bin"
 # Warm-cache short-circuit: skip BEFORE any stack invocation or digest wipe.
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 source "$HYDRA_ROOT_DIR/bin/lib/batch-cache.sh"
+export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp java)
 if batch_cache_fresh "$DIST_ROOT" "$HYDRA_ROOT_DIR/dist/json"; then
     echo "  Cache hit: every per-package digest fresh; skipping batch."
     echo "=== Done (cache hit). ==="
