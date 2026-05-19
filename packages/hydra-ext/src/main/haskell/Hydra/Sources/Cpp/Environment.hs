@@ -9,6 +9,7 @@ import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.Sources.Kernel.Types.Packaging as ModuleTypes
+import qualified Hydra.Sources.Kernel.Types.Util as UtilTypes
 import qualified Hydra.Sources.Cpp.Syntax as CppSyntax
 
 ns :: Namespace
@@ -23,11 +24,14 @@ coreType = typeref CoreTypes.ns
 modulType :: String -> Type
 modulType = typeref ModuleTypes.ns
 
+utilType :: String -> Type
+utilType = typeref UtilTypes.ns
+
 module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [CoreTypes.ns, ModuleTypes.ns],
+            moduleDependencies = [CoreTypes.ns, ModuleTypes.ns, UtilTypes.ns],
             moduleDescription = Just "Type definitions for C++ code generation environment"}
   where
     definitions = [
@@ -40,7 +44,7 @@ cppEnvironmentType = define "CppEnvironment" $
   T.record [
     "namespaces" >:
       doc "Namespace mapping for code generation" $
-      T.apply (modulType "Namespaces") T.string,
+      T.apply (utilType "Namespaces") T.string,
     "boundTypeVariables" >:
       doc "Type variables in scope, with their C++ names" $
       T.pair (T.list (coreType "Name")) (T.map (coreType "Name") T.string)]
