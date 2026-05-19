@@ -21,7 +21,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Context.ns, Core.ns, Error.ns, Context.ns, Core.ns, Error.ns],
+            moduleDependencies = [Context.ns, Core.ns, Error.ns],
             moduleDescription = Just "The extension to graphs of Hydra's core type system (hydra.core)"}
   where
     definitions = [
