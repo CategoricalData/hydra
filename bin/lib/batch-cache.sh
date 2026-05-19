@@ -55,6 +55,20 @@ for entry in sorted(os.listdir(dist_root)):
         recorded_gen = out_d.get("generator", "v0-unstamped")
         if recorded_gen != expected_gen:
             sys.exit(1)
+        # #347 transitive invalidation: compare package selfHash and the
+        # depHash:<pkg> entries. Both live as top-level fields on the
+        # input digest (PerPackageDigest format) and as recorded-* slots
+        # in the output digest's flat top-level (alongside generator).
+        input_self = in_d.get("selfHash", "")
+        recorded_self = out_d.get("selfHash", "")
+        if input_self != recorded_self:
+            sys.exit(1)
+        input_deps = {k[len("depHash:"):]: v for k, v in in_d.items()
+                      if isinstance(v, str) and k.startswith("depHash:")}
+        recorded_deps = {k[len("depHash:"):]: v for k, v in out_d.items()
+                         if isinstance(v, str) and k.startswith("depHash:")}
+        if input_deps != recorded_deps:
+            sys.exit(1)
         any_set = True
 sys.exit(0 if any_set else 1)
 PYEOF
