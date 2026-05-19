@@ -24,15 +24,3 @@ context x =
         Core.Field {
           Core.fieldName = (Core.Name "other"),
           Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap EncodeCore.name EncodeCore.term m)) (Context.contextOther x))}]})
--- | Encoder for hydra.context.InContext
-inContext :: (t0 -> Core.Term) -> Context.InContext t0 -> Core.Term
-inContext e x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.context.InContext"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "object"),
-          Core.fieldTerm = (e (Context.inContextObject x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "context"),
-          Core.fieldTerm = (context (Context.inContextContext x))}]})
