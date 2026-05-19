@@ -30,6 +30,7 @@ import qualified Data.Aeson as A
 import qualified Data.Aeson.KeyMap as AKM
 import qualified Data.Aeson.Key as AK
 import qualified Data.ByteString.Lazy as BS
+import qualified Data.Set as S
 import qualified Data.Scientific as SC
 import qualified Data.Vector as V
 import qualified System.FilePath as FP
@@ -400,6 +401,82 @@ perPackageDigestPath :: FilePath -> String -> FilePath
 perPackageDigestPath distJsonRoot pkg =
   distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "digest.json"
 
+-- | Read a package's declared dependencies from packages/<pkg>/package.json.
+-- Returns the values of the top-level "dependencies" array, or [] if the
+-- field is absent or the file can't be read.
+--
+-- Used by 'finalizePerPackageDigests' to populate each digest's depHash:<pkg>
+-- entries, which carry that dep's selfHash for transitive invalidation.
+loadPackageDeps :: String -> IO [String]
+loadPackageDeps pkg = do
+    let path = ".." FP.</> ".." FP.</> "packages" FP.</> pkg FP.</> "package.json"
+    exists <- SD.doesFileExist path
+    if not exists then return [] else do
+      result <- E.try (BS.readFile path) :: IO (Either E.SomeException BS.ByteString)
+      case result of
+        Left _ -> return []
+        Right bs -> case A.eitherDecode bs of
+          Left _ -> return []
+          Right (A.Object obj) -> case AKM.lookup (AK.fromString "dependencies") obj of
+            Just (A.Array arr) -> return
+              [ T.unpack t | A.String t <- V.toList arr ]
+            _ -> return []
+          Right _ -> return []
+
+-- | After per-package digests have been written with their namespace
+-- hashes (by 'refreshPerPackageDigests' / 'mergeDslJsonIntoPerPackageDigests'),
+-- compute each package's selfHash and recorded dep selfHashes and rewrite
+-- the digest with those fields populated.
+--
+-- Two in-memory passes over the packages on disk:
+--
+--   1. Read each package's existing digest; compute selfHash from its
+--      hashes field. Collect into a map pkgName -> selfHash.
+--   2. For each package, read its declared dependencies from package.json;
+--      look up each dep's selfHash from the map; write back the digest
+--      with selfHash + depHash:<dep> entries populated.
+--
+-- Packages whose declared deps haven't been written yet (e.g. test sources
+-- before main) are skipped silently — the dep entry just gets dropped.
+-- The next sync run will pick them up once all digests exist.
+--
+-- See #347 for the broader transitive-invalidation story.
+finalizePerPackageDigests :: FilePath -> IO ()
+finalizePerPackageDigests distJsonRoot = do
+    -- Discover packages from on-disk digest files (don't rely on
+    -- compile-time package lists; respects whatever was just written).
+    pkgs <- discoverPackagesWithDigests distJsonRoot
+    -- Pass 1: read each package's digest, compute selfHash.
+    pkgPpds <- CM.forM pkgs $ \pkg -> do
+      let dpath = perPackageDigestPath distJsonRoot pkg
+      ppd <- Digest.readPerPackageDigest dpath
+      let selfH = Digest.computeSelfHash (Digest.ppHashes ppd)
+      return (pkg, ppd { Digest.ppSelfHash = selfH })
+    let selfHashMap = M.fromList [(pkg, Digest.ppSelfHash ppd) | (pkg, ppd) <- pkgPpds]
+    -- Pass 2: populate deps and write back.
+    CM.forM_ pkgPpds $ \(pkg, ppd) -> do
+      deps <- loadPackageDeps pkg
+      let depHashes = M.fromList
+            [ (d, h)
+            | d <- deps
+            , Just h <- [M.lookup d selfHashMap]
+            ]
+          finalPpd = ppd { Digest.ppDeps = depHashes }
+          dpath = perPackageDigestPath distJsonRoot pkg
+      Digest.writePerPackageDigest dpath finalPpd
+
+-- | Enumerate packages that have a main-source-set digest on disk.
+-- Walks dist/json/hydra-*/src/main/digest.json.
+discoverPackagesWithDigests :: FilePath -> IO [String]
+discoverPackagesWithDigests distJsonRoot = do
+    exists <- SD.doesDirectoryExist distJsonRoot
+    if not exists then return [] else do
+      entries <- SD.listDirectory distJsonRoot
+      fmap Y.catMaybes $ CM.forM entries $ \entry -> do
+        let dpath = perPackageDigestPath distJsonRoot entry
+        dExists <- SD.doesFileExist dpath
+        return $ if dExists then Just entry else Nothing
+
 -- | After a successful regen, write per-package digest files. Each
 -- package's digest hashes only its own DSL sources (the modules that
 -- route to that package), letting Stage 3+ check freshness per
@@ -448,11 +525,40 @@ ensurePerPackageDigests distJsonRoot mods = do
         putStrLn $ "  Per-package digest refreshed: " ++ dpath
           ++ " (" ++ show (M.size pkgDigest) ++ " entries)"
 
+-- | Transitive closure over @moduleDependencies@: starting from an
+-- initial dirty set of namespaces, repeatedly add any module whose
+-- declared dependencies intersect the current dirty set, until fixed
+-- point. Returns the closure (which always contains the initial set).
+--
+-- This is the reverse-edge walk: 'moduleDependencies' records what a
+-- module imports; we want "modules that import any dirty thing." Built
+-- as a fixed-point over the modules-with-some-dirty-dep predicate so
+-- we don't have to materialize the inverted graph explicitly.
+--
+-- Note: @moduleDependencies@ reflects /declared/ deps (the
+-- 'moduleDependencies' field on @Module@). Source files that use a
+-- namespace without declaring it as a dep will not be picked up — but
+-- such files would fail at inference time anyway, so the omission is
+-- self-correcting in practice. See #347.
+closeDirtySet :: [Module] -> S.Set Namespace -> S.Set Namespace
+closeDirtySet universeMods initialDirty = fixedPoint initialDirty
+  where
+    fixedPoint d =
+      let newlyDirty = S.fromList
+            [ moduleNamespace m
+            | m <- universeMods
+            , not (moduleNamespace m `S.member` d)
+            , any (`S.member` d) (moduleDependencies m)
+            ]
+          d' = S.union d newlyDirty
+      in if S.size d' == S.size d then d else fixedPoint d'
+
 -- | Try the incremental inference path: partition universeMods into
 --   * cleanMods — DSL hash matches recorded digest AND existing JSON
 --                 file is loadable (carries inferred TypeSchemes).
 --   * dirtyMods — DSL hash mismatch OR no recorded hash OR JSON
---                 missing/unloadable.
+--                 missing/unloadable. Plus the transitive closure of
+--                 dependents via 'closeDirtySet' (#347).
 --
 -- If dirtyMods is empty, returns the loaded clean universe (no
 -- inference needed; caller still writes JSON because we got here
@@ -466,7 +572,7 @@ ensurePerPackageDigests distJsonRoot mods = do
 -- If anything goes wrong (no digest yet, JSON load failure, etc.),
 -- returns Nothing — caller falls back to full inferModulesIO.
 tryIncrementalInference :: FilePath -> [Module] -> [Module] -> IO (Maybe IncrementalResult)
-tryIncrementalInference distJsonRoot universeMods _targetMods = do
+tryIncrementalInference distJsonRoot universeMods targetMods = do
   -- Read the universe-wide digest to learn which sources were clean
   -- as of the last successful regen.
   let digestFile = packageSplitDigestAnchor distJsonRoot
@@ -474,65 +580,94 @@ tryIncrementalInference distJsonRoot universeMods _targetMods = do
   if M.null stored
     then return Nothing
     else do
-      -- Encoder identity check: if the JSON encode/decode/model/writer
-      -- DSL has changed since the digest was written, every module's
-      -- on-disk JSON is potentially stale (it was written by the old
-      -- encoder). Force a full re-encode.
-      storedEnc <- Digest.readEncoderId digestFile
-      currentEnc <- Digest.computeEncoderId
-      if storedEnc /= currentEnc
-        then do
-          putStrLn $ "  Encoder identity changed; falling back to full inference."
-          return Nothing
+      -- (Pre-#347 universe digests carried an encoderId field gating an
+      -- additional universal-miss check here; retired in favor of
+      -- HYDRA_GENERATOR_STAMP at Layer 2. The four JSON-coder DSL files
+      -- previously fingerprinted by encoderId are namespaces in
+      -- 'hashUniverse' below, so any change to them invalidates the
+      -- cache through the standard per-namespace path.)
+      nsFiles <- Digest.discoverNamespaceFiles
+      currentDigest <- Digest.hashUniverse nsFiles universeMods
+      if M.null currentDigest
+        then return Nothing
         else do
-          nsFiles <- Digest.discoverNamespaceFiles
-          currentDigest <- Digest.hashUniverse nsFiles universeMods
-          if M.null currentDigest
-            then return Nothing
-            else do
-              -- Partition: a module is "clean" if its current DSL source
-              -- hash matches the stored hash for its namespace. Modules
-              -- without a discoverable DSL source (e.g. demos under
-              -- demos/src/, modules from heads/haskell/src/) are treated
-              -- as clean — their definition is determined by code we
-              -- don't have direct access to here, but if they aren't
-              -- in stored AND aren't in currentDigest, no source change
-              -- is detectable so they're effectively unchanged.
-              let isClean m =
-                    let ns = moduleNamespace m
-                    in case (M.lookup ns currentDigest, M.lookup ns stored) of
-                         (Just c, Just s) -> c == s
-                         (Nothing, Nothing) -> True
-                         _                -> False
-                  (cleanMods, dirtyMods) = L.partition isClean universeMods
+          -- Partition: a module is "clean" if its current DSL source
+          -- hash matches the stored hash for its namespace. Modules
+          -- without a discoverable DSL source (e.g. demos under
+          -- demos/src/, modules from heads/haskell/src/) are treated
+          -- as clean — their definition is determined by code we
+          -- don't have direct access to here, but if they aren't
+          -- in stored AND aren't in currentDigest, no source change
+          -- is detectable so they're effectively unchanged.
+          let isSourceClean m =
+                let ns = moduleNamespace m
+                in case (M.lookup ns currentDigest, M.lookup ns stored) of
+                     (Just c, Just s) -> c == s
+                     (Nothing, Nothing) -> True
+                     _                -> False
+              -- Initial dirty set: modules whose own source hash changed.
+              initialDirty = L.filter (not . isSourceClean) universeMods
+              initialDirtyNs = S.fromList (fmap moduleNamespace initialDirty)
+              -- Transitive expansion: add any module that imports a dirty
+              -- module, by closure over moduleDependencies. Without this
+              -- step a kernel-type rename invalidates the renamed module
+              -- only — its consumers are loaded from the on-disk JSON
+              -- (which reflects the old name) and the dependent .hs/.json
+              -- on disk stays stale. See #347.
+              allDirtyNs = closeDirtySet universeMods initialDirtyNs
+              -- Two separate concerns:
+              --
+              -- 1) Which modules get re-inferred + re-written? Only those
+              --    in targetMods (the caller is responsible for the rest;
+              --    e.g. update-json-main excludes native-owned hydra.java.*
+              --    and hydra.python.* per #344, leaving them to the native
+              --    generators).
+              --
+              -- 2) Which modules get loaded from JSON to build the typed
+              --    universe for inference? Everything in universeMods that
+              --    isn't in dirtyMods, so cross-package type references
+              --    still resolve.
+              targetNs = S.fromList (fmap moduleNamespace targetMods)
+              isDirty m =
+                let ns = moduleNamespace m
+                in ns `S.member` allDirtyNs && ns `S.member` targetNs
+              dirtyMods = filter isDirty targetMods
+              dirtyNs = S.fromList (fmap moduleNamespace dirtyMods)
+              cleanMods = filter (\m -> not (moduleNamespace m `S.member` dirtyNs))
+                                 universeMods
+              addedByClosure = S.size (S.intersection allDirtyNs targetNs)
+                             - S.size (S.intersection initialDirtyNs targetNs)
 
-              if Prelude.null dirtyMods
-                then do
-                  -- Everything is clean per the digest, but tryCacheHitSplit
-                  -- said miss. That means a JSON file is missing or the
-                  -- digest is stale. Fall through to full inference.
+          CM.when (addedByClosure > 0) $
+            putStrLn $ "  Transitive closure added " ++ show addedByClosure
+              ++ " dependent modules to the dirty set."
+          if Prelude.null dirtyMods
+            then do
+              -- Everything is clean per the digest, but tryCacheHitSplit
+              -- said miss. That means a JSON file is missing or the
+              -- digest is stale. Fall through to full inference.
+              return Nothing
+            else do
+              putStrLn $ "  Incremental inference: "
+                ++ show (length dirtyMods) ++ " dirty / "
+                ++ show (length cleanMods) ++ " clean"
+              -- Load clean modules from JSON (they carry inferred types).
+              let cleanNs = fmap moduleNamespace cleanMods
+              loaded <- E.try (loadCleanFromJson distJsonRoot universeMods cleanNs)
+                        :: IO (Either E.SomeException [Module])
+              case loaded of
+                Left e -> do
+                  putStrLn $ "  Incremental load failed: " ++ show e
                   return Nothing
-                else do
-                  putStrLn $ "  Incremental inference: "
-                    ++ show (length dirtyMods) ++ " dirty / "
-                    ++ show (length cleanMods) ++ " clean"
-                  -- Load clean modules from JSON (they carry inferred types).
-                  let cleanNs = fmap moduleNamespace cleanMods
-                  loaded <- E.try (loadCleanFromJson distJsonRoot universeMods cleanNs)
-                            :: IO (Either E.SomeException [Module])
-                  case loaded of
-                    Left e -> do
-                      putStrLn $ "  Incremental load failed: " ++ show e
-                      return Nothing
-                    Right cleanLoaded -> do
-                      let typedUniverse = cleanLoaded ++ dirtyMods
-                      inferred <- inferModulesGivenIO typedUniverse dirtyMods
-                      -- Return:
-                      --   * all modules (cleanLoaded ++ inferred), so the
-                      --     schemaMap can be built over the complete set.
-                      --   * dirty subset (inferred), so the caller writes
-                      --     JSON only for the modules that actually changed.
-                      return (Just (IncrementalPartial (cleanLoaded ++ inferred) inferred))
+                Right cleanLoaded -> do
+                  let typedUniverse = cleanLoaded ++ dirtyMods
+                  inferred <- inferModulesGivenIO typedUniverse dirtyMods
+                  -- Return:
+                  --   * all modules (cleanLoaded ++ inferred), so the
+                  --     schemaMap can be built over the complete set.
+                  --   * dirty subset (inferred), so the caller writes
+                  --     JSON only for the modules that actually changed.
+                  return (Just (IncrementalPartial (cleanLoaded ++ inferred) inferred))
 
 -- | Load modules from per-package JSON paths. The dist-json-root
 -- layout is dist/json/<pkg>/src/main/json/<ns-path>.json; we route
@@ -580,13 +715,11 @@ tryCacheHitSplit distJsonRoot universeMods targetMods = do
 -- transparently handled because their generator's source IS in the map, so
 -- any change upstream invalidates the cache.
 --
--- Additionally, the universe-wide digest carries an `encoderId` (a hash of
--- the JSON encode/decode/model/writer DSL files). When the on-disk
--- encoderId doesn't match the current one, every namespace's stored JSON
--- is potentially stale even if its DSL source is unchanged — we treat
--- this as a universal cache miss. Per-package digests don't carry an
--- encoderId because the universe-wide check fires first (before any
--- per-package read).
+-- (Pre-#347 universe digests also carried an `encoderId` field that
+-- fired here as an additional universal-miss trigger; retired in favor
+-- of HYDRA_GENERATOR_STAMP at Layer 2. The four JSON-coder DSL files
+-- previously fingerprinted by encoderId are namespaces in 'hashUniverse'
+-- below, so changes propagate through the standard per-namespace path.)
 checkCacheHit :: FilePath -> [Module] -> [FilePath] -> IO (Maybe Digest.DigestMap)
 checkCacheHit digestFile universeMods targetPaths = do
   nsFiles <- Digest.discoverNamespaceFiles
@@ -595,18 +728,11 @@ checkCacheHit digestFile universeMods targetPaths = do
     then return Nothing  -- nothing to verify against; always recompute
     else do
       stored <- Digest.readDigest digestFile
-      storedEnc <- Digest.readEncoderId digestFile
-      currentEnc <- Digest.computeEncoderId
-      let encoderMatches = storedEnc == currentEnc
-      if not encoderMatches
-        then do
-          putStrLn $ "  Encoder identity changed; invalidating universe cache."
-          return Nothing
-        else if stored /= currentDigest
-          then return Nothing
-          else do
-            existFlags <- mapM SD.doesFileExist targetPaths
-            if and existFlags then return (Just currentDigest) else return Nothing
+      if stored /= currentDigest
+        then return Nothing
+        else do
+          existFlags <- mapM SD.doesFileExist targetPaths
+          if and existFlags then return (Just currentDigest) else return Nothing
 
 -- | After a successful slow-path run, overwrite the digest with fresh hashes.
 refreshDigest :: FilePath -> [Module] -> IO ()
@@ -616,8 +742,7 @@ refreshDigestAt :: FilePath -> [Module] -> IO ()
 refreshDigestAt digestFile universeMods = do
   nsFiles <- Digest.discoverNamespaceFiles
   current <- Digest.hashUniverse nsFiles universeMods
-  encoderId <- Digest.computeEncoderId
-  Digest.writeUniverseDigest digestFile encoderId current
+  Digest.writeDigest digestFile current
   putStrLn $ "  Digest refreshed: " ++ digestFile ++ " (" ++ show (M.size current) ++ " entries)"
 
 -- | Write DSL modules to JSON files.
@@ -645,6 +770,10 @@ writeDslJsonPackageSplit distJsonRoot universeModules typeModules = do
     let nonEmpty = filter (not . null . moduleDefinitions) dslMods
     writeModulesJsonPackageSplit False distJsonRoot universeModules nonEmpty
     mergeDslJsonIntoPerPackageDigests distJsonRoot nonEmpty
+    -- After both type/term and DSL hash entries are settled, compute the
+    -- per-package selfHash and depHashes that drive transitive
+    -- invalidation. See finalizePerPackageDigests and #347.
+    finalizePerPackageDigests distJsonRoot
 
 -- | For each package owning at least one of the given DSL modules, read its
 -- per-package input digest, add an entry per DSL namespace whose value is

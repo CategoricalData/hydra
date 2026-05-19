@@ -1,6 +1,9 @@
 {
   "formatVersion": 1,
   "version": 1,
+  "selfHash": "9ba10ad4946941f79d886a0c51293f6cd43ed7b89e87583960cca3127e2ce1b5",
+  "depHash:hydra-kernel": "151619049e4eb96e28efc60cd7b05e845f3a44faedae31fe62744e02ad644890",
+  "depHash:hydra-rdf": "a2868bfcb13a7840d31f02bcdc35d4b74f17a191a16ddaca96a7ba9273e61c6f",
   "hashes": {
     "com.gdblab.pathAlgebra.expressions": "d3f31158fb7ebe6129c9d869c0b80b6cea57a293be2cebcea6857def0179e027",
     "com.gdblab.pathAlgebra.syntax": "7d68a229a2c4aef9503aa0d221321f38994139d6b671135b1e88848e46e1a2be",

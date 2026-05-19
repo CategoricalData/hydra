@@ -1,6 +1,8 @@
 {
   "formatVersion": 1,
   "version": 1,
+  "selfHash": "a2ba2c73be05f0c57d83a0313bd43b9e2def7a18a8abc0e3b92d59456421ac1b",
+  "depHash:hydra-kernel": "151619049e4eb96e28efc60cd7b05e845f3a44faedae31fe62744e02ad644890",
   "hashes": {
     "hydra.dsl.haskell.environment": "d54db8aa64c0bb6c42682ed3d275023f82db2e98782dd734292c98a0783b83fa",
     "hydra.dsl.haskell.syntax": "129d4d1b3f780e464e468b618ab595a43a4b3e0da63d0f1b8b8face65523881a",
