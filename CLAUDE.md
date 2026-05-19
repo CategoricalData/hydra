@@ -68,7 +68,20 @@ At the beginning of every new session, follow these steps **before doing any oth
 2. **Identify the current branch**: Run `git branch --show-current`.
    It should match the name of the worktree directory.
 
-3. **Load or create the branch plan document**: Look for a Markdown file at the
+3. **Tag every meaningful reply with the branch identifier.** Multiple
+   Claude sessions across parallel worktrees produce visually identical
+   output; the tag tells the user which session a reply came from.
+   Format: derive the tag from the branch name:
+   - `feature_NNN_*` or `bug_NNN_*` → `[#NNN]` (e.g., `[#347]`, `[#283]`).
+   - Anything else (`staging`, `main`, ad-hoc names) → `[<branch>]` verbatim.
+   Placement: emit the tag exactly once per reply, as the first token of
+   the first line. Do not repeat it on subsequent paragraphs, bullet
+   points, or sections — the whole reply belongs to one session, so one
+   tag suffices. Skip the tag entirely on pure status echoes (one-line
+   "done", tool-result acknowledgements) where it would add noise without
+   aiding identification.
+
+4. **Load or create the branch plan document**: Look for a Markdown file at the
    worktree root named after the current branch
    (e.g., `staging-plan.md`, `feature_249_java_version-plan.md`).
    - If it exists, read it to understand the current state of work.
@@ -78,7 +91,7 @@ At the beginning of every new session, follow these steps **before doing any oth
      - **Other branches**: Create a minimal plan summarizing purpose and in-progress work.
    - These plan documents are not checked in to Git.
 
-4. **Check for sibling-worktree messages**: List
+5. **Check for sibling-worktree messages**: List
    `claude-hydra-messages/inbox/*.md` at the worktree root. If there are
    new messages, summarize them for the user and ask whether to act on
    them before doing anything else. Also list
@@ -86,9 +99,9 @@ At the beginning of every new session, follow these steps **before doing any oth
    send from a crashed prior session that needs to be retried. See
    [Cross-worktree communication](#cross-worktree-communication).
 
-5. **Discuss the plan with the user**: Present it, incorporate feedback, update the file.
+6. **Discuss the plan with the user**: Present it, incorporate feedback, update the file.
 
-6. **Consult task-specific references as needed** (see [Where to look up X](#where-to-look-up-x) below).
+7. **Consult task-specific references as needed** (see [Where to look up X](#where-to-look-up-x) below).
 
 ### During the session
 
