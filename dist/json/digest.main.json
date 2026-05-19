@@ -1,7 +1,6 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "encoderId": "a8896a46a4ab31a4d6ed1c27b0854eccb6b66716ba104cc3f32a99cf276b5a32",
   "hashes": {
     "com.gdblab.pathAlgebra.expressions": "d3f31158fb7ebe6129c9d869c0b80b6cea57a293be2cebcea6857def0179e027",
     "com.gdblab.pathAlgebra.syntax": "7d68a229a2c4aef9503aa0d221321f38994139d6b671135b1e88848e46e1a2be",

@@ -14,15 +14,12 @@ module Hydra.Digest (
     readDigest,
     writeDigest,
     digestPath,
-    -- Encoder identity: a hash of the JSON encode/decode/model/writer
-    -- DSL sources. When the universe-wide digest's encoderId doesn't
-    -- match the one computed from current sources, every module's
-    -- on-disk JSON is potentially stale (the format changed even
-    -- though the per-namespace DSL hashes didn't). The cache check
-    -- treats this as a universal miss.
-    computeEncoderId,
-    readEncoderId,
-    writeUniverseDigest,
+    -- Per-package input digest (v1 + selfHash + deps; see PerPackageDigest)
+    PerPackageDigest(..),
+    emptyPerPackageDigest,
+    computeSelfHash,
+    readPerPackageDigest,
+    writePerPackageDigest,
     -- v2 API (richer digest with inputs, outputs, generator stamp)
     Digest(..),
     DigestEntry(..),
@@ -39,6 +36,7 @@ module Hydra.Digest (
 import Hydra.Packaging (Module(..), Namespace(..))
 
 import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString.Lazy.Char8 as BLC
 import qualified Data.Digest.Pure.SHA as SHA
 import qualified Data.Map as M
 import qualified Data.List as L
@@ -153,7 +151,10 @@ digestPath basePath = FP.takeDirectory basePath FP.</> "digest.json"
 
 
 -- | Read a digest file. Absent or malformed → empty map.
--- The "encoderId" key, when present, is filtered out of the result.
+--
+-- The "encoderId" key (legacy from pre-#347 universe digests) is
+-- silently ignored if present, for backward compatibility with old
+-- on-disk digests — see retirement note above 'writeDigest'.
 readDigest :: FilePath -> IO DigestMap
 readDigest path = do
     exists <- SD.doesFileExist path
@@ -162,20 +163,6 @@ readDigest path = do
       case result of
         Left _  -> return M.empty
         Right s -> return $ parseDigest s
-
-
--- | Read the encoderId field from a digest file, if present. Absent file
--- or no encoderId field → empty string. Callers compare this against
--- 'computeEncoderId'; a mismatch means the encoder/format changed since
--- the digest was last written.
-readEncoderId :: FilePath -> IO String
-readEncoderId path = do
-    exists <- SD.doesFileExist path
-    if not exists then return "" else do
-      result <- E.try (readFile path) :: IO (Either E.SomeException String)
-      case result of
-        Left _  -> return ""
-        Right s -> return $ parseEncoderId s
 
 
 -- | Write a digest file. Format: a minimal JSON object
@@ -191,59 +178,16 @@ readEncoderId path = do
 --     hash map, v2 = inputs/outputs/generator). It is not meant for consumers
 --     gating on the module-JSON encoding.
 --
--- Use 'writeUniverseDigest' to also record an encoderId.
+-- Pre-#347 universe digests also carried a top-level "encoderId" field
+-- (a content hash of four JSON-coder DSL source files). That mechanism
+-- was retired when 'compute_generator_stamp' in bin/lib/assemble-common.sh
+-- subsumed it as a per-target transform identity. Legacy on-disk
+-- encoderIds are tolerated by 'parseDigest' (silently ignored) but no
+-- longer produced or compared.
 writeDigest :: FilePath -> DigestMap -> IO ()
 writeDigest path digest = do
     SD.createDirectoryIfMissing True (FP.takeDirectory path)
-    writeFile path (serializeDigest "" digest)
-
-
--- | Write a digest file together with an encoderId stamp. Format:
--- { "formatVersion": 1, "version": 1, "encoderId": "<hex>", "hashes": { ... } }
--- The encoderId is computed by 'computeEncoderId'. When empty, the field
--- is omitted (matching the legacy schema).
-writeUniverseDigest :: FilePath -> String -> DigestMap -> IO ()
-writeUniverseDigest path encoderId digest = do
-    SD.createDirectoryIfMissing True (FP.takeDirectory path)
-    writeFile path (serializeDigest encoderId digest)
-
-
--- | Compute a hash identifying the on-disk JSON encoder/decoder layer.
--- Concretely: SHA-256 of the concatenated bytes of the four DSL source
--- files that govern the wire format. Any change to these files
--- invalidates the universe-wide cache, even when per-namespace DSL
--- hashes are unchanged — guards against the failure mode where editing
--- only Encode.hs or Decode.hs leaves stale JSON on disk for every other
--- namespace (issue surfaced by feature_343_json on 2026-04-25).
---
--- Files hashed (in fixed order):
---   * Hydra/Sources/Json/Encode.hs   — emits Term → Value
---   * Hydra/Sources/Json/Decode.hs   — parses Value → Term
---   * Hydra/Sources/Json/Model.hs    — Value type definition
---   * Hydra/Sources/Json/Writer.hs   — serializes Value to bytes on disk
---
--- A missing file is treated as the zero-byte string for hashing
--- (fail-soft); the encoderId still reflects the present files'
--- contents, and a missing encoder file should fail downstream anyway.
-computeEncoderId :: IO String
-computeEncoderId = do
-    let files =
-          [ packagesRoot FP.</> "hydra-kernel/src/main/haskell/Hydra/Sources/Json/Encode.hs"
-          , packagesRoot FP.</> "hydra-kernel/src/main/haskell/Hydra/Sources/Json/Decode.hs"
-          , packagesRoot FP.</> "hydra-kernel/src/main/haskell/Hydra/Sources/Json/Model.hs"
-          , packagesRoot FP.</> "hydra-kernel/src/main/haskell/Hydra/Sources/Json/Writer.hs"
-          ]
-    chunks <- mapM safeRead files
-    let combined = BL.concat chunks
-    return $ SHA.showDigest (SHA.sha256 combined)
-  where
-    safeRead fp = do
-      exists <- SD.doesFileExist fp
-      if not exists then return BL.empty else do
-        result <- E.try (BL.readFile fp) :: IO (Either E.SomeException BL.ByteString)
-        case result of
-          Left _  -> return BL.empty
-          Right b -> return b
+    writeFile path (serializeDigest digest)
 
 
 -- | Minimal JSON parser for the digest file. We deliberately avoid pulling
@@ -252,9 +196,13 @@ computeEncoderId = do
 -- The regex only matches `"key": "quoted_value"` pairs, so it naturally
 -- skips the `"formatVersion"`, `"version"`, and `"hashes": { ... }` scaffolding.
 --
--- The "encoderId" key is filtered from the namespace map: it is a
--- top-level field, not a namespace hash. Callers wanting the encoderId
--- use 'parseEncoderId' / 'readEncoderId' instead.
+-- Top-level non-namespace keys are filtered out:
+--   * "encoderId" — legacy from pre-#347 universe digests (retired).
+--   * "selfHash"  — per-package digest's package-level hash (#347).
+--   * "depHash:<pkg>" — per-package digest's recorded dep self-hashes (#347).
+--     The "depHash:" prefix makes them syntactically distinct from
+--     namespace entries (namespaces use "." as separator; packages use "-"
+--     and the prefix removes any chance of collision).
 parseDigest :: String -> DigestMap
 parseDigest s =
     let kvPattern = "\"([^\"]+)\"[[:space:]]*:[[:space:]]*\"([^\"]+)\"" :: String
@@ -262,39 +210,143 @@ parseDigest s =
     in M.fromList [ (Namespace k, v)
                   | (_:k:v:_) <- matches
                   , k /= "encoderId"
+                  , k /= "selfHash"
+                  , not ("depHash:" `L.isPrefixOf` k)
                   ]
 
 
--- | Extract the encoderId field from a digest file's text, or "" if absent.
-parseEncoderId :: String -> String
-parseEncoderId s =
-    let pat = "\"encoderId\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"" :: String
-    in case s RE.=~ pat :: [[String]] of
-         ((_:enc:_):_) -> enc
-         _             -> ""
-
-
--- | Serialize a digest, optionally with an encoderId stamp. Pass "" to
--- omit the field (legacy schema).
-serializeDigest :: String -> DigestMap -> String
-serializeDigest encoderId digest = unlines $
+-- | Serialize a digest. Schema:
+-- { "formatVersion": 1, "version": 1, "hashes": { "<ns>": "<hex>", ... } }
+serializeDigest :: DigestMap -> String
+serializeDigest digest = unlines $
     ["{"
     ,"  \"formatVersion\": 1,"
-    ,"  \"version\": 1,"]
-    ++ encoderLines ++
-    ["  \"hashes\": {"]
+    ,"  \"version\": 1,"
+    ,"  \"hashes\": {"]
     ++ hashLines ++
     ["  }"
     ,"}"]
   where
-    encoderLines =
-      if null encoderId
-        then []
-        else ["  \"encoderId\": \"" ++ encoderId ++ "\","]
     entries = L.sortBy (\a b -> compare (fst a) (fst b)) (M.toList digest)
     hashLines = zipWith renderEntry [0..] entries
     renderEntry i (Namespace ns, h) =
       let sep = if i == length entries - 1 then "" else ","
+      in "    \"" ++ ns ++ "\": \"" ++ h ++ "\"" ++ sep
+
+
+----------------------------------------------------------------------
+-- Per-package input digest (#347 transitive A-side invalidation).
+----------------------------------------------------------------------
+-- Extends the v1 namespace→hash map with two extra fields:
+--
+--   * selfHash — SHA-256 over this package's own namespace hashes
+--     (sorted by namespace name). A single string that summarizes "what
+--     does this package's source content look like." Recorded into each
+--     per-target output digest's transform-identity slot so that any
+--     edit to any module in the package invalidates downstream regen.
+--
+--   * deps — map of declared-dependency-package-name → that dep's
+--     selfHash, captured at the time this digest was written. When a
+--     dep package's selfHash changes (because someone edited a module
+--     in it), this package's recorded deps entry no longer matches,
+--     and downstream caches invalidate transitively.
+--
+-- On-disk schema (a v1 file with selfHash + depHash:<pkg> top-level
+-- entries, plus the existing hashes block):
+--
+--   {
+--     "formatVersion": 1,
+--     "version": 1,
+--     "selfHash": "<hex>",
+--     "depHash:hydra-kernel": "<hex>",
+--     "depHash:hydra-rdf":    "<hex>",
+--     "hashes": { "<ns>": "<hex>", ... }
+--   }
+--
+-- The "depHash:" prefix keeps dep entries syntactically distinct from
+-- namespace entries (namespaces don't contain ":") and lets the legacy
+-- regex-based parseDigest reject them cleanly.
+--
+-- Backward compat: a pre-#347 on-disk digest has no selfHash field;
+-- readPerPackageDigest returns empty strings/maps for those, and the
+-- next regen will rewrite the file with the new fields populated.
+data PerPackageDigest = PerPackageDigest
+  { ppHashes   :: DigestMap          -- per-namespace source hashes
+  , ppSelfHash :: String             -- hash over ppHashes (empty if legacy)
+  , ppDeps     :: M.Map String String  -- depPkgName → that pkg's selfHash
+  } deriving (Show, Eq)
+
+emptyPerPackageDigest :: PerPackageDigest
+emptyPerPackageDigest = PerPackageDigest M.empty "" M.empty
+
+-- | Compute the package's selfHash from its own namespace hashes.
+-- Deterministic: entries sorted lex by namespace, joined with explicit
+-- separators so a hash collision can't be engineered by clever naming.
+computeSelfHash :: DigestMap -> String
+computeSelfHash digest =
+    let entries = L.sortBy (\(a,_) (b,_) -> compare a b) (M.toList digest)
+        rendered = concatMap (\(Namespace ns, h) -> ns ++ "\t" ++ h ++ "\n") entries
+    in SHA.showDigest (SHA.sha256 (BLC.pack rendered))
+
+readPerPackageDigest :: FilePath -> IO PerPackageDigest
+readPerPackageDigest path = do
+    exists <- SD.doesFileExist path
+    if not exists then return emptyPerPackageDigest else do
+      result <- E.try (readFile path) :: IO (Either E.SomeException String)
+      case result of
+        Left _  -> return emptyPerPackageDigest
+        -- Force the string fully before returning so the underlying file
+        -- handle is closed promptly. Without this, lazy I/O can hold the
+        -- handle open across a subsequent writeFile to the same path,
+        -- producing "resource busy (file is locked)" errors (#347 #11).
+        Right s -> length s `seq` return (parsePerPackageDigest s)
+
+parsePerPackageDigest :: String -> PerPackageDigest
+parsePerPackageDigest s =
+    let kvPattern = "\"([^\"]+)\"[[:space:]]*:[[:space:]]*\"([^\"]+)\"" :: String
+        matches   = s RE.=~ kvPattern :: [[String]]
+        pairs     = [(k, v) | (_:k:v:_) <- matches]
+        hashesMap = M.fromList
+          [ (Namespace k, v) | (k, v) <- pairs
+          , k /= "encoderId"
+          , k /= "selfHash"
+          , not ("depHash:" `L.isPrefixOf` k)
+          ]
+        depsMap   = M.fromList
+          [ (drop (length ("depHash:" :: String)) k, v)
+          | (k, v) <- pairs, "depHash:" `L.isPrefixOf` k
+          ]
+        selfH     = Y.fromMaybe "" (L.lookup "selfHash" pairs)
+    in PerPackageDigest hashesMap selfH depsMap
+
+writePerPackageDigest :: FilePath -> PerPackageDigest -> IO ()
+writePerPackageDigest path ppd = do
+    SD.createDirectoryIfMissing True (FP.takeDirectory path)
+    writeFile path (serializePerPackageDigest ppd)
+
+serializePerPackageDigest :: PerPackageDigest -> String
+serializePerPackageDigest (PerPackageDigest hashes selfH deps) = unlines $
+    ["{"
+    ,"  \"formatVersion\": 1,"
+    ,"  \"version\": 1,"]
+    ++ selfHashLines
+    ++ depLines
+    ++ ["  \"hashes\": {"]
+    ++ hashLines ++
+    ["  }"
+    ,"}"]
+  where
+    selfHashLines =
+      if null selfH
+        then []
+        else ["  \"selfHash\": \"" ++ selfH ++ "\","]
+    depEntries = L.sortBy (\(a,_) (b,_) -> compare a b) (M.toList deps)
+    depLines = map (\(pkg, h) ->
+      "  \"depHash:" ++ pkg ++ "\": \"" ++ h ++ "\",") depEntries
+    hashEntries = L.sortBy (\a b -> compare (fst a) (fst b)) (M.toList hashes)
+    hashLines = zipWith renderEntry [0..] hashEntries
+    renderEntry i (Namespace ns, h) =
+      let sep = if i == length hashEntries - 1 then "" else ","
       in "    \"" ++ ns ++ "\": \"" ++ h ++ "\"" ++ sep
 
 
@@ -339,10 +391,14 @@ data Digest = Digest
     { digestInputs    :: M.Map FilePath DigestEntry
     , digestOutputs   :: M.Map FilePath DigestEntry
     , digestGenerator :: String  -- generator stamp; see 'generatorStamp'
+    -- #347 transitive-invalidation fields, recorded at refresh time and
+    -- compared at freshness-check time alongside per-namespace inputs:
+    , digestRecordedSelfHash :: String  -- input package's selfHash
+    , digestRecordedDeps     :: M.Map String String  -- depPkg → selfHash
     } deriving (Eq, Show)
 
 emptyDigest :: Digest
-emptyDigest = Digest M.empty M.empty ""
+emptyDigest = Digest M.empty M.empty "" "" M.empty
 
 -- | Hash any file by content. Returns a DigestEntry with the given kind
 -- attached. Fails loudly if the file is missing — callers handle by
@@ -393,6 +449,8 @@ digestsMatch a b =
     digestInputs a == digestInputs b
       && digestOutputs a == digestOutputs b
       && digestGenerator a == digestGenerator b
+      && digestRecordedSelfHash a == digestRecordedSelfHash b
+      && digestRecordedDeps a == digestRecordedDeps b
 
 -- | For each output file recorded in the digest, verify the file
 -- exists on disk and hashes to the recorded value. Returns True iff
@@ -441,8 +499,11 @@ serializeDigestV2 d = unlines $
     [ "{"
     , "  \"version\": 2,"
     , "  \"generator\": " ++ jsonString (digestGenerator d) ++ ","
-    , "  \"inputs\": {"
-    ] ++ entries (digestInputs d) ++
+    ]
+    ++ selfHashLine
+    ++ depHashLines
+    ++ [ "  \"inputs\": {" ]
+    ++ entries (digestInputs d) ++
     [ "  },"
     , "  \"outputs\": {"
     ] ++ entries (digestOutputs d) ++
@@ -450,6 +511,18 @@ serializeDigestV2 d = unlines $
     , "}"
     ]
   where
+    -- #347 transitive fields: emit only when non-empty so legacy on-disk
+    -- digests (no selfHash, no deps) and current ones round-trip cleanly.
+    selfHashLine =
+      if null (digestRecordedSelfHash d)
+        then []
+        else ["  \"selfHash\": " ++ jsonString (digestRecordedSelfHash d) ++ ","]
+    depHashLines =
+      [ "  \"depHash:" ++ pkg ++ "\": " ++ jsonString h ++ ","
+      | (pkg, h) <- L.sortBy (\(a,_) (b,_) -> compare a b)
+                      (M.toList (digestRecordedDeps d))
+      ]
+
     entries m =
       let kvs = L.sortBy (\a b -> compare (fst a) (fst b)) (M.toList m)
       in zipWith (renderEntry (length kvs)) [0..] kvs
@@ -490,13 +563,25 @@ parseDigestV2 s =
         gen    = case s RE.=~ genPat :: [[String]] of
                    ((_:g:_):_) -> g
                    _           -> ""
+        -- selfHash is also a top-level string (added by #347). Absent
+        -- on legacy digests; default to "".
+        selfPat = "\"selfHash\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"" :: String
+        selfH   = case s RE.=~ selfPat :: [[String]] of
+                    ((_:h:_):_) -> h
+                    _           -> ""
+        -- depHash:<pkg> entries are flat top-level strings (the prefix
+        -- keeps them syntactically distinct from filepath inputs/outputs).
+        -- Restrict to the header region (before "inputs") so we don't
+        -- accidentally match anything appearing later.
+        headerEnd = case findIndex "\"inputs\"" s of
+                      Just i  -> i
+                      Nothing -> length s
+        header = take headerEnd s
+        depPat = "\"depHash:([^\"]+)\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"" :: String
+        depEntries = (header RE.=~ depPat) :: [[String]]
+        deps    = M.fromList [(pkg, h) | (_:pkg:h:_) <- depEntries]
         -- Split on "outputs": to give us two halves; the inputs half is
-        -- everything before, outputs half is everything after. This is
-        -- coarse but lets us assign entries to the right map without
-        -- proper JSON parsing.
-        -- We anchor on the literal text "\"outputs\"" preceded by a
-        -- closing brace + comma + whitespace to disambiguate from the
-        -- (theoretical) word "outputs" appearing in a path.
+        -- everything before, outputs half is everything after.
         (inHalf, outHalf) = splitOnOutputs s
         entryPat = "\"([^\"]+)\"[[:space:]]*:[[:space:]]*\\{[[:space:]]*\"kind\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"[[:space:]]*,[[:space:]]*\"hash\"[[:space:]]*:[[:space:]]*\"([^\"]*)\"" :: String
         parseEntries :: String -> M.Map FilePath DigestEntry
@@ -506,9 +591,11 @@ parseDigestV2 s =
                         | (_:path:k:h:_) <- ms
                         ]
     in Digest
-        { digestInputs    = parseEntries inHalf
-        , digestOutputs   = parseEntries outHalf
-        , digestGenerator = gen
+        { digestInputs           = parseEntries inHalf
+        , digestOutputs          = parseEntries outHalf
+        , digestGenerator        = gen
+        , digestRecordedSelfHash = selfH
+        , digestRecordedDeps     = deps
         }
 
 -- Split the digest text into the inputs region (everything up to and
@@ -519,11 +606,14 @@ splitOnOutputs s =
     case findIndex "\"outputs\"" s of
       Just i  -> (take i s, drop i s)
       Nothing -> (s, "")
-  where
-    findIndex needle hay =
-      let n = length needle
-          go ix rest
-            | length rest < n = Nothing
-            | take n rest == needle = Just ix
-            | otherwise = go (ix + 1) (drop 1 rest)
-      in go 0 hay
+
+-- | First index at which 'needle' starts in 'hay', or Nothing.
+-- Naive O(n*m) search; the strings are short (digest files are < 100KB).
+findIndex :: String -> String -> Maybe Int
+findIndex needle hay =
+    let n = length needle
+        go ix rest
+          | length rest < n = Nothing
+          | take n rest == needle = Just ix
+          | otherwise = go (ix + 1) (drop 1 rest)
+    in go 0 hay

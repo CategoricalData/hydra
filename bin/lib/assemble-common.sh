@@ -27,46 +27,97 @@
 # triggers a cache miss even when the per-package input digest itself
 # is byte-identical.
 #
-# Inputs hashed (per target lang L):
-#   * dist/json/hydra-L/src/main/digest.json — the coder's own input
-#     digest, which after Fix #1 transitively covers L's coder DSL
-#     source files (packages/hydra-L/src/main/haskell/Hydra/Sources/L/**)
-#     and L's emitted DSL wrappers.
-#   * heads/L/bin/assemble-distribution.sh — the assembler script itself.
-#   * For L == "haskell": additionally heads/haskell/src/main/haskell/**.hs,
-#     since Haskell-emit pulls in the hand-written orchestrators
-#     (Hydra.Generation, Hydra.Haskell.Generation, Hydra.PackageRouting)
-#     that aren't reachable through dist/json/hydra-haskell/. Same scope
-#     as bin/lib/check-phase1-fresh.py and sync-haskell.sh's BFJ cache,
-#     so the three caches stay consistent.
+# Compositional structure: a host transform is a small dependency graph
+# of three components, each of which has its own identity:
+#
+#   stamp(L) = hash(
+#       kernel-id  = component_identity hydra-kernel,
+#       coder-id   = component_identity hydra-L (or hydra-lisp for any L
+#                    in {clojure, scheme, common-lisp, emacs-lisp}),
+#       runtime-id = runtime_identity L
+#   )
+#
+# This shape isolates invalidation: a kernel change invalidates every
+# target's stamp; a Java-coder change invalidates only Java; a Python
+# runtime edit invalidates only Python. The flat-blob predecessor
+# invalidated every target on any heads/haskell/src/main/haskell edit,
+# which was over-eager.
+#
+# component_identity is the swappable layer: today it always returns a
+# local content hash (the package isn't published yet), but post-#370
+# it will branch on published-vs-local and return a version string for
+# published hosts. The composition above is unchanged either way.
 #
 # Output: a 16-char hex prefix of the SHA-256, short enough to live in a
-# JSON string without bloating the digest file. The full hash is overkill
-# for collision purposes given the small input space.
+# JSON string without bloating the digest file.
 #
-# See #347 for the broader transform-fingerprinting story.
+# See #347 (Merkle cache invalidation) and #370 (external versioned hosts).
 compute_generator_stamp() {
     local lang="$1"
-    local coder_digest="$HYDRA_ROOT_DIR/dist/json/hydra-$lang/src/main/digest.json"
+    local coder_pkg
+    case "$lang" in
+        clojure|scheme|common-lisp|emacs-lisp|lisp) coder_pkg="hydra-lisp" ;;
+        *)                                          coder_pkg="hydra-$lang" ;;
+    esac
     {
-        [ -f "$coder_digest" ] && cat "$coder_digest"
-        # Hash the per-target assembler script(s). Most heads use a single
-        # heads/<lang>/bin/assemble-distribution.sh; Lisp dialects share
-        # logic in heads/lisp/bin/common.sh and have per-dialect
-        # assemble-distribution.sh wrappers.
-        if [ "$lang" = "lisp" ]; then
+        printf 'kernel:%s\n'  "$(component_identity hydra-kernel)"
+        printf 'coder:%s\n'   "$(component_identity "$coder_pkg")"
+        printf 'runtime:%s\n' "$(runtime_identity "$lang")"
+    } | shasum -a 256 | awk '{print substr($1,1,16)}'
+}
+
+# Identity of a Hydra package. Today: hash of every Haskell source under
+# packages/<pkg>/src/main/haskell/ — this transitively covers the package's
+# DSL sources, manifests, and (for the kernel) all the json/encode/decode
+# modules previously fingerprinted by Hydra.Digest.encoderId (now retired).
+#
+# Post-#370 swap point: when the package is available as a published
+# artifact pinned in this build's manifest, return the version string
+# instead. Single-function change; callers don't need updating.
+component_identity() {
+    local pkg="$1"
+    local src_dir="$HYDRA_ROOT_DIR/packages/$pkg/src/main/haskell"
+    if [ -d "$src_dir" ]; then
+        find "$src_dir" -type f -name '*.hs' 2>/dev/null \
+            | LC_ALL=C sort | xargs cat 2>/dev/null \
+            | shasum -a 256 | awk '{print $1}'
+    else
+        # Package directory missing — emit a sentinel rather than empty
+        # so the composition still produces a stable distinct value.
+        echo "missing:$pkg"
+    fi
+}
+
+# Identity of a host's hand-written runtime support — the code under
+# heads/<lang>/src/main/ that the generator depends on but isn't part of
+# any packages/<pkg>/. For Haskell, this is the orchestrator code
+# (Hydra.Generation, Hydra.PackageRouting, etc.) that the bootstrap-from-json
+# binary links against. For other hosts, it's the runtime classes / modules
+# the generated code depends on at compile time (the digest pipeline doesn't
+# read these to make decisions, but a change to them invalidates the
+# downstream output because consumers' compiled artifacts would differ).
+#
+# Lisp special case: dialects share heads/lisp/bin/common.sh assembler
+# logic plus per-dialect heads/lisp/<dialect>/src/main/ runtime trees.
+runtime_identity() {
+    local lang="$1"
+    {
+        if [ "$lang" = "lisp" ] || [ "$lang" = "clojure" ] || [ "$lang" = "scheme" ] \
+                || [ "$lang" = "common-lisp" ] || [ "$lang" = "emacs-lisp" ]; then
             [ -f "$HYDRA_ROOT_DIR/heads/lisp/bin/common.sh" ] && cat "$HYDRA_ROOT_DIR/heads/lisp/bin/common.sh"
+            find "$HYDRA_ROOT_DIR/heads/lisp" -path '*/src/main/*' -type f 2>/dev/null \
+                | LC_ALL=C sort | xargs cat 2>/dev/null
             find "$HYDRA_ROOT_DIR/heads/lisp" -name 'assemble-distribution.sh' -type f 2>/dev/null \
                 | LC_ALL=C sort | xargs cat 2>/dev/null
         else
+            local main_dir="$HYDRA_ROOT_DIR/heads/$lang/src/main"
+            [ -d "$main_dir" ] && \
+                find "$main_dir" -type f 2>/dev/null \
+                    | LC_ALL=C sort | xargs cat 2>/dev/null
             local assembler="$HYDRA_ROOT_DIR/heads/$lang/bin/assemble-distribution.sh"
             [ -f "$assembler" ] && cat "$assembler"
-            if [ "$lang" = "haskell" ]; then
-                find "$HYDRA_ROOT_DIR/heads/haskell/src/main/haskell" -type f -name '*.hs' 2>/dev/null \
-                    | LC_ALL=C sort | xargs cat 2>/dev/null
-            fi
         fi
-    } | shasum -a 256 | awk '{print substr($1,1,16)}'
+    } | shasum -a 256 | awk '{print $1}'
 }
 
 assemble_check_fresh() {
