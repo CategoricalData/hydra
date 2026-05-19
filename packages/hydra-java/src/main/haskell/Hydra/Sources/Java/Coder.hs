@@ -71,7 +71,7 @@ import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSourc
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
--- | Get a type annotation, converting DecodingError to InContext Error.
+-- | Get a type annotation, converting DecodingError to Error.
 getTypeE :: TTerm Context -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either Error (Maybe Type))
 getTypeE cx g ann = Eithers.bimap
   ("__de" ~> Error.errorOther (Error.otherError ((unwrap _DecodingError) @@ var "__de")))

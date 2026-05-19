@@ -43,14 +43,6 @@ import Data.Char (isAlphaNum, toUpper)
 
 
 
--- | Format an InContext Error with trace information
-formatError :: Context.InContext Error.Error -> String
-formatError ic = showError (Context.inContextObject ic) ++ traceInfo
-  where
-    cx = Context.inContextContext ic
-    stack = Context.contextTrace cx
-    traceInfo = if L.null stack then "" else " (" ++ L.intercalate " > " (reverse stack) ++ ")"
-
 showError :: Error.Error -> String
 showError = ShowError.error
 

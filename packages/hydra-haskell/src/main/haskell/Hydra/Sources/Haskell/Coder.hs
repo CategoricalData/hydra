@@ -101,9 +101,9 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 formatError :: TTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
 
--- | Lift Either String to Either Error using a context
+-- | Lift Either String to Either Error
 liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either Error a)
-liftStringError cx = Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorExtraction $ Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "valid input") (var "_s")) cx) ("_x" ~> var "_x")
+liftStringError _cx = Eithers.bimap ("_s" ~> Error.errorExtraction (Error.extractionErrorUnexpectedShape $ Error.unexpectedShapeError (string "valid input") (var "_s"))) ("_x" ~> var "_x")
 
 type HaskellNamespaces = Namespaces H.ModuleName
 

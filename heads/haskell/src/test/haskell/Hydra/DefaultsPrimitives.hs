@@ -58,11 +58,6 @@ coerceError :: Either e Term -> Either Error Term
 coerceError (Right t) = Right t
 coerceError (Left _) = error "coerceError: impossible Left from always-Right eval primitive"
 
--- | Bridge: convert InContext Error to Error (temporary until gen-main is regenerated)
-dropCtx :: Either (InContext Error) Term -> Either Error Term
-dropCtx (Left ic) = Left (inContextObject ic)
-dropCtx (Right t) = Right t
-
 -- ---- Eithers ----
 
 defaultLibEithers :: Library

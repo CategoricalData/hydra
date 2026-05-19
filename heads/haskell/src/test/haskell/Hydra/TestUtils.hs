@@ -221,10 +221,6 @@ shouldSucceedWith f x = case f of
     Left err -> HL.assertFailure err
     Right y -> y `H.shouldBe` x
 
--- | Map an Error to a plain String error (legacy name)
-mapInContextError :: Either Error a -> Either String a
-mapInContextError = mapError
-
 mapError :: Either Error a -> Either String a
 mapError (Left e) = Left (showError e)
 mapError (Right a) = Right a

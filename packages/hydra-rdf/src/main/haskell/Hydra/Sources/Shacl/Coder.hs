@@ -416,7 +416,7 @@ encodeType = define "encodeType" $
             (Sets.fromList (list [
               inject Shacl._Reference Shacl._Reference_named (nameToIri @@ var "vname")]))])]
 
--- | Construct a Left (InContext Error) error
+-- | Construct a Left Error
 err :: TTermDefinition (Context -> String -> Either Error a)
 err = define "err" $
   doc "Construct an error result with a context and message" $

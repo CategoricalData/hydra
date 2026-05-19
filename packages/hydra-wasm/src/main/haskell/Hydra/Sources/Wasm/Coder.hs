@@ -97,7 +97,7 @@ module_ = Module {
 -- =============================================================================
 
 -- | Map a Hydra type to a WASM value type
-encodeValType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) W.ValType)
+encodeValType :: TTermDefinition (Context -> Graph -> Type -> Either Error W.ValType)
 encodeValType = def "encodeValType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
@@ -213,7 +213,7 @@ encodeLiteral = def "encodeLiteral" $
 
 -- | Encode a Hydra type as a list of WASM result types (for function signatures).
 -- For function types, returns the innermost codomain (after stripping all arrows).
-encodeType :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) [W.ValType])
+encodeType :: TTermDefinition (Context -> Graph -> Type -> Either Error [W.ValType])
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
@@ -245,7 +245,7 @@ encodeType = def "encodeType" $
 -- `(param i32) (result i32)` signature of our import declarations. Correct runtime
 -- semantics (actual arg passing) is out of scope for this pass — we're producing
 -- syntactically valid WAT only.
-encodeApplication :: TTermDefinition (Context -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> Term -> Either (InContext Error) [W.Instruction])
+encodeApplication :: TTermDefinition (Context -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> Term -> Either Error [W.Instruction])
 encodeApplication = def "encodeApplication" $
   "cx" ~> "g" ~> "stringOffsets" ~> "fieldOffsets" ~> "variantIndexes" ~> "funcSigs" ~> lambda "term" $
     "gathered" <~ (Analysis.gatherArgs @@ var "term" @@ list ([] :: [TTerm Term])) $
@@ -410,7 +410,7 @@ encodeApplication = def "encodeApplication" $
 -- is the universe-wide record-type→field-offset table used by encodeProjection. The
 -- variantIndexes map is the universe-wide union-type→variant-tag-index table used by
 -- `_Term_inject` (tag at construction) and by `encodeCases` (tag dispatch).
-encodeTerm :: TTermDefinition (Context -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> Term -> Either (InContext Error) [W.Instruction])
+encodeTerm :: TTermDefinition (Context -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> Term -> Either Error [W.Instruction])
 encodeTerm = def "encodeTerm" $
   "cx" ~> "g" ~> "stringOffsets" ~> "fieldOffsets" ~> "variantIndexes" ~> "funcSigs" ~> lambda "term" $
     cases _Term (var "term") (Just $
@@ -899,7 +899,7 @@ encodeTerm = def "encodeTerm" $
 -- memory read from the record pointer). If the type is unknown (e.g. a projection from
 -- a term whose type hasn't been declared as a record), we fall back to the session-8
 -- placeholder: drop the scrutinee and push `i32.const 0`.
-encodeProjection :: TTermDefinition (Context -> Graph -> M.Map Name [(Name, Int)] -> Projection -> [W.Instruction] -> Either (InContext Error) [W.Instruction])
+encodeProjection :: TTermDefinition (Context -> Graph -> M.Map Name [(Name, Int)] -> Projection -> [W.Instruction] -> Either Error [W.Instruction])
 encodeProjection = def "encodeProjection" $
   "cx" ~> "g" ~> "fieldOffsets" ~> lambda "proj" $ lambda "scrutineeInstrs" $
     "typeName" <~ Core.projectionTypeName (var "proj") $
@@ -944,7 +944,7 @@ encodeProjection = def "encodeProjection" $
 
 -- | Encode a case statement (union elimination) as WASM instructions.
 -- Takes scrutinee instructions to place before the dispatch.
-encodeCases :: TTermDefinition (Context -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> CaseStatement -> [W.Instruction] -> Either (InContext Error) [W.Instruction])
+encodeCases :: TTermDefinition (Context -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> CaseStatement -> [W.Instruction] -> Either Error [W.Instruction])
 encodeCases = def "encodeCases" $
   "cx" ~> "g" ~> "stringOffsets" ~> "fieldOffsets" ~> "variantIndexes" ~> "funcSigs" ~> lambda "cs" $ lambda "scrutineeInstrsRaw" $
     "tname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs"))) $
@@ -1074,7 +1074,7 @@ encodeCases = def "encodeCases" $
 -- | Encode a Hydra type definition as WASM module fields.
 -- Types are erased at runtime in WASM, but we emit function type definitions
 -- for types that represent function signatures (useful for call_indirect).
-encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either (InContext Error) [W.ModuleField])
+encodeTypeDefinition :: TTermDefinition (Context -> Graph -> TypeDefinition -> Either Error [W.ModuleField])
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Packaging.typeDefinitionName (var "tdef") $
@@ -1191,7 +1191,7 @@ collectCallTargets = def "collectCallTargets" $
       (var "instrs")
 
 -- | Extract parameter types from a function type, returning a list of domain types
-extractParamTypes :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) [W.ValType])
+extractParamTypes :: TTermDefinition (Context -> Graph -> Type -> Either Error [W.ValType])
 extractParamTypes = def "extractParamTypes" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Strip.deannotateType @@ var "t") $
@@ -1218,7 +1218,7 @@ clampValTypesToI32 = def "clampValTypesToI32" $
 -- clamping every Wasm value type to i32. Returns a pair `(paramTypes, resultTypes)`
 -- suitable for direct use in a Wasm TypeUse. Non-function types have zero params
 -- and a single i32 result (constants).
-extractSignature :: TTermDefinition (Context -> Graph -> Type -> Either (InContext Error) ([W.ValType], [W.ValType]))
+extractSignature :: TTermDefinition (Context -> Graph -> Type -> Either Error ([W.ValType], [W.ValType]))
 extractSignature = def "extractSignature" $
   "cx" ~> "g" ~> lambda "t" $
     "params" <<~ (extractParamTypes @@ var "cx" @@ var "g" @@ var "t") $
@@ -1271,7 +1271,7 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
 -- The fieldOffsets map is threaded down to encodeProjection so that record projection emits
 -- a real `i32.load offset=N` instead of the placeholder. The variantIndexes map is threaded
 -- down to encodeTerm (for _Term_inject tags) and encodeCases (for br_table tag dispatch).
-encodeTermDefinition :: TTermDefinition (Context -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> TermDefinition -> Either (InContext Error) W.ModuleField)
+encodeTermDefinition :: TTermDefinition (Context -> Graph -> M.Map String Int -> M.Map Name [(Name, Int)] -> M.Map Name [(Name, Int)] -> M.Map String ([W.ValType], [W.ValType]) -> TermDefinition -> Either Error W.ModuleField)
 encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> "stringOffsets" ~> "fieldOffsets" ~> "variantIndexes" ~> "funcSigs" ~> lambda "tdef" $
     "name" <~ Packaging.termDefinitionName (var "tdef") $
@@ -1576,7 +1576,7 @@ stringDataSegment = def "stringDataSegment" $
 -- =============================================================================
 
 -- | Convert a Hydra module to a map of file paths to WAT source code strings.
-moduleToWasm :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
+moduleToWasm :: TTermDefinition (Module -> [Definition] -> Context -> Graph -> Either Error (M.Map FilePath String))
 moduleToWasm = def "moduleToWasm" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $

@@ -283,15 +283,11 @@ object TestSuiteRunner {
               lambda("descTerm",
                 apply(
                   matchTerm("hydra.core.Term", Some(
-                    left(record("hydra.context.InContext",
-                      field("object", inject("hydra.errors.Error", "other", wrap("hydra.errors.OtherError", string("Expected string literal")))),
-                      field("context", variable("cx"))))),
+                    left(inject("hydra.errors.Error", "other", wrap("hydra.errors.OtherError", string("Expected string literal"))))),
                     field("literal", lambda("lit",
                       apply(
                         matchTerm("hydra.core.Literal", Some(
-                          left(record("hydra.context.InContext",
-                            field("object", inject("hydra.errors.Error", "other", wrap("hydra.errors.OtherError", string("Expected string literal")))),
-                            field("context", variable("cx"))))),
+                          left(inject("hydra.errors.Error", "other", wrap("hydra.errors.OtherError", string("Expected string literal"))))),
                           field("string", lambda("s", right(just(variable("s")))))),
                         variable("lit"))))),
                   variable("descTerm")))),
@@ -356,25 +352,21 @@ object TestSuiteRunner {
         FieldType("decode", Type.unit))))
 
     val contextName = "hydra.context.Context"
-    val inContextName = "hydra.context.InContext"
     val errorName = "hydra.errors.Error"
-    val inContextError = Type.application(ApplicationType(
-      Type.variable(inContextName),
-      Type.variable(errorName)))
-    def eitherInContextError(v: hydra.core.Type): hydra.core.Type =
-      Type.either(EitherType(inContextError, v))
+    def eitherError(v: hydra.core.Type): hydra.core.Type =
+      Type.either(EitherType(Type.variable(errorName), v))
 
     // Coder: forall v1 v2. {encode: ..., decode: ...}
     val encodeType = Type.function(FunctionType(
       Type.variable(contextName),
       Type.function(FunctionType(
         Type.variable("v1"),
-        eitherInContextError(Type.variable("v2"))))))
+        eitherError(Type.variable("v2"))))))
     val decodeType = Type.function(FunctionType(
       Type.variable(contextName),
       Type.function(FunctionType(
         Type.variable("v2"),
-        eitherInContextError(Type.variable("v1"))))))
+        eitherError(Type.variable("v1"))))))
     val coderBody = Type.record(Seq(
       FieldType("encode", encodeType),
       FieldType("decode", decodeType)))
@@ -390,13 +382,6 @@ object TestSuiteRunner {
         FieldType("other", Type.map(MapType(
           Type.variable("hydra.core.Name"),
           Type.variable("hydra.core.Term")))))))
-
-    // InContext
-    types += (inContextName ->
-      Type.forall(ForallType("e",
-        Type.record(Seq(
-          FieldType("object", Type.variable("e")),
-          FieldType("context", Type.variable(contextName)))))))
 
     // Error types
     val otherErrorName = "hydra.errors.OtherError"
