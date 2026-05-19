@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "version": 1,
   "selfHash": "d7cd9ad0e767e095975f16e066a7e04568e41bbcb773cb1cb110255eef26de74",
-  "depHash:hydra-kernel": "932435460c02fd2f215eecb920f4a34a84db6a52806405bb1f8960f306acc383",
+  "depHash:hydra-kernel": "1efed46b49cf35f3aff6d5bdc2b65bf7f60753c90d59989b69180922b16685b7",
   "hashes": {
     "hydra.wasm.coder": "bde239beec76cae92ea8978b5e957f7f35ed868da77efbb21a9e13bb7553122f",
     "hydra.wasm.language": "657a00c39bd7e6186800818c47ecd503964e3ec51280a4cfa187ea0d41286539",
