@@ -328,16 +328,12 @@
     (make-prim-type-scheme arity)))
 
 (defun hydra--make-annotation-primitive (name arity impl-fn)
+  ;; #368: errors flow through Either Left Error directly; no InContext wrap
   (make-hydra_graph_primitive name (make-prim-type-scheme arity)
     (lambda (cx) (lambda (g) (lambda (args)
       (condition-case err
-          (let ((result (funcall impl-fn cx g args)))
-            (if (eq (car result) :left)
-                (list :left (make-hydra_context_in_context
-                             (list :other (make-hydra_context_in_context (cadr result) cx)) cx))
-              result))
-        (error (list :left (make-hydra_context_in_context
-                            (list :other (make-hydra_context_in_context (format "%S" err) cx)) cx)))))))))
+          (funcall impl-fn cx g args)
+        (error (list :left (list :other (make-hydra_errors_other_error (format "%S" err)))))))))))
 
 ;; ============================================================================
 ;; Annotation cache — preserves annotations stripped by the reducer

@@ -92,13 +92,9 @@
     ;; Error helpers
     ;; ============================================================================
 
-    (define (wrap-other-error cx result)
-      (if (eq? (car result) 'right)
-          result
-          (let* ((ic (cadr result))
-                 (obj (if (hydra_context_in_context? ic) (hydra_context_in_context-object ic) ic))
-                 (ctx (if (hydra_context_in_context? ic) (hydra_context_in_context-context ic) cx)))
-            (list 'left (make-hydra_context_in_context (list 'other (make-hydra_context_in_context obj ctx)) ctx)))))
+    ;; After #368 InContext removal, errors flow through Either Left Error
+    ;; directly; no rewrapping needed. Kept as a pass-through for callers.
+    (define (wrap-other-error cx result) result)
 
     ;; ============================================================================
     ;; TermCoder constructors
@@ -346,8 +342,8 @@
                         ((equal? variant-name "lessThan")    (list 'right (list 'less_than '())))
                         ((equal? variant-name "equalTo")     (list 'right (list 'equal_to '())))
                         ((equal? variant-name "greaterThan") (list 'right (list 'greater_than '())))
-                        (else (list 'left (make-hydra_context_in_context
-                                            (string-append "unknown comparison: " variant-name) cx))))))))))
+                        (else (list 'left (list 'other (make-hydra_errors_other_error
+                                            (string-append "unknown comparison: " variant-name))))))))))))
         (lambda (cx)
           (lambda (c)
             (let ((variant-name (cond
@@ -370,8 +366,8 @@
     (define (tc-function dom cod)
       (make-hydra_graph_term_coder
        (list 'function (make-hydra_core_function_type (hydra_graph_term_coder-type dom) (hydra_graph_term_coder-type cod)))
-        (lambda (cx) (lambda (g) (lambda (t) (list 'left (make-hydra_context_in_context "cannot encode term to a function" cx)))))
-        (lambda (cx) (lambda (v) (list 'left (make-hydra_context_in_context "cannot decode functions to terms" cx))))))
+        (lambda (cx) (lambda (g) (lambda (t) (list 'left (list 'other (make-hydra_errors_other_error "cannot encode term to a function"))))))
+        (lambda (cx) (lambda (v) (list 'left (list 'other (make-hydra_errors_other_error "cannot decode functions to terms")))))))
 
     (define (tc-function-with-reduce reduce-fn dom cod)
       (make-hydra_graph_term_coder
@@ -394,7 +390,7 @@
                             (when (eq? (car decode-result) 'left)
                               (error "function_with_reduce: failed to decode result"))
                             (cadr decode-result)))))))))
-        (lambda (cx) (lambda (v) (list 'left (make-hydra_context_in_context "cannot decode functions to terms" cx))))))
+        (lambda (cx) (lambda (v) (list 'left (list 'other (make-hydra_errors_other_error "cannot decode functions to terms")))))))
 
     ;; ============================================================================
     ;; Primitive constructors

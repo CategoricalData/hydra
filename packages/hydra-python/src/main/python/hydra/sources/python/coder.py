@@ -6622,7 +6622,7 @@ def _initial_metadata():
                 ("dottedNs", _kref.names_encode_namespace(var("ns"))),
                 (
                     "emptyNs",
-                    Pkg.namespaces(
+                    Util.namespaces(
                         pair(var("ns"), var("dottedNs")),
                         Maps.empty(),
                     ),

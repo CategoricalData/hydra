@@ -24,7 +24,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                         "body": {
-                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}}},
+                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}}},
                   {
                     "name": "boundTypeVariables",
                     "type": {
@@ -86,7 +86,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                         "body": {
-                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}}},
+                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}}},
                   {
                     "name": "typeVariables",
                     "type": {

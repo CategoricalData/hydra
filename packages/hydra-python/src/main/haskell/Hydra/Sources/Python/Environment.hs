@@ -39,6 +39,9 @@ graph = typeref Graph.ns
 modul :: String -> Type
 modul = typeref Module.ns
 
+util :: String -> Type
+util = typeref Util.ns
+
 typing :: String -> Type
 typing = typeref Typing.ns
 
@@ -70,7 +73,7 @@ pythonEnvironment = def "PythonEnvironment" $
   T.record [
     "namespaces">:
       doc "Namespace mapping for imports" $
-      modul "Namespaces" @@ syntax "DottedName",
+      util "Namespaces" @@ syntax "DottedName",
     "boundTypeVariables">:
       doc "Type variables in scope, with their Python names" $
       T.pair (T.list (core "Name")) (T.map (core "Name") (syntax "Name")),
@@ -97,7 +100,7 @@ pythonModuleMetadata = def "PythonModuleMetadata" $
   T.record [
     "namespaces">:
       doc "Namespace mapping for imports" $
-      modul "Namespaces" @@ syntax "DottedName",
+      util "Namespaces" @@ syntax "DottedName",
     "typeVariables">:
       doc "Type variables used in the module" $
       T.set (core "Name"),
