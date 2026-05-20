@@ -175,6 +175,11 @@ from hydra.dsl.util import (
     namespaces_focus as packaging_namespaces_focus,
 )
 
+# hydra.util — namespaces_focus moved from hydra.packaging to hydra.util (#369 A2).
+from hydra.dsl.util import (
+    namespaces_focus as packaging_namespaces_focus,
+)
+
 # hydra.util CaseConvention enum constants are TTerms (injects), already
 # available as constants in hydra.dsl.util. Re-export here for symmetry.
 from hydra.dsl.util import (
