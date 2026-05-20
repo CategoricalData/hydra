@@ -90,9 +90,6 @@ module_ = Module {
 wasmLanguage :: TTermDefinition Language
 wasmLanguage = define "wasmLanguage" $
     doc "Language constraints for WebAssembly" $ lets [
-    "eliminationVariants">: Sets.fromList $ list [
-      Variants.eliminationVariantRecord,
-      Variants.eliminationVariantUnion],
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBoolean, -- i32 (0/1)
       Variants.literalVariantFloat, -- f32, f64
@@ -101,9 +98,6 @@ wasmLanguage = define "wasmLanguage" $
     "floatTypes">: Sets.fromList $ list [
       Core.floatTypeFloat32, -- f32
       Core.floatTypeFloat64], -- f64
-    "functionVariants">: Sets.fromList $ list [
-      Variants.functionVariantElimination,
-      Variants.functionVariantLambda],
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeInt8,   -- i32
       Core.integerTypeInt16,  -- i32
@@ -157,10 +151,8 @@ wasmLanguage = define "wasmLanguage" $
     Coders.language
       (Coders.languageName2 $ string "hydra.wasm")
       (Coders.languageConstraints2
-        (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
-        (var "functionVariants")
         (var "integerTypes")
         (var "termVariants")
         (var "typeVariants")

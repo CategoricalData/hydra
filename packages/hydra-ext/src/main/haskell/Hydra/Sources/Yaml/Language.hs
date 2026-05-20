@@ -36,14 +36,12 @@ define = definitionInModule module_
 yamlLanguage :: TTermDefinition Language
 yamlLanguage = define "yamlLanguage" $
   doc "Language constraints for YAML" $ lets [
-  "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBoolean,
     Variants.literalVariantFloat,
     Variants.literalVariantInteger,
     Variants.literalVariantString],
   "floatTypes">: Sets.fromList $ list [Core.floatTypeFloat64],
-  "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [Core.integerTypeBigint],
   "termVariants">: Sets.fromList $ list [
     Variants.termVariantLiteral,
@@ -69,10 +67,8 @@ yamlLanguage = define "yamlLanguage" $
   Coders.language
     (Coders.languageName2 (string "hydra.yaml"))
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

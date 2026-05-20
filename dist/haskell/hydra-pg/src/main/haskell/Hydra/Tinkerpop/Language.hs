@@ -23,7 +23,6 @@ tinkerpopLanguage name features extras =
                   Logic.or (Features.dataTypeFeaturesSupportsBooleanArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsByteArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsDoubleArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsFloatArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsIntegerArrayValues vpFeatures) (Logic.or (Features.dataTypeFeaturesSupportsLongArrayValues vpFeatures) (Features.dataTypeFeaturesSupportsStringArrayValues vpFeatures))))))
           supportsLiterals = True
           supportsMaps = Features.dataTypeFeaturesSupportsMapValues vpFeatures
-          eliminationVariants = Sets.empty
           literalVariants =
                   Sets.fromList (Maybes.cat [
                     cond Variants.LiteralVariantBinary (Features.dataTypeFeaturesSupportsByteArrayValues vpFeatures),
@@ -35,7 +34,6 @@ tinkerpopLanguage name features extras =
                   Sets.fromList (Maybes.cat [
                     cond Core.FloatTypeFloat32 (Features.dataTypeFeaturesSupportsFloatValues vpFeatures),
                     (cond Core.FloatTypeFloat64 (Features.dataTypeFeaturesSupportsDoubleValues vpFeatures))])
-          functionVariants = Sets.empty
           integerTypes =
                   Sets.fromList (Maybes.cat [
                     cond Core.IntegerTypeInt32 (Features.dataTypeFeaturesSupportsIntegerValues vpFeatures),
@@ -82,10 +80,8 @@ tinkerpopLanguage name features extras =
       in Coders.Language {
         Coders.languageName = name,
         Coders.languageConstraints = Coders.LanguageConstraints {
-          Coders.languageConstraintsEliminationVariants = eliminationVariants,
           Coders.languageConstraintsLiteralVariants = literalVariants,
           Coders.languageConstraintsFloatTypes = floatTypes,
-          Coders.languageConstraintsFunctionVariants = functionVariants,
           Coders.languageConstraintsIntegerTypes = integerTypes,
           Coders.languageConstraintsTermVariants = termVariants,
           Coders.languageConstraintsTypeVariants = typeVariants,

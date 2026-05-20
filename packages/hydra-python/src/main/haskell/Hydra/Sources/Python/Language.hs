@@ -90,10 +90,6 @@ module_ = Module {
 pythonLanguage :: TTermDefinition Language
 pythonLanguage = define "pythonLanguage" $
     doc "Language constraints for Python 3" $ lets [
-    "eliminationVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
-      Variants.eliminationVariantRecord,
-      Variants.eliminationVariantUnion,
-      Variants.eliminationVariantWrap],
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBinary, -- bytes
       Variants.literalVariantBoolean, -- bool
@@ -103,9 +99,6 @@ pythonLanguage = define "pythonLanguage" $
       Variants.literalVariantString], -- str
     "floatTypes">: Sets.fromList $ list [
       Core.floatTypeFloat64], -- float
-    "functionVariants">: Sets.fromList $ list [
-      Variants.functionVariantElimination,
-      Variants.functionVariantLambda],
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeBigint], -- Python has only one built-in integer type
     "termVariants">: Sets.fromList $ list [ -- TODO: verify whether all are supported
@@ -156,10 +149,8 @@ pythonLanguage = define "pythonLanguage" $
     Coders.language
       (Coders.languageName2 $ string "hydra.python")
       (Coders.languageConstraints2
-        (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
-        (var "functionVariants")
         (var "integerTypes")
         (var "termVariants")
         (var "typeVariants")
