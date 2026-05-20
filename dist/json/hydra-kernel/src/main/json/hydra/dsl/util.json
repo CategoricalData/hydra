@@ -251,6 +251,418 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.util.namespaces",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.util.Namespaces"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Namespaces"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "focus"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "focus"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapping"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "mapping"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping of namespaces to values"}}}],
+                            "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "n"}}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "mapping"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace in focus, together with its associated value"}}}],
+                        "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "n"}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "focus"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping of namespaces to values"}}}],
+                          "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "n"}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace in focus, together with its associated value"}}}],
+                      "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "n"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["n"]}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.namespacesFocus",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL accessor for the focus field of hydra.util.Namespaces"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Namespaces"}}, "typeName": "hydra.core.Name"}}},
+                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "focus"}}, "typeName": "hydra.core.Name"}}}],
+                                            "typeName": "hydra.core.Projection"}}},
+                                      "typeName": "hydra.core.Term"}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                              "typeName": "hydra.core.Application"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace in focus, together with its associated value"}}}],
+                      "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "n"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["n"]}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.namespacesMapping",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {"key": "description", "value": {"literal": {"string": "DSL accessor for the mapping field of hydra.util.Namespaces"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Namespaces"}}, "typeName": "hydra.core.Name"}}},
+                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "mapping"}}, "typeName": "hydra.core.Name"}}}],
+                                            "typeName": "hydra.core.Projection"}}},
+                                      "typeName": "hydra.core.Term"}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                              "typeName": "hydra.core.Application"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping of namespaces to values"}}}],
+                      "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "n"}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["n"]}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.namespacesWithFocus",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the focus field of hydra.util.Namespaces"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Namespaces"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "focus"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapping"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Namespaces"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "mapping"}}, "typeName": "hydra.core.Name"}}}],
+                                                                          "typeName": "hydra.core.Projection"}}},
+                                                                    "typeName": "hydra.core.Term"}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                            "typeName": "hydra.core.Application"}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace in focus, together with its associated value"}}}],
+                            "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "n"}}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}},
+                "domain": {
+                  "application": {
+                    "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "original"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace in focus, together with its associated value"}}}],
+                          "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "n"}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["n"]}}},
+    {
+      "term": {
+        "name": "hydra.dsl.util.namespacesWithMapping",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL updater for the mapping field of hydra.util.Namespaces"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Namespaces"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "focus"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "application",
+                                                        "term": {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "function",
+                                                                "term": {
+                                                                  "inject": {
+                                                                    "field": {
+                                                                      "name": "project",
+                                                                      "term": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "typeName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.util.Namespaces"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "focus"}}, "typeName": "hydra.core.Name"}}}],
+                                                                          "typeName": "hydra.core.Projection"}}},
+                                                                    "typeName": "hydra.core.Term"}}},
+                                                              {
+                                                                "name": "argument",
+                                                                "term": {"application": {"argument": {"variable": "original"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                            "typeName": "hydra.core.Application"}}},
+                                                      "typeName": "hydra.core.Term"}}}],
+                                              "typeName": "hydra.core.Field"}},
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapping"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping of namespaces to values"}}}],
+                            "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "n"}}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}},
+                "domain": {
+                  "application": {
+                    "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "original"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "application": {
+                      "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping of namespaces to values"}}}],
+                          "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "n"}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {
+                "application": {
+                  "argument": {"application": {"argument": {"variable": "n"}, "function": {"variable": "hydra.util.Namespaces"}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": ["n"]}}},
+    {
+      "term": {
         "name": "hydra.dsl.util.precisionArbitrary",
         "term": {
           "annotated": {
@@ -337,6 +749,6 @@
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.util", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": ["hydra.util", "hydra.phantoms", "hydra.core", "hydra.packaging", "hydra.dsl.core", "hydra.dsl.packaging"],
   "description": "DSL functions for hydra.util",
   "namespace": "hydra.dsl.util"}

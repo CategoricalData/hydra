@@ -31,13 +31,6 @@ def _python_language_term():
         "Language constraints for Python 3",
         lets(
             [
-                field("eliminationVariants",
-                    Sets.from_list(list_([
-                        Variants.elimination_variant_record,
-                        Variants.elimination_variant_union,
-                        Variants.elimination_variant_wrap,
-                    ])),
-                ),
                 field("literalVariants",
                     Sets.from_list(list_([
                         Variants.literal_variant_binary,
@@ -51,12 +44,6 @@ def _python_language_term():
                 field("floatTypes",
                     Sets.from_list(list_([
                         Core.float_type_float64,
-                    ])),
-                ),
-                field("functionVariants",
-                    Sets.from_list(list_([
-                        Variants.function_variant_elimination,
-                        Variants.function_variant_lambda,
                     ])),
                 ),
                 field("integerTypes",
@@ -117,10 +104,8 @@ def _python_language_term():
             Coders.language(
                 Coders.language_name2(string("hydra.python")),
                 Coders.language_constraints2(
-                    var("eliminationVariants"),
                     var("literalVariants"),
                     var("floatTypes"),
-                    var("functionVariants"),
                     var("integerTypes"),
                     var("termVariants"),
                     var("typeVariants"),

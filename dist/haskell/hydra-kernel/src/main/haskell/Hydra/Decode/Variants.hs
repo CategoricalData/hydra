@@ -13,43 +13,6 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | Decoder for hydra.variants.EliminationVariant
-eliminationVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.EliminationVariant
-eliminationVariant cx raw =
-    Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermInject v0 ->
-        let field = Core.injectionField v0
-            fname = Core.fieldName field
-            fterm = Core.fieldTerm field
-            variantMap =
-                    Maps.fromList [
-                      (Core.Name "record", (\input -> Eithers.map (\t -> Variants.EliminationVariantRecord) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "union", (\input -> Eithers.map (\t -> Variants.EliminationVariantUnion) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "wrap", (\input -> Eithers.map (\t -> Variants.EliminationVariantWrap) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
-          "no such field ",
-          (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
--- | Decoder for hydra.variants.FunctionVariant
-functionVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.FunctionVariant
-functionVariant cx raw =
-    Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermInject v0 ->
-        let field = Core.injectionField v0
-            fname = Core.fieldName field
-            fterm = Core.fieldTerm field
-            variantMap =
-                    Maps.fromList [
-                      (
-                        Core.Name "elimination",
-                        (\input -> Eithers.map (\t -> Variants.FunctionVariantElimination) (ExtractCore.decodeUnit cx input))),
-                      (Core.Name "lambda", (\input -> Eithers.map (\t -> Variants.FunctionVariantLambda) (ExtractCore.decodeUnit cx input)))]
-        in (Maybes.maybe (Left (Errors.DecodingError (Strings.cat [
-          "no such field ",
-          (Core.unName fname),
-          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-      _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.variants.LiteralVariant
 literalVariant :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Variants.LiteralVariant
 literalVariant cx raw =

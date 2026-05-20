@@ -3178,6 +3178,6 @@
               {"name": "name", "type": {"variable": "hydra.csharp.syntax.Identifier"}},
               {"name": "size", "type": {"variable": "hydra.csharp.syntax.ConstantExpression"}}]},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.core"],
+  "dependencies": ["hydra.core"],
   "description": "A C# syntax module based on the ANTLR grammar dated 02/07/2024 and available at:\n  https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/grammar",
   "namespace": "hydra.csharp.syntax"}

@@ -96,10 +96,6 @@ javaMaxTupleLength = define "javaMaxTupleLength" $
 javaLanguage :: TTermDefinition Language
 javaLanguage = define "javaLanguage" $
   doc "Language constraints for Java" $ lets [
-  "eliminationVariants">: Sets.fromList $ list [
-    Variants.eliminationVariantRecord,
-    Variants.eliminationVariantUnion,
-    Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBinary, -- byte[]
     Variants.literalVariantBoolean, -- boolean
@@ -110,9 +106,6 @@ javaLanguage = define "javaLanguage" $
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat32, -- float
     Core.floatTypeFloat64], -- double
-  "functionVariants">: Sets.fromList $ list [
-    Variants.functionVariantElimination,
-    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeBigint, -- java.math.BigInteger
     Core.integerTypeInt8, -- byte (signed, 8-bit)
@@ -169,10 +162,8 @@ javaLanguage = define "javaLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.java")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

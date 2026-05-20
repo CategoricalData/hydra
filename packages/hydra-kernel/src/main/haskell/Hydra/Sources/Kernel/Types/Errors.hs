@@ -24,7 +24,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Context.ns, Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Paths.ns, Typing.ns, Variants.ns, Context.ns, Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Paths.ns, Typing.ns, Variants.ns],
+            moduleDependencies = [Context.ns, Core.ns, ErrorsChecking.ns, ErrorsCore.ns, Paths.ns, Typing.ns, Variants.ns],
             moduleDescription = Just "Top-level error types for the Hydra kernel"}
   where
     definitions = [

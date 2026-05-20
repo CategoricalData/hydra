@@ -22,6 +22,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Strip as Strip
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
@@ -32,13 +33,13 @@ applicationPattern name args =
       Syntax.applicationPatternName = name,
       Syntax.applicationPatternArgs = args})
 -- | Generate a Haskell name reference for a Hydra element
-elementReference :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Syntax.Name
+elementReference :: Util.Namespaces Syntax.ModuleName -> Core.Name -> Syntax.Name
 elementReference namespaces name =
 
-      let namespacePair = Packaging.namespacesFocus namespaces
+      let namespacePair = Util.namespacesFocus namespaces
           gname = Pairs.first namespacePair
           gmod = Syntax.unModuleName (Pairs.second namespacePair)
-          namespacesMap = Packaging.namespacesMapping namespaces
+          namespacesMap = Util.namespacesMapping namespaces
           qname = Names.qualifyName name
           local = Packaging.qualifiedNameLocal qname
           escLocal = sanitizeHaskellName local
@@ -69,7 +70,7 @@ hslit lit = Syntax.ExpressionLiteral lit
 hsvar :: String -> Syntax.Expression
 hsvar s = Syntax.ExpressionVariable (rawName s)
 -- | Compute the Haskell module namespaces for a Hydra module
-namespacesForModule :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Error (Packaging.Namespaces Syntax.ModuleName)
+namespacesForModule :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Error (Util.Namespaces Syntax.ModuleName)
 namespacesForModule mod cx g =
     Eithers.bind (Analysis.moduleDependencyNamespaces cx g True True True True mod) (\nss ->
       let ns = Packaging.moduleNamespace mod
@@ -128,9 +129,9 @@ namespacesForModule mod cx g =
                       in (nm, newN)) aliasEntries))
           finalState = Lists.foldl growStep initialState (Lists.replicate maxSegs ())
           resultMap = Maps.fromList (Lists.map (\nm -> (nm, (aliasFromSuffix (segsFor nm) (takenFor finalState nm)))) nssAsList)
-      in (Right (Packaging.Namespaces {
-        Packaging.namespacesFocus = focusPair,
-        Packaging.namespacesMapping = resultMap})))
+      in (Right (Util.Namespaces {
+        Util.namespacesFocus = focusPair,
+        Util.namespacesMapping = resultMap})))
 -- | Generate an accessor name for a newtype wrapper (e.g., 'unFoo' for Foo)
 newtypeAccessorName :: Core.Name -> String
 newtypeAccessorName name = Strings.cat2 "un" (Names.localNameOf name)
@@ -141,7 +142,7 @@ rawName n =
       Syntax.qualifiedNameQualifiers = [],
       Syntax.qualifiedNameUnqualified = (Syntax.NamePart n)})
 -- | Generate a Haskell name for a record field accessor
-recordFieldReference :: Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
+recordFieldReference :: Util.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
 recordFieldReference namespaces sname fname =
 
       let fnameStr = Core.unName fname
@@ -198,7 +199,7 @@ typeNameForRecord sname =
           parts = Strings.splitOn "." snameStr
       in (Maybes.fromMaybe snameStr (Lists.maybeLast parts))
 -- | Generate a Haskell name for a union variant constructor, with disambiguation
-unionFieldReference :: S.Set Core.Name -> Packaging.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
+unionFieldReference :: S.Set Core.Name -> Util.Namespaces Syntax.ModuleName -> Core.Name -> Core.Name -> Syntax.Name
 unionFieldReference boundNames namespaces sname fname =
 
       let fnameStr = Core.unName fname

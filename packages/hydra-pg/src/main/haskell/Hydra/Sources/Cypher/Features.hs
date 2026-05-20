@@ -31,7 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just ("A model for characterizing OpenCypher queries and implementations in terms of included features."
       ++ "Based on the OpenCypher grammar and the list of standard Cypher functions at "
       ++ "https://neo4j.com/docs/cypher-manual/current/functions."
@@ -224,7 +224,7 @@ openCypherFeaturesEnumModule :: Module
 openCypherFeaturesEnumModule = Module {
                                  moduleNamespace = ns2,
                                  moduleDefinitions = (map toTypeDef definitions),
-                                 moduleDependencies = [Core.ns, Core.ns],
+                                 moduleDependencies = [Core.ns],
                                  moduleDescription = Just ("A model with an enumeration of (Open)Cypher features.")}
   where
     ns2 = Namespace "hydra.org/opencypher/features"

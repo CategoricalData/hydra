@@ -90,10 +90,6 @@ module_ = Module {
 scalaLanguage :: TTermDefinition Language
 scalaLanguage = define "scalaLanguage" $
   doc "Language constraints for Scala" $ lets [
-  "eliminationVariants">: Sets.fromList $ list [
-    Variants.eliminationVariantRecord,
-    Variants.eliminationVariantUnion,
-    Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBoolean,
     Variants.literalVariantDecimal,
@@ -103,9 +99,6 @@ scalaLanguage = define "scalaLanguage" $
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat32,
     Core.floatTypeFloat64],
-  "functionVariants">: Sets.fromList $ list [
-    Variants.functionVariantElimination,
-    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeBigint,
     Core.integerTypeInt8,
@@ -165,10 +158,8 @@ scalaLanguage = define "scalaLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.scala")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

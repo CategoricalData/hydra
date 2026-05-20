@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "generator": "v0-unstamped",
+  "generator": "f64771030353ac6d",
+  "selfHash": "ee5f4900da2e7dfe6f3ee8913f86a476228824847184c9ba44eee8d4aecc917a",
+  "depHash:hydra-kernel": "932435460c02fd2f215eecb920f4a34a84db6a52806405bb1f8960f306acc383",
   "inputs": {
     "hydra.dsl.lisp.syntax": { "kind": "Other", "hash": "623f011bf0048ef3bf42bcc46e9ef193ee6288f068e3abe27c5cf56c7bd8968a" },
     "hydra.lisp.coder": { "kind": "Other", "hash": "8c221addcaea55efd1f377c1fd5b9d36435e4168e7fbe57f388c1fa2ff59c5d2" },
     "hydra.lisp.language": { "kind": "Other", "hash": "21d069b16ab367b1ff2b152414041cd6921a6a32fd83de570de77b254b046444" },
     "hydra.lisp.serde": { "kind": "Other", "hash": "712986fba2b7f61e5281055d3057b77ce426b4b079f3b2e4f80069bd647576d5" },
-    "hydra.lisp.syntax": { "kind": "Other", "hash": "7c9b4c505164f2582894dddef8dc3839a7fbe1a254ec7d3ebe7604d489ef7dba" }
+    "hydra.lisp.syntax": { "kind": "Other", "hash": "1d7ef92ae8e5ea307ba28945f3823f664f91c9c6a74c6d44ff491c53e4ba7c36" }
   },
   "outputs": {
     "Hydra/Dsl/Lisp/Syntax.hs": { "kind": "TargetFile", "hash": "d3a96b3e2f5ab089ed36f9acdab35a25a14c88c526144d57cc0c7f6b9c1e7d8a" },

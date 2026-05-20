@@ -28,7 +28,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just "A C++ syntax model, focusing on features for representing algebraic data types and declarative computations"}
   where
     definitions = accessSpecifiers ++ declarationTypes ++ expressionTypes ++ statementTypes

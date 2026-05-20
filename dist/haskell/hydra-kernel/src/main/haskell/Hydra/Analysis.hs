@@ -28,19 +28,20 @@ import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 -- | Add names to existing namespaces mapping
-addNamesToNamespaces :: (Packaging.Namespace -> t0) -> S.Set Core.Name -> Packaging.Namespaces t0 -> Packaging.Namespaces t0
+addNamesToNamespaces :: (Packaging.Namespace -> t0) -> S.Set Core.Name -> Util.Namespaces t0 -> Util.Namespaces t0
 addNamesToNamespaces encodeNamespace names ns0 =
 
       let nss = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
           toPair = \ns -> (ns, (encodeNamespace ns))
-      in Packaging.Namespaces {
-        Packaging.namespacesFocus = (Packaging.namespacesFocus ns0),
-        Packaging.namespacesMapping = (Maps.union (Packaging.namespacesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
+      in Util.Namespaces {
+        Util.namespacesFocus = (Util.namespacesFocus ns0),
+        Util.namespacesMapping = (Maps.union (Util.namespacesMapping ns0) (Maps.fromList (Lists.map toPair (Sets.toList nss))))}
 -- | Analyze a function term, collecting lambdas, type lambdas, lets, and type applications
 analyzeFunctionTerm :: Context.Context -> (t0 -> Graph.Graph) -> (Graph.Graph -> t0 -> t0) -> t0 -> Core.Term -> Either t1 (Typing.FunctionStructure t0)
 analyzeFunctionTerm cx getTC setTC env term =
@@ -280,11 +281,11 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Eithers.map (\deps -> Sets.delete (Packaging.moduleNamespace mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema allBindings))
 -- | Create namespaces mapping for definitions
-namespacesForDefinitions :: (Packaging.Namespace -> t0) -> Packaging.Namespace -> [Packaging.Definition] -> Packaging.Namespaces t0
+namespacesForDefinitions :: (Packaging.Namespace -> t0) -> Packaging.Namespace -> [Packaging.Definition] -> Util.Namespaces t0
 namespacesForDefinitions encodeNamespace focusNs defs =
 
       let nss = Sets.delete focusNs (definitionDependencyNamespaces defs)
           toPair = \ns -> (ns, (encodeNamespace ns))
-      in Packaging.Namespaces {
-        Packaging.namespacesFocus = (toPair focusNs),
-        Packaging.namespacesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}
+      in Util.Namespaces {
+        Util.namespacesFocus = (toPair focusNs),
+        Util.namespacesMapping = (Maps.fromList (Lists.map toPair (Sets.toList nss)))}

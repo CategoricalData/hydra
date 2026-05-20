@@ -2,21 +2,6 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.reflect.eliminationVariants",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "All elimination variants (constructors), in a canonical order (legacy)"}}}],
-            "body": {
-              "list": [
-                {"inject": {"field": {"name": "record", "term": {"unit": {}}}, "typeName": "hydra.variants.EliminationVariant"}},
-                {"inject": {"field": {"name": "union", "term": {"unit": {}}}, "typeName": "hydra.variants.EliminationVariant"}},
-                {"inject": {"field": {"name": "wrap", "term": {"unit": {}}}, "typeName": "hydra.variants.EliminationVariant"}}]}}},
-        "typeScheme": {"body": {"list": {"variable": "hydra.variants.EliminationVariant"}}, "variables": []}}},
-    {
-      "term": {
         "name": "hydra.reflect.floatTypePrecision",
         "term": {
           "annotated": {
@@ -82,20 +67,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.FloatType"}, "domain": {"variable": "hydra.core.FloatValue"}}},
           "variables": []}}},
-    {
-      "term": {
-        "name": "hydra.reflect.functionVariants",
-        "term": {
-          "annotated": {
-            "annotation": [
-              {
-                "key": "description",
-                "value": {"literal": {"string": "All function variants (constructors), in a canonical order (legacy)"}}}],
-            "body": {
-              "list": [
-                {"inject": {"field": {"name": "elimination", "term": {"unit": {}}}, "typeName": "hydra.variants.FunctionVariant"}},
-                {"inject": {"field": {"name": "lambda", "term": {"unit": {}}}, "typeName": "hydra.variants.FunctionVariant"}}]}}},
-        "typeScheme": {"body": {"list": {"variable": "hydra.variants.FunctionVariant"}}, "variables": []}}},
     {
       "term": {
         "name": "hydra.reflect.integerTypeIsSigned",

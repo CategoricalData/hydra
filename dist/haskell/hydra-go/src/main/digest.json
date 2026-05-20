@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "generator": "v0-unstamped",
+  "generator": "f64771030353ac6d",
+  "selfHash": "19ee3a801d5eafcdcd1a909e20ea5be82ef8e7925f749c608b59bce09ce6bdc4",
+  "depHash:hydra-kernel": "932435460c02fd2f215eecb920f4a34a84db6a52806405bb1f8960f306acc383",
   "inputs": {
     "hydra.dsl.go.syntax": { "kind": "Other", "hash": "d0ed83316e0374e3603009b18b4a786df9f859a01b7639a6297b709993d117f7" },
     "hydra.go.language": { "kind": "Other", "hash": "4df72bcc3a1f9bc22edc8ae52e062824a469baecc5c7a802ce1a1f3d58daa542" },
-    "hydra.go.syntax": { "kind": "Other", "hash": "cdfefec504c824609bcf2227b3fc2bc74d9519f8df7941ee36517e19d11e9ddc" }
+    "hydra.go.syntax": { "kind": "Other", "hash": "594c32937d54a5c634391372c22309c739fd109a6029e942b18c4f527f75a994" }
   },
   "outputs": {
     "Hydra/Dsl/Go/Syntax.hs": { "kind": "TargetFile", "hash": "dd16a3154a424acf81f7739f9c106e230c1a4fc191bf7efd25ca77fe20cb7627" },

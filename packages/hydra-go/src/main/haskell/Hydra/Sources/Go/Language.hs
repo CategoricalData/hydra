@@ -91,10 +91,6 @@ goLanguage :: TTermDefinition Language
 goLanguage = define "goLanguage" $
     doc "Language constraints for Go 1.22+" $ lets [
     -- Go supports record projection, union elimination via type switch, and wrap/unwrap
-    "eliminationVariants">: Sets.fromList $ list [
-      Variants.eliminationVariantRecord,
-      Variants.eliminationVariantUnion,
-      Variants.eliminationVariantWrap],
     -- Go supports all literal variants
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBinary, -- []byte
@@ -107,9 +103,6 @@ goLanguage = define "goLanguage" $
       Core.floatTypeFloat32, -- float32
       Core.floatTypeFloat64], -- float64
     -- Go supports all three function variants
-    "functionVariants">: Sets.fromList $ list [
-      Variants.functionVariantElimination,
-      Variants.functionVariantLambda],
     -- Go has all standard integer types plus big.Int from math/big
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeBigint, -- math/big.Int
@@ -172,10 +165,8 @@ goLanguage = define "goLanguage" $
     Coders.language
       (Coders.languageName2 $ string "hydra.go")
       (Coders.languageConstraints2
-        (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
-        (var "functionVariants")
         (var "integerTypes")
         (var "termVariants")
         (var "typeVariants")

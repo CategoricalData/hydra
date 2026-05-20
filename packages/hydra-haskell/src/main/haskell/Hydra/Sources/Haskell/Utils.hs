@@ -134,10 +134,10 @@ elementReference :: TTermDefinition (HaskellNamespaces -> Name -> H.Name)
 elementReference = haskellUtilsDefinition "elementReference" $
   doc "Generate a Haskell name reference for a Hydra element" $
   "namespaces" ~> "name" ~> lets [
-    "namespacePair">: Packaging.namespacesFocus $ var "namespaces",
+    "namespacePair">: Util.namespacesFocus $ var "namespaces",
     "gname">: Pairs.first $ var "namespacePair",
     "gmod">: unwrap H._ModuleName @@ (Pairs.second $ var "namespacePair"),
-    "namespacesMap">: Packaging.namespacesMapping $ var "namespaces",
+    "namespacesMap">: Util.namespacesMapping $ var "namespaces",
     "qname">: Names.qualifyName @@ var "name",
     "local">: Packaging.qualifiedNameLocal $ var "qname",
     "escLocal">: sanitizeHaskellName @@ var "local",
@@ -306,7 +306,7 @@ namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
       ("nm" ~> pair (var "nm")
         (var "aliasFromSuffix" @@ (var "segsFor" @@ var "nm") @@ (var "takenFor" @@ var "finalState" @@ var "nm"))) $
       (var "nssAsList")) $
-    right $ Packaging.namespaces (var "focusPair") (var "resultMap")
+    right $ Util.namespaces (var "focusPair") (var "resultMap")
 
 newtypeAccessorName :: TTermDefinition (Name -> String)
 newtypeAccessorName = haskellUtilsDefinition "newtypeAccessorName" $

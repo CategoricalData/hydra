@@ -18,7 +18,8 @@ module_ =
         (Packaging.Namespace "hydra.rewriting"),
         (Packaging.Namespace "hydra.util"),
         (Packaging.Namespace "hydra.util"),
-        (Packaging.Namespace "hydra.decode.core")],
+        (Packaging.Namespace "hydra.decode.core"),
+        (Packaging.Namespace "hydra.decode.packaging")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.util.caseConvention"),
@@ -464,6 +465,125 @@ module_ =
                 Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
                   Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
                   Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.util.Comparison"))}))}))})),
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.decode.util.namespaces"),
+          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+            Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "n"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "cx"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermLambda (Core.Lambda {
+                  Core.lambdaParameter = (Core.Name "raw"),
+                  Core.lambdaDomain = Nothing,
+                  Core.lambdaBody = (Core.TermApplication (Core.Application {
+                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.either")),
+                        Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                          Core.lambdaParameter = (Core.Name "err"),
+                          Core.lambdaDomain = Nothing,
+                          Core.lambdaBody = (Core.TermEither (Left (Core.TermVariable (Core.Name "err"))))}))})),
+                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                        Core.lambdaParameter = (Core.Name "stripped"),
+                        Core.lambdaDomain = Nothing,
+                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                          Core.applicationFunction = (Core.TermCases (Core.CaseStatement {
+                            Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
+                            Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
+                              Core.wrappedTermTypeName = (Core.Name "hydra.errors.DecodingError"),
+                              Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
+                            Core.caseStatementCases = [
+                              Core.Field {
+                                Core.fieldName = (Core.Name "record"),
+                                Core.fieldTerm = (Core.TermLambda (Core.Lambda {
+                                  Core.lambdaParameter = (Core.Name "record"),
+                                  Core.lambdaDomain = Nothing,
+                                  Core.lambdaBody = (Core.TermLet (Core.Let {
+                                    Core.letBindings = [
+                                      Core.Binding {
+                                        Core.bindingName = (Core.Name "fieldMap"),
+                                        Core.bindingTerm = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.toFieldMap")),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
+                                        Core.bindingTypeScheme = Nothing}],
+                                    Core.letBody = (Core.TermApplication (Core.Application {
+                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.bind")),
+                                        Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
+                                                Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "focus"))})),
+                                              Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodePair")),
+                                                  Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.namespace"))})),
+                                                Core.applicationArgument = (Core.TermVariable (Core.Name "n"))}))})),
+                                            Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
+                                          Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
+                                      Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                                        Core.lambdaParameter = (Core.Name "field_focus"),
+                                        Core.lambdaDomain = Nothing,
+                                        Core.lambdaBody = (Core.TermApplication (Core.Application {
+                                          Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.eithers.bind")),
+                                            Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                    Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
+                                                    Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "mapping"))})),
+                                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMap")),
+                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.namespace"))})),
+                                                    Core.applicationArgument = (Core.TermVariable (Core.Name "n"))}))})),
+                                                Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
+                                          Core.applicationArgument = (Core.TermLambda (Core.Lambda {
+                                            Core.lambdaParameter = (Core.Name "field_mapping"),
+                                            Core.lambdaDomain = Nothing,
+                                            Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
+                                              Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
+                                              Core.recordFields = [
+                                                Core.Field {
+                                                  Core.fieldName = (Core.Name "focus"),
+                                                  Core.fieldTerm = (Core.TermVariable (Core.Name "field_focus"))},
+                                                Core.Field {
+                                                  Core.fieldName = (Core.Name "mapping"),
+                                                  Core.fieldTerm = (Core.TermVariable (Core.Name "field_mapping"))}]}))))}))}))}))}))}))}))}]})),
+                          Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
+                    Core.applicationArgument = (Core.TermApplication (Core.Application {
+                      Core.applicationFunction = (Core.TermApplication (Core.Application {
+                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.stripWithDecodingError")),
+                        Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))}))})),
+            Core.annotatedTermAnnotation = (M.fromList [
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.util.Namespaces")))])})),
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [
+              Core.Name "n"],
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                  Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+                    Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                    Core.eitherTypeRight = (Core.TypeVariable (Core.Name "n"))}))}))})),
+              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                  Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
+                    Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                    Core.eitherTypeRight = (Core.TypeApplication (Core.ApplicationType {
+                      Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.util.Namespaces")),
+                      Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "n"))}))}))}))}))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.util.precision"),

@@ -1406,8 +1406,7 @@ public class Syntax {
         constantExpressionDef()
     );
 
-    // Haskell source has `[Core.ns, Core.ns]` (duplicated) — preserve verbatim.
-    private static final List<Namespace> DEPENDENCIES = Arrays.asList(CORE_NS, CORE_NS);
+    private static final List<Namespace> DEPENDENCIES = Arrays.asList(CORE_NS);
 
     public static final Module module_ = new Module(
         Maybe.just("A Java syntax module. Tracks the Oracle Java SE 21 BNF:\n  https://docs.oracle.com/javase/specs/jls/se21/html/jls-19.html\nNote: all *WithComments types were added manually, rather than derived from the BNF, which does not allow for comments."),

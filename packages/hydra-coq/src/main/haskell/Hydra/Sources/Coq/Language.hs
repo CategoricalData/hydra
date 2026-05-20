@@ -49,10 +49,6 @@ module_ = Module {
 -- Coq's type system (CIC) is a strict superset of System F, so it supports all Hydra features.
 coqLanguage :: TTermDefinition Language
 coqLanguage = define "coqLanguage" $ lets [
-    "eliminationVariants">: Sets.fromList $ list [
-      Variants.eliminationVariantRecord,
-      Variants.eliminationVariantUnion,
-      Variants.eliminationVariantWrap],
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBoolean,
       Variants.literalVariantFloat,
@@ -60,9 +56,6 @@ coqLanguage = define "coqLanguage" $ lets [
       Variants.literalVariantString],
     "floatTypes">: Sets.fromList $ list [
       Core.floatTypeFloat64],
-    "functionVariants">: Sets.fromList $ list [
-      Variants.functionVariantElimination,
-      Variants.functionVariantLambda],
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeBigint],
     "termVariants">: Sets.fromList $ list [
@@ -114,10 +107,8 @@ coqLanguage = define "coqLanguage" $ lets [
     Coders.language
       (Coders.languageName2 $ string "hydra.coq")
       (Coders.languageConstraints2
-        (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
-        (var "functionVariants")
         (var "integerTypes")
         (var "termVariants")
         (var "typeVariants")

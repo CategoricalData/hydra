@@ -26,6 +26,6 @@
                                 "string": "The path-qualified name of the .proto file that contained the associated protobuf element.  For example: `\"google/protobuf/source_context.proto\"`."}}}],
                         "body": {"literal": {"string": {}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.core"],
+  "dependencies": ["hydra.core"],
   "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto",
   "namespace": "hydra.protobuf.sourceContext"}

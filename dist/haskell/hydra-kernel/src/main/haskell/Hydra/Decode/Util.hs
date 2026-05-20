@@ -3,6 +3,7 @@
 
 module Hydra.Decode.Util where
 import qualified Hydra.Core as Core
+import qualified Hydra.Decode.Packaging as Packaging
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
@@ -50,6 +51,16 @@ comparison cx raw =
           (Core.unName fname),
           " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
       _ -> Left (Errors.DecodingError "expected union")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.util.Namespaces
+namespaces :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Util.Namespaces t0)
+namespaces n cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "focus" (ExtractCore.decodePair Packaging.namespace n) fieldMap cx) (\field_focus -> Eithers.bind (ExtractCore.requireField "mapping" (ExtractCore.decodeMap Packaging.namespace n) fieldMap cx) (\field_mapping -> Right (Util.Namespaces {
+          Util.namespacesFocus = field_focus,
+          Util.namespacesMapping = field_mapping}))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.util.Precision
 precision :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Util.Precision
 precision cx raw =

@@ -6,39 +6,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | Encoder for hydra.variants.EliminationVariant
-eliminationVariant :: Variants.EliminationVariant -> Core.Term
-eliminationVariant x =
-    case x of
-      Variants.EliminationVariantRecord -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "record"),
-          Core.fieldTerm = Core.TermUnit}})
-      Variants.EliminationVariantUnion -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "union"),
-          Core.fieldTerm = Core.TermUnit}})
-      Variants.EliminationVariantWrap -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "wrap"),
-          Core.fieldTerm = Core.TermUnit}})
--- | Encoder for hydra.variants.FunctionVariant
-functionVariant :: Variants.FunctionVariant -> Core.Term
-functionVariant x =
-    case x of
-      Variants.FunctionVariantElimination -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "elimination"),
-          Core.fieldTerm = Core.TermUnit}})
-      Variants.FunctionVariantLambda -> Core.TermInject (Core.Injection {
-        Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
-        Core.injectionField = Core.Field {
-          Core.fieldName = (Core.Name "lambda"),
-          Core.fieldTerm = Core.TermUnit}})
 -- | Encoder for hydra.variants.LiteralVariant
 literalVariant :: Variants.LiteralVariant -> Core.Term
 literalVariant x =

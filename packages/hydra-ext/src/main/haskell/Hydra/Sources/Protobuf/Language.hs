@@ -91,7 +91,6 @@ module_ = Module {
 protobufLanguage :: TTermDefinition Language
 protobufLanguage = definition_ "protobufLanguage" $
   doc "Language constraints for Protocol Buffers v3" $ lets [
-  "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBinary,
     Variants.literalVariantBoolean,
@@ -101,7 +100,6 @@ protobufLanguage = definition_ "protobufLanguage" $
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat32,
     Core.floatTypeFloat64],
-  "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeInt32,
     Core.integerTypeInt64,
@@ -145,10 +143,8 @@ protobufLanguage = definition_ "protobufLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.protobuf")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

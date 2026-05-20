@@ -166,10 +166,14 @@ serialization_tab_indent_double_space = var("hydra.serialization.tabIndentDouble
 # hydra.packaging — these are DSL accessors (generated), not kernel functions.
 # Re-export from hydra.dsl.packaging for symmetry with the Haskell DSL imports.
 from hydra.dsl.packaging import (
-    namespaces_focus as packaging_namespaces_focus,
     qualified_name_local as packaging_qualified_name_local,
     qualified_name_namespace as packaging_qualified_name_namespace,
     un_namespace as packaging_un_namespace,
+)
+
+# hydra.util — namespaces_focus moved from hydra.packaging to hydra.util (#369 A2).
+from hydra.dsl.util import (
+    namespaces_focus as packaging_namespaces_focus,
 )
 
 # hydra.util CaseConvention enum constants are TTerms (injects), already

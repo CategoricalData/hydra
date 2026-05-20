@@ -67,16 +67,6 @@ namespace cx raw =
           _ -> Left (Errors.DecodingError "expected string literal")
         _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx raw2)) (Core.wrappedTermBody v0))
       _ -> Left (Errors.DecodingError "expected wrapped type")) (ExtractCore.stripWithDecodingError cx raw)
--- | Decoder for hydra.packaging.Namespaces
-namespaces :: (Graph.Graph -> Core.Term -> Either Errors.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Errors.DecodingError (Packaging.Namespaces t0)
-namespaces n cx raw =
-    Eithers.either (\err -> Left err) (\stripped -> case stripped of
-      Core.TermRecord v0 ->
-        let fieldMap = ExtractCore.toFieldMap v0
-        in (Eithers.bind (ExtractCore.requireField "focus" (ExtractCore.decodePair namespace n) fieldMap cx) (\field_focus -> Eithers.bind (ExtractCore.requireField "mapping" (ExtractCore.decodeMap namespace n) fieldMap cx) (\field_mapping -> Right (Packaging.Namespaces {
-          Packaging.namespacesFocus = field_focus,
-          Packaging.namespacesMapping = field_mapping}))))
-      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.Package
 package :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Package
 package cx raw =

@@ -46,9 +46,6 @@ public class Language {
     private static TTerm<?> variant(String typeName, String fieldName) {
         return injectUnit(typeName, fieldName);
     }
-    private static TTerm<?> eliminationVariant(String which) {
-        return variant("hydra.variants.EliminationVariant", which);
-    }
     private static TTerm<?> literalVariant(String which) {
         return variant("hydra.variants.LiteralVariant", which);
     }
@@ -57,9 +54,6 @@ public class Language {
     }
     private static TTerm<?> typeVariantInj(String which) {
         return variant("hydra.variants.TypeVariant", which);
-    }
-    private static TTerm<?> functionVariant(String which) {
-        return variant("hydra.variants.FunctionVariant", which);
     }
     private static TTerm<?> floatType(String which) {
         return variant("hydra.core.FloatType", which);
@@ -79,19 +73,15 @@ public class Language {
     }
     /** {@code Coders.languageConstraints2(...)} expands to a Record term. */
     private static TTerm<?> codersLanguageConstraints2(
-            TTerm<?> eliminationVariants,
             TTerm<?> literalVariants,
             TTerm<?> floatTypes,
-            TTerm<?> functionVariants,
             TTerm<?> integerTypes,
             TTerm<?> termVariants,
             TTerm<?> typeVariants,
             TTerm<?> types) {
         return record("hydra.coders.LanguageConstraints",
-            field("eliminationVariants", eliminationVariants),
             field("literalVariants", literalVariants),
             field("floatTypes", floatTypes),
-            field("functionVariants", functionVariants),
             field("integerTypes", integerTypes),
             field("termVariants", termVariants),
             field("typeVariants", typeVariants),
@@ -121,12 +111,6 @@ public class Language {
             "Language constraints for Java",
             let(
                 Arrays.<hydra.core.Field>asList(
-                    field("eliminationVariants", setsFromList(
-                        "hydra.variants.EliminationVariant",
-                        list(
-                            eliminationVariant("record"),
-                            eliminationVariant("union"),
-                            eliminationVariant("wrap")))),
                     field("literalVariants", setsFromList(
                         "hydra.variants.LiteralVariant",
                         list(
@@ -141,11 +125,6 @@ public class Language {
                         list(
                             floatType("float32"),
                             floatType("float64")))),
-                    field("functionVariants", setsFromList(
-                        "hydra.variants.FunctionVariant",
-                        list(
-                            functionVariant("elimination"),
-                            functionVariant("lambda")))),
                     field("integerTypes", setsFromList(
                         "hydra.core.IntegerType",
                         list(
@@ -202,10 +181,8 @@ public class Language {
                 codersLanguage(
                     codersLanguageName2(string("hydra.java")),
                     codersLanguageConstraints2(
-                        var("eliminationVariants"),
                         var("literalVariants"),
                         var("floatTypes"),
-                        var("functionVariants"),
                         var("integerTypes"),
                         var("termVariants"),
                         var("typeVariants"),

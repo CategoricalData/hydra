@@ -138,16 +138,6 @@
                                         "function": {"project": {"field": "supportsMapValues", "typeName": "hydra.tinkerpop.features.DataTypeFeatures"}}}},
                                     "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                   {
-                                    "name": "eliminationVariants",
-                                    "term": {
-                                      "typeLambda": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "t1"}}},
-                                        "parameter": "t1"}},
-                                    "typeScheme": {
-                                      "body": {"set": {"variable": "t1"}},
-                                      "constraints": [{"key": "t1", "value": {"classes": ["ordering"]}}],
-                                      "variables": ["t1"]}},
-                                  {
                                     "name": "literalVariants",
                                     "term": {
                                       "application": {
@@ -259,16 +249,6 @@
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.cat"}, "type": {"variable": "hydra.core.FloatType"}}}}},
                                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.FloatType"}}}}},
                                     "typeScheme": {"body": {"set": {"variable": "hydra.core.FloatType"}}, "variables": []}},
-                                  {
-                                    "name": "functionVariants",
-                                    "term": {
-                                      "typeLambda": {
-                                        "body": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "t1"}}},
-                                        "parameter": "t1"}},
-                                    "typeScheme": {
-                                      "body": {"set": {"variable": "t1"}},
-                                      "constraints": [{"key": "t1", "value": {"classes": ["ordering"]}}],
-                                      "variables": ["t1"]}},
                                   {
                                     "name": "integerTypes",
                                     "term": {
@@ -577,15 +557,8 @@
                                         "term": {
                                           "record": {
                                             "fields": [
-                                              {
-                                                "name": "eliminationVariants",
-                                                "term": {
-                                                  "typeApplication": {"body": {"variable": "eliminationVariants"}, "type": {"variable": "hydra.variants.EliminationVariant"}}}},
                                               {"name": "literalVariants", "term": {"variable": "literalVariants"}},
                                               {"name": "floatTypes", "term": {"variable": "floatTypes"}},
-                                              {
-                                                "name": "functionVariants",
-                                                "term": {"typeApplication": {"body": {"variable": "functionVariants"}, "type": {"variable": "hydra.variants.FunctionVariant"}}}},
                                               {"name": "integerTypes", "term": {"variable": "integerTypes"}},
                                               {"name": "termVariants", "term": {"variable": "termVariants"}},
                                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},

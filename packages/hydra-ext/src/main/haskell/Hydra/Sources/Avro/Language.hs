@@ -91,7 +91,6 @@ module_ = Module {
 avroLanguage :: TTermDefinition Language
 avroLanguage = define "avroLanguage" $
   doc "Language constraints for Apache Avro" $ lets [
-  "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBinary,
     Variants.literalVariantBoolean,
@@ -101,7 +100,6 @@ avroLanguage = define "avroLanguage" $
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat32,
     Core.floatTypeFloat64],
-  "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeInt32,
     Core.integerTypeInt64],
@@ -127,10 +125,8 @@ avroLanguage = define "avroLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.avro")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

@@ -2096,6 +2096,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Optional JSDoc comment"}}}],
                         "body": {"maybe": {"variable": "hydra.typeScript.syntax.DocumentationComment"}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.core"],
+  "dependencies": ["hydra.core"],
   "description": "A TypeScript 5.x syntax model for Hydra code generation",
   "namespace": "hydra.typeScript.syntax"}

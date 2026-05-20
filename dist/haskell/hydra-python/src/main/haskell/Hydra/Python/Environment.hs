@@ -5,6 +5,7 @@ module Hydra.Python.Environment where
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Util as Util
 import qualified Hydra.Python.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -22,7 +23,7 @@ _PythonVersion_python312 = Core.Name "python312"
 data PythonEnvironment =
   PythonEnvironment {
     -- | Namespace mapping for imports
-    pythonEnvironmentNamespaces :: (Packaging.Namespaces Syntax.DottedName),
+    pythonEnvironmentNamespaces :: (Util.Namespaces Syntax.DottedName),
     -- | Type variables in scope, with their Python names
     pythonEnvironmentBoundTypeVariables :: ([Core.Name], (M.Map Core.Name Syntax.Name)),
     -- | Graph context for type inference
@@ -47,7 +48,7 @@ _PythonEnvironment_inlineVariables = Core.Name "inlineVariables"
 data PythonModuleMetadata =
   PythonModuleMetadata {
     -- | Namespace mapping for imports
-    pythonModuleMetadataNamespaces :: (Packaging.Namespaces Syntax.DottedName),
+    pythonModuleMetadataNamespaces :: (Util.Namespaces Syntax.DottedName),
     -- | Type variables used in the module
     pythonModuleMetadataTypeVariables :: (S.Set Core.Name),
     pythonModuleMetadataUsesAnnotated :: Bool,

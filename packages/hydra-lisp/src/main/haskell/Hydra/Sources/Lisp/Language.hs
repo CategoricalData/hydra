@@ -134,10 +134,7 @@ module_ = Module {
 lispLanguage :: TTermDefinition Language
 lispLanguage = define "lispLanguage" $
     doc "Language constraints for Lisp" $ lets [
-    "eliminationVariants">: Sets.fromList $ list [
-      Variants.eliminationVariantRecord, -- field access: (:field record) or (record-field instance)
-      Variants.eliminationVariantUnion, -- case dispatch on tagged unions
-      Variants.eliminationVariantWrap], -- newtype unwrapping (transparent)
+-- newtype unwrapping (transparent)
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBinary, -- byte arrays / byte strings
       Variants.literalVariantBoolean, -- true/false, t/nil, #t/#f
@@ -146,9 +143,7 @@ lispLanguage = define "lispLanguage" $
       Variants.literalVariantString], -- strings
     "floatTypes">: Sets.fromList $ list [
       Core.floatTypeFloat64], -- double-precision float (native in all dialects)
-    "functionVariants">: Sets.fromList $ list [
-      Variants.functionVariantElimination, -- case/cond dispatch, field projection
-      Variants.functionVariantLambda], -- fn/lambda
+-- fn/lambda
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeBigint], -- all four dialects have arbitrary-precision integers
     "termVariants">: Sets.fromList $ list [
@@ -201,10 +196,8 @@ lispLanguage = define "lispLanguage" $
     Coders.language
       (Coders.languageName2 $ string "hydra.lisp")
       (Coders.languageConstraints2
-        (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
-        (var "functionVariants")
         (var "integerTypes")
         (var "termVariants")
         (var "typeVariants")
