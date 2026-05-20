@@ -90,7 +90,6 @@ module_ = Module {
 pdlLanguage :: TTermDefinition Language
 pdlLanguage = define "pdlLanguage" $
   doc "Language constraints for LinkedIn Pegasus (PDL)" $ lets [
-  "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBinary,
     Variants.literalVariantBoolean,
@@ -100,7 +99,6 @@ pdlLanguage = define "pdlLanguage" $
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat32,
     Core.floatTypeFloat64],
-  "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeInt32,
     Core.integerTypeInt64],
@@ -132,10 +130,8 @@ pdlLanguage = define "pdlLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.pegasus.pdl")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

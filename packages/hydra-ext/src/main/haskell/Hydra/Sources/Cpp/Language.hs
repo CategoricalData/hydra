@@ -92,10 +92,6 @@ module_ = Module {
 cppLanguage :: TTermDefinition Language
 cppLanguage = define "cppLanguage" $
   doc "Language constraints for C++" $ lets [
-  "eliminationVariants">: Sets.fromList $ list [
-    Variants.eliminationVariantRecord,
-    Variants.eliminationVariantUnion,
-    Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBinary,  -- char arrays, std::byte arrays
     Variants.literalVariantBoolean, -- bool
@@ -105,9 +101,6 @@ cppLanguage = define "cppLanguage" $
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat32,      -- float
     Core.floatTypeFloat64],     -- double
-  "functionVariants">: Sets.fromList $ list [
-    Variants.functionVariantElimination,
-    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeInt8,       -- char, int8_t
     Core.integerTypeInt16,      -- short, int16_t
@@ -159,10 +152,8 @@ cppLanguage = define "cppLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.cpp")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")
