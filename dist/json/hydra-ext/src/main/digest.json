@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "version": 1,
   "selfHash": "41468e1070849081c4b4953405b8a56d774207628c8c0e831b3fee738b751f8a",
-  "depHash:hydra-kernel": "caea45e45fe8930dff5e1b20787911e93902453e36ae80282590d1550178c579",
+  "depHash:hydra-kernel": "d25c6dc40ebc11c2bbb1f8d5c345205c4bbc0c260ffc64a31ea5ce9f127fbccd",
   "depHash:hydra-rdf": "0086d20f3cb128cec23678ac162c2b842bc6846852cd708b46f4fee6dcf3ba59",
   "hashes": {
     "hydra.atlas": "e5e336b96093b2814f24403f58234bb0172c7d4eb9271e8170a95945292be660",
