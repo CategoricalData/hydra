@@ -705,6 +705,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.packaging.TypeDefinition"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.encode.graph", "hydra.packaging"],
+  "dependencies": ["hydra.encode.core", "hydra.packaging"],
   "description": "Term encoders for hydra.packaging",
   "namespace": "hydra.encode.packaging"}

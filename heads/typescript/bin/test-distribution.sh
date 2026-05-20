@@ -54,8 +54,31 @@ fi
 echo "=========================================="
 
 cd "$PKG_ROOT"
-TSC_OUTPUT=$(npx --yes -p typescript@5.6 tsc --noEmit 2>&1 || true)
+set +e
+TSC_OUTPUT=$(npx --yes -p typescript@5.6 tsc --noEmit 2>&1)
+TSC_EXIT=$?
+set -e
 ERROR_COUNT=$(echo "$TSC_OUTPUT" | grep -cE "^(main|test)/typescript/" || true)
+
+# Detect internal tsc crashes ("Debug Failure", uncaught exceptions). These
+# produce a non-zero exit with no file-anchored diagnostics, and used to slip
+# past the grep-based count above. Any such crash means the generated code
+# is pathological enough to defeat the compiler — must be a hard fail.
+if echo "$TSC_OUTPUT" | grep -qE "^Error: Debug Failure|^Error: |throw e;"; then
+    echo "  tsc --strict: INTERNAL COMPILER CRASH. FAIL."
+    echo ""
+    echo "First 50 lines of tsc output:"
+    echo "$TSC_OUTPUT" | head -50
+    exit 1
+fi
+
+if [ "$TSC_EXIT" -ne 0 ] && [ "$ERROR_COUNT" -eq 0 ]; then
+    echo "  tsc --strict: non-zero exit ($TSC_EXIT) with no parsed errors. FAIL."
+    echo ""
+    echo "First 50 lines of tsc output:"
+    echo "$TSC_OUTPUT" | head -50
+    exit 1
+fi
 
 if [ "$ERROR_COUNT" -eq 0 ]; then
     echo "  tsc --strict: 0 errors. PASS."

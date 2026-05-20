@@ -1801,6 +1801,34 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A graph, or lexical environment which binds names to terms, types, primitives, and metadata")))])}))),
       (
+        Core.Name "hydra.graph.Library",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "namespace"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Namespace")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "A common prefix for all primitive function names in the library")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "prefix"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "A preferred namespace prefix for function names in the library")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "primitives"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.graph.Primitive"))),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The primitives defined in this library")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A library of primitive functions")))])}))),
+      (
         Core.Name "hydra.graph.Primitive",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
@@ -1904,34 +1932,6 @@ typesByName =
             (
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A file extension (without the dot), e.g. \"json\" or \"py\"")))])}))),
-      (
-        Core.Name "hydra.packaging.Library",
-        (Core.TypeAnnotated (Core.AnnotatedType {
-          Core.annotatedTypeBody = (Core.TypeRecord [
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "namespace"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Namespace")),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (
-                    Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "A common prefix for all primitive function names in the library")))])}))},
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "prefix"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeLiteral Core.LiteralTypeString),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (
-                    Core.Name "description",
-                    (Core.TermLiteral (Core.LiteralString "A preferred namespace prefix for function names in the library")))])}))},
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "primitives"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.graph.Primitive"))),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The primitives defined in this library")))])}))}]),
-          Core.annotatedTypeAnnotation = (M.fromList [
-            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A library of primitive functions")))])}))),
       (
         Core.Name "hydra.packaging.Module",
         (Core.TypeAnnotated (Core.AnnotatedType {

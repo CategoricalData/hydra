@@ -5,6 +5,7 @@ module Hydra.Graph where
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
+import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -37,6 +38,19 @@ _Graph_metadata = Core.Name "metadata"
 _Graph_primitives = Core.Name "primitives"
 _Graph_schemaTypes = Core.Name "schemaTypes"
 _Graph_typeVariables = Core.Name "typeVariables"
+-- | A library of primitive functions
+data Library =
+  Library {
+    -- | A common prefix for all primitive function names in the library
+    libraryNamespace :: Packaging.Namespace,
+    -- | A preferred namespace prefix for function names in the library
+    libraryPrefix :: String,
+    -- | The primitives defined in this library
+    libraryPrimitives :: [Primitive]}
+_Library = Core.Name "hydra.graph.Library"
+_Library_namespace = Core.Name "namespace"
+_Library_prefix = Core.Name "prefix"
+_Library_primitives = Core.Name "primitives"
 -- | A built-in function or constant
 data Primitive =
   Primitive {

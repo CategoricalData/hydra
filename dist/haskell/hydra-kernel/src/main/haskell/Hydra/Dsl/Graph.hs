@@ -6,6 +6,7 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -568,6 +569,114 @@ graphWithTypeVariables original newVal =
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeVariables"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
+-- | DSL constructor for hydra.graph.Library
+library :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm String -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Graph.Library
+library namespace prefix primitives =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.graph.Library"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Phantoms.unTTerm namespace)},
+        Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Phantoms.unTTerm prefix)},
+        Core.Field {
+          Core.fieldName = (Core.Name "primitives"),
+          Core.fieldTerm = (Phantoms.unTTerm primitives)}]}))
+-- | DSL accessor for the namespace field of hydra.graph.Library
+libraryNamespace :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm Packaging.Namespace
+libraryNamespace x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
+        Core.projectionField = (Core.Name "namespace")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the prefix field of hydra.graph.Library
+libraryPrefix :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm String
+libraryPrefix x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
+        Core.projectionField = (Core.Name "prefix")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the primitives field of hydra.graph.Library
+libraryPrimitives :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm [Graph.Primitive]
+libraryPrimitives x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
+        Core.projectionField = (Core.Name "primitives")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the namespace field of hydra.graph.Library
+libraryWithNamespace :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Graph.Library
+libraryWithNamespace original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.graph.Library"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
+              Core.projectionField = (Core.Name "prefix")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "primitives"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
+              Core.projectionField = (Core.Name "primitives")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the prefix field of hydra.graph.Library
+libraryWithPrefix :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm String -> Phantoms.TTerm Graph.Library
+libraryWithPrefix original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.graph.Library"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
+              Core.projectionField = (Core.Name "namespace")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "primitives"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
+              Core.projectionField = (Core.Name "primitives")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the primitives field of hydra.graph.Library
+libraryWithPrimitives :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Graph.Library
+libraryWithPrimitives original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.graph.Library"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "namespace"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
+              Core.projectionField = (Core.Name "namespace")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "prefix"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.graph.Library"),
+              Core.projectionField = (Core.Name "prefix")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "primitives"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.graph.Primitive
 primitive :: Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either Errors.Error Core.Term) -> Phantoms.TTerm Graph.Primitive

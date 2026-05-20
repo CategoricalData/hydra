@@ -1,5 +1,4 @@
-// Hand-written registration of standard hydra.lib.* primitives for the
-// TypeScript test runtime.
+// Hand-written registration of standard hydra.lib.* primitives.
 //
 // Each generated kernel module that uses a primitive expects a graph in
 // which `lookupPrimitive(name)` returns a `Primitive` whose
@@ -11,30 +10,42 @@
 // can count the function's surface arity (that's all the evaluator
 // reads). Type variables in the schemes are nominal-looking strings;
 // the evaluator never unifies them.
+//
+// This file is hand-written but lives under `src/main/` so it ships
+// alongside the runtime. It depends on the generated kernel modules
+// (`reduction`, `extract/core`, `context`, `graph`, `errors`) which only
+// exist after `bin/sync-typescript.sh` populates `dist/typescript/`. The
+// head's own `tsconfig.json` therefore excludes this file from
+// source-tree type-checking; `tsc` validates it via
+// `bin/test-distribution.sh` in the dist tree, where the generated
+// modules are siblings of this file. This mirrors how the Java head's
+// gradle source-set crossover and the Python head's pyright/pytest
+// extraPaths bridge hand-written + generated code into one namespace at
+// compile/test time.
 
-import type { Name, Term, Type, TypeScheme } from "../../../../main/typescript/hydra/core.js";
-import type { Context } from "../../../../main/typescript/hydra/context.js";
-import type { Graph, Primitive } from "../../../../main/typescript/hydra/graph.js";
-import type { Error as HydraError } from "../../../../main/typescript/hydra/errors.js";
-import type { Either } from "../../../../main/typescript/hydra/core.js";
+import type { Name, Term, Type, TypeScheme } from "../core.js";
+import type { Context } from "../context.js";
+import type { Graph, Primitive } from "../graph.js";
+import type { Error as HydraError } from "../errors.js";
+import type { Either } from "../core.js";
 
-import * as extractCore from "../../../../main/typescript/hydra/extract/core.js";
+import * as extractCore from "../extract/core.js";
 
-import * as libChars from "../../../../main/typescript/hydra/lib/chars.js";
-import * as libEquality from "../../../../main/typescript/hydra/lib/equality.js";
-import * as libLists from "../../../../main/typescript/hydra/lib/lists.js";
-import * as libLiterals from "../../../../main/typescript/hydra/lib/literals.js";
-import * as libLogic from "../../../../main/typescript/hydra/lib/logic.js";
-import * as libMaps from "../../../../main/typescript/hydra/lib/maps.js";
-import * as libMath from "../../../../main/typescript/hydra/lib/math.js";
-import * as libRegex from "../../../../main/typescript/hydra/lib/regex.js";
-import * as libSets from "../../../../main/typescript/hydra/lib/sets.js";
-import * as libStrings from "../../../../main/typescript/hydra/lib/strings.js";
+import * as libChars from "./chars.js";
+import * as libEquality from "./equality.js";
+import * as libLists from "./lists.js";
+import * as libLiterals from "./literals.js";
+import * as libLogic from "./logic.js";
+import * as libMaps from "./maps.js";
+import * as libMath from "./math.js";
+import * as libRegex from "./regex.js";
+import * as libSets from "./sets.js";
+import * as libStrings from "./strings.js";
 
 // HOF primitives like `maps.alter` need to invoke Hydra closures —
 // they take a function argument that's a Term and must call reduceTerm
 // with `apply(closure, arg)` to evaluate.
-import { reduceTerm } from "../../../../main/typescript/hydra/reduction.js";
+import { reduceTerm } from "../reduction.js";
 
 // === Term construction helpers ===
 

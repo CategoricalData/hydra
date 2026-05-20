@@ -35,40 +35,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.packaging.Library",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A library of primitive functions"}}}],
-              "body": {
-                "record": [
-                  {
-                    "name": "namespace",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
-                  {
-                    "name": "prefix",
-                    "type": {
-                      "annotated": {
-                        "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
-                        "body": {"literal": {"string": {}}}}}},
-                  {
-                    "name": "primitives",
-                    "type": {
-                      "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
-                        "body": {"list": {"variable": "hydra.graph.Primitive"}}}}}]}}},
-          "variables": []}}},
-    {
-      "type": {
         "name": "hydra.packaging.Module",
         "typeScheme": {
           "body": {
@@ -245,6 +211,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.graph"],
+  "dependencies": ["hydra.core"],
   "description": "A model for Hydra namespaces, modules, and packages",
   "namespace": "hydra.packaging"}

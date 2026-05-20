@@ -110,7 +110,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Bootstrap Hydra code generation from JSON modules")
     parser.add_argument("--target", required=True,
-                        choices=["haskell", "java", "python", "scala",
+                        choices=["haskell", "java", "python", "scala", "typescript",
                                  "clojure", "scheme", "common-lisp", "emacs-lisp"],
                         help="Target language for code generation")
     parser.add_argument("--json-dir", required=True,
@@ -232,6 +232,9 @@ def main():
     elif args.target == "scala":
         from hydra.generation import write_scala
         write_scala(os.path.join(out_main, "scala"), all_main_mods, mods_to_generate)
+    elif args.target == "typescript":
+        from hydra.generation import write_typescript
+        write_typescript(os.path.join(out_main, "typescript"), all_main_mods, mods_to_generate)
     elif args.target in _lisp_dialects:
         dialect_name, _ext = _lisp_dialects[args.target]
         write_lisp_dialect(os.path.join(out_main, args.target), dialect_name, _ext,
@@ -240,6 +243,7 @@ def main():
     step_time = time.time() - step_start
 
     ext = {"java": ".java", "python": ".py", "haskell": ".hs", "scala": ".scala",
+           "typescript": ".ts",
            "clojure": ".clj", "scheme": ".scm", "common-lisp": ".lisp",
            "emacs-lisp": ".el"}[args.target]
     main_file_count = _count_files(os.path.join(out_dir, "src/main"), ext)
@@ -300,6 +304,9 @@ def main():
                     elif args.target == "scala":
                         from hydra.generation import write_scala
                         write_scala(os.path.join(out_main_sub, "scala"), all_universe, ext_mods_for_tests)
+                    elif args.target == "typescript":
+                        from hydra.generation import write_typescript
+                        write_typescript(os.path.join(out_main_sub, "typescript"), all_universe, ext_mods_for_tests)
                     elif args.target in _lisp_dialects:
                         d, e = _lisp_dialects[args.target]
                         write_lisp_dialect(os.path.join(out_main_sub, args.target), d, e,
@@ -323,6 +330,9 @@ def main():
         elif args.target == "scala":
             from hydra.generation import write_scala
             write_scala(os.path.join(out_test, "scala"), all_universe, test_mods)
+        elif args.target == "typescript":
+            from hydra.generation import write_typescript
+            write_typescript(os.path.join(out_test, "typescript"), all_universe, test_mods)
         elif args.target in _lisp_dialects:
             d, e = _lisp_dialects[args.target]
             write_lisp_dialect(os.path.join(out_test, args.target), d, e,

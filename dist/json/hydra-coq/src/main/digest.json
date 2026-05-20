@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "version": 1,
   "selfHash": "2a908da2eb4db299cd1f07daffe5d31cca47b53a7f6da4de47943a8970eadf5e",
-  "depHash:hydra-kernel": "773df86bd79b97437d281a1ab4afe65bb6dc4abf01fd411155e9578b0636d961",
+  "depHash:hydra-kernel": "d25c6dc40ebc11c2bbb1f8d5c345205c4bbc0c260ffc64a31ea5ce9f127fbccd",
   "hashes": {
     "hydra.coq.coder": "63ddde4edbc0814768319ae04e5a82524cb8c5283325ec2eefcdf934d012ce1a",
     "hydra.coq.environment": "7137f85cad1acf4f1036dcb5e899357b706561829cafe331dc513f3379039d08",
@@ -10,7 +10,6 @@
     "hydra.coq.language": "e51a15579443345476bc29a85965627bb3a37aae6830d569d0749eb01a756ef0",
     "hydra.coq.serde": "351e919ac1bfd059c9a4e9747d45631df3d7ba7ea05de742a43d6658f9d15e44",
     "hydra.coq.syntax": "a80ac0906eab7b8fffb5625bc876df7c349cfe290b9debebf3467bc500138289",
-    "hydra.coq.utils": "f8f43e7728691a1a517efec39284f99e1e13476b8f61696c48f9689227ef5c62",
-    "hydra.dsl.coq.syntax": "f5d5d6e0091e679ffefb6cc17476aa7709cda4300b967bbdf84a3ce351b9a941"
+    "hydra.coq.utils": "f8f43e7728691a1a517efec39284f99e1e13476b8f61696c48f9689227ef5c62"
   }
 }

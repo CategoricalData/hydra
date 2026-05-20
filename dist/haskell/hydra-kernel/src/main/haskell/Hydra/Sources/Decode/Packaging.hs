@@ -18,8 +18,7 @@ module_ =
         (Packaging.Namespace "hydra.rewriting"),
         (Packaging.Namespace "hydra.packaging"),
         (Packaging.Namespace "hydra.util"),
-        (Packaging.Namespace "hydra.decode.core"),
-        (Packaging.Namespace "hydra.decode.graph")],
+        (Packaging.Namespace "hydra.decode.core")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.packaging.definition"),

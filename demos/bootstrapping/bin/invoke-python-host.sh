@@ -42,7 +42,7 @@ echo ""
 # bootstrap-all.sh) requires bin/sync.sh to have been run first.
 
 PYTHONPATH="$HYDRA_PYTHON_DIR/src/main/python"
-for pkg in hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-pg hydra-rdf hydra-ext; do
+for pkg in hydra-kernel hydra-haskell hydra-java hydra-python hydra-scala hydra-typescript hydra-lisp hydra-pg hydra-rdf hydra-ext; do
     PYTHONPATH="$PYTHONPATH:$HYDRA_ROOT/dist/python/$pkg/src/main/python"
 done
 export PYTHONPATH

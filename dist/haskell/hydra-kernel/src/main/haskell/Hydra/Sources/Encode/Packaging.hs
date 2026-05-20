@@ -14,7 +14,6 @@ module_ =
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.packaging"),
       Packaging.moduleDependencies = [
         Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.graph"),
         (Packaging.Namespace "hydra.packaging")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {

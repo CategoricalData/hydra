@@ -9,6 +9,7 @@ import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Errors as Error
+import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 
 
 ns :: Namespace
@@ -21,11 +22,12 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Context.ns, Core.ns, Error.ns],
+            moduleDependencies = [Context.ns, Core.ns, Error.ns, Packaging.ns],
             moduleDescription = Just "The extension to graphs of Hydra's core type system (hydra.core)"}
   where
     definitions = [
       graph,
+      library,
       primitive,
       termCoder]
 
@@ -58,6 +60,20 @@ graph = define "Graph" $
     "typeVariables">:
       doc "The set of type variables introduced specifically by type lambdas" $
       T.set Core.name]
+
+library :: Binding
+library = define "Library" $
+  doc "A library of primitive functions" $
+  T.record [
+    "namespace">:
+      doc "A common prefix for all primitive function names in the library"
+      Packaging.namespace,
+    "prefix">:
+      doc "A preferred namespace prefix for function names in the library"
+      T.string,
+    "primitives">:
+      doc "The primitives defined in this library" $
+      T.list primitive]
 
 primitive :: Binding
 primitive = define "Primitive" $

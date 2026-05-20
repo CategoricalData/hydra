@@ -3,7 +3,6 @@
 
 module Hydra.Packaging where
 import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | A definition, which may be either a term or type definition
@@ -22,19 +21,6 @@ newtype FileExtension =
     unFileExtension :: String}
   deriving (Eq, Ord, Read, Show)
 _FileExtension = Core.Name "hydra.packaging.FileExtension"
--- | A library of primitive functions
-data Library =
-  Library {
-    -- | A common prefix for all primitive function names in the library
-    libraryNamespace :: Namespace,
-    -- | A preferred namespace prefix for function names in the library
-    libraryPrefix :: String,
-    -- | The primitives defined in this library
-    libraryPrimitives :: [Graph.Primitive]}
-_Library = Core.Name "hydra.packaging.Library"
-_Library_namespace = Core.Name "namespace"
-_Library_prefix = Core.Name "prefix"
-_Library_primitives = Core.Name "primitives"
 -- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
 data Module =
   Module {
