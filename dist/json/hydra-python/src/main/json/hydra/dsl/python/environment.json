@@ -232,7 +232,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                         "body": {
-                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "namespaces"}}}},
         "typeScheme": {
@@ -308,7 +308,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                       "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -366,7 +366,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                       "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
@@ -1001,7 +1001,7 @@
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                             "body": {
-                              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -1024,7 +1024,7 @@
                         "annotated": {
                           "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                           "body": {
-                            "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                            "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
@@ -3048,7 +3048,7 @@
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                         "body": {
-                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                          "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "namespaces"}}}},
         "typeScheme": {
@@ -3136,7 +3136,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                       "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -3195,7 +3195,7 @@
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                       "body": {
-                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                        "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
@@ -5257,7 +5257,7 @@
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                             "body": {
-                              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                              "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -5280,7 +5280,7 @@
                         "annotated": {
                           "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
                           "body": {
-                            "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.packaging.Namespaces"}}}}},
+                            "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {

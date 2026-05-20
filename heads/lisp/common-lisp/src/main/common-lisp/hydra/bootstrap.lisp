@@ -214,7 +214,8 @@
 
 (defun generate-sources (coder language flags out-dir universe-mods mods-to-generate)
   (let* ((bs-graph (bootstrap-graph))
-         (cx (funcall 'make-hydra_context_in_context nil nil))
+         ;; #368: build proper Context (trace, messages, other), not deleted InContext
+         (cx (funcall 'make-hydra_context_context nil nil nil))
          (do-infer (first flags))
          (do-expand (second flags))
          (do-hoist-case (third flags))
