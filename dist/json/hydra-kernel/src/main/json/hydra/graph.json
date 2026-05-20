@@ -74,6 +74,40 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.graph.Library",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A library of primitive functions"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "namespace",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                  {
+                    "name": "prefix",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "A preferred namespace prefix for function names in the library"}}}],
+                        "body": {"literal": {"string": {}}}}}},
+                  {
+                    "name": "primitives",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The primitives defined in this library"}}}],
+                        "body": {"list": {"variable": "hydra.graph.Primitive"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.graph.Primitive",
         "typeScheme": {
           "body": {
@@ -165,6 +199,6 @@
                                 "domain": {"variable": "hydra.context.Context"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.context", "hydra.core", "hydra.errors"],
+  "dependencies": ["hydra.context", "hydra.core", "hydra.errors", "hydra.packaging"],
   "description": "The extension to graphs of Hydra's core type system (hydra.core)",
   "namespace": "hydra.graph"}

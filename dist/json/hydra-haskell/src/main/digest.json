@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "version": 1,
   "selfHash": "ba305d63b698f5a47fdf3fd359bc099ba26a0398de79c5a6045d86d71150b0f9",
-  "depHash:hydra-kernel": "caea45e45fe8930dff5e1b20787911e93902453e36ae80282590d1550178c579",
+  "depHash:hydra-kernel": "d25c6dc40ebc11c2bbb1f8d5c345205c4bbc0c260ffc64a31ea5ce9f127fbccd",
   "hashes": {
     "hydra.dsl.haskell.environment": "d54db8aa64c0bb6c42682ed3d275023f82db2e98782dd734292c98a0783b83fa",
     "hydra.dsl.haskell.syntax": "129d4d1b3f780e464e468b618ab595a43a4b3e0da63d0f1b8b8face65523881a",
