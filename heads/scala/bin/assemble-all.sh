@@ -44,7 +44,7 @@ stack build hydra:exe:bootstrap-from-json hydra:exe:digest-check >/dev/null 2>&1
 # (e.g. hydra-pg, hydra-rdf, hydra-ext) keep their digests untouched;
 # those are managed by per-package assemble-distribution.sh runs.
 for pkg in $BATCH_PACKAGES; do
-    rm -f "$DIST_ROOT/$pkg/src/main/digest.json" "$DIST_ROOT/$pkg/src/test/digest.json"
+    rm -f "$DIST_ROOT/$pkg/build/main/digest.json" "$DIST_ROOT/$pkg/build/test/digest.json"
 done
 
 echo "Step 1: Generating main scala modules for every package..."
@@ -80,9 +80,9 @@ cd "$HYDRA_ROOT_DIR"
 for pkg in $BATCH_PACKAGES; do
     pkg_dir="$DIST_ROOT/$pkg"
     # Main set: required.
-    input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/main/digest.json"
+    input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/build/main/digest.json"
     out_set_dir="$pkg_dir/src/main/scala"
-    out_digest="$pkg_dir/src/main/digest.json"
+    out_digest="$pkg_dir/build/main/digest.json"
     if [ ! -f "$input_digest" ]; then
         echo "ERROR: missing input digest for $pkg main: $input_digest" >&2
         exit 1
@@ -97,10 +97,10 @@ for pkg in $BATCH_PACKAGES; do
         --output-dir "$out_set_dir" \
         --output-digest "$out_digest")
     # Test set: optional, gated on input test digest presence.
-    test_input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/test/digest.json"
+    test_input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/build/test/digest.json"
     if [ -f "$test_input_digest" ]; then
         test_out_set_dir="$pkg_dir/src/test/scala"
-        test_out_digest="$pkg_dir/src/test/digest.json"
+        test_out_digest="$pkg_dir/build/test/digest.json"
         if [ ! -d "$test_out_set_dir" ]; then
             echo "ERROR: missing generated test output for $pkg: $test_out_set_dir" >&2
             exit 1
