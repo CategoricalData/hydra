@@ -28,5 +28,11 @@
     "resolveJsonModule": true
   },
   "include": ["src/main/typescript/**/*.ts"],
-  "exclude": ["build", "node_modules", "src/test"]
+  "exclude": [
+    "build",
+    "node_modules",
+    "src/test",
+    "src/main/typescript/hydra/lib/libraries.ts",
+    "src/main/typescript/hydra/bootstrap.ts"
+  ]
 }

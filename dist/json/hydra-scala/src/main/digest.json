@@ -4,7 +4,6 @@
   "selfHash": "0bfcb68170c818b140150f3788e0960e92c371c9213b30bb899e6930cffa2f71",
   "depHash:hydra-kernel": "d25c6dc40ebc11c2bbb1f8d5c345205c4bbc0c260ffc64a31ea5ce9f127fbccd",
   "hashes": {
-    "hydra.dsl.scala.syntax": "8ae2a2791edbb5b50fc5e7758e6f74a1f5e2d6e898e918d531b1057179877136",
     "hydra.scala.coder": "3724a37925f93472f9816c2c640150823f845a7424405d00456c385f2f15d3ef",
     "hydra.scala.language": "577c7039fbe627e987569741a77ae6f622e31fdf9cbd05da3d21232287a5dd22",
     "hydra.scala.serde": "d127ee1c200fe1d4d7dcbbd6a455371e3755cbb5f739325497b455c1dacdab55",
