@@ -6,8 +6,8 @@
 #   <json_root>  e.g. "$HYDRA_ROOT_DIR/dist/json"
 #
 # Returns 0 (fresh, skip work) if every per-source-set
-# <dist_root>/<pkg>/src/<set>/digest.json's recorded inputs match
-# <json_root>/<pkg>/src/<set>/digest.json's hashes AND the recorded
+# <dist_root>/<pkg>/build/<set>/digest.json's recorded inputs match
+# <json_root>/<pkg>/build/<set>/digest.json's hashes AND the recorded
 # generator stamp matches the current HYDRA_GENERATOR_STAMP env var
 # (or the unstamped fallback if unset), for every existing
 # (package, source-set) pair. Returns 1 otherwise.
@@ -34,8 +34,8 @@ for entry in sorted(os.listdir(dist_root)):
     if not os.path.isdir(pkg_dir):
         continue
     for set_name in ("main", "test"):
-        in_digest_path = os.path.join(json_root, entry, "src", set_name, "digest.json")
-        out_digest_path = os.path.join(pkg_dir, "src", set_name, "digest.json")
+        in_digest_path = os.path.join(json_root, entry, "build", set_name, "digest.json")
+        out_digest_path = os.path.join(pkg_dir, "build", set_name, "digest.json")
         # If the input digest doesn't exist, this set isn't part of the
         # universe (e.g. test set absent for most packages); skip.
         if not os.path.isfile(in_digest_path):
