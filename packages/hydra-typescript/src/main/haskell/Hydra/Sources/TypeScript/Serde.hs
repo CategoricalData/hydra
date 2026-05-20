@@ -226,10 +226,16 @@ stringLiteralToExpr = define "stringLiteralToExpr" $
 escapeString :: TTermDefinition (String -> Bool -> String)
 escapeString = define "escapeString" $
   doc "Escape special characters in a string for TypeScript" $
-  lambda "s" $ lambda "singleQuote" $
-    -- Simple implementation: escape backslashes, quotes, and newlines
-    -- A full implementation would handle more escape sequences
-    var "s"  -- TODO: implement proper escaping
+  lambda "s" $ lambda "singleQuote" $ lets [
+    "replace">: lambda "old" $ lambda "new_" $ lambda "str" $
+      Strings.intercalate (var "new_") (Strings.splitOn (var "old") (var "str")),
+    "s1">: var "replace" @@ string "\\" @@ string "\\\\" @@ var "s",
+    "s2">: var "replace" @@ string "\n" @@ string "\\n" @@ var "s1",
+    "s3">: var "replace" @@ string "\r" @@ string "\\r" @@ var "s2",
+    "s4">: var "replace" @@ string "\t" @@ string "\\t" @@ var "s3"] $
+    Logic.ifElse (var "singleQuote")
+      (var "replace" @@ string "'"  @@ string "\\'" @@ var "s4")
+      (var "replace" @@ string "\"" @@ string "\\\"" @@ var "s4")
 
 templateLiteralToExpr :: TTermDefinition (TS.TemplateLiteral -> Expr)
 templateLiteralToExpr = define "templateLiteralToExpr" $
@@ -298,7 +304,7 @@ expressionToExpr = define "expressionToExpr" $
       TS._Expression_spread>>: lambda "spread" $
         Serialization.prefix @@ string "..." @@ (expressionToExpr @@ (unwrap TS._SpreadElement @@ var "spread")),
       TS._Expression_parenthesized>>: lambda "e" $
-        Serialization.parenthesize @@ (expressionToExpr @@ var "e")]
+        Serialization.parens @@ (expressionToExpr @@ var "e")]
 
 arrayExpressionToExpr :: TTermDefinition (TS.ArrayExpression -> Expr)
 arrayExpressionToExpr = define "arrayExpressionToExpr" $
@@ -377,7 +383,13 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
       (Maybes.fromMaybe (Serialization.cst @@ string "") (Maybes.map patternToExpr (Lists.maybeHead $ var "params")))
       (Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))),
     "bodyExpr">: cases TS._ArrowFunctionBody (var "body") Nothing [
-      TS._ArrowFunctionBody_expression>>: lambda "e" $ expressionToExpr @@ var "e",
+      -- An object-literal body needs explicit parens: `() => { ... }` would
+      -- otherwise be parsed as an arrow with a block body. Same for sequence
+      -- expressions (`a, b, c`) which would shadow the arrow.
+      TS._ArrowFunctionBody_expression>>: lambda "e" $
+        cases TS._Expression (var "e") (Just $ expressionToExpr @@ var "e") [
+          TS._Expression_object>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "e"),
+          TS._Expression_sequence>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "e")],
       TS._ArrowFunctionBody_block>>: lambda "b" $ blockStatementToExpr @@ var "b"]] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "asyncKw",
@@ -390,7 +402,18 @@ callExpressionToExpr = define "callExpressionToExpr" $
     "callee">: project TS._CallExpression TS._CallExpression_callee @@ var "call",
     "args">: project TS._CallExpression TS._CallExpression_arguments @@ var "call",
     "optional">: project TS._CallExpression TS._CallExpression_optional @@ var "call",
-    "calleeExpr">: expressionToExpr @@ var "callee",
+    -- A bare arrow / conditional / binary / sequence / new can't appear in
+    -- callee position without parens: `x => x.body(arg)` parses as
+    -- `x => (x.body(arg))`, not `(x => x.body)(arg)`. Wrap those forms.
+    "calleeExpr">: cases TS._Expression (var "callee") (Just $ expressionToExpr @@ var "callee") [
+      TS._Expression_arrow>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
+      TS._Expression_conditional>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
+      TS._Expression_binary>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
+      TS._Expression_unary>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
+      TS._Expression_assignment>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
+      TS._Expression_sequence>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
+      TS._Expression_object>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee"),
+      TS._Expression_function>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "callee")],
     "argsExpr">: Serialization.parenListAdaptive @@ (Lists.map (expressionToExpr) (var "args")),
     "optionalDot">: Logic.ifElse (var "optional") (string "?.") (string "")] $
     Serialization.spaceSep @@ list [
@@ -406,7 +429,18 @@ memberExpressionToExpr = define "memberExpressionToExpr" $
     "prop">: project TS._MemberExpression TS._MemberExpression_property @@ var "mem",
     "computed">: project TS._MemberExpression TS._MemberExpression_computed @@ var "mem",
     "optional">: project TS._MemberExpression TS._MemberExpression_optional @@ var "mem",
-    "objExpr">: expressionToExpr @@ var "obj",
+    -- Same caveat as in callExpressionToExpr: an unparenthesized arrow /
+    -- conditional / binary / object on the LHS of `.` would re-associate
+    -- the dot to a sub-expression. Parenthesize them.
+    "objExpr">: cases TS._Expression (var "obj") (Just $ expressionToExpr @@ var "obj") [
+      TS._Expression_arrow>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
+      TS._Expression_conditional>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
+      TS._Expression_binary>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
+      TS._Expression_unary>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
+      TS._Expression_assignment>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
+      TS._Expression_sequence>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
+      TS._Expression_object>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj"),
+      TS._Expression_function>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "obj")],
     "propExpr">: expressionToExpr @@ var "prop"] $
     Logic.ifElse (var "computed")
       -- obj[prop] or obj?.[prop]
@@ -425,13 +459,25 @@ conditionalExpressionToExpr = define "conditionalExpressionToExpr" $
   lambda "cond" $ lets [
     "test">: project TS._ConditionalExpression TS._ConditionalExpression_test @@ var "cond",
     "consequent">: project TS._ConditionalExpression TS._ConditionalExpression_consequent @@ var "cond",
-    "alternate">: project TS._ConditionalExpression TS._ConditionalExpression_alternate @@ var "cond"] $
+    "alternate">: project TS._ConditionalExpression TS._ConditionalExpression_alternate @@ var "cond",
+    -- The consequent in `cond ? <obj> : ...` would be parsed as
+    -- a block statement if it began with `{`. Parenthesize object literals
+    -- (and sequences) on either side. Nested conditionals don't need parens
+    -- because `?:` is right-associative.
+    "consExpr">: cases TS._Expression (var "consequent")
+      (Just $ expressionToExpr @@ var "consequent") [
+        TS._Expression_object>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "consequent"),
+        TS._Expression_sequence>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "consequent")],
+    "altExpr">: cases TS._Expression (var "alternate")
+      (Just $ expressionToExpr @@ var "alternate") [
+        TS._Expression_object>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "alternate"),
+        TS._Expression_sequence>>: constant $ Serialization.parens @@ (expressionToExpr @@ var "alternate")]] $
     Serialization.spaceSep @@ list [
       expressionToExpr @@ var "test",
       Serialization.cst @@ string "?",
-      expressionToExpr @@ var "consequent",
+      var "consExpr",
       Serialization.cst @@ string ":",
-      expressionToExpr @@ var "alternate"]
+      var "altExpr"]
 
 binaryExpressionToExpr :: TTermDefinition (TS.BinaryExpression -> Expr)
 binaryExpressionToExpr = define "binaryExpressionToExpr" $
@@ -605,7 +651,7 @@ ifStatementToExpr = define "ifStatementToExpr" $
     "alternate">: project TS._IfStatement TS._IfStatement_alternate @@ var "ifStmt",
     "ifPart">: Serialization.spaceSep @@ list [
       Serialization.cst @@ string "if",
-      Serialization.parenthesize @@ (expressionToExpr @@ var "test"),
+      Serialization.parens @@ (expressionToExpr @@ var "test"),
       statementToExpr @@ var "consequent"]] $
     Maybes.maybe
       (var "ifPart")
@@ -623,7 +669,7 @@ switchStatementToExpr = define "switchStatementToExpr" $
     "cases">: project TS._SwitchStatement TS._SwitchStatement_cases @@ var "switchStmt"] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "switch",
-      Serialization.parenthesize @@ (expressionToExpr @@ var "discriminant"),
+      Serialization.parens @@ (expressionToExpr @@ var "discriminant"),
       Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@
         (Lists.map (switchCaseToExpr) (var "cases"))]
 
@@ -695,7 +741,7 @@ catchClauseToExpr = define "catchClauseToExpr" $
       (Serialization.cst @@ string "catch")
       (lambda "p" $ Serialization.spaceSep @@ list [
         Serialization.cst @@ string "catch",
-        Serialization.parenthesize @@ (patternToExpr @@ var "p")])
+        Serialization.parens @@ (patternToExpr @@ var "p")])
       (var "param")] $
     Serialization.spaceSep @@ list [var "catchKw", blockStatementToExpr @@ var "body"]
 
@@ -731,7 +777,7 @@ whileStatementToExpr = define "whileStatementToExpr" $
     "body">: project TS._WhileStatement TS._WhileStatement_body @@ var "w"] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "while",
-      Serialization.parenthesize @@ (expressionToExpr @@ var "test"),
+      Serialization.parens @@ (expressionToExpr @@ var "test"),
       statementToExpr @@ var "body"]
 
 doWhileStatementToExpr :: TTermDefinition (TS.DoWhileStatement -> Expr)
@@ -745,7 +791,7 @@ doWhileStatementToExpr = define "doWhileStatementToExpr" $
         Serialization.cst @@ string "do",
         statementToExpr @@ var "body",
         Serialization.cst @@ string "while",
-        Serialization.parenthesize @@ (expressionToExpr @@ var "test")])
+        Serialization.parens @@ (expressionToExpr @@ var "test")])
 
 forStatementToExpr :: TTermDefinition (TS.ForStatement -> Expr)
 forStatementToExpr = define "forStatementToExpr" $
@@ -779,7 +825,7 @@ forInStatementToExpr = define "forInStatementToExpr" $
       TS._ForInLeft_pattern>>: lambda "p" $ patternToExpr @@ var "p"]] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "for",
-      Serialization.parenthesize @@ (Serialization.spaceSep @@ list [
+      Serialization.parens @@ (Serialization.spaceSep @@ list [
         var "leftExpr",
         Serialization.cst @@ string "in",
         expressionToExpr @@ var "right"]),
@@ -801,7 +847,7 @@ forOfStatementToExpr = define "forOfStatementToExpr" $
       TS._ForInLeft_pattern>>: lambda "p" $ patternToExpr @@ var "p"]] $
     Serialization.spaceSep @@ list [
       var "forKw",
-      Serialization.parenthesize @@ (Serialization.spaceSep @@ list [
+      Serialization.parens @@ (Serialization.spaceSep @@ list [
         var "leftExpr",
         Serialization.cst @@ string "of",
         expressionToExpr @@ var "right"]),

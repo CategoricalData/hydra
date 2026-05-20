@@ -45,5 +45,28 @@ case "$PKG" in
         "$HYDRA_ROOT/heads/haskell/bin/transform-json-to-target.sh" \
             typescript "$PKG" main \
             --output "$HYDRA_ROOT/dist/typescript"
+        # Cross-package self-containment: each dist/typescript/<pkg>/.../hydra/
+        # imports kernel modules via relative paths (../lib/maps.js, ../names.js,
+        # etc.). They resolve to kernel-pkg-local paths but the kernel sources
+        # only physically exist under dist/typescript/hydra-kernel/. Symlink
+        # every kernel file into this package so the imports resolve at runtime
+        # under node's NodeNext module resolution. Mirrors how Java's gradle
+        # source-set crossover and Python's pyright extraPaths bridge the two
+        # trees at compile time.
+        PKG_HYDRA="$HYDRA_ROOT/dist/typescript/$PKG/src/main/typescript/hydra"
+        KERNEL_HYDRA="$HYDRA_ROOT/dist/typescript/hydra-kernel/src/main/typescript/hydra"
+        if [ -d "$PKG_HYDRA" ] && [ -d "$KERNEL_HYDRA" ]; then
+            # Walk all kernel .ts files (including subdirs: show/, validate/,
+            # decode/, encode/, error/, json/, extract/, lib/, lib/defaults/, ...).
+            while IFS= read -r kfile; do
+                rel="${kfile#$KERNEL_HYDRA/}"
+                dest="$PKG_HYDRA/$rel"
+                # Only link if the package didn't generate its own file at that path.
+                if [ ! -e "$dest" ]; then
+                    mkdir -p "$(dirname "$dest")"
+                    ln -sf "$kfile" "$dest"
+                fi
+            done < <(find "$KERNEL_HYDRA" -name "*.ts" -not -path "*/node_modules/*")
+        fi
         ;;
 esac
