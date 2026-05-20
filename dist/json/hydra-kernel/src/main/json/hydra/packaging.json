@@ -73,6 +73,36 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.packaging.ModuleDependency",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A dependency on another module, identified by its namespace and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate namespace across packages is a resolution error which can be disambiguated by naming the intended package explicitly."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the depended-on module"}}}],
+                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                  {
+                    "name": "package",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.packaging.Namespace",
         "typeScheme": {
           "body": {

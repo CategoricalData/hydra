@@ -57,6 +57,16 @@ module_ cx raw =
           Packaging.moduleDependencies = field_dependencies,
           Packaging.moduleDefinitions = field_definitions}))))))
       _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
+-- | Decoder for hydra.packaging.ModuleDependency
+moduleDependency :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.ModuleDependency
+moduleDependency cx raw =
+    Eithers.either (\err -> Left err) (\stripped -> case stripped of
+      Core.TermRecord v0 ->
+        let fieldMap = ExtractCore.toFieldMap v0
+        in (Eithers.bind (ExtractCore.requireField "module" namespace fieldMap cx) (\field_module -> Eithers.bind (ExtractCore.requireField "package" (ExtractCore.decodeMaybe packageName) fieldMap cx) (\field_package -> Right (Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = field_module,
+          Packaging.moduleDependencyPackage = field_package}))))
+      _ -> Left (Errors.DecodingError "expected record")) (ExtractCore.stripWithDecodingError cx raw)
 -- | Decoder for hydra.packaging.Namespace
 namespace :: Graph.Graph -> Core.Term -> Either Errors.DecodingError Packaging.Namespace
 namespace cx raw =
