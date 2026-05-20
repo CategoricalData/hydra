@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "version": 1,
   "selfHash": "37a9896ee8eb7b2d2bc5a9827a6c534af2434d1f2d2f284779d2ec4d0f0db09c",
-  "depHash:hydra-kernel": "ef87b417371ec4b69defe1a5c486cc8838b5bb84acf5899e65245d1a86d150c4",
+  "depHash:hydra-kernel": "996bb0fc5abcb5b2a451a3c42002599b621fcb290af64c0f433eef75f1bc0516",
   "depHash:hydra-rdf": "8168cd80dd6215b235b6afbc71b56045d8d6d2e588b4dc57c784a43908e7d445",
   "hashes": {
     "com.gdblab.pathAlgebra.expressions": "d3f31158fb7ebe6129c9d869c0b80b6cea57a293be2cebcea6857def0179e027",
