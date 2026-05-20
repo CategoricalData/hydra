@@ -5,8 +5,8 @@
 # implement per-source-set freshness checks. The digest layout is uniform
 # across every target language:
 #
-#   dist/json/<pkg>/src/<set>/digest.json     — input digest (v1)
-#   dist/<lang>/<pkg>/src/<set>/digest.json   — output digest (v2)
+#   dist/json/<pkg>/build/<set>/digest.json     — input digest (v1)
+#   dist/<lang>/<pkg>/build/<set>/digest.json   — output digest (v2)
 #
 # where <set> ∈ {main, test}.
 #
