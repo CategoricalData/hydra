@@ -11,12 +11,12 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
-import qualified Hydra.Util as Util
 import qualified Hydra.Python.Environment as Environment
 import qualified Hydra.Python.Names as Names
 import qualified Hydra.Python.Serde as Serde
 import qualified Hydra.Python.Syntax as Syntax
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Annotate an expression with an optional comment using Annotated[]

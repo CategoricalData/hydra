@@ -674,12 +674,8 @@
 
 (define (extract-error-msg err)
   (cond
-    ((hydra_context_in_context? err)
-     (let ((obj (hydra_context_in_context-object err)))
-       (cond
-         ((and (pair? obj) (eq? (car obj) 'other))
-          (extract-error-msg (cadr obj)))
-         (else (extract-error-msg obj)))))
+    ((and (pair? err) (eq? (car err) 'other))
+     (extract-error-msg (cadr err)))
     ((string? err) err)
     (else (obj->string err))))
 

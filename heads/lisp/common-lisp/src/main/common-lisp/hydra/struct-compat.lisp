@@ -266,20 +266,8 @@
 (setf (symbol-function 'copy-context) #'copy-hydra_context_context)
 (setf (symbol-function 'context-p) #'hydra_context_context-p)
 
-;; hydra_context_in_context -> hydra_context_in_context
-(defun make-hydra_context_in_context (&rest args)
-  (if (and args (keywordp (first args)))
-    (loop for (k v) on args by #'cddr collect (cons k v))
-    (mapcar #'cons '( :object :context) args)))
-(defun hydra_context_in_context-object (rec) (cdr (assoc :object rec)))
-(defun hydra_context_in_context-context (rec) (cdr (assoc :context rec)))
-(defun copy-hydra_context_in_context (x) (copy-alist x))
-(defun hydra_context_in_context-p (x) (listp x))
-(setf (symbol-function 'make-in_context) #'make-hydra_context_in_context)
-(setf (symbol-function 'in_context-object) #'hydra_context_in_context-object)
-(setf (symbol-function 'in_context-context) #'hydra_context_in_context-context)
-(setf (symbol-function 'copy-in_context) #'copy-hydra_context_in_context)
-(setf (symbol-function 'in_context-p) #'hydra_context_in_context-p)
+;; #368: hydra.context.InContext was removed; the compat shims that lived here
+;; for hydra_context_in_context have been deleted accordingly.
 
 ;; hydra_core_annotated_term -> hydra_core_annotated_term
 (defun make-hydra_core_annotated_term (&rest args)

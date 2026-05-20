@@ -86,13 +86,10 @@
 ;; ============================================================================
 
 (defun wrap-other-error (cx result)
-  "Wrap Either (InContext OtherError) into Either (InContext Error)."
-  (if (eq (first result) :right)
-      result
-      (let* ((ic (second result))
-             (obj (if (consp ic) (cdr (assoc :object ic :test #'eq)) ic))
-             (ctx (if (consp ic) (cdr (assoc :context ic :test #'eq)) cx)))
-        (list :left (make-in_context (list :other (make-in_context obj ctx)) ctx)))))
+  "After #368 InContext removal, errors flow through Either Left Error directly.
+   Kept as pass-through for callers."
+  (declare (ignore cx))
+  result)
 
 ;; ============================================================================
 ;; TermCoder constructors
@@ -319,7 +316,7 @@
                     ((equal variant-name "lessThan")    (list :right :lt))
                     ((equal variant-name "equalTo")     (list :right :eq))
                     ((equal variant-name "greaterThan") (list :right :gt))
-                    (t (list :left (make-in_context (format nil "unknown comparison: ~A" variant-name) cx))))))))))
+                    (t (list :left (list :other (make-hydra_errors_other_error (format nil "unknown comparison: ~A" variant-name))))))))))))
     (lambda (cx) (declare (ignore cx))
       (lambda (c)
         (let ((variant-name (cond
@@ -339,8 +336,8 @@
 
 (defun tc-function (dom cod)
   (make-term_coder (list :function (make-function_type (term_coder-type dom) (term_coder-type cod)))
-    (lambda (cx) (lambda (g) (declare (ignore g)) (lambda (t_) (declare (ignore t_)) (list :left (make-in_context "cannot encode term to a function" cx)))))
-    (lambda (cx) (lambda (v) (declare (ignore v)) (list :left (make-in_context "cannot decode functions to terms" cx))))))
+    (lambda (cx) (declare (ignore cx)) (lambda (g) (declare (ignore g)) (lambda (t_) (declare (ignore t_)) (list :left (list :other (make-hydra_errors_other_error "cannot encode term to a function"))))))
+    (lambda (cx) (declare (ignore cx)) (lambda (v) (declare (ignore v)) (list :left (list :other (make-hydra_errors_other_error "cannot decode functions to terms")))))))
 
 (defun tc-function-with-reduce (reduce-fn dom cod)
   "TermCoder for function types, using a reducer to bridge term-level to native."
@@ -363,7 +360,7 @@
                         (when (eq (first decode-result) :left)
                           (error "function_with_reduce: failed to decode result"))
                         (second decode-result)))))))))
-    (lambda (cx) (lambda (v) (declare (ignore v)) (list :left (make-in_context "cannot decode functions to terms" cx))))))
+    (lambda (cx) (declare (ignore cx)) (lambda (v) (declare (ignore v)) (list :left (list :other (make-hydra_errors_other_error "cannot decode functions to terms")))))))
 
 ;; ============================================================================
 ;; Primitive constructors

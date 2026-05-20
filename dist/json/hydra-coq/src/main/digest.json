@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "version": 1,
   "selfHash": "2a908da2eb4db299cd1f07daffe5d31cca47b53a7f6da4de47943a8970eadf5e",
-  "depHash:hydra-kernel": "996bb0fc5abcb5b2a451a3c42002599b621fcb290af64c0f433eef75f1bc0516",
+  "depHash:hydra-kernel": "ef87b417371ec4b69defe1a5c486cc8838b5bb84acf5899e65245d1a86d150c4",
   "hashes": {
     "hydra.coq.coder": "63ddde4edbc0814768319ae04e5a82524cb8c5283325ec2eefcdf934d012ce1a",
     "hydra.coq.environment": "7137f85cad1acf4f1036dcb5e899357b706561829cafe331dc513f3379039d08",
