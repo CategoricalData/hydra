@@ -9,8 +9,9 @@ feature_NNN  ──→  integration  ──→  staging  ──→  main  ──
  sessions)         collector)        checks)        local mirror)
 ```
 
-For the read/modify rules across worktrees, see CLAUDE.md ("Working with worktrees")
-and [worktree-workflow.md](worktree-workflow.md).
+For the read/modify rules across worktrees, see CLAUDE.md ("Working with worktrees").
+For git-worktree mechanics (adding, removing, cherry-picks across worktrees),
+see [worktree-workflow.md](worktree-workflow.md).
 
 ## Where work happens
 
