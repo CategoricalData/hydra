@@ -3,10 +3,10 @@
             [hydra.lib.preload :as preload]
             [hydra.core :refer :all]
             [hydra.context :refer :all]
+            [hydra.errors :refer :all]
             [hydra.graph :refer :all]
             [hydra.typing :refer :all])
-  (:import [hydra.context hydra_context_in_context]
-           [hydra.core hydra_core_wrapped_term hydra_core_injection hydra_core_field]
+  (:import [hydra.core hydra_core_wrapped_term hydra_core_injection hydra_core_field]
            [hydra.graph hydra_graph_primitive hydra_graph_term_coder]))
 
 ;; ==========================================================================
@@ -126,20 +126,15 @@
 
 (defn- make-annotation-primitive
   "Create a Primitive that takes raw term arguments and returns a term result.
-   The implementation receives args as a list of terms and must return Either."
+   The implementation receives args as a list of terms and must return Either.
+   After #368 InContext removal, errors flow through as Either Left Error directly."
   [name arity impl-fn]
-  (let [ic-err (fn [cx msg] (->hydra_context_in_context msg cx))]
-    (->hydra_graph_primitive name (make-type-scheme arity)
-      (fn [cx] (fn [g] (fn [args]
-        (try
-          (let [result (impl-fn cx g args)]
-            (if (= (first result) :left)
-              ;; Wrap error in proper InContext
-              (let [err (second result)]
-                (list :left (->hydra_context_in_context (list :other (->hydra_context_in_context err cx)) cx)))
-              result))
-          (catch Throwable e
-            (list :left (->hydra_context_in_context (list :other (->hydra_context_in_context (.getMessage e) cx)) cx))))))))))
+  (->hydra_graph_primitive name (make-type-scheme arity)
+    (fn [cx] (fn [g] (fn [args]
+      (try
+        (impl-fn cx g args)
+        (catch Throwable e
+          (list :left (list :other (->hydra_errors_other_error (.getMessage e)))))))))))
 
 ;; setTermAnnotation :: Name -> Maybe Term -> Term -> Term
 (defn- prim-set-term-annotation [_cx _g args]
@@ -495,9 +490,8 @@
           (let [err (second result)
                 msg (loop [e err]
                       (cond
-                        (instance? hydra_context_in_context e) (recur (.object e))
                         (and (sequential? e) (= (first e) :other)) (recur (second e))
-                        (map? e) (recur (:object e))
+                        (map? e) (recur (or (:value e) (:object e)))
                         :else (str e)))]
             (println (str "FAIL: " path))
             (println (str "  ERROR: " msg))
@@ -700,9 +694,8 @@
               (let [err (second result)
                     msg (loop [e err]
                           (cond
-                            (instance? hydra_context_in_context e) (recur (.object e))
                             (and (sequential? e) (= (first e) :other)) (recur (second e))
-                            (map? e) (recur (:object e))
+                            (map? e) (recur (or (:value e) (:object e)))
                             :else (str e)))]
                 (println (str "  Inference ERROR: " msg)))
               [0 1 0])

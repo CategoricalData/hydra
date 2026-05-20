@@ -284,7 +284,8 @@ Uses hash-tables for objects (from json-parse-string with object-type hash-table
   "Generate source files using the full generate_source_files pipeline.
 Write output to OUT-DIR. UNIVERSE-MODS is the full set; MODS-TO-GENERATE is the subset to generate."
   (let* ((bs-graph (bootstrap-graph))
-         (cx (funcall 'make-hydra_context_in_context nil nil))
+         ;; #368: build proper Context (trace, messages, other), not deleted InContext
+         (cx (funcall 'make-hydra_context_context nil nil nil))
          (do-infer (nth 0 flags))
          (do-expand (nth 1 flags))
          (do-hoist-case (nth 2 flags))
