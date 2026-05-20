@@ -2,8 +2,6 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.dsl.haskell.environment": "d54db8aa64c0bb6c42682ed3d275023f82db2e98782dd734292c98a0783b83fa",
-    "hydra.dsl.haskell.syntax": "129d4d1b3f780e464e468b618ab595a43a4b3e0da63d0f1b8b8face65523881a",
     "hydra.haskell.coder": "034088192ae042d2d2fe478abd21891f01950da3d7fed51c89a477f1d8199c2c",
     "hydra.haskell.environment": "75ff0a28ef41a6048ba5ac53c2721dcdd3dba6bb190dc7e9d96155d16f33acbe",
     "hydra.haskell.language": "731be7825087fb72bd6f5bd35b13e839eadfb36b3c7bed187312224a75721322",
