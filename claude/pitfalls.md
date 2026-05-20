@@ -237,6 +237,20 @@ skipped before) registers as a regression at the
 `bin/sync-packages.sh` exit-code level, even when the underlying bug
 is older.
 
+### Cross-worktree sync contention can multiply sync time 10×+
+
+Two worktrees running `bin/sync.sh` simultaneously share GHC, Stack, the
+machine's CPU, and (transiently) the same `.stack` global cache. A sync
+that completes in a few minutes solo can stretch to an hour or more with
+a sibling sync competing. The work still succeeds — this is contention,
+not corruption — but expect dramatically longer wall-clock times.
+
+Before scheduling a long sync in your worktree, scan for sibling activity:
+`pgrep -fl "bin/sync.sh"` lists every active sync across all worktrees.
+If another session is mid-sync, prefer waiting unless the user explicitly
+authorizes parallel syncs. Don't kill the other process — it belongs to a
+different session (see CLAUDE.md "Hard rules").
+
 ### Bootstrap "Could not find module" early in compile is usually transient
 
 When `/bootstrap` reports a path failing at module 1-of-N with
