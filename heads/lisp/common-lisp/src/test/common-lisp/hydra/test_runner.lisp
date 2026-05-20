@@ -298,16 +298,12 @@
       (lambda (g)
         (lambda (args)
           ;; (format t "  DBG-PRIM ~A called with ~A args~%" pname (length args))
+          ;; #368: errors flow through Either Left Error directly; no InContext wrap
           (handler-case
-              (let ((result (funcall impl-fn cx g args)))
-                (if (eq (first result) :left)
-                    (list :left (make-in_context
-                                  (list :other (make-in_context (second result) cx)) cx))
-                    result))
+              (funcall impl-fn cx g args)
             (error (e)
               (format t "  DBG-PRIM ~A error: ~A~%" pname e)
-              (list :left (make-in_context
-                            (list :other (make-in_context (princ-to-string e) cx)) cx)))))))))
+              (list :left (list :other (make-hydra_errors_other_error (princ-to-string e)))))))))))
 
 ;; --------------------------------------------------------------------------
 ;; Extract annotations from terms in either format
