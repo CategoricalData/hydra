@@ -94,10 +94,6 @@ module_ = Module {
 haskellLanguage :: TTermDefinition Language
 haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
   doc "Language constraints for Haskell" $ lets [
-  "eliminationVariants">: Sets.fromList $ list [
-    Variants.eliminationVariantRecord,
-    Variants.eliminationVariantUnion,
-    Variants.eliminationVariantWrap],
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBinary,
     Variants.literalVariantBoolean,
@@ -108,9 +104,6 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat32, -- Float
     Core.floatTypeFloat64], -- Double
-  "functionVariants">: Sets.fromList $ list [
-    Variants.functionVariantElimination,
-    Variants.functionVariantLambda],
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeBigint, -- Integer
     Core.integerTypeInt8, -- Int8
@@ -161,10 +154,8 @@ haskellLanguage = haskellLanguageDefinition "haskellLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.haskell")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

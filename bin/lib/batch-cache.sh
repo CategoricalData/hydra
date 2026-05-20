@@ -7,16 +7,25 @@
 #
 # Returns 0 (fresh, skip work) if every per-source-set
 # <dist_root>/<pkg>/src/<set>/digest.json's recorded inputs match
-# <json_root>/<pkg>/src/<set>/digest.json's hashes, for every existing
+# <json_root>/<pkg>/src/<set>/digest.json's hashes AND the recorded
+# generator stamp matches the current HYDRA_GENERATOR_STAMP env var
+# (or the unstamped fallback if unset), for every existing
 # (package, source-set) pair. Returns 1 otherwise.
 #
 # Pure Python, no stack invocation. Runs in <1s on a cold cache check.
+#
+# The generator-stamp comparison mirrors digest-check's Haskell-side
+# logic (see heads/haskell/src/exec/digest-check/Main.hs doFresh) so
+# that batch_cache_fresh and assemble_check_fresh agree on what counts
+# as "fresh." See #347 for the transform-fingerprinting story.
 batch_cache_fresh() {
     local dist_root="$1"
     local json_root="$2"
+    HYDRA_GENERATOR_STAMP="${HYDRA_GENERATOR_STAMP:-v0-unstamped}" \
     python3 - "$dist_root" "$json_root" <<'PYEOF'
 import json, os, sys
 dist_root, json_root = sys.argv[1], sys.argv[2]
+expected_gen = os.environ.get("HYDRA_GENERATOR_STAMP", "v0-unstamped")
 if not os.path.isdir(dist_root):
     sys.exit(1)
 any_set = False
@@ -42,6 +51,23 @@ for entry in sorted(os.listdir(dist_root)):
                     for k, v in out_d.get("inputs", {}).items()}
         current = in_d.get("hashes", in_d)
         if recorded != current:
+            sys.exit(1)
+        recorded_gen = out_d.get("generator", "v0-unstamped")
+        if recorded_gen != expected_gen:
+            sys.exit(1)
+        # #347 transitive invalidation: compare package selfHash and the
+        # depHash:<pkg> entries. Both live as top-level fields on the
+        # input digest (PerPackageDigest format) and as recorded-* slots
+        # in the output digest's flat top-level (alongside generator).
+        input_self = in_d.get("selfHash", "")
+        recorded_self = out_d.get("selfHash", "")
+        if input_self != recorded_self:
+            sys.exit(1)
+        input_deps = {k[len("depHash:"):]: v for k, v in in_d.items()
+                      if isinstance(v, str) and k.startswith("depHash:")}
+        recorded_deps = {k[len("depHash:"):]: v for k, v in out_d.items()
+                         if isinstance(v, str) and k.startswith("depHash:")}
+        if input_deps != recorded_deps:
             sys.exit(1)
         any_set = True
 sys.exit(0 if any_set else 1)

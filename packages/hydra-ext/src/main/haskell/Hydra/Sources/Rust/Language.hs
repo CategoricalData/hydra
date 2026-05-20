@@ -90,10 +90,6 @@ module_ = Module {
 rustLanguage :: TTermDefinition Language
 rustLanguage = define "rustLanguage" $
     doc "Language constraints for Rust" $ lets [
-    "eliminationVariants">: Sets.fromList $ list [
-      Variants.eliminationVariantRecord,
-      Variants.eliminationVariantUnion,
-      Variants.eliminationVariantWrap],
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBinary, -- &[u8], Vec<u8>
       Variants.literalVariantBoolean, -- bool
@@ -103,9 +99,6 @@ rustLanguage = define "rustLanguage" $
     "floatTypes">: Sets.fromList $ list [
       Core.floatTypeFloat32, -- f32
       Core.floatTypeFloat64], -- f64
-    "functionVariants">: Sets.fromList $ list [
-      Variants.functionVariantElimination,
-      Variants.functionVariantLambda],
     "integerTypes">: Sets.fromList $ list [
       Core.integerTypeInt8,   -- i8
       Core.integerTypeInt16,  -- i16
@@ -166,10 +159,8 @@ rustLanguage = define "rustLanguage" $
     Coders.language
       (Coders.languageName2 $ string "hydra.rust")
       (Coders.languageConstraints2
-        (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
-        (var "functionVariants")
         (var "integerTypes")
         (var "termVariants")
         (var "typeVariants")

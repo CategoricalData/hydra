@@ -16,20 +16,13 @@ javaLanguage =
     Coders.Language {
       Coders.languageName = (Coders.LanguageName "hydra.java"),
       Coders.languageConstraints = Coders.LanguageConstraints {
-        Coders.languageConstraintsEliminationVariants = eliminationVariants,
         Coders.languageConstraintsLiteralVariants = literalVariants,
         Coders.languageConstraintsFloatTypes = floatTypes,
-        Coders.languageConstraintsFunctionVariants = functionVariants,
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
         Coders.languageConstraintsTypes = typePredicate}}
   where
-    eliminationVariants =
-        Sets.fromList [
-          Variants.EliminationVariantRecord,
-          Variants.EliminationVariantUnion,
-          Variants.EliminationVariantWrap]
     literalVariants =
         Sets.fromList [
           Variants.LiteralVariantBinary,
@@ -42,10 +35,6 @@ javaLanguage =
         Sets.fromList [
           Core.FloatTypeFloat32,
           Core.FloatTypeFloat64]
-    functionVariants =
-        Sets.fromList [
-          Variants.FunctionVariantElimination,
-          Variants.FunctionVariantLambda]
     integerTypes =
         Sets.fromList [
           Core.IntegerTypeBigint,

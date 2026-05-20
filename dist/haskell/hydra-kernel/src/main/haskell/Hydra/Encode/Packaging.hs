@@ -5,9 +5,7 @@ module Hydra.Encode.Packaging where
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Lib.Lists as Lists
-import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
-import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Packaging as Packaging
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -55,18 +53,6 @@ namespace x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.Namespace"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unNamespace x))})
--- | Encoder for hydra.packaging.Namespaces
-namespaces :: (t0 -> Core.Term) -> Packaging.Namespaces t0 -> Core.Term
-namespaces n x =
-    Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.Namespaces"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "focus"),
-          Core.fieldTerm = ((\p -> Core.TermPair (Pairs.bimap namespace n p)) (Packaging.namespacesFocus x))},
-        Core.Field {
-          Core.fieldName = (Core.Name "mapping"),
-          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap namespace n m)) (Packaging.namespacesMapping x))}]})
 -- | Encoder for hydra.packaging.Package
 package :: Packaging.Package -> Core.Term
 package x =

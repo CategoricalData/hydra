@@ -116,18 +116,12 @@ languageConstraints :: Binding
 languageConstraints = define "LanguageConstraints" $
   doc "A set of constraints on valid type and term expressions, characterizing a language" $
   T.record [
-    "eliminationVariants">:
-      doc "All supported elimination variants" $
-      T.set Variants.eliminationVariant,
     "literalVariants">:
       doc "All supported literal variants" $
       T.set Variants.literalVariant,
     "floatTypes">:
       doc "All supported float types" $
       T.set Core.floatType,
-    "functionVariants">:
-      doc "All supported function variants" $
-      T.set Variants.functionVariant,
     "integerTypes">:
       doc "All supported integer types" $
       T.set Core.integerType,

@@ -8,13 +8,6 @@ import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | All elimination variants (constructors), in a canonical order (legacy)
-eliminationVariants :: [Variants.EliminationVariant]
-eliminationVariants =
-    [
-      Variants.EliminationVariantRecord,
-      Variants.EliminationVariantUnion,
-      Variants.EliminationVariantWrap]
 -- | Find the precision of a given floating-point type
 floatTypePrecision :: Core.FloatType -> Util.Precision
 floatTypePrecision x =
@@ -33,12 +26,6 @@ floatValueType x =
     case x of
       Core.FloatValueFloat32 _ -> Core.FloatTypeFloat32
       Core.FloatValueFloat64 _ -> Core.FloatTypeFloat64
--- | All function variants (constructors), in a canonical order (legacy)
-functionVariants :: [Variants.FunctionVariant]
-functionVariants =
-    [
-      Variants.FunctionVariantElimination,
-      Variants.FunctionVariantLambda]
 -- | Find whether a given integer type is signed (true) or unsigned (false)
 integerTypeIsSigned :: Core.IntegerType -> Bool
 integerTypeIsSigned x =

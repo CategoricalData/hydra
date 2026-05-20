@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Core.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just ("A syntax model for the path algebra grammar by Angles et al."
       ++ " See the paper \"Path-based Algebraic Foundations of Graph Query Languages\""
       ++ " and the ANTLR grammar at https://github.com/pathalgebra/AlgebraParser")}

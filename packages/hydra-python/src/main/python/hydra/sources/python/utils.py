@@ -16,6 +16,7 @@ import hydra.dsl.meta.lib.pairs as Pairs
 import hydra.dsl.meta.lib.strings as Strings
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
 import hydra.dsl.packaging as Packaging
+import hydra.dsl.util as Util
 import hydra.dsl.python.syntax as PySyn
 
 from hydra.sources.python import _python_helpers as PyDsl
@@ -409,17 +410,17 @@ def _find_namespaces():
         Logic.if_else(
             Equality.equal(
                 Packaging.un_namespace(
-                    Pairs.first(Packaging.namespaces_focus(var("namespaces"))),
+                    Pairs.first(Util.namespaces_focus(var("namespaces"))),
                 ),
                 Packaging.un_namespace(var("coreNs")),
             ),
             var("namespaces"),
-            Packaging.namespaces(
-                Packaging.namespaces_focus(var("namespaces")),
+            Util.namespaces(
+                Util.namespaces_focus(var("namespaces")),
                 Maps.insert(
                     var("coreNs"),
                     _pynames_encode_namespace(var("coreNs")),
-                    Packaging.namespaces_mapping(var("namespaces")),
+                    Util.namespaces_mapping(var("namespaces")),
                 ),
             ),
         ),

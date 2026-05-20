@@ -123,8 +123,8 @@ addNamesToNamespaces = define "addNamesToNamespaces" $
 --  "nss" <~ Sets.empty $
   "nss" <~ Sets.fromList (Maybes.cat $ Lists.map (Names.namespaceOf) $ Sets.toList $ var "names") $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
-  Packaging.namespacesWithMapping (var "ns0") $ Maps.union
-    (Packaging.namespacesMapping $ var "ns0")
+  Util.namespacesWithMapping (var "ns0") $ Maps.union
+    (Util.namespacesMapping $ var "ns0")
     (Maps.fromList $ Lists.map (var "toPair") $ Sets.toList $ var "nss")
 
 analyzeFunctionTerm :: TTermDefinition (
@@ -520,5 +520,5 @@ namespacesForDefinitions = define "namespacesForDefinitions" $
   "encodeNamespace" ~> "focusNs" ~> "defs" ~>
   "nss" <~ Sets.delete (var "focusNs") (definitionDependencyNamespaces @@ var "defs") $
   "toPair" <~ ("ns" ~> pair (var "ns") (var "encodeNamespace" @@ var "ns")) $
-  Packaging.namespaces (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss"))))
+  Util.namespaces (var "toPair" @@ var "focusNs") (Maps.fromList (Lists.map (var "toPair") (Sets.toList (var "nss"))))
 

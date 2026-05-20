@@ -14,16 +14,13 @@ shaclLanguage =
     Coders.Language {
       Coders.languageName = (Coders.LanguageName "hydra.shacl"),
       Coders.languageConstraints = Coders.LanguageConstraints {
-        Coders.languageConstraintsEliminationVariants = eliminationVariants,
         Coders.languageConstraintsLiteralVariants = literalVariants,
         Coders.languageConstraintsFloatTypes = floatTypes,
-        Coders.languageConstraintsFunctionVariants = functionVariants,
         Coders.languageConstraintsIntegerTypes = integerTypes,
         Coders.languageConstraintsTermVariants = termVariants,
         Coders.languageConstraintsTypeVariants = typeVariants,
         Coders.languageConstraintsTypes = typePredicate}}
   where
-    eliminationVariants = Sets.empty
     literalVariants =
         Sets.fromList [
           Variants.LiteralVariantBoolean,
@@ -34,7 +31,6 @@ shaclLanguage =
         Sets.fromList [
           Core.FloatTypeFloat32,
           Core.FloatTypeFloat64]
-    functionVariants = Sets.empty
     integerTypes =
         Sets.fromList [
           Core.IntegerTypeInt32,

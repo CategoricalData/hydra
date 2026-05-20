@@ -497,13 +497,6 @@
     "hydra.error.core",
     "hydra.paths",
     "hydra.typing",
-    "hydra.variants",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.paths",
-    "hydra.typing",
     "hydra.variants"],
   "description": "Top-level error types for the Hydra kernel",
   "namespace": "hydra.errors"}

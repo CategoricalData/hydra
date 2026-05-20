@@ -336,14 +336,14 @@ findNamespaces = def "findNamespaces" $
     "coreNs">: Packaging.namespace $ string "hydra.core",
     "namespaces">: Analysis.namespacesForDefinitions @@ PyNames.encodeNamespace @@ var "focusNs" @@ var "defs"] $
     Logic.ifElse (Equality.equal
-      (Packaging.unNamespace $ Pairs.first $ Packaging.namespacesFocus $ var "namespaces")
+      (Packaging.unNamespace $ Pairs.first $ Util.namespacesFocus $ var "namespaces")
       (Packaging.unNamespace $ var "coreNs"))
       (var "namespaces")
-      (Packaging.namespaces
-        (Packaging.namespacesFocus $ var "namespaces")
+      (Util.namespaces
+        (Util.namespacesFocus $ var "namespaces")
         (Maps.insert (var "coreNs")
           (PyNames.encodeNamespace @@ var "coreNs")
-          (Packaging.namespacesMapping $ var "namespaces")))
+          (Util.namespacesMapping $ var "namespaces")))
 
 -- | Create a function call expression
 functionCall :: TTermDefinition (Py.Primary -> [Py.Expression] -> Py.Expression)

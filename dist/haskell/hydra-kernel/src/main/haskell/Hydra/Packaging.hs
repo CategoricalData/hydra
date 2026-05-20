@@ -6,7 +6,6 @@ import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
-import qualified Data.Map as M
 -- | A definition, which may be either a term or type definition
 data Definition =
   -- | A term definition
@@ -59,17 +58,6 @@ newtype Namespace =
     unNamespace :: String}
   deriving (Eq, Ord, Read, Show)
 _Namespace = Core.Name "hydra.packaging.Namespace"
--- | A mapping from namespaces to values of type n, with a focus on one namespace
-data Namespaces n =
-  Namespaces {
-    -- | The namespace in focus, together with its associated value
-    namespacesFocus :: (Namespace, n),
-    -- | A mapping of namespaces to values
-    namespacesMapping :: (M.Map Namespace n)}
-  deriving (Eq, Ord, Read, Show)
-_Namespaces = Core.Name "hydra.packaging.Namespaces"
-_Namespaces_focus = Core.Name "focus"
-_Namespaces_mapping = Core.Name "mapping"
 -- | A package, which is a named collection of modules with metadata and dependencies
 data Package =
   Package {

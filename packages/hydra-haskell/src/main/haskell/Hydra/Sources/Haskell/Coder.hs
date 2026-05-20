@@ -225,7 +225,7 @@ constructModule = haskellCoderDefinition "constructModule" $
           H._Import_module>>: var "importName" @@ var "name",
           H._Import_as>>: just $ var "alias",
           H._Import_spec>>: nothing]] $
-      Lists.map (var "toImport") (Maps.toList $ Packaging.namespacesMapping $ var "namespaces"),
+      Lists.map (var "toImport") (Maps.toList $ Util.namespacesMapping $ var "namespaces"),
     "meta">: gatherMetadata @@ var "defs",
     "condImport">: "flag" ~> "triple" ~>
       Logic.ifElse (var "flag")
@@ -993,7 +993,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "ftype">: Core.fieldTypeType $ var "fieldType",
       "deconflict">: "name" ~> lets [
         "tname">: Names.unqualifyName @@ record _QualifiedName [
-          _QualifiedName_namespace>>: just $ Pairs.first $ Packaging.namespacesFocus $ var "namespaces",
+          _QualifiedName_namespace>>: just $ Pairs.first $ Util.namespacesFocus $ var "namespaces",
           _QualifiedName_local>>: var "name"]] $
         Logic.ifElse (Sets.member (var "tname") (var "boundNames'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))

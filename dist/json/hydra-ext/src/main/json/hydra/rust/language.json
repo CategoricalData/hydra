@@ -10,18 +10,6 @@
               "let": {
                 "bindings": [
                   {
-                    "name": "eliminationVariants",
-                    "term": {
-                      "application": {
-                        "argument": {
-                          "list": [
-                            {"inject": {"field": {"name": "record", "term": {"unit": {}}}, "typeName": "hydra.variants.EliminationVariant"}},
-                            {"inject": {"field": {"name": "union", "term": {"unit": {}}}, "typeName": "hydra.variants.EliminationVariant"}},
-                            {"inject": {"field": {"name": "wrap", "term": {"unit": {}}}, "typeName": "hydra.variants.EliminationVariant"}}]},
-                        "function": {
-                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
-                    "typeScheme": {"body": {"set": {"variable": "hydra.variants.EliminationVariant"}}, "variables": []}},
-                  {
                     "name": "literalVariants",
                     "term": {
                       "application": {
@@ -45,17 +33,6 @@
                             {"inject": {"field": {"name": "float64", "term": {"unit": {}}}, "typeName": "hydra.core.FloatType"}}]},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.FloatType"}}}}},
                     "typeScheme": {"body": {"set": {"variable": "hydra.core.FloatType"}}, "variables": []}},
-                  {
-                    "name": "functionVariants",
-                    "term": {
-                      "application": {
-                        "argument": {
-                          "list": [
-                            {"inject": {"field": {"name": "elimination", "term": {"unit": {}}}, "typeName": "hydra.variants.FunctionVariant"}},
-                            {"inject": {"field": {"name": "lambda", "term": {"unit": {}}}, "typeName": "hydra.variants.FunctionVariant"}}]},
-                        "function": {
-                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
-                    "typeScheme": {"body": {"set": {"variable": "hydra.variants.FunctionVariant"}}, "variables": []}},
                   {
                     "name": "integerTypes",
                     "term": {
@@ -146,10 +123,8 @@
                         "term": {
                           "record": {
                             "fields": [
-                              {"name": "eliminationVariants", "term": {"variable": "eliminationVariants"}},
                               {"name": "literalVariants", "term": {"variable": "literalVariants"}},
                               {"name": "floatTypes", "term": {"variable": "floatTypes"}},
-                              {"name": "functionVariants", "term": {"variable": "functionVariants"}},
                               {"name": "integerTypes", "term": {"variable": "integerTypes"}},
                               {"name": "termVariants", "term": {"variable": "termVariants"}},
                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},

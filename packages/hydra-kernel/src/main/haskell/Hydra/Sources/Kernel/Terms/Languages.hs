@@ -66,10 +66,8 @@ module_ = Module {
 hydraLanguage :: TTermDefinition Language
 hydraLanguage = definitionInModule module_ "hydraLanguage" $
   doc "Language constraints for Hydra Core, i.e. no constraints." $ lets [
-  "eliminationVariants">: Sets.fromList Reflect.eliminationVariants,
   "literalVariants">: Sets.fromList Reflect.literalVariants,
   "floatTypes">: Sets.fromList Reflect.floatTypes,
-  "functionVariants">: Sets.fromList Reflect.functionVariants,
   "integerTypes">: Sets.fromList Reflect.integerTypes,
   "termVariants">: Sets.fromList Reflect.termVariants,
   "typeVariants">: Sets.fromList Reflect.typeVariants,
@@ -77,10 +75,8 @@ hydraLanguage = definitionInModule module_ "hydraLanguage" $
   Coders.language
     (Coders.languageName2 (string "hydra.core"))
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

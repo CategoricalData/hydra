@@ -2560,6 +2560,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Multi-part queries using WITH"}}}],
                         "body": {"literal": {"boolean": {}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.core"],
+  "dependencies": ["hydra.core"],
   "description": "A model for characterizing OpenCypher queries and implementations in terms of included features.Based on the OpenCypher grammar and the list of standard Cypher functions at https://neo4j.com/docs/cypher-manual/current/functions. Current as of August 2024.",
   "namespace": "hydra.cypher.features"}

@@ -116,34 +116,6 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.packaging.Namespaces",
-        "typeScheme": {
-          "body": {
-            "annotated": {
-              "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "A mapping from namespaces to values of type n, with a focus on one namespace"}}}],
-              "body": {
-                "forall": {
-                  "body": {
-                    "record": [
-                      {
-                        "name": "focus",
-                        "type": {
-                          "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace in focus, together with its associated value"}}}],
-                            "body": {"pair": {"first": {"variable": "hydra.packaging.Namespace"}, "second": {"variable": "n"}}}}}},
-                      {
-                        "name": "mapping",
-                        "type": {
-                          "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "A mapping of namespaces to values"}}}],
-                            "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "n"}}}}}}]},
-                  "parameter": "n"}}}},
-          "variables": []}}},
-    {
-      "type": {
         "name": "hydra.packaging.Package",
         "typeScheme": {
           "body": {

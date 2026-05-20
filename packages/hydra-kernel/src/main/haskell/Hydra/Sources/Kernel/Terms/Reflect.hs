@@ -3,7 +3,6 @@ module Hydra.Sources.Kernel.Terms.Reflect where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
-  eliminationVariants, functionVariants,
   floatTypePrecision, floatTypes, floatValueType,
   integerTypeIsSigned, integerTypePrecision, integerTypes,
   integerValueType, literalType, literalTypeVariant, literalTypes, literalVariant, literalVariants,
@@ -68,11 +67,9 @@ module_ = Module {
             moduleDescription = Just ("Reflection functions for working with term, type, and literal type variants, as well as numeric precision.")}
   where
     definitions = [
-      toDefinition eliminationVariants,
       toDefinition floatTypePrecision,
       toDefinition floatTypes,
       toDefinition floatValueType,
-      toDefinition functionVariants,
       toDefinition integerTypeIsSigned,
       toDefinition integerTypePrecision,
       toDefinition integerTypes,
@@ -89,24 +86,6 @@ module_ = Module {
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
-
--- Note: kept for backward compatibility with the Hydra.Coders LanguageConstraints schema,
--- even though hydra.core.Function and hydra.core.Elimination no longer exist as of #332.
-eliminationVariants :: TTermDefinition [EliminationVariant]
-eliminationVariants = define "eliminationVariants" $
-  doc "All elimination variants (constructors), in a canonical order (legacy)" $
-  list $ injectUnit _EliminationVariant <$> [
-    _EliminationVariant_record,
-    _EliminationVariant_union,
-    _EliminationVariant_wrap]
-
--- Note: kept for backward compatibility with the Hydra.Coders LanguageConstraints schema.
-functionVariants :: TTermDefinition [FunctionVariant]
-functionVariants = define "functionVariants" $
-  doc "All function variants (constructors), in a canonical order (legacy)" $
-  list $ injectUnit _FunctionVariant <$> [
-    _FunctionVariant_elimination,
-    _FunctionVariant_lambda]
 
 floatTypePrecision :: TTermDefinition (FloatType -> Precision)
 floatTypePrecision = define "floatTypePrecision" $
