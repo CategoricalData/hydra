@@ -7,46 +7,6 @@ import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
--- | DSL injection for the record variant of hydra.variants.EliminationVariant
-eliminationVariantRecord :: Phantoms.TTerm Variants.EliminationVariant
-eliminationVariantRecord =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "record"),
-        Core.fieldTerm = Core.TermUnit}}))
--- | DSL injection for the union variant of hydra.variants.EliminationVariant
-eliminationVariantUnion :: Phantoms.TTerm Variants.EliminationVariant
-eliminationVariantUnion =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "union"),
-        Core.fieldTerm = Core.TermUnit}}))
--- | DSL injection for the wrap variant of hydra.variants.EliminationVariant
-eliminationVariantWrap :: Phantoms.TTerm Variants.EliminationVariant
-eliminationVariantWrap =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "wrap"),
-        Core.fieldTerm = Core.TermUnit}}))
--- | DSL injection for the elimination variant of hydra.variants.FunctionVariant
-functionVariantElimination :: Phantoms.TTerm Variants.FunctionVariant
-functionVariantElimination =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "elimination"),
-        Core.fieldTerm = Core.TermUnit}}))
--- | DSL injection for the lambda variant of hydra.variants.FunctionVariant
-functionVariantLambda :: Phantoms.TTerm Variants.FunctionVariant
-functionVariantLambda =
-    Phantoms.TTerm (Core.TermInject (Core.Injection {
-      Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
-      Core.injectionField = Core.Field {
-        Core.fieldName = (Core.Name "lambda"),
-        Core.fieldTerm = Core.TermUnit}}))
 -- | DSL injection for the binary variant of hydra.variants.LiteralVariant
 literalVariantBinary :: Phantoms.TTerm Variants.LiteralVariant
 literalVariantBinary =

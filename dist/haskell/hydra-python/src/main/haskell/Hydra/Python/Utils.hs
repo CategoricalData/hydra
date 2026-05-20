@@ -11,6 +11,7 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Util as Util
 import qualified Hydra.Python.Environment as Environment
 import qualified Hydra.Python.Names as Names
 import qualified Hydra.Python.Serde as Serde
@@ -116,14 +117,14 @@ dottedAssignmentStatement obj attr expr =
 doubleQuotedString :: String -> Syntax.Expression
 doubleQuotedString s = stringToPyExpression Syntax.QuoteStyleDouble s
 -- | Find all namespaces referenced by a list of definitions, plus the core namespace
-findNamespaces :: Packaging.Namespace -> [Packaging.Definition] -> Packaging.Namespaces Syntax.DottedName
+findNamespaces :: Packaging.Namespace -> [Packaging.Definition] -> Util.Namespaces Syntax.DottedName
 findNamespaces focusNs defs =
 
       let coreNs = Packaging.Namespace "hydra.core"
           namespaces = Analysis.namespacesForDefinitions Names.encodeNamespace focusNs defs
-      in (Logic.ifElse (Equality.equal (Packaging.unNamespace (Pairs.first (Packaging.namespacesFocus namespaces))) (Packaging.unNamespace coreNs)) namespaces (Packaging.Namespaces {
-        Packaging.namespacesFocus = (Packaging.namespacesFocus namespaces),
-        Packaging.namespacesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Packaging.namespacesMapping namespaces))}))
+      in (Logic.ifElse (Equality.equal (Packaging.unNamespace (Pairs.first (Util.namespacesFocus namespaces))) (Packaging.unNamespace coreNs)) namespaces (Util.Namespaces {
+        Util.namespacesFocus = (Util.namespacesFocus namespaces),
+        Util.namespacesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Util.namespacesMapping namespaces))}))
 -- | Create a function call expression
 functionCall :: Syntax.Primary -> [Syntax.Expression] -> Syntax.Expression
 functionCall func args = pyPrimaryToPyExpression (primaryWithRhs func (Syntax.PrimaryRhsCall (pyExpressionsToPyArgs args)))

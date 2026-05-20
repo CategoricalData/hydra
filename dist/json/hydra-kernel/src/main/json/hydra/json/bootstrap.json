@@ -1314,52 +1314,6 @@
                                               {
                                                 "record": {
                                                   "fields": [
-                                                    {
-                                                      "name": "name",
-                                                      "term": {"wrap": {"body": {"literal": {"string": "eliminationVariants"}}, "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "type",
-                                                      "term": {
-                                                        "inject": {
-                                                          "field": {
-                                                            "name": "annotated",
-                                                            "term": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {
-                                                                    "name": "body",
-                                                                    "term": {
-                                                                      "inject": {
-                                                                        "field": {
-                                                                          "name": "set",
-                                                                          "term": {
-                                                                            "inject": {
-                                                                              "field": {
-                                                                                "name": "variable",
-                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.EliminationVariant"}}, "typeName": "hydra.core.Name"}}},
-                                                                              "typeName": "hydra.core.Type"}}},
-                                                                        "typeName": "hydra.core.Type"}}},
-                                                                  {
-                                                                    "name": "annotation",
-                                                                    "term": {
-                                                                      "map": [
-                                                                        {
-                                                                          "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
-                                                                          "value": {
-                                                                            "inject": {
-                                                                              "field": {
-                                                                                "name": "literal",
-                                                                                "term": {
-                                                                                  "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "All supported elimination variants"}}},
-                                                                                    "typeName": "hydra.core.Literal"}}},
-                                                                              "typeName": "hydra.core.Term"}}}]}}],
-                                                                "typeName": "hydra.core.AnnotatedType"}}},
-                                                          "typeName": "hydra.core.Type"}}}],
-                                                  "typeName": "hydra.core.FieldType"}},
-                                              {
-                                                "record": {
-                                                  "fields": [
                                                     {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "type",
@@ -1440,50 +1394,6 @@
                                                                                 "term": {
                                                                                   "inject": {
                                                                                     "field": {"name": "string", "term": {"literal": {"string": "All supported float types"}}},
-                                                                                    "typeName": "hydra.core.Literal"}}},
-                                                                              "typeName": "hydra.core.Term"}}}]}}],
-                                                                "typeName": "hydra.core.AnnotatedType"}}},
-                                                          "typeName": "hydra.core.Type"}}}],
-                                                  "typeName": "hydra.core.FieldType"}},
-                                              {
-                                                "record": {
-                                                  "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "functionVariants"}}, "typeName": "hydra.core.Name"}}},
-                                                    {
-                                                      "name": "type",
-                                                      "term": {
-                                                        "inject": {
-                                                          "field": {
-                                                            "name": "annotated",
-                                                            "term": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {
-                                                                    "name": "body",
-                                                                    "term": {
-                                                                      "inject": {
-                                                                        "field": {
-                                                                          "name": "set",
-                                                                          "term": {
-                                                                            "inject": {
-                                                                              "field": {
-                                                                                "name": "variable",
-                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.variants.FunctionVariant"}}, "typeName": "hydra.core.Name"}}},
-                                                                              "typeName": "hydra.core.Type"}}},
-                                                                        "typeName": "hydra.core.Type"}}},
-                                                                  {
-                                                                    "name": "annotation",
-                                                                    "term": {
-                                                                      "map": [
-                                                                        {
-                                                                          "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
-                                                                          "value": {
-                                                                            "inject": {
-                                                                              "field": {
-                                                                                "name": "literal",
-                                                                                "term": {
-                                                                                  "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "All supported function variants"}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}}]}}],
                                                                 "typeName": "hydra.core.AnnotatedType"}}},
@@ -12445,170 +12355,6 @@
                                 "typeName": "hydra.core.AnnotatedType"}}},
                           "typeName": "hydra.core.Type"}}}}},
                 {
-                  "key": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespaces"}}, "typeName": "hydra.core.Name"}},
-                  "value": {
-                    "annotated": {
-                      "annotation": [{"key": "type", "value": {"variable": "hydra.core.Type"}}],
-                      "body": {
-                        "inject": {
-                          "field": {
-                            "name": "annotated",
-                            "term": {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "body",
-                                    "term": {
-                                      "inject": {
-                                        "field": {
-                                          "name": "forall",
-                                          "term": {
-                                            "record": {
-                                              "fields": [
-                                                {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "n"}}, "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "body",
-                                                  "term": {
-                                                    "inject": {
-                                                      "field": {
-                                                        "name": "record",
-                                                        "term": {
-                                                          "list": [
-                                                            {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "focus"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {
-                                                                    "name": "type",
-                                                                    "term": {
-                                                                      "inject": {
-                                                                        "field": {
-                                                                          "name": "annotated",
-                                                                          "term": {
-                                                                            "record": {
-                                                                              "fields": [
-                                                                                {
-                                                                                  "name": "body",
-                                                                                  "term": {
-                                                                                    "inject": {
-                                                                                      "field": {
-                                                                                        "name": "pair",
-                                                                                        "term": {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "first",
-                                                                                                "term": {
-                                                                                                  "inject": {
-                                                                                                    "field": {
-                                                                                                      "name": "variable",
-                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                    "typeName": "hydra.core.Type"}}},
-                                                                                              {
-                                                                                                "name": "second",
-                                                                                                "term": {
-                                                                                                  "inject": {
-                                                                                                    "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "n"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                    "typeName": "hydra.core.Type"}}}],
-                                                                                            "typeName": "hydra.core.PairType"}}},
-                                                                                      "typeName": "hydra.core.Type"}}},
-                                                                                {
-                                                                                  "name": "annotation",
-                                                                                  "term": {
-                                                                                    "map": [
-                                                                                      {
-                                                                                        "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
-                                                                                        "value": {
-                                                                                          "inject": {
-                                                                                            "field": {
-                                                                                              "name": "literal",
-                                                                                              "term": {
-                                                                                                "inject": {
-                                                                                                  "field": {"name": "string", "term": {"literal": {"string": "The namespace in focus, together with its associated value"}}},
-                                                                                                  "typeName": "hydra.core.Literal"}}},
-                                                                                            "typeName": "hydra.core.Term"}}}]}}],
-                                                                              "typeName": "hydra.core.AnnotatedType"}}},
-                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                "typeName": "hydra.core.FieldType"}},
-                                                            {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapping"}}, "typeName": "hydra.core.Name"}}},
-                                                                  {
-                                                                    "name": "type",
-                                                                    "term": {
-                                                                      "inject": {
-                                                                        "field": {
-                                                                          "name": "annotated",
-                                                                          "term": {
-                                                                            "record": {
-                                                                              "fields": [
-                                                                                {
-                                                                                  "name": "body",
-                                                                                  "term": {
-                                                                                    "inject": {
-                                                                                      "field": {
-                                                                                        "name": "map",
-                                                                                        "term": {
-                                                                                          "record": {
-                                                                                            "fields": [
-                                                                                              {
-                                                                                                "name": "keys",
-                                                                                                "term": {
-                                                                                                  "inject": {
-                                                                                                    "field": {
-                                                                                                      "name": "variable",
-                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                    "typeName": "hydra.core.Type"}}},
-                                                                                              {
-                                                                                                "name": "values",
-                                                                                                "term": {
-                                                                                                  "inject": {
-                                                                                                    "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "n"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                    "typeName": "hydra.core.Type"}}}],
-                                                                                            "typeName": "hydra.core.MapType"}}},
-                                                                                      "typeName": "hydra.core.Type"}}},
-                                                                                {
-                                                                                  "name": "annotation",
-                                                                                  "term": {
-                                                                                    "map": [
-                                                                                      {
-                                                                                        "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
-                                                                                        "value": {
-                                                                                          "inject": {
-                                                                                            "field": {
-                                                                                              "name": "literal",
-                                                                                              "term": {
-                                                                                                "inject": {
-                                                                                                  "field": {"name": "string", "term": {"literal": {"string": "A mapping of namespaces to values"}}},
-                                                                                                  "typeName": "hydra.core.Literal"}}},
-                                                                                            "typeName": "hydra.core.Term"}}}]}}],
-                                                                              "typeName": "hydra.core.AnnotatedType"}}},
-                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                "typeName": "hydra.core.FieldType"}}]}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.ForallType"}}},
-                                        "typeName": "hydra.core.Type"}}},
-                                  {
-                                    "name": "annotation",
-                                    "term": {
-                                      "map": [
-                                        {
-                                          "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
-                                          "value": {
-                                            "inject": {
-                                              "field": {
-                                                "name": "literal",
-                                                "term": {
-                                                  "inject": {
-                                                    "field": {
-                                                      "name": "string",
-                                                      "term": {"literal": {"string": "A mapping from namespaces to values of type n, with a focus on one namespace"}}},
-                                                    "typeName": "hydra.core.Literal"}}},
-                                              "typeName": "hydra.core.Term"}}}]}}],
-                                "typeName": "hydra.core.AnnotatedType"}}},
-                          "typeName": "hydra.core.Type"}}}}},
-                {
                   "key": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Package"}}, "typeName": "hydra.core.Name"}},
                   "value": {
                     "annotated": {
@@ -13372,6 +13118,170 @@
                                                 "term": {
                                                   "inject": {
                                                     "field": {"name": "string", "term": {"literal": {"string": "An equality judgement: less than, equal to, or greater than"}}},
+                                                    "typeName": "hydra.core.Literal"}}},
+                                              "typeName": "hydra.core.Term"}}}]}}],
+                                "typeName": "hydra.core.AnnotatedType"}}},
+                          "typeName": "hydra.core.Type"}}}}},
+                {
+                  "key": {"wrap": {"body": {"literal": {"string": "hydra.util.Namespaces"}}, "typeName": "hydra.core.Name"}},
+                  "value": {
+                    "annotated": {
+                      "annotation": [{"key": "type", "value": {"variable": "hydra.core.Type"}}],
+                      "body": {
+                        "inject": {
+                          "field": {
+                            "name": "annotated",
+                            "term": {
+                              "record": {
+                                "fields": [
+                                  {
+                                    "name": "body",
+                                    "term": {
+                                      "inject": {
+                                        "field": {
+                                          "name": "forall",
+                                          "term": {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "parameter", "term": {"wrap": {"body": {"literal": {"string": "n"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "body",
+                                                  "term": {
+                                                    "inject": {
+                                                      "field": {
+                                                        "name": "record",
+                                                        "term": {
+                                                          "list": [
+                                                            {
+                                                              "record": {
+                                                                "fields": [
+                                                                  {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "focus"}}, "typeName": "hydra.core.Name"}}},
+                                                                  {
+                                                                    "name": "type",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "annotated",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "body",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "pair",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "first",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "field": {
+                                                                                                      "name": "variable",
+                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                    "typeName": "hydra.core.Type"}}},
+                                                                                              {
+                                                                                                "name": "second",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "n"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                                            "typeName": "hydra.core.PairType"}}},
+                                                                                      "typeName": "hydra.core.Type"}}},
+                                                                                {
+                                                                                  "name": "annotation",
+                                                                                  "term": {
+                                                                                    "map": [
+                                                                                      {
+                                                                                        "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
+                                                                                        "value": {
+                                                                                          "inject": {
+                                                                                            "field": {
+                                                                                              "name": "literal",
+                                                                                              "term": {
+                                                                                                "inject": {
+                                                                                                  "field": {"name": "string", "term": {"literal": {"string": "The namespace in focus, together with its associated value"}}},
+                                                                                                  "typeName": "hydra.core.Literal"}}},
+                                                                                            "typeName": "hydra.core.Term"}}}]}}],
+                                                                              "typeName": "hydra.core.AnnotatedType"}}},
+                                                                        "typeName": "hydra.core.Type"}}}],
+                                                                "typeName": "hydra.core.FieldType"}},
+                                                            {
+                                                              "record": {
+                                                                "fields": [
+                                                                  {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "mapping"}}, "typeName": "hydra.core.Name"}}},
+                                                                  {
+                                                                    "name": "type",
+                                                                    "term": {
+                                                                      "inject": {
+                                                                        "field": {
+                                                                          "name": "annotated",
+                                                                          "term": {
+                                                                            "record": {
+                                                                              "fields": [
+                                                                                {
+                                                                                  "name": "body",
+                                                                                  "term": {
+                                                                                    "inject": {
+                                                                                      "field": {
+                                                                                        "name": "map",
+                                                                                        "term": {
+                                                                                          "record": {
+                                                                                            "fields": [
+                                                                                              {
+                                                                                                "name": "keys",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "field": {
+                                                                                                      "name": "variable",
+                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                    "typeName": "hydra.core.Type"}}},
+                                                                                              {
+                                                                                                "name": "values",
+                                                                                                "term": {
+                                                                                                  "inject": {
+                                                                                                    "field": {"name": "variable", "term": {"wrap": {"body": {"literal": {"string": "n"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                                            "typeName": "hydra.core.MapType"}}},
+                                                                                      "typeName": "hydra.core.Type"}}},
+                                                                                {
+                                                                                  "name": "annotation",
+                                                                                  "term": {
+                                                                                    "map": [
+                                                                                      {
+                                                                                        "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
+                                                                                        "value": {
+                                                                                          "inject": {
+                                                                                            "field": {
+                                                                                              "name": "literal",
+                                                                                              "term": {
+                                                                                                "inject": {
+                                                                                                  "field": {"name": "string", "term": {"literal": {"string": "A mapping of namespaces to values"}}},
+                                                                                                  "typeName": "hydra.core.Literal"}}},
+                                                                                            "typeName": "hydra.core.Term"}}}]}}],
+                                                                              "typeName": "hydra.core.AnnotatedType"}}},
+                                                                        "typeName": "hydra.core.Type"}}}],
+                                                                "typeName": "hydra.core.FieldType"}}]}},
+                                                      "typeName": "hydra.core.Type"}}}],
+                                              "typeName": "hydra.core.ForallType"}}},
+                                        "typeName": "hydra.core.Type"}}},
+                                  {
+                                    "name": "annotation",
+                                    "term": {
+                                      "map": [
+                                        {
+                                          "key": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}},
+                                          "value": {
+                                            "inject": {
+                                              "field": {
+                                                "name": "literal",
+                                                "term": {
+                                                  "inject": {
+                                                    "field": {
+                                                      "name": "string",
+                                                      "term": {"literal": {"string": "A mapping from namespaces to values of type n, with a focus on one namespace"}}},
                                                     "typeName": "hydra.core.Literal"}}},
                                               "typeName": "hydra.core.Term"}}}]}}],
                                 "typeName": "hydra.core.AnnotatedType"}}},

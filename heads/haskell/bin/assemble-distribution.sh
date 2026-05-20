@@ -78,6 +78,11 @@ esac
 # across every target language.
 source "$HYDRA_ROOT_DIR/bin/lib/assemble-common.sh"
 
+# Per-target generator stamp: invalidates output digests when the
+# Haskell-emit transform's sources change without the per-package JSON
+# inputs themselves changing. See assemble-common.sh and #347.
+export HYDRA_GENERATOR_STAMP=$(compute_generator_stamp haskell)
+
 # Step 1: Main modules.
 if assemble_check_fresh "$INPUT_DIGEST_MAIN" "$OUT_MAIN" "$OUTPUT_DIGEST_MAIN"; then
     echo "Step 1: Main modules unchanged; skipping main regeneration."

@@ -10,14 +10,6 @@
               "let": {
                 "bindings": [
                   {
-                    "name": "eliminationVariants",
-                    "term": {
-                      "application": {
-                        "argument": {"variable": "hydra.reflect.eliminationVariants"},
-                        "function": {
-                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.EliminationVariant"}}}}},
-                    "typeScheme": {"body": {"set": {"variable": "hydra.variants.EliminationVariant"}}, "variables": []}},
-                  {
                     "name": "literalVariants",
                     "term": {
                       "application": {
@@ -32,14 +24,6 @@
                         "argument": {"variable": "hydra.reflect.floatTypes"},
                         "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.core.FloatType"}}}}},
                     "typeScheme": {"body": {"set": {"variable": "hydra.core.FloatType"}}, "variables": []}},
-                  {
-                    "name": "functionVariants",
-                    "term": {
-                      "application": {
-                        "argument": {"variable": "hydra.reflect.functionVariants"},
-                        "function": {
-                          "typeApplication": {"body": {"variable": "hydra.lib.sets.fromList"}, "type": {"variable": "hydra.variants.FunctionVariant"}}}}},
-                    "typeScheme": {"body": {"set": {"variable": "hydra.variants.FunctionVariant"}}, "variables": []}},
                   {
                     "name": "integerTypes",
                     "term": {
@@ -87,10 +71,8 @@
                         "term": {
                           "record": {
                             "fields": [
-                              {"name": "eliminationVariants", "term": {"variable": "eliminationVariants"}},
                               {"name": "literalVariants", "term": {"variable": "literalVariants"}},
                               {"name": "floatTypes", "term": {"variable": "floatTypes"}},
-                              {"name": "functionVariants", "term": {"variable": "functionVariants"}},
                               {"name": "integerTypes", "term": {"variable": "integerTypes"}},
                               {"name": "termVariants", "term": {"variable": "termVariants"}},
                               {"name": "typeVariants", "term": {"variable": "typeVariants"}},

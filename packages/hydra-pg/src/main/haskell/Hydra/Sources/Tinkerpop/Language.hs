@@ -135,7 +135,6 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
     -- Note: additional constraints are required, beyond Graph.Features, if maps are supported
     "supportsMaps">: project TF._DataTypeFeatures TF._DataTypeFeatures_supportsMapValues @@ var "vpFeatures",
 
-    "eliminationVariants">: Sets.empty,
 
     "literalVariants">: Sets.fromList (Maybes.cat $ list [
       var "cond" @@ Variants.literalVariantBinary
@@ -157,7 +156,6 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
       var "cond" @@ Core.floatTypeFloat64
         @@ (project TF._DataTypeFeatures TF._DataTypeFeatures_supportsDoubleValues @@ var "vpFeatures")]),
 
-    "functionVariants">: Sets.empty,
 
     "integerTypes">: Sets.fromList (Maybes.cat $ list [
       var "cond" @@ Core.integerTypeInt32
@@ -213,10 +211,8 @@ tinkerpopLanguage = define "tinkerpopLanguage" $
   Coders.language
     (var "name")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")
