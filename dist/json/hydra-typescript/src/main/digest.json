@@ -1,11 +1,13 @@
 {
   "formatVersion": 1,
   "version": 1,
+  "selfHash": "6cddd5c1719d3d6f261bf36c10fdd8b8ab8f0851d13233712f1b4f7163857e0c",
+  "depHash:hydra-kernel": "ab44b87139519ef35055dca9ae8a2b2cfa01e523710a4886bde2041457f8d0de",
   "hashes": {
     "hydra.typeScript.coder": "3af673ff799cb4081ed7611b29a69f957b13b67cb0e58c63c5baf1a64bad79be",
-    "hydra.typeScript.language": "33ed950689561dd3df7df5e4e50c43b28e1be1e2f37dacb108e577cd811ee6cc",
+    "hydra.typeScript.language": "f66bc23090e6f3b286e789e14e3a605b0105b92f7ccfa78bbbe8ae61700f9356",
     "hydra.typeScript.operators": "8b6da32e547cb6606e092dbf897c2b588e7f3d192d586b72680d2b45de7d721e",
     "hydra.typeScript.serde": "b4090c37b69741986adfec33f258953d6787c47bb85a6e4c0e7b69015d2e04a7",
-    "hydra.typeScript.syntax": "52b5f0f440a402306df8f30e80026173678f523e6c47097841969d5f3bf62579"
+    "hydra.typeScript.syntax": "758598b31a2abf71647e336fcad05a7eb1f45a04dc13e12b47907221091d3697"
   }
 }

@@ -28,7 +28,9 @@ module_ = Module {
       module',
       namespace,
       package,
+      packageDependency,
       packageName,
+      packageVersionSpecifier,
       qualifiedName,
       termDefinition,
       typeDefinition]
@@ -88,10 +90,32 @@ package = define "Package" $
       doc "An optional human-readable description of the package" $
       T.maybe T.string]
 
+packageDependency :: Binding
+packageDependency = define "PackageDependency" $
+  doc "A dependency on another package, identified by name and constrained by an optional version specifier" $
+  T.record [
+    "name">:
+      doc "The name of the depended-on package"
+      packageName,
+    "version">:
+      doc "The version-range constraint on the depended-on package"
+      packageVersionSpecifier]
+
 packageName :: Binding
 packageName = define "PackageName" $
   doc "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\"" $
   T.wrap T.string
+
+packageVersionSpecifier :: Binding
+packageVersionSpecifier = define "PackageVersionSpecifier" $
+  doc ("A specifier constraining acceptable versions of a depended-on package."
+    ++ " Currently only the `any` (unit) specifier is defined; future variants"
+    ++ " such as `exact`, `caret`, and `range` may be added without breaking"
+    ++ " consumers of the `any` form.") $
+  T.union [
+    "any">:
+      doc "Any version of the package satisfies the dependency" $
+      T.unit]
 
 qualifiedName :: Binding
 qualifiedName = define "QualifiedName" $

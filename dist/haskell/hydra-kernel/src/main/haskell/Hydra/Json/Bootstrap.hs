@@ -2003,6 +2003,26 @@ typesByName =
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "A package, which is a named collection of modules with metadata and dependencies")))])}))),
       (
+        Core.Name "hydra.packaging.PackageDependency",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeRecord [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "name"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.PackageName")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The name of the depended-on package")))])}))},
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "version"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.PackageVersionSpecifier")),
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The version-range constraint on the depended-on package")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A dependency on another package, identified by name and constrained by an optional version specifier")))])}))),
+      (
         Core.Name "hydra.packaging.PackageName",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
@@ -2010,6 +2030,20 @@ typesByName =
             (
               Core.Name "description",
               (Core.TermLiteral (Core.LiteralString "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\"")))])}))),
+      (
+        Core.Name "hydra.packaging.PackageVersionSpecifier",
+        (Core.TypeAnnotated (Core.AnnotatedType {
+          Core.annotatedTypeBody = (Core.TypeUnion [
+            Core.FieldType {
+              Core.fieldTypeName = (Core.Name "any"),
+              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
+                Core.annotatedTypeBody = Core.TypeUnit,
+                Core.annotatedTypeAnnotation = (M.fromList [
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Any version of the package satisfies the dependency")))])}))}]),
+          Core.annotatedTypeAnnotation = (M.fromList [
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "A specifier constraining acceptable versions of a depended-on package. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form.")))])}))),
       (
         Core.Name "hydra.packaging.QualifiedName",
         (Core.TypeAnnotated (Core.AnnotatedType {

@@ -231,6 +231,66 @@ packageDependencies x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.Package"),
         Core.projectionField = (Core.Name "dependencies")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL constructor for hydra.packaging.PackageDependency
+packageDependency :: Phantoms.TTerm Packaging.PackageName -> Phantoms.TTerm Packaging.PackageVersionSpecifier -> Phantoms.TTerm Packaging.PackageDependency
+packageDependency name version =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm name)},
+        Core.Field {
+          Core.fieldName = (Core.Name "version"),
+          Core.fieldTerm = (Phantoms.unTTerm version)}]}))
+-- | DSL accessor for the name field of hydra.packaging.PackageDependency
+packageDependencyName :: Phantoms.TTerm Packaging.PackageDependency -> Phantoms.TTerm Packaging.PackageName
+packageDependencyName x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+        Core.projectionField = (Core.Name "name")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the version field of hydra.packaging.PackageDependency
+packageDependencyVersion :: Phantoms.TTerm Packaging.PackageDependency -> Phantoms.TTerm Packaging.PackageVersionSpecifier
+packageDependencyVersion x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+        Core.projectionField = (Core.Name "version")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the name field of hydra.packaging.PackageDependency
+packageDependencyWithName :: Phantoms.TTerm Packaging.PackageDependency -> Phantoms.TTerm Packaging.PackageName -> Phantoms.TTerm Packaging.PackageDependency
+packageDependencyWithName original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "version"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+              Core.projectionField = (Core.Name "version")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the version field of hydra.packaging.PackageDependency
+packageDependencyWithVersion :: Phantoms.TTerm Packaging.PackageDependency -> Phantoms.TTerm Packaging.PackageVersionSpecifier -> Phantoms.TTerm Packaging.PackageDependency
+packageDependencyWithVersion original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+              Core.projectionField = (Core.Name "name")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "version"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL accessor for the description field of hydra.packaging.Package
 packageDescription :: Phantoms.TTerm Packaging.Package -> Phantoms.TTerm (Maybe String)
 packageDescription x =
@@ -261,6 +321,14 @@ packageName2 x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.PackageName"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
+-- | DSL injection for the any variant of hydra.packaging.PackageVersionSpecifier
+packageVersionSpecifierAny :: Phantoms.TTerm Packaging.PackageVersionSpecifier
+packageVersionSpecifierAny =
+    Phantoms.TTerm (Core.TermInject (Core.Injection {
+      Core.injectionTypeName = (Core.Name "hydra.packaging.PackageVersionSpecifier"),
+      Core.injectionField = Core.Field {
+        Core.fieldName = (Core.Name "any"),
+        Core.fieldTerm = Core.TermUnit}}))
 -- | DSL updater for the dependencies field of hydra.packaging.Package
 packageWithDependencies :: Phantoms.TTerm Packaging.Package -> Phantoms.TTerm [Packaging.PackageName] -> Phantoms.TTerm Packaging.Package
 packageWithDependencies original newVal =

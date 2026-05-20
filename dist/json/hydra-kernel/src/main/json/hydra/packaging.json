@@ -119,6 +119,32 @@
           "variables": []}}},
     {
       "type": {
+        "name": "hydra.packaging.PackageDependency",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {"string": "A dependency on another package, identified by name and constrained by an optional version specifier"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "name",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on package"}}}],
+                        "body": {"variable": "hydra.packaging.PackageName"}}}},
+                  {
+                    "name": "version",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The version-range constraint on the depended-on package"}}}],
+                        "body": {"variable": "hydra.packaging.PackageVersionSpecifier"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
         "name": "hydra.packaging.PackageName",
         "typeScheme": {
           "body": {
@@ -128,6 +154,27 @@
                   "key": "description",
                   "value": {"literal": {"string": "The unique name of a package, e.g. \"hydra-kernel\" or \"hydra-python\""}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.packaging.PackageVersionSpecifier",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A specifier constraining acceptable versions of a depended-on package. Currently only the `any` (unit) specifier is defined; future variants such as `exact`, `caret`, and `range` may be added without breaking consumers of the `any` form."}}}],
+              "body": {
+                "union": [
+                  {
+                    "name": "any",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "Any version of the package satisfies the dependency"}}}],
+                        "body": {"unit": {}}}}}]}}},
           "variables": []}}},
     {
       "type": {
