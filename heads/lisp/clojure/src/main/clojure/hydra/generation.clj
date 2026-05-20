@@ -37,9 +37,10 @@
     #{}))    ; type_variables
 
 (defn empty-context
-  "Create an empty Context."
+  "Create an empty Context. (Updated after #368 InContext removal: builds
+  a proper hydra.context.Context, not the deleted InContext wrapper.)"
   []
-  ((r '->hydra_context_in_context) nil (list)))
+  ((r '->hydra_context_context) (list) (list) {}))
 
 (defn unwrap-either
   "Unwrap an Either value, throwing on Left."
