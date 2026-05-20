@@ -38,6 +38,17 @@ _Module_description = Core.Name "description"
 _Module_namespace = Core.Name "namespace"
 _Module_dependencies = Core.Name "dependencies"
 _Module_definitions = Core.Name "definitions"
+-- | A dependency on another module, identified by its namespace and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate namespace across packages is a resolution error which can be disambiguated by naming the intended package explicitly.
+data ModuleDependency =
+  ModuleDependency {
+    -- | The namespace of the depended-on module
+    moduleDependencyModule :: Namespace,
+    -- | The package providing the depended-on module, if disambiguation is required
+    moduleDependencyPackage :: (Maybe PackageName)}
+  deriving (Eq, Ord, Read, Show)
+_ModuleDependency = Core.Name "hydra.packaging.ModuleDependency"
+_ModuleDependency_module = Core.Name "module"
+_ModuleDependency_package = Core.Name "package"
 -- | A prefix for element names
 newtype Namespace =
   Namespace {
