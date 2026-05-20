@@ -42,7 +42,10 @@ arrowFunctionExpressionToExpr arrow =
                   Logic.ifElse (Equality.equal (Lists.length params) 1) (Maybes.fromMaybe (Serialization.cst "") (Maybes.map patternToExpr (Lists.maybeHead params))) (Serialization.parenListAdaptive (Lists.map patternToExpr params))
           bodyExpr =
                   case body of
-                    Syntax.ArrowFunctionBodyExpression v0 -> expressionToExpr v0
+                    Syntax.ArrowFunctionBodyExpression v0 -> case v0 of
+                      Syntax.ExpressionObject _ -> Serialization.parens (expressionToExpr v0)
+                      Syntax.ExpressionSequence _ -> Serialization.parens (expressionToExpr v0)
+                      _ -> expressionToExpr v0
                     Syntax.ArrowFunctionBodyBlock v0 -> blockStatementToExpr v0
       in (Serialization.spaceSep (Lists.concat [
         asyncKw,
@@ -141,7 +144,17 @@ callExpressionToExpr call =
       let callee = Syntax.callExpressionCallee call
           args = Syntax.callExpressionArguments call
           optional = Syntax.callExpressionOptional call
-          calleeExpr = expressionToExpr callee
+          calleeExpr =
+                  case callee of
+                    Syntax.ExpressionArrow _ -> Serialization.parens (expressionToExpr callee)
+                    Syntax.ExpressionConditional _ -> Serialization.parens (expressionToExpr callee)
+                    Syntax.ExpressionBinary _ -> Serialization.parens (expressionToExpr callee)
+                    Syntax.ExpressionUnary _ -> Serialization.parens (expressionToExpr callee)
+                    Syntax.ExpressionAssignment _ -> Serialization.parens (expressionToExpr callee)
+                    Syntax.ExpressionSequence _ -> Serialization.parens (expressionToExpr callee)
+                    Syntax.ExpressionObject _ -> Serialization.parens (expressionToExpr callee)
+                    Syntax.ExpressionFunction _ -> Serialization.parens (expressionToExpr callee)
+                    _ -> expressionToExpr callee
           argsExpr = Serialization.parenListAdaptive (Lists.map expressionToExpr args)
           optionalDot = Logic.ifElse optional "?." ""
       in (Serialization.spaceSep [
@@ -157,7 +170,7 @@ catchClauseToExpr c =
           catchKw =
                   Maybes.maybe (Serialization.cst "catch") (\p -> Serialization.spaceSep [
                     Serialization.cst "catch",
-                    (Serialization.parenthesize (patternToExpr p))]) param
+                    (Serialization.parens (patternToExpr p))]) param
       in (Serialization.spaceSep [
         catchKw,
         (blockStatementToExpr body)])
@@ -196,12 +209,22 @@ conditionalExpressionToExpr cond =
       let test = Syntax.conditionalExpressionTest cond
           consequent = Syntax.conditionalExpressionConsequent cond
           alternate = Syntax.conditionalExpressionAlternate cond
+          consExpr =
+                  case consequent of
+                    Syntax.ExpressionObject _ -> Serialization.parens (expressionToExpr consequent)
+                    Syntax.ExpressionSequence _ -> Serialization.parens (expressionToExpr consequent)
+                    _ -> expressionToExpr consequent
+          altExpr =
+                  case alternate of
+                    Syntax.ExpressionObject _ -> Serialization.parens (expressionToExpr alternate)
+                    Syntax.ExpressionSequence _ -> Serialization.parens (expressionToExpr alternate)
+                    _ -> expressionToExpr alternate
       in (Serialization.spaceSep [
         expressionToExpr test,
         (Serialization.cst "?"),
-        (expressionToExpr consequent),
+        consExpr,
         (Serialization.cst ":"),
-        (expressionToExpr alternate)])
+        altExpr])
 -- | Convert a continue statement to an AST expression
 continueStatementToExpr :: Maybe Syntax.Identifier -> Ast.Expr
 continueStatementToExpr c =
@@ -218,7 +241,7 @@ doWhileStatementToExpr d =
         Serialization.cst "do",
         (statementToExpr body),
         (Serialization.cst "while"),
-        (Serialization.parenthesize (expressionToExpr test))]))
+        (Serialization.parens (expressionToExpr test))]))
 -- | Convert a documentation comment to an AST expression
 documentationCommentToExpr :: Syntax.DocumentationComment -> Ast.Expr
 documentationCommentToExpr doc =
@@ -249,8 +272,15 @@ documentationTagToLine tag =
           nonEmpty = Lists.filter (\p -> Logic.not (Equality.equal p "")) parts
       in (Strings.cat2 " * " (Strings.intercalate " " nonEmpty))
 -- | Escape special characters in a string for TypeScript
-escapeString :: t0 -> t1 -> t0
-escapeString s singleQuote = s
+escapeString :: String -> Bool -> String
+escapeString s singleQuote =
+
+      let replace = \old -> \new_ -> \str -> Strings.intercalate new_ (Strings.splitOn old str)
+          s1 = replace "\\" "\\\\" s
+          s2 = replace "\n" "\\n" s1
+          s3 = replace "\r" "\\r" s2
+          s4 = replace "\t" "\\t" s3
+      in (Logic.ifElse singleQuote (replace "'" "\\'" s4) (replace "\"" "\\\"" s4))
 -- | Convert an export all declaration to an AST expression
 exportAllToExpr :: Syntax.ExportAllDeclaration -> Ast.Expr
 exportAllToExpr a =
@@ -318,7 +348,7 @@ expressionToExpr expr =
         Serialization.cst "await",
         (expressionToExpr v0)]
       Syntax.ExpressionSpread v0 -> Serialization.prefix "..." (expressionToExpr (Syntax.unSpreadElement v0))
-      Syntax.ExpressionParenthesized v0 -> Serialization.parenthesize (expressionToExpr v0)
+      Syntax.ExpressionParenthesized v0 -> Serialization.parens (expressionToExpr v0)
 -- | Convert a for-in statement to an AST expression
 forInStatementToExpr :: Syntax.ForInStatement -> Ast.Expr
 forInStatementToExpr f =
@@ -332,7 +362,7 @@ forInStatementToExpr f =
                     Syntax.ForInLeftPattern v0 -> patternToExpr v0
       in (Serialization.spaceSep [
         Serialization.cst "for",
-        (Serialization.parenthesize (Serialization.spaceSep [
+        (Serialization.parens (Serialization.spaceSep [
           leftExpr,
           (Serialization.cst "in"),
           (expressionToExpr right)])),
@@ -352,7 +382,7 @@ forOfStatementToExpr f =
                     Syntax.ForInLeftPattern v0 -> patternToExpr v0
       in (Serialization.spaceSep [
         forKw,
-        (Serialization.parenthesize (Serialization.spaceSep [
+        (Serialization.parens (Serialization.spaceSep [
           leftExpr,
           (Serialization.cst "of"),
           (expressionToExpr right)])),
@@ -446,7 +476,7 @@ ifStatementToExpr ifStmt =
           ifPart =
                   Serialization.spaceSep [
                     Serialization.cst "if",
-                    (Serialization.parenthesize (expressionToExpr test)),
+                    (Serialization.parens (expressionToExpr test)),
                     (statementToExpr consequent)]
       in (Maybes.maybe ifPart (\alt -> Serialization.spaceSep [
         ifPart,
@@ -511,7 +541,17 @@ memberExpressionToExpr mem =
           prop = Syntax.memberExpressionProperty mem
           computed = Syntax.memberExpressionComputed mem
           optional = Syntax.memberExpressionOptional mem
-          objExpr = expressionToExpr obj
+          objExpr =
+                  case obj of
+                    Syntax.ExpressionArrow _ -> Serialization.parens (expressionToExpr obj)
+                    Syntax.ExpressionConditional _ -> Serialization.parens (expressionToExpr obj)
+                    Syntax.ExpressionBinary _ -> Serialization.parens (expressionToExpr obj)
+                    Syntax.ExpressionUnary _ -> Serialization.parens (expressionToExpr obj)
+                    Syntax.ExpressionAssignment _ -> Serialization.parens (expressionToExpr obj)
+                    Syntax.ExpressionSequence _ -> Serialization.parens (expressionToExpr obj)
+                    Syntax.ExpressionObject _ -> Serialization.parens (expressionToExpr obj)
+                    Syntax.ExpressionFunction _ -> Serialization.parens (expressionToExpr obj)
+                    _ -> expressionToExpr obj
           propExpr = expressionToExpr prop
       in (Logic.ifElse computed (Serialization.spaceSep [
         objExpr,
@@ -696,7 +736,7 @@ switchStatementToExpr switchStmt =
           cases = Syntax.switchStatementCases switchStmt
       in (Serialization.spaceSep [
         Serialization.cst "switch",
-        (Serialization.parenthesize (expressionToExpr discriminant)),
+        (Serialization.parens (expressionToExpr discriminant)),
         (Serialization.curlyBracesList Nothing Serialization.fullBlockStyle (Lists.map switchCaseToExpr cases))])
 -- | Convert a template literal to an AST expression
 templateLiteralToExpr :: Syntax.TemplateLiteral -> Ast.Expr
@@ -834,5 +874,5 @@ whileStatementToExpr w =
           body = Syntax.whileStatementBody w
       in (Serialization.spaceSep [
         Serialization.cst "while",
-        (Serialization.parenthesize (expressionToExpr test)),
+        (Serialization.parens (expressionToExpr test)),
         (statementToExpr body)])

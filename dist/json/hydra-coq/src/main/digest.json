@@ -8,7 +8,6 @@
     "hydra.coq.language": "dbaab95dc6accb5f7434e4b89ea6f118b8cac899333f2ffa7ea67c3710b74112",
     "hydra.coq.serde": "351e919ac1bfd059c9a4e9747d45631df3d7ba7ea05de742a43d6658f9d15e44",
     "hydra.coq.syntax": "a80ac0906eab7b8fffb5625bc876df7c349cfe290b9debebf3467bc500138289",
-    "hydra.coq.utils": "f8f43e7728691a1a517efec39284f99e1e13476b8f61696c48f9689227ef5c62",
-    "hydra.dsl.coq.syntax": "f5d5d6e0091e679ffefb6cc17476aa7709cda4300b967bbdf84a3ce351b9a941"
+    "hydra.coq.utils": "f8f43e7728691a1a517efec39284f99e1e13476b8f61696c48f9689227ef5c62"
   }
 }

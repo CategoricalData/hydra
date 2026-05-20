@@ -2,7 +2,6 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.dsl.lisp.syntax": "623f011bf0048ef3bf42bcc46e9ef193ee6288f068e3abe27c5cf56c7bd8968a",
     "hydra.lisp.coder": "8c221addcaea55efd1f377c1fd5b9d36435e4168e7fbe57f388c1fa2ff59c5d2",
     "hydra.lisp.language": "21d069b16ab367b1ff2b152414041cd6921a6a32fd83de570de77b254b046444",
     "hydra.lisp.serde": "712986fba2b7f61e5281055d3057b77ce426b4b079f3b2e4f80069bd647576d5",

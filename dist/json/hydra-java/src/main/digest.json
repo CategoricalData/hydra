@@ -2,8 +2,6 @@
   "formatVersion": 1,
   "version": 1,
   "hashes": {
-    "hydra.dsl.java.environment": "2c713230f49e08cc13d85b2bfb93a628d8dfb14e50e1dc5d4674f65e6d0e857f",
-    "hydra.dsl.java.syntax": "0512ff68306fd0e99866aab8967a5382f2f5a2a5dfcbd5afd5df02dcd6a1875d",
     "hydra.java.coder": "7ca8687b40bd2889b1766e4f7c52c6c1f8a1d965563ee22691464e7d3e819260",
     "hydra.java.environment": "41804a0e1a6148ef146031aa6d091ddefe7ca64cb0ca1a943cda0fd043fff01b",
     "hydra.java.language": "906c19f70955d05607cb180b94e680d3c83f3ac387f668e34372431099fcea19",
