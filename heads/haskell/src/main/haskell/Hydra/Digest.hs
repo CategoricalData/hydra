@@ -142,12 +142,19 @@ hashUniverse nsFiles mods = do
     return $ M.fromList (Y.catMaybes pairs)
 
 
--- | Digest path for a single-tree writer: sits next to the json/ subdir.
--- Input `<pkg>/src/main/json` produces `<pkg>/src/main/digest.json`, and
--- `<pkg>/src/test/json` produces `<pkg>/src/test/digest.json`. This keeps
--- main-tree and test-tree caches distinct.
+-- | Digest path for a single-tree writer: lives under the package's
+-- build/ subdir, partitioned by source set.
+-- Input `<pkg>/src/main/json` produces `<pkg>/build/main/digest.json`, and
+-- `<pkg>/src/test/json` produces `<pkg>/build/test/digest.json`. The
+-- per-source-set partitioning keeps main-tree and test-tree caches
+-- distinct; the build/ root keeps the whole cache subtree gitignored
+-- under a single .gitignore pattern (see #379).
 digestPath :: FilePath -> FilePath
-digestPath basePath = FP.takeDirectory basePath FP.</> "digest.json"
+digestPath basePath =
+    let srcSetDir = FP.takeDirectory basePath           -- <pkg>/src/<set>
+        sourceSet = FP.takeFileName srcSetDir            -- <set>
+        pkgRoot   = FP.takeDirectory (FP.takeDirectory srcSetDir)  -- <pkg>
+    in pkgRoot FP.</> "build" FP.</> sourceSet FP.</> "digest.json"
 
 
 -- | Read a digest file. Absent or malformed → empty map.
