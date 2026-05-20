@@ -277,6 +277,16 @@ def write_scala(base_path, universe, mods):
         base_path, universe, mods)
 
 
+def write_typescript(base_path, universe, mods):
+    """Generate TypeScript source files from modules."""
+    from hydra.type_script.coder import module_to_type_script
+    from hydra.type_script.language import type_script_language
+    generate_sources(
+        module_to_type_script, type_script_language(),
+        False, True, False, False,
+        base_path, universe, mods)
+
+
 def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     """Generate source files for a Lisp dialect (Clojure, Scheme, Common Lisp, or Emacs Lisp)."""
     from hydra.lisp.coder import module_to_lisp

@@ -36,7 +36,8 @@ Hydra modules from a language-independent JSON representation and regenerate cod
 target language.
 The default demo uses Haskell, Java, and Python as both hosts and targets,
 producing 9 bootstrapping paths.
-Scala and Lisp can also be included as hosts and targets.
+Scala and Lisp can also be included as hosts and targets;
+TypeScript is supported as a target (host support is deferred — see #126).
 
 The pipeline works in four steps:
 

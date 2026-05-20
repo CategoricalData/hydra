@@ -83,7 +83,11 @@ case "$PACKAGE" in
         ;;
 esac
 
-stack exec bootstrap-from-json -- \
+# `stack exec` resolves to PATH, which can pick up a stale binary from
+# ~/.local/bin/. Invoke the stack-built binary by absolute path to
+# guarantee we run the exec that was just rebuilt by `stack build` above.
+BOOTSTRAP_FROM_JSON_BIN=$(stack path --local-install-root)/bin/bootstrap-from-json
+"$BOOTSTRAP_FROM_JSON_BIN" \
     --target "$TARGET" \
     $LOAD_FLAGS \
     --package "$PACKAGE" \

@@ -4,8 +4,6 @@
   "selfHash": "d5307fbd3ec06c44cb3f70c62f2ba9f4c28b3cb2b198a2dc829d6c30b1d81e2f",
   "depHash:hydra-kernel": "d25c6dc40ebc11c2bbb1f8d5c345205c4bbc0c260ffc64a31ea5ce9f127fbccd",
   "hashes": {
-    "hydra.dsl.java.environment": "2c713230f49e08cc13d85b2bfb93a628d8dfb14e50e1dc5d4674f65e6d0e857f",
-    "hydra.dsl.java.syntax": "0512ff68306fd0e99866aab8967a5382f2f5a2a5dfcbd5afd5df02dcd6a1875d",
     "hydra.java.coder": "7ca8687b40bd2889b1766e4f7c52c6c1f8a1d965563ee22691464e7d3e819260",
     "hydra.java.environment": "41804a0e1a6148ef146031aa6d091ddefe7ca64cb0ca1a943cda0fd043fff01b",
     "hydra.java.language": "c033bbaa65771226409cdbe4077de32bddd6d4db0810fdbf005f4200560fa78e",

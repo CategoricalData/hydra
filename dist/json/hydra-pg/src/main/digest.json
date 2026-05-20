@@ -1,15 +1,11 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "37a9896ee8eb7b2d2bc5a9827a6c534af2434d1f2d2f284779d2ec4d0f0db09c",
-  "depHash:hydra-kernel": "d25c6dc40ebc11c2bbb1f8d5c345205c4bbc0c260ffc64a31ea5ce9f127fbccd",
-  "depHash:hydra-rdf": "0086d20f3cb128cec23678ac162c2b842bc6846852cd708b46f4fee6dcf3ba59",
   "hashes": {
     "com.gdblab.pathAlgebra.expressions": "d3f31158fb7ebe6129c9d869c0b80b6cea57a293be2cebcea6857def0179e027",
-    "com.gdblab.pathAlgebra.syntax": "7d68a229a2c4aef9503aa0d221321f38994139d6b671135b1e88848e46e1a2be",
-    "hydra.cypher.features": "05e09aaa17d9aeb94ee128a8b1057eb64764435f8b493b6477833bb98c4f628b",
-    "hydra.cypher.openCypher": "dd00a35743ee1f5af6418ee2300e9c20a4b26550aaac22fe53cfd6994d55a95f",
-    "hydra.dsl.pg.model": "2f722c73bdb6ec3993afa87307e4690930ded65dd3139f4f93348934ac2ac20d",
+    "com.gdblab.pathAlgebra.syntax": "1c2941b9707e3d48899e5e8805c96a62bbe522dfd06bb6422fdc592844608874",
+    "hydra.cypher.features": "4c55322e05210a9738d1b500947fdd5117ade26fb40cb5fa35a930f8a40d5095",
+    "hydra.cypher.openCypher": "ab6337fd324bf0c41489aea22aa514c61c8661827326212d868967972ec907d3",
     "hydra.error.pg": "c6726ec89c1cd2832bb5c1e66eee666230f0063341a8cc5cd6b18ee674c02053",
     "hydra.graphviz.coder": "fc9374ec4972b7b29aa9ad96193ed0bb0dea3522d34658f076d571f473ae93bd",
     "hydra.graphviz.dot": "6ddcec66e1fb7afb776562b7b51b32c354c2d655ab6bf3c72eae6b7bdc165a29",
@@ -19,7 +15,7 @@
     "hydra.pg.graphson.construct": "557bd4325e31e2587cd79f0cab030c1314cf0dda47a888057b9fe359b733c8ab",
     "hydra.pg.graphson.syntax": "f3bfb1b1eec73f2f93e4c2a466744d66caa51049a6a1d5e644d6e97c44ed4cc7",
     "hydra.pg.graphson.utils": "4ba1241a5f3c64d111ef5c670e051da291b27af82c7ef80ceb72532b6d0dd865",
-    "hydra.pg.mapping": "a21ba1c72415be2f56ff1f0e75cc667617e24f74c52507a8731f5dbaaa9d1a06",
+    "hydra.pg.mapping": "3723ef60b082e377448120d4eb36e868fe6d553222b1ddc70561f8f7ed6ddc22",
     "hydra.pg.model": "8f4226c231faf40e36f66dd64b167614d58e51f0eca09268e58c8d918c6e4942",
     "hydra.pg.printing": "1548a9f7b360888642ce2de858e395dfca9b343bb2345f4c68dce59ef66a8a35",
     "hydra.pg.query": "e074994a7b5e5020cb974126f1e4c790f45c97f8b2d6c50a1bb3062017b222ca",
@@ -28,10 +24,10 @@
     "hydra.pg.termsToElements": "bfb603a8ffebdb06a421fffb091a0b0dd5fc5575bc5eea6abfd6feaee5f34222",
     "hydra.pg.utils": "4c5eeb1437c21e04fc99435adf6e4069cd4d05168ddd8230d614fe684d81ba97",
     "hydra.show.error.pg": "a108b450a777e955c67655b105f8ee159bcee9c16f92051a2bfc1a6fd4bdd666",
-    "hydra.tinkerpop.features": "1e84c8bc96d3763879f9b31e47a511e75d514ef1f0f769f0e0bc71b48a33aad1",
-    "hydra.tinkerpop.gremlin": "c8ecc3310982ae38498507ef2a8c909c3e9062dbc93c277f96e79b3eb42259ed",
-    "hydra.tinkerpop.language": "a9c7dd32d25a7b84fd2fce24d6aafb35106b3162b4a21fecb427f721ef3ddefe",
+    "hydra.tinkerpop.features": "ae6bd5376af9c9cfff2e0c0423d8a842f833debf6cee8b570e1846908428b5e9",
+    "hydra.tinkerpop.gremlin": "0e481ac7ee42a2f4a652d802a2beb97cb6a2a77c6c07aa5e04c64494279ebe99",
+    "hydra.tinkerpop.language": "0ade50498f46cf5e491a2f37413e61f60710a57635646263ca8380b4a5d6f87e",
     "hydra.validate.pg": "3cb2434a145e580102f7c5fd467bc283fa5182fc6af80ff645257291352411ea",
-    "openGql.grammar": "36c63ef90abf3800d9ad5169e7906ee1511cf03e75ee6224b80aa8f310308013"
+    "openGql.grammar": "0e131aa3a5427dbb74379b60a2cf7a99c324cccee4e2caf81e7d863ed64cecaa"
   }
 }
