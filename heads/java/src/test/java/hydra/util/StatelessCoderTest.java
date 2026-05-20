@@ -98,7 +98,7 @@ public class StatelessCoderTest extends HydraTestBase {
     }
 
     /**
-     * Apply a Coder's encode function, converting InContext errors to simple strings.
+     * Apply a Coder's encode function, converting errors to simple strings.
      */
     private static <V1, V2> Either<String, V2> coderEncode(Coder<V1, V2> coder, V1 value) {
         hydra.context.Context cx = new hydra.context.Context(

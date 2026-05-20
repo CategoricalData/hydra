@@ -119,7 +119,7 @@ module_ = Module {
 define :: String -> TTerm x -> TTermDefinition x
 define = definitionInModule module_
 
--- | Bridge helper: format InContext DecodingError as a string
+-- | Format a DecodingError as a string
 formatDecodingError :: TTerm (DecodingError -> String)
 formatDecodingError = "e" ~> unwrap _DecodingError @@ var "e"
 

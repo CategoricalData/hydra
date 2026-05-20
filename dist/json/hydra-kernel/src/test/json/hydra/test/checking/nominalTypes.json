@@ -16386,27 +16386,8 @@
                                                                                                                                       "term": {
                                                                                                                                         "inject": {
                                                                                                                                           "field": {
-                                                                                                                                            "name": "application",
-                                                                                                                                            "term": {
-                                                                                                                                              "record": {
-                                                                                                                                                "fields": [
-                                                                                                                                                  {
-                                                                                                                                                    "name": "function",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "inject": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.context.InContext"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}},
-                                                                                                                                                  {
-                                                                                                                                                    "name": "argument",
-                                                                                                                                                    "term": {
-                                                                                                                                                      "inject": {
-                                                                                                                                                        "field": {
-                                                                                                                                                          "name": "variable",
-                                                                                                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.errors.Error"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                                                                                                "typeName": "hydra.core.ApplicationType"}}},
+                                                                                                                                            "name": "variable",
+                                                                                                                                            "term": {"wrap": {"body": {"literal": {"string": "hydra.errors.Error"}}, "typeName": "hydra.core.Name"}}},
                                                                                                                                           "typeName": "hydra.core.Type"}}},
                                                                                                                                     {
                                                                                                                                       "name": "right",

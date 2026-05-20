@@ -7,7 +7,6 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 
 
 ns :: Namespace
@@ -20,13 +19,12 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Graph.ns],
+            moduleDependencies = [Core.ns],
             moduleDescription = Just "A model for Hydra namespaces, modules, and packages"}
   where
     definitions = [
       definition,
       fileExtension,
-      library,
       module',
       namespace,
       package,
@@ -50,20 +48,6 @@ fileExtension :: Binding
 fileExtension = define "FileExtension" $
   doc "A file extension (without the dot), e.g. \"json\" or \"py\"" $
   T.wrap T.string
-
-library :: Binding
-library = define "Library" $
-  doc "A library of primitive functions" $
-  T.record [
-    "namespace">:
-      doc "A common prefix for all primitive function names in the library"
-      namespace,
-    "prefix">:
-      doc "A preferred namespace prefix for function names in the library"
-      T.string,
-    "primitives">:
-      doc "The primitives defined in this library" $
-      T.list Graph.primitive]
 
 module' :: Binding
 module' = define "Module" $
