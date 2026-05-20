@@ -221,12 +221,6 @@ typesByName =
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "eliminationVariants"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeSet (Core.TypeVariable (Core.Name "hydra.variants.EliminationVariant"))),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "All supported elimination variants")))])}))},
-            Core.FieldType {
               Core.fieldTypeName = (Core.Name "literalVariants"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeSet (Core.TypeVariable (Core.Name "hydra.variants.LiteralVariant"))),
@@ -238,12 +232,6 @@ typesByName =
                 Core.annotatedTypeBody = (Core.TypeSet (Core.TypeVariable (Core.Name "hydra.core.FloatType"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "All supported float types")))])}))},
-            Core.FieldType {
-              Core.fieldTypeName = (Core.Name "functionVariants"),
-              Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeSet (Core.TypeVariable (Core.Name "hydra.variants.FunctionVariant"))),
-                Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "All supported function variants")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "integerTypes"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
