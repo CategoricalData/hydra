@@ -91,7 +91,6 @@ module_ = Module {
 graphqlLanguage :: TTermDefinition Language
 graphqlLanguage = define "graphqlLanguage" $
   doc "Language constraints for GraphQL" $ lets [
-  "eliminationVariants">: Sets.empty,
   "literalVariants">: Sets.fromList $ list [
     Variants.literalVariantBoolean,
     Variants.literalVariantFloat,
@@ -99,7 +98,6 @@ graphqlLanguage = define "graphqlLanguage" $
     Variants.literalVariantString],
   "floatTypes">: Sets.fromList $ list [
     Core.floatTypeFloat64],
-  "functionVariants">: Sets.empty,
   "integerTypes">: Sets.fromList $ list [
     Core.integerTypeInt32],
   "termVariants">: Sets.fromList $ list [
@@ -132,10 +130,8 @@ graphqlLanguage = define "graphqlLanguage" $
   Coders.language
     (Coders.languageName2 $ string "hydra.graphql")
     (Coders.languageConstraints2
-      (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")
-      (var "functionVariants")
       (var "integerTypes")
       (var "termVariants")
       (var "typeVariants")

@@ -93,10 +93,6 @@ module_ = Module {
 typeScriptLanguage :: TTermDefinition Language
 typeScriptLanguage = define "typeScriptLanguage" $
     doc "Language constraints for TypeScript 5.x" $ lets [
-    "eliminationVariants">: Sets.fromList $ list [
-      Variants.eliminationVariantRecord,
-      Variants.eliminationVariantUnion,
-      Variants.eliminationVariantWrap],
     "literalVariants">: Sets.fromList $ list [
       Variants.literalVariantBinary, -- Uint8Array
       Variants.literalVariantBoolean, -- boolean
@@ -106,9 +102,6 @@ typeScriptLanguage = define "typeScriptLanguage" $
     "floatTypes">: Sets.fromList $ list [
       -- TypeScript's number is IEEE 754 double precision (float64)
       Core.floatTypeFloat64],
-    "functionVariants">: Sets.fromList $ list [
-      Variants.functionVariantElimination,
-      Variants.functionVariantLambda],
     "integerTypes">: Sets.fromList $ list [
       -- TypeScript number can safely represent integers up to 2^53-1
       -- For larger integers, BigInt must be used
@@ -162,10 +155,8 @@ typeScriptLanguage = define "typeScriptLanguage" $
     Coders.language
       (Coders.languageName2 $ string "hydra.typeScript")
       (Coders.languageConstraints2
-        (var "eliminationVariants")
         (var "literalVariants")
         (var "floatTypes")
-        (var "functionVariants")
         (var "integerTypes")
         (var "termVariants")
         (var "typeVariants")
