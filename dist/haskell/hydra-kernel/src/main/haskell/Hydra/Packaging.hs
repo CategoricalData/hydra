@@ -52,7 +52,7 @@ data Package =
     -- | The modules in this package
     packageModules :: [Module],
     -- | The packages which this package depends on
-    packageDependencies :: [PackageName],
+    packageDependencies :: [PackageDependency],
     -- | An optional human-readable description of the package
     packageDescription :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)

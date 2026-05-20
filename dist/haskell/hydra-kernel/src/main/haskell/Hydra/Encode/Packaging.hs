@@ -67,16 +67,37 @@ package x =
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map module_ xs)) (Packaging.packageModules x))},
         Core.Field {
           Core.fieldName = (Core.Name "dependencies"),
-          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map packageName xs)) (Packaging.packageDependencies x))},
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map packageDependency xs)) (Packaging.packageDependencies x))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Packaging.packageDescription x))}]})
+-- | Encoder for hydra.packaging.PackageDependency
+packageDependency :: Packaging.PackageDependency -> Core.Term
+packageDependency x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.PackageDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "name"),
+          Core.fieldTerm = (packageName (Packaging.packageDependencyName x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "version"),
+          Core.fieldTerm = (packageVersionSpecifier (Packaging.packageDependencyVersion x))}]})
 -- | Encoder for hydra.packaging.PackageName
 packageName :: Packaging.PackageName -> Core.Term
 packageName x =
     Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.PackageName"),
       Core.wrappedTermBody = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.unPackageName x))})
+-- | Encoder for hydra.packaging.PackageVersionSpecifier
+packageVersionSpecifier :: Packaging.PackageVersionSpecifier -> Core.Term
+packageVersionSpecifier x =
+    case x of
+      Packaging.PackageVersionSpecifierAny -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.packaging.PackageVersionSpecifier"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "any"),
+          Core.fieldTerm = Core.TermUnit}})
 -- | Encoder for hydra.packaging.QualifiedName
 qualifiedName :: Packaging.QualifiedName -> Core.Term
 qualifiedName x =

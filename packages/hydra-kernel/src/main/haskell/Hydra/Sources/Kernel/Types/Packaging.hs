@@ -85,7 +85,7 @@ package = define "Package" $
       T.list module',
     "dependencies">:
       doc "The packages which this package depends on" $
-      T.list packageName,
+      T.list packageDependency,
     "description">:
       doc "An optional human-readable description of the package" $
       T.maybe T.string]

@@ -78,7 +78,7 @@
                                                             {"name": "modules", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Module"}}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package test-pkg"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkConflictingModuleNamespaces"}}},
@@ -175,7 +175,7 @@
                                                                       "typeName": "hydra.packaging.Module"}}]}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package test-pkg"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkConflictingModuleNamespaces"}}},
@@ -286,7 +286,7 @@
                                                                       "typeName": "hydra.packaging.Module"}}]}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package test-pkg"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkConflictingModuleNamespaces"}}},
@@ -397,7 +397,7 @@
                                                                       "typeName": "hydra.packaging.Module"}}]}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package test-pkg"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkConflictingModuleNamespaces"}}},
@@ -3451,7 +3451,7 @@
                                                             {"name": "modules", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Module"}}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package test-pkg"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkDuplicateModuleNamespaces"}}},
@@ -3562,7 +3562,7 @@
                                                                       "typeName": "hydra.packaging.Module"}}]}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package test-pkg"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkDuplicateModuleNamespaces"}}},
@@ -3673,7 +3673,7 @@
                                                                       "typeName": "hydra.packaging.Module"}}]}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package test-pkg"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkDuplicateModuleNamespaces"}}},
@@ -4233,7 +4233,7 @@
                                                             {"name": "modules", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Module"}}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package hydra"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkPackageNameConvention"}}},
@@ -4313,7 +4313,7 @@
                                                             {"name": "modules", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Module"}}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package hydra-kernel"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkPackageNameConvention"}}},
@@ -4393,7 +4393,7 @@
                                                             {"name": "modules", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Module"}}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package Hydra-kernel"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkPackageNameConvention"}}},
@@ -4485,7 +4485,7 @@
                                                             {"name": "modules", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Module"}}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package hydra_kernel"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkPackageNameConvention"}}},
@@ -4577,7 +4577,7 @@
                                                             {"name": "modules", "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Module"}}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package hydra.kernel"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.checkPackageNameConvention"}}},
@@ -5254,7 +5254,7 @@
                                                                       "typeName": "hydra.packaging.Module"}}]}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package test-pkg"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.kernelPackage"}}},
@@ -5410,7 +5410,7 @@
                                                                       "typeName": "hydra.packaging.Module"}}]}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package BadName"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.kernelPackage"}}},
@@ -5533,7 +5533,7 @@
                                                                       "typeName": "hydra.packaging.Module"}}]}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageName"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.PackageDependency"}}}},
                                                             {"name": "description", "term": {"maybe": {"literal": {"string": "Test package test-pkg"}}}}],
                                                           "typeName": "hydra.packaging.Package"}},
                                                       "function": {"variable": "hydra.validate.packaging.kernelPackage"}}},
