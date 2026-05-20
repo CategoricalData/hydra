@@ -14,13 +14,12 @@ and Lisp ([Hydra-Lisp](https://github.com/CategoricalData/hydra/tree/main/packag
 with four dialects: Clojure, Scheme, Common Lisp, and Emacs Lisp).
 All five implementations are complete and pass the
 [common test suite](https://github.com/CategoricalData/hydra/wiki/Testing).
+A TypeScript port ([Hydra-TypeScript](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-typescript))
+passes the common test suite (2570 of 2577 tests; the remaining 7 are intentionally
+disabled upstream) and participates in the cross-host bootstrapping demo as a target.
 A Go port ([Hydra-Go](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-go))
 is in early development; the kernel can be generated to Go, but the implementation is
 not yet complete and does not yet pass the test suite.
-A TypeScript port ([Hydra-TypeScript](https://github.com/CategoricalData/hydra/tree/main/packages/hydra-typescript))
-is in progress: the coder is complete and the kernel passes the common test suite at runtime,
-but the head is still being completed (generation-side test runner and bootstrap-demo
-participation are TODO).
 Hydra is used for data modeling, validation, and transforms at Microsoft,
 while its closed-source predecessor
 [Dragon](https://www.uber.com/blog/dragon-schema-integration-at-uber-scale/) was used

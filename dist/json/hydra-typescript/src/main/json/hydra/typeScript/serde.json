@@ -152,13 +152,7 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "singleQuote"},
-                            "function": {
-                              "application": {
-                                "argument": {"variable": "value"},
-                                "function": {
-                                  "typeApplication": {
-                                    "body": {"typeApplication": {"body": {"variable": "hydra.typeScript.serde.escapeString"}, "type": {"literal": {"string": {}}}}},
-                                    "type": {"literal": {"boolean": {}}}}}}}}},
+                            "function": {"application": {"argument": {"variable": "value"}, "function": {"variable": "hydra.typeScript.serde.escapeString"}}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -177,23 +171,117 @@
       "term": {
         "name": "hydra.typeScript.serde.escapeString",
         "term": {
-          "typeLambda": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Escape special characters in a string for TypeScript"}}}],
             "body": {
-              "typeLambda": {
+              "lambda": {
                 "body": {
-                  "annotated": {
-                    "annotation": [{"key": "description", "value": {"literal": {"string": "Escape special characters in a string for TypeScript"}}}],
+                  "lambda": {
                     "body": {
-                      "lambda": {
-                        "body": {"lambda": {"body": {"variable": "s"}, "domain": {"variable": "t1"}, "parameter": "singleQuote"}},
-                        "domain": {"variable": "t0"},
-                        "parameter": "s"}}}},
-                "parameter": "t1"}},
-            "parameter": "t0"}},
+                      "let": {
+                        "bindings": [
+                          {
+                            "name": "replace",
+                            "term": {
+                              "lambda": {
+                                "body": {
+                                  "lambda": {
+                                    "body": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "str"},
+                                                "function": {"application": {"argument": {"variable": "old"}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
+                                            "function": {"application": {"argument": {"variable": "new_"}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
+                                        "domain": {"literal": {"string": {}}},
+                                        "parameter": "str"}},
+                                    "domain": {"literal": {"string": {}}},
+                                    "parameter": "new_"}},
+                                "domain": {"literal": {"string": {}}},
+                                "parameter": "old"}},
+                            "typeScheme": {
+                              "body": {
+                                "function": {
+                                  "codomain": {
+                                    "function": {
+                                      "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
+                                      "domain": {"literal": {"string": {}}}}},
+                                  "domain": {"literal": {"string": {}}}}},
+                              "variables": []}},
+                          {
+                            "name": "s1",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "s"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "\\\\"}},
+                                    "function": {"application": {"argument": {"literal": {"string": "\\"}}, "function": {"variable": "replace"}}}}}}},
+                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
+                          {
+                            "name": "s2",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "s1"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "\\n"}},
+                                    "function": {"application": {"argument": {"literal": {"string": "\n"}}, "function": {"variable": "replace"}}}}}}},
+                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
+                          {
+                            "name": "s3",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "s2"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "\\r"}},
+                                    "function": {"application": {"argument": {"literal": {"string": "\r"}}, "function": {"variable": "replace"}}}}}}},
+                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
+                          {
+                            "name": "s4",
+                            "term": {
+                              "application": {
+                                "argument": {"variable": "s3"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "\\t"}},
+                                    "function": {"application": {"argument": {"literal": {"string": "\t"}}, "function": {"variable": "replace"}}}}}}},
+                            "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
+                        "body": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "s4"},
+                                "function": {
+                                  "application": {
+                                    "argument": {"literal": {"string": "\\\""}},
+                                    "function": {"application": {"argument": {"literal": {"string": "\""}}, "function": {"variable": "replace"}}}}}}},
+                            "function": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "s4"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"literal": {"string": "\\'"}},
+                                        "function": {"application": {"argument": {"literal": {"string": "'"}}, "function": {"variable": "replace"}}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {"variable": "singleQuote"},
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.logic.ifElse"}, "type": {"literal": {"string": {}}}}}}}}}}}}},
+                    "domain": {"literal": {"boolean": {}}},
+                    "parameter": "singleQuote"}},
+                "domain": {"literal": {"string": {}}},
+                "parameter": "s"}}}},
         "typeScheme": {
           "body": {
-            "function": {"codomain": {"function": {"codomain": {"variable": "t0"}, "domain": {"variable": "t1"}}}, "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "function": {
+              "codomain": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"boolean": {}}}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}}},
     {
       "term": {
         "name": "hydra.typeScript.serde.templateLiteralToExpr",
@@ -508,7 +596,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
-                                    "function": {"variable": "hydra.serialization.parenthesize"}}},
+                                    "function": {"variable": "hydra.serialization.parens"}}},
                                 "domain": {"variable": "hydra.typeScript.syntax.Expression"},
                                 "parameter": "e"}}}],
                         "typeName": "hydra.typeScript.syntax.Expression"}}}},
@@ -961,7 +1049,34 @@
                                     "name": "expression",
                                     "term": {
                                       "lambda": {
-                                        "body": {"application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                        "body": {
+                                          "application": {
+                                            "argument": {"variable": "e"},
+                                            "function": {
+                                              "cases": {
+                                                "cases": [
+                                                  {
+                                                    "name": "object",
+                                                    "term": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {"application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Property"}},
+                                                        "parameter": "_"}}},
+                                                  {
+                                                    "name": "sequence",
+                                                    "term": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "application": {
+                                                            "argument": {"application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Expression"}},
+                                                        "parameter": "_"}}}],
+                                                "default": {"application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                                "typeName": "hydra.typeScript.syntax.Expression"}}}},
                                         "domain": {"variable": "hydra.typeScript.syntax.Expression"},
                                         "parameter": "e"}}},
                                   {
@@ -1034,7 +1149,102 @@
                       {
                         "name": "calleeExpr",
                         "term": {
-                          "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                          "application": {
+                            "argument": {"variable": "callee"},
+                            "function": {
+                              "cases": {
+                                "cases": [
+                                  {
+                                    "name": "arrow",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.ArrowFunctionExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "conditional",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.ConditionalExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "binary",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.BinaryExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "unary",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.UnaryExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "assignment",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.AssignmentExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "sequence",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Expression"}},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "object",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Property"}},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "function",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.FunctionExpression"},
+                                        "parameter": "_"}}}],
+                                "default": {
+                                  "application": {"argument": {"variable": "callee"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                "typeName": "hydra.typeScript.syntax.Expression"}}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "argsExpr",
@@ -1121,7 +1331,94 @@
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "objExpr",
-                        "term": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "obj"},
+                            "function": {
+                              "cases": {
+                                "cases": [
+                                  {
+                                    "name": "arrow",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.ArrowFunctionExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "conditional",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.ConditionalExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "binary",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.BinaryExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "unary",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.UnaryExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "assignment",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.AssignmentExpression"},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "sequence",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Expression"}},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "object",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Property"}},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "function",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"variable": "hydra.typeScript.syntax.FunctionExpression"},
+                                        "parameter": "_"}}}],
+                                "default": {"application": {"argument": {"variable": "obj"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                "typeName": "hydra.typeScript.syntax.Expression"}}}},
                         "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
                       {
                         "name": "propExpr",
@@ -1217,18 +1514,84 @@
                           "application": {
                             "argument": {"variable": "cond"},
                             "function": {"project": {"field": "alternate", "typeName": "hydra.typeScript.syntax.ConditionalExpression"}}}},
-                        "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}}],
+                        "typeScheme": {"body": {"variable": "hydra.typeScript.syntax.Expression"}, "variables": []}},
+                      {
+                        "name": "consExpr",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "consequent"},
+                            "function": {
+                              "cases": {
+                                "cases": [
+                                  {
+                                    "name": "object",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "consequent"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Property"}},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "sequence",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "consequent"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Expression"}},
+                                        "parameter": "_"}}}],
+                                "default": {
+                                  "application": {"argument": {"variable": "consequent"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                "typeName": "hydra.typeScript.syntax.Expression"}}}},
+                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}},
+                      {
+                        "name": "altExpr",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "alternate"},
+                            "function": {
+                              "cases": {
+                                "cases": [
+                                  {
+                                    "name": "object",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "alternate"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Property"}},
+                                        "parameter": "_"}}},
+                                  {
+                                    "name": "sequence",
+                                    "term": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {"argument": {"variable": "alternate"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                            "function": {"variable": "hydra.serialization.parens"}}},
+                                        "domain": {"list": {"variable": "hydra.typeScript.syntax.Expression"}},
+                                        "parameter": "_"}}}],
+                                "default": {
+                                  "application": {"argument": {"variable": "alternate"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                                "typeName": "hydra.typeScript.syntax.Expression"}}}},
+                        "typeScheme": {"body": {"variable": "hydra.ast.Expr"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
                           "list": [
                             {"application": {"argument": {"variable": "test"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
                             {"application": {"argument": {"literal": {"string": "?"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                            {
-                              "application": {"argument": {"variable": "consequent"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
+                            {"variable": "consExpr"},
                             {"application": {"argument": {"literal": {"string": ":"}}, "function": {"variable": "hydra.serialization.cst"}}},
-                            {
-                              "application": {"argument": {"variable": "alternate"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}}]},
+                            {"variable": "altExpr"}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.typeScript.syntax.ConditionalExpression"},
                 "parameter": "cond"}}}},
@@ -2045,7 +2408,7 @@
                                 {
                                   "application": {
                                     "argument": {"application": {"argument": {"variable": "test"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
-                                    "function": {"variable": "hydra.serialization.parenthesize"}}},
+                                    "function": {"variable": "hydra.serialization.parens"}}},
                                 {
                                   "application": {"argument": {"variable": "consequent"}, "function": {"variable": "hydra.typeScript.serde.statementToExpr"}}}]},
                             "function": {"variable": "hydra.serialization.spaceSep"}}},
@@ -2114,7 +2477,7 @@
                               "application": {
                                 "argument": {
                                   "application": {"argument": {"variable": "discriminant"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
-                                "function": {"variable": "hydra.serialization.parenthesize"}}},
+                                "function": {"variable": "hydra.serialization.parens"}}},
                             {
                               "application": {
                                 "argument": {
@@ -2434,7 +2797,7 @@
                                             {
                                               "application": {
                                                 "argument": {"application": {"argument": {"variable": "p"}, "function": {"variable": "hydra.typeScript.serde.patternToExpr"}}},
-                                                "function": {"variable": "hydra.serialization.parenthesize"}}}]},
+                                                "function": {"variable": "hydra.serialization.parens"}}}]},
                                         "function": {"variable": "hydra.serialization.spaceSep"}}},
                                     "domain": {"variable": "hydra.typeScript.syntax.Pattern"},
                                     "parameter": "p"}},
@@ -2575,7 +2938,7 @@
                             {
                               "application": {
                                 "argument": {"application": {"argument": {"variable": "test"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
-                                "function": {"variable": "hydra.serialization.parenthesize"}}},
+                                "function": {"variable": "hydra.serialization.parens"}}},
                             {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.typeScript.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.typeScript.syntax.WhileStatement"},
@@ -2621,7 +2984,7 @@
                                 {
                                   "application": {
                                     "argument": {"application": {"argument": {"variable": "test"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}},
-                                    "function": {"variable": "hydra.serialization.parenthesize"}}}]},
+                                    "function": {"variable": "hydra.serialization.parens"}}}]},
                             "function": {"variable": "hydra.serialization.spaceSep"}}},
                         "function": {"application": {"argument": {"literal": {"string": ";"}}, "function": {"variable": "hydra.serialization.suffix"}}}}}}},
                 "domain": {"variable": "hydra.typeScript.syntax.DoWhileStatement"},
@@ -2832,7 +3195,7 @@
                                         {
                                           "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                "function": {"variable": "hydra.serialization.parenthesize"}}},
+                                "function": {"variable": "hydra.serialization.parens"}}},
                             {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.typeScript.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.typeScript.syntax.ForInStatement"},
@@ -2934,7 +3297,7 @@
                                         {
                                           "application": {"argument": {"variable": "right"}, "function": {"variable": "hydra.typeScript.serde.expressionToExpr"}}}]},
                                     "function": {"variable": "hydra.serialization.spaceSep"}}},
-                                "function": {"variable": "hydra.serialization.parenthesize"}}},
+                                "function": {"variable": "hydra.serialization.parens"}}},
                             {"application": {"argument": {"variable": "body"}, "function": {"variable": "hydra.typeScript.serde.statementToExpr"}}}]},
                         "function": {"variable": "hydra.serialization.spaceSep"}}}}},
                 "domain": {"variable": "hydra.typeScript.syntax.ForOfStatement"},

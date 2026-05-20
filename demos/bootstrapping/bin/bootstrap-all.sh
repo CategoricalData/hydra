@@ -94,10 +94,10 @@ done
 
 # Expand "all" for hosts and targets
 case "$HOSTS" in
-    all) HOSTS="haskell,java,scala,python" ;;
+    all) HOSTS="haskell,java,scala,python" ;;  # typescript not a host yet (no DSL builders; see #126 follow-ups)
 esac
 case "$TARGETS" in
-    all) TARGETS="haskell,java,scala,python,clojure,scheme,common-lisp,emacs-lisp" ;;
+    all) TARGETS="haskell,java,scala,python,typescript,clojure,scheme,common-lisp,emacs-lisp" ;;
 esac
 
 # Expand "lisp" alias to the four lisp dialects (matches bin/sync.sh).
@@ -121,7 +121,7 @@ IFS=',' read -ra HOST_LIST <<< "$HOSTS"
 IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
 
 # Validate language names
-VALID_LANGS="haskell java scala python clojure scheme common-lisp emacs-lisp"
+VALID_LANGS="haskell java scala python typescript clojure scheme common-lisp emacs-lisp"
 for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
     if ! echo "$VALID_LANGS" | grep -qw "$lang"; then
         echo "Error: unrecognized language '$lang'"
@@ -160,6 +160,7 @@ NEED_STACK=false
 NEED_JAVA=false
 NEED_SCALA=false
 NEED_PYTHON=false
+NEED_NODE=false
 NEED_CLOJURE=false
 NEED_SCHEME=false
 NEED_SBCL=false
@@ -170,6 +171,7 @@ for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
         java)        NEED_JAVA=true ;;
         scala)       NEED_SCALA=true ;;
         python)      NEED_PYTHON=true ;;
+        typescript)  NEED_NODE=true ;;
         clojure)     NEED_CLOJURE=true ;;
         scheme)      NEED_SCHEME=true ;;
         common-lisp) NEED_SBCL=true ;;
@@ -307,6 +309,18 @@ if $NEED_EMACS; then
     fi
 fi
 
+# --- Node (for TypeScript target) ---
+if $NEED_NODE; then
+    if ! command -v node > /dev/null 2>&1 || ! command -v npm > /dev/null 2>&1; then
+        ENV_ERRORS+=("node + npm are required for TypeScript target. Install Node.js 20+.")
+    else
+        NODE_VER=$(node --version 2>/dev/null | sed 's/^v//' | cut -d. -f1)
+        if [ -n "$NODE_VER" ] && [ "$NODE_VER" -lt 20 ] 2>/dev/null; then
+            ENV_ERRORS+=("node $NODE_VER detected; Hydra-TypeScript requires Node 20+.")
+        fi
+    fi
+fi
+
 # Report results.
 if [ ${#ENV_ERRORS[@]} -gt 0 ]; then
     echo "Environment check FAILED:"
@@ -340,7 +354,9 @@ ext_for_target() {
     case "$1" in
         haskell)     echo ".hs" ;;
         java)        echo ".java" ;;
+        scala)       echo ".scala" ;;
         python)      echo ".py" ;;
+        typescript)  echo ".ts" ;;
         clojure)     echo ".clj" ;;
         scheme)      echo ".scm" ;;
         common-lisp) echo ".lisp" ;;

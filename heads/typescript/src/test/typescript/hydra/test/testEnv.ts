@@ -24,7 +24,7 @@ import type { Name, Term, Type, TypeScheme } from "../../../../main/typescript/h
 import * as maps from "../../../../main/typescript/hydra/lib/maps.js";
 import * as sets from "../../../../main/typescript/hydra/lib/sets.js";
 
-import { standardPrimitives } from "./libraries.js";
+import { standardPrimitives } from "../../../../main/typescript/hydra/lib/libraries.js";
 import { loadAll } from "./jsonBindings.js";
 
 // An empty Context value. No side effects.

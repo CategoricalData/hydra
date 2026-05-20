@@ -23,8 +23,8 @@ Each bootstrapping path proceeds as follows:
 4. Build and test the generated project
 
 By default, the bootstrapping system runs the 3×3 matrix of Haskell, Java, and Python
-as both hosts and targets. Additional hosts (Scala) and targets (Scala, Clojure,
-Common Lisp, Emacs Lisp, Scheme) can be included with `--hosts` and `--targets`
+as both hosts and targets. Additional hosts (Scala) and targets (Scala, TypeScript,
+Clojure, Common Lisp, Emacs Lisp, Scheme) can be included with `--hosts` and `--targets`
 flags; passing `--hosts all --targets all` exercises every supported combination.
 All output goes to `/tmp/hydra-bootstrapping-demo/` (override with `--output`):
 

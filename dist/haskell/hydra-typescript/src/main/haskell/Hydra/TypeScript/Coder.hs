@@ -18,9 +18,11 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Strip as Strip
 import qualified Hydra.TypeScript.Language as Language
+import qualified Hydra.TypeScript.Serde as Serde
 import qualified Hydra.TypeScript.Syntax as Syntax
 import qualified Hydra.Util as Util
 import qualified Hydra.Variables as Variables
@@ -45,7 +47,7 @@ collectTermImports currentNs t =
 
       let vars = Variables.freeVariablesInTerm t
       in (filterNonLocalNames currentNs vars)
-encodeLazyCall :: t0 -> t1 -> Packaging.Namespace -> Core.Term -> [Core.Term] -> [Bool] -> String
+encodeLazyCall :: t0 -> t1 -> Packaging.Namespace -> Core.Term -> [Core.Term] -> [Bool] -> Syntax.Expression
 encodeLazyCall cx g currentNs headTerm args lazyFlags =
 
       let headExpr = encodeTerm cx g currentNs headTerm
@@ -55,47 +57,49 @@ encodeLazyCall cx g currentNs headTerm args lazyFlags =
                     let argTerm = Pairs.first p
                         isLazy = Pairs.second p
                         expr = encodeTerm cx g currentNs argTerm
-                    in (Logic.ifElse isLazy (Strings.cat [
-                      "(() => (",
-                      expr,
-                      "))"]) (Strings.cat [
-                      "(",
-                      expr,
-                      ")"]))
-          argParts = Lists.map renderArg paired
-      in (Strings.cat [
-        "(",
-        headExpr,
-        ")",
-        (Strings.cat argParts)])
-encodeLiteral :: Core.Literal -> String
+                    in (Logic.ifElse isLazy (tsArrow [] expr) expr)
+          argExprs = Lists.map renderArg paired
+      in (tsCall headExpr argExprs)
+encodeLiteral :: Core.Literal -> Syntax.Expression
 encodeLiteral lit =
-    case lit of
-      Core.LiteralBinary v0 -> tsEscapeString (Literals.binaryToString v0)
-      Core.LiteralBoolean v0 -> Logic.ifElse v0 "true" "false"
-      Core.LiteralDecimal v0 -> Literals.showDecimal v0
-      Core.LiteralString v0 -> tsEscapeString v0
-      Core.LiteralInteger v0 -> case v0 of
-        Core.IntegerValueBigint v1 -> Strings.cat2 (Literals.showBigint v1) "n"
-        Core.IntegerValueInt8 v1 -> Literals.showInt8 v1
-        Core.IntegerValueInt16 v1 -> Literals.showInt16 v1
-        Core.IntegerValueInt32 v1 -> Literals.showInt32 v1
-        Core.IntegerValueInt64 v1 -> Strings.cat2 (Literals.showInt64 v1) "n"
-        Core.IntegerValueUint8 v1 -> Literals.showUint8 v1
-        Core.IntegerValueUint16 v1 -> Literals.showUint16 v1
-        Core.IntegerValueUint32 v1 -> Literals.showUint32 v1
-        Core.IntegerValueUint64 v1 -> Strings.cat2 (Literals.showUint64 v1) "n"
-        _ -> "0"
-      Core.LiteralFloat v0 -> case v0 of
-        Core.FloatValueFloat32 v1 -> Literals.showFloat32 v1
-        Core.FloatValueFloat64 v1 -> Literals.showFloat64 v1
-        _ -> "0"
-      _ -> "null"
+
+      let litExpr = \lit -> Syntax.ExpressionLiteral lit
+          numLit = \i -> litExpr (Syntax.LiteralNumber (Syntax.NumericLiteralInteger i))
+          floatLit = \f -> litExpr (Syntax.LiteralNumber (Syntax.NumericLiteralFloat f))
+          strLit =
+                  \s -> litExpr (Syntax.LiteralString (Syntax.StringLiteral {
+                    Syntax.stringLiteralValue = s,
+                    Syntax.stringLiteralSingleQuote = False}))
+          boolLit = \b -> litExpr (Syntax.LiteralBoolean b)
+          bigIntCall = \txt -> tsCall (tsExprIdent "BigInt") [
+                strLit txt]
+      in case lit of
+        Core.LiteralBinary v0 -> strLit (Literals.binaryToString v0)
+        Core.LiteralBoolean v0 -> boolLit v0
+        Core.LiteralDecimal v0 -> numLit (Literals.bigintToInt64 (Literals.decimalToBigint v0))
+        Core.LiteralString v0 -> strLit v0
+        Core.LiteralInteger v0 -> case v0 of
+          Core.IntegerValueBigint v1 -> bigIntCall (Literals.showBigint v1)
+          Core.IntegerValueInt8 v1 -> numLit (Literals.bigintToInt64 (Literals.int8ToBigint v1))
+          Core.IntegerValueInt16 v1 -> numLit (Literals.bigintToInt64 (Literals.int16ToBigint v1))
+          Core.IntegerValueInt32 v1 -> numLit (Literals.bigintToInt64 (Literals.int32ToBigint v1))
+          Core.IntegerValueInt64 v1 -> bigIntCall (Literals.showInt64 v1)
+          Core.IntegerValueUint8 v1 -> numLit (Literals.bigintToInt64 (Literals.uint8ToBigint v1))
+          Core.IntegerValueUint16 v1 -> numLit (Literals.bigintToInt64 (Literals.uint16ToBigint v1))
+          Core.IntegerValueUint32 v1 -> numLit (Literals.bigintToInt64 (Literals.uint32ToBigint v1))
+          Core.IntegerValueUint64 v1 -> bigIntCall (Literals.showUint64 v1)
+          _ -> numLit (Literals.bigintToInt64 (Literals.int32ToBigint 0))
+        Core.LiteralFloat v0 -> case v0 of
+          Core.FloatValueFloat32 v1 -> floatLit (Literals.float32ToFloat64 v1)
+          Core.FloatValueFloat64 v1 -> floatLit v1
+          _ -> floatLit 0.0
+        _ -> litExpr Syntax.LiteralNull
 encodeLiteralType :: Core.LiteralType -> Syntax.TypeExpression
 encodeLiteralType lt =
     case lt of
       Core.LiteralTypeBinary -> tsParamApp1 "ReadonlyArray" (tsNamedType "number")
       Core.LiteralTypeBoolean -> tsNamedType "boolean"
+      Core.LiteralTypeDecimal -> tsNamedType "number"
       Core.LiteralTypeFloat v0 -> case v0 of
         Core.FloatTypeFloat32 -> tsNamedType "number"
         Core.FloatTypeFloat64 -> tsNamedType "number"
@@ -110,35 +114,22 @@ encodeLiteralType lt =
         Core.IntegerTypeUint32 -> tsNamedType "number"
         Core.IntegerTypeUint64 -> tsNamedType "bigint"
       Core.LiteralTypeString -> tsNamedType "string"
-encodeTerm :: t0 -> t1 -> Packaging.Namespace -> Core.Term -> String
+encodeTerm :: t0 -> t1 -> Packaging.Namespace -> Core.Term -> Syntax.Expression
 encodeTerm cx g currentNs term =
     case term of
       Core.TermAnnotated v0 -> encodeTerm cx g currentNs (Core.annotatedTermBody v0)
       Core.TermLiteral v0 -> encodeLiteral v0
       Core.TermVariable v0 ->
         let local = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf v0)
-        in (Maybes.cases (Names.namespaceOf v0) local (\ns -> Logic.ifElse (Equality.equal (Packaging.unNamespace currentNs) (Packaging.unNamespace ns)) local (
+        in (Maybes.cases (Names.namespaceOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unNamespace currentNs) (Packaging.unNamespace ns)) (tsExprIdent local) (
           let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unNamespace ns))
               alias = Strings.cat2 "$mod_" (Strings.intercalate "_" nsSegs)
-          in (Strings.cat [
-            alias,
-            ".",
-            local]))))
+          in (tsMember (tsExprIdent alias) local))))
       Core.TermLambda v0 ->
         let p = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf (Core.lambdaParameter v0))
             b = encodeTerm cx g currentNs (Core.lambdaBody v0)
-            domMaybe = Core.lambdaDomain v0
-            paramText =
-                    Maybes.cases domMaybe p (\dom -> Eithers.either (\_e -> p) (\te -> Strings.cat [
-                      p,
-                      ": ",
-                      (printTypeExpression te)]) (encodeType cx g dom))
-        in (Strings.cat [
-          "(",
-          paramText,
-          ") => (",
-          b,
-          ")"])
+        in (tsArrow [
+          p] b)
       Core.TermApplication v0 ->
         let asTerm = Core.TermApplication v0
             flat = flattenApplication asTerm
@@ -166,162 +157,125 @@ encodeTerm cx g currentNs term =
         in (Maybes.cases lazyMaybe (
           let fn = encodeTerm cx g currentNs (Core.applicationFunction v0)
               ag = encodeTerm cx g currentNs (Core.applicationArgument v0)
-          in (Strings.cat [
-            "(",
-            fn,
-            ")(",
-            ag,
-            ")"])) (\s -> s))
-      Core.TermUnit -> "undefined"
-      Core.TermList v0 -> Strings.cat [
-        "[",
-        (Strings.intercalate ", " (Lists.map (encodeTerm cx g currentNs) v0)),
-        "]"]
-      Core.TermSet v0 -> Strings.cat [
-        "new Set([",
-        (Strings.intercalate ", " (Lists.map (encodeTerm cx g currentNs) (Sets.toList v0))),
-        "])"]
-      Core.TermMap v0 -> Strings.cat [
-        "new Map([",
-        (Strings.intercalate ", " (Lists.map (\entry -> Strings.cat [
-          "[",
-          (encodeTerm cx g currentNs (Pairs.first entry)),
-          ", ",
-          (encodeTerm cx g currentNs (Pairs.second entry)),
-          "]"]) (Maps.toList v0))),
-        "])"]
-      Core.TermPair v0 -> Strings.cat [
-        "[",
-        (encodeTerm cx g currentNs (Pairs.first v0)),
-        ", ",
-        (encodeTerm cx g currentNs (Pairs.second v0)),
-        "] as const"]
-      Core.TermMaybe v0 -> Maybes.cases v0 "{ tag: \"nothing\" }" (\v -> Strings.cat [
-        "{ tag: \"just\", value: ",
-        (encodeTerm cx g currentNs v),
-        " }"])
+          in (tsCall fn [
+            ag])) (\e -> e))
+      Core.TermUnit -> tsUndefined
+      Core.TermList v0 -> tsArray (Lists.map (encodeTerm cx g currentNs) v0)
+      Core.TermSet v0 -> tsNew (tsExprIdent "Set") [
+        tsArray (Lists.map (encodeTerm cx g currentNs) (Sets.toList v0))]
+      Core.TermMap v0 -> tsNew (tsExprIdent "Map") [
+        tsArray (Lists.map (\entry -> tsArray [
+          encodeTerm cx g currentNs (Pairs.first entry),
+          (encodeTerm cx g currentNs (Pairs.second entry))]) (Maps.toList v0))]
+      Core.TermPair v0 -> tsArray [
+        encodeTerm cx g currentNs (Pairs.first v0),
+        (encodeTerm cx g currentNs (Pairs.second v0))]
+      Core.TermMaybe v0 -> Maybes.cases v0 (tsObject [
+        ("tag", (tsExprStr "nothing"))]) (\v -> tsObject [
+        ("tag", (tsExprStr "just")),
+        ("value", (encodeTerm cx g currentNs v))])
       Core.TermRecord v0 ->
         let fields = Core.recordFields v0
-        in (Strings.cat [
-          "{ ",
-          (Strings.intercalate ", " (Lists.map (\f -> Strings.cat [
-            Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.fieldName f)),
-            ": ",
-            (encodeTerm cx g currentNs (Core.fieldTerm f))]) fields)),
-          " }"])
+        in (tsObject (Lists.map (\f -> (
+          Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.fieldName f)),
+          (encodeTerm cx g currentNs (Core.fieldTerm f)))) fields))
       Core.TermInject v0 ->
         let fname = Core.unName (Core.fieldName (Core.injectionField v0))
-            fnameLit = tsEscapeString fname
             fterm = Core.fieldTerm (Core.injectionField v0)
             isUnit =
                     case (Strip.deannotateTerm fterm) of
                       Core.TermUnit -> True
                       _ -> False
-        in (Logic.ifElse isUnit (Strings.cat [
-          "{ tag: ",
-          fnameLit,
-          " }"]) (Strings.cat [
-          "{ tag: ",
-          fnameLit,
-          ", value: ",
-          (encodeTerm cx g currentNs fterm),
-          " }"]))
-      Core.TermWrap v0 -> Strings.cat [
-        "{ value: ",
-        (encodeTerm cx g currentNs (Core.wrappedTermBody v0)),
-        " }"]
+        in (Logic.ifElse isUnit (tsObject [
+          ("tag", (tsExprStr fname))]) (tsObject [
+          ("tag", (tsExprStr fname)),
+          ("value", (encodeTerm cx g currentNs fterm))]))
+      Core.TermWrap v0 -> tsObject [
+        ("value", (encodeTerm cx g currentNs (Core.wrappedTermBody v0)))]
       Core.TermLet v0 ->
         let bindings = Core.letBindings v0
             body = Core.letBody v0
-        in (Strings.cat [
-          "(() => { ",
-          (Strings.cat (Lists.map (\b ->
-            let bname = Core.bindingName b
-                lname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf bname)
-                bterm = Core.bindingTerm b
-                isRecursive = Sets.member bname (Variables.freeVariablesInTerm bterm)
-            in (Logic.ifElse isRecursive (Strings.cat [
-              "function ",
-              lname,
-              "(__a0) { return (",
-              (encodeTerm cx g currentNs bterm),
-              ")(__a0); } "]) (Strings.cat [
-              "const ",
-              lname,
-              " = ",
-              (encodeTerm cx g currentNs bterm),
-              "; "]))) bindings)),
-          "return ",
-          (encodeTerm cx g currentNs body),
-          "; })()"])
+            encodedBody = encodeTerm cx g currentNs body
+            reversedBindings = Lists.reverse bindings
+        in (Lists.foldl (\acc -> \b ->
+          let bname = Core.bindingName b
+              lname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf bname)
+              bterm = Core.bindingTerm b
+              encodedBterm = encodeTerm cx g currentNs bterm
+          in (tsCall (tsArrow [
+            lname] acc) [
+            encodedBterm])) encodedBody reversedBindings)
       Core.TermTypeApplication v0 -> encodeTerm cx g currentNs (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> encodeTerm cx g currentNs (Core.typeLambdaBody v0)
       Core.TermProject v0 ->
         let fname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.projectionField v0))
-        in (Strings.cat [
-          "((__x) => __x.",
-          fname,
-          ")"])
-      Core.TermUnwrap _ -> "((__w) => __w.value)"
+        in (tsArrow [
+          "x"] (tsMember (tsExprIdent "x") fname))
+      Core.TermUnwrap _ -> tsArrow [
+        "x"] (tsMember (tsExprIdent "x") "value")
       Core.TermCases v0 ->
         let armFields = Core.caseStatementCases v0
             defaultMaybe = Core.caseStatementDefault v0
-            armsText =
-                    Strings.cat (Lists.map (\f -> Strings.cat [
-                      "__u.tag === ",
-                      (tsEscapeString (Core.unName (Core.fieldName f))),
-                      " ? (",
-                      (encodeTerm cx g currentNs (Core.fieldTerm f)),
-                      ")(__u.value) : "]) armFields)
-            tailText =
-                    Maybes.cases defaultMaybe "(() => { throw new Error(\"unmatched case\"); })()" (\dt -> Strings.cat [
-                      "(",
-                      (encodeTerm cx g currentNs dt),
-                      ")"])
-        in (Strings.cat [
-          "((__u) => (",
-          armsText,
-          tailText,
-          "))"])
-      Core.TermEither v0 -> Eithers.either (\l -> Strings.cat [
-        "{ tag: \"left\", value: ",
-        (encodeTerm cx g currentNs l),
-        " }"]) (\r -> Strings.cat [
-        "{ tag: \"right\", value: ",
-        (encodeTerm cx g currentNs r),
-        " }"]) v0
-      _ -> "/* unsupported term */ null"
-encodeTermDefinition :: t0 -> t1 -> Packaging.Namespace -> Packaging.TermDefinition -> String
+            tail =
+                    Maybes.cases defaultMaybe (tsCall (tsArrow [] (tsCall (tsExprIdent "(() => { throw new Error('unmatched case'); })") [])) []) (\dt -> encodeTerm cx g currentNs dt)
+            uVar = "u"
+            uExpr = tsExprIdent uVar
+            uTag = tsMember uExpr "tag"
+            uValue = tsMember uExpr "value"
+            reversedArms = Lists.reverse armFields
+            body =
+                    Lists.foldl (\acc -> \f ->
+                      let fname = Core.unName (Core.fieldName f)
+                          armExpr = encodeTerm cx g currentNs (Core.fieldTerm f)
+                      in (tsCond (Syntax.ExpressionBinary (Syntax.BinaryExpression {
+                        Syntax.binaryExpressionOperator = Syntax.BinaryOperatorStrictEqual,
+                        Syntax.binaryExpressionLeft = uTag,
+                        Syntax.binaryExpressionRight = (tsExprStr fname)})) (tsCall armExpr [
+                        uValue]) acc)) tail reversedArms
+        in (tsArrow [
+          uVar] body)
+      Core.TermEither v0 -> Eithers.either (\l -> tsObject [
+        ("tag", (tsExprStr "left")),
+        ("value", (encodeTerm cx g currentNs l))]) (\r -> tsObject [
+        ("tag", (tsExprStr "right")),
+        ("value", (encodeTerm cx g currentNs r))]) v0
+      _ -> tsExprIdent "null"
+encodeTermDefinition :: t0 -> t1 -> Packaging.Namespace -> Packaging.TermDefinition -> Syntax.ModuleItem
 encodeTermDefinition cx g currentNs td =
 
       let name = Packaging.termDefinitionName td
           lname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf name)
           rawTerm = Packaging.termDefinitionTerm td
           dterm = Strip.deannotateTerm rawTerm
+          asExport = \stmt -> Syntax.ModuleItemExport (Syntax.ExportDeclarationDeclaration stmt)
       in case dterm of
         Core.TermLambda v0 ->
           let p = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf (Core.lambdaParameter v0))
-              body = Core.lambdaBody v0
-              domMaybe = Core.lambdaDomain v0
-              paramText =
-                      Maybes.cases domMaybe p (\dom -> Eithers.either (\_e -> p) (\te -> Strings.cat [
-                        p,
-                        ": ",
-                        (printTypeExpression te)]) (encodeType cx g dom))
-          in (Strings.cat [
-            "export function ",
-            lname,
-            "(",
-            paramText,
-            ") { return ",
-            (encodeTerm cx g currentNs body),
-            "; }\n"])
-        _ -> Strings.cat [
-          "export const ",
-          lname,
-          " = ",
-          (encodeTerm cx g currentNs rawTerm),
-          ";\n"]
+              bodyExpr = encodeTerm cx g currentNs (Core.lambdaBody v0)
+              returnStmt = Syntax.StatementReturn (Just bodyExpr)
+              block = [
+                    returnStmt]
+              funDecl =
+                      Syntax.FunctionDeclaration {
+                        Syntax.functionDeclarationId = (tsIdent lname),
+                        Syntax.functionDeclarationParams = [
+                          Syntax.PatternIdentifier (tsIdent p)],
+                        Syntax.functionDeclarationBody = block,
+                        Syntax.functionDeclarationAsync = False,
+                        Syntax.functionDeclarationGenerator = False}
+          in (asExport (Syntax.StatementFunctionDeclaration funDecl))
+        _ ->
+          let expr = encodeTerm cx g currentNs rawTerm
+              declarator =
+                      Syntax.VariableDeclarator {
+                        Syntax.variableDeclaratorId = (Syntax.PatternIdentifier (tsIdent lname)),
+                        Syntax.variableDeclaratorInit = (Just expr)}
+              varDecl =
+                      Syntax.VariableDeclaration {
+                        Syntax.variableDeclarationKind = Syntax.VariableKindConst,
+                        Syntax.variableDeclarationDeclarations = [
+                          declarator]}
+          in (asExport (Syntax.StatementVariableDeclaration varDecl))
 encodeType :: t0 -> t1 -> Core.Type -> Either t2 Syntax.TypeExpression
 encodeType cx g t =
 
@@ -512,18 +466,18 @@ moduleToTypeScript mod defs cx g =
           typeImportsBlock = importsToText "type" currentNs typeImports
           termImportsBlock = importsToText "value" currentNs termImports
           importsBlock = Strings.cat2 typeImportsBlock termImportsBlock
-      in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\items ->
-        let header = "// Note: this is an automatically generated file. Do not edit.\n\n"
-            typeBody = Strings.intercalate "\n" (Lists.map printModuleItem items)
-            termBody = Strings.cat (Lists.map (encodeTermDefinition cx g currentNs) termDefs)
+      in (Eithers.bind (Eithers.mapList (encodeTypeDefinition cx g) typeDefs) (\typeItems ->
+        let termItems = Lists.map (encodeTermDefinition cx g currentNs) termDefs
+            allItems = Lists.concat2 typeItems termItems
+            header = "// Note: this is an automatically generated file. Do not edit.\n\n"
+            body = Strings.intercalate "\n\n" (Lists.map printModuleItem allItems)
             filePath = Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "ts") (Packaging.moduleNamespace mod)
         in (Right (Maps.singleton filePath (Strings.cat [
           header,
           importsBlock,
           (Logic.ifElse (Equality.equal importsBlock "") "" "\n"),
-          typeBody,
-          (Logic.ifElse (Equality.equal termBody "") "" "\n"),
-          termBody])))))
+          body,
+          (Logic.ifElse (Equality.equal body "") "" "\n")])))))
 printInterfaceDeclaration :: Syntax.InterfaceDeclaration -> String
 printInterfaceDeclaration decl =
 
@@ -559,6 +513,9 @@ printModuleItem mi =
     case mi of
       Syntax.ModuleItemInterface v0 -> printInterfaceDeclaration v0
       Syntax.ModuleItemTypeAlias v0 -> printTypeAliasDeclaration v0
+      Syntax.ModuleItemStatement _ -> Serialization.printExpr (Serde.moduleItemToExpr mi)
+      Syntax.ModuleItemImport _ -> Serialization.printExpr (Serde.moduleItemToExpr mi)
+      Syntax.ModuleItemExport _ -> Serialization.printExpr (Serde.moduleItemToExpr mi)
       _ -> ""
 printPropertySignature :: Syntax.PropertySignature -> String
 printPropertySignature ps =
@@ -662,6 +619,26 @@ termHeadVariable t =
         Core.TermVariable v0 -> Just v0
         Core.TermTypeApplication v0 -> termHeadVariable (Core.typeApplicationTermBody v0)
         _ -> Nothing
+tsArray :: [Syntax.Expression] -> Syntax.Expression
+tsArray elems = Syntax.ExpressionArray (Lists.map (\e -> Syntax.ArrayElementExpression e) elems)
+tsArrow :: [String] -> Syntax.Expression -> Syntax.Expression
+tsArrow params body =
+    Syntax.ExpressionArrow (Syntax.ArrowFunctionExpression {
+      Syntax.arrowFunctionExpressionParams = (Lists.map (\p -> Syntax.PatternIdentifier (tsIdent p)) params),
+      Syntax.arrowFunctionExpressionBody = (Syntax.ArrowFunctionBodyExpression body),
+      Syntax.arrowFunctionExpressionAsync = False})
+tsCall :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
+tsCall callee args =
+    Syntax.ExpressionCall (Syntax.CallExpression {
+      Syntax.callExpressionCallee = callee,
+      Syntax.callExpressionArguments = args,
+      Syntax.callExpressionOptional = False})
+tsCond :: Syntax.Expression -> Syntax.Expression -> Syntax.Expression -> Syntax.Expression
+tsCond test cons alt =
+    Syntax.ExpressionConditional (Syntax.ConditionalExpression {
+      Syntax.conditionalExpressionTest = test,
+      Syntax.conditionalExpressionConsequent = cons,
+      Syntax.conditionalExpressionAlternate = alt})
 tsEscapeString :: String -> String
 tsEscapeString s =
 
@@ -671,10 +648,41 @@ tsEscapeString s =
         "\"",
         (Strings.cat (Lists.map escapeChar (Strings.toList s))),
         "\""])
+tsExprIdent :: String -> Syntax.Expression
+tsExprIdent s = Syntax.ExpressionIdentifier (tsIdent s)
+tsExprStr :: String -> Syntax.Expression
+tsExprStr s =
+    Syntax.ExpressionLiteral (Syntax.LiteralString (Syntax.StringLiteral {
+      Syntax.stringLiteralValue = s,
+      Syntax.stringLiteralSingleQuote = False}))
 tsIdent :: String -> Syntax.Identifier
 tsIdent s = Syntax.Identifier s
+tsMember :: Syntax.Expression -> String -> Syntax.Expression
+tsMember obj prop =
+    Syntax.ExpressionMember (Syntax.MemberExpression {
+      Syntax.memberExpressionObject = obj,
+      Syntax.memberExpressionProperty = (tsExprIdent prop),
+      Syntax.memberExpressionComputed = False,
+      Syntax.memberExpressionOptional = False})
 tsNamedType :: String -> Syntax.TypeExpression
 tsNamedType n = Syntax.TypeExpressionIdentifier (tsIdent n)
+tsNew :: Syntax.Expression -> [Syntax.Expression] -> Syntax.Expression
+tsNew callee args =
+    Syntax.ExpressionNew (Syntax.CallExpression {
+      Syntax.callExpressionCallee = callee,
+      Syntax.callExpressionArguments = args,
+      Syntax.callExpressionOptional = False})
+tsObject :: [(String, Syntax.Expression)] -> Syntax.Expression
+tsObject props =
+    Syntax.ExpressionObject (Lists.map (\kv ->
+      let k = Pairs.first kv
+          v = Pairs.second kv
+      in Syntax.Property {
+        Syntax.propertyKey = (tsExprIdent k),
+        Syntax.propertyValue = v,
+        Syntax.propertyKind = Syntax.PropertyKindInit,
+        Syntax.propertyComputed = False,
+        Syntax.propertyShorthand = False}) props)
 tsParam :: String -> Syntax.TypeParameter
 tsParam n =
     Syntax.TypeParameter {
@@ -694,6 +702,8 @@ tsParamApp2 n a b =
       Syntax.parameterizedTypeExpressionArguments = [
         a,
         b]})
+tsParen :: Syntax.Expression -> Syntax.Expression
+tsParen e = Syntax.ExpressionParenthesized e
 tsPropSig :: String -> Bool -> Syntax.TypeExpression -> Syntax.PropertySignature
 tsPropSig name optional typ =
 
@@ -709,3 +719,5 @@ tsReadonlySet :: Syntax.TypeExpression -> Syntax.TypeExpression
 tsReadonlySet t = tsParamApp1 "ReadonlySet" t
 tsTuple :: [Syntax.TypeExpression] -> Syntax.TypeExpression
 tsTuple ts = Syntax.TypeExpressionTuple ts
+tsUndefined :: Syntax.Expression
+tsUndefined = tsExprIdent "undefined"

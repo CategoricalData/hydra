@@ -14,6 +14,9 @@ export const abs = (a: number): number => Math.abs(a);
 
 export const max_ = (a: number) => (b: number): number => Math.max(a, b);
 export const min_ = (a: number) => (b: number): number => Math.min(a, b);
+// Aliases so generated code that emits .max/.min (without trailing _) works.
+export const max = max_;
+export const min = min_;
 
 export const ceil = (f: number): number => Math.ceil(f);
 export const floor = (f: number): number => Math.floor(f);
