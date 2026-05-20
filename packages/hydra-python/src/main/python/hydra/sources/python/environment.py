@@ -49,8 +49,8 @@ def _graph(local: str) -> Type:
     return _typeref(Namespace("hydra.graph"), local)
 
 
-def _modul(local: str) -> Type:
-    return _typeref(Namespace("hydra.packaging"), local)
+def _util(local: str) -> Type:
+    return _typeref(Namespace("hydra.util"), local)
 
 
 def _def(local_name: str, typ: Type) -> DefinitionType:
@@ -87,7 +87,7 @@ def _python_environment():
                     "namespaces",
                     Annotations.doc(
                         "Namespace mapping for imports",
-                        T.apply(_modul("Namespaces"), _syntax("DottedName")),
+                        T.apply(_util("Namespaces"), _syntax("DottedName")),
                     ),
                 ),
                 T.field(
@@ -132,7 +132,7 @@ def _python_module_metadata():
                     "namespaces",
                     Annotations.doc(
                         "Namespace mapping for imports",
-                        T.apply(_modul("Namespaces"), _syntax("DottedName")),
+                        T.apply(_util("Namespaces"), _syntax("DottedName")),
                     ),
                 ),
                 T.field(
