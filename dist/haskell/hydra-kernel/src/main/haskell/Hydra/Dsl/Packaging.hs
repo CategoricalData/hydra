@@ -3,7 +3,6 @@
 
 module Hydra.Dsl.Packaging where
 import qualified Hydra.Core as Core
-import qualified Hydra.Graph as Graph
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -30,114 +29,6 @@ fileExtension x =
     Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.FileExtension"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
--- | DSL constructor for hydra.packaging.Library
-library :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm String -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Packaging.Library
-library namespace prefix primitives =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.Library"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm namespace)},
-        Core.Field {
-          Core.fieldName = (Core.Name "prefix"),
-          Core.fieldTerm = (Phantoms.unTTerm prefix)},
-        Core.Field {
-          Core.fieldName = (Core.Name "primitives"),
-          Core.fieldTerm = (Phantoms.unTTerm primitives)}]}))
--- | DSL accessor for the namespace field of hydra.packaging.Library
-libraryNamespace :: Phantoms.TTerm Packaging.Library -> Phantoms.TTerm Packaging.Namespace
-libraryNamespace x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.packaging.Library"),
-        Core.projectionField = (Core.Name "namespace")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the prefix field of hydra.packaging.Library
-libraryPrefix :: Phantoms.TTerm Packaging.Library -> Phantoms.TTerm String
-libraryPrefix x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.packaging.Library"),
-        Core.projectionField = (Core.Name "prefix")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL accessor for the primitives field of hydra.packaging.Library
-libraryPrimitives :: Phantoms.TTerm Packaging.Library -> Phantoms.TTerm [Graph.Primitive]
-libraryPrimitives x =
-    Phantoms.TTerm (Core.TermApplication (Core.Application {
-      Core.applicationFunction = (Core.TermProject (Core.Projection {
-        Core.projectionTypeName = (Core.Name "hydra.packaging.Library"),
-        Core.projectionField = (Core.Name "primitives")})),
-      Core.applicationArgument = (Phantoms.unTTerm x)}))
--- | DSL updater for the namespace field of hydra.packaging.Library
-libraryWithNamespace :: Phantoms.TTerm Packaging.Library -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Packaging.Library
-libraryWithNamespace original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.Library"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "prefix"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.Library"),
-              Core.projectionField = (Core.Name "prefix")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "primitives"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.Library"),
-              Core.projectionField = (Core.Name "primitives")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the prefix field of hydra.packaging.Library
-libraryWithPrefix :: Phantoms.TTerm Packaging.Library -> Phantoms.TTerm String -> Phantoms.TTerm Packaging.Library
-libraryWithPrefix original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.Library"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.Library"),
-              Core.projectionField = (Core.Name "namespace")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "prefix"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)},
-        Core.Field {
-          Core.fieldName = (Core.Name "primitives"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.Library"),
-              Core.projectionField = (Core.Name "primitives")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
--- | DSL updater for the primitives field of hydra.packaging.Library
-libraryWithPrimitives :: Phantoms.TTerm Packaging.Library -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Packaging.Library
-libraryWithPrimitives original newVal =
-    Phantoms.TTerm (Core.TermRecord (Core.Record {
-      Core.recordTypeName = (Core.Name "hydra.packaging.Library"),
-      Core.recordFields = [
-        Core.Field {
-          Core.fieldName = (Core.Name "namespace"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.Library"),
-              Core.projectionField = (Core.Name "namespace")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "prefix"),
-          Core.fieldTerm = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermProject (Core.Projection {
-              Core.projectionTypeName = (Core.Name "hydra.packaging.Library"),
-              Core.projectionField = (Core.Name "prefix")})),
-            Core.applicationArgument = (Phantoms.unTTerm original)}))},
-        Core.Field {
-          Core.fieldName = (Core.Name "primitives"),
-          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.packaging.Module
 module_ :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm [Packaging.Namespace] -> Phantoms.TTerm [Packaging.Definition] -> Phantoms.TTerm Packaging.Module
 module_ description namespace dependencies definitions =

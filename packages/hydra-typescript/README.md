@@ -3,10 +3,13 @@
 A TypeScript implementation of the [Hydra](https://github.com/CategoricalData/hydra) type
 system and kernel.
 
-**Status:** in progress — the TypeScript kernel passes the full common test suite at
-runtime (2570 of 2577 tests passing, 7 skipped as `disabled` upstream, 0 failing), but
-the head is still a *head bud*: the TypeScript coder lives under `packages/hydra-typescript`
-and emits valid TypeScript, but TypeScript itself is not yet a sync host. See issue
+**Status:** TypeScript-as-target is complete. The kernel passes the full common test
+suite (2570 of 2577 tests passing, 7 skipped as `disabled` upstream, 0 failing), the
+coder lives under `packages/hydra-typescript` and emits valid TypeScript with full
+type signatures, and the head participates in `bin/run-bootstrapping-demo.sh` as a
+target. **TypeScript-as-host** (writing Hydra DSL sources in TypeScript) is deferred
+— it would require TS analogues of the Hydra DSL meta-builders (Scala and Lisp heads
+also lack this today). See issue
 [#126](https://github.com/CategoricalData/hydra/issues/126) for the tracking effort.
 
 Hydra is a type-aware data transformation toolkit which aims to be highly flexible and
@@ -104,11 +107,11 @@ base64 strings). `hydra.lib.literals.binaryToString` is the identity for string 
 
 ## Future enhancements
 
-- **Generation-side test runner.** The runtime test runner (kernel evaluation) is in
-  place; a separate test runner for generated-code evaluation is still TODO. See
-  [docs/test-suite-architecture.md](../../docs/test-suite-architecture.md) for the
-  pattern.
-- **Bootstrap demo.** TypeScript is not yet wired into the cross-host bootstrapping
-  demo (`bin/run-bootstrapping-demo.sh`).
-- **Parameter type annotations.** The coder currently emits untyped lambda parameters
-  in some positions; tightening this to emit fully-typed parameters is tracked in #126.
+- **TypeScript-as-host.** Today TypeScript is a target only. Adding TS-as-host
+  requires meta-level DSL builders (`hydra/dsl/*.ts` analogues of
+  `Hydra.Dsl.Meta.*`) plus a TS source-import path equivalent to
+  `transform-haskell-dsl-to-json`. The Scala and Lisp heads also lack this today;
+  not a blocker for parity with them.
+- **Primitive coverage parity.** A handful of inference edge cases tagged
+  `disabled` upstream (let-polymorphism corner cases, Y-combinator typing) remain
+  open across all heads — they would require kernel changes, not TS-specific work.

@@ -77,11 +77,11 @@ for t in "${RAW_LIST[@]}"; do
     case "$t" in
         all)  expanded="${expanded:+$expanded,}$ALL_HOSTS" ;;
         lisp) expanded="${expanded:+$expanded,}$LISP_HOSTS" ;;
-        haskell|java|python|clojure|common-lisp|emacs-lisp|scheme)
+        haskell|java|python|typescript|clojure|common-lisp|emacs-lisp|scheme)
             expanded="${expanded:+$expanded,}$t" ;;
         *)
             echo "Error: Unknown host '$t'"
-            echo "Valid hosts: haskell, java, python, clojure, common-lisp, emacs-lisp, scheme, lisp, all"
+            echo "Valid hosts: haskell, java, python, typescript, clojure, common-lisp, emacs-lisp, scheme, lisp, all"
             exit 1
             ;;
     esac
@@ -130,6 +130,42 @@ run_lang() {
             cd "$REPO_ROOT"
             HYDRA_BENCHMARK_OUTPUT="$outfile" \
                 ./gradlew :hydra-java:test --rerun
+            ;;
+        typescript)
+            echo "=== Running TypeScript benchmark tests (run $i/$REPEAT) ==="
+            cd "$REPO_ROOT/heads/typescript"
+            local ts_json
+            ts_json=$(mktemp).json
+            local ts_start ts_end
+            ts_start=$(python3 -c 'import time; print(int(time.monotonic() * 1000))')
+            set +e
+            HYDRA_JSON_DIR="$REPO_ROOT/dist/json/hydra-kernel/src/main/json" \
+                npx vitest run --reporter=json --outputFile="$ts_json"
+            local ts_exit=$?
+            set -e
+            ts_end=$(python3 -c 'import time; print(int(time.monotonic() * 1000))')
+            local ts_elapsed=$((ts_end - ts_start))
+            # Convert vitest JSON to Hydra benchmark JSON (groups omitted; summary suffices).
+            local p f s
+            if [ -f "$ts_json" ]; then
+                p=$(python3 -c "import json; d=json.load(open('$ts_json')); print(d.get('numPassedTests', 0))" 2>/dev/null || echo 0)
+                f=$(python3 -c "import json; d=json.load(open('$ts_json')); print(d.get('numFailedTests', 0))" 2>/dev/null || echo 0)
+                s=$(python3 -c "import json; d=json.load(open('$ts_json')); print(d.get('numPendingTests', 0))" 2>/dev/null || echo 0)
+            else
+                p=0; f=0; s=0
+            fi
+            cat > "$outfile" <<TSEOF
+{
+  "groups": [],
+  "summary": {
+    "totalPassed": $p,
+    "totalFailed": $f,
+    "totalSkipped": $s,
+    "totalTimeMs": $ts_elapsed
+  }
+}
+TSEOF
+            rm -f "$ts_json"
             ;;
         clojure)
             echo "=== Running Clojure benchmark tests (run $i/$REPEAT) ==="
