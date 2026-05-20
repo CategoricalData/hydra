@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "version": 1,
   "selfHash": "86283d12b52c3886d8934610b8386bf1fb9ff69597212835be672d1980d2129e",
-  "depHash:hydra-kernel": "d25c6dc40ebc11c2bbb1f8d5c345205c4bbc0c260ffc64a31ea5ce9f127fbccd",
+  "depHash:hydra-kernel": "ab44b87139519ef35055dca9ae8a2b2cfa01e523710a4886bde2041457f8d0de",
   "hashes": {
     "hydra.bench.fanOut": "3976d49e97820592a896fdeac1868797b5f7aaa29836283d42e415328de4c472",
     "hydra.bench.linearChain": "7c5e1853984c03ff0df31598e0791c3f640d97b92e59f339c0c89e3c3a1681d5",
