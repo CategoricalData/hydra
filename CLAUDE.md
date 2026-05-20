@@ -163,6 +163,20 @@ Two hard rules:
 For git-worktree mechanics (adding, removing, the shared object store, cherry-picks
 between worktrees), see [claude/worktree-workflow.md](claude/worktree-workflow.md).
 
+### Branch promotion flow
+
+Hydra uses a four-tier ladder: `feature → integration → staging → main`.
+Feature worktrees have active Claude sessions and own conflict resolution
+(pull *integration* into the feature branch first, resolve there, then merge
+upward). `integration` and `main` are passive, typically with no attached
+session. `staging` is the only intermediate tier with active checks — its
+session runs `/sync`, `/bootstrap`, and any user-specified additional checks
+before a batch advances to `main`. Don't promote up the chain reflexively;
+wait for each tier to drain its current batch.
+
+For the full sequence, cadence rules, and conflict patterns, see
+[claude/branch-flow.md](claude/branch-flow.md).
+
 ### Cross-worktree communication
 
 Sibling Claude sessions can message each other through a per-worktree

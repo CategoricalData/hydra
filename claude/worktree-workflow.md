@@ -5,6 +5,8 @@ Day-to-day git operations work normally inside a worktree —
 This page covers the mechanics that are specific to the bare-repo + worktrees layout.
 
 For the read/modify rules, see CLAUDE.md ("Working with worktrees").
+For the promotion ladder between long-lived branches (feature → integration →
+staging → main), see [branch-flow.md](branch-flow.md).
 For sibling messaging, see [cross-worktree-messages.md](cross-worktree-messages.md).
 
 ## One branch per worktree

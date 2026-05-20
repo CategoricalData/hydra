@@ -49,7 +49,7 @@ BATCH_PACKAGES=$(batch_emit_packages)
 # hydra-pg, hydra-rdf, hydra-ext) keep their digests untouched; those
 # are managed by per-package assemble-distribution.sh runs.
 for pkg in $BATCH_PACKAGES; do
-    rm -f "$DIST_ROOT/$pkg/src/main/digest.json" "$DIST_ROOT/$pkg/src/test/digest.json"
+    rm -f "$DIST_ROOT/$pkg/build/main/digest.json" "$DIST_ROOT/$pkg/build/test/digest.json"
 done
 
 # Step 0: Copy hand-written Java runtime into hydra-kernel dist BEFORE
@@ -86,7 +86,7 @@ cd "$HYDRA_ROOT_DIR"
 # Step 4: Generate per-package build.gradle + settings.gradle. Mirrors
 # assemble-distribution.sh Step 4. The build files live at
 # dist/java/<pkg>/{build.gradle,settings.gradle} — outside the
-# src/<set>/java tree the digest tracks — so ordering with digest
+# src/<set>/java tree the digest hashes over — so ordering with digest
 # refresh is moot.
 #
 # Package list ($BATCH_PACKAGES) is the batch emit set (baseline +
@@ -108,13 +108,13 @@ done
 # dist/java/<pkg>/src/main/java/ is an error (signal of a broken
 # bootstrap-from-json pass) rather than something to silently skip.
 # The test source set is optional — gated on whether the input test
-# digest at dist/json/<pkg>/src/test/digest.json exists.
+# digest at dist/json/<pkg>/build/test/digest.json exists.
 for pkg in $BATCH_PACKAGES; do
     pkg_dir="$DIST_ROOT/$pkg"
     # Main set: required.
-    input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/main/digest.json"
+    input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/build/main/digest.json"
     out_set_dir="$pkg_dir/src/main/java"
-    out_digest="$pkg_dir/src/main/digest.json"
+    out_digest="$pkg_dir/build/main/digest.json"
     if [ ! -f "$input_digest" ]; then
         echo "ERROR: missing input digest for $pkg main: $input_digest" >&2
         exit 1
@@ -129,10 +129,10 @@ for pkg in $BATCH_PACKAGES; do
         --output-dir "$out_set_dir" \
         --output-digest "$out_digest")
     # Test set: optional, gated on input test digest presence.
-    test_input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/src/test/digest.json"
+    test_input_digest="$HYDRA_ROOT_DIR/dist/json/$pkg/build/test/digest.json"
     if [ -f "$test_input_digest" ]; then
         test_out_set_dir="$pkg_dir/src/test/java"
-        test_out_digest="$pkg_dir/src/test/digest.json"
+        test_out_digest="$pkg_dir/build/test/digest.json"
         if [ ! -d "$test_out_set_dir" ]; then
             echo "ERROR: missing generated test output for $pkg: $test_out_set_dir" >&2
             exit 1

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Shell-level freshness check for sync.sh Phase 1.
 
-Reads dist/json/digest.main.json (the universe-wide v1 digest written
+Reads dist/json/build/digest.json (the universe-wide v1 digest written
 by writeModulesJsonPackageSplit) and compares its recorded hashes
 against the current SHA-256 of every DSL source file under
 packages/*/src/main/haskell/Hydra/Sources/.

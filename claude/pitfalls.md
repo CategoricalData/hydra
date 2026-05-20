@@ -82,14 +82,15 @@ Cache hits can also mask edits.
 A coarse "make me clean" sequence:
 
 ```sh
-rm -f dist/haskell/<pkg>/src/main/digest.json
-rm -f dist/json/<pkg>/src/main/digest.json
-rm -f dist/json/digest.main.json
+rm -rf dist/json/build dist/json/*/build dist/haskell/*/build
 rm -f heads/haskell/.stack-work/bootstrap-from-json-cache.txt
 rm -f heads/haskell/.stack-work/verify-json-kernel-cache.txt
 heads/haskell/bin/sync-haskell.sh --no-tests
 bin/sync-packages.sh <pkg> --targets haskell --no-tests
 ```
+
+The `dist/**/build/` subtree is gitignored cache state (see #379), so
+wiping it is always safe and never affects shared history.
 
 Then sync forward into whatever target language consumes the regenerated coder.
 
@@ -260,16 +261,14 @@ concrete `FloatValue` callsites. Symptom:
 adapter callsite. Fix: list each remaining variant with an explicit
 `inject _Variant _variant_name` identity arm.
 
-### Digest conflicts on staging merges
+### Digest conflicts on staging merges — no longer applies (#379)
 
-When merging staging into a feature branch, all `dist/**/digest.json`
-and `dist/json/digest.main.json` files conflict if both branches
-touched DSL sources. Both sides' hashes are wrong post-merge — the
-correct hashes depend on the merged source state. Resolution: take
-`--ours` to satisfy git, complete the merge commit, run `/sync` to
-regenerate, then commit the digest deltas as a follow-up
-"Regenerate digests after staging merge" commit. Don't try to merge
-hash maps by hand.
+Historical: digest files used to be tracked and would conflict on every
+multi-branch merge because hashes always diverge. As of #379 the entire
+`dist/**/build/` subtree is gitignored, so digests never enter the
+diff. Merges should now be clean for digests; if you encounter a digest
+file in conflict, you're on a pre-#379 branch — run the post-merge
+recovery: `rm -rf dist/**/build` then `bin/sync.sh`.
 
 ### `run-benchmark-tests.sh` Python leg needs `.venv`
 
