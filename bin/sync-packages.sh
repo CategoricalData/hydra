@@ -305,7 +305,7 @@ all_sorted=$(echo $ALL_PACKAGES | tr ' ' '\n' | sort | tr '\n' ' ')
 # nothing has changed.
 if python3 "$HYDRA_ROOT_DIR/bin/lib/check-dsl-fresh.py" \
         "$HYDRA_ROOT_DIR" \
-        "$HYDRA_ROOT_DIR/dist/json/digest.main.json" >/dev/null 2>&1; then
+        "$HYDRA_ROOT_DIR/dist/json/build/digest.json" >/dev/null 2>&1; then
     echo "  Cache hit: every DSL source fresh; skipping Phase 1."
 else
     if [ "$effective_sorted" = "$all_sorted" ]; then

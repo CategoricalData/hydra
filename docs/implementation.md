@@ -1275,9 +1275,11 @@ universe carries a scheme, which is today's default path.
 A content-hash cache (`Hydra.Digest`) sits on top: `writeModulesJson`
 computes SHA-256 hashes of kernel DSL source files and short-circuits
 inference and writes entirely if every hash matches the stored digest and
-every target JSON file exists. Digest files are checked in at
-`dist/json/<pkg>/src/<main|test>/digest.json` and
-`dist/json/digest.main.json`. See [issue #247](https://github.com/CategoricalData/hydra/issues/247).
+every target JSON file exists. Digest files live under the gitignored
+build-cache subtree at `dist/json/<pkg>/build/<main|test>/digest.json`
+and `dist/json/build/digest.json` (see [#247](https://github.com/CategoricalData/hydra/issues/247)
+and [#379](https://github.com/CategoricalData/hydra/issues/379) for the
+build/ layout rationale).
 
 ### The bootstrap challenge
 
@@ -1554,7 +1556,7 @@ The short-circuits, from coarsest to finest:
 | Step 3 (verify, per-module) | `verify-json-kernel` exec | `heads/haskell/.stack-work/verify-json-kernel-per-module-cache.json` | Each module's JSON file content-hash matches its last green-verify record |
 | Step 4 (generate Haskell) | `sync-haskell.sh` coarse skip | `heads/haskell/.stack-work/bootstrap-from-json-cache.txt` | `dist/json/**.json` + bootstrap-from-json source content-hash unchanged |
 | Step 6 (stack test) | `sync-haskell.sh` coarse skip | `heads/haskell/.stack-work/haskell-test-cache.txt` | Generated kernel + `heads/haskell/src/{main,test}/**.hs` + package.yaml + stack.yaml content-hash unchanged |
-| Layer 2/2.5 per-package | `digest-check` | `dist/<lang>/<pkg>/digest.json` | Per-package input digest matches recorded digest |
+| Layer 2/2.5 per-package | `digest-check` | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-package input digest matches recorded digest |
 | Layer 2.5 per-target tests | `bin/lib/test-cache.sh` | `dist/<lang>/test-cache.json` | Every source + test helper + runner content-hash unchanged since last green run |
 
 All caches are content-hash based (not mtime). Editing a file with no byte-level

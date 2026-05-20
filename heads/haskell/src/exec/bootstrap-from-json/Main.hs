@@ -833,12 +833,12 @@ elapsed end start = realToFrac (diffUTCTime end start)
 -- kept — we can't verify staleness, so we don't risk a false skip.
 --
 -- The per-target digest is read from
--- <outBase>/<pkg>/src/<sourceSet>/digest.json, where outBase is e.g.
+-- <outBase>/<pkg>/build/<sourceSet>/digest.json, where outBase is e.g.
 -- "../../dist/java" (the parent of the per-package target dirs) and
 -- sourceSet is "main" or "test".
 filterByTargetDigest :: FilePath -> String -> String -> [Module] -> IO [Module]
 filterByTargetDigest outBase pkg sourceSet mods = do
-  let digestPath = outBase FP.</> pkg FP.</> "src" FP.</> sourceSet FP.</> "digest.json"
+  let digestPath = outBase FP.</> pkg FP.</> "build" FP.</> sourceSet FP.</> "digest.json"
   exists <- SD.doesFileExist digestPath
   if not exists
     then do

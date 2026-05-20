@@ -335,7 +335,7 @@ generated module), and regeneration depends on the kernel building.
    (a known limitation — see `incremental_inference_wiring_pending`),
    `verify-json-kernel` will fail with `definition differs at <Name>` for
    modules whose JSON wasn't re-emitted.
-   Fix: delete `dist/json/digest.main.json` to force a full universe
+   Fix: delete `dist/json/build/digest.json` to force a full universe
    re-inference on the next sync. (Pre-#347, the canonical trick was to
    zero out the `encoderId` field in that file; that mechanism is retired
    — see `docs/build-system.md` §"Retired: encoderId" — so deletion is

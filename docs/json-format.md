@@ -5,8 +5,8 @@ It covers the rules of the JSON coder itself, independent of the shape of the `M
 or any other particular kernel type being encoded.
 
 The encoding is intended to be stable for the lifetime of the v1 series.
-A `formatVersion` field on the per-package `digest.json` advertises the version a consumer is reading;
-see [Format versioning](#format-versioning) below.
+A `formatVersion` field on the per-package `build/<set>/digest.json` advertises the version
+a consumer is reading; see [Format versioning](#format-versioning) below.
 
 ## Status
 
@@ -18,13 +18,14 @@ Every implementation that reads or writes Hydra JSON modules must conform to the
 
 ## Top-level shape
 
-Every JSON file under `dist/json/**/*.json` (apart from `digest.json` and `manifest.json`)
+Every JSON file under `dist/json/**/src/<set>/json/**/*.json` (apart from `manifest.json`)
 encodes exactly one Hydra `Module`.
 The file is JSON-pretty-printed with stable, deterministic output:
 the same module always produces byte-identical JSON.
 
-`digest.json` is a sibling artifact carrying content hashes for incremental builds;
-see [Format versioning](#format-versioning).
+A separate `dist/json/<pkg>/build/<set>/digest.json` artifact carries content hashes
+for incremental builds; it lives in the gitignored `build/` subtree and is regenerated
+on every sync. See [Format versioning](#format-versioning).
 
 ## Tagged unions
 
@@ -244,7 +245,7 @@ exceed an internal soft-wrap budget.
 ## Format versioning
 
 Encoding changes are gated by a `formatVersion` integer carried at the top level of each
-package's checked-in `digest.json`:
+package's per-source-set `digest.json` (`dist/json/<pkg>/build/<set>/digest.json`):
 
 ```json
 {
@@ -271,8 +272,8 @@ and is not meant for consumers gating on the encoding format.
 Consumers should read `formatVersion` only.
 
 Module files themselves carry no version field;
-the package's `digest.json` is the single source of truth for the format version of all
-sibling JSON files in the same package.
+the package's `build/<set>/digest.json` is the single source of truth for the format
+version of all JSON files in the same package's source set.
 
 ## Conformance
 
