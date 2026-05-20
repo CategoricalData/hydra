@@ -1,0 +1,18 @@
+{
+  "name": "hydra-typescript-bootstrap",
+  "version": "0.16.0",
+  "description": "Bootstrapped Hydra-TypeScript test target. Self-contained: does NOT reference the parent repo's dist/. Generated kernel + hand-written runtime + vitest test runner.",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "vitest run --reporter=json --outputFile=vitest-out.json"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "typescript": "^5.6",
+    "vitest": "^2.1"
+  }
+}
