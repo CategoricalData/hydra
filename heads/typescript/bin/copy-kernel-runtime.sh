@@ -38,7 +38,7 @@ fi
 mkdir -p "$OUT_DIR/hydra"
 
 # Top-level runtime files (core types, primitive registry).
-for f in core.ts primitives.ts; do
+for f in core.ts primitives.ts bootstrap.ts; do
     if [ -f "$SRC_DIR/hydra/$f" ]; then
         cp "$SRC_DIR/hydra/$f" "$OUT_DIR/hydra/$f"
     fi
