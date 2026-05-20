@@ -26,6 +26,7 @@ module_ = Module {
       definition,
       fileExtension,
       module',
+      moduleDependency,
       namespace,
       package,
       packageDependency,
@@ -67,6 +68,21 @@ module' = define "Module" $
     "definitions">:
       doc "The definitions in this module" $
       T.list definition]
+
+moduleDependency :: Binding
+moduleDependency = define "ModuleDependency" $
+  doc ("A dependency on another module, identified by its namespace and"
+    ++ " (optionally) the package which provides it. When the package is omitted,"
+    ++ " the resolver searches all packages in scope; a duplicate namespace"
+    ++ " across packages is a resolution error which can be disambiguated by"
+    ++ " naming the intended package explicitly.") $
+  T.record [
+    "module">:
+      doc "The namespace of the depended-on module"
+      namespace,
+    "package">:
+      doc "The package providing the depended-on module, if disambiguation is required" $
+      T.maybe packageName]
 
 namespace :: Binding
 namespace = define "Namespace" $

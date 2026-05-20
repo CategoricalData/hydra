@@ -47,6 +47,18 @@ module_ x =
         Core.Field {
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = ((\xs -> Core.TermList (Lists.map definition xs)) (Packaging.moduleDefinitions x))}]})
+-- | Encoder for hydra.packaging.ModuleDependency
+moduleDependency :: Packaging.ModuleDependency -> Core.Term
+moduleDependency x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (namespace (Packaging.moduleDependencyModule x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map packageName opt)) (Packaging.moduleDependencyPackage x))}]})
 -- | Encoder for hydra.packaging.Namespace
 namespace :: Packaging.Namespace -> Core.Term
 namespace x =

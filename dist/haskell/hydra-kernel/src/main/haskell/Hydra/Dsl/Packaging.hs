@@ -63,6 +63,66 @@ moduleDependencies x =
         Core.projectionTypeName = (Core.Name "hydra.packaging.Module"),
         Core.projectionField = (Core.Name "dependencies")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL constructor for hydra.packaging.ModuleDependency
+moduleDependency :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm (Maybe Packaging.PackageName) -> Phantoms.TTerm Packaging.ModuleDependency
+moduleDependency module_ package =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Phantoms.unTTerm module_)},
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (Phantoms.unTTerm package)}]}))
+-- | DSL accessor for the module field of hydra.packaging.ModuleDependency
+moduleDependencyModule :: Phantoms.TTerm Packaging.ModuleDependency -> Phantoms.TTerm Packaging.Namespace
+moduleDependencyModule x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+        Core.projectionField = (Core.Name "module")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL accessor for the package field of hydra.packaging.ModuleDependency
+moduleDependencyPackage :: Phantoms.TTerm Packaging.ModuleDependency -> Phantoms.TTerm (Maybe Packaging.PackageName)
+moduleDependencyPackage x =
+    Phantoms.TTerm (Core.TermApplication (Core.Application {
+      Core.applicationFunction = (Core.TermProject (Core.Projection {
+        Core.projectionTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+        Core.projectionField = (Core.Name "package")})),
+      Core.applicationArgument = (Phantoms.unTTerm x)}))
+-- | DSL updater for the module field of hydra.packaging.ModuleDependency
+moduleDependencyWithModule :: Phantoms.TTerm Packaging.ModuleDependency -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Packaging.ModuleDependency
+moduleDependencyWithModule original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)},
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+              Core.projectionField = (Core.Name "package")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
+-- | DSL updater for the package field of hydra.packaging.ModuleDependency
+moduleDependencyWithPackage :: Phantoms.TTerm Packaging.ModuleDependency -> Phantoms.TTerm (Maybe Packaging.PackageName) -> Phantoms.TTerm Packaging.ModuleDependency
+moduleDependencyWithPackage original newVal =
+    Phantoms.TTerm (Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "module"),
+          Core.fieldTerm = (Core.TermApplication (Core.Application {
+            Core.applicationFunction = (Core.TermProject (Core.Projection {
+              Core.projectionTypeName = (Core.Name "hydra.packaging.ModuleDependency"),
+              Core.projectionField = (Core.Name "module")})),
+            Core.applicationArgument = (Phantoms.unTTerm original)}))},
+        Core.Field {
+          Core.fieldName = (Core.Name "package"),
+          Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL accessor for the description field of hydra.packaging.Module
 moduleDescription :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm (Maybe String)
 moduleDescription x =
