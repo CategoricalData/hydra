@@ -1,7 +1,7 @@
 module Hydra.Sources.Kernel.Types.Variants where
 
 -- Standard type-level kernel imports
-import           Hydra.Kernel hiding (eliminationVariant, functionVariant, literalVariant, termVariant, typeVariant)
+import           Hydra.Kernel hiding (literalVariant, termVariant, typeVariant)
 import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
@@ -23,29 +23,9 @@ module_ = Module {
             moduleDescription = Just "Variant types which describe the structure of Hydra core types and terms."}
   where
     definitions = [
-      eliminationVariant,
-      functionVariant,
       literalVariant,
       termVariant,
       typeVariant]
-
--- Note: kept around for backward compatibility with the Hydra.Coders LanguageConstraints schema,
--- even though hydra.core.Function and hydra.core.Elimination no longer exist as #332 of 2026-04.
-eliminationVariant :: Binding
-eliminationVariant = define "EliminationVariant" $
-  doc "The identifier of an elimination constructor (legacy)" $
-  T.enum [
-    "record",
-    "union",
-    "wrap"]
-
--- Note: kept around for backward compatibility with the Hydra.Coders LanguageConstraints schema.
-functionVariant :: Binding
-functionVariant = define "FunctionVariant" $
-  doc "The identifier of a function constructor (legacy)" $
-  T.enum [
-    "elimination",
-    "lambda"]
 
 literalVariant :: Binding
 literalVariant = define "LiteralVariant" $
