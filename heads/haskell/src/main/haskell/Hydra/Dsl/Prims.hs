@@ -32,17 +32,6 @@ import Data.Either (Either)
 otherErr :: Context.Context -> String -> Error.Error
 otherErr _cx msg = Error.ErrorOther (Error.OtherError msg)
 
--- | Unwrap InContext to extract just the error (bridge for gen-main functions that still return InContext)
-dropContext :: Prelude.Either (Context.InContext Error.Error) a -> Prelude.Either Error.Error a
-dropContext (Left ic) = Left (Context.inContextObject ic)
-dropContext (Right a) = Right a
-
--- | Lift an Error back to InContext (bridge for passing new-style callbacks to gen-main functions)
-liftContext :: (a -> Prelude.Either Error.Error b) -> (a -> Prelude.Either (Context.InContext Error.Error) b)
-liftContext f x = case f x of
-  Left e -> Left (Context.InContext e (Context.Context [] [] M.empty))
-  Right v -> Right v
-
 -- | A type variable specification with optional class constraints
 data TypeVar = TypeVar {
   typeVarName :: String,

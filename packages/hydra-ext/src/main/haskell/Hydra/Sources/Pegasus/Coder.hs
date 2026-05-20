@@ -126,7 +126,7 @@ module_ = Module {
       toDefinition typeToSchema]
 
 
--- | err cx msg = Left (InContext (ErrorOther (OtherError msg)) cx)
+-- | err cx msg = Left (ErrorOther (OtherError msg))
 err :: TTerm Context -> TTerm String -> TTerm (Either Error a)
 err cx msg = Ctx.failInContext (Error.errorOther $ Error.otherError msg) cx
 

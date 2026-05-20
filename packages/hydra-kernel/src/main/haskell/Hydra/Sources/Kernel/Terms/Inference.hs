@@ -157,11 +157,11 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
--- | Bridge helper: format InContext UnificationError as a string
+-- | Format a UnificationError as a string
 formatUnifError :: TTerm (UnificationError -> String)
 formatUnifError = "e" ~> Error.unificationErrorMessage (var "e")
 
--- | Bridge helper: format InContext Error as a string
+-- | Format an Error as a string
 formatError :: TTerm (Error -> String)
 formatError = "e" ~> ShowError.error_ @@ var "e"
 

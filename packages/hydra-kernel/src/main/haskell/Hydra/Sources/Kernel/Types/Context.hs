@@ -22,8 +22,7 @@ module_ = Module {
             moduleDescription = Just "Execution context for tracing and diagnostics"}
   where
     definitions = [
-      context,
-      inContext]
+      context]
 
 context :: Binding
 context = define "Context" $
@@ -38,14 +37,3 @@ context = define "Context" $
     "other">:
       doc "A map of string keys to arbitrary terms as values, for application-specific use" $
       T.map Core.name Core.term]
-
-inContext :: Binding
-inContext = define "InContext" $
-  doc "A particular domain object (such as an error) together with an execution context" $
-  T.forAll "e" $ T.record [
-    "object">:
-      doc "A domain object; typically an error" $
-      T.var "e",
-    "context">:
-      doc "The execution context at the point of capture" $
-      context]
