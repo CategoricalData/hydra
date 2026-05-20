@@ -1371,7 +1371,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
-                                "body": {"list": {"variable": "hydra.packaging.PackageName"}}}},
+                                "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                             "function": {"variable": "hydra.phantoms.TTerm"}}},
                         "parameter": "dependencies"}},
                     "domain": {
@@ -1412,7 +1412,7 @@
                           "argument": {
                             "annotated": {
                               "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
-                              "body": {"list": {"variable": "hydra.packaging.PackageName"}}}},
+                              "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
                     "application": {
@@ -1587,7 +1587,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
-                      "body": {"list": {"variable": "hydra.packaging.PackageName"}}}},
+                      "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {"application": {"argument": {"variable": "hydra.packaging.Package"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -2122,7 +2122,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
-                            "body": {"list": {"variable": "hydra.packaging.PackageName"}}}},
+                            "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.packaging.Package"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -2138,7 +2138,7 @@
                       "argument": {
                         "annotated": {
                           "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
-                          "body": {"list": {"variable": "hydra.packaging.PackageName"}}}},
+                          "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {"application": {"argument": {"variable": "hydra.packaging.Package"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},

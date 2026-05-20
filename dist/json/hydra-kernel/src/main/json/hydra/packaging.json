@@ -109,7 +109,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The packages which this package depends on"}}}],
-                        "body": {"list": {"variable": "hydra.packaging.PackageName"}}}}},
+                        "body": {"list": {"variable": "hydra.packaging.PackageDependency"}}}}},
                   {
                     "name": "description",
                     "type": {
