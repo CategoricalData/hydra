@@ -2474,6 +2474,6 @@
                   "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.relational.Row"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["v"]}}}],
-  "dependencies": ["hydra.relational", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.relational"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.relational",
   "namespace": "hydra.dsl.relational"}

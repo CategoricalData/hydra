@@ -66,7 +66,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just ("Utilities for sorting."
       <> " This module includes an implementation of Tarjan's algorithm,"
       <> " originally based on GraphSCC by Iavor S. Diatchki:"

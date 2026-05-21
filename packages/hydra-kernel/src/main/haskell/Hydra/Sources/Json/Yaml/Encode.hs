@@ -97,7 +97,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [JsonEncode.ns, YamlModel.ns] L.++ (YamlModel.ns : KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([JsonEncode.ns, YamlModel.ns] L.++ (YamlModel.ns : KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "JSON-to-YAML encoding. Converts JSON Values to YAML Nodes (always succeeds), and Hydra Terms to YAML Nodes via JSON."}
   where
     definitions = [

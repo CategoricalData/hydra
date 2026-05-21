@@ -22,7 +22,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [CoreTypes.ns],
+            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns],
             moduleDescription = Just "Type definitions for the Protobuf code generation environment"}
   where
     definitions = [

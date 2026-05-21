@@ -31,7 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [CoreTypes.ns, ModuleTypes.ns, UtilTypes.ns],
+            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, ModuleTypes.ns, UtilTypes.ns],
             moduleDescription = Just "Type definitions for C++ code generation environment"}
   where
     definitions = [

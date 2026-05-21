@@ -13,14 +13,14 @@ module_ =
       Packaging.moduleDescription = (Just "Term decoders for hydra.pg.mapping"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.pg.mapping"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.extract.core",
-        (Packaging.Namespace "hydra.lexical"),
-        (Packaging.Namespace "hydra.rewriting"),
-        (Packaging.Namespace "hydra.pg.mapping"),
-        (Packaging.Namespace "hydra.util"),
-        (Packaging.Namespace "hydra.decode.pg.model"),
-        (Packaging.Namespace "hydra.decode.coders"),
-        (Packaging.Namespace "hydra.decode.core")],
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.extract.core") Nothing),
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.lexical") Nothing),
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.rewriting") Nothing),
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.pg.mapping") Nothing),
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.util") Nothing),
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.decode.pg.model") Nothing),
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.decode.coders") Nothing),
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.decode.core") Nothing)],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.pg.mapping.annotationSchema"),

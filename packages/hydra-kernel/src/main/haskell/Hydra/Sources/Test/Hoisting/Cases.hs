@@ -6,6 +6,7 @@ module Hydra.Sources.Test.Hoisting.Cases where
 
 -- Standard imports for tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing hiding (
   hoistPredicateNothing, hoistPredicateLists, hoistPredicateApplications, hoistPredicateCaseStatements)
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
@@ -36,7 +37,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, Hoisting.ns, Lexical.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Hoisting.ns, Lexical.ns] ++ kernelTypesNamespaces),
             moduleDescription = Just "Test cases for subterm hoisting and case statement hoisting"}
   where
     definitions = [Phantoms.toDefinition allTests]

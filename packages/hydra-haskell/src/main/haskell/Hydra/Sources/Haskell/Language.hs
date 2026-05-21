@@ -89,7 +89,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = [toDefinition haskellLanguage, toDefinition reservedWords],
-            moduleDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Language constraints and reserved words for Haskell"}
 haskellLanguage :: TTermDefinition Language
 haskellLanguage = haskellLanguageDefinition "haskellLanguage" $

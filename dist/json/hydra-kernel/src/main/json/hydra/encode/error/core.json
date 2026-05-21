@@ -3460,6 +3460,10 @@
           "body": {
             "function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.error.core.VoidInNonBottomPositionError"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.paths", "hydra.encode.core", "hydra.encode.variants", "hydra.error.core"],
+  "dependencies": [
+    {"module": "hydra.encode.paths"},
+    {"module": "hydra.encode.core"},
+    {"module": "hydra.encode.variants"},
+    {"module": "hydra.error.core"}],
   "description": "Term encoders for hydra.error.core",
   "namespace": "hydra.encode.error.core"}

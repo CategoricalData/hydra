@@ -67,7 +67,7 @@ initState mod_ = GoState {
 buildNsMap :: Module -> M.Map Namespace String
 buildNsMap mod_ = M.fromList $ fmap toEntry allNs
   where
-    allNs = moduleNamespace mod_ : moduleDependencies mod_
+    allNs = moduleNamespace mod_ : fmap moduleDependencyModule (moduleDependencies mod_)
     toEntry ns@(Namespace name) = (ns, namespaceToGoPath name)
 
 -- | Go module path. Must contain a dot to avoid confusion with the Go standard library.

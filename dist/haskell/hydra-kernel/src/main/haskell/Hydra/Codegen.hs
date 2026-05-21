@@ -315,7 +315,7 @@ moduleDepsTransitive :: M.Map Packaging.Namespace Packaging.Module -> [Packaging
 moduleDepsTransitive nsMap modules =
 
       let closure =
-              Sets.union (transitiveDeps (\m -> Packaging.moduleDependencies m) nsMap modules) (Sets.fromList (Lists.map (\m -> Packaging.moduleNamespace m) modules))
+              Sets.union (transitiveDeps (\m -> Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies m)) nsMap modules) (Sets.fromList (Lists.map (\m -> Packaging.moduleNamespace m) modules))
       in (Maybes.cat (Lists.map (\n -> Maps.lookup n nsMap) (Sets.toList closure)))
 -- | Convert a Module to a JSON string
 moduleToJson :: M.Map Core.Name Core.Type -> Packaging.Module -> Either Errors.Error String
@@ -343,7 +343,9 @@ moduleToSourceModule m =
         Packaging.moduleDescription = (Just (Strings.cat2 "Source module for " (Packaging.unNamespace (Packaging.moduleNamespace m)))),
         Packaging.moduleNamespace = sourceNs,
         Packaging.moduleDependencies = [
-          modTypeNs],
+          Packaging.ModuleDependency {
+            Packaging.moduleDependencyModule = modTypeNs,
+            Packaging.moduleDependencyPackage = Nothing}],
         Packaging.moduleDefinitions = [
           moduleDef]}
 -- | Build a graph from universe modules and working modules, using an explicit bootstrap graph

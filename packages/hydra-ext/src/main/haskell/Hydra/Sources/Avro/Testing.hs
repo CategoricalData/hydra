@@ -31,7 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, AvroSchema.ns, JsonModel.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, AvroSchema.ns, JsonModel.ns],
             moduleDescription = Just "Test case types for the bidirectional Avro coder"}
   where
     definitions = [

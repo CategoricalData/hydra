@@ -10280,6 +10280,6 @@
                   "argument": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.VertexWithAdjacentEdges"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["v"]}}}],
-  "dependencies": ["hydra.pg.model", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.pg.model",
   "namespace": "hydra.dsl.pg.model"}

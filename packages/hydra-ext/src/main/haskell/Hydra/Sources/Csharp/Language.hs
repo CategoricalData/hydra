@@ -85,7 +85,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.csharp.language"),
             moduleDefinitions = [toDefinition csharpLanguage, toDefinition csharpReservedWords],
-            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Language constraints and reserved words for C Sharp (C#)"}
 csharpLanguage :: TTermDefinition Language
 csharpLanguage = define "csharpLanguage" $

@@ -93,7 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = (PgModel.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ((PgModel.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Printing functions for property graph elements"}
   where
     definitions = [

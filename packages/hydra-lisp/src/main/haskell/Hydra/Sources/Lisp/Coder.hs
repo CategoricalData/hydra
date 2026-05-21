@@ -9,6 +9,7 @@ module Hydra.Sources.Lisp.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -61,8 +62,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [moduleNamespace LispLanguageSource.module_,
-      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns] L.++ (LispSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([moduleNamespace LispLanguageSource.module_,
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns] L.++ (LispSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"}
   where
     definitions = [

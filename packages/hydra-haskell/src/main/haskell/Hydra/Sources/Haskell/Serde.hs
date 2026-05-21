@@ -96,7 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns, HaskellOperators.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, HaskellOperators.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"

@@ -22,7 +22,7 @@ import Hydra.Generation (showError)
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Sources.All as All
 import qualified Hydra.Sources.Ext as Ext
-import Hydra.Dsl.Bootstrap (bootstrapGraph)
+import Hydra.Dsl.Bootstrap (bootstrapGraph, unqualifiedDep)
 
 import qualified Data.List               as L
 import qualified Data.Map                as M
@@ -71,7 +71,7 @@ makeSyntheticModule benchMod n =
     Module {
         moduleNamespace = targetNs,
         moduleDefinitions = renamed,
-        moduleDependencies = moduleNamespace benchMod : moduleDependencies benchMod,
+        moduleDependencies = unqualifiedDep (moduleNamespace benchMod) : moduleDependencies benchMod,
         moduleDescription = moduleDescription benchMod
       }
   where

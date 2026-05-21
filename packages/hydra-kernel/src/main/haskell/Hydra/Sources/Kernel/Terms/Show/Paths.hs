@@ -61,7 +61,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Names.ns, Rewriting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Rewriting.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just ("Utilities for working with subterm steps and paths.")}
   where
    definitions = [

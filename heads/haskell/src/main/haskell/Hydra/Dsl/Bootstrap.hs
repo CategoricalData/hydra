@@ -5,9 +5,11 @@ module Hydra.Dsl.Bootstrap (
   bootstrapGraph,
   datatype,
   qualify,
+  qualifiedDep,
   typeref,
   defineType,
   toTypeDef,
+  unqualifiedDep,
   use,
   useType,
 ) where
@@ -86,3 +88,11 @@ use b = TypeVariable (bindingName b)
 -- | Reference a type in a namespace (old style, for migration)
 useType :: Namespace -> String -> Type
 useType = typeref
+
+-- | An unqualified module dependency (package omitted; resolver searches all packages in scope)
+unqualifiedDep :: Namespace -> ModuleDependency
+unqualifiedDep ns = ModuleDependency ns Nothing
+
+-- | A module dependency qualified by the providing package, for disambiguation
+qualifiedDep :: PackageName -> Namespace -> ModuleDependency
+qualifiedDep pkg ns = ModuleDependency ns (Just pkg)

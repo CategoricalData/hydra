@@ -7,6 +7,7 @@ module Hydra.Sources.Test.Sorting where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
@@ -40,7 +41,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [SortingModule.ns, ShowCore.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([SortingModule.ns, ShowCore.ns] ++ kernelTypesNamespaces),
             moduleDescription = (Just "Test cases for topological sorting algorithms")}
   where
     definitions = [Phantoms.toDefinition allTests]

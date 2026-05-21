@@ -29,7 +29,7 @@ data Module =
     -- | A common prefix for all element names in the module
     moduleNamespace :: Namespace,
     -- | Any modules which this module directly depends on
-    moduleDependencies :: [Namespace],
+    moduleDependencies :: [ModuleDependency],
     -- | The definitions in this module
     moduleDefinitions :: [Definition]}
   deriving (Eq, Ord, Read, Show)

@@ -133,6 +133,6 @@
               {"name": "c", "type": {"unit": {}}},
               {"name": "none", "type": {"unit": {}}}]},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A model from the Graphviz DOT graph description language. Based on the grammar at https://graphviz.org/doc/info/lang.html",
   "namespace": "hydra.graphviz.dot"}

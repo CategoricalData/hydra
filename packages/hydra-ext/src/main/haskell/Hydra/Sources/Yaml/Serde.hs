@@ -3,6 +3,7 @@ module Hydra.Sources.Yaml.Serde where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -35,7 +36,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"]),
+            moduleDependencies = unqualifiedDep <$> ((KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"])),
             moduleDescription = Just "Native YAML serialization: YAML Node to String"}
   where
     definitions = [

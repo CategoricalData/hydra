@@ -2417,6 +2417,6 @@
               "domain": {
                 "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.topology", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.topology"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.topology",
   "namespace": "hydra.dsl.topology"}

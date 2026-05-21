@@ -13,12 +13,24 @@ module_ =
       Packaging.moduleDescription = (Just "Term decoders for hydra.packaging"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.packaging"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.extract.core",
-        (Packaging.Namespace "hydra.lexical"),
-        (Packaging.Namespace "hydra.rewriting"),
-        (Packaging.Namespace "hydra.packaging"),
-        (Packaging.Namespace "hydra.util"),
-        (Packaging.Namespace "hydra.decode.core")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.extract.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.lexical"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.rewriting"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.packaging"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.util"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.core"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.packaging.definition"),
@@ -420,7 +432,7 @@ module_ =
                                                       Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "dependencies"))})),
                                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeList")),
-                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.namespace"))}))})),
+                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.moduleDependency"))}))})),
                                                   Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
                                             Core.applicationArgument = (Core.TermLambda (Core.Lambda {

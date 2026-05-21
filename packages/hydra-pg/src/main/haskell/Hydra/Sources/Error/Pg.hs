@@ -22,7 +22,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [PgModel.ns],
+            moduleDependencies = unqualifiedDep <$> [PgModel.ns],
             moduleDescription = Just "Error types for property graph validation"}
   where
     definitions = [

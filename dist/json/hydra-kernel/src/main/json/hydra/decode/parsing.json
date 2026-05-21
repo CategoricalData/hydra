@@ -933,6 +933,12 @@
                       "domain": {"variable": "hydra.core.Term"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}}}},
           "variables": ["t0"]}}}],
-  "dependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.parsing", "hydra.util", "hydra.decode.core"],
+  "dependencies": [
+    {"module": "hydra.extract.core"},
+    {"module": "hydra.lexical"},
+    {"module": "hydra.rewriting"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.parsing",
   "namespace": "hydra.decode.parsing"}

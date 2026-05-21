@@ -50,6 +50,6 @@
                             "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Literal"}, "domain": {"variable": "v"}}}}}}]},
                   "parameter": "v"}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.rdf.syntax", "hydra.pg.model", "hydra.core"],
+  "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.pg.model"}, {"module": "hydra.core"}],
   "description": "Environment types for property graph to RDF mapping",
   "namespace": "hydra.pg.rdf.environment"}

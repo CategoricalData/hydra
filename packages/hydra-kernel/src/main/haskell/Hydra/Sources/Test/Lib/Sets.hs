@@ -4,6 +4,7 @@ module Hydra.Sources.Test.Lib.Sets where
 
 -- Standard imports for tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -33,7 +34,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Namespace "hydra.reduction", ShowCore.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Namespace "hydra.reduction", ShowCore.ns] ++ kernelTypesNamespaces),
             moduleDescription = Just "Test cases for hydra.lib.sets primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]

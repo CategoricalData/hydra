@@ -2,6 +2,7 @@ module Hydra.Sources.Show.Error.Pg where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -24,7 +25,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = (ErrorPg.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ((ErrorPg.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "String representations of hydra.error.pg types"}
   where
     definitions = [

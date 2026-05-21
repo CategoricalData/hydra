@@ -5,6 +5,7 @@ module Hydra.Sources.Test.Ordering where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -31,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Namespace "hydra.reduction", Namespace "hydra.show.core", ShowUtil.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Namespace "hydra.reduction", Namespace "hydra.show.core", ShowUtil.ns] ++ kernelTypesNamespaces),
             moduleDescription = Just "Test cases for Ord instance comparisons on complex Hydra types"}
   where
     definitions = [Phantoms.toDefinition allTests]

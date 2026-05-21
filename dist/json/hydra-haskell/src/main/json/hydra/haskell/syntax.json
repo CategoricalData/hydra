@@ -1514,6 +1514,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "A type variable"}}}],
               "body": {"wrap": {"variable": "hydra.haskell.syntax.Name"}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs.",
   "namespace": "hydra.haskell.syntax"}

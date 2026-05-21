@@ -4,6 +4,7 @@ module Hydra.Sources.Test.Checking.NominalTypes where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -24,7 +25,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, Namespace "hydra.rewriting"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Namespace "hydra.rewriting"] ++ kernelTypesNamespaces),
             moduleDescription = (Just "Nominal type checking test cases: records, unions, field access, injection, projection")}
   where
     definitions = [

@@ -34,7 +34,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [ns],
+            moduleDependencies = unqualifiedDep <$> [ns],
             moduleDescription = Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."}
   where
     definitions = [

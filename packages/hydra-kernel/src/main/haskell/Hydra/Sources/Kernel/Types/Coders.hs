@@ -23,7 +23,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Context.ns, Error.ns, Graph.ns, Variants.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Context.ns, Error.ns, Graph.ns, Variants.ns, Core.ns],
             moduleDescription = Just "Abstractions for paired transformations between languages"}
   where
     definitions = [

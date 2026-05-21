@@ -98,7 +98,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Names.ns, Strip.ns, Annotations.ns, moduleNamespace DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns] L.++ (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Strip.ns, Annotations.ns, moduleNamespace DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns] L.++ (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"}
   where
     definitions = [

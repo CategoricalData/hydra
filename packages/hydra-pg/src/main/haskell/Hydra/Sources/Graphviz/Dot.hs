@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A model from the Graphviz DOT graph description language."
       ++ " Based on the grammar at https://graphviz.org/doc/info/lang.html")}
   where

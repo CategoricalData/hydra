@@ -42,7 +42,7 @@ salesModule = Module {
       termDefinitionTypeScheme = Just lazyGraphTermScheme
     }
   ],
-  moduleDependencies = [Namespace "hydra.tabular",
+  moduleDependencies = fmap (\ns -> ModuleDependency ns Nothing) [Namespace "hydra.tabular",
     Namespace "hydra.relational",
     Namespace "hydra.pg.model",
     Namespace "hydra.core", Namespace "hydra.tabular",
@@ -82,7 +82,7 @@ healthModule = Module {
       termDefinitionTypeScheme = Just lazyGraphTermScheme
     }
   ],
-  moduleDependencies = [Namespace "hydra.tabular",
+  moduleDependencies = fmap (\ns -> ModuleDependency ns Nothing) [Namespace "hydra.tabular",
     Namespace "hydra.relational",
     Namespace "hydra.pg.model",
     Namespace "hydra.core", Namespace "hydra.tabular",

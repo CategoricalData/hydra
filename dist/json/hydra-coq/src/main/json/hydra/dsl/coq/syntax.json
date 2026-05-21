@@ -35876,6 +35876,6 @@
           "body": {
             "application": {"argument": {"variable": "hydra.coq.syntax.TheoremKind"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.coq.syntax", "hydra.phantoms"],
+  "dependencies": [{"module": "hydra.coq.syntax"}, {"module": "hydra.phantoms"}],
   "description": "DSL functions for hydra.coq.syntax",
   "namespace": "hydra.dsl.coq.syntax"}
