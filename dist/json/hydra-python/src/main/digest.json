@@ -1,11 +1,7 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "dc98bac14dfe16e9575c3b839944bb7967dcaa9a6ae0842e637177d748b04448",
-  "depHash:hydra-kernel": "ef87b417371ec4b69defe1a5c486cc8838b5bb84acf5899e65245d1a86d150c4",
   "hashes": {
-    "hydra.dsl.python.environment": "a862ad3ab271b1031210a77e9457a9bdc8d807c354d01ed683a83da3334203f1",
-    "hydra.dsl.python.syntax": "c3f53e9c80c99ff3f89ba552ef6a304c8ceb1c7724c5a2a9eecf90432159ac8f",
     "hydra.python.coder": "15087e49186ae5a4cd41daffc5fd6afec40e38c0e369e5bf23ddd5defd29fa94",
     "hydra.python.environment": "c743c043868d76c63d3a4f503d6ab196ab2fd737035d799014da10ac6fb38262",
     "hydra.python.language": "da72e9e838fd21526c2c26d447b0596e161291edbe86a24f4f4f768984523836",

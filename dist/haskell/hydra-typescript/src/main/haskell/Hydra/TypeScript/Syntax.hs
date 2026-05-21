@@ -280,7 +280,9 @@ data Expression =
   -- | A spread expression (...x)
   ExpressionSpread SpreadElement |
   -- | A parenthesized expression
-  ExpressionParenthesized Expression
+  ExpressionParenthesized Expression |
+  -- | A TypeScript type assertion `<expr> as <type>`
+  ExpressionAsExpression AsExpression
   deriving (Eq, Ord, Read, Show)
 _Expression = Core.Name "hydra.typeScript.syntax.Expression"
 _Expression_identifier = Core.Name "identifier"
@@ -302,6 +304,18 @@ _Expression_yield = Core.Name "yield"
 _Expression_await = Core.Name "await"
 _Expression_spread = Core.Name "spread"
 _Expression_parenthesized = Core.Name "parenthesized"
+_Expression_asExpression = Core.Name "asExpression"
+-- | A TypeScript `<expression> as <type>` cast
+data AsExpression =
+  AsExpression {
+    -- | The expression being cast
+    asExpressionExpression :: Expression,
+    -- | The target type
+    asExpressionType :: TypeExpression}
+  deriving (Eq, Ord, Read, Show)
+_AsExpression = Core.Name "hydra.typeScript.syntax.AsExpression"
+_AsExpression_expression = Core.Name "expression"
+_AsExpression_type = Core.Name "type"
 -- | An array expression [a, b, c]
 type ArrayExpression = [ArrayElement]
 _ArrayExpression = Core.Name "hydra.typeScript.syntax.ArrayExpression"
@@ -489,7 +503,9 @@ data Pattern =
   -- | A pattern with default value
   PatternAssignment AssignmentPattern |
   -- | A rest element (...x)
-  PatternRest RestElement
+  PatternRest RestElement |
+  -- | A pattern with a TypeScript type annotation (`x: T`)
+  PatternTyped TypedPattern
   deriving (Eq, Ord, Read, Show)
 _Pattern = Core.Name "hydra.typeScript.syntax.Pattern"
 _Pattern_identifier = Core.Name "identifier"
@@ -497,6 +513,7 @@ _Pattern_object = Core.Name "object"
 _Pattern_array = Core.Name "array"
 _Pattern_assignment = Core.Name "assignment"
 _Pattern_rest = Core.Name "rest"
+_Pattern_typed = Core.Name "typed"
 -- | An object destructuring pattern {a, b: c}
 data ObjectPattern =
   ObjectPattern {
@@ -531,6 +548,17 @@ newtype RestElement =
     unRestElement :: Pattern}
   deriving (Eq, Ord, Read, Show)
 _RestElement = Core.Name "hydra.typeScript.syntax.RestElement"
+-- | A pattern with a TypeScript type annotation (`x: T`)
+data TypedPattern =
+  TypedPattern {
+    -- | The underlying binding pattern
+    typedPatternPattern :: Pattern,
+    -- | The TypeScript type annotation
+    typedPatternType :: TypeExpression}
+  deriving (Eq, Ord, Read, Show)
+_TypedPattern = Core.Name "hydra.typeScript.syntax.TypedPattern"
+_TypedPattern_pattern = Core.Name "pattern"
+_TypedPattern_type = Core.Name "type"
 -- | A TypeScript statement
 data Statement =
   -- | An expression statement

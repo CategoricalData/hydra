@@ -1,15 +1,11 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "37a9896ee8eb7b2d2bc5a9827a6c534af2434d1f2d2f284779d2ec4d0f0db09c",
-  "depHash:hydra-kernel": "ef87b417371ec4b69defe1a5c486cc8838b5bb84acf5899e65245d1a86d150c4",
-  "depHash:hydra-rdf": "8168cd80dd6215b235b6afbc71b56045d8d6d2e588b4dc57c784a43908e7d445",
   "hashes": {
     "com.gdblab.pathAlgebra.expressions": "d3f31158fb7ebe6129c9d869c0b80b6cea57a293be2cebcea6857def0179e027",
     "com.gdblab.pathAlgebra.syntax": "7d68a229a2c4aef9503aa0d221321f38994139d6b671135b1e88848e46e1a2be",
     "hydra.cypher.features": "05e09aaa17d9aeb94ee128a8b1057eb64764435f8b493b6477833bb98c4f628b",
     "hydra.cypher.openCypher": "dd00a35743ee1f5af6418ee2300e9c20a4b26550aaac22fe53cfd6994d55a95f",
-    "hydra.dsl.pg.model": "2f722c73bdb6ec3993afa87307e4690930ded65dd3139f4f93348934ac2ac20d",
     "hydra.error.pg": "c6726ec89c1cd2832bb5c1e66eee666230f0063341a8cc5cd6b18ee674c02053",
     "hydra.graphviz.coder": "fc9374ec4972b7b29aa9ad96193ed0bb0dea3522d34658f076d571f473ae93bd",
     "hydra.graphviz.dot": "6ddcec66e1fb7afb776562b7b51b32c354c2d655ab6bf3c72eae6b7bdc165a29",
