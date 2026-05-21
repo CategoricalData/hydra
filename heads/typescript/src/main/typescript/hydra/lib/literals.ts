@@ -10,8 +10,8 @@
 // The functions below mirror the Python implementation in
 // heads/python/src/main/python/hydra/lib/literals.py.
 
-import type { Maybe } from "../core.js";
-import { Just, Nothing } from "../core.js";
+import type { Maybe } from "../runtime.js";
+import { Just, Nothing } from "../runtime.js";
 
 // === show family ===
 
