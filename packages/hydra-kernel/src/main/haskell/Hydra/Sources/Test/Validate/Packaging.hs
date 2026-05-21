@@ -81,7 +81,7 @@ mkPackage :: String -> [TTerm Module] -> TTerm Package
 mkPackage nameStr mods = Packaging.package
   (pn nameStr)
   (Phantoms.list mods)
-  (Phantoms.list ([] :: [TTerm PackageName]))
+  (Phantoms.list ([] :: [TTerm PackageDependency]))
   (Phantoms.just $ Phantoms.string ("Test package " <> nameStr))
 
 -- | A reified Term value (a Core.TermLiteral of a Core.LiteralString) for use
