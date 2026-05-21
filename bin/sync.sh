@@ -231,7 +231,7 @@ echo ""
 # It also runs stack test (unless --no-tests) and regenerates the lexicon.
 #
 # Shell-level shortcut: if every DSL source under packages/ matches
-# its recorded hash in dist/json/digest.main.json, skip Phase 1
+# its recorded hash in dist/json/build/digest.json, skip Phase 1
 # entirely. This is sub-second and avoids ~30+ seconds of Haskell
 # startup when nothing has changed.
 #

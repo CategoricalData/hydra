@@ -287,12 +287,13 @@ writeModulesJson doInfer basePath universeMods mods = do
 -- construction happen once over the full universe, so each per-module write
 -- is as cheap as the single-directory version.
 --
--- Cache layout (after 2026-04-18 split):
+-- Cache layout (after 2026-04-18 split; build/ relocation in #379):
 --
---   * Per-package digest at dist/json/<pkg>/digest.json — covers the
---     namespaces routed to <pkg>. Stage 3+ will exploit per-package
---     freshness; for now it's recorded so callers can rely on it.
---   * Universe-wide digest at <distJsonRoot>/digest.main.json — kept
+--   * Per-package digest at dist/json/<pkg>/build/main/digest.json
+--     — covers the namespaces routed to <pkg>. Stage 3+ will exploit
+--     per-package freshness; for now it's recorded so callers can rely
+--     on it.
+--   * Universe-wide digest at <distJsonRoot>/build/digest.json — kept
 --     for backwards compatibility with the existing cache-hit semantics
 --     (universe-wide all-or-nothing). Removed once per-package
 --     freshness checks are wired in.
@@ -379,19 +380,20 @@ writePackageSplitJson distJsonRoot universeMods universeForSchema toWrite = do
     mapM_ (writeModuleJson schemaMap pkgDir) pkgMods
 
 -- | Digest file for 'writeModulesJsonPackageSplit'. Single well-known
--- location shared across all packages the universe touches. Will be
--- removed once per-package freshness checks fully replace the
--- universe-wide cache (Stage 3+).
+-- location at <distJsonRoot>/build/digest.json — the universe-wide
+-- cache for Phase-1 freshness checks. Lives under build/ so the whole
+-- build-cache subtree is gitignored as one unit (see #379).
 packageSplitDigestAnchor :: FilePath -> FilePath
-packageSplitDigestAnchor distJsonRoot = distJsonRoot FP.</> "digest.main.json"
+packageSplitDigestAnchor distJsonRoot = distJsonRoot FP.</> "build" FP.</> "digest.json"
 
 -- | Per-package main-source-set digest path:
--- dist/json/<pkg>/src/main/digest.json. The digest covers the DSL
--- sources whose namespaces route to <pkg> and live in the main
--- source set. The parallel test path is at <pkg>/src/test/digest.json.
+-- dist/json/<pkg>/build/main/digest.json. The digest covers the DSL
+-- sources whose namespaces route to <pkg> and live in the main source
+-- set. The parallel test path is at <pkg>/build/test/digest.json.
+-- See #379 for the build/ layout rationale.
 perPackageDigestPath :: FilePath -> String -> FilePath
 perPackageDigestPath distJsonRoot pkg =
-  distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "digest.json"
+  distJsonRoot FP.</> pkg FP.</> "build" FP.</> "main" FP.</> "digest.json"
 
 -- | Read a package's declared dependencies from packages/<pkg>/package.json.
 -- Returns the values of the top-level "dependencies" array, or [] if the
@@ -458,7 +460,7 @@ finalizePerPackageDigests distJsonRoot = do
       Digest.writePerPackageDigest dpath finalPpd
 
 -- | Enumerate packages that have a main-source-set digest on disk.
--- Walks dist/json/hydra-*/src/main/digest.json.
+-- Walks dist/json/hydra-*/build/main/digest.json.
 discoverPackagesWithDigests :: FilePath -> IO [String]
 discoverPackagesWithDigests distJsonRoot = do
     exists <- SD.doesDirectoryExist distJsonRoot

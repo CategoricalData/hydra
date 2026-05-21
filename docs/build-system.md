@@ -90,11 +90,25 @@ The caches form a hierarchy: a hit at a coarser layer skips a finer one.
 | Cache | Location | Granularity | What it gates |
 |-------|----------|-------------|---------------|
 | Phase 1 input cache | `heads/haskell/.stack-work/phase1-input-cache.txt` | Universe-wide | Skips all of Phase 1 (no stack startup, no JSON regen) |
-| Universe digest | `dist/json/digest.main.json` | Per-namespace | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
-| Per-package input digest | `dist/json/<pkg>/src/<set>/digest.json` | Per-namespace, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
-| Per-package output digest | `dist/<lang>/<pkg>/src/<set>/digest.json` | Per-namespace + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
+| Universe digest | `dist/json/build/digest.json` | Per-namespace | Drives `check-dsl-fresh.py`; per-module skip inside `bootstrap-from-json` |
+| Per-package input digest | `dist/json/<pkg>/build/<set>/digest.json` | Per-namespace, scoped to one package | Source-of-truth for Layer 2 freshness comparison |
+| Per-package output digest | `dist/<lang>/<pkg>/build/<set>/digest.json` | Per-namespace + per-target generator stamp | Compared against input digest to skip Layer 1 + Layer 2 for one package |
 | Step caches | `heads/haskell/.stack-work/{verify-json-kernel,bootstrap-from-json,haskell-test}-cache.txt` | Universe-wide hash of inputs + exec source | Skips `verify-json-kernel`, `bootstrap-from-json`, or `stack test` |
 | Per-target test cache | `dist/<lang>/test-cache.json` | Universe of generated sources + test infra + runner | Skips the target's `test-distribution.sh` |
+
+### Cache files are not tracked
+
+Every `dist/<lang>/<pkg>/build/` directory holds derived freshness state: input digests,
+output digests, generator stamps. The entire `dist/**/build/` subtree is gitignored.
+The same applies to `dist/json/build/` (the universe digest). See
+[#379](https://github.com/CategoricalData/hydra/issues/379) for the rationale —
+in short, hashes diverge on every branch by construction, so committing them produced
+merge conflicts on every multi-branch merge while providing no value (the post-merge
+hashes are stale anyway, so the next build re-derives them).
+
+A missing or stale digest is always a cache miss, never a correctness problem. The
+first build after a fresh clone or after a merge runs without cache hits and rebuilds
+the digests as it goes; subsequent runs hit the cache normally.
 
 ### What invalidates what
 
@@ -161,8 +175,10 @@ the field. They'll naturally fade out the next time any source change triggers a
 refresh.
 
 If you ever need to manually invalidate a per-target cache without editing real source,
-delete `dist/<lang>/<pkg>/src/<set>/digest.json` — the next assemble will report a missing
-output digest and regenerate.
+delete `dist/<lang>/<pkg>/build/<set>/digest.json` — the next assemble will report a missing
+output digest and regenerate. The entire `dist/**/build/` subtree is gitignored (see
+[#379](https://github.com/CategoricalData/hydra/issues/379)); each `build/` directory holds
+only derived freshness state, so deleting it is always safe and never affects shared history.
 
 ## What the cache currently keys on
 

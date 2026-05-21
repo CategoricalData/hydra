@@ -753,9 +753,10 @@ the renamed name has a different in-memory body, but only the modules whose own
 sources changed get re-emitted to JSON, so the on-disk JSON for the dependents
 stays at the pre-rename name.
 
-Workaround: delete `dist/json/digest.main.json` to force a full universe
-re-inference on the next sync. (Pre-#347, the canonical trick was to zero out
-the `encoderId` field in that file; that mechanism is retired — see
+Workaround: delete `dist/json/build/digest.json` (or wipe the whole `dist/**/build/`
+subtree — it's all derivable cache state, never tracked) to force a full universe
+re-inference on the next sync. (Pre-#347, the canonical trick was to zero out the
+`encoderId` field in that file; that mechanism is retired — see
 `docs/build-system.md` §"Retired: encoderId" — so deletion is now the way.)
 This is a known limitation of the incremental dirty-detector;
 see the `incremental_inference_wiring_pending` follow-up.
