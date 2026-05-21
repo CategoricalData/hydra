@@ -1,12 +1,12 @@
 ---
-description: Run bin/sync-typescript.sh — regenerates the hydra-typescript package's DSL sources into Haskell. Transitional until the TypeScript coder is wired into bin/sync.sh.
+description: Run bin/sync-typescript.sh — regenerates the TypeScript-only sync matrix (hosts × targets = typescript × typescript). Thin wrapper around bin/sync.sh.
 allowed-tools:
   - Bash(bin/sync-typescript.sh*)
   - Read
   - Bash(git status*)
 ---
 
-# TypeScript sync (transitional)
+# TypeScript sync
 
 ## Procedure
 
@@ -14,17 +14,17 @@ allowed-tools:
 bin/sync-typescript.sh
 ```
 
-Currently delegates to `bin/sync-packages.sh --targets haskell
-hydra-typescript`. This regenerates only the hydra-typescript package's
-own DSL sources (Syntax/Language/Operators/Serde) into Haskell under
-`dist/haskell/hydra-typescript/`.
+Thin wrapper around `bin/sync.sh --hosts typescript --targets typescript`.
+Extra flags (e.g. `--no-tests`) are forwarded. Runs:
 
-The TypeScript coder itself does not yet exist. Once `Coder.hs` and
-`writeTypeScript` land, `bin/sync-typescript.sh` will switch to the
-standard matrix-tool invocation (`bin/sync.sh --hosts haskell --targets
-typescript`).
+- Phase 1: regenerate Haskell coder dist for `hydra-typescript`
+- Phase 2: regenerate `hydra-typescript` coder Haskell dist
+- Phase 3: emit `hydra-kernel` into `dist/typescript/hydra-kernel/`
+  (assemble-distribution.sh copies the hand-written runtime alongside)
 
-See issue #126 for the broader TypeScript head plan.
+TypeScript is a "head bud" — Phase 4 (`host=typescript`) is skipped
+because the TS runtime cannot yet host generation of coder packages in
+TypeScript's own language. See issue #126.
 
 ## First-run gotcha
 
