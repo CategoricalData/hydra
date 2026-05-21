@@ -1,9 +1,6 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "29ce6462241e06e604c6c9d3751263b479069a525f815df796a93d935811a5b6",
-  "depHash:hydra-kernel": "ef87b417371ec4b69defe1a5c486cc8838b5bb84acf5899e65245d1a86d150c4",
-  "depHash:hydra-rdf": "8168cd80dd6215b235b6afbc71b56045d8d6d2e588b4dc57c784a43908e7d445",
   "hashes": {
     "hydra.atlas": "e5e336b96093b2814f24403f58234bb0172c7d4eb9271e8170a95945292be660",
     "hydra.avro.coder": "9970d5e294f9e8779043c4d254ca4dc0b5b2a2bf30789f3ca0cd6312c42c7a07",

@@ -1,11 +1,7 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "8168cd80dd6215b235b6afbc71b56045d8d6d2e588b4dc57c784a43908e7d445",
-  "depHash:hydra-kernel": "ef87b417371ec4b69defe1a5c486cc8838b5bb84acf5899e65245d1a86d150c4",
   "hashes": {
-    "hydra.dsl.rdf.syntax": "1ebd90a61495bffaaa9991579338191de7318c97ad8a581770430af7b67d10a6",
-    "hydra.dsl.shacl.model": "6b18fba411345421934b031d3da446b110ad62ce284cc01b8fe2459578c7102e",
     "hydra.owl.syntax": "4ba19676234243d57f4fd4bdf1f175fd68647be11bcd6d547b92ecf73538b08b",
     "hydra.rdf.serde": "7edee0edf8eb4444d0e55cd154c87914bb2e8165ad24557df7f6a4a28df1e2c4",
     "hydra.rdf.syntax": "5d07723191b87cd8226a4e5dad78c7f78aae51a5ec42bcb7b2e39cd52cd62fbf",
