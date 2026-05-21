@@ -39,7 +39,7 @@
                                                               "application": {
                                                                 "argument": {"variable": "et"},
                                                                 "function": {
-                                                                  "typeApplication": {"body": {"project": {"field": "out", "typeName": "hydra.pg.model.EdgeType"}}, "type": {"variable": "t1"}}}}},
+                                                                  "typeApplication": {"body": {"project": {"fieldName": "out", "typeName": "hydra.pg.model.EdgeType"}}, "type": {"variable": "t1"}}}}},
                                                             "typeScheme": {"body": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
                                                           {
                                                             "name": "matchesVertex",
@@ -131,7 +131,7 @@
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "et"},
                                                                                                     "function": {
-                                                                                                      "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.EdgeType"}}, "type": {"variable": "t1"}}}}},
+                                                                                                      "typeApplication": {"body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.EdgeType"}}, "type": {"variable": "t1"}}}}},
                                                                                                 "function": {"variable": "encodeEdgeLabel"}}}}],
                                                                                         "typeName": "hydra.shacl.model.PropertyShape"}}},
                                                                                   "typeName": "hydra.shacl.model.Reference"}},
@@ -211,7 +211,7 @@
                                   "application": {
                                     "argument": {"variable": "edge"},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
+                                      "typeApplication": {"body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
                                 "typeScheme": {"body": {"variable": "hydra.pg.model.EdgeLabel"}, "variables": []}},
                               {
                                 "name": "eout",
@@ -219,7 +219,7 @@
                                   "application": {
                                     "argument": {"variable": "edge"},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "out", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
+                                      "typeApplication": {"body": {"project": {"fieldName": "out", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
                                 "typeScheme": {"body": {"variable": "t0"}, "variables": []}},
                               {
                                 "name": "ein",
@@ -227,7 +227,7 @@
                                   "application": {
                                     "argument": {"variable": "edge"},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "in", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
+                                      "typeApplication": {"body": {"project": {"fieldName": "in", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "t0"}}}}},
                                 "typeScheme": {"body": {"variable": "t0"}, "variables": []}},
                               {
                                 "name": "subj",
@@ -243,7 +243,7 @@
                                               "argument": {"variable": "env"},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"project": {"field": "encodeVertexId", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
+                                                  "body": {"project": {"fieldName": "encodeVertexId", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                   "type": {"variable": "t0"}}}}}}}},
                                     "typeName": "hydra.rdf.syntax.Resource"}},
                                 "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
@@ -261,7 +261,7 @@
                                               "argument": {"variable": "env"},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"project": {"field": "encodeVertexId", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
+                                                  "body": {"project": {"fieldName": "encodeVertexId", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                   "type": {"variable": "t0"}}}}}}}},
                                     "typeName": "hydra.rdf.syntax.Node"}},
                                 "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}},
@@ -275,7 +275,7 @@
                                         "argument": {"variable": "env"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"project": {"field": "encodeEdgeLabel", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
+                                            "body": {"project": {"fieldName": "encodeEdgeLabel", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                             "type": {"variable": "t0"}}}}}}},
                                 "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}}],
                             "body": {
@@ -337,7 +337,7 @@
                                       "application": {
                                         "argument": {"variable": "lg"},
                                         "function": {
-                                          "typeApplication": {"body": {"project": {"field": "vertices", "typeName": "hydra.pg.model.LazyGraph"}}, "type": {"variable": "t0"}}}}},
+                                          "typeApplication": {"body": {"project": {"fieldName": "vertices", "typeName": "hydra.pg.model.LazyGraph"}}, "type": {"variable": "t0"}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -360,7 +360,7 @@
                                       "application": {
                                         "argument": {"variable": "lg"},
                                         "function": {
-                                          "typeApplication": {"body": {"project": {"field": "edges", "typeName": "hydra.pg.model.LazyGraph"}}, "type": {"variable": "t0"}}}}},
+                                          "typeApplication": {"body": {"project": {"fieldName": "edges", "typeName": "hydra.pg.model.LazyGraph"}}, "type": {"variable": "t0"}}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -419,7 +419,7 @@
                                   "application": {
                                     "argument": {"variable": "vertex"},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
+                                      "typeApplication": {"body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
                                 "typeScheme": {"body": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
                               {
                                 "name": "vid",
@@ -427,7 +427,7 @@
                                   "application": {
                                     "argument": {"variable": "vertex"},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
+                                      "typeApplication": {"body": {"project": {"fieldName": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
                                 "typeScheme": {"body": {"variable": "t0"}, "variables": []}},
                               {
                                 "name": "vprops",
@@ -435,7 +435,7 @@
                                   "application": {
                                     "argument": {"variable": "vertex"},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "properties", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
+                                      "typeApplication": {"body": {"project": {"fieldName": "properties", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
                                 "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}, "variables": []}},
                               {
                                 "name": "subj",
@@ -451,7 +451,7 @@
                                               "argument": {"variable": "env"},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"project": {"field": "encodeVertexId", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
+                                                  "body": {"project": {"fieldName": "encodeVertexId", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                   "type": {"variable": "t0"}}}}}}}},
                                     "typeName": "hydra.rdf.syntax.Resource"}},
                                 "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
@@ -469,7 +469,7 @@
                                               "argument": {"variable": "env"},
                                               "function": {
                                                 "typeApplication": {
-                                                  "body": {"project": {"field": "encodeVertexLabel", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
+                                                  "body": {"project": {"fieldName": "encodeVertexLabel", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                   "type": {"variable": "t0"}}}}}}}},
                                     "typeName": "hydra.rdf.syntax.Node"}},
                                 "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}},
@@ -534,7 +534,7 @@
                                                             "argument": {"variable": "env"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"project": {"field": "encodePropertyKey", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
+                                                                "body": {"project": {"fieldName": "encodePropertyKey", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                                 "type": {"variable": "t0"}}}}}}},
                                                     "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                                                   {
@@ -551,7 +551,7 @@
                                                                   "argument": {"variable": "env"},
                                                                   "function": {
                                                                     "typeApplication": {
-                                                                      "body": {"project": {"field": "encodePropertyValue", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
+                                                                      "body": {"project": {"fieldName": "encodePropertyValue", "typeName": "hydra.pg.rdf.environment.PgRdfEnvironment"}},
                                                                       "type": {"variable": "t0"}}}}}}}},
                                                         "typeName": "hydra.rdf.syntax.Node"}},
                                                     "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}}],
@@ -641,7 +641,7 @@
                                                   "application": {
                                                     "argument": {"variable": "schema"},
                                                     "function": {
-                                                      "typeApplication": {"body": {"project": {"field": "vertices", "typeName": "hydra.pg.model.GraphSchema"}}, "type": {"variable": "t0"}}}}},
+                                                      "typeApplication": {"body": {"project": {"fieldName": "vertices", "typeName": "hydra.pg.model.GraphSchema"}}, "type": {"variable": "t0"}}}}},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.elems"}, "type": {"variable": "hydra.pg.model.VertexLabel"}}},
@@ -657,7 +657,7 @@
                                                   "application": {
                                                     "argument": {"variable": "schema"},
                                                     "function": {
-                                                      "typeApplication": {"body": {"project": {"field": "edges", "typeName": "hydra.pg.model.GraphSchema"}}, "type": {"variable": "t0"}}}}},
+                                                      "typeApplication": {"body": {"project": {"fieldName": "edges", "typeName": "hydra.pg.model.GraphSchema"}}, "type": {"variable": "t0"}}}}},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.elems"}, "type": {"variable": "hydra.pg.model.EdgeLabel"}}},
@@ -707,7 +707,7 @@
                                                                           "application": {
                                                                             "argument": {"variable": "vt"},
                                                                             "function": {
-                                                                              "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.VertexType"}}, "type": {"variable": "t0"}}}}},
+                                                                              "typeApplication": {"body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.VertexType"}}, "type": {"variable": "t0"}}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "encodeEdgeLabel"},
@@ -729,7 +729,7 @@
                                                                     "argument": {"variable": "baseDef"},
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"project": {"field": "target", "typeName": "hydra.shacl.model.Definition"}},
+                                                                        "body": {"project": {"fieldName": "target", "typeName": "hydra.shacl.model.Definition"}},
                                                                         "type": {"variable": "hydra.shacl.model.Shape"}}}}},
                                                                 "typeScheme": {"body": {"variable": "hydra.shacl.model.Shape"}, "variables": []}},
                                                               {
@@ -788,7 +788,7 @@
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "baseNode"},
-                                                                    "function": {"project": {"field": "common", "typeName": "hydra.shacl.model.NodeShape"}}}},
+                                                                    "function": {"project": {"fieldName": "common", "typeName": "hydra.shacl.model.NodeShape"}}}},
                                                                 "typeScheme": {"body": {"variable": "hydra.shacl.model.CommonProperties"}, "variables": []}},
                                                               {
                                                                 "name": "mergedConstraints",
@@ -804,7 +804,7 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "argument": {"variable": "baseCommon"},
-                                                                            "function": {"project": {"field": "constraints", "typeName": "hydra.shacl.model.CommonProperties"}}}},
+                                                                            "function": {"project": {"fieldName": "constraints", "typeName": "hydra.shacl.model.CommonProperties"}}}},
                                                                         "function": {
                                                                           "typeApplication": {"body": {"variable": "hydra.lib.sets.union"}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}}}}}},
                                                                 "typeScheme": {"body": {"set": {"variable": "hydra.shacl.model.CommonConstraint"}}, "variables": []}},
@@ -819,43 +819,43 @@
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "baseCommon"},
-                                                                            "function": {"project": {"field": "deactivated", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
+                                                                            "function": {"project": {"fieldName": "deactivated", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
                                                                       {
                                                                         "name": "message",
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "baseCommon"},
-                                                                            "function": {"project": {"field": "message", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
+                                                                            "function": {"project": {"fieldName": "message", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
                                                                       {
                                                                         "name": "severity",
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "baseCommon"},
-                                                                            "function": {"project": {"field": "severity", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
+                                                                            "function": {"project": {"fieldName": "severity", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
                                                                       {
                                                                         "name": "targetClass",
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "baseCommon"},
-                                                                            "function": {"project": {"field": "targetClass", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
+                                                                            "function": {"project": {"fieldName": "targetClass", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
                                                                       {
                                                                         "name": "targetNode",
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "baseCommon"},
-                                                                            "function": {"project": {"field": "targetNode", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
+                                                                            "function": {"project": {"fieldName": "targetNode", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
                                                                       {
                                                                         "name": "targetObjectsOf",
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "baseCommon"},
-                                                                            "function": {"project": {"field": "targetObjectsOf", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
+                                                                            "function": {"project": {"fieldName": "targetObjectsOf", "typeName": "hydra.shacl.model.CommonProperties"}}}}},
                                                                       {
                                                                         "name": "targetSubjectsOf",
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "baseCommon"},
-                                                                            "function": {"project": {"field": "targetSubjectsOf", "typeName": "hydra.shacl.model.CommonProperties"}}}}}],
+                                                                            "function": {"project": {"fieldName": "targetSubjectsOf", "typeName": "hydra.shacl.model.CommonProperties"}}}}}],
                                                                     "typeName": "hydra.shacl.model.CommonProperties"}},
                                                                 "typeScheme": {"body": {"variable": "hydra.shacl.model.CommonProperties"}, "variables": []}},
                                                               {
@@ -880,7 +880,7 @@
                                                                             "argument": {"variable": "baseDef"},
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"project": {"field": "iri", "typeName": "hydra.shacl.model.Definition"}},
+                                                                                "body": {"project": {"fieldName": "iri", "typeName": "hydra.shacl.model.Definition"}},
                                                                                 "type": {"variable": "hydra.shacl.model.Shape"}}}}}},
                                                                       {"name": "target", "term": {"variable": "updatedShape"}}],
                                                                     "typeName": "hydra.shacl.model.Definition"}},
@@ -963,7 +963,7 @@
                                       "application": {
                                         "argument": {"variable": "pt"},
                                         "function": {
-                                          "typeApplication": {"body": {"project": {"field": "key", "typeName": "hydra.pg.model.PropertyType"}}, "type": {"variable": "t0"}}}}},
+                                          "typeApplication": {"body": {"project": {"fieldName": "key", "typeName": "hydra.pg.model.PropertyType"}}, "type": {"variable": "t0"}}}}},
                                     "typeScheme": {"body": {"variable": "hydra.pg.model.PropertyKey"}, "variables": []}},
                                   {
                                     "name": "path",
@@ -975,7 +975,7 @@
                                       "application": {
                                         "argument": {"variable": "pt"},
                                         "function": {
-                                          "typeApplication": {"body": {"project": {"field": "required", "typeName": "hydra.pg.model.PropertyType"}}, "type": {"variable": "t0"}}}}},
+                                          "typeApplication": {"body": {"project": {"fieldName": "required", "typeName": "hydra.pg.model.PropertyType"}}, "type": {"variable": "t0"}}}}},
                                     "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                   {
                                     "name": "dtIri",
@@ -985,7 +985,7 @@
                                           "application": {
                                             "argument": {"variable": "pt"},
                                             "function": {
-                                              "typeApplication": {"body": {"project": {"field": "value", "typeName": "hydra.pg.model.PropertyType"}}, "type": {"variable": "t0"}}}}},
+                                              "typeApplication": {"body": {"project": {"fieldName": "value", "typeName": "hydra.pg.model.PropertyType"}}, "type": {"variable": "t0"}}}}},
                                         "function": {"variable": "encodeType"}}},
                                     "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                                   {
@@ -1104,7 +1104,7 @@
                                           "application": {
                                             "argument": {"variable": "vt"},
                                             "function": {
-                                              "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.VertexType"}}, "type": {"variable": "t0"}}}}},
+                                              "typeApplication": {"body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.VertexType"}}, "type": {"variable": "t0"}}}}},
                                         "typeScheme": {"body": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}},
                                       {
                                         "name": "labelIri",
@@ -1116,7 +1116,7 @@
                                           "application": {
                                             "argument": {"variable": "vt"},
                                             "function": {
-                                              "typeApplication": {"body": {"project": {"field": "properties", "typeName": "hydra.pg.model.VertexType"}}, "type": {"variable": "t0"}}}}},
+                                              "typeApplication": {"body": {"project": {"fieldName": "properties", "typeName": "hydra.pg.model.VertexType"}}, "type": {"variable": "t0"}}}}},
                                         "typeScheme": {
                                           "body": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.PropertyType"}}}},
                                           "variables": []}},

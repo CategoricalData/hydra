@@ -904,7 +904,7 @@ encodeProjection :: TTermDefinition (Context -> Graph -> M.Map Name [(Name, Int)
 encodeProjection = def "encodeProjection" $
   "cx" ~> "g" ~> "fieldOffsets" ~> lambda "proj" $ lambda "scrutineeInstrs" $
     "typeName" <~ Core.projectionTypeName (var "proj") $
-    "fieldName" <~ Core.projectionField (var "proj") $
+    "fieldName" <~ Core.projectionFieldName (var "proj") $
     "mFields" <~ Maps.lookup (var "typeName") (var "fieldOffsets") $
     -- Compute the offset if the type is known and the field exists in it. Returns
     -- Maybe Int — Nothing if the type is unknown or the field name doesn't match

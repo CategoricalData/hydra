@@ -36,17 +36,17 @@
                                                       {
                                                         "name": "field",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"field": "field", "typeName": "hydra.core.Injection"}}}},
+                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"fieldName": "field", "typeName": "hydra.core.Injection"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Field"}, "variables": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                       {
                                                         "name": "variantMap",
@@ -905,17 +905,17 @@
                                                       {
                                                         "name": "field",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"field": "field", "typeName": "hydra.core.Injection"}}}},
+                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"fieldName": "field", "typeName": "hydra.core.Injection"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Field"}, "variables": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                       {
                                                         "name": "variantMap",
@@ -1198,17 +1198,17 @@
                                                       {
                                                         "name": "field",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"field": "field", "typeName": "hydra.core.Injection"}}}},
+                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"fieldName": "field", "typeName": "hydra.core.Injection"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Field"}, "variables": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                       {
                                                         "name": "variantMap",
@@ -1643,17 +1643,17 @@
                                                       {
                                                         "name": "field",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"field": "field", "typeName": "hydra.core.Injection"}}}},
+                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"fieldName": "field", "typeName": "hydra.core.Injection"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Field"}, "variables": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                       {
                                                         "name": "variantMap",
@@ -2722,17 +2722,17 @@
                                                       {
                                                         "name": "field",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"field": "field", "typeName": "hydra.core.Injection"}}}},
+                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"fieldName": "field", "typeName": "hydra.core.Injection"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Field"}, "variables": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                       {
                                                         "name": "variantMap",
@@ -3573,17 +3573,17 @@
                                                       {
                                                         "name": "field",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"field": "field", "typeName": "hydra.core.Injection"}}}},
+                                                          "application": {"argument": {"variable": "inj"}, "function": {"project": {"fieldName": "field", "typeName": "hydra.core.Injection"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Field"}, "variables": []}},
                                                       {
                                                         "name": "fname",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}},
                                                       {
                                                         "name": "fterm",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}},
+                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Field"}}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                       {
                                                         "name": "variantMap",
@@ -4059,7 +4059,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "wrappedTerm"},
-                                                            "function": {"project": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}},
+                                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.core.WrappedTerm"}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "cx"},

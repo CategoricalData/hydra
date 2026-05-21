@@ -190,7 +190,9 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesByteString"}}, "typeName": "hydra.core.Name"}}}],
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "usesByteString"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -252,7 +254,7 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesInt"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesInt"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -315,7 +317,7 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesMap"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesMap"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -380,7 +382,7 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesSet"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesSet"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -476,7 +478,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesInt"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesInt"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -511,7 +513,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesMap"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesMap"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -546,7 +548,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesSet"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesSet"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -648,7 +650,9 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesByteString"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "usesByteString"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -691,7 +695,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesMap"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesMap"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -726,7 +730,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesSet"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesSet"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -830,7 +834,9 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesByteString"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "usesByteString"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -865,7 +871,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesInt"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesInt"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -908,7 +914,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesSet"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesSet"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1016,7 +1022,9 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesByteString"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "usesByteString"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1051,7 +1059,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesInt"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesInt"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1086,7 +1094,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.haskell.environment.HaskellModuleMetadata"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "usesMap"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "usesMap"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {

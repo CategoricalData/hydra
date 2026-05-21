@@ -184,7 +184,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "indent", "typeName": "hydra.ast.BlockStyle"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "indent", "typeName": "hydra.ast.BlockStyle"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -227,7 +227,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "newlineBeforeContent", "typeName": "hydra.ast.BlockStyle"}}}},
+                                                  "function": {"project": {"fieldName": "newlineBeforeContent", "typeName": "hydra.ast.BlockStyle"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -252,7 +252,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "newlineAfterContent", "typeName": "hydra.ast.BlockStyle"}}}},
+                                                  "function": {"project": {"fieldName": "newlineAfterContent", "typeName": "hydra.ast.BlockStyle"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -302,7 +302,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "brackets", "typeName": "hydra.ast.BracketExpr"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "brackets", "typeName": "hydra.ast.BracketExpr"}}}},
                                               "function": {"variable": "hydra.encode.ast.brackets"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -314,7 +314,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "enclosed", "typeName": "hydra.ast.BracketExpr"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "enclosed", "typeName": "hydra.ast.BracketExpr"}}}},
                                               "function": {"variable": "hydra.encode.ast.expr"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -326,7 +326,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "style", "typeName": "hydra.ast.BracketExpr"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "style", "typeName": "hydra.ast.BracketExpr"}}}},
                                               "function": {"variable": "hydra.encode.ast.blockStyle"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -367,7 +367,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "open", "typeName": "hydra.ast.Brackets"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "open", "typeName": "hydra.ast.Brackets"}}}},
                                               "function": {"variable": "hydra.encode.ast.symbol"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -379,7 +379,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "close", "typeName": "hydra.ast.Brackets"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "close", "typeName": "hydra.ast.Brackets"}}}},
                                               "function": {"variable": "hydra.encode.ast.symbol"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -666,7 +666,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "style", "typeName": "hydra.ast.IndentedExpression"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "style", "typeName": "hydra.ast.IndentedExpression"}}}},
                                               "function": {"variable": "hydra.encode.ast.indentStyle"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -678,7 +680,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "expr", "typeName": "hydra.ast.IndentedExpression"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "expr", "typeName": "hydra.ast.IndentedExpression"}}}},
                                               "function": {"variable": "hydra.encode.ast.expr"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -717,7 +721,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "symbol", "typeName": "hydra.ast.Op"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "symbol", "typeName": "hydra.ast.Op"}}}},
                                               "function": {"variable": "hydra.encode.ast.symbol"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -729,7 +733,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "padding", "typeName": "hydra.ast.Op"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "padding", "typeName": "hydra.ast.Op"}}}},
                                               "function": {"variable": "hydra.encode.ast.padding"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -741,7 +745,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "precedence", "typeName": "hydra.ast.Op"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "precedence", "typeName": "hydra.ast.Op"}}}},
                                               "function": {"variable": "hydra.encode.ast.precedence"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -753,7 +757,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "associativity", "typeName": "hydra.ast.Op"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "associativity", "typeName": "hydra.ast.Op"}}}},
                                               "function": {"variable": "hydra.encode.ast.associativity"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -794,7 +798,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "op", "typeName": "hydra.ast.OpExpr"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "op", "typeName": "hydra.ast.OpExpr"}}}},
                                               "function": {"variable": "hydra.encode.ast.op"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -806,7 +810,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "lhs", "typeName": "hydra.ast.OpExpr"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "lhs", "typeName": "hydra.ast.OpExpr"}}}},
                                               "function": {"variable": "hydra.encode.ast.expr"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -818,7 +822,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "rhs", "typeName": "hydra.ast.OpExpr"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "rhs", "typeName": "hydra.ast.OpExpr"}}}},
                                               "function": {"variable": "hydra.encode.ast.expr"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -859,7 +863,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "left", "typeName": "hydra.ast.Padding"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "left", "typeName": "hydra.ast.Padding"}}}},
                                               "function": {"variable": "hydra.encode.ast.ws"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -871,7 +875,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "right", "typeName": "hydra.ast.Padding"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "right", "typeName": "hydra.ast.Padding"}}}},
                                               "function": {"variable": "hydra.encode.ast.ws"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -957,7 +961,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "op", "typeName": "hydra.ast.SeqExpr"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "op", "typeName": "hydra.ast.SeqExpr"}}}},
                                               "function": {"variable": "hydra.encode.ast.op"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -969,7 +973,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "elements", "typeName": "hydra.ast.SeqExpr"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "elements", "typeName": "hydra.ast.SeqExpr"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {

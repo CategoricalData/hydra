@@ -26,7 +26,7 @@ arrayItems x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Array"),
-        Core.projectionField = (Core.Name "items")})),
+        Core.projectionFieldName = (Core.Name "items")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayWithItems :: Phantoms.TTerm Schema.Array -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Schema.Array
@@ -55,7 +55,7 @@ enumDefault x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Enum"),
-        Core.projectionField = (Core.Name "default")})),
+        Core.projectionFieldName = (Core.Name "default")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumSymbols :: Phantoms.TTerm Schema.Enum -> Phantoms.TTerm [String]
@@ -63,7 +63,7 @@ enumSymbols x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Enum"),
-        Core.projectionField = (Core.Name "symbols")})),
+        Core.projectionFieldName = (Core.Name "symbols")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumWithDefault :: Phantoms.TTerm Schema.Enum -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Schema.Enum
@@ -76,7 +76,7 @@ enumWithDefault original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Enum"),
-              Core.projectionField = (Core.Name "symbols")})),
+              Core.projectionFieldName = (Core.Name "symbols")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
@@ -95,7 +95,7 @@ enumWithSymbols original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Enum"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 field :: Phantoms.TTerm String -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm (Maybe Model.Value) -> Phantoms.TTerm (Maybe Schema.Order) -> Phantoms.TTerm (Maybe [String]) -> Phantoms.TTerm (M.Map String Model.Value) -> Phantoms.TTerm Schema.Field
@@ -130,7 +130,7 @@ fieldAliases x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-        Core.projectionField = (Core.Name "aliases")})),
+        Core.projectionFieldName = (Core.Name "aliases")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldAnnotations :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm (M.Map String Model.Value)
@@ -138,7 +138,7 @@ fieldAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-        Core.projectionField = (Core.Name "annotations")})),
+        Core.projectionFieldName = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldDefault :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm (Maybe Model.Value)
@@ -146,7 +146,7 @@ fieldDefault x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-        Core.projectionField = (Core.Name "default")})),
+        Core.projectionFieldName = (Core.Name "default")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldDoc :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm (Maybe String)
@@ -154,7 +154,7 @@ fieldDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldName :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm String
@@ -162,7 +162,7 @@ fieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldOrder :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm (Maybe Schema.Order)
@@ -170,7 +170,7 @@ fieldOrder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-        Core.projectionField = (Core.Name "order")})),
+        Core.projectionFieldName = (Core.Name "order")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldType :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm Schema.Schema
@@ -178,7 +178,7 @@ fieldType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldWithAliases :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm (Maybe [String]) -> Phantoms.TTerm Schema.Field
@@ -191,35 +191,35 @@ fieldWithAliases original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "order")})),
+              Core.projectionFieldName = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
@@ -229,7 +229,7 @@ fieldWithAliases original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldWithAnnotations :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm (M.Map String Model.Value) -> Phantoms.TTerm Schema.Field
@@ -242,42 +242,42 @@ fieldWithAnnotations original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "order")})),
+              Core.projectionFieldName = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
@@ -293,21 +293,21 @@ fieldWithDefault original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
@@ -317,21 +317,21 @@ fieldWithDefault original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "order")})),
+              Core.projectionFieldName = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldWithDoc :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Schema.Field
@@ -344,7 +344,7 @@ fieldWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -354,35 +354,35 @@ fieldWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "order")})),
+              Core.projectionFieldName = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldWithName :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm String -> Phantoms.TTerm Schema.Field
@@ -398,42 +398,42 @@ fieldWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "order")})),
+              Core.projectionFieldName = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldWithOrder :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm (Maybe Schema.Order) -> Phantoms.TTerm Schema.Field
@@ -446,28 +446,28 @@ fieldWithOrder original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
@@ -477,14 +477,14 @@ fieldWithOrder original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldWithType :: Phantoms.TTerm Schema.Field -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Schema.Field
@@ -497,14 +497,14 @@ fieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -514,28 +514,28 @@ fieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "order")})),
+              Core.projectionFieldName = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Field"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fixed :: Phantoms.TTerm Int -> Phantoms.TTerm Schema.Fixed
@@ -552,7 +552,7 @@ fixedSize x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Fixed"),
-        Core.projectionField = (Core.Name "size")})),
+        Core.projectionFieldName = (Core.Name "size")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fixedWithSize :: Phantoms.TTerm Schema.Fixed -> Phantoms.TTerm Int -> Phantoms.TTerm Schema.Fixed
@@ -578,7 +578,7 @@ mapValues x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Map"),
-        Core.projectionField = (Core.Name "values")})),
+        Core.projectionFieldName = (Core.Name "values")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapWithValues :: Phantoms.TTerm Schema.Map -> Phantoms.TTerm Schema.Schema -> Phantoms.TTerm Schema.Map
@@ -619,7 +619,7 @@ namedAliases x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-        Core.projectionField = (Core.Name "aliases")})),
+        Core.projectionFieldName = (Core.Name "aliases")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 namedAnnotations :: Phantoms.TTerm Schema.Named -> Phantoms.TTerm (M.Map String Model.Value)
@@ -627,7 +627,7 @@ namedAnnotations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-        Core.projectionField = (Core.Name "annotations")})),
+        Core.projectionFieldName = (Core.Name "annotations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 namedDoc :: Phantoms.TTerm Schema.Named -> Phantoms.TTerm (Maybe String)
@@ -635,7 +635,7 @@ namedDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 namedName :: Phantoms.TTerm Schema.Named -> Phantoms.TTerm String
@@ -643,7 +643,7 @@ namedName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 namedNamespace :: Phantoms.TTerm Schema.Named -> Phantoms.TTerm (Maybe String)
@@ -651,7 +651,7 @@ namedNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 namedType :: Phantoms.TTerm Schema.Named -> Phantoms.TTerm Schema.NamedType
@@ -659,7 +659,7 @@ namedType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 namedTypeEnum :: Phantoms.TTerm Schema.Enum -> Phantoms.TTerm Schema.NamedType
@@ -696,14 +696,14 @@ namedWithAliases original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
@@ -713,21 +713,21 @@ namedWithAliases original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 namedWithAnnotations :: Phantoms.TTerm Schema.Named -> Phantoms.TTerm (M.Map String Model.Value) -> Phantoms.TTerm Schema.Named
@@ -740,35 +740,35 @@ namedWithAnnotations original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
@@ -784,21 +784,21 @@ namedWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -808,14 +808,14 @@ namedWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 namedWithName :: Phantoms.TTerm Schema.Named -> Phantoms.TTerm String -> Phantoms.TTerm Schema.Named
@@ -831,35 +831,35 @@ namedWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 namedWithNamespace :: Phantoms.TTerm Schema.Named -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Schema.Named
@@ -872,7 +872,7 @@ namedWithNamespace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
@@ -882,28 +882,28 @@ namedWithNamespace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annotations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 namedWithType :: Phantoms.TTerm Schema.Named -> Phantoms.TTerm Schema.NamedType -> Phantoms.TTerm Schema.Named
@@ -916,28 +916,28 @@ namedWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "namespace"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "aliases"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "aliases")})),
+              Core.projectionFieldName = (Core.Name "aliases")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -947,7 +947,7 @@ namedWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.avro.schema.Named"),
-              Core.projectionField = (Core.Name "annotations")})),
+              Core.projectionFieldName = (Core.Name "annotations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 orderAscending :: Phantoms.TTerm Schema.Order
@@ -1052,7 +1052,7 @@ recordFields x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.avro.schema.Record"),
-        Core.projectionField = (Core.Name "fields")})),
+        Core.projectionFieldName = (Core.Name "fields")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recordWithFields :: Phantoms.TTerm Schema.Record -> Phantoms.TTerm [Schema.Field] -> Phantoms.TTerm Schema.Record

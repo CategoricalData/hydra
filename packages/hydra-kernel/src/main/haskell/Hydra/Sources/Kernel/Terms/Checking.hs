@@ -736,7 +736,7 @@ typeOfProjection = define "typeOfProjection" $
   doc "Reconstruct the type of a record projection (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "p" ~>
   "tname" <~ Core.projectionTypeName (var "p") $
-  "fname" <~ Core.projectionField (var "p") $
+  "fname" <~ Core.projectionFieldName (var "p") $
   "schemaResult" <<~ Resolution.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $

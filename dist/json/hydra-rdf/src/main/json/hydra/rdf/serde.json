@@ -570,21 +570,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "lit"},
-                            "function": {"project": {"field": "lexicalForm", "typeName": "hydra.rdf.syntax.Literal"}}}},
+                            "function": {"project": {"fieldName": "lexicalForm", "typeName": "hydra.rdf.syntax.Literal"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "dt",
                         "term": {
                           "application": {
                             "argument": {"variable": "lit"},
-                            "function": {"project": {"field": "datatypeIri", "typeName": "hydra.rdf.syntax.Literal"}}}},
+                            "function": {"project": {"fieldName": "datatypeIri", "typeName": "hydra.rdf.syntax.Literal"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                       {
                         "name": "lang",
                         "term": {
                           "application": {
                             "argument": {"variable": "lit"},
-                            "function": {"project": {"field": "languageTag", "typeName": "hydra.rdf.syntax.Literal"}}}},
+                            "function": {"project": {"fieldName": "languageTag", "typeName": "hydra.rdf.syntax.Literal"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "variables": []}},
                       {
                         "name": "lexExpr",
@@ -720,17 +720,21 @@
                       {
                         "name": "subj",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "subject", "typeName": "hydra.rdf.syntax.Triple"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "subject", "typeName": "hydra.rdf.syntax.Triple"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
                       {
                         "name": "pred",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "predicate", "typeName": "hydra.rdf.syntax.Triple"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "predicate", "typeName": "hydra.rdf.syntax.Triple"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                       {
                         "name": "obj",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "object", "typeName": "hydra.rdf.syntax.Triple"}}}},
+                          "application": {"argument": {"variable": "t"}, "function": {"project": {"fieldName": "object", "typeName": "hydra.rdf.syntax.Triple"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}}],
                     "body": {
                       "application": {

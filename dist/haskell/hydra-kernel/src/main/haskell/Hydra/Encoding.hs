@@ -358,7 +358,7 @@ encodeRecordTypeNamed ename rt =
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermProject (Core.Projection {
                             Core.projectionTypeName = tname,
-                            Core.projectionField = (Core.fieldTypeName ft)})),
+                            Core.projectionFieldName = (Core.fieldTypeName ft)})),
                           Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})) ename rt) rt))}]}))}}))})
 -- | Generate an encoder for a set type
 encodeSetType :: Core.Type -> Core.Term

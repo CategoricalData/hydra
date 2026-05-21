@@ -27,7 +27,7 @@ conflictingModuleNamespaceErrorFirst x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"),
-        Core.projectionField = (Core.Name "first")})),
+        Core.projectionFieldName = (Core.Name "first")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the second field of hydra.error.packaging.ConflictingModuleNamespaceError
 conflictingModuleNamespaceErrorSecond :: Phantoms.TTerm ErrorPackaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Packaging.Namespace
@@ -35,7 +35,7 @@ conflictingModuleNamespaceErrorSecond x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"),
-        Core.projectionField = (Core.Name "second")})),
+        Core.projectionFieldName = (Core.Name "second")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the first field of hydra.error.packaging.ConflictingModuleNamespaceError
 conflictingModuleNamespaceErrorWithFirst :: Phantoms.TTerm ErrorPackaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm ErrorPackaging.ConflictingModuleNamespaceError
@@ -51,7 +51,7 @@ conflictingModuleNamespaceErrorWithFirst original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"),
-              Core.projectionField = (Core.Name "second")})),
+              Core.projectionFieldName = (Core.Name "second")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the second field of hydra.error.packaging.ConflictingModuleNamespaceError
 conflictingModuleNamespaceErrorWithSecond :: Phantoms.TTerm ErrorPackaging.ConflictingModuleNamespaceError -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm ErrorPackaging.ConflictingModuleNamespaceError
@@ -64,7 +64,7 @@ conflictingModuleNamespaceErrorWithSecond original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"),
-              Core.projectionField = (Core.Name "first")})),
+              Core.projectionFieldName = (Core.Name "first")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "second"),
@@ -93,7 +93,7 @@ conflictingVariantNameErrorConflictingName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-        Core.projectionField = (Core.Name "conflictingName")})),
+        Core.projectionFieldName = (Core.Name "conflictingName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the namespace field of hydra.error.packaging.ConflictingVariantNameError
 conflictingVariantNameErrorNamespace :: Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError -> Phantoms.TTerm Packaging.Namespace
@@ -101,7 +101,7 @@ conflictingVariantNameErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeName field of hydra.error.packaging.ConflictingVariantNameError
 conflictingVariantNameErrorTypeName :: Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError -> Phantoms.TTerm Core.Name
@@ -109,7 +109,7 @@ conflictingVariantNameErrorTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the variantName field of hydra.error.packaging.ConflictingVariantNameError
 conflictingVariantNameErrorVariantName :: Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError -> Phantoms.TTerm Core.Name
@@ -117,7 +117,7 @@ conflictingVariantNameErrorVariantName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-        Core.projectionField = (Core.Name "variantName")})),
+        Core.projectionFieldName = (Core.Name "variantName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the conflictingName field of hydra.error.packaging.ConflictingVariantNameError
 conflictingVariantNameErrorWithConflictingName :: Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError
@@ -130,21 +130,21 @@ conflictingVariantNameErrorWithConflictingName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variantName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "variantName")})),
+              Core.projectionFieldName = (Core.Name "variantName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "conflictingName"),
@@ -163,21 +163,21 @@ conflictingVariantNameErrorWithNamespace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variantName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "variantName")})),
+              Core.projectionFieldName = (Core.Name "variantName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "conflictingName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "conflictingName")})),
+              Core.projectionFieldName = (Core.Name "conflictingName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeName field of hydra.error.packaging.ConflictingVariantNameError
 conflictingVariantNameErrorWithTypeName :: Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError
@@ -190,7 +190,7 @@ conflictingVariantNameErrorWithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
@@ -200,14 +200,14 @@ conflictingVariantNameErrorWithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "variantName")})),
+              Core.projectionFieldName = (Core.Name "variantName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "conflictingName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "conflictingName")})),
+              Core.projectionFieldName = (Core.Name "conflictingName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the variantName field of hydra.error.packaging.ConflictingVariantNameError
 conflictingVariantNameErrorWithVariantName :: Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError
@@ -220,14 +220,14 @@ conflictingVariantNameErrorWithVariantName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variantName"),
@@ -237,7 +237,7 @@ conflictingVariantNameErrorWithVariantName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-              Core.projectionField = (Core.Name "conflictingName")})),
+              Core.projectionFieldName = (Core.Name "conflictingName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.packaging.DefinitionNotInModuleNamespaceError
 definitionNotInModuleNamespaceError :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.DefinitionNotInModuleNamespaceError
@@ -257,7 +257,7 @@ definitionNotInModuleNamespaceErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the namespace field of hydra.error.packaging.DefinitionNotInModuleNamespaceError
 definitionNotInModuleNamespaceErrorNamespace :: Phantoms.TTerm ErrorPackaging.DefinitionNotInModuleNamespaceError -> Phantoms.TTerm Packaging.Namespace
@@ -265,7 +265,7 @@ definitionNotInModuleNamespaceErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.error.packaging.DefinitionNotInModuleNamespaceError
 definitionNotInModuleNamespaceErrorWithName :: Phantoms.TTerm ErrorPackaging.DefinitionNotInModuleNamespaceError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.DefinitionNotInModuleNamespaceError
@@ -278,7 +278,7 @@ definitionNotInModuleNamespaceErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -297,7 +297,7 @@ definitionNotInModuleNamespaceErrorWithNamespace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.packaging.DefinitionsOutOfOrderError
 definitionsOutOfOrderError :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.DefinitionsOutOfOrderError
@@ -320,7 +320,7 @@ definitionsOutOfOrderErrorFollowingName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-        Core.projectionField = (Core.Name "followingName")})),
+        Core.projectionFieldName = (Core.Name "followingName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the namespace field of hydra.error.packaging.DefinitionsOutOfOrderError
 definitionsOutOfOrderErrorNamespace :: Phantoms.TTerm ErrorPackaging.DefinitionsOutOfOrderError -> Phantoms.TTerm Packaging.Namespace
@@ -328,7 +328,7 @@ definitionsOutOfOrderErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the precedingName field of hydra.error.packaging.DefinitionsOutOfOrderError
 definitionsOutOfOrderErrorPrecedingName :: Phantoms.TTerm ErrorPackaging.DefinitionsOutOfOrderError -> Phantoms.TTerm Core.Name
@@ -336,7 +336,7 @@ definitionsOutOfOrderErrorPrecedingName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-        Core.projectionField = (Core.Name "precedingName")})),
+        Core.projectionFieldName = (Core.Name "precedingName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the followingName field of hydra.error.packaging.DefinitionsOutOfOrderError
 definitionsOutOfOrderErrorWithFollowingName :: Phantoms.TTerm ErrorPackaging.DefinitionsOutOfOrderError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.DefinitionsOutOfOrderError
@@ -349,14 +349,14 @@ definitionsOutOfOrderErrorWithFollowingName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "precedingName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-              Core.projectionField = (Core.Name "precedingName")})),
+              Core.projectionFieldName = (Core.Name "precedingName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "followingName"),
@@ -375,14 +375,14 @@ definitionsOutOfOrderErrorWithNamespace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-              Core.projectionField = (Core.Name "precedingName")})),
+              Core.projectionFieldName = (Core.Name "precedingName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "followingName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-              Core.projectionField = (Core.Name "followingName")})),
+              Core.projectionFieldName = (Core.Name "followingName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the precedingName field of hydra.error.packaging.DefinitionsOutOfOrderError
 definitionsOutOfOrderErrorWithPrecedingName :: Phantoms.TTerm ErrorPackaging.DefinitionsOutOfOrderError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.DefinitionsOutOfOrderError
@@ -395,7 +395,7 @@ definitionsOutOfOrderErrorWithPrecedingName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "precedingName"),
@@ -405,7 +405,7 @@ definitionsOutOfOrderErrorWithPrecedingName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-              Core.projectionField = (Core.Name "followingName")})),
+              Core.projectionFieldName = (Core.Name "followingName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.packaging.DuplicateDefinitionNameError
 duplicateDefinitionNameError :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.DuplicateDefinitionNameError
@@ -425,7 +425,7 @@ duplicateDefinitionNameErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the namespace field of hydra.error.packaging.DuplicateDefinitionNameError
 duplicateDefinitionNameErrorNamespace :: Phantoms.TTerm ErrorPackaging.DuplicateDefinitionNameError -> Phantoms.TTerm Packaging.Namespace
@@ -433,7 +433,7 @@ duplicateDefinitionNameErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.error.packaging.DuplicateDefinitionNameError
 duplicateDefinitionNameErrorWithName :: Phantoms.TTerm ErrorPackaging.DuplicateDefinitionNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.DuplicateDefinitionNameError
@@ -446,7 +446,7 @@ duplicateDefinitionNameErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -465,7 +465,7 @@ duplicateDefinitionNameErrorWithNamespace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.packaging.DuplicateModuleNamespaceError
 duplicateModuleNamespaceError :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm ErrorPackaging.DuplicateModuleNamespaceError
@@ -482,7 +482,7 @@ duplicateModuleNamespaceErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateModuleNamespaceError"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the namespace field of hydra.error.packaging.DuplicateModuleNamespaceError
 duplicateModuleNamespaceErrorWithNamespace :: Phantoms.TTerm ErrorPackaging.DuplicateModuleNamespaceError -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm ErrorPackaging.DuplicateModuleNamespaceError
@@ -514,7 +514,7 @@ invalidDefinitionNameErrorExpectedConvention x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-        Core.projectionField = (Core.Name "expectedConvention")})),
+        Core.projectionFieldName = (Core.Name "expectedConvention")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.packaging.InvalidDefinitionNameError
 invalidDefinitionNameErrorName :: Phantoms.TTerm ErrorPackaging.InvalidDefinitionNameError -> Phantoms.TTerm Core.Name
@@ -522,7 +522,7 @@ invalidDefinitionNameErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the namespace field of hydra.error.packaging.InvalidDefinitionNameError
 invalidDefinitionNameErrorNamespace :: Phantoms.TTerm ErrorPackaging.InvalidDefinitionNameError -> Phantoms.TTerm Packaging.Namespace
@@ -530,7 +530,7 @@ invalidDefinitionNameErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the expectedConvention field of hydra.error.packaging.InvalidDefinitionNameError
 invalidDefinitionNameErrorWithExpectedConvention :: Phantoms.TTerm ErrorPackaging.InvalidDefinitionNameError -> Phantoms.TTerm Util.CaseConvention -> Phantoms.TTerm ErrorPackaging.InvalidDefinitionNameError
@@ -543,14 +543,14 @@ invalidDefinitionNameErrorWithExpectedConvention original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedConvention"),
@@ -566,7 +566,7 @@ invalidDefinitionNameErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -576,7 +576,7 @@ invalidDefinitionNameErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-              Core.projectionField = (Core.Name "expectedConvention")})),
+              Core.projectionFieldName = (Core.Name "expectedConvention")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the namespace field of hydra.error.packaging.InvalidDefinitionNameError
 invalidDefinitionNameErrorWithNamespace :: Phantoms.TTerm ErrorPackaging.InvalidDefinitionNameError -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm ErrorPackaging.InvalidDefinitionNameError
@@ -592,14 +592,14 @@ invalidDefinitionNameErrorWithNamespace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expectedConvention"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-              Core.projectionField = (Core.Name "expectedConvention")})),
+              Core.projectionFieldName = (Core.Name "expectedConvention")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the conflictingVariantName variant of hydra.error.packaging.InvalidModuleError
 invalidModuleErrorConflictingVariantName :: Phantoms.TTerm ErrorPackaging.ConflictingVariantNameError -> Phantoms.TTerm ErrorPackaging.InvalidModuleError
@@ -672,7 +672,7 @@ invalidNamespaceConventionErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidNamespaceConventionError"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the namespace field of hydra.error.packaging.InvalidNamespaceConventionError
 invalidNamespaceConventionErrorWithNamespace :: Phantoms.TTerm ErrorPackaging.InvalidNamespaceConventionError -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm ErrorPackaging.InvalidNamespaceConventionError
@@ -730,7 +730,7 @@ invalidPackageNameErrorPackageName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidPackageNameError"),
-        Core.projectionField = (Core.Name "packageName")})),
+        Core.projectionFieldName = (Core.Name "packageName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the packageName field of hydra.error.packaging.InvalidPackageNameError
 invalidPackageNameErrorWithPackageName :: Phantoms.TTerm ErrorPackaging.InvalidPackageNameError -> Phantoms.TTerm Packaging.PackageName -> Phantoms.TTerm ErrorPackaging.InvalidPackageNameError
@@ -759,7 +759,7 @@ missingDocumentationErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.MissingDocumentationError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the namespace field of hydra.error.packaging.MissingDocumentationError
 missingDocumentationErrorNamespace :: Phantoms.TTerm ErrorPackaging.MissingDocumentationError -> Phantoms.TTerm Packaging.Namespace
@@ -767,7 +767,7 @@ missingDocumentationErrorNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.packaging.MissingDocumentationError"),
-        Core.projectionField = (Core.Name "namespace")})),
+        Core.projectionFieldName = (Core.Name "namespace")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.error.packaging.MissingDocumentationError
 missingDocumentationErrorWithName :: Phantoms.TTerm ErrorPackaging.MissingDocumentationError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorPackaging.MissingDocumentationError
@@ -780,7 +780,7 @@ missingDocumentationErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.MissingDocumentationError"),
-              Core.projectionField = (Core.Name "namespace")})),
+              Core.projectionFieldName = (Core.Name "namespace")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -799,5 +799,5 @@ missingDocumentationErrorWithNamespace original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.packaging.MissingDocumentationError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
