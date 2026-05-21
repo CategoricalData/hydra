@@ -223,8 +223,12 @@ step_cache_record() {
 
 # Standard GHC runtime flags for code-generation executables.
 # Raises heap and allocation-area sizes to handle large module sets.
-# -M5G caps the max heap so a runaway pass fails with a visible
-# "heap overflow" instead of being SIGKILL'd silently by a 7 GB GH
-# runner (three consecutive CI runs in 2026-05 hit silent cancels
-# inside update-json-main's kernel validation with no error message).
-RTS_FLAGS="+RTS -K256M -A32M -M5G -RTS"
+# -M6G caps the max heap below the 7 GB GH-runner limit so a runaway
+# pass fails with a visible "heap overflow" instead of being silently
+# SIGKILL'd by the OOM killer. The first cap at -M5G surfaced the
+# real cause: update-json-main's full-inference path
+# (Hydra.Inference.writeModulesJson) blows past 5 GB on CI; 6 GB is
+# the temporary headroom until per-module incremental inference is
+# wired through writeModulesJson (see project memory
+# incremental_inference_wiring; tracks the #247 follow-up).
+RTS_FLAGS="+RTS -K256M -A32M -M6G -RTS"
