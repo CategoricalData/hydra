@@ -14,12 +14,16 @@
                       {
                         "name": "ltyp",
                         "term": {
-                          "application": {"argument": {"variable": "tc"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                          "application": {
+                            "argument": {"variable": "tc"},
+                            "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                         "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}},
                       {
                         "name": "rtyp",
                         "term": {
-                          "application": {"argument": {"variable": "tc"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                          "application": {
+                            "argument": {"variable": "tc"},
+                            "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                         "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                     "body": {
                       "application": {

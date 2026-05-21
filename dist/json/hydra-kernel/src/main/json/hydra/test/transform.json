@@ -207,7 +207,9 @@
                         "argument": {
                           "application": {
                             "argument": {
-                              "application": {"argument": {"variable": "tg"}, "function": {"project": {"field": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
+                              "application": {
+                                "argument": {"variable": "tg"},
+                                "function": {"project": {"fieldName": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -224,7 +226,7 @@
                     "function": {
                       "application": {
                         "argument": {
-                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"field": "cases", "typeName": "hydra.testing.TestGroup"}}}},
+                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"fieldName": "cases", "typeName": "hydra.testing.TestGroup"}}}},
                         "function": {
                           "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}}}},
                 "domain": {"variable": "hydra.testing.TestGroup"},
@@ -554,24 +556,30 @@
                       {
                         "name": "description",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "description", "typeName": "hydra.packaging.Module"}}}}},
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
                       {
                         "name": "namespace",
                         "term": {
                           "application": {
                             "argument": {
-                              "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                              "application": {
+                                "argument": {"variable": "m"},
+                                "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                             "function": {"variable": "hydra.test.transform.addGenerationPrefix"}}}},
                       {
                         "name": "dependencies",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Module"}}}}},
+                            "function": {"project": {"fieldName": "dependencies", "typeName": "hydra.packaging.Module"}}}}},
                       {
                         "name": "definitions",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}}}],
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}}}],
                     "typeName": "hydra.packaging.Module"}},
                 "domain": {"variable": "hydra.packaging.Module"},
                 "parameter": "m"}}}},
@@ -606,24 +614,26 @@
                       {
                         "name": "name_",
                         "term": {
-                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}},
+                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.testing.TestGroup"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "desc",
                         "term": {
                           "application": {
                             "argument": {"variable": "tg"},
-                            "function": {"project": {"field": "description", "typeName": "hydra.testing.TestGroup"}}}},
+                            "function": {"project": {"fieldName": "description", "typeName": "hydra.testing.TestGroup"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "subgroups",
                         "term": {
-                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"field": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
+                          "application": {
+                            "argument": {"variable": "tg"},
+                            "function": {"project": {"fieldName": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.testing.TestGroup"}}, "variables": []}},
                       {
                         "name": "cases_",
                         "term": {
-                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"field": "cases", "typeName": "hydra.testing.TestGroup"}}}},
+                          "application": {"argument": {"variable": "tg"}, "function": {"project": {"fieldName": "cases", "typeName": "hydra.testing.TestGroup"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}, "variables": []}},
                       {
                         "name": "transformedCases",

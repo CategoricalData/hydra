@@ -140,7 +140,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "description", "typeName": "hydra.packaging.Module"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -179,7 +181,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                                               "function": {"variable": "hydra.encode.packaging.namespace"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -193,7 +197,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Module"}}}},
+                                                  "function": {"project": {"fieldName": "dependencies", "typeName": "hydra.packaging.Module"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -224,7 +228,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -285,7 +291,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "module", "typeName": "hydra.packaging.ModuleDependency"}}}},
+                                                  "function": {"project": {"fieldName": "module", "typeName": "hydra.packaging.ModuleDependency"}}}},
                                               "function": {"variable": "hydra.encode.packaging.namespace"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -299,7 +305,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "package", "typeName": "hydra.packaging.ModuleDependency"}}}},
+                                                  "function": {"project": {"fieldName": "package", "typeName": "hydra.packaging.ModuleDependency"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -398,7 +404,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "name", "typeName": "hydra.packaging.Package"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Package"}}}},
                                               "function": {"variable": "hydra.encode.packaging.packageName"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -410,7 +416,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "modules", "typeName": "hydra.packaging.Package"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "modules", "typeName": "hydra.packaging.Package"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -442,7 +450,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "dependencies", "typeName": "hydra.packaging.Package"}}}},
+                                                  "function": {"project": {"fieldName": "dependencies", "typeName": "hydra.packaging.Package"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -475,7 +483,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "description", "typeName": "hydra.packaging.Package"}}}},
+                                                  "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Package"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -545,7 +553,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.packaging.PackageDependency"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.PackageDependency"}}}},
                                               "function": {"variable": "hydra.encode.packaging.packageName"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -559,7 +567,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "version", "typeName": "hydra.packaging.PackageDependency"}}}},
+                                                  "function": {"project": {"fieldName": "version", "typeName": "hydra.packaging.PackageDependency"}}}},
                                               "function": {"variable": "hydra.encode.packaging.packageVersionSpecifier"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -691,7 +699,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                                  "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -723,7 +731,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                                  "function": {"project": {"fieldName": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -775,7 +783,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.TermDefinition"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -789,7 +797,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "term", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                  "function": {"project": {"fieldName": "term", "typeName": "hydra.packaging.TermDefinition"}}}},
                                               "function": {"variable": "hydra.encode.core.term"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -803,7 +811,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "typeScheme", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                  "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.packaging.TermDefinition"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -864,7 +872,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.packaging.TypeDefinition"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.TypeDefinition"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -878,7 +886,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "typeScheme", "typeName": "hydra.packaging.TypeDefinition"}}}},
+                                                  "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.packaging.TypeDefinition"}}}},
                                               "function": {"variable": "hydra.encode.core.typeScheme"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},

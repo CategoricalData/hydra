@@ -78,7 +78,7 @@
                                                         "application": {
                                                           "argument": {"variable": "x"},
                                                           "function": {
-                                                            "typeApplication": {"body": {"project": {"field": "name", "typeName": "hydra.relational.ColumnSchema"}}, "type": {"variable": "t0"}}}}},
+                                                            "typeApplication": {"body": {"project": {"fieldName": "name", "typeName": "hydra.relational.ColumnSchema"}}, "type": {"variable": "t0"}}}}},
                                                       "function": {"variable": "hydra.encode.relational.columnName"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
@@ -93,7 +93,7 @@
                                                         "application": {
                                                           "argument": {"variable": "x"},
                                                           "function": {
-                                                            "typeApplication": {"body": {"project": {"field": "domain", "typeName": "hydra.relational.ColumnSchema"}}, "type": {"variable": "t0"}}}}},
+                                                            "typeApplication": {"body": {"project": {"fieldName": "domain", "typeName": "hydra.relational.ColumnSchema"}}, "type": {"variable": "t0"}}}}},
                                                       "function": {"variable": "t"}}}}],
                                               "typeName": "hydra.core.Field"}}]}}],
                                   "typeName": "hydra.core.Record"}}},
@@ -145,7 +145,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "foreignRelation", "typeName": "hydra.relational.ForeignKey"}}}},
+                                                  "function": {"project": {"fieldName": "foreignRelation", "typeName": "hydra.relational.ForeignKey"}}}},
                                               "function": {"variable": "hydra.encode.relational.relationName"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -157,7 +157,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "keys", "typeName": "hydra.relational.ForeignKey"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "keys", "typeName": "hydra.relational.ForeignKey"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -392,7 +394,7 @@
                                                         "application": {
                                                           "argument": {"variable": "x"},
                                                           "function": {
-                                                            "typeApplication": {"body": {"project": {"field": "name", "typeName": "hydra.relational.RelationSchema"}}, "type": {"variable": "t0"}}}}},
+                                                            "typeApplication": {"body": {"project": {"fieldName": "name", "typeName": "hydra.relational.RelationSchema"}}, "type": {"variable": "t0"}}}}},
                                                       "function": {"variable": "hydra.encode.relational.relationName"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
@@ -407,7 +409,9 @@
                                                         "application": {
                                                           "argument": {"variable": "x"},
                                                           "function": {
-                                                            "typeApplication": {"body": {"project": {"field": "columns", "typeName": "hydra.relational.RelationSchema"}}, "type": {"variable": "t0"}}}}},
+                                                            "typeApplication": {
+                                                              "body": {"project": {"fieldName": "columns", "typeName": "hydra.relational.RelationSchema"}},
+                                                              "type": {"variable": "t0"}}}}},
                                                       "function": {
                                                         "lambda": {
                                                           "body": {
@@ -447,7 +451,7 @@
                                                           "argument": {"variable": "x"},
                                                           "function": {
                                                             "typeApplication": {
-                                                              "body": {"project": {"field": "primaryKeys", "typeName": "hydra.relational.RelationSchema"}},
+                                                              "body": {"project": {"fieldName": "primaryKeys", "typeName": "hydra.relational.RelationSchema"}},
                                                               "type": {"variable": "t0"}}}}},
                                                       "function": {
                                                         "lambda": {
@@ -482,7 +486,7 @@
                                                           "argument": {"variable": "x"},
                                                           "function": {
                                                             "typeApplication": {
-                                                              "body": {"project": {"field": "foreignKeys", "typeName": "hydra.relational.RelationSchema"}},
+                                                              "body": {"project": {"fieldName": "foreignKeys", "typeName": "hydra.relational.RelationSchema"}},
                                                               "type": {"variable": "t0"}}}}},
                                                       "function": {
                                                         "lambda": {

@@ -188,7 +188,7 @@ termLabel = define "termLabel" $
           string "{",
           Names.compactName @@ var "namespaces" @@ (project _Projection _Projection_typeName @@ var "proj"),
           string "}.",
-          Core.unName (project _Projection _Projection_field @@ var "proj")]),
+          Core.unName (project _Projection _Projection_fieldName @@ var "proj")]),
       _Term_cases>>: "cs" ~>
         var "simpleLabel" @@ Strings.cat (list [
           string "cases_{",

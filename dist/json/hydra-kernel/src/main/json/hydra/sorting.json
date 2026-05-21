@@ -854,7 +854,9 @@
                                         "argument": {
                                           "application": {
                                             "argument": {
-                                              "application": {"argument": {"variable": "st"}, "function": {"project": {"field": "stack", "typeName": "hydra.topology.TarjanState"}}}},
+                                              "application": {
+                                                "argument": {"variable": "st"},
+                                                "function": {"project": {"fieldName": "stack", "typeName": "hydra.topology.TarjanState"}}}},
                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.uncons"}, "type": {"literal": {"integer": {"int32": {}}}}}}}},
                                         "function": {
                                           "application": {
@@ -899,30 +901,32 @@
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "st"},
-                                                                            "function": {"project": {"field": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                            "function": {"project": {"fieldName": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                       {
                                                                         "name": "indices",
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "st"},
-                                                                            "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                            "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                       {
                                                                         "name": "lowLinks",
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "st"},
-                                                                            "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                            "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                       {"name": "stack", "term": {"variable": "xs"}},
                                                                       {
                                                                         "name": "onStack",
                                                                         "term": {
                                                                           "application": {
                                                                             "argument": {"variable": "st"},
-                                                                            "function": {"project": {"field": "onStack", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                            "function": {"project": {"fieldName": "onStack", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                       {
                                                                         "name": "sccs",
                                                                         "term": {
-                                                                          "application": {"argument": {"variable": "st"}, "function": {"project": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
+                                                                          "application": {
+                                                                            "argument": {"variable": "st"},
+                                                                            "function": {"project": {"fieldName": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
                                                                     "typeName": "hydra.topology.TarjanState"}},
                                                                 "typeScheme": {"body": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                                                             "body": {
@@ -938,25 +942,25 @@
                                                                             "term": {
                                                                               "application": {
                                                                                 "argument": {"variable": "newSt"},
-                                                                                "function": {"project": {"field": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                "function": {"project": {"fieldName": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                           {
                                                                             "name": "indices",
                                                                             "term": {
                                                                               "application": {
                                                                                 "argument": {"variable": "newSt"},
-                                                                                "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                           {
                                                                             "name": "lowLinks",
                                                                             "term": {
                                                                               "application": {
                                                                                 "argument": {"variable": "newSt"},
-                                                                                "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                           {
                                                                             "name": "stack",
                                                                             "term": {
                                                                               "application": {
                                                                                 "argument": {"variable": "newSt"},
-                                                                                "function": {"project": {"field": "stack", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                "function": {"project": {"fieldName": "stack", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                           {
                                                                             "name": "onStack",
                                                                             "term": {
@@ -964,7 +968,7 @@
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "st"},
-                                                                                    "function": {"project": {"field": "onStack", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                    "function": {"project": {"fieldName": "onStack", "typeName": "hydra.topology.TarjanState"}}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "x"},
@@ -974,7 +978,7 @@
                                                                             "term": {
                                                                               "application": {
                                                                                 "argument": {"variable": "newSt"},
-                                                                                "function": {"project": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
+                                                                                "function": {"project": {"fieldName": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
                                                                         "typeName": "hydra.topology.TarjanState"}},
                                                                     "typeScheme": {"body": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                                                                 "body": {
@@ -1344,7 +1348,7 @@
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "st"},
-                                    "function": {"project": {"field": "counter", "typeName": "hydra.topology.TarjanState"}}}},
+                                    "function": {"project": {"fieldName": "counter", "typeName": "hydra.topology.TarjanState"}}}},
                                 "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                             "body": {
                               "let": {
@@ -1367,7 +1371,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "st"},
-                                                    "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}},
+                                                    "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"variable": "i"},
@@ -1385,7 +1389,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "st"},
-                                                    "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
+                                                    "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"variable": "i"},
@@ -1401,7 +1405,9 @@
                                             "term": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {"argument": {"variable": "st"}, "function": {"project": {"field": "stack", "typeName": "hydra.topology.TarjanState"}}}},
+                                                  "application": {
+                                                    "argument": {"variable": "st"},
+                                                    "function": {"project": {"fieldName": "stack", "typeName": "hydra.topology.TarjanState"}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"variable": "v"},
@@ -1413,7 +1419,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "st"},
-                                                    "function": {"project": {"field": "onStack", "typeName": "hydra.topology.TarjanState"}}}},
+                                                    "function": {"project": {"fieldName": "onStack", "typeName": "hydra.topology.TarjanState"}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"variable": "v"},
@@ -1421,7 +1427,9 @@
                                           {
                                             "name": "sccs",
                                             "term": {
-                                              "application": {"argument": {"variable": "st"}, "function": {"project": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
+                                              "application": {
+                                                "argument": {"variable": "st"},
+                                                "function": {"project": {"fieldName": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
                                         "typeName": "hydra.topology.TarjanState"}},
                                     "typeScheme": {"body": {"variable": "hydra.topology.TarjanState"}, "variables": []}}],
                                 "body": {
@@ -1470,7 +1478,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {"variable": "s"},
-                                                                                "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "v"},
@@ -1491,7 +1499,9 @@
                                                                             "term": {
                                                                               "application": {
                                                                                 "argument": {
-                                                                                  "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "s"},
+                                                                                    "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "w"},
@@ -1510,11 +1520,15 @@
                                                                               {
                                                                                 "name": "counter",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "s"},
+                                                                                    "function": {"project": {"fieldName": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                               {
                                                                                 "name": "indices",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "s"},
+                                                                                    "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                               {
                                                                                 "name": "lowLinks",
                                                                                 "term": {
@@ -1522,7 +1536,7 @@
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "s"},
-                                                                                        "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                        "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {
@@ -1542,15 +1556,21 @@
                                                                               {
                                                                                 "name": "stack",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "stack", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "s"},
+                                                                                    "function": {"project": {"fieldName": "stack", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                               {
                                                                                 "name": "onStack",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "onStack", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "s"},
+                                                                                    "function": {"project": {"fieldName": "onStack", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                               {
                                                                                 "name": "sccs",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "s"},
+                                                                                    "function": {"project": {"fieldName": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
                                                                             "typeName": "hydra.topology.TarjanState"}}}}}},
                                                                 "domain": {"variable": "hydra.topology.TarjanState"},
                                                                 "parameter": "s"}},
@@ -1573,7 +1593,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {"variable": "st_"},
-                                                                                "function": {"project": {"field": "onStack", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                "function": {"project": {"fieldName": "onStack", "typeName": "hydra.topology.TarjanState"}}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "w"},
@@ -1605,7 +1625,7 @@
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "stAfter"},
-                                                                                    "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                    "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "v"},
@@ -1628,7 +1648,7 @@
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "stAfter"},
-                                                                                        "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                        "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "w"},
@@ -1649,13 +1669,13 @@
                                                                                     "term": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "stAfter"},
-                                                                                        "function": {"project": {"field": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                        "function": {"project": {"fieldName": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                                   {
                                                                                     "name": "indices",
                                                                                     "term": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "stAfter"},
-                                                                                        "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                        "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                                   {
                                                                                     "name": "lowLinks",
                                                                                     "term": {
@@ -1663,7 +1683,7 @@
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "argument": {"variable": "stAfter"},
-                                                                                            "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                            "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {
@@ -1685,19 +1705,19 @@
                                                                                     "term": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "stAfter"},
-                                                                                        "function": {"project": {"field": "stack", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                        "function": {"project": {"fieldName": "stack", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                                   {
                                                                                     "name": "onStack",
                                                                                     "term": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "stAfter"},
-                                                                                        "function": {"project": {"field": "onStack", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                        "function": {"project": {"fieldName": "onStack", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                                   {
                                                                                     "name": "sccs",
                                                                                     "term": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "stAfter"},
-                                                                                        "function": {"project": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
+                                                                                        "function": {"project": {"fieldName": "sccs", "typeName": "hydra.topology.TarjanState"}}}}}],
                                                                                 "typeName": "hydra.topology.TarjanState"}}}}}}}},
                                                                 "function": {
                                                                   "application": {
@@ -1708,7 +1728,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {"variable": "st_"},
-                                                                                "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "w"},
@@ -1759,7 +1779,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "stAfterNeighbors"},
-                                                            "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
+                                                            "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "v"},
@@ -1782,7 +1802,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "stAfterNeighbors"},
-                                                                "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "v"},
@@ -1849,31 +1869,31 @@
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "stPopped"},
-                                                                                    "function": {"project": {"field": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                    "function": {"project": {"fieldName": "counter", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                               {
                                                                                 "name": "indices",
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "stPopped"},
-                                                                                    "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                    "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                               {
                                                                                 "name": "lowLinks",
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "stPopped"},
-                                                                                    "function": {"project": {"field": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                    "function": {"project": {"fieldName": "lowLinks", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                               {
                                                                                 "name": "stack",
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "stPopped"},
-                                                                                    "function": {"project": {"field": "stack", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                    "function": {"project": {"fieldName": "stack", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                               {
                                                                                 "name": "onStack",
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "stPopped"},
-                                                                                    "function": {"project": {"field": "onStack", "typeName": "hydra.topology.TarjanState"}}}}},
+                                                                                    "function": {"project": {"fieldName": "onStack", "typeName": "hydra.topology.TarjanState"}}}}},
                                                                               {
                                                                                 "name": "sccs",
                                                                                 "term": {
@@ -1881,7 +1901,7 @@
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "stPopped"},
-                                                                                        "function": {"project": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                                        "function": {"project": {"fieldName": "sccs", "typeName": "hydra.topology.TarjanState"}}}},
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "comp"},
@@ -1977,7 +1997,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "st"},
-                                                                    "function": {"project": {"field": "indices", "typeName": "hydra.topology.TarjanState"}}}},
+                                                                    "function": {"project": {"fieldName": "indices", "typeName": "hydra.topology.TarjanState"}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "v"},
@@ -2003,7 +2023,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "finalState"},
-                                    "function": {"project": {"field": "sccs", "typeName": "hydra.topology.TarjanState"}}}},
+                                    "function": {"project": {"fieldName": "sccs", "typeName": "hydra.topology.TarjanState"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {"typeApplication": {"body": {"variable": "hydra.lib.lists.sort"}, "type": {"literal": {"integer": {"int32": {}}}}}},

@@ -1152,7 +1152,7 @@ encodeTerm = def "encodeTerm" $
      _Term_project>>: lambda "proj" $
        "fname" <~ (Formatting.sanitizeWithUnderscores
          @@ TypeScriptLanguageSource.typeScriptReservedWords
-         @@ Core.unName (Core.projectionField (var "proj"))) $
+         @@ Core.unName (Core.projectionFieldName (var "proj"))) $
        tsArrow @@ list [string "x"] @@ (tsMember @@ (tsExprIdent @@ string "x") @@ var "fname"),
      -- Wrapper unwrap: `(x) => x.value`.
      _Term_unwrap>>: lambda "_n" $

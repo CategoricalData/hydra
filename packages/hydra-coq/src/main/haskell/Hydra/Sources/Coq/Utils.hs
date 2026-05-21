@@ -578,9 +578,9 @@ rewriteTermFields = define "rewriteTermFields" $
       cases _Term (var "term") (Just $ var "recurse" @@ var "term") [
         _Term_project>>: "p" ~> lets [
           "tname">: unwrap _Name @@ (Core.projectionTypeName $ var "p"),
-          "rawFn">: localNameRaw @@ (unwrap _Name @@ (Core.projectionField $ var "p")),
+          "rawFn">: localNameRaw @@ (unwrap _Name @@ (Core.projectionFieldName $ var "p")),
           "key">: pair (var "tname") (var "rawFn"),
-          "newFname">: Maybes.fromMaybe (Core.projectionField $ var "p")
+          "newFname">: Maybes.fromMaybe (Core.projectionFieldName $ var "p")
             (Maybes.map (lambda "s" $ wrap _Name (var "s")) (Maps.lookup (var "key") (var "fm")))] $
           Core.termProject $ Core.projection
             (Core.projectionTypeName $ var "p")

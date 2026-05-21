@@ -6498,13 +6498,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -6559,13 +6563,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -6654,13 +6662,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -6715,13 +6727,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -6823,13 +6839,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -6909,13 +6929,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -7043,13 +7067,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -7148,13 +7176,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -7256,13 +7288,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -7342,13 +7378,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -7476,13 +7516,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -7581,13 +7625,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -7715,13 +7763,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -7820,13 +7872,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -7954,13 +8010,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -8059,13 +8119,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -8167,13 +8231,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -8253,13 +8321,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -8338,13 +8410,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -8399,13 +8475,17 @@
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": " ~ "}},
                                                                                               {
                                                                                                 "application": {
                                                                                                   "argument": {
-                                                                                                    "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "c"},
+                                                                                                      "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                   "function": {"variable": "hydra.show.core.type"}}},
                                                                                               {"literal": {"string": ")"}}]},
                                                                                           "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -8499,13 +8579,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -8650,13 +8734,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},
@@ -8810,13 +8898,17 @@
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": " ~ "}},
                                                                                                           {
                                                                                                             "application": {
                                                                                                               "argument": {
-                                                                                                                "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "c"},
+                                                                                                                  "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                                                               "function": {"variable": "hydra.show.core.type"}}},
                                                                                                           {"literal": {"string": ")"}}]},
                                                                                                       "function": {"variable": "hydra.lib.strings.cat"}}},

@@ -382,12 +382,12 @@
                                                                           {
                                                                             "name": "bindings",
                                                                             "term": {
-                                                                              "application": {"argument": {"variable": "letExpr"}, "function": {"project": {"field": "bindings", "typeName": "hydra.core.Let"}}}},
+                                                                              "application": {"argument": {"variable": "letExpr"}, "function": {"project": {"fieldName": "bindings", "typeName": "hydra.core.Let"}}}},
                                                                             "typeScheme": {"body": {"list": {"variable": "hydra.core.Binding"}}, "variables": []}},
                                                                           {
                                                                             "name": "env",
                                                                             "term": {
-                                                                              "application": {"argument": {"variable": "letExpr"}, "function": {"project": {"field": "body", "typeName": "hydra.core.Let"}}}},
+                                                                              "application": {"argument": {"variable": "letExpr"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.core.Let"}}}},
                                                                             "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                                           {
                                                                             "name": "bindingNames",
@@ -396,7 +396,7 @@
                                                                                 "argument": {"variable": "bindings"},
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "argument": {"project": {"field": "name", "typeName": "hydra.core.Binding"}},
+                                                                                    "argument": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}},
                                                                                     "function": {
                                                                                       "typeApplication": {
                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Binding"}}},
@@ -695,7 +695,7 @@
                                                                                           {
                                                                                             "name": "term1",
                                                                                             "term": {
-                                                                                              "application": {"argument": {"variable": "binding"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Binding"}}}},
+                                                                                              "application": {"argument": {"variable": "binding"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Binding"}}}},
                                                                                             "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                         "body": {
                                                                                           "application": {

@@ -586,7 +586,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
     cases _Term (Strip.deannotateAndDetypeTerm @@ var "fun") (Just $ var "defaultCase") [
       -- Record projection: obj.field
       _Term_project>>: "proj" ~>
-        "fname" <~ (project _Projection _Projection_field @@ var "proj") $
+        "fname" <~ (project _Projection _Projection_fieldName @@ var "proj") $
         "fieldExpr" <~ (PyUtils.projectFromExpression @@ var "firstArg" @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")) $
         right $ pair (var "withRest" @@ var "fieldExpr") (var "rargs"),
       -- Union elimination: encode as inline conditional chain (isinstance-based ternary)
@@ -1543,7 +1543,7 @@ encodeTermInline = def "encodeTermInline" $
 
       -- TermProject: record projection as lambda v1: v1.field
       _Term_project>>: "proj" ~>
-        "fname" <~ (Phantoms.project _Projection _Projection_field @@ var "proj") $
+        "fname" <~ (Phantoms.project _Projection _Projection_fieldName @@ var "proj") $
         right $ makeCurriedLambda @@ list [PyDsl.name $ string "v1"] @@
           (PyUtils.projectFromExpression @@ (PyDsl.pyNameToPyExpression $ PyDsl.name $ string "v1") @@ (PyNames.encodeFieldName @@ var "env" @@ var "fname")),
 

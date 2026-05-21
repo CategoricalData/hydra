@@ -37,7 +37,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "wrappedTerm"},
-                                                            "function": {"project": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}},
+                                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.core.WrappedTerm"}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "cx"},
@@ -599,7 +599,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "wrappedTerm"},
-                                                            "function": {"project": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}},
+                                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.core.WrappedTerm"}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "cx"},
@@ -709,7 +709,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "wrappedTerm"},
-                                                                    "function": {"project": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}},
+                                                                    "function": {"project": {"fieldName": "body", "typeName": "hydra.core.WrappedTerm"}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "cx"},
@@ -847,7 +847,7 @@
                                                         "argument": {
                                                           "application": {
                                                             "argument": {"variable": "wrappedTerm"},
-                                                            "function": {"project": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}},
+                                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.core.WrappedTerm"}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "cx"},
@@ -1328,7 +1328,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "wrappedTerm"},
-                                                                    "function": {"project": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}},
+                                                                    "function": {"project": {"fieldName": "body", "typeName": "hydra.core.WrappedTerm"}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "cx"},
@@ -1478,7 +1478,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "wrappedTerm"},
-                                                                    "function": {"project": {"field": "body", "typeName": "hydra.core.WrappedTerm"}}}},
+                                                                    "function": {"project": {"fieldName": "body", "typeName": "hydra.core.WrappedTerm"}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {"variable": "cx"},

@@ -357,7 +357,7 @@ encodeProjection = haskellCoderDefinition "encodeProjection" $
   doc "Encode a record projection as a Haskell expression" $
   "namespaces" ~> "proj" ~> lets [
     "dn">: Core.projectionTypeName $ var "proj",
-    "fname">: Core.projectionField $ var "proj"] $
+    "fname">: Core.projectionFieldName $ var "proj"] $
     right $ inject H._Expression H._Expression_variable $ HaskellUtilsSource.recordFieldReference @@ var "namespaces" @@ var "dn" @@ var "fname"
 
 encodeLambdaTerm :: TTermDefinition (Int -> HaskellNamespaces -> Lambda -> Context -> Graph -> Either Error H.Expression)

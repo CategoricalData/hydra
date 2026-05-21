@@ -67,7 +67,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
-                                      Core.projectionField = (Core.Name "message")})),
+                                      Core.projectionFieldName = (Core.Name "message")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -95,7 +95,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
-                                      Core.projectionField = (Core.Name "remainder")})),
+                                      Core.projectionFieldName = (Core.Name "remainder")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.parsing.ParseError")))])})),
@@ -235,7 +235,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-                                        Core.projectionField = (Core.Name "value")})),
+                                        Core.projectionFieldName = (Core.Name "value")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -263,7 +263,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-                                        Core.projectionField = (Core.Name "remainder")})),
+                                        Core.projectionFieldName = (Core.Name "remainder")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.parsing.ParseSuccess")))])})),

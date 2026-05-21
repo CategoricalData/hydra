@@ -108,7 +108,7 @@
                                               {
                                                 "name": "valuesType",
                                                 "term": {
-                                                  "application": {"argument": {"variable": "mt"}, "function": {"project": {"field": "values", "typeName": "hydra.core.MapType"}}}},
+                                                  "application": {"argument": {"variable": "mt"}, "function": {"project": {"fieldName": "values", "typeName": "hydra.core.MapType"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}},
                                               {
                                                 "name": "stripped",

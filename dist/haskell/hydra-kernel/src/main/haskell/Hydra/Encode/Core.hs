@@ -422,8 +422,8 @@ projection x =
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (name (Core.projectionTypeName x))},
         Core.Field {
-          Core.fieldName = (Core.Name "field"),
-          Core.fieldTerm = (name (Core.projectionField x))}]})
+          Core.fieldName = (Core.Name "fieldName"),
+          Core.fieldTerm = (name (Core.projectionFieldName x))}]})
 -- | Encoder for hydra.core.Record
 record :: Core.Record -> Core.Term
 record x =
