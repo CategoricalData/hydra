@@ -2,6 +2,7 @@ module Hydra.Sources.Kernel.Terms.Validate.Packaging where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Error.Packaging (
   InvalidModuleError, InvalidPackageError,
   _InvalidModuleError,
@@ -52,7 +53,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Constants.ns, Formatting.ns, Names.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Constants.ns, Formatting.ns, Names.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just "Validation functions for modules and packages"}
   where
     definitions = [

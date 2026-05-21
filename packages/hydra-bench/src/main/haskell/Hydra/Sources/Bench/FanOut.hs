@@ -22,6 +22,7 @@
 module Hydra.Sources.Bench.FanOut where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
@@ -103,7 +104,7 @@ module_ :: Module
 module_ = Module {
   moduleNamespace = ns,
   moduleDefinitions = definitions,
-  moduleDependencies = [Strip.ns] `L.union` kernelTypesNamespaces,
+  moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesNamespaces),
   moduleDescription = Just "Fan-out inference benchmark. Each fanWalker_K branches to three smaller fanWalkers via _Term cases — closer to real codegen DAG shape than LinearChain."
   }
   where

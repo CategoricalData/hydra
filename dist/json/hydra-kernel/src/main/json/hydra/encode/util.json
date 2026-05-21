@@ -490,6 +490,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.util.Precision"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.encode.packaging", "hydra.util"],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.packaging"}, {"module": "hydra.util"}],
   "description": "Term encoders for hydra.util",
   "namespace": "hydra.encode.util"}

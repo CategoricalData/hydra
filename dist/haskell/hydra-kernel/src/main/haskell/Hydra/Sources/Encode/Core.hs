@@ -13,8 +13,12 @@ module_ =
       Packaging.moduleDescription = (Just "Term encoders for hydra.core"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.core"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.core")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.core"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.core.annotatedTerm"),

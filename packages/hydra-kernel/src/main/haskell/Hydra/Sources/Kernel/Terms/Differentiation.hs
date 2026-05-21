@@ -68,7 +68,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, Variables.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just "Source-to-source automatic differentiation for Float64 terms."}
   where
     definitions = [

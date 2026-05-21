@@ -485,6 +485,6 @@
                       "body": {"literal": {"string": {}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.yaml.model", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.yaml.model"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.yaml.model",
   "namespace": "hydra.dsl.yaml.model"}

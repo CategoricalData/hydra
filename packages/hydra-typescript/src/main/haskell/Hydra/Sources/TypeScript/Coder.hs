@@ -15,6 +15,7 @@ module Hydra.Sources.TypeScript.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -64,12 +65,11 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies =
-              [moduleNamespace TypeScriptLanguageSource.module_,
+            moduleDependencies = unqualifiedDep <$> (              [moduleNamespace TypeScriptLanguageSource.module_,
                moduleNamespace TypeScriptSerdeSource.module_,
                Environment.ns, Formatting.ns, Names.ns, Rewriting.ns,
                Serialization.ns, Sorting.ns, Strip.ns, Variables.ns]
-              L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesNamespaces),
+              L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules"}
   where
     definitions = [

@@ -59,7 +59,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesNamespaces),
             moduleDescription = Just "General-purpose parser combinators"}
   where
    definitions = [

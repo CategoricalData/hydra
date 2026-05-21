@@ -95,7 +95,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, JsonModel.ns]),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ((kernelTypesNamespaces L.++ [GraphsonSyntax.ns, JsonModel.ns])),
             moduleDescription = Just "Encoding functions for converting GraphSON syntax to JSON."}
   where
     definitions = [

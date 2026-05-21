@@ -13,10 +13,18 @@ module_ =
       Packaging.moduleDescription = (Just "Term encoders for hydra.error.packaging"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.error.packaging"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.packaging"),
-        (Packaging.Namespace "hydra.encode.util"),
-        (Packaging.Namespace "hydra.error.packaging")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.packaging"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.util"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.error.packaging"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.conflictingModuleNamespaceError"),

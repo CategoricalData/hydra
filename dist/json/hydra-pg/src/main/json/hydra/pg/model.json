@@ -537,6 +537,6 @@
                             "body": {"list": {"application": {"argument": {"variable": "v"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}}}}}]},
                   "parameter": "v"}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A typed property graph data model. Property graphs are parameterized a type for property and id values, while property graph schemas are parameterized by a type for property and id types",
   "namespace": "hydra.pg.model"}

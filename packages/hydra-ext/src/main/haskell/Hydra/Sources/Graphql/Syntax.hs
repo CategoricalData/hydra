@@ -21,7 +21,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [],
+            moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just ("A GraphQL model. Based on the (extended) BNF at:\n" ++
       "  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary")}
   where

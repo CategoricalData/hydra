@@ -65,7 +65,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just ("Utilities for type unification.")}
   where
    definitions = [

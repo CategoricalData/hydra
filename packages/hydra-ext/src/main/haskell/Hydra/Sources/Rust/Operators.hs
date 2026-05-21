@@ -95,7 +95,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "AST operators for Rust serialization"}
   where
     definitions = [

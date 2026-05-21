@@ -31,7 +31,7 @@ testModule :: Module
 testModule = Module {
                moduleNamespace = testNs,
                moduleDefinitions = definitions,
-               moduleDependencies = [],
+               moduleDependencies = [] :: [ModuleDependency],
                moduleDescription = Nothing}
   where
     test local tterm = TTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm

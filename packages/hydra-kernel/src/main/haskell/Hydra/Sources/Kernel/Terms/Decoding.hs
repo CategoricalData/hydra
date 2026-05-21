@@ -78,7 +78,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just "Functions for generating term decoders from type modules"}
   where
     definitions = [
@@ -488,20 +488,20 @@ decodeModule = define "decodeModule" $
         -- 2. Decoded versions of source dependencies (e.g., hydra.core -> hydra.decode.core).
         --    If type A references type B, the decoder for A needs to call the decoder for B.
         -- 3. The original module's namespace (the schema being decoded) and hydra.util
-        "allDecodedDeps" <~ (primitive _lists_nub @@ (Lists.map decodeNamespace (Packaging.moduleDependencies (var "mod")))) $
+        "allDecodedDeps" <~ (primitive _lists_nub @@ (Lists.map decodeNamespace (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))) $
         right (just (Packaging.module_
           (just (Strings.cat $ list [
             string "Term decoders for ",
             Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (decodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.concat2
+          (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.concat2
             (list [
               (Packaging.namespace $ string "hydra.extract.core"),
               (Packaging.namespace $ string "hydra.lexical"),
               (Packaging.namespace $ string "hydra.rewriting"),
               Packaging.moduleNamespace (var "mod"),
               Packaging.namespace $ string "hydra.util"])
-            (var "allDecodedDeps"))
+            (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingTypeScheme $ var "b")))

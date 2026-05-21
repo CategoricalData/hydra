@@ -22,7 +22,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A Haskell syntax model for Hydra. Originally inspired by Language.Haskell.Tools.AST, but now diverges freely to suit Hydra's needs."}
   where
     definitions = [

@@ -2,6 +2,7 @@ module Hydra.Sources.Test.TestTerms where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -26,7 +27,7 @@ module_ :: HydraModule
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestTypes.ns],
+            moduleDependencies = unqualifiedDep <$> [TestTypes.ns],
             moduleDescription = (Just "Term definitions for the test suite")}
   where
     definitions = [

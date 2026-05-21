@@ -199,6 +199,6 @@
                                 "domain": {"variable": "hydra.context.Context"}}}}}}]},
                   "parameter": "a"}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.context", "hydra.core", "hydra.errors", "hydra.packaging"],
+  "dependencies": [{"module": "hydra.context"}, {"module": "hydra.core"}, {"module": "hydra.errors"}, {"module": "hydra.packaging"}],
   "description": "The extension to graphs of Hydra's core type system (hydra.core)",
   "namespace": "hydra.graph"}

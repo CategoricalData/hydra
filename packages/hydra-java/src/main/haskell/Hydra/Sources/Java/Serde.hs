@@ -95,7 +95,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns] L.++ (JavaSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Java serializer: converts Java AST to concrete syntax"}
   where
     definitions = [

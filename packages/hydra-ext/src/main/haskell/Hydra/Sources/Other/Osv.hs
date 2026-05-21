@@ -27,7 +27,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [],
+            moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just "See https://ossf.github.io/osv-schema"}
   where
     definitions = [

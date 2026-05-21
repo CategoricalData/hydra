@@ -8,6 +8,7 @@
 module Hydra.Sources.Coq.Utils where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -45,7 +46,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Pure helpers for the Coq code generator"}
   where
     definitions = [
@@ -389,7 +390,7 @@ moduleDependencyNames :: TTermDefinition (Module -> [String])
 moduleDependencyNames = define "moduleDependencyNames" $
   doc "Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace" $
   lambda "m" $ lets [
-    "allDeps">: Lists.map (lambda "ns" $ Packaging.unNamespace (var "ns")) (Packaging.moduleDependencies (var "m")),
+    "allDeps">: Lists.map (lambda "dep" $ Packaging.unNamespace (Packaging.moduleDependencyModule (var "dep"))) (Packaging.moduleDependencies (var "m")),
     "ownNs">: Packaging.unNamespace (Packaging.moduleNamespace (var "m")),
     "filtered">: Lists.filter (lambda "s" $ Logic.not (Equality.equal (var "s") (var "ownNs"))) (var "allDeps")] $
     (Lists.nub :: TTerm [String] -> TTerm [String]) (var "filtered")

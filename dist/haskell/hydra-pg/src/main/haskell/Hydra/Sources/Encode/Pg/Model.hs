@@ -14,8 +14,8 @@ module_ =
       Packaging.moduleDescription = (Just "Term encoders for hydra.pg.model"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.pg.model"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.pg.model")],
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.encode.core") Nothing),
+        (Packaging.ModuleDependency (Packaging.Namespace "hydra.pg.model") Nothing)],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.adjacentEdge"),

@@ -13,9 +13,15 @@ module_ =
       Packaging.moduleDescription = (Just "Term encoders for hydra.util"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.util"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.packaging"),
-        (Packaging.Namespace "hydra.util")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.packaging"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.util"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.util.caseConvention"),

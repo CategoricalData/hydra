@@ -101,7 +101,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Python utilities for constructing Python syntax trees"}
   where
     definitions = [

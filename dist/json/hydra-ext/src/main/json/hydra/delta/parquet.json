@@ -190,6 +190,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "Struct type which contains one or more columns."}}}],
               "body": {"record": [{"name": "fields", "type": {"list": {"variable": "hydra.delta.parquet.StructField"}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A partial Delta Parquet model, based on DataType and its subclasses as specified in the 3.0.0 Java API: https://docs.delta.io/3.0.0/api/java/kernel/io/delta/kernel/types/DataType.html",
   "namespace": "hydra.delta.parquet"}

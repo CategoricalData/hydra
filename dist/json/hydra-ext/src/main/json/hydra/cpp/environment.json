@@ -25,6 +25,6 @@
                             "first": {"list": {"variable": "hydra.core.Name"}},
                             "second": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"literal": {"string": {}}}}}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.packaging", "hydra.util"],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
   "description": "Type definitions for C++ code generation environment",
   "namespace": "hydra.cpp.environment"}

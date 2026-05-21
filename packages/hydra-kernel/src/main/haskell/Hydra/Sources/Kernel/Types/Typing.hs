@@ -20,7 +20,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Context.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Context.ns],
             moduleDescription = Just "Types supporting type inference and type reconstruction."}
   where
     definitions = [

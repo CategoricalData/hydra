@@ -5347,6 +5347,6 @@
         "typeScheme": {
           "body": {"application": {"argument": {"variable": "hydra.ast.Ws"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.ast", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.ast"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.ast",
   "namespace": "hydra.dsl.ast"}

@@ -1054,6 +1054,6 @@
                   "argument": {"application": {"argument": {"variable": "a"}, "function": {"variable": "hydra.parsing.Parser"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["a"]}}}],
-  "dependencies": ["hydra.parsing", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.parsing"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.parsing",
   "namespace": "hydra.dsl.parsing"}

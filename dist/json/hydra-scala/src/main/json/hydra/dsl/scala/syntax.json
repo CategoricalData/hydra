@@ -61046,6 +61046,6 @@
               "domain": {
                 "application": {"argument": {"variable": "hydra.scala.syntax.Source"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.scala.syntax", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.scala.syntax"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.scala.syntax",
   "namespace": "hydra.dsl.scala.syntax"}

@@ -61,7 +61,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesNamespaces),
             moduleDescription = Just ("Default term-level implementations of Equality functions for the Hydra interpreter.")}
   where
     definitions = [

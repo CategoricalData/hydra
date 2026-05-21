@@ -1251,6 +1251,11 @@
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.error.checking.UntypedTermVariableCheckingError"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.encode.paths", "hydra.encode.typing", "hydra.encode.variants", "hydra.error.checking"],
+  "dependencies": [
+    {"module": "hydra.encode.core"},
+    {"module": "hydra.encode.paths"},
+    {"module": "hydra.encode.typing"},
+    {"module": "hydra.encode.variants"},
+    {"module": "hydra.error.checking"}],
   "description": "Term encoders for hydra.error.checking",
   "namespace": "hydra.encode.error.checking"}

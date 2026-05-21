@@ -681,6 +681,6 @@
                   "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.relational.Row"}}}}},
               "domain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "t0"}}}}},
           "variables": ["t0"]}}}],
-  "dependencies": ["hydra.encode.core", "hydra.relational"],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.relational"}],
   "description": "Term encoders for hydra.relational",
   "namespace": "hydra.encode.relational"}

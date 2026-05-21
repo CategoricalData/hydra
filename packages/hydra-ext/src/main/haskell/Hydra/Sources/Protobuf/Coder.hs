@@ -6,6 +6,7 @@ module Hydra.Sources.Protobuf.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -80,10 +81,10 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.module_,
+            moduleDependencies = unqualifiedDep <$> ([moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.module_,
       Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
-      moduleNamespace DecodeCore.module_] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces),
+      moduleNamespace DecodeCore.module_] L.++ (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"}
   where
     definitions = [

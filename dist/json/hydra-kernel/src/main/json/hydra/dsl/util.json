@@ -749,6 +749,12 @@
                       "body": {"literal": {"integer": {"int32": {}}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.util", "hydra.phantoms", "hydra.core", "hydra.packaging", "hydra.dsl.core", "hydra.dsl.packaging"],
+  "dependencies": [
+    {"module": "hydra.util"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.core"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.dsl.core"},
+    {"module": "hydra.dsl.packaging"}],
   "description": "DSL functions for hydra.util",
   "namespace": "hydra.dsl.util"}

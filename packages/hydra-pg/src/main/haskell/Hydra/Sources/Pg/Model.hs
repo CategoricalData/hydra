@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A typed property graph data model. " ++
       "Property graphs are parameterized a type for property and id values, " ++
       "while property graph schemas are parameterized by a type for property and id types")}

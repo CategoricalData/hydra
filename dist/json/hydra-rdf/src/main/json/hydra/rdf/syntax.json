@@ -199,6 +199,6 @@
                   {"name": "predicate", "type": {"variable": "hydra.rdf.syntax.Iri"}},
                   {"name": "object", "type": {"variable": "hydra.rdf.syntax.Node"}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "An RDF 1.1 syntax model",
   "namespace": "hydra.rdf.syntax"}

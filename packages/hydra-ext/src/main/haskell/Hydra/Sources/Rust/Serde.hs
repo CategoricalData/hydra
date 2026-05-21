@@ -97,7 +97,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns, RustOperators.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, RustOperators.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Rust serializer: converts Rust AST to concrete syntax"}
   where
     definitions = [

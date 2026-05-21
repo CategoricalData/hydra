@@ -59263,6 +59263,10 @@
               "domain": {
                 "application": {"argument": {"variable": "hydra.python.syntax.FuncTypeComment"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.python.syntax", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [
+    {"module": "hydra.python.syntax"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.python.syntax",
   "namespace": "hydra.dsl.python.syntax"}

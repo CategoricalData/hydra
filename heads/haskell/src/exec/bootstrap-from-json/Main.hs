@@ -689,7 +689,7 @@ main = do
       -- so test code can reference them.
       when (optKernelOnly opts) $ do
         let testExtraDeps = Prelude.filter (\ns -> unNamespace ns `notElem` kernelNsStrings)
-              $ concatMap moduleDependencies testMods
+              $ fmap moduleDependencyModule $ concatMap moduleDependencies testMods
             extModsForTests = Prelude.filter (\m -> moduleNamespace m `elem` testExtraDeps) allMods
         when (not (Prelude.null extModsForTests)) $ do
           putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."

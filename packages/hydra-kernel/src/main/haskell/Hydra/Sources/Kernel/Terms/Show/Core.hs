@@ -61,7 +61,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesNamespaces),
             moduleDescription = Just "String representations of hydra.core types"}
   where
    definitions = [
