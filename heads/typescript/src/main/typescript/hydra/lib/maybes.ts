@@ -1,57 +1,62 @@
 // Hand-written runtime: hydra.lib.maybes primitives.
 //
+// Signatures are flat (positional), matching Python's heads/python/lib/maybes.py.
 // `cases`, `maybe`, and `fromMaybe` have lazy default positions — see
-// docs/recipes/new-implementation.md "Lazy evaluation and thunking".
-// The coder wraps those defaults in nullary arrows `() => expr`; we
-// force the value here only when needed. Plain (non-function) defaults
-// are accepted unchanged.
+// docs/recipes/new-implementation.md "Lazy evaluation and thunking". The coder
+// wraps those defaults in nullary arrows `() => expr`; we force the value
+// here only when needed.
+//
+// Maybe and callback parameters take `any` rather than precise `Maybe<A>` —
+// the kernel-generated coder routes Maybes through `any`-typed positions
+// (continuation args, anonymous reducer accumulators). The runtime checks
+// `tag` directly so this loosening is safe and silences TS2345 churn.
 
-import type { Maybe } from "../core.js";
-import { Just, Nothing } from "../core.js";
+import type { Maybe } from "../runtime.js";
+import { Just, Nothing } from "../runtime.js";
 
 const force = <A>(x: A | (() => A)): A =>
   typeof x === "function" ? (x as () => A)() : x;
 
-export const apply = <A, B>(f: Maybe<(a: A) => B>) => (m: Maybe<A>): Maybe<B> =>
+export const apply = (f: any, m: any): Maybe<any> =>
   f.tag === "just" && m.tag === "just" ? Just(f.value(m.value)) : Nothing;
 
-export const bind = <A, B>(m: Maybe<A>) => (f: (a: A) => Maybe<B>): Maybe<B> =>
+export const bind = (m: any, f: (a: any) => any): Maybe<any> =>
   m.tag === "just" ? f(m.value) : Nothing;
 
-export const cases = <A, B>(m: Maybe<A>) => (n: B | (() => B)) => (j: (a: A) => B): B =>
+export const cases = (m: any, n: any, j: (a: any) => any): any =>
   m.tag === "just" ? j(m.value) : force(n);
 
-export const cat = <A>(ms: readonly Maybe<A>[]): readonly A[] => {
-  const out: A[] = [];
-  for (const m of ms) if (m.tag === "just") out.push(m.value);
+export const cat = (ms: any): readonly any[] => {
+  const out: any[] = [];
+  for (const m of (ms as readonly Maybe<any>[])) if (m.tag === "just") out.push(m.value);
   return out;
 };
 
-export const compose = <A, B, C>(f: (a: A) => Maybe<B>) => (g: (b: B) => Maybe<C>) => (x: A): Maybe<C> => {
+export const compose = (f: (a: any) => any, g: (b: any) => any, x: any): Maybe<any> => {
   const r = f(x);
   return r.tag === "just" ? g(r.value) : Nothing;
 };
 
-export const fromMaybe = <A>(d: A | (() => A)) => (m: Maybe<A>): A =>
+export const fromMaybe = (d: any, m: any): any =>
   m.tag === "just" ? m.value : force(d);
 
-export const isJust = <A>(m: Maybe<A>): boolean => m.tag === "just";
+export const isJust = (m: any): boolean => m.tag === "just";
 
-export const isNothing = <A>(m: Maybe<A>): boolean => m.tag === "nothing";
+export const isNothing = (m: any): boolean => m.tag === "nothing";
 
-export const map = <A, B>(f: (a: A) => B) => (m: Maybe<A>): Maybe<B> =>
+export const map = (f: (a: any) => any, m: any): Maybe<any> =>
   m.tag === "just" ? Just(f(m.value)) : Nothing;
 
-export const mapMaybe = <A, B>(f: (a: A) => Maybe<B>) => (xs: readonly A[]): readonly B[] => {
-  const out: B[] = [];
-  for (const x of xs) { const y = f(x); if (y.tag === "just") out.push(y.value); }
+export const mapMaybe = (f: (a: any) => any, xs: any): readonly any[] => {
+  const out: any[] = [];
+  for (const x of (xs as readonly any[])) { const y = f(x); if (y.tag === "just") out.push(y.value); }
   return out;
 };
 
-export const maybe = <A, B>(d: B | (() => B)) => (f: (a: A) => B) => (m: Maybe<A>): B =>
+export const maybe = (d: any, f: (a: any) => any, m: any): any =>
   m.tag === "just" ? f(m.value) : force(d);
 
 export const pure = <A>(x: A): Maybe<A> => Just(x);
 
-export const toList = <A>(m: Maybe<A>): readonly A[] =>
+export const toList = (m: any): readonly any[] =>
   m.tag === "just" ? [m.value] : [];
