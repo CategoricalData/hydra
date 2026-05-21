@@ -24,7 +24,7 @@ sourceContextFileName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.protobuf.sourceContext.SourceContext"),
-        Core.projectionField = (Core.Name "fileName")})),
+        Core.projectionFieldName = (Core.Name "fileName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sourceContextWithFileName :: Phantoms.TTerm SourceContext.SourceContext -> Phantoms.TTerm String -> Phantoms.TTerm SourceContext.SourceContext

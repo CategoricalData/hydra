@@ -318,7 +318,7 @@ projection = define "projection" $
   doc "Show a projection as a string" $
   "proj" ~>
   "tname" <~ unwrap _Name @@ (Core.projectionTypeName $ var "proj") $
-  "fname" <~ unwrap _Name @@ (Core.projectionField $ var "proj") $
+  "fname" <~ unwrap _Name @@ (Core.projectionFieldName $ var "proj") $
   Strings.cat $ list [
     string "project(",
     var "tname",

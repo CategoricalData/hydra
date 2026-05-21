@@ -483,7 +483,9 @@ typesByName =
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.core.Field"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A list of case alternatives, one per union field")))])}))}]),
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "A list of case alternatives, one per union field. Each Field's name is the variant tag being matched and term is the handler applied to the variant's payload.")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A union elimination; a case statement")))])}))),
       (
@@ -941,7 +943,7 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The name of the record type")))])}))},
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "field"),
+              Core.fieldTypeName = (Core.Name "fieldName"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
                 Core.annotatedTypeAnnotation = (M.fromList [
@@ -1091,7 +1093,9 @@ typesByName =
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Name")),
                 Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An unwrap elimination; the inverse of a wrap")))])}))},
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "An unwrap elimination; the inverse of a wrap. Given the name of a wrapper type, unwraps an instance of that type to its underlying body value.")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "variable"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1211,7 +1215,9 @@ typesByName =
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                 Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
                 Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A wrapped type (newtype)")))])}))}]),
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "A wrapped type (newtype). There is no corresponding `unwrap` variant at the type level: wrap is the introduction form, and a wrapper type's underlying body type is given by the `wrap` variant's argument.")))])}))}]),
           Core.annotatedTypeAnnotation = (M.fromList [
             (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A data type")))])}))),
       (

@@ -190,7 +190,7 @@ encodeFunction cx g meta funTerm arg =
         in (Eithers.bind (encodeTerm cx g body) (\sbody -> Eithers.bind (Maybes.maybe (findSdom cx g meta) (\dom -> Eithers.bind (encodeType cx g dom) (\sdom -> Right (Just sdom))) mdom) (\sdom -> Right (Utils.slambda v sbody sdom))))
       Core.TermUnwrap _ -> Maybes.maybe (Eithers.bind (findSdom cx g meta) (\sdom -> Right (Utils.slambda "x" (Utils.sname "x") sdom))) (\a -> encodeTerm cx g a) arg
       Core.TermProject v0 ->
-        let fname = Utils.scalaEscapeName (Core.unName (Core.projectionField v0))
+        let fname = Utils.scalaEscapeName (Core.unName (Core.projectionFieldName v0))
             typeName = Core.projectionTypeName v0
             pv = "x"
         in (Maybes.maybe (Eithers.bind (Eithers.either (\_ -> Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\msdom -> Maybes.maybe (Eithers.bind (encodeType cx g (Core.TypeVariable typeName)) (\st -> Right (Just st))) (\sdom -> Right (Just sdom)) msdom) (findSdom cx g meta)) (\msdom -> Right (Utils.slambda pv (Syntax.DataRef (Syntax.RefDataSelect (Syntax.SelectData {
@@ -374,7 +374,7 @@ encodeTerm cx g term0 =
                 _ -> Eithers.bind (encodeTerm cx g fun) (\sfun -> Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Utils.sapply sfun [
                   sarg])))
             Core.TermProject v1 ->
-              let fname = Utils.scalaEscapeName (Core.unName (Core.projectionField v1))
+              let fname = Utils.scalaEscapeName (Core.unName (Core.projectionFieldName v1))
               in (Eithers.bind (encodeTerm cx g arg) (\sarg -> Right (Syntax.DataRef (Syntax.RefDataSelect (Syntax.SelectData {
                 Syntax.selectDataQual = sarg,
                 Syntax.selectDataName = Syntax.NameData {

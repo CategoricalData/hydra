@@ -208,7 +208,7 @@ encodeTerm cx g currentNs term =
       Core.TermTypeApplication v0 -> encodeTerm cx g currentNs (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> encodeTerm cx g currentNs (Core.typeLambdaBody v0)
       Core.TermProject v0 ->
-        let fname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.projectionField v0))
+        let fname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.projectionFieldName v0))
         in (tsArrow [
           "x"] (tsMember (tsExprIdent "x") fname))
       Core.TermUnwrap _ -> tsArrow [

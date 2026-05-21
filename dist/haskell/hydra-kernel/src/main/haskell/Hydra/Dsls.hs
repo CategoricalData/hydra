@@ -199,7 +199,7 @@ generateRecordAccessor origType typeName ft =
                                             Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))},
                                         Core.Field {
-                                          Core.fieldName = (Core.Name "field"),
+                                          Core.fieldName = (Core.Name "fieldName"),
                                           Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                             Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName fieldName)))}))}]}))}}))},
@@ -327,7 +327,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
                                               Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                               Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))},
                                           Core.Field {
-                                            Core.fieldName = (Core.Name "field"),
+                                            Core.fieldName = (Core.Name "fieldName"),
                                             Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                               Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                               Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))}))}]}))}}))},

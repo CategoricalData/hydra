@@ -367,7 +367,7 @@ encodeProjection :: t0 -> t1 -> M.Map Core.Name [(Core.Name, Int)] -> Core.Proje
 encodeProjection cx g fieldOffsets proj scrutineeInstrs =
 
       let typeName = Core.projectionTypeName proj
-          fieldName = Core.projectionField proj
+          fieldName = Core.projectionFieldName proj
           mFields = Maps.lookup typeName fieldOffsets
           mOffset =
                   Maybes.cases mFields Nothing (\pairs ->

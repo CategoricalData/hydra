@@ -153,9 +153,9 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "env"},
-                                                "function": {"project": {"field": "namespaces", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
+                                                "function": {"project": {"fieldName": "namespaces", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
                                             "function": {
-                                              "typeApplication": {"body": {"project": {"field": "focus", "typeName": "hydra.util.Namespaces"}}, "type": {"literal": {"string": {}}}}}}},
+                                              "typeApplication": {"body": {"project": {"fieldName": "focus", "typeName": "hydra.util.Namespaces"}}, "type": {"literal": {"string": {}}}}}}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.packaging.Namespace"}}},
@@ -168,7 +168,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "env"},
-                                            "function": {"project": {"field": "boundTypeVariables", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
+                                            "function": {"project": {"fieldName": "boundTypeVariables", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.core.Name"}}}},
@@ -183,14 +183,14 @@
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "qualName"},
-                                        "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                        "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
                                     "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.Namespace"}}, "variables": []}},
                                   {
                                     "name": "local",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "qualName"},
-                                        "function": {"project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                        "function": {"project": {"fieldName": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "cppLocal",
@@ -335,7 +335,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "env"},
-                                    "function": {"project": {"field": "boundTypeVariables", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
+                                    "function": {"project": {"fieldName": "boundTypeVariables", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
                                 "function": {
                                   "typeApplication": {
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.second"}, "type": {"list": {"variable": "hydra.core.Name"}}}},
@@ -350,9 +350,9 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "env"},
-                                        "function": {"project": {"field": "namespaces", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
+                                        "function": {"project": {"fieldName": "namespaces", "typeName": "hydra.cpp.environment.CppEnvironment"}}}},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "focus", "typeName": "hydra.util.Namespaces"}}, "type": {"literal": {"string": {}}}}}}},
+                                      "typeApplication": {"body": {"project": {"fieldName": "focus", "typeName": "hydra.util.Namespaces"}}, "type": {"literal": {"string": {}}}}}}},
                                 "function": {
                                   "typeApplication": {
                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.pairs.first"}, "type": {"variable": "hydra.packaging.Namespace"}}},
@@ -367,14 +367,14 @@
                             "term": {
                               "application": {
                                 "argument": {"variable": "qualName"},
-                                "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
                             "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.Namespace"}}, "variables": []}},
                           {
                             "name": "local",
                             "term": {
                               "application": {
                                 "argument": {"variable": "qualName"},
-                                "function": {"project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                "function": {"project": {"fieldName": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
                           "application": {

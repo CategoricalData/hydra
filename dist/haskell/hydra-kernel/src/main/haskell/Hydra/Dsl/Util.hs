@@ -83,7 +83,7 @@ namespacesFocus x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
-        Core.projectionField = (Core.Name "focus")})),
+        Core.projectionFieldName = (Core.Name "focus")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the mapping field of hydra.util.Namespaces
 namespacesMapping :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (M.Map Packaging.Namespace n)
@@ -91,7 +91,7 @@ namespacesMapping x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
-        Core.projectionField = (Core.Name "mapping")})),
+        Core.projectionFieldName = (Core.Name "mapping")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the focus field of hydra.util.Namespaces
 namespacesWithFocus :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (Packaging.Namespace, n) -> Phantoms.TTerm (Util.Namespaces n)
@@ -107,7 +107,7 @@ namespacesWithFocus original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
-              Core.projectionField = (Core.Name "mapping")})),
+              Core.projectionFieldName = (Core.Name "mapping")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the mapping field of hydra.util.Namespaces
 namespacesWithMapping :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (M.Map Packaging.Namespace n) -> Phantoms.TTerm (Util.Namespaces n)
@@ -120,7 +120,7 @@ namespacesWithMapping original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
-              Core.projectionField = (Core.Name "focus")})),
+              Core.projectionFieldName = (Core.Name "focus")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mapping"),

@@ -1080,7 +1080,7 @@ resolvePrimRef (Core.Name name) st = case Strings.splitOn "." name of
 encodeProjection :: Context -> Graph -> Core.Projection -> Maybe Core.Term -> GoState
   -> GoResult Go.Expression
 encodeProjection cx g proj marg st = do
-    let fname = toGoExported (unName $ Core.projectionField proj)
+    let fname = toGoExported (unName $ Core.projectionFieldName proj)
         typeName = Core.projectionTypeName proj
         -- Resolve type arguments from the current substitution context
         resolvedArgs = resolveTypeArgs g typeName st

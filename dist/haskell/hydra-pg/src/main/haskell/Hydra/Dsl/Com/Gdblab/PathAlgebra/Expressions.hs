@@ -27,7 +27,7 @@ andConditionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.AndCondition"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 andConditionRight :: Phantoms.TTerm Expressions.AndCondition -> Phantoms.TTerm Expressions.SelectionCondition
@@ -35,7 +35,7 @@ andConditionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.AndCondition"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 andConditionWithLeft :: Phantoms.TTerm Expressions.AndCondition -> Phantoms.TTerm Expressions.SelectionCondition -> Phantoms.TTerm Expressions.AndCondition
@@ -51,7 +51,7 @@ andConditionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.AndCondition"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 andConditionWithRight :: Phantoms.TTerm Expressions.AndCondition -> Phantoms.TTerm Expressions.SelectionCondition -> Phantoms.TTerm Expressions.AndCondition
@@ -64,7 +64,7 @@ andConditionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.AndCondition"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -159,7 +159,7 @@ edgePropertyRefElement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.EdgePropertyRef"),
-        Core.projectionField = (Core.Name "element")})),
+        Core.projectionFieldName = (Core.Name "element")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgePropertyRefProperty :: Phantoms.TTerm Expressions.EdgePropertyRef -> Phantoms.TTerm String
@@ -167,7 +167,7 @@ edgePropertyRefProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.EdgePropertyRef"),
-        Core.projectionField = (Core.Name "property")})),
+        Core.projectionFieldName = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgePropertyRefWithElement :: Phantoms.TTerm Expressions.EdgePropertyRef -> Phantoms.TTerm Expressions.PathElement -> Phantoms.TTerm Expressions.EdgePropertyRef
@@ -183,7 +183,7 @@ edgePropertyRefWithElement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.EdgePropertyRef"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgePropertyRefWithProperty :: Phantoms.TTerm Expressions.EdgePropertyRef -> Phantoms.TTerm String -> Phantoms.TTerm Expressions.EdgePropertyRef
@@ -196,7 +196,7 @@ edgePropertyRefWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.EdgePropertyRef"),
-              Core.projectionField = (Core.Name "element")})),
+              Core.projectionFieldName = (Core.Name "element")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
@@ -289,7 +289,7 @@ groupByExpressionCriterion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByExpression"),
-        Core.projectionField = (Core.Name "criterion")})),
+        Core.projectionFieldName = (Core.Name "criterion")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 groupByExpressionExpression :: Phantoms.TTerm Expressions.GroupByExpression -> Phantoms.TTerm Expressions.PathExpression
@@ -297,7 +297,7 @@ groupByExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 groupByExpressionWithCriterion :: Phantoms.TTerm Expressions.GroupByExpression -> Phantoms.TTerm Expressions.GroupByCriterion -> Phantoms.TTerm Expressions.GroupByExpression
@@ -313,7 +313,7 @@ groupByExpressionWithCriterion original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 groupByExpressionWithExpression :: Phantoms.TTerm Expressions.GroupByExpression -> Phantoms.TTerm Expressions.PathExpression -> Phantoms.TTerm Expressions.GroupByExpression
@@ -326,7 +326,7 @@ groupByExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.GroupByExpression"),
-              Core.projectionField = (Core.Name "criterion")})),
+              Core.projectionFieldName = (Core.Name "criterion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -349,7 +349,7 @@ joinExpressionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.JoinExpression"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 joinExpressionRight :: Phantoms.TTerm Expressions.JoinExpression -> Phantoms.TTerm Expressions.PathExpression
@@ -357,7 +357,7 @@ joinExpressionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.JoinExpression"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 joinExpressionWithLeft :: Phantoms.TTerm Expressions.JoinExpression -> Phantoms.TTerm Expressions.PathExpression -> Phantoms.TTerm Expressions.JoinExpression
@@ -373,7 +373,7 @@ joinExpressionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.JoinExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 joinExpressionWithRight :: Phantoms.TTerm Expressions.JoinExpression -> Phantoms.TTerm Expressions.PathExpression -> Phantoms.TTerm Expressions.JoinExpression
@@ -386,7 +386,7 @@ joinExpressionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.JoinExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -409,7 +409,7 @@ labelConditionTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.LabelCondition"),
-        Core.projectionField = (Core.Name "target")})),
+        Core.projectionFieldName = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 labelConditionValue :: Phantoms.TTerm Expressions.LabelCondition -> Phantoms.TTerm String
@@ -417,7 +417,7 @@ labelConditionValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.LabelCondition"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 labelConditionWithTarget :: Phantoms.TTerm Expressions.LabelCondition -> Phantoms.TTerm Expressions.PathElement -> Phantoms.TTerm Expressions.LabelCondition
@@ -433,7 +433,7 @@ labelConditionWithTarget original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.LabelCondition"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 labelConditionWithValue :: Phantoms.TTerm Expressions.LabelCondition -> Phantoms.TTerm String -> Phantoms.TTerm Expressions.LabelCondition
@@ -446,7 +446,7 @@ labelConditionWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.LabelCondition"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -466,7 +466,7 @@ lengthConditionLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.LengthCondition"),
-        Core.projectionField = (Core.Name "length")})),
+        Core.projectionFieldName = (Core.Name "length")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lengthConditionWithLength :: Phantoms.TTerm Expressions.LengthCondition -> Phantoms.TTerm Int -> Phantoms.TTerm Expressions.LengthCondition
@@ -527,7 +527,7 @@ nodePropertyRefElement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.NodePropertyRef"),
-        Core.projectionField = (Core.Name "element")})),
+        Core.projectionFieldName = (Core.Name "element")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodePropertyRefProperty :: Phantoms.TTerm Expressions.NodePropertyRef -> Phantoms.TTerm String
@@ -535,7 +535,7 @@ nodePropertyRefProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.NodePropertyRef"),
-        Core.projectionField = (Core.Name "property")})),
+        Core.projectionFieldName = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodePropertyRefWithElement :: Phantoms.TTerm Expressions.NodePropertyRef -> Phantoms.TTerm Expressions.PathElement -> Phantoms.TTerm Expressions.NodePropertyRef
@@ -551,7 +551,7 @@ nodePropertyRefWithElement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.NodePropertyRef"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodePropertyRefWithProperty :: Phantoms.TTerm Expressions.NodePropertyRef -> Phantoms.TTerm String -> Phantoms.TTerm Expressions.NodePropertyRef
@@ -564,7 +564,7 @@ nodePropertyRefWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.NodePropertyRef"),
-              Core.projectionField = (Core.Name "element")})),
+              Core.projectionFieldName = (Core.Name "element")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
@@ -584,7 +584,7 @@ notConditionCondition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.NotCondition"),
-        Core.projectionField = (Core.Name "condition")})),
+        Core.projectionFieldName = (Core.Name "condition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notConditionWithCondition :: Phantoms.TTerm Expressions.NotCondition -> Phantoms.TTerm Expressions.SelectionCondition -> Phantoms.TTerm Expressions.NotCondition
@@ -613,7 +613,7 @@ orConditionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrCondition"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 orConditionRight :: Phantoms.TTerm Expressions.OrCondition -> Phantoms.TTerm Expressions.SelectionCondition
@@ -621,7 +621,7 @@ orConditionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrCondition"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 orConditionWithLeft :: Phantoms.TTerm Expressions.OrCondition -> Phantoms.TTerm Expressions.SelectionCondition -> Phantoms.TTerm Expressions.OrCondition
@@ -637,7 +637,7 @@ orConditionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrCondition"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 orConditionWithRight :: Phantoms.TTerm Expressions.OrCondition -> Phantoms.TTerm Expressions.SelectionCondition -> Phantoms.TTerm Expressions.OrCondition
@@ -650,7 +650,7 @@ orConditionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrCondition"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -729,7 +729,7 @@ orderByExpressionCriterion x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByExpression"),
-        Core.projectionField = (Core.Name "criterion")})),
+        Core.projectionFieldName = (Core.Name "criterion")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 orderByExpressionExpression :: Phantoms.TTerm Expressions.OrderByExpression -> Phantoms.TTerm Expressions.SolutionSpaceExpression
@@ -737,7 +737,7 @@ orderByExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 orderByExpressionWithCriterion :: Phantoms.TTerm Expressions.OrderByExpression -> Phantoms.TTerm Expressions.OrderByCriterion -> Phantoms.TTerm Expressions.OrderByExpression
@@ -753,7 +753,7 @@ orderByExpressionWithCriterion original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 orderByExpressionWithExpression :: Phantoms.TTerm Expressions.OrderByExpression -> Phantoms.TTerm Expressions.SolutionSpaceExpression -> Phantoms.TTerm Expressions.OrderByExpression
@@ -766,7 +766,7 @@ orderByExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.OrderByExpression"),
-              Core.projectionField = (Core.Name "criterion")})),
+              Core.projectionFieldName = (Core.Name "criterion")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -955,7 +955,7 @@ projectionExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionExpressionGroups :: Phantoms.TTerm Expressions.ProjectionExpression -> Phantoms.TTerm Expressions.ProjectionSpec
@@ -963,7 +963,7 @@ projectionExpressionGroups x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-        Core.projectionField = (Core.Name "groups")})),
+        Core.projectionFieldName = (Core.Name "groups")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionExpressionPartitions :: Phantoms.TTerm Expressions.ProjectionExpression -> Phantoms.TTerm Expressions.ProjectionSpec
@@ -971,7 +971,7 @@ projectionExpressionPartitions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-        Core.projectionField = (Core.Name "partitions")})),
+        Core.projectionFieldName = (Core.Name "partitions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionExpressionPaths :: Phantoms.TTerm Expressions.ProjectionExpression -> Phantoms.TTerm Expressions.ProjectionSpec
@@ -979,7 +979,7 @@ projectionExpressionPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-        Core.projectionField = (Core.Name "paths")})),
+        Core.projectionFieldName = (Core.Name "paths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionExpressionWithExpression :: Phantoms.TTerm Expressions.ProjectionExpression -> Phantoms.TTerm Expressions.SolutionSpaceExpression -> Phantoms.TTerm Expressions.ProjectionExpression
@@ -992,21 +992,21 @@ projectionExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "partitions")})),
+              Core.projectionFieldName = (Core.Name "partitions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groups"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "groups")})),
+              Core.projectionFieldName = (Core.Name "groups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "paths"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "paths")})),
+              Core.projectionFieldName = (Core.Name "paths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -1022,7 +1022,7 @@ projectionExpressionWithGroups original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "partitions")})),
+              Core.projectionFieldName = (Core.Name "partitions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groups"),
@@ -1032,14 +1032,14 @@ projectionExpressionWithGroups original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "paths")})),
+              Core.projectionFieldName = (Core.Name "paths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 projectionExpressionWithPartitions :: Phantoms.TTerm Expressions.ProjectionExpression -> Phantoms.TTerm Expressions.ProjectionSpec -> Phantoms.TTerm Expressions.ProjectionExpression
@@ -1055,21 +1055,21 @@ projectionExpressionWithPartitions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "groups")})),
+              Core.projectionFieldName = (Core.Name "groups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "paths"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "paths")})),
+              Core.projectionFieldName = (Core.Name "paths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 projectionExpressionWithPaths :: Phantoms.TTerm Expressions.ProjectionExpression -> Phantoms.TTerm Expressions.ProjectionSpec -> Phantoms.TTerm Expressions.ProjectionExpression
@@ -1082,14 +1082,14 @@ projectionExpressionWithPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "partitions")})),
+              Core.projectionFieldName = (Core.Name "partitions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groups"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "groups")})),
+              Core.projectionFieldName = (Core.Name "groups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "paths"),
@@ -1099,7 +1099,7 @@ projectionExpressionWithPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ProjectionExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 projectionSpecAll :: Phantoms.TTerm Expressions.ProjectionSpec
@@ -1141,7 +1141,7 @@ propertyComparisonConditionOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyComparisonConditionProperty :: Phantoms.TTerm Expressions.PropertyComparisonCondition -> Phantoms.TTerm String
@@ -1149,7 +1149,7 @@ propertyComparisonConditionProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-        Core.projectionField = (Core.Name "property")})),
+        Core.projectionFieldName = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyComparisonConditionTarget :: Phantoms.TTerm Expressions.PropertyComparisonCondition -> Phantoms.TTerm Expressions.PathElement
@@ -1157,7 +1157,7 @@ propertyComparisonConditionTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-        Core.projectionField = (Core.Name "target")})),
+        Core.projectionFieldName = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyComparisonConditionValue :: Phantoms.TTerm Expressions.PropertyComparisonCondition -> Phantoms.TTerm Expressions.LiteralValue
@@ -1165,7 +1165,7 @@ propertyComparisonConditionValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyComparisonConditionWithOperator :: Phantoms.TTerm Expressions.PropertyComparisonCondition -> Phantoms.TTerm Expressions.ComparisonOperator -> Phantoms.TTerm Expressions.PropertyComparisonCondition
@@ -1178,14 +1178,14 @@ propertyComparisonConditionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -1195,7 +1195,7 @@ propertyComparisonConditionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyComparisonConditionWithProperty :: Phantoms.TTerm Expressions.PropertyComparisonCondition -> Phantoms.TTerm String -> Phantoms.TTerm Expressions.PropertyComparisonCondition
@@ -1208,7 +1208,7 @@ propertyComparisonConditionWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
@@ -1218,14 +1218,14 @@ propertyComparisonConditionWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyComparisonConditionWithTarget :: Phantoms.TTerm Expressions.PropertyComparisonCondition -> Phantoms.TTerm Expressions.PathElement -> Phantoms.TTerm Expressions.PropertyComparisonCondition
@@ -1241,21 +1241,21 @@ propertyComparisonConditionWithTarget original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyComparisonConditionWithValue :: Phantoms.TTerm Expressions.PropertyComparisonCondition -> Phantoms.TTerm Expressions.LiteralValue -> Phantoms.TTerm Expressions.PropertyComparisonCondition
@@ -1268,21 +1268,21 @@ propertyComparisonConditionWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyComparisonCondition"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1308,7 +1308,7 @@ propertyConditionProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyCondition"),
-        Core.projectionField = (Core.Name "property")})),
+        Core.projectionFieldName = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyConditionTarget :: Phantoms.TTerm Expressions.PropertyCondition -> Phantoms.TTerm Expressions.PathElement
@@ -1316,7 +1316,7 @@ propertyConditionTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyCondition"),
-        Core.projectionField = (Core.Name "target")})),
+        Core.projectionFieldName = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyConditionValue :: Phantoms.TTerm Expressions.PropertyCondition -> Phantoms.TTerm Expressions.LiteralValue
@@ -1324,7 +1324,7 @@ propertyConditionValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyCondition"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyConditionWithProperty :: Phantoms.TTerm Expressions.PropertyCondition -> Phantoms.TTerm String -> Phantoms.TTerm Expressions.PropertyCondition
@@ -1337,7 +1337,7 @@ propertyConditionWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyCondition"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
@@ -1347,7 +1347,7 @@ propertyConditionWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyCondition"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyConditionWithTarget :: Phantoms.TTerm Expressions.PropertyCondition -> Phantoms.TTerm Expressions.PathElement -> Phantoms.TTerm Expressions.PropertyCondition
@@ -1363,14 +1363,14 @@ propertyConditionWithTarget original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyCondition"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyCondition"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyConditionWithValue :: Phantoms.TTerm Expressions.PropertyCondition -> Phantoms.TTerm Expressions.LiteralValue -> Phantoms.TTerm Expressions.PropertyCondition
@@ -1383,14 +1383,14 @@ propertyConditionWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyCondition"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyCondition"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1413,7 +1413,7 @@ propertyExtractionAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyExtraction"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyExtractionSource :: Phantoms.TTerm Expressions.PropertyExtraction -> Phantoms.TTerm Expressions.PropertySource
@@ -1421,7 +1421,7 @@ propertyExtractionSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyExtraction"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyExtractionWithAlias :: Phantoms.TTerm Expressions.PropertyExtraction -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Expressions.PropertyExtraction
@@ -1437,7 +1437,7 @@ propertyExtractionWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyExtraction"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyExtractionWithSource :: Phantoms.TTerm Expressions.PropertyExtraction -> Phantoms.TTerm Expressions.PropertySource -> Phantoms.TTerm Expressions.PropertyExtraction
@@ -1450,7 +1450,7 @@ propertyExtractionWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.PropertyExtraction"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
@@ -1497,7 +1497,7 @@ queryExpressionPathExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.QueryExpression"),
-        Core.projectionField = (Core.Name "pathExpression")})),
+        Core.projectionFieldName = (Core.Name "pathExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 queryExpressionResultProjection :: Phantoms.TTerm Expressions.QueryExpression -> Phantoms.TTerm (Maybe Expressions.ResultProjection)
@@ -1505,7 +1505,7 @@ queryExpressionResultProjection x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.QueryExpression"),
-        Core.projectionField = (Core.Name "resultProjection")})),
+        Core.projectionFieldName = (Core.Name "resultProjection")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 queryExpressionWithPathExpression :: Phantoms.TTerm Expressions.QueryExpression -> Phantoms.TTerm Expressions.PathExpression -> Phantoms.TTerm Expressions.QueryExpression
@@ -1521,7 +1521,7 @@ queryExpressionWithPathExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.QueryExpression"),
-              Core.projectionField = (Core.Name "resultProjection")})),
+              Core.projectionFieldName = (Core.Name "resultProjection")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 queryExpressionWithResultProjection :: Phantoms.TTerm Expressions.QueryExpression -> Phantoms.TTerm (Maybe Expressions.ResultProjection) -> Phantoms.TTerm Expressions.QueryExpression
@@ -1534,7 +1534,7 @@ queryExpressionWithResultProjection original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.QueryExpression"),
-              Core.projectionField = (Core.Name "pathExpression")})),
+              Core.projectionFieldName = (Core.Name "pathExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "resultProjection"),
@@ -1557,7 +1557,7 @@ recursiveExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.RecursiveExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recursiveExpressionSemantics :: Phantoms.TTerm Expressions.RecursiveExpression -> Phantoms.TTerm Expressions.PathSemantics
@@ -1565,7 +1565,7 @@ recursiveExpressionSemantics x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.RecursiveExpression"),
-        Core.projectionField = (Core.Name "semantics")})),
+        Core.projectionFieldName = (Core.Name "semantics")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 recursiveExpressionWithExpression :: Phantoms.TTerm Expressions.RecursiveExpression -> Phantoms.TTerm Expressions.PathExpression -> Phantoms.TTerm Expressions.RecursiveExpression
@@ -1578,7 +1578,7 @@ recursiveExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.RecursiveExpression"),
-              Core.projectionField = (Core.Name "semantics")})),
+              Core.projectionFieldName = (Core.Name "semantics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -1597,7 +1597,7 @@ recursiveExpressionWithSemantics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.RecursiveExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 resultProjection :: Phantoms.TTerm [Expressions.PropertyExtraction] -> Phantoms.TTerm Expressions.ResultProjection
@@ -1614,7 +1614,7 @@ resultProjectionProjections x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.ResultProjection"),
-        Core.projectionField = (Core.Name "projections")})),
+        Core.projectionFieldName = (Core.Name "projections")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 resultProjectionWithProjections :: Phantoms.TTerm Expressions.ResultProjection -> Phantoms.TTerm [Expressions.PropertyExtraction] -> Phantoms.TTerm Expressions.ResultProjection
@@ -1675,7 +1675,7 @@ selectionExpressionCondition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SelectionExpression"),
-        Core.projectionField = (Core.Name "condition")})),
+        Core.projectionFieldName = (Core.Name "condition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectionExpressionExpression :: Phantoms.TTerm Expressions.SelectionExpression -> Phantoms.TTerm Expressions.PathExpression
@@ -1683,7 +1683,7 @@ selectionExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SelectionExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectionExpressionWithCondition :: Phantoms.TTerm Expressions.SelectionExpression -> Phantoms.TTerm Expressions.SelectionCondition -> Phantoms.TTerm Expressions.SelectionExpression
@@ -1699,7 +1699,7 @@ selectionExpressionWithCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SelectionExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectionExpressionWithExpression :: Phantoms.TTerm Expressions.SelectionExpression -> Phantoms.TTerm Expressions.PathExpression -> Phantoms.TTerm Expressions.SelectionExpression
@@ -1712,7 +1712,7 @@ selectionExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.SelectionExpression"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -1789,7 +1789,7 @@ unionExpressionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.UnionExpression"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionExpressionRight :: Phantoms.TTerm Expressions.UnionExpression -> Phantoms.TTerm Expressions.PathExpression
@@ -1797,7 +1797,7 @@ unionExpressionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.UnionExpression"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionExpressionWithLeft :: Phantoms.TTerm Expressions.UnionExpression -> Phantoms.TTerm Expressions.PathExpression -> Phantoms.TTerm Expressions.UnionExpression
@@ -1813,7 +1813,7 @@ unionExpressionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.UnionExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unionExpressionWithRight :: Phantoms.TTerm Expressions.UnionExpression -> Phantoms.TTerm Expressions.PathExpression -> Phantoms.TTerm Expressions.UnionExpression
@@ -1826,7 +1826,7 @@ unionExpressionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "com.gdblab.pathAlgebra.expressions.UnionExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),

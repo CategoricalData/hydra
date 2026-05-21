@@ -181,7 +181,7 @@ deepProjection typeName fieldName =
   injectTermProject $
     Core.termRecord $ Core.record (Core.nameLift _Projection) (list [
       Core.field (Core.nameLift _Projection_typeName) (deepName (Core.unName typeName)),
-      Core.field (Core.nameLift _Projection_field) (deepName (Core.unName fieldName))])
+      Core.field (Core.nameLift _Projection_fieldName) (deepName (Core.unName fieldName))])
 
 -- | Build a deep Application as a Term value
 deepApplication :: TTerm Term -> TTerm Term -> TTerm Term

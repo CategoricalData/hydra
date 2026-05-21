@@ -854,7 +854,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.errors.MultipleBindingsError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.errors.MultipleBindingsError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -898,7 +898,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "fieldName", "typeName": "hydra.errors.MultipleFieldsError"}}}},
+                                                  "function": {"project": {"fieldName": "fieldName", "typeName": "hydra.errors.MultipleFieldsError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -941,7 +941,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "fieldName", "typeName": "hydra.errors.NoMatchingFieldError"}}}},
+                                                  "function": {"project": {"fieldName": "fieldName", "typeName": "hydra.errors.NoMatchingFieldError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -984,7 +984,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.errors.NoSuchBindingError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.errors.NoSuchBindingError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -1027,7 +1027,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "name", "typeName": "hydra.errors.NoSuchPrimitiveError"}}}},
+                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.errors.NoSuchPrimitiveError"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -1125,7 +1125,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "path", "typeName": "hydra.errors.OtherInferenceError"}}}},
+                                                  "function": {"project": {"fieldName": "path", "typeName": "hydra.errors.OtherInferenceError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -1139,7 +1139,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "message", "typeName": "hydra.errors.OtherInferenceError"}}}},
+                                                  "function": {"project": {"fieldName": "message", "typeName": "hydra.errors.OtherInferenceError"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -1384,7 +1384,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "expected", "typeName": "hydra.errors.UnexpectedShapeError"}}}},
+                                                  "function": {"project": {"fieldName": "expected", "typeName": "hydra.errors.UnexpectedShapeError"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -1407,7 +1407,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "actual", "typeName": "hydra.errors.UnexpectedShapeError"}}}},
+                                                  "function": {"project": {"fieldName": "actual", "typeName": "hydra.errors.UnexpectedShapeError"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -1459,7 +1459,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "leftType", "typeName": "hydra.errors.UnificationError"}}}},
+                                                  "function": {"project": {"fieldName": "leftType", "typeName": "hydra.errors.UnificationError"}}}},
                                               "function": {"variable": "hydra.encode.core.type"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -1473,7 +1473,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "rightType", "typeName": "hydra.errors.UnificationError"}}}},
+                                                  "function": {"project": {"fieldName": "rightType", "typeName": "hydra.errors.UnificationError"}}}},
                                               "function": {"variable": "hydra.encode.core.type"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -1487,7 +1487,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "message", "typeName": "hydra.errors.UnificationError"}}}},
+                                                  "function": {"project": {"fieldName": "message", "typeName": "hydra.errors.UnificationError"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -1539,7 +1539,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "path", "typeName": "hydra.errors.UnificationInferenceError"}}}},
+                                                  "function": {"project": {"fieldName": "path", "typeName": "hydra.errors.UnificationInferenceError"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -1553,7 +1553,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "cause", "typeName": "hydra.errors.UnificationInferenceError"}}}},
+                                                  "function": {"project": {"fieldName": "cause", "typeName": "hydra.errors.UnificationInferenceError"}}}},
                                               "function": {"variable": "hydra.encode.errors.unificationError"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},

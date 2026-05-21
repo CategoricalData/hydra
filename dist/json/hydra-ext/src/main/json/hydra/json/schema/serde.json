@@ -452,14 +452,16 @@
                                       {
                                         "name": "value",
                                         "term": {
-                                          "application": {"argument": {"variable": "lim"}, "function": {"project": {"field": "value", "typeName": "hydra.json.schema.Limit"}}}},
+                                          "application": {
+                                            "argument": {"variable": "lim"},
+                                            "function": {"project": {"fieldName": "value", "typeName": "hydra.json.schema.Limit"}}}},
                                         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                       {
                                         "name": "excl",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "lim"},
-                                            "function": {"project": {"field": "exclusive", "typeName": "hydra.json.schema.Limit"}}}},
+                                            "function": {"project": {"fieldName": "exclusive", "typeName": "hydra.json.schema.Limit"}}}},
                                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -520,14 +522,16 @@
                                       {
                                         "name": "value",
                                         "term": {
-                                          "application": {"argument": {"variable": "lim"}, "function": {"project": {"field": "value", "typeName": "hydra.json.schema.Limit"}}}},
+                                          "application": {
+                                            "argument": {"variable": "lim"},
+                                            "function": {"project": {"fieldName": "value", "typeName": "hydra.json.schema.Limit"}}}},
                                         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                       {
                                         "name": "excl",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "lim"},
-                                            "function": {"project": {"field": "exclusive", "typeName": "hydra.json.schema.Limit"}}}},
+                                            "function": {"project": {"fieldName": "exclusive", "typeName": "hydra.json.schema.Limit"}}}},
                                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -1461,14 +1465,16 @@
                       {
                         "name": "mid",
                         "term": {
-                          "application": {"argument": {"variable": "doc"}, "function": {"project": {"field": "id", "typeName": "hydra.json.schema.Document"}}}},
+                          "application": {
+                            "argument": {"variable": "doc"},
+                            "function": {"project": {"fieldName": "id", "typeName": "hydra.json.schema.Document"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "mdefs",
                         "term": {
                           "application": {
                             "argument": {"variable": "doc"},
-                            "function": {"project": {"field": "definitions", "typeName": "hydra.json.schema.Document"}}}},
+                            "function": {"project": {"fieldName": "definitions", "typeName": "hydra.json.schema.Document"}}}},
                         "typeScheme": {
                           "body": {
                             "maybe": {"map": {"keys": {"variable": "hydra.json.schema.Keyword"}, "values": {"variable": "hydra.json.schema.Schema"}}}},
@@ -1476,7 +1482,9 @@
                       {
                         "name": "root",
                         "term": {
-                          "application": {"argument": {"variable": "doc"}, "function": {"project": {"field": "root", "typeName": "hydra.json.schema.Document"}}}},
+                          "application": {
+                            "argument": {"variable": "doc"},
+                            "function": {"project": {"fieldName": "root", "typeName": "hydra.json.schema.Document"}}}},
                         "typeScheme": {"body": {"variable": "hydra.json.schema.Schema"}, "variables": []}},
                       {
                         "name": "schemaMap",

@@ -71,7 +71,7 @@
                                                                   {
                                                                     "name": "fname",
                                                                     "term": {
-                                                                      "application": {"argument": {"variable": "ft"}, "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
+                                                                      "application": {"argument": {"variable": "ft"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.FieldType"}}}},
                                                                     "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                                                 "body": {
                                                                   "let": {
@@ -147,7 +147,9 @@
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
-                                                                                                  "typeApplication": {"body": {"project": {"field": "decode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"project": {"fieldName": "decode", "typeName": "hydra.coders.Coder"}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}},
                                                                                                 "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                 "function": {
                                                                                   "typeApplication": {
@@ -329,7 +331,7 @@
                                                 "body": {
                                                   "application": {
                                                     "argument": {
-                                                      "application": {"argument": {"variable": "ft"}, "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}},
+                                                      "application": {"argument": {"variable": "ft"}, "function": {"project": {"fieldName": "type", "typeName": "hydra.core.FieldType"}}}},
                                                     "function": {
                                                       "cases": {
                                                         "cases": [
@@ -473,7 +475,7 @@
                                                                           {
                                                                             "name": "fname",
                                                                             "term": {
-                                                                              "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Field"}}}},
+                                                                              "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Field"}}}},
                                                                             "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                                                         "body": {
                                                                           "let": {
@@ -481,7 +483,7 @@
                                                                               {
                                                                                 "name": "fvalue",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Field"}}}},
+                                                                                  "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Field"}}}},
                                                                                 "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                             "body": {
                                                                               "application": {
@@ -532,7 +534,9 @@
                                                                                                     "function": {
                                                                                                       "typeApplication": {
                                                                                                         "body": {
-                                                                                                          "typeApplication": {"body": {"project": {"field": "encode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"project": {"fieldName": "encode", "typeName": "hydra.coders.Coder"}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}},
                                                                                                         "type": {"variable": "t0"}}}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
@@ -608,7 +612,7 @@
                                                       {
                                                         "name": "fields",
                                                         "term": {
-                                                          "application": {"argument": {"variable": "record"}, "function": {"project": {"field": "fields", "typeName": "hydra.core.Record"}}}},
+                                                          "application": {"argument": {"variable": "record"}, "function": {"project": {"fieldName": "fields", "typeName": "hydra.core.Record"}}}},
                                                         "typeScheme": {"body": {"list": {"variable": "hydra.core.Field"}}, "variables": []}}],
                                                     "body": {
                                                       "application": {
@@ -1615,7 +1619,7 @@
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
-                                                                  "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}}}},
+                                                                  "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "type", "typeName": "hydra.core.FieldType"}}}},
                                                                 "function": {"typeApplication": {"body": {"variable": "hydra.yaml.coder.termCoder"}, "type": {"variable": "t0"}}}}}}}}},
                                                     "function": {
                                                       "typeApplication": {
@@ -1922,7 +1926,9 @@
                                                                                         "function": {
                                                                                           "typeApplication": {
                                                                                             "body": {
-                                                                                              "typeApplication": {"body": {"project": {"field": "encode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Literal"}}},
+                                                                                              "typeApplication": {
+                                                                                                "body": {"project": {"fieldName": "encode", "typeName": "hydra.coders.Coder"}},
+                                                                                                "type": {"variable": "hydra.core.Literal"}}},
                                                                                             "type": {"variable": "hydra.yaml.model.Scalar"}}}}}}}}},
                                                                             "function": {
                                                                               "typeApplication": {
@@ -2038,7 +2044,9 @@
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
-                                                                                                              "typeApplication": {"body": {"project": {"field": "encode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"project": {"fieldName": "encode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                "type": {"variable": "hydra.core.Term"}}},
                                                                                                             "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                             "domain": {"variable": "hydra.core.Term"},
                                                                                             "parameter": "el"}},
@@ -2162,7 +2170,9 @@
                                                                                                             "function": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
-                                                                                                                  "typeApplication": {"body": {"project": {"field": "decode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"project": {"fieldName": "decode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
                                                                                                                 "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                                 "domain": {"variable": "hydra.yaml.model.Node"},
                                                                                                 "parameter": "node"}},
@@ -2281,7 +2291,9 @@
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
-                                                                                                                          "typeApplication": {"body": {"project": {"field": "encode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"project": {"fieldName": "encode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                            "type": {"variable": "hydra.core.Term"}}},
                                                                                                                         "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
@@ -2439,7 +2451,9 @@
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {
-                                                                                                                      "typeApplication": {"body": {"project": {"field": "decode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"project": {"fieldName": "decode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                        "type": {"variable": "hydra.core.Term"}}},
                                                                                                                     "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                                     "function": {
                                                                                                       "typeApplication": {
@@ -2480,7 +2494,9 @@
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {
-                                                                                                      "typeApplication": {"body": {"project": {"field": "decode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"project": {"fieldName": "decode", "typeName": "hydra.coders.Coder"}},
+                                                                                                        "type": {"variable": "hydra.core.Term"}}},
                                                                                                     "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                     "function": {
                                                                                       "typeApplication": {
@@ -2591,7 +2607,9 @@
                                                                                                                                                             "function": {
                                                                                                                                                               "typeApplication": {
                                                                                                                                                                 "body": {
-                                                                                                                                                                  "typeApplication": {"body": {"project": {"field": "decode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Literal"}}},
+                                                                                                                                                                  "typeApplication": {
+                                                                                                                                                                    "body": {"project": {"fieldName": "decode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                                                                    "type": {"variable": "hydra.core.Literal"}}},
                                                                                                                                                                 "type": {"variable": "hydra.yaml.model.Scalar"}}}}}}}}},
                                                                                                                                                 "function": {
                                                                                                                                                   "typeApplication": {
@@ -2729,7 +2747,7 @@
                                                                                   {
                                                                                     "name": "kt",
                                                                                     "term": {
-                                                                                      "application": {"argument": {"variable": "mt"}, "function": {"project": {"field": "keys", "typeName": "hydra.core.MapType"}}}},
+                                                                                      "application": {"argument": {"variable": "mt"}, "function": {"project": {"fieldName": "keys", "typeName": "hydra.core.MapType"}}}},
                                                                                     "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "let": {
@@ -2737,7 +2755,7 @@
                                                                                       {
                                                                                         "name": "vt",
                                                                                         "term": {
-                                                                                          "application": {"argument": {"variable": "mt"}, "function": {"project": {"field": "values", "typeName": "hydra.core.MapType"}}}},
+                                                                                          "application": {"argument": {"variable": "mt"}, "function": {"project": {"fieldName": "values", "typeName": "hydra.core.MapType"}}}},
                                                                                         "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                                                     "body": {
                                                                                       "application": {
@@ -2821,7 +2839,9 @@
                                                                                                                                                         "function": {
                                                                                                                                                           "typeApplication": {
                                                                                                                                                             "body": {
-                                                                                                                                                              "typeApplication": {"body": {"project": {"field": "encode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                              "typeApplication": {
+                                                                                                                                                                "body": {"project": {"fieldName": "encode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                                                                "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                             "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                                                                             "function": {
                                                                                                                                               "typeApplication": {
@@ -2846,7 +2866,9 @@
                                                                                                                                                 "function": {
                                                                                                                                                   "typeApplication": {
                                                                                                                                                     "body": {
-                                                                                                                                                      "typeApplication": {"body": {"project": {"field": "encode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                      "typeApplication": {
+                                                                                                                                                        "body": {"project": {"fieldName": "encode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                                                        "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                     "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
@@ -2945,7 +2967,9 @@
                                                                                                                                                             "function": {
                                                                                                                                                               "typeApplication": {
                                                                                                                                                                 "body": {
-                                                                                                                                                                  "typeApplication": {"body": {"project": {"field": "decode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                                  "typeApplication": {
+                                                                                                                                                                    "body": {"project": {"fieldName": "decode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                                                                    "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                                 "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                                                                                 "function": {
                                                                                                                                                   "typeApplication": {
@@ -2970,7 +2994,9 @@
                                                                                                                                                     "function": {
                                                                                                                                                       "typeApplication": {
                                                                                                                                                         "body": {
-                                                                                                                                                          "typeApplication": {"body": {"project": {"field": "decode", "typeName": "hydra.coders.Coder"}}, "type": {"variable": "hydra.core.Term"}}},
+                                                                                                                                                          "typeApplication": {
+                                                                                                                                                            "body": {"project": {"fieldName": "decode", "typeName": "hydra.coders.Coder"}},
+                                                                                                                                                            "type": {"variable": "hydra.core.Term"}}},
                                                                                                                                                         "type": {"variable": "hydra.yaml.model.Node"}}}}}}}}},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
@@ -3714,7 +3740,9 @@
                                                                                 "body": {
                                                                                   "typeApplication": {
                                                                                     "body": {
-                                                                                      "typeApplication": {"body": {"project": {"field": "coder", "typeName": "hydra.coders.Adapter"}}, "type": {"variable": "hydra.core.Type"}}},
+                                                                                      "typeApplication": {
+                                                                                        "body": {"project": {"fieldName": "coder", "typeName": "hydra.coders.Adapter"}},
+                                                                                        "type": {"variable": "hydra.core.Type"}}},
                                                                                     "type": {"variable": "hydra.core.Type"}}},
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}}}},
@@ -3749,7 +3777,9 @@
                                                                 "body": {
                                                                   "typeApplication": {
                                                                     "body": {
-                                                                      "typeApplication": {"body": {"project": {"field": "target", "typeName": "hydra.coders.Adapter"}}, "type": {"variable": "hydra.core.Type"}}},
+                                                                      "typeApplication": {
+                                                                        "body": {"project": {"fieldName": "target", "typeName": "hydra.coders.Adapter"}},
+                                                                        "type": {"variable": "hydra.core.Type"}}},
                                                                     "type": {"variable": "hydra.core.Type"}}},
                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                             "type": {"variable": "hydra.core.Term"}}}}},

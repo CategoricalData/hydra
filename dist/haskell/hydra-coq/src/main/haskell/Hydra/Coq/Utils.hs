@@ -448,12 +448,12 @@ rewriteTermFields fm term0 =
               \recurse -> \term -> case term of
                 Core.TermProject v0 ->
                   let tname = Core.unName (Core.projectionTypeName v0)
-                      rawFn = localNameRaw (Core.unName (Core.projectionField v0))
+                      rawFn = localNameRaw (Core.unName (Core.projectionFieldName v0))
                       key = (tname, rawFn)
-                      newFname = Maybes.fromMaybe (Core.projectionField v0) (Maybes.map (\s -> Core.Name s) (Maps.lookup key fm))
+                      newFname = Maybes.fromMaybe (Core.projectionFieldName v0) (Maybes.map (\s -> Core.Name s) (Maps.lookup key fm))
                   in (Core.TermProject (Core.Projection {
                     Core.projectionTypeName = (Core.projectionTypeName v0),
-                    Core.projectionField = newFname}))
+                    Core.projectionFieldName = newFname}))
                 _ -> recurse term
       in (Rewriting.rewriteTerm rewrite term0)
 -- | Escape a stripped local name against Coq's stripped reserved-words set

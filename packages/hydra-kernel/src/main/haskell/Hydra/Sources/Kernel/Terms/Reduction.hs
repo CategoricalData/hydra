@@ -765,10 +765,10 @@ reduceTerm = define "reduceTerm" $
   "applyProjection" <~ ("proj" ~> "reducedArg" ~>
     "fields" <<~ ExtractCore.record @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
     "matching" <~ (Lists.find
-      ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
+      ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionFieldName $ var "proj"))
       (var "fields")) $
     Maybes.maybe
-      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionField $ var "proj")) (var "cx"))
+      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionFieldName $ var "proj")) (var "cx"))
       ("mf" ~> right $ Core.fieldTerm $ var "mf")
       (var "matching")) $
   "applyCases" <~ ("cs" ~> "reducedArg" ~>

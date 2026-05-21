@@ -303,7 +303,7 @@ encodeApplicationInner cx env fun hargs rargs =
                   Eithers.bind (encodeTermInline cx env False fun) (\pfun -> Right (Utils.functionCall (Utils.pyExpressionToPyPrimary pfun) hargs, rargs))
       in case (Strip.deannotateAndDetypeTerm fun) of
         Core.TermProject v0 ->
-          let fname = Core.projectionField v0
+          let fname = Core.projectionFieldName v0
               fieldExpr = Utils.projectFromExpression firstArg (PythonNames.encodeFieldName env fname)
           in (Right (withRest fieldExpr, rargs))
         Core.TermCases v0 -> Eithers.bind (encodeUnionEliminationInline cx env v0 firstArg) (\inlineExpr -> Right (withRest inlineExpr, rargs))
@@ -909,7 +909,7 @@ encodeTermInline cx env noCast term =
                         indexValue]
               in (Right (makeUncurriedLambda pparams (Utils.pyPrimaryToPyExpression indexedExpr)))))))))
         Core.TermProject v0 ->
-          let fname = Core.projectionField v0
+          let fname = Core.projectionFieldName v0
           in (Right (makeCurriedLambda [
             Syntax.Name "v1"] (Utils.projectFromExpression (Syntax.ExpressionSimple (Syntax.Disjunction [
             Syntax.Conjunction [

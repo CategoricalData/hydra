@@ -31,7 +31,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "trace", "typeName": "hydra.context.Context"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "trace", "typeName": "hydra.context.Context"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -70,7 +70,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "messages", "typeName": "hydra.context.Context"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "messages", "typeName": "hydra.context.Context"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -109,7 +109,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "other", "typeName": "hydra.context.Context"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "other", "typeName": "hydra.context.Context"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {

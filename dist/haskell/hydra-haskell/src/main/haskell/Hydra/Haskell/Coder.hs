@@ -237,7 +237,7 @@ encodeProjection :: Util.Namespaces Syntax.ModuleName -> Core.Projection -> Eith
 encodeProjection namespaces proj =
 
       let dn = Core.projectionTypeName proj
-          fname = Core.projectionField proj
+          fname = Core.projectionFieldName proj
       in (Right (Syntax.ExpressionVariable (Utils.recordFieldReference namespaces dn fname)))
 -- | Encode a standalone (un-applied) case statement as a Haskell lambda over a case expression
 encodeStandaloneCases :: Int -> Util.Namespaces Syntax.ModuleName -> Core.CaseStatement -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression

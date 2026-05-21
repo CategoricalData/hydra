@@ -329,7 +329,7 @@ encodeFunction = def "encodeFunction" $
           ("a" ~> asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "a")
           (var "arg")),
       _Term_project>>: ("proj" ~> lets [
-        "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _Projection _Projection_field @@ var "proj")),
+        "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _Projection _Projection_fieldName @@ var "proj")),
         "typeName">: project _Projection _Projection_typeName @@ var "proj",
         "pv">: string "x"] $
         Maybes.maybe
@@ -651,7 +651,7 @@ encodeTerm = def "encodeTerm" $
                     -- Pass arg as the applied argument to encodeFunction's cases handler
                     asTerm encodeFunction @@ var "cx" @@ var "g" @@ (Annotations.termAnnotationInternal @@ var "innerFun") @@ var "innerFun" @@ just (var "arg"))])]),
           _Term_project>>: ("proj" ~> lets [
-            "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _Projection _Projection_field @@ var "proj"))] $
+            "fname">: ScalaUtilsSource.scalaEscapeName @@ (Core.unName (project _Projection _Projection_fieldName @@ var "proj"))] $
             Eithers.bind
               (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "arg")
               ("sarg" ~>

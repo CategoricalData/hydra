@@ -31,7 +31,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "ae"},
-                                                  "function": {"project": {"field": "id", "typeName": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
+                                                  "function": {"project": {"fieldName": "id", "typeName": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                                               "function": {"variable": "hydra.pg.graphson.coder.valueToJson"}}}}}},
                                     "type": {"literal": {"string": {}}}}},
                                 "type": {"maybe": {"variable": "hydra.json.model.Value"}}}},
@@ -53,7 +53,7 @@
                                                       "argument": {
                                                         "application": {
                                                           "argument": {"variable": "ae"},
-                                                          "function": {"project": {"field": "vertexId", "typeName": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
+                                                          "function": {"project": {"fieldName": "vertexId", "typeName": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                                                       "function": {"variable": "hydra.pg.graphson.coder.valueToJson"}}}},
                                                 "function": {
                                                   "application": {
@@ -77,7 +77,7 @@
                                                   "argument": {
                                                     "application": {
                                                       "argument": {"variable": "ae"},
-                                                      "function": {"project": {"field": "vertexId", "typeName": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
+                                                      "function": {"project": {"fieldName": "vertexId", "typeName": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                                                   "function": {"variable": "hydra.pg.graphson.coder.valueToJson"}}}},
                                             "function": {
                                               "application": {
@@ -101,7 +101,7 @@
                                             "argument": {
                                               "application": {
                                                 "argument": {"variable": "ae"},
-                                                "function": {"project": {"field": "properties", "typeName": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
+                                                "function": {"project": {"fieldName": "properties", "typeName": "hydra.pg.graphson.syntax.AdjacentEdge"}}}},
                                             "function": {"variable": "hydra.pg.graphson.coder.edgePropertyMapToJson"}}}}},
                                     "type": {"literal": {"string": {}}}}},
                                 "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}]},
@@ -482,14 +482,14 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "vp"},
-                                                  "function": {"project": {"field": "first", "typeName": "hydra.pg.graphson.syntax.ValuePair"}}}},
+                                                  "function": {"project": {"fieldName": "first", "typeName": "hydra.pg.graphson.syntax.ValuePair"}}}},
                                               "function": {"variable": "hydra.pg.graphson.coder.valueToJson"}}},
                                           {
                                             "application": {
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "vp"},
-                                                  "function": {"project": {"field": "second", "typeName": "hydra.pg.graphson.syntax.ValuePair"}}}},
+                                                  "function": {"project": {"fieldName": "second", "typeName": "hydra.pg.graphson.syntax.ValuePair"}}}},
                                               "function": {"variable": "hydra.pg.graphson.coder.valueToJson"}}}]},
                                       "domain": {"variable": "hydra.pg.graphson.syntax.ValuePair"},
                                       "parameter": "vp"}},
@@ -754,7 +754,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "ctv"},
-                                    "function": {"project": {"field": "fields", "typeName": "hydra.pg.graphson.syntax.CompositeTypedValue"}}}},
+                                    "function": {"project": {"fieldName": "fields", "typeName": "hydra.pg.graphson.syntax.CompositeTypedValue"}}}},
                                 "function": {"variable": "hydra.pg.graphson.coder.mapToJson"}}},
                             "function": {
                               "application": {
@@ -763,7 +763,7 @@
                                     "argument": {
                                       "application": {
                                         "argument": {"variable": "ctv"},
-                                        "function": {"project": {"field": "type", "typeName": "hydra.pg.graphson.syntax.CompositeTypedValue"}}}},
+                                        "function": {"project": {"fieldName": "type", "typeName": "hydra.pg.graphson.syntax.CompositeTypedValue"}}}},
                                     "function": {"unwrap": "hydra.pg.graphson.syntax.TypeName"}}},
                                 "function": {"variable": "hydra.pg.graphson.coder.typedValueToJson"}}}}},
                         "domain": {"variable": "hydra.pg.graphson.syntax.CompositeTypedValue"},
@@ -921,7 +921,7 @@
                                   "term": {
                                     "application": {
                                       "argument": {"variable": "ptv"},
-                                      "function": {"project": {"field": "value", "typeName": "hydra.pg.graphson.syntax.PrimitiveTypedValue"}}}}},
+                                      "function": {"project": {"fieldName": "value", "typeName": "hydra.pg.graphson.syntax.PrimitiveTypedValue"}}}}},
                                 "typeName": "hydra.json.model.Value"}},
                             "function": {
                               "application": {
@@ -1149,7 +1149,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "vpv"},
-                                            "function": {"project": {"field": "id", "typeName": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
+                                            "function": {"project": {"fieldName": "id", "typeName": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "hydra.pg.graphson.coder.valueToJson"},
@@ -1173,7 +1173,7 @@
                                           "argument": {
                                             "application": {
                                               "argument": {"variable": "vpv"},
-                                              "function": {"project": {"field": "value", "typeName": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
+                                              "function": {"project": {"fieldName": "value", "typeName": "hydra.pg.graphson.syntax.VertexPropertyValue"}}}},
                                           "function": {"variable": "hydra.pg.graphson.coder.valueToJson"}}}}}},
                                 "type": {"literal": {"string": {}}}}},
                             "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}]},
@@ -1209,7 +1209,9 @@
                                       "maybe": {
                                         "application": {
                                           "argument": {
-                                            "application": {"argument": {"variable": "v"}, "function": {"project": {"field": "id", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
+                                            "application": {
+                                              "argument": {"variable": "v"},
+                                              "function": {"project": {"fieldName": "id", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
                                           "function": {"variable": "hydra.pg.graphson.coder.valueToJson"}}}}}},
                                 "type": {"literal": {"string": {}}}}},
                             "type": {"maybe": {"variable": "hydra.json.model.Value"}}}},
@@ -1225,7 +1227,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "v"},
-                                            "function": {"project": {"field": "label", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
+                                            "function": {"project": {"fieldName": "label", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
                                         "function": {
                                           "application": {
                                             "argument": {
@@ -1257,7 +1259,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "v"},
-                                            "function": {"project": {"field": "inEdges", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
+                                            "function": {"project": {"fieldName": "inEdges", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
                                         "function": {
                                           "application": {"argument": {"literal": {"boolean": false}}, "function": {"variable": "hydra.pg.graphson.coder.edgeMapToJson"}}}}}}},
                                 "type": {"literal": {"string": {}}}}},
@@ -1274,7 +1276,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "v"},
-                                            "function": {"project": {"field": "outEdges", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
+                                            "function": {"project": {"fieldName": "outEdges", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
                                         "function": {
                                           "application": {"argument": {"literal": {"boolean": true}}, "function": {"variable": "hydra.pg.graphson.coder.edgeMapToJson"}}}}}}},
                                 "type": {"literal": {"string": {}}}}},
@@ -1291,7 +1293,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "v"},
-                                            "function": {"project": {"field": "properties", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
+                                            "function": {"project": {"fieldName": "properties", "typeName": "hydra.pg.graphson.syntax.Vertex"}}}},
                                         "function": {"variable": "hydra.pg.graphson.coder.vertexPropertyMapToJson"}}}}},
                                 "type": {"literal": {"string": {}}}}},
                             "type": {"maybe": {"variable": "hydra.json.model.Value"}}}}]},

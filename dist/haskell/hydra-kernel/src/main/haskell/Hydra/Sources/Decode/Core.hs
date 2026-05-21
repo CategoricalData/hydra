@@ -994,7 +994,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                          Core.projectionField = (Core.Name "field")})),
+                                          Core.projectionFieldName = (Core.Name "field")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -1002,7 +1002,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "name")})),
+                                          Core.projectionFieldName = (Core.Name "name")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -1010,7 +1010,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "term")})),
+                                          Core.projectionFieldName = (Core.Name "term")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -1167,7 +1167,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                          Core.projectionField = (Core.Name "field")})),
+                                          Core.projectionFieldName = (Core.Name "field")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -1175,7 +1175,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "name")})),
+                                          Core.projectionFieldName = (Core.Name "name")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -1183,7 +1183,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "term")})),
+                                          Core.projectionFieldName = (Core.Name "term")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -1723,7 +1723,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                          Core.projectionField = (Core.Name "field")})),
+                                          Core.projectionFieldName = (Core.Name "field")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -1731,7 +1731,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "name")})),
+                                          Core.projectionFieldName = (Core.Name "name")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -1739,7 +1739,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "term")})),
+                                          Core.projectionFieldName = (Core.Name "term")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -2127,7 +2127,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                          Core.projectionField = (Core.Name "field")})),
+                                          Core.projectionFieldName = (Core.Name "field")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -2135,7 +2135,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "name")})),
+                                          Core.projectionFieldName = (Core.Name "name")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -2143,7 +2143,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "term")})),
+                                          Core.projectionFieldName = (Core.Name "term")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -3161,7 +3161,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                          Core.projectionField = (Core.Name "field")})),
+                                          Core.projectionFieldName = (Core.Name "field")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -3169,7 +3169,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "name")})),
+                                          Core.projectionFieldName = (Core.Name "name")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -3177,7 +3177,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "term")})),
+                                          Core.projectionFieldName = (Core.Name "term")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -3598,7 +3598,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                          Core.projectionField = (Core.Name "field")})),
+                                          Core.projectionFieldName = (Core.Name "field")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -3606,7 +3606,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "name")})),
+                                          Core.projectionFieldName = (Core.Name "name")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -3614,7 +3614,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "term")})),
+                                          Core.projectionFieldName = (Core.Name "term")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -4037,7 +4037,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.core.WrappedTerm"),
-                                        Core.projectionField = (Core.Name "body")})),
+                                        Core.projectionFieldName = (Core.Name "body")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "wrappedTerm"))}))}))}))}))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
@@ -4217,12 +4217,12 @@ module_ =
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.requireField")),
-                                                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "field"))})),
+                                                  Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "fieldName"))})),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.name"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
                                         Core.applicationArgument = (Core.TermLambda (Core.Lambda {
-                                          Core.lambdaParameter = (Core.Name "field_field"),
+                                          Core.lambdaParameter = (Core.Name "field_fieldName"),
                                           Core.lambdaDomain = Nothing,
                                           Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
                                             Core.recordTypeName = (Core.Name "hydra.core.Projection"),
@@ -4231,8 +4231,8 @@ module_ =
                                                 Core.fieldName = (Core.Name "typeName"),
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "field_typeName"))},
                                               Core.Field {
-                                                Core.fieldName = (Core.Name "field"),
-                                                Core.fieldTerm = (Core.TermVariable (Core.Name "field_field"))}]}))))}))}))}))}))}))}))}]})),
+                                                Core.fieldName = (Core.Name "fieldName"),
+                                                Core.fieldTerm = (Core.TermVariable (Core.Name "field_fieldName"))}]}))))}))}))}))}))}))}))}]})),
                         Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))}))})),
                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                     Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -4389,7 +4389,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                          Core.projectionField = (Core.Name "field")})),
+                                          Core.projectionFieldName = (Core.Name "field")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -4397,7 +4397,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "name")})),
+                                          Core.projectionFieldName = (Core.Name "name")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -4405,7 +4405,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "term")})),
+                                          Core.projectionFieldName = (Core.Name "term")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -5007,7 +5007,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                          Core.projectionField = (Core.Name "field")})),
+                                          Core.projectionFieldName = (Core.Name "field")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -5015,7 +5015,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "name")})),
+                                          Core.projectionFieldName = (Core.Name "name")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {
@@ -5023,7 +5023,7 @@ module_ =
                                       Core.bindingTerm = (Core.TermApplication (Core.Application {
                                         Core.applicationFunction = (Core.TermProject (Core.Projection {
                                           Core.projectionTypeName = (Core.Name "hydra.core.Field"),
-                                          Core.projectionField = (Core.Name "term")})),
+                                          Core.projectionFieldName = (Core.Name "term")})),
                                         Core.applicationArgument = (Core.TermVariable (Core.Name "field"))})),
                                       Core.bindingTypeScheme = Nothing},
                                     Core.Binding {

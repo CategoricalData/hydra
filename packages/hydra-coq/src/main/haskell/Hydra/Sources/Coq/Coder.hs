@@ -389,7 +389,7 @@ encodeProjectionElim :: TTermDefinition (CE.CoqEnvironment -> Projection -> C.Te
 encodeProjectionElim = define "encodeProjectionElim" $
   doc "Translate a Hydra record projection into a Coq lambda that pulls out the field" $
   lambdas ["env", "p"] $ lets [
-    "fname">: Core.projectionField $ var "p",
+    "fname">: Core.projectionFieldName $ var "p",
     "rawFname">: unwrap _Name @@ var "fname",
     "sanitizedSet">: project CE._CoqEnvironment CE._CoqEnvironment_sanitizedAccessors @@ var "env"] $
     Logic.ifElse (Sets.member (var "rawFname") (var "sanitizedSet"))

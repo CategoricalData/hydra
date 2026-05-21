@@ -2140,7 +2140,7 @@ encodeElimination = def "encodeElimination" $
 
       -- Projection: field projection
       _Term_project>>: lambda "proj" $
-        "fname" <~ (Core.projectionField (var "proj")) $
+        "fname" <~ (Core.projectionFieldName (var "proj")) $
         "jdom0" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "dom" @@ var "cx" @@ var "g") $
         "jdomr" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jdom0" @@ var "cx") $
         Maybes.cases (var "marg")

@@ -1062,7 +1062,7 @@ encodeElimination env marg dom cod elimTerm cx g =
       let aliases = JavaEnvironment.javaEnvironmentAliases env
       in case (Strip.deannotateAndDetypeTerm elimTerm) of
         Core.TermProject v0 ->
-          let fname = Core.projectionField v0
+          let fname = Core.projectionFieldName v0
           in (Eithers.bind (encodeType aliases Sets.empty dom cx g) (\jdom0 -> Eithers.bind (Utils.javaTypeToJavaReferenceType jdom0 cx) (\_ -> Maybes.cases marg (
             let projVar = Core.Name "projected"
                 jbody =

@@ -51,7 +51,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "opt"},
-                                                    "function": {"project": {"field": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
+                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
                                                 "function": {
                                                   "application": {"argument": {"literal": {"integer": {"int32": 0}}}, "function": {"variable": "hydra.lib.strings.maybeCharAt"}}}}},
                                             "function": {
@@ -105,7 +105,7 @@
                                                     "argument": {
                                                       "application": {
                                                         "argument": {"variable": "opt"},
-                                                        "function": {"project": {"field": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
+                                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
                                             "domain": {"variable": "hydra.protobuf.proto3.Option"},
                                             "parameter": "opt"}},
@@ -131,7 +131,7 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "firstDesc"},
-                                                    "function": {"project": {"field": "value", "typeName": "hydra.protobuf.proto3.Option"}}}},
+                                                    "function": {"project": {"fieldName": "value", "typeName": "hydra.protobuf.proto3.Option"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.Value"}, "variables": []}},
                                               {
                                                 "name": "descStr",
@@ -346,21 +346,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "ed"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.protobuf.proto3.EnumDefinition"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.protobuf.proto3.EnumDefinition"}}}},
                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.TypeName"}, "variables": []}},
                       {
                         "name": "values",
                         "term": {
                           "application": {
                             "argument": {"variable": "ed"},
-                            "function": {"project": {"field": "values", "typeName": "hydra.protobuf.proto3.EnumDefinition"}}}},
+                            "function": {"project": {"fieldName": "values", "typeName": "hydra.protobuf.proto3.EnumDefinition"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.protobuf.proto3.EnumValue"}}, "variables": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "argument": {"variable": "ed"},
-                            "function": {"project": {"field": "options", "typeName": "hydra.protobuf.proto3.EnumDefinition"}}}},
+                            "function": {"project": {"fieldName": "options", "typeName": "hydra.protobuf.proto3.EnumDefinition"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -414,21 +414,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "ev"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.protobuf.proto3.EnumValue"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.protobuf.proto3.EnumValue"}}}},
                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.EnumValueName"}, "variables": []}},
                       {
                         "name": "number",
                         "term": {
                           "application": {
                             "argument": {"variable": "ev"},
-                            "function": {"project": {"field": "number", "typeName": "hydra.protobuf.proto3.EnumValue"}}}},
+                            "function": {"project": {"fieldName": "number", "typeName": "hydra.protobuf.proto3.EnumValue"}}}},
                         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "argument": {"variable": "ev"},
-                            "function": {"project": {"field": "options", "typeName": "hydra.protobuf.proto3.EnumValue"}}}},
+                            "function": {"project": {"fieldName": "options", "typeName": "hydra.protobuf.proto3.EnumValue"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -472,24 +472,30 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "name", "typeName": "hydra.protobuf.proto3.Field"}}}},
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.protobuf.proto3.Field"}}}},
                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.FieldName"}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "type", "typeName": "hydra.protobuf.proto3.Field"}}}},
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.protobuf.proto3.Field"}}}},
                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.FieldType"}, "variables": []}},
                       {
                         "name": "num",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "number", "typeName": "hydra.protobuf.proto3.Field"}}}},
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"project": {"fieldName": "number", "typeName": "hydra.protobuf.proto3.Field"}}}},
                         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "argument": {"variable": "f"},
-                            "function": {"project": {"field": "options", "typeName": "hydra.protobuf.proto3.Field"}}}},
+                            "function": {"project": {"fieldName": "options", "typeName": "hydra.protobuf.proto3.Field"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -540,14 +546,14 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "mt"},
-                                                    "function": {"project": {"field": "keys", "typeName": "hydra.protobuf.proto3.MapType"}}}},
+                                                    "function": {"project": {"fieldName": "keys", "typeName": "hydra.protobuf.proto3.MapType"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.SimpleType"}, "variables": []}},
                                               {
                                                 "name": "vt",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "mt"},
-                                                    "function": {"project": {"field": "values", "typeName": "hydra.protobuf.proto3.MapType"}}}},
+                                                    "function": {"project": {"fieldName": "values", "typeName": "hydra.protobuf.proto3.MapType"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.SimpleType"}, "variables": []}}],
                                             "body": {
                                               "application": {
@@ -694,14 +700,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "opt"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "value",
                         "term": {
                           "application": {
                             "argument": {"variable": "opt"},
-                            "function": {"project": {"field": "value", "typeName": "hydra.protobuf.proto3.Option"}}}},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.protobuf.proto3.Option"}}}},
                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.Value"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -801,14 +807,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "mt"},
-                                            "function": {"project": {"field": "keys", "typeName": "hydra.protobuf.proto3.MapType"}}}},
+                                            "function": {"project": {"fieldName": "keys", "typeName": "hydra.protobuf.proto3.MapType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.SimpleType"}, "variables": []}},
                                       {
                                         "name": "vt",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "mt"},
-                                            "function": {"project": {"field": "values", "typeName": "hydra.protobuf.proto3.MapType"}}}},
+                                            "function": {"project": {"fieldName": "values", "typeName": "hydra.protobuf.proto3.MapType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.SimpleType"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -877,14 +883,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "opt"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "value",
                         "term": {
                           "application": {
                             "argument": {"variable": "opt"},
-                            "function": {"project": {"field": "value", "typeName": "hydra.protobuf.proto3.Option"}}}},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.protobuf.proto3.Option"}}}},
                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.Value"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -1005,21 +1011,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "md"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.protobuf.proto3.MessageDefinition"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.protobuf.proto3.MessageDefinition"}}}},
                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.TypeName"}, "variables": []}},
                       {
                         "name": "fields",
                         "term": {
                           "application": {
                             "argument": {"variable": "md"},
-                            "function": {"project": {"field": "fields", "typeName": "hydra.protobuf.proto3.MessageDefinition"}}}},
+                            "function": {"project": {"fieldName": "fields", "typeName": "hydra.protobuf.proto3.MessageDefinition"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.protobuf.proto3.Field"}}, "variables": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "argument": {"variable": "md"},
-                            "function": {"project": {"field": "options", "typeName": "hydra.protobuf.proto3.MessageDefinition"}}}},
+                            "function": {"project": {"fieldName": "options", "typeName": "hydra.protobuf.proto3.MessageDefinition"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -1072,28 +1078,28 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "pf"},
-                            "function": {"project": {"field": "package", "typeName": "hydra.protobuf.proto3.ProtoFile"}}}},
+                            "function": {"project": {"fieldName": "package", "typeName": "hydra.protobuf.proto3.ProtoFile"}}}},
                         "typeScheme": {"body": {"variable": "hydra.protobuf.proto3.PackageName"}, "variables": []}},
                       {
                         "name": "imports",
                         "term": {
                           "application": {
                             "argument": {"variable": "pf"},
-                            "function": {"project": {"field": "imports", "typeName": "hydra.protobuf.proto3.ProtoFile"}}}},
+                            "function": {"project": {"fieldName": "imports", "typeName": "hydra.protobuf.proto3.ProtoFile"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.protobuf.proto3.FileReference"}}, "variables": []}},
                       {
                         "name": "defs",
                         "term": {
                           "application": {
                             "argument": {"variable": "pf"},
-                            "function": {"project": {"field": "types", "typeName": "hydra.protobuf.proto3.ProtoFile"}}}},
+                            "function": {"project": {"fieldName": "types", "typeName": "hydra.protobuf.proto3.ProtoFile"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.protobuf.proto3.Definition"}}, "variables": []}},
                       {
                         "name": "options",
                         "term": {
                           "application": {
                             "argument": {"variable": "pf"},
-                            "function": {"project": {"field": "options", "typeName": "hydra.protobuf.proto3.ProtoFile"}}}},
+                            "function": {"project": {"fieldName": "options", "typeName": "hydra.protobuf.proto3.ProtoFile"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.protobuf.proto3.Option"}}, "variables": []}},
                       {
                         "name": "headerSec",
@@ -1176,7 +1182,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "opt"},
-                                                    "function": {"project": {"field": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
+                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.protobuf.proto3.Option"}}}},
                                                 "function": {"typeApplication": {"body": {"variable": "hydra.lib.equality.equal"}, "type": {"literal": {"string": {}}}}}}}}},
                                         "function": {"variable": "hydra.lib.logic.not"}}},
                                     "domain": {"variable": "hydra.protobuf.proto3.Option"},

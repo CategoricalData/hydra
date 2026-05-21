@@ -456,7 +456,7 @@ encodeProjectionElim :: TTermDefinition (L.Dialect -> Context -> Graph -> Projec
 encodeProjectionElim = def "encodeProjectionElim" $
   "dialect" ~> "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
       -- Record projection: (:field record) or (record-type-field record)
-        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
+        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
         "tname" <~ (qualifiedSnakeName @@ Core.projectionTypeName (var "proj")) $
         Maybes.cases (var "marg")
           -- Unapplied: (lambda (v) (record-type-field v))

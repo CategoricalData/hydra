@@ -33,7 +33,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "vertexLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "vertexLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -56,7 +56,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "edgeLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "edgeLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -79,7 +79,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "vertexId", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "vertexId", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -102,7 +102,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "edgeId", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "edgeId", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -125,7 +125,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "propertyKey", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "propertyKey", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -148,7 +148,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "propertyValue", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "propertyValue", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -171,7 +171,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "outVertex", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "outVertex", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -194,7 +194,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "outVertexLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "outVertexLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -217,7 +217,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "inVertex", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "inVertex", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -240,7 +240,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "inVertexLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "inVertexLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -263,7 +263,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "outEdge", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "outEdge", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -286,7 +286,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "outEdgeLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "outEdgeLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -309,7 +309,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "inEdge", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "inEdge", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -332,7 +332,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "inEdgeLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "inEdgeLabel", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -355,7 +355,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "ignore", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
+                                                  "function": {"project": {"fieldName": "ignore", "typeName": "hydra.pg.mapping.AnnotationSchema"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -405,7 +405,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "label", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "label", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
                                               "function": {"variable": "hydra.encode.pg.model.edgeLabel"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -417,7 +419,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "id", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "id", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
                                               "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -429,7 +431,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "out", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "out", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
                                               "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -441,7 +443,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "in", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "in", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
                                               "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -455,7 +457,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "properties", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
+                                                  "function": {"project": {"fieldName": "properties", "typeName": "hydra.pg.mapping.EdgeSpec"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -584,7 +586,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "key", "typeName": "hydra.pg.mapping.PropertySpec"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "key", "typeName": "hydra.pg.mapping.PropertySpec"}}}},
                                               "function": {"variable": "hydra.encode.pg.model.propertyKey"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -598,7 +602,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "value", "typeName": "hydra.pg.mapping.PropertySpec"}}}},
+                                                  "function": {"project": {"fieldName": "value", "typeName": "hydra.pg.mapping.PropertySpec"}}}},
                                               "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -727,7 +731,9 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "label", "typeName": "hydra.pg.mapping.VertexSpec"}}}},
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"fieldName": "label", "typeName": "hydra.pg.mapping.VertexSpec"}}}},
                                               "function": {"variable": "hydra.encode.pg.model.vertexLabel"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -739,7 +745,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "id", "typeName": "hydra.pg.mapping.VertexSpec"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "id", "typeName": "hydra.pg.mapping.VertexSpec"}}}},
                                               "function": {"variable": "hydra.encode.pg.mapping.valueSpec"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -753,7 +759,7 @@
                                               "argument": {
                                                 "application": {
                                                   "argument": {"variable": "x"},
-                                                  "function": {"project": {"field": "properties", "typeName": "hydra.pg.mapping.VertexSpec"}}}},
+                                                  "function": {"project": {"fieldName": "properties", "typeName": "hydra.pg.mapping.VertexSpec"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {

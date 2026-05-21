@@ -27,7 +27,7 @@ arrayTypeContainsNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.ArrayType"),
-        Core.projectionField = (Core.Name "containsNull")})),
+        Core.projectionFieldName = (Core.Name "containsNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayTypeElementType :: Phantoms.TTerm Parquet.ArrayType -> Phantoms.TTerm Parquet.DataType
@@ -35,7 +35,7 @@ arrayTypeElementType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.ArrayType"),
-        Core.projectionField = (Core.Name "elementType")})),
+        Core.projectionFieldName = (Core.Name "elementType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayTypeWithContainsNull :: Phantoms.TTerm Parquet.ArrayType -> Phantoms.TTerm Bool -> Phantoms.TTerm Parquet.ArrayType
@@ -48,7 +48,7 @@ arrayTypeWithContainsNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.ArrayType"),
-              Core.projectionField = (Core.Name "elementType")})),
+              Core.projectionFieldName = (Core.Name "elementType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "containsNull"),
@@ -67,7 +67,7 @@ arrayTypeWithElementType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.ArrayType"),
-              Core.projectionField = (Core.Name "containsNull")})),
+              Core.projectionFieldName = (Core.Name "containsNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 basePrimitiveTypeBinary :: Phantoms.TTerm Parquet.BasePrimitiveType
@@ -215,7 +215,7 @@ decimalTypePrecision x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.DecimalType"),
-        Core.projectionField = (Core.Name "precision")})),
+        Core.projectionFieldName = (Core.Name "precision")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 decimalTypeScale :: Phantoms.TTerm Parquet.DecimalType -> Phantoms.TTerm Int
@@ -223,7 +223,7 @@ decimalTypeScale x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.DecimalType"),
-        Core.projectionField = (Core.Name "scale")})),
+        Core.projectionFieldName = (Core.Name "scale")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 decimalTypeWithPrecision :: Phantoms.TTerm Parquet.DecimalType -> Phantoms.TTerm Int -> Phantoms.TTerm Parquet.DecimalType
@@ -239,7 +239,7 @@ decimalTypeWithPrecision original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.DecimalType"),
-              Core.projectionField = (Core.Name "scale")})),
+              Core.projectionFieldName = (Core.Name "scale")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 decimalTypeWithScale :: Phantoms.TTerm Parquet.DecimalType -> Phantoms.TTerm Int -> Phantoms.TTerm Parquet.DecimalType
@@ -252,7 +252,7 @@ decimalTypeWithScale original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.DecimalType"),
-              Core.projectionField = (Core.Name "precision")})),
+              Core.projectionFieldName = (Core.Name "precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "scale"),
@@ -278,7 +278,7 @@ mapTypeKeyType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.MapType"),
-        Core.projectionField = (Core.Name "keyType")})),
+        Core.projectionFieldName = (Core.Name "keyType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapTypeValueContainsNull :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Bool
@@ -286,7 +286,7 @@ mapTypeValueContainsNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.MapType"),
-        Core.projectionField = (Core.Name "valueContainsNull")})),
+        Core.projectionFieldName = (Core.Name "valueContainsNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapTypeValueType :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Parquet.DataType
@@ -294,7 +294,7 @@ mapTypeValueType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.MapType"),
-        Core.projectionField = (Core.Name "valueType")})),
+        Core.projectionFieldName = (Core.Name "valueType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mapTypeWithKeyType :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Parquet.MapType
@@ -310,14 +310,14 @@ mapTypeWithKeyType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.MapType"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueContainsNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.MapType"),
-              Core.projectionField = (Core.Name "valueContainsNull")})),
+              Core.projectionFieldName = (Core.Name "valueContainsNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 mapTypeWithValueContainsNull :: Phantoms.TTerm Parquet.MapType -> Phantoms.TTerm Bool -> Phantoms.TTerm Parquet.MapType
@@ -330,14 +330,14 @@ mapTypeWithValueContainsNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.MapType"),
-              Core.projectionField = (Core.Name "keyType")})),
+              Core.projectionFieldName = (Core.Name "keyType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.MapType"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueContainsNull"),
@@ -353,7 +353,7 @@ mapTypeWithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.MapType"),
-              Core.projectionField = (Core.Name "keyType")})),
+              Core.projectionFieldName = (Core.Name "keyType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
@@ -363,7 +363,7 @@ mapTypeWithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.MapType"),
-              Core.projectionField = (Core.Name "valueContainsNull")})),
+              Core.projectionFieldName = (Core.Name "valueContainsNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structField :: Phantoms.TTerm String -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Bool -> Phantoms.TTerm Parquet.StructField
@@ -386,7 +386,7 @@ structFieldDataType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructField"),
-        Core.projectionField = (Core.Name "dataType")})),
+        Core.projectionFieldName = (Core.Name "dataType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structFieldName :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm String
@@ -394,7 +394,7 @@ structFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructField"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structFieldNullable :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm Bool
@@ -402,7 +402,7 @@ structFieldNullable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructField"),
-        Core.projectionField = (Core.Name "nullable")})),
+        Core.projectionFieldName = (Core.Name "nullable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structFieldWithDataType :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm Parquet.DataType -> Phantoms.TTerm Parquet.StructField
@@ -415,7 +415,7 @@ structFieldWithDataType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructField"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dataType"),
@@ -425,7 +425,7 @@ structFieldWithDataType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructField"),
-              Core.projectionField = (Core.Name "nullable")})),
+              Core.projectionFieldName = (Core.Name "nullable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structFieldWithName :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm String -> Phantoms.TTerm Parquet.StructField
@@ -441,14 +441,14 @@ structFieldWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructField"),
-              Core.projectionField = (Core.Name "dataType")})),
+              Core.projectionFieldName = (Core.Name "dataType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructField"),
-              Core.projectionField = (Core.Name "nullable")})),
+              Core.projectionFieldName = (Core.Name "nullable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structFieldWithNullable :: Phantoms.TTerm Parquet.StructField -> Phantoms.TTerm Bool -> Phantoms.TTerm Parquet.StructField
@@ -461,14 +461,14 @@ structFieldWithNullable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructField"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dataType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructField"),
-              Core.projectionField = (Core.Name "dataType")})),
+              Core.projectionFieldName = (Core.Name "dataType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullable"),
@@ -488,7 +488,7 @@ structTypeFields x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.delta.parquet.StructType"),
-        Core.projectionField = (Core.Name "fields")})),
+        Core.projectionFieldName = (Core.Name "fields")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structTypeWithFields :: Phantoms.TTerm Parquet.StructType -> Phantoms.TTerm [Parquet.StructField] -> Phantoms.TTerm Parquet.StructType

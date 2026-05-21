@@ -246,7 +246,7 @@ encodeLiteralType = def "encodeLiteralType" $
 encodeProjectionElim :: TTermDefinition (Context -> Graph -> Projection -> Maybe Term -> Either Error R.Expression)
 encodeProjectionElim = def "encodeProjectionElim" $
   "cx" ~> "g" ~> lambda "proj" $ lambda "marg" $
-        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionField (var "proj"))) $
+        "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.projectionFieldName (var "proj"))) $
         Maybes.cases (var "marg")
           -- Unapplied projection: |v| v.field
           (right (rustClosure @@ list [string "v"] @@

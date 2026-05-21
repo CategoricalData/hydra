@@ -13,7 +13,9 @@
                     "argument": {
                       "application": {
                         "argument": {
-                          "application": {"argument": {"variable": "crate"}, "function": {"project": {"field": "items", "typeName": "hydra.rust.syntax.Crate"}}}},
+                          "application": {
+                            "argument": {"variable": "crate"},
+                            "function": {"project": {"fieldName": "items", "typeName": "hydra.rust.syntax.Crate"}}}},
                         "function": {
                           "application": {
                             "argument": {"variable": "hydra.rust.serde.itemWithCommentsToExpr"},
@@ -142,21 +144,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "iwc"},
-                            "function": {"project": {"field": "doc", "typeName": "hydra.rust.syntax.ItemWithComments"}}}},
+                            "function": {"project": {"fieldName": "doc", "typeName": "hydra.rust.syntax.ItemWithComments"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "vis",
                         "term": {
                           "application": {
                             "argument": {"variable": "iwc"},
-                            "function": {"project": {"field": "visibility", "typeName": "hydra.rust.syntax.ItemWithComments"}}}},
+                            "function": {"project": {"fieldName": "visibility", "typeName": "hydra.rust.syntax.ItemWithComments"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Visibility"}, "variables": []}},
                       {
                         "name": "item",
                         "term": {
                           "application": {
                             "argument": {"variable": "iwc"},
-                            "function": {"project": {"field": "item", "typeName": "hydra.rust.syntax.ItemWithComments"}}}},
+                            "function": {"project": {"fieldName": "item", "typeName": "hydra.rust.syntax.ItemWithComments"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Item"}, "variables": []}},
                       {
                         "name": "docPart",
@@ -230,14 +232,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "use"},
-                            "function": {"project": {"field": "public", "typeName": "hydra.rust.syntax.UseDeclaration"}}}},
+                            "function": {"project": {"fieldName": "public", "typeName": "hydra.rust.syntax.UseDeclaration"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "tree",
                         "term": {
                           "application": {
                             "argument": {"variable": "use"},
-                            "function": {"project": {"field": "tree", "typeName": "hydra.rust.syntax.UseDeclaration"}}}},
+                            "function": {"project": {"fieldName": "tree", "typeName": "hydra.rust.syntax.UseDeclaration"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.UseTree"}, "variables": []}},
                       {
                         "name": "pubKw",
@@ -296,7 +298,9 @@
                                     "argument": {
                                       "application": {
                                         "argument": {
-                                          "application": {"argument": {"variable": "p"}, "function": {"project": {"field": "segments", "typeName": "hydra.rust.syntax.UsePath"}}}},
+                                          "application": {
+                                            "argument": {"variable": "p"},
+                                            "function": {"project": {"fieldName": "segments", "typeName": "hydra.rust.syntax.UsePath"}}}},
                                         "function": {"application": {"argument": {"literal": {"string": "::"}}, "function": {"variable": "hydra.lib.strings.intercalate"}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"variable": "hydra.rust.syntax.UsePath"},
@@ -311,12 +315,16 @@
                                       {
                                         "name": "path",
                                         "term": {
-                                          "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "path", "typeName": "hydra.rust.syntax.UseRename"}}}},
+                                          "application": {
+                                            "argument": {"variable": "r"},
+                                            "function": {"project": {"fieldName": "path", "typeName": "hydra.rust.syntax.UseRename"}}}},
                                         "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "alias",
                                         "term": {
-                                          "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "alias", "typeName": "hydra.rust.syntax.UseRename"}}}},
+                                          "application": {
+                                            "argument": {"variable": "r"},
+                                            "function": {"project": {"fieldName": "alias", "typeName": "hydra.rust.syntax.UseRename"}}}},
                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -363,12 +371,16 @@
                                       {
                                         "name": "prefix",
                                         "term": {
-                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "prefix", "typeName": "hydra.rust.syntax.UseGroup"}}}},
+                                          "application": {
+                                            "argument": {"variable": "g"},
+                                            "function": {"project": {"fieldName": "prefix", "typeName": "hydra.rust.syntax.UseGroup"}}}},
                                         "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "trees",
                                         "term": {
-                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "trees", "typeName": "hydra.rust.syntax.UseGroup"}}}},
+                                          "application": {
+                                            "argument": {"variable": "g"},
+                                            "function": {"project": {"fieldName": "trees", "typeName": "hydra.rust.syntax.UseGroup"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.UseTree"}}, "variables": []}},
                                       {
                                         "name": "prefixStr",
@@ -448,38 +460,44 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.StructDef"}}}},
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.StructDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "generics",
                         "term": {
                           "application": {
                             "argument": {"variable": "s"},
-                            "function": {"project": {"field": "generics", "typeName": "hydra.rust.syntax.StructDef"}}}},
+                            "function": {"project": {"fieldName": "generics", "typeName": "hydra.rust.syntax.StructDef"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.GenericParam"}}, "variables": []}},
                       {
                         "name": "whereC",
                         "term": {
                           "application": {
                             "argument": {"variable": "s"},
-                            "function": {"project": {"field": "whereClause", "typeName": "hydra.rust.syntax.StructDef"}}}},
+                            "function": {"project": {"fieldName": "whereClause", "typeName": "hydra.rust.syntax.StructDef"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.StructDef"}}}},
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.StructDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.StructBody"}, "variables": []}},
                       {
                         "name": "derives",
                         "term": {
                           "application": {
                             "argument": {"variable": "s"},
-                            "function": {"project": {"field": "derives", "typeName": "hydra.rust.syntax.StructDef"}}}},
+                            "function": {"project": {"fieldName": "derives", "typeName": "hydra.rust.syntax.StructDef"}}}},
                         "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "docC",
                         "term": {
-                          "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "doc", "typeName": "hydra.rust.syntax.StructDef"}}}},
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {"project": {"fieldName": "doc", "typeName": "hydra.rust.syntax.StructDef"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "derivesAttr",
@@ -648,7 +666,9 @@
                                                         "body": {
                                                           "application": {
                                                             "argument": {
-                                                              "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.TupleField"}}}},
+                                                              "application": {
+                                                                "argument": {"variable": "f"},
+                                                                "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.TupleField"}}}},
                                                             "function": {"variable": "hydra.rust.serde.typeToExpr"}}},
                                                         "domain": {"variable": "hydra.rust.syntax.TupleField"},
                                                         "parameter": "f"}},
@@ -690,28 +710,28 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "field"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.StructField"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.StructField"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "argument": {"variable": "field"},
-                            "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.StructField"}}}},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.StructField"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                       {
                         "name": "pub",
                         "term": {
                           "application": {
                             "argument": {"variable": "field"},
-                            "function": {"project": {"field": "public", "typeName": "hydra.rust.syntax.StructField"}}}},
+                            "function": {"project": {"fieldName": "public", "typeName": "hydra.rust.syntax.StructField"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "docC",
                         "term": {
                           "application": {
                             "argument": {"variable": "field"},
-                            "function": {"project": {"field": "doc", "typeName": "hydra.rust.syntax.StructField"}}}},
+                            "function": {"project": {"fieldName": "doc", "typeName": "hydra.rust.syntax.StructField"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "pubKw",
@@ -800,34 +820,40 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.EnumDef"}}}},
+                          "application": {"argument": {"variable": "e"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.EnumDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "generics",
                         "term": {
-                          "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "generics", "typeName": "hydra.rust.syntax.EnumDef"}}}},
+                          "application": {
+                            "argument": {"variable": "e"},
+                            "function": {"project": {"fieldName": "generics", "typeName": "hydra.rust.syntax.EnumDef"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.GenericParam"}}, "variables": []}},
                       {
                         "name": "whereC",
                         "term": {
                           "application": {
                             "argument": {"variable": "e"},
-                            "function": {"project": {"field": "whereClause", "typeName": "hydra.rust.syntax.EnumDef"}}}},
+                            "function": {"project": {"fieldName": "whereClause", "typeName": "hydra.rust.syntax.EnumDef"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}, "variables": []}},
                       {
                         "name": "variants",
                         "term": {
-                          "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "variants", "typeName": "hydra.rust.syntax.EnumDef"}}}},
+                          "application": {
+                            "argument": {"variable": "e"},
+                            "function": {"project": {"fieldName": "variants", "typeName": "hydra.rust.syntax.EnumDef"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.EnumVariant"}}, "variables": []}},
                       {
                         "name": "derives",
                         "term": {
-                          "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "derives", "typeName": "hydra.rust.syntax.EnumDef"}}}},
+                          "application": {
+                            "argument": {"variable": "e"},
+                            "function": {"project": {"fieldName": "derives", "typeName": "hydra.rust.syntax.EnumDef"}}}},
                         "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "docC",
                         "term": {
-                          "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "doc", "typeName": "hydra.rust.syntax.EnumDef"}}}},
+                          "application": {"argument": {"variable": "e"}, "function": {"project": {"fieldName": "doc", "typeName": "hydra.rust.syntax.EnumDef"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "derivesAttr",
@@ -968,17 +994,23 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "v"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.EnumVariant"}}}},
+                          "application": {
+                            "argument": {"variable": "v"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.EnumVariant"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "v"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.EnumVariant"}}}},
+                          "application": {
+                            "argument": {"variable": "v"},
+                            "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.EnumVariant"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.EnumVariantBody"}, "variables": []}},
                       {
                         "name": "docC",
                         "term": {
-                          "application": {"argument": {"variable": "v"}, "function": {"project": {"field": "doc", "typeName": "hydra.rust.syntax.EnumVariant"}}}},
+                          "application": {
+                            "argument": {"variable": "v"},
+                            "function": {"project": {"fieldName": "doc", "typeName": "hydra.rust.syntax.EnumVariant"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "docPart",
@@ -1114,54 +1146,58 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "generics",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "generics", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"project": {"fieldName": "generics", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.GenericParam"}}, "variables": []}},
                       {
                         "name": "whereC",
                         "term": {
                           "application": {
                             "argument": {"variable": "f"},
-                            "function": {"project": {"field": "whereClause", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                            "function": {"project": {"fieldName": "whereClause", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}, "variables": []}},
                       {
                         "name": "params",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "params", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "params", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.FnParam"}}, "variables": []}},
                       {
                         "name": "retType",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "returnType", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"project": {"fieldName": "returnType", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Block"}, "variables": []}},
                       {
                         "name": "isAsync",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "async", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "async", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "isConst",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "const", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "const", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "isUnsafe",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "unsafe", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "unsafe", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "docC",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "doc", "typeName": "hydra.rust.syntax.FnDef"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "doc", "typeName": "hydra.rust.syntax.FnDef"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "docPart",
@@ -1366,12 +1402,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "param"},
-                            "function": {"project": {"field": "pattern", "typeName": "hydra.rust.syntax.FnParam"}}}},
+                            "function": {"project": {"fieldName": "pattern", "typeName": "hydra.rust.syntax.FnParam"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Pattern"}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
-                          "application": {"argument": {"variable": "param"}, "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.FnParam"}}}},
+                          "application": {
+                            "argument": {"variable": "param"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.FnParam"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -1472,24 +1510,30 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "ta"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.TypeAlias"}}}},
+                          "application": {
+                            "argument": {"variable": "ta"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.TypeAlias"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "generics",
                         "term": {
                           "application": {
                             "argument": {"variable": "ta"},
-                            "function": {"project": {"field": "generics", "typeName": "hydra.rust.syntax.TypeAlias"}}}},
+                            "function": {"project": {"fieldName": "generics", "typeName": "hydra.rust.syntax.TypeAlias"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.GenericParam"}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
-                          "application": {"argument": {"variable": "ta"}, "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.TypeAlias"}}}},
+                          "application": {
+                            "argument": {"variable": "ta"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.TypeAlias"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                       {
                         "name": "docC",
                         "term": {
-                          "application": {"argument": {"variable": "ta"}, "function": {"project": {"field": "doc", "typeName": "hydra.rust.syntax.TypeAlias"}}}},
+                          "application": {
+                            "argument": {"variable": "ta"},
+                            "function": {"project": {"fieldName": "doc", "typeName": "hydra.rust.syntax.TypeAlias"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "docPart",
@@ -1564,17 +1608,23 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.ConstDef"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.ConstDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.ConstDef"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.ConstDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                       {
                         "name": "val",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "value", "typeName": "hydra.rust.syntax.ConstDef"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.rust.syntax.ConstDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -1612,24 +1662,30 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.StaticDef"}}}},
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.StaticDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
-                          "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.StaticDef"}}}},
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.StaticDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                       {
                         "name": "val",
                         "term": {
-                          "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "value", "typeName": "hydra.rust.syntax.StaticDef"}}}},
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.rust.syntax.StaticDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "mut",
                         "term": {
                           "application": {
                             "argument": {"variable": "s"},
-                            "function": {"project": {"field": "mutable", "typeName": "hydra.rust.syntax.StaticDef"}}}},
+                            "function": {"project": {"fieldName": "mutable", "typeName": "hydra.rust.syntax.StaticDef"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "mutKw",
@@ -1690,12 +1746,12 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.ModDef"}}}},
+                          "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.ModDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.ModDef"}}}},
+                          "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.ModDef"}}}},
                         "typeScheme": {"body": {"maybe": {"list": {"variable": "hydra.rust.syntax.Item"}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -1767,31 +1823,35 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "i"},
-                            "function": {"project": {"field": "generics", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
+                            "function": {"project": {"fieldName": "generics", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.GenericParam"}}, "variables": []}},
                       {
                         "name": "whereC",
                         "term": {
                           "application": {
                             "argument": {"variable": "i"},
-                            "function": {"project": {"field": "whereClause", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
+                            "function": {"project": {"fieldName": "whereClause", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}, "variables": []}},
                       {
                         "name": "trait",
                         "term": {
-                          "application": {"argument": {"variable": "i"}, "function": {"project": {"field": "trait", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
+                          "application": {
+                            "argument": {"variable": "i"},
+                            "function": {"project": {"fieldName": "trait", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.TypePath"}}, "variables": []}},
                       {
                         "name": "selfType",
                         "term": {
                           "application": {
                             "argument": {"variable": "i"},
-                            "function": {"project": {"field": "selfType", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
+                            "function": {"project": {"fieldName": "selfType", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                       {
                         "name": "items",
                         "term": {
-                          "application": {"argument": {"variable": "i"}, "function": {"project": {"field": "items", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
+                          "application": {
+                            "argument": {"variable": "i"},
+                            "function": {"project": {"fieldName": "items", "typeName": "hydra.rust.syntax.ImplBlock"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.ImplItem"}}, "variables": []}},
                       {
                         "name": "genericsExpr",
@@ -1950,52 +2010,58 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "generics",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "generics", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
+                            "function": {"project": {"fieldName": "generics", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.GenericParam"}}, "variables": []}},
                       {
                         "name": "whereC",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "whereClause", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
+                            "function": {"project": {"fieldName": "whereClause", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}, "variables": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "params", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
+                            "function": {"project": {"fieldName": "params", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.MethodParam"}}, "variables": []}},
                       {
                         "name": "retType",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "returnType", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
+                            "function": {"project": {"fieldName": "returnType", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Block"}, "variables": []}},
                       {
                         "name": "pub",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "public", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
+                            "function": {"project": {"fieldName": "public", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "docC",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "doc", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "doc", "typeName": "hydra.rust.syntax.ImplMethod"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "docPart",
@@ -2162,43 +2228,49 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.TraitDef"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.TraitDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "generics",
                         "term": {
                           "application": {
                             "argument": {"variable": "t"},
-                            "function": {"project": {"field": "generics", "typeName": "hydra.rust.syntax.TraitDef"}}}},
+                            "function": {"project": {"fieldName": "generics", "typeName": "hydra.rust.syntax.TraitDef"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.GenericParam"}}, "variables": []}},
                       {
                         "name": "whereC",
                         "term": {
                           "application": {
                             "argument": {"variable": "t"},
-                            "function": {"project": {"field": "whereClause", "typeName": "hydra.rust.syntax.TraitDef"}}}},
+                            "function": {"project": {"fieldName": "whereClause", "typeName": "hydra.rust.syntax.TraitDef"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.WhereClause"}}, "variables": []}},
                       {
                         "name": "supers",
                         "term": {
                           "application": {
                             "argument": {"variable": "t"},
-                            "function": {"project": {"field": "superTraits", "typeName": "hydra.rust.syntax.TraitDef"}}}},
+                            "function": {"project": {"fieldName": "superTraits", "typeName": "hydra.rust.syntax.TraitDef"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.TypeParamBound"}}, "variables": []}},
                       {
                         "name": "items",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "items", "typeName": "hydra.rust.syntax.TraitDef"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "items", "typeName": "hydra.rust.syntax.TraitDef"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.TraitItem"}}, "variables": []}},
                       {
                         "name": "isUnsafe",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "unsafe", "typeName": "hydra.rust.syntax.TraitDef"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "unsafe", "typeName": "hydra.rust.syntax.TraitDef"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "docC",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "doc", "typeName": "hydra.rust.syntax.TraitDef"}}}},
+                          "application": {"argument": {"variable": "t"}, "function": {"project": {"fieldName": "doc", "typeName": "hydra.rust.syntax.TraitDef"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "docPart",
@@ -2427,35 +2499,37 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "generics",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "generics", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
+                            "function": {"project": {"fieldName": "generics", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.GenericParam"}}, "variables": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "params", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
+                            "function": {"project": {"fieldName": "params", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.MethodParam"}}, "variables": []}},
                       {
                         "name": "retType",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "returnType", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
+                            "function": {"project": {"fieldName": "returnType", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                       {
                         "name": "defBody",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "defaultBody", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
+                            "function": {"project": {"fieldName": "defaultBody", "typeName": "hydra.rust.syntax.TraitMethod"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Block"}}, "variables": []}},
                       {
                         "name": "genericsExpr",
@@ -2571,19 +2645,23 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.TraitType"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.TraitType"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "bounds",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "bounds", "typeName": "hydra.rust.syntax.TraitType"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "bounds", "typeName": "hydra.rust.syntax.TraitType"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.TypeParamBound"}}, "variables": []}},
                       {
                         "name": "def",
                         "term": {
                           "application": {
                             "argument": {"variable": "t"},
-                            "function": {"project": {"field": "default", "typeName": "hydra.rust.syntax.TraitType"}}}},
+                            "function": {"project": {"fieldName": "default", "typeName": "hydra.rust.syntax.TraitType"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                       {
                         "name": "boundsPart",
@@ -2693,19 +2771,23 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.TraitConst"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.TraitConst"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.TraitConst"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.TraitConst"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                       {
                         "name": "def",
                         "term": {
                           "application": {
                             "argument": {"variable": "c"},
-                            "function": {"project": {"field": "default", "typeName": "hydra.rust.syntax.TraitConst"}}}},
+                            "function": {"project": {"fieldName": "default", "typeName": "hydra.rust.syntax.TraitConst"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "defPart",
@@ -2777,14 +2859,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "gp"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.GenericParam"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.GenericParam"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "bounds",
                         "term": {
                           "application": {
                             "argument": {"variable": "gp"},
-                            "function": {"project": {"field": "bounds", "typeName": "hydra.rust.syntax.GenericParam"}}}},
+                            "function": {"project": {"fieldName": "bounds", "typeName": "hydra.rust.syntax.GenericParam"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.TypeParamBound"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -2917,7 +2999,9 @@
                                     "argument": {
                                       "application": {
                                         "argument": {
-                                          "application": {"argument": {"variable": "lt"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.Lifetime"}}}},
+                                          "application": {
+                                            "argument": {"variable": "lt"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.Lifetime"}}}},
                                         "function": {"application": {"argument": {"literal": {"string": "'"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"variable": "hydra.rust.syntax.Lifetime"},
@@ -2944,7 +3028,7 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "wc"},
-                            "function": {"project": {"field": "predicates", "typeName": "hydra.rust.syntax.WhereClause"}}}},
+                            "function": {"project": {"fieldName": "predicates", "typeName": "hydra.rust.syntax.WhereClause"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.WherePredicate"}}, "variables": []}},
                       {
                         "name": "predExprs",
@@ -2963,14 +3047,14 @@
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "p"},
-                                                "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.WherePredicate"}}}},
+                                                "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.WherePredicate"}}}},
                                             "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                                           {
                                             "name": "bounds",
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "p"},
-                                                "function": {"project": {"field": "bounds", "typeName": "hydra.rust.syntax.WherePredicate"}}}},
+                                                "function": {"project": {"fieldName": "bounds", "typeName": "hydra.rust.syntax.WherePredicate"}}}},
                                             "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.TypeParamBound"}}, "variables": []}}],
                                         "body": {
                                           "application": {
@@ -3080,14 +3164,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "at"},
-                                            "function": {"project": {"field": "element", "typeName": "hydra.rust.syntax.ArrayType"}}}},
+                                            "function": {"project": {"fieldName": "element", "typeName": "hydra.rust.syntax.ArrayType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                                       {
                                         "name": "len",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "at"},
-                                            "function": {"project": {"field": "length", "typeName": "hydra.rust.syntax.ArrayType"}}}},
+                                            "function": {"project": {"fieldName": "length", "typeName": "hydra.rust.syntax.ArrayType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -3141,14 +3225,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "fp"},
-                                            "function": {"project": {"field": "params", "typeName": "hydra.rust.syntax.FnPointerType"}}}},
+                                            "function": {"project": {"fieldName": "params", "typeName": "hydra.rust.syntax.FnPointerType"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                                       {
                                         "name": "ret",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "fp"},
-                                            "function": {"project": {"field": "returnType", "typeName": "hydra.rust.syntax.FnPointerType"}}}},
+                                            "function": {"project": {"fieldName": "returnType", "typeName": "hydra.rust.syntax.FnPointerType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -3278,14 +3362,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "rp"},
-                                            "function": {"project": {"field": "mutable", "typeName": "hydra.rust.syntax.RawPointerType"}}}},
+                                            "function": {"project": {"fieldName": "mutable", "typeName": "hydra.rust.syntax.RawPointerType"}}}},
                                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                                       {
                                         "name": "t",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "rp"},
-                                            "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.RawPointerType"}}}},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.RawPointerType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                                       {
                                         "name": "kw",
@@ -3336,14 +3420,16 @@
                       {
                         "name": "global",
                         "term": {
-                          "application": {"argument": {"variable": "tp"}, "function": {"project": {"field": "global", "typeName": "hydra.rust.syntax.TypePath"}}}},
+                          "application": {
+                            "argument": {"variable": "tp"},
+                            "function": {"project": {"fieldName": "global", "typeName": "hydra.rust.syntax.TypePath"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "segs",
                         "term": {
                           "application": {
                             "argument": {"variable": "tp"},
-                            "function": {"project": {"field": "segments", "typeName": "hydra.rust.syntax.TypePath"}}}},
+                            "function": {"project": {"fieldName": "segments", "typeName": "hydra.rust.syntax.TypePath"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}}, "variables": []}},
                       {
                         "name": "prefix",
@@ -3410,14 +3496,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "seg"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.PathSegment"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.PathSegment"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "args",
                         "term": {
                           "application": {
                             "argument": {"variable": "seg"},
-                            "function": {"project": {"field": "arguments", "typeName": "hydra.rust.syntax.PathSegment"}}}},
+                            "function": {"project": {"fieldName": "arguments", "typeName": "hydra.rust.syntax.PathSegment"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.GenericArguments"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -3467,7 +3553,7 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "ab"},
-                                            "function": {"project": {"field": "args", "typeName": "hydra.rust.syntax.AngleBracketedArgs"}}}},
+                                            "function": {"project": {"fieldName": "args", "typeName": "hydra.rust.syntax.AngleBracketedArgs"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.GenericArg"}}, "variables": []}}],
                                     "body": {
                                       "maybe": {
@@ -3500,14 +3586,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "pa"},
-                                            "function": {"project": {"field": "inputs", "typeName": "hydra.rust.syntax.ParenthesizedArgs"}}}},
+                                            "function": {"project": {"fieldName": "inputs", "typeName": "hydra.rust.syntax.ParenthesizedArgs"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                                       {
                                         "name": "output",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "pa"},
-                                            "function": {"project": {"field": "output", "typeName": "hydra.rust.syntax.ParenthesizedArgs"}}}},
+                                            "function": {"project": {"fieldName": "output", "typeName": "hydra.rust.syntax.ParenthesizedArgs"}}}},
                                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                                       {
                                         "name": "inputPart",
@@ -3599,7 +3685,9 @@
                                     "argument": {
                                       "application": {
                                         "argument": {
-                                          "application": {"argument": {"variable": "lt"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.Lifetime"}}}},
+                                          "application": {
+                                            "argument": {"variable": "lt"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.Lifetime"}}}},
                                         "function": {"application": {"argument": {"literal": {"string": "'"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "function": {"variable": "hydra.serialization.cst"}}},
                                 "domain": {"variable": "hydra.rust.syntax.Lifetime"},
@@ -3623,14 +3711,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "tb"},
-                                            "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.TypeBinding"}}}},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.TypeBinding"}}}},
                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                       {
                                         "name": "typ",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "tb"},
-                                            "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.TypeBinding"}}}},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.TypeBinding"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -3664,21 +3752,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "rt"},
-                            "function": {"project": {"field": "lifetime", "typeName": "hydra.rust.syntax.ReferenceType"}}}},
+                            "function": {"project": {"fieldName": "lifetime", "typeName": "hydra.rust.syntax.ReferenceType"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Lifetime"}}, "variables": []}},
                       {
                         "name": "mut",
                         "term": {
                           "application": {
                             "argument": {"variable": "rt"},
-                            "function": {"project": {"field": "mutable", "typeName": "hydra.rust.syntax.ReferenceType"}}}},
+                            "function": {"project": {"fieldName": "mutable", "typeName": "hydra.rust.syntax.ReferenceType"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "t",
                         "term": {
                           "application": {
                             "argument": {"variable": "rt"},
-                            "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.ReferenceType"}}}},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.ReferenceType"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}},
                       {
                         "name": "ltPart",
@@ -3697,7 +3785,9 @@
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.Lifetime"}}}},
+                                                  "application": {
+                                                    "argument": {"variable": "l"},
+                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.Lifetime"}}}},
                                                 "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                         "function": {"application": {"argument": {"literal": {"string": "'"}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
                                     "domain": {"variable": "hydra.rust.syntax.Lifetime"},
@@ -4094,14 +4184,16 @@
                       {
                         "name": "global",
                         "term": {
-                          "application": {"argument": {"variable": "ep"}, "function": {"project": {"field": "global", "typeName": "hydra.rust.syntax.ExprPath"}}}},
+                          "application": {
+                            "argument": {"variable": "ep"},
+                            "function": {"project": {"fieldName": "global", "typeName": "hydra.rust.syntax.ExprPath"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "segs",
                         "term": {
                           "application": {
                             "argument": {"variable": "ep"},
-                            "function": {"project": {"field": "segments", "typeName": "hydra.rust.syntax.ExprPath"}}}},
+                            "function": {"project": {"fieldName": "segments", "typeName": "hydra.rust.syntax.ExprPath"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.PathSegment"}}, "variables": []}},
                       {
                         "name": "prefix",
@@ -4168,12 +4260,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "c"},
-                            "function": {"project": {"field": "function", "typeName": "hydra.rust.syntax.CallExpr"}}}},
+                            "function": {"project": {"fieldName": "function", "typeName": "hydra.rust.syntax.CallExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "args",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "args", "typeName": "hydra.rust.syntax.CallExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "args", "typeName": "hydra.rust.syntax.CallExpr"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -4215,28 +4309,28 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "receiver", "typeName": "hydra.rust.syntax.MethodCallExpr"}}}},
+                            "function": {"project": {"fieldName": "receiver", "typeName": "hydra.rust.syntax.MethodCallExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "method",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "method", "typeName": "hydra.rust.syntax.MethodCallExpr"}}}},
+                            "function": {"project": {"fieldName": "method", "typeName": "hydra.rust.syntax.MethodCallExpr"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "turbo",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "turbofish", "typeName": "hydra.rust.syntax.MethodCallExpr"}}}},
+                            "function": {"project": {"fieldName": "turbofish", "typeName": "hydra.rust.syntax.MethodCallExpr"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                       {
                         "name": "args",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "args", "typeName": "hydra.rust.syntax.MethodCallExpr"}}}},
+                            "function": {"project": {"fieldName": "args", "typeName": "hydra.rust.syntax.MethodCallExpr"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "turboPart",
@@ -4338,14 +4432,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "f"},
-                            "function": {"project": {"field": "object", "typeName": "hydra.rust.syntax.FieldAccessExpr"}}}},
+                            "function": {"project": {"fieldName": "object", "typeName": "hydra.rust.syntax.FieldAccessExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "field",
                         "term": {
                           "application": {
                             "argument": {"variable": "f"},
-                            "function": {"project": {"field": "field", "typeName": "hydra.rust.syntax.FieldAccessExpr"}}}},
+                            "function": {"project": {"fieldName": "field", "typeName": "hydra.rust.syntax.FieldAccessExpr"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -4382,14 +4476,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "t"},
-                            "function": {"project": {"field": "tuple", "typeName": "hydra.rust.syntax.TupleIndexExpr"}}}},
+                            "function": {"project": {"fieldName": "tuple", "typeName": "hydra.rust.syntax.TupleIndexExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "idx",
                         "term": {
                           "application": {
                             "argument": {"variable": "t"},
-                            "function": {"project": {"field": "index", "typeName": "hydra.rust.syntax.TupleIndexExpr"}}}},
+                            "function": {"project": {"fieldName": "index", "typeName": "hydra.rust.syntax.TupleIndexExpr"}}}},
                         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -4424,26 +4518,30 @@
                       {
                         "name": "move",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "move", "typeName": "hydra.rust.syntax.ClosureExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "move", "typeName": "hydra.rust.syntax.ClosureExpr"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "params",
                         "term": {
                           "application": {
                             "argument": {"variable": "c"},
-                            "function": {"project": {"field": "params", "typeName": "hydra.rust.syntax.ClosureExpr"}}}},
+                            "function": {"project": {"fieldName": "params", "typeName": "hydra.rust.syntax.ClosureExpr"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.ClosureParam"}}, "variables": []}},
                       {
                         "name": "retType",
                         "term": {
                           "application": {
                             "argument": {"variable": "c"},
-                            "function": {"project": {"field": "returnType", "typeName": "hydra.rust.syntax.ClosureExpr"}}}},
+                            "function": {"project": {"fieldName": "returnType", "typeName": "hydra.rust.syntax.ClosureExpr"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.ClosureExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.ClosureExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "moveKw",
@@ -4544,14 +4642,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "cp"},
-                            "function": {"project": {"field": "pattern", "typeName": "hydra.rust.syntax.ClosureParam"}}}},
+                            "function": {"project": {"fieldName": "pattern", "typeName": "hydra.rust.syntax.ClosureParam"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Pattern"}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "argument": {"variable": "cp"},
-                            "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.ClosureParam"}}}},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.ClosureParam"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                       {
                         "name": "patStr",
@@ -4606,19 +4704,23 @@
                       {
                         "name": "cond",
                         "term": {
-                          "application": {"argument": {"variable": "i"}, "function": {"project": {"field": "condition", "typeName": "hydra.rust.syntax.IfExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "i"},
+                            "function": {"project": {"fieldName": "condition", "typeName": "hydra.rust.syntax.IfExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.IfCondition"}, "variables": []}},
                       {
                         "name": "thenB",
                         "term": {
-                          "application": {"argument": {"variable": "i"}, "function": {"project": {"field": "thenBlock", "typeName": "hydra.rust.syntax.IfExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "i"},
+                            "function": {"project": {"fieldName": "thenBlock", "typeName": "hydra.rust.syntax.IfExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Block"}, "variables": []}},
                       {
                         "name": "elseB",
                         "term": {
                           "application": {
                             "argument": {"variable": "i"},
-                            "function": {"project": {"field": "elseBranch", "typeName": "hydra.rust.syntax.IfExpr"}}}},
+                            "function": {"project": {"fieldName": "elseBranch", "typeName": "hydra.rust.syntax.IfExpr"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "condExpr",
@@ -4647,14 +4749,14 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "lc"},
-                                                    "function": {"project": {"field": "pattern", "typeName": "hydra.rust.syntax.LetCondition"}}}},
+                                                    "function": {"project": {"fieldName": "pattern", "typeName": "hydra.rust.syntax.LetCondition"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.rust.syntax.Pattern"}, "variables": []}},
                                               {
                                                 "name": "expr",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "lc"},
-                                                    "function": {"project": {"field": "expr", "typeName": "hydra.rust.syntax.LetCondition"}}}},
+                                                    "function": {"project": {"fieldName": "expr", "typeName": "hydra.rust.syntax.LetCondition"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}}],
                                             "body": {
                                               "application": {
@@ -4731,12 +4833,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "scrutinee", "typeName": "hydra.rust.syntax.MatchExpr"}}}},
+                            "function": {"project": {"fieldName": "scrutinee", "typeName": "hydra.rust.syntax.MatchExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "arms",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "arms", "typeName": "hydra.rust.syntax.MatchExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "arms", "typeName": "hydra.rust.syntax.MatchExpr"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.MatchArm"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -4785,17 +4889,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "arm"},
-                            "function": {"project": {"field": "pattern", "typeName": "hydra.rust.syntax.MatchArm"}}}},
+                            "function": {"project": {"fieldName": "pattern", "typeName": "hydra.rust.syntax.MatchArm"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Pattern"}, "variables": []}},
                       {
                         "name": "guard",
                         "term": {
-                          "application": {"argument": {"variable": "arm"}, "function": {"project": {"field": "guard", "typeName": "hydra.rust.syntax.MatchArm"}}}},
+                          "application": {
+                            "argument": {"variable": "arm"},
+                            "function": {"project": {"fieldName": "guard", "typeName": "hydra.rust.syntax.MatchArm"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "arm"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.MatchArm"}}}},
+                          "application": {
+                            "argument": {"variable": "arm"},
+                            "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.MatchArm"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "guardPart",
@@ -4860,12 +4968,16 @@
                       {
                         "name": "label",
                         "term": {
-                          "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "label", "typeName": "hydra.rust.syntax.LoopExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "l"},
+                            "function": {"project": {"fieldName": "label", "typeName": "hydra.rust.syntax.LoopExpr"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.LoopExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "l"},
+                            "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.LoopExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Block"}, "variables": []}},
                       {
                         "name": "labelPart",
@@ -4928,19 +5040,23 @@
                       {
                         "name": "label",
                         "term": {
-                          "application": {"argument": {"variable": "w"}, "function": {"project": {"field": "label", "typeName": "hydra.rust.syntax.WhileExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "w"},
+                            "function": {"project": {"fieldName": "label", "typeName": "hydra.rust.syntax.WhileExpr"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "cond",
                         "term": {
                           "application": {
                             "argument": {"variable": "w"},
-                            "function": {"project": {"field": "condition", "typeName": "hydra.rust.syntax.WhileExpr"}}}},
+                            "function": {"project": {"fieldName": "condition", "typeName": "hydra.rust.syntax.WhileExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.IfCondition"}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "w"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.WhileExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "w"},
+                            "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.WhileExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Block"}, "variables": []}},
                       {
                         "name": "labelPart",
@@ -4999,14 +5115,14 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "lc"},
-                                                    "function": {"project": {"field": "pattern", "typeName": "hydra.rust.syntax.LetCondition"}}}},
+                                                    "function": {"project": {"fieldName": "pattern", "typeName": "hydra.rust.syntax.LetCondition"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.rust.syntax.Pattern"}, "variables": []}},
                                               {
                                                 "name": "expr",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "lc"},
-                                                    "function": {"project": {"field": "expr", "typeName": "hydra.rust.syntax.LetCondition"}}}},
+                                                    "function": {"project": {"fieldName": "expr", "typeName": "hydra.rust.syntax.LetCondition"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}}],
                                             "body": {
                                               "application": {
@@ -5053,22 +5169,26 @@
                       {
                         "name": "label",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "label", "typeName": "hydra.rust.syntax.ForExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"project": {"fieldName": "label", "typeName": "hydra.rust.syntax.ForExpr"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "pat",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "pattern", "typeName": "hydra.rust.syntax.ForExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "f"},
+                            "function": {"project": {"fieldName": "pattern", "typeName": "hydra.rust.syntax.ForExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Pattern"}, "variables": []}},
                       {
                         "name": "iter",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "iter", "typeName": "hydra.rust.syntax.ForExpr"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "iter", "typeName": "hydra.rust.syntax.ForExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "body", "typeName": "hydra.rust.syntax.ForExpr"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.rust.syntax.ForExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Block"}, "variables": []}},
                       {
                         "name": "labelPart",
@@ -5137,17 +5257,23 @@
                       {
                         "name": "left",
                         "term": {
-                          "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "left", "typeName": "hydra.rust.syntax.BinaryExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "b"},
+                            "function": {"project": {"fieldName": "left", "typeName": "hydra.rust.syntax.BinaryExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "op",
                         "term": {
-                          "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "op", "typeName": "hydra.rust.syntax.BinaryExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "b"},
+                            "function": {"project": {"fieldName": "op", "typeName": "hydra.rust.syntax.BinaryExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.BinaryOp"}, "variables": []}},
                       {
                         "name": "right",
                         "term": {
-                          "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "right", "typeName": "hydra.rust.syntax.BinaryExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "b"},
+                            "function": {"project": {"fieldName": "right", "typeName": "hydra.rust.syntax.BinaryExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -5217,14 +5343,14 @@
                       {
                         "name": "op",
                         "term": {
-                          "application": {"argument": {"variable": "u"}, "function": {"project": {"field": "op", "typeName": "hydra.rust.syntax.UnaryExpr"}}}},
+                          "application": {"argument": {"variable": "u"}, "function": {"project": {"fieldName": "op", "typeName": "hydra.rust.syntax.UnaryExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.UnaryOp"}, "variables": []}},
                       {
                         "name": "operand",
                         "term": {
                           "application": {
                             "argument": {"variable": "u"},
-                            "function": {"project": {"field": "operand", "typeName": "hydra.rust.syntax.UnaryExpr"}}}},
+                            "function": {"project": {"fieldName": "operand", "typeName": "hydra.rust.syntax.UnaryExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "opStr",
@@ -5267,12 +5393,14 @@
                       {
                         "name": "mut",
                         "term": {
-                          "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "mutable", "typeName": "hydra.rust.syntax.RefExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "r"},
+                            "function": {"project": {"fieldName": "mutable", "typeName": "hydra.rust.syntax.RefExpr"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "expr",
                         "term": {
-                          "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "expr", "typeName": "hydra.rust.syntax.RefExpr"}}}},
+                          "application": {"argument": {"variable": "r"}, "function": {"project": {"fieldName": "expr", "typeName": "hydra.rust.syntax.RefExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "prefix",
@@ -5316,19 +5444,23 @@
                       {
                         "name": "path",
                         "term": {
-                          "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "path", "typeName": "hydra.rust.syntax.StructExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {"project": {"fieldName": "path", "typeName": "hydra.rust.syntax.StructExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.ExprPath"}, "variables": []}},
                       {
                         "name": "fields",
                         "term": {
                           "application": {
                             "argument": {"variable": "s"},
-                            "function": {"project": {"field": "fields", "typeName": "hydra.rust.syntax.StructExpr"}}}},
+                            "function": {"project": {"fieldName": "fields", "typeName": "hydra.rust.syntax.StructExpr"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.FieldValue"}}, "variables": []}},
                       {
                         "name": "rest",
                         "term": {
-                          "application": {"argument": {"variable": "s"}, "function": {"project": {"field": "rest", "typeName": "hydra.rust.syntax.StructExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "s"},
+                            "function": {"project": {"fieldName": "rest", "typeName": "hydra.rust.syntax.StructExpr"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "fieldExprs",
@@ -5416,14 +5548,16 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "fv"}, "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.FieldValue"}}}},
+                          "application": {
+                            "argument": {"variable": "fv"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.FieldValue"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "val",
                         "term": {
                           "application": {
                             "argument": {"variable": "fv"},
-                            "function": {"project": {"field": "value", "typeName": "hydra.rust.syntax.FieldValue"}}}},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.rust.syntax.FieldValue"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -5507,14 +5641,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "r"},
-                                            "function": {"project": {"field": "element", "typeName": "hydra.rust.syntax.ArrayRepeat"}}}},
+                                            "function": {"project": {"fieldName": "element", "typeName": "hydra.rust.syntax.ArrayRepeat"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                                       {
                                         "name": "len",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "r"},
-                                            "function": {"project": {"field": "length", "typeName": "hydra.rust.syntax.ArrayRepeat"}}}},
+                                            "function": {"project": {"fieldName": "length", "typeName": "hydra.rust.syntax.ArrayRepeat"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -5557,12 +5691,16 @@
                       {
                         "name": "obj",
                         "term": {
-                          "application": {"argument": {"variable": "i"}, "function": {"project": {"field": "object", "typeName": "hydra.rust.syntax.IndexExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "i"},
+                            "function": {"project": {"fieldName": "object", "typeName": "hydra.rust.syntax.IndexExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "idx",
                         "term": {
-                          "application": {"argument": {"variable": "i"}, "function": {"project": {"field": "index", "typeName": "hydra.rust.syntax.IndexExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "i"},
+                            "function": {"project": {"fieldName": "index", "typeName": "hydra.rust.syntax.IndexExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -5601,19 +5739,21 @@
                       {
                         "name": "from",
                         "term": {
-                          "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "from", "typeName": "hydra.rust.syntax.RangeExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "r"},
+                            "function": {"project": {"fieldName": "from", "typeName": "hydra.rust.syntax.RangeExpr"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "to",
                         "term": {
-                          "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "to", "typeName": "hydra.rust.syntax.RangeExpr"}}}},
+                          "application": {"argument": {"variable": "r"}, "function": {"project": {"fieldName": "to", "typeName": "hydra.rust.syntax.RangeExpr"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "incl",
                         "term": {
                           "application": {
                             "argument": {"variable": "r"},
-                            "function": {"project": {"field": "inclusive", "typeName": "hydra.rust.syntax.RangeExpr"}}}},
+                            "function": {"project": {"fieldName": "inclusive", "typeName": "hydra.rust.syntax.RangeExpr"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "fromStr",
@@ -5700,12 +5840,16 @@
                       {
                         "name": "expr",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "expr", "typeName": "hydra.rust.syntax.CastExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "expr", "typeName": "hydra.rust.syntax.CastExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.CastExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "c"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.CastExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -5736,14 +5880,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "t"},
-                            "function": {"project": {"field": "expr", "typeName": "hydra.rust.syntax.TypeAscriptionExpr"}}}},
+                            "function": {"project": {"fieldName": "expr", "typeName": "hydra.rust.syntax.TypeAscriptionExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "argument": {"variable": "t"},
-                            "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.TypeAscriptionExpr"}}}},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.TypeAscriptionExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -5775,12 +5919,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "a"},
-                            "function": {"project": {"field": "target", "typeName": "hydra.rust.syntax.AssignExpr"}}}},
+                            "function": {"project": {"fieldName": "target", "typeName": "hydra.rust.syntax.AssignExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "val",
                         "term": {
-                          "application": {"argument": {"variable": "a"}, "function": {"project": {"field": "value", "typeName": "hydra.rust.syntax.AssignExpr"}}}},
+                          "application": {
+                            "argument": {"variable": "a"},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.rust.syntax.AssignExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -5811,21 +5957,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "c"},
-                            "function": {"project": {"field": "target", "typeName": "hydra.rust.syntax.CompoundAssignExpr"}}}},
+                            "function": {"project": {"fieldName": "target", "typeName": "hydra.rust.syntax.CompoundAssignExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "op",
                         "term": {
                           "application": {
                             "argument": {"variable": "c"},
-                            "function": {"project": {"field": "op", "typeName": "hydra.rust.syntax.CompoundAssignExpr"}}}},
+                            "function": {"project": {"fieldName": "op", "typeName": "hydra.rust.syntax.CompoundAssignExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.CompoundAssignOp"}, "variables": []}},
                       {
                         "name": "val",
                         "term": {
                           "application": {
                             "argument": {"variable": "c"},
-                            "function": {"project": {"field": "value", "typeName": "hydra.rust.syntax.CompoundAssignExpr"}}}},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.rust.syntax.CompoundAssignExpr"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Expression"}, "variables": []}},
                       {
                         "name": "opStr",
@@ -5897,21 +6043,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "path", "typeName": "hydra.rust.syntax.MacroInvocation"}}}},
+                            "function": {"project": {"fieldName": "path", "typeName": "hydra.rust.syntax.MacroInvocation"}}}},
                         "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "delim",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "delimiter", "typeName": "hydra.rust.syntax.MacroInvocation"}}}},
+                            "function": {"project": {"fieldName": "delimiter", "typeName": "hydra.rust.syntax.MacroInvocation"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.MacroDelimiter"}, "variables": []}},
                       {
                         "name": "tokens",
                         "term": {
                           "application": {
                             "argument": {"variable": "m"},
-                            "function": {"project": {"field": "tokens", "typeName": "hydra.rust.syntax.MacroInvocation"}}}},
+                            "function": {"project": {"fieldName": "tokens", "typeName": "hydra.rust.syntax.MacroInvocation"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "pathStr",
@@ -6038,28 +6184,28 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "l"},
-                            "function": {"project": {"field": "pattern", "typeName": "hydra.rust.syntax.LetStatement"}}}},
+                            "function": {"project": {"fieldName": "pattern", "typeName": "hydra.rust.syntax.LetStatement"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Pattern"}, "variables": []}},
                       {
                         "name": "mut",
                         "term": {
                           "application": {
                             "argument": {"variable": "l"},
-                            "function": {"project": {"field": "mutable", "typeName": "hydra.rust.syntax.LetStatement"}}}},
+                            "function": {"project": {"fieldName": "mutable", "typeName": "hydra.rust.syntax.LetStatement"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "argument": {"variable": "l"},
-                            "function": {"project": {"field": "type", "typeName": "hydra.rust.syntax.LetStatement"}}}},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.rust.syntax.LetStatement"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Type"}}, "variables": []}},
                       {
                         "name": "init",
                         "term": {
                           "application": {
                             "argument": {"variable": "l"},
-                            "function": {"project": {"field": "init", "typeName": "hydra.rust.syntax.LetStatement"}}}},
+                            "function": {"project": {"fieldName": "init", "typeName": "hydra.rust.syntax.LetStatement"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "mutKw",
@@ -6165,12 +6311,16 @@
                       {
                         "name": "stmts",
                         "term": {
-                          "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "statements", "typeName": "hydra.rust.syntax.Block"}}}},
+                          "application": {
+                            "argument": {"variable": "b"},
+                            "function": {"project": {"fieldName": "statements", "typeName": "hydra.rust.syntax.Block"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.Statement"}}, "variables": []}},
                       {
                         "name": "expr",
                         "term": {
-                          "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "expression", "typeName": "hydra.rust.syntax.Block"}}}},
+                          "application": {
+                            "argument": {"variable": "b"},
+                            "function": {"project": {"fieldName": "expression", "typeName": "hydra.rust.syntax.Block"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Expression"}}, "variables": []}},
                       {
                         "name": "stmtExprs",
@@ -6411,21 +6561,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "ip"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.IdentifierPattern"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.IdentifierPattern"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "mut",
                         "term": {
                           "application": {
                             "argument": {"variable": "ip"},
-                            "function": {"project": {"field": "mutable", "typeName": "hydra.rust.syntax.IdentifierPattern"}}}},
+                            "function": {"project": {"fieldName": "mutable", "typeName": "hydra.rust.syntax.IdentifierPattern"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "atPat",
                         "term": {
                           "application": {
                             "argument": {"variable": "ip"},
-                            "function": {"project": {"field": "atPattern", "typeName": "hydra.rust.syntax.IdentifierPattern"}}}},
+                            "function": {"project": {"fieldName": "atPattern", "typeName": "hydra.rust.syntax.IdentifierPattern"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}, "variables": []}},
                       {
                         "name": "mutKw",
@@ -6501,14 +6651,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "rp"},
-                            "function": {"project": {"field": "mutable", "typeName": "hydra.rust.syntax.RefPattern"}}}},
+                            "function": {"project": {"fieldName": "mutable", "typeName": "hydra.rust.syntax.RefPattern"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "pat",
                         "term": {
                           "application": {
                             "argument": {"variable": "rp"},
-                            "function": {"project": {"field": "pattern", "typeName": "hydra.rust.syntax.RefPattern"}}}},
+                            "function": {"project": {"fieldName": "pattern", "typeName": "hydra.rust.syntax.RefPattern"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.Pattern"}, "variables": []}},
                       {
                         "name": "prefix",
@@ -6554,21 +6704,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "sp"},
-                            "function": {"project": {"field": "path", "typeName": "hydra.rust.syntax.StructPattern"}}}},
+                            "function": {"project": {"fieldName": "path", "typeName": "hydra.rust.syntax.StructPattern"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.ExprPath"}, "variables": []}},
                       {
                         "name": "fields",
                         "term": {
                           "application": {
                             "argument": {"variable": "sp"},
-                            "function": {"project": {"field": "fields", "typeName": "hydra.rust.syntax.StructPattern"}}}},
+                            "function": {"project": {"fieldName": "fields", "typeName": "hydra.rust.syntax.StructPattern"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.FieldPattern"}}, "variables": []}},
                       {
                         "name": "rest",
                         "term": {
                           "application": {
                             "argument": {"variable": "sp"},
-                            "function": {"project": {"field": "rest", "typeName": "hydra.rust.syntax.StructPattern"}}}},
+                            "function": {"project": {"fieldName": "rest", "typeName": "hydra.rust.syntax.StructPattern"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "fieldExprs",
@@ -6645,14 +6795,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "fp"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.rust.syntax.FieldPattern"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.rust.syntax.FieldPattern"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "pat",
                         "term": {
                           "application": {
                             "argument": {"variable": "fp"},
-                            "function": {"project": {"field": "pattern", "typeName": "hydra.rust.syntax.FieldPattern"}}}},
+                            "function": {"project": {"fieldName": "pattern", "typeName": "hydra.rust.syntax.FieldPattern"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -6704,14 +6854,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "tsp"},
-                            "function": {"project": {"field": "path", "typeName": "hydra.rust.syntax.TupleStructPattern"}}}},
+                            "function": {"project": {"fieldName": "path", "typeName": "hydra.rust.syntax.TupleStructPattern"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rust.syntax.ExprPath"}, "variables": []}},
                       {
                         "name": "elems",
                         "term": {
                           "application": {
                             "argument": {"variable": "tsp"},
-                            "function": {"project": {"field": "elements", "typeName": "hydra.rust.syntax.TupleStructPattern"}}}},
+                            "function": {"project": {"fieldName": "elements", "typeName": "hydra.rust.syntax.TupleStructPattern"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.rust.syntax.Pattern"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -6754,19 +6904,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "rp"},
-                            "function": {"project": {"field": "from", "typeName": "hydra.rust.syntax.RangePattern"}}}},
+                            "function": {"project": {"fieldName": "from", "typeName": "hydra.rust.syntax.RangePattern"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}, "variables": []}},
                       {
                         "name": "to",
                         "term": {
-                          "application": {"argument": {"variable": "rp"}, "function": {"project": {"field": "to", "typeName": "hydra.rust.syntax.RangePattern"}}}},
+                          "application": {
+                            "argument": {"variable": "rp"},
+                            "function": {"project": {"fieldName": "to", "typeName": "hydra.rust.syntax.RangePattern"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rust.syntax.Pattern"}}, "variables": []}},
                       {
                         "name": "incl",
                         "term": {
                           "application": {
                             "argument": {"variable": "rp"},
-                            "function": {"project": {"field": "inclusive", "typeName": "hydra.rust.syntax.RangePattern"}}}},
+                            "function": {"project": {"fieldName": "inclusive", "typeName": "hydra.rust.syntax.RangePattern"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "fromStr",
@@ -6972,14 +7124,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "il"},
-                            "function": {"project": {"field": "value", "typeName": "hydra.rust.syntax.IntegerLiteral"}}}},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.rust.syntax.IntegerLiteral"}}}},
                         "typeScheme": {"body": {"literal": {"integer": {"bigint": {}}}}, "variables": []}},
                       {
                         "name": "suf",
                         "term": {
                           "application": {
                             "argument": {"variable": "il"},
-                            "function": {"project": {"field": "suffix", "typeName": "hydra.rust.syntax.IntegerLiteral"}}}},
+                            "function": {"project": {"fieldName": "suffix", "typeName": "hydra.rust.syntax.IntegerLiteral"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "valStr",
@@ -7029,14 +7181,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "fl"},
-                            "function": {"project": {"field": "value", "typeName": "hydra.rust.syntax.FloatLiteral"}}}},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.rust.syntax.FloatLiteral"}}}},
                         "typeScheme": {"body": {"literal": {"float": {"float64": {}}}}, "variables": []}},
                       {
                         "name": "suf",
                         "term": {
                           "application": {
                             "argument": {"variable": "fl"},
-                            "function": {"project": {"field": "suffix", "typeName": "hydra.rust.syntax.FloatLiteral"}}}},
+                            "function": {"project": {"fieldName": "suffix", "typeName": "hydra.rust.syntax.FloatLiteral"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "valStr",
@@ -7152,21 +7304,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "attr"},
-                            "function": {"project": {"field": "inner", "typeName": "hydra.rust.syntax.Attribute"}}}},
+                            "function": {"project": {"fieldName": "inner", "typeName": "hydra.rust.syntax.Attribute"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "path",
                         "term": {
                           "application": {
                             "argument": {"variable": "attr"},
-                            "function": {"project": {"field": "path", "typeName": "hydra.rust.syntax.Attribute"}}}},
+                            "function": {"project": {"fieldName": "path", "typeName": "hydra.rust.syntax.Attribute"}}}},
                         "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "tokens",
                         "term": {
                           "application": {
                             "argument": {"variable": "attr"},
-                            "function": {"project": {"field": "tokens", "typeName": "hydra.rust.syntax.Attribute"}}}},
+                            "function": {"project": {"fieldName": "tokens", "typeName": "hydra.rust.syntax.Attribute"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "prefix",

@@ -210,7 +210,7 @@ encodeLiteral lit =
 encodeProjectionElim :: Syntax.Dialect -> t0 -> t1 -> Core.Projection -> Maybe Core.Term -> Either t2 Syntax.Expression
 encodeProjectionElim dialect cx g proj marg =
 
-      let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField proj))
+      let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionFieldName proj))
           tname = qualifiedSnakeName (Core.projectionTypeName proj)
       in (Maybes.cases marg (Right (lispLambdaExpr [
         "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccess {

@@ -116,21 +116,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "Description", "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
+                            "function": {"project": {"fieldName": "Description", "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "Name", "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
+                            "function": {"project": {"fieldName": "Name", "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
                         "typeScheme": {"body": {"variable": "hydra.graphql.syntax.Name"}, "variables": []}},
                       {
                         "name": "values",
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "EnumValuesDefinition", "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
+                            "function": {"project": {"fieldName": "EnumValuesDefinition", "typeName": "hydra.graphql.syntax.EnumTypeDefinition"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.EnumValuesDefinition"}}, "variables": []}},
                       {
                         "name": "valuesExpr",
@@ -221,14 +221,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "Description", "typeName": "hydra.graphql.syntax.EnumValueDefinition"}}}},
+                            "function": {"project": {"fieldName": "Description", "typeName": "hydra.graphql.syntax.EnumValueDefinition"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
                       {
                         "name": "ev",
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "EnumValue", "typeName": "hydra.graphql.syntax.EnumValueDefinition"}}}},
+                            "function": {"project": {"fieldName": "EnumValue", "typeName": "hydra.graphql.syntax.EnumValueDefinition"}}}},
                         "typeScheme": {"body": {"variable": "hydra.graphql.syntax.EnumValue"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -256,21 +256,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "Description", "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
+                            "function": {"project": {"fieldName": "Description", "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "Name", "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
+                            "function": {"project": {"fieldName": "Name", "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
                         "typeScheme": {"body": {"variable": "hydra.graphql.syntax.Name"}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "Type", "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
+                            "function": {"project": {"fieldName": "Type", "typeName": "hydra.graphql.syntax.FieldDefinition"}}}},
                         "typeScheme": {"body": {"variable": "hydra.graphql.syntax.Type"}, "variables": []}},
                       {
                         "name": "namePart",
@@ -420,21 +420,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "Description", "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
+                            "function": {"project": {"fieldName": "Description", "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.Description"}}, "variables": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "Name", "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
+                            "function": {"project": {"fieldName": "Name", "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
                         "typeScheme": {"body": {"variable": "hydra.graphql.syntax.Name"}, "variables": []}},
                       {
                         "name": "fields",
                         "term": {
                           "application": {
                             "argument": {"variable": "def"},
-                            "function": {"project": {"field": "FieldsDefinition", "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
+                            "function": {"project": {"fieldName": "FieldsDefinition", "typeName": "hydra.graphql.syntax.ObjectTypeDefinition"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.graphql.syntax.FieldsDefinition"}}, "variables": []}},
                       {
                         "name": "fieldsExpr",

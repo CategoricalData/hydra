@@ -96,7 +96,7 @@ termLabel compact namespaces term =
           "{",
           (Names.compactName namespaces (Core.projectionTypeName v0)),
           "}.",
-          (Core.unName (Core.projectionField v0))])
+          (Core.unName (Core.projectionFieldName v0))])
         Core.TermCases v0 -> simpleLabel (Strings.cat [
           "cases_{",
           (Names.compactName namespaces (Core.caseStatementTypeName v0)),

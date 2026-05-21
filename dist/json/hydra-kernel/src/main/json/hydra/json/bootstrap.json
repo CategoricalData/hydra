@@ -3011,7 +3011,11 @@
                                                                                 "name": "literal",
                                                                                 "term": {
                                                                                   "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "A list of case alternatives, one per union field"}}},
+                                                                                    "field": {
+                                                                                      "name": "string",
+                                                                                      "term": {
+                                                                                        "literal": {
+                                                                                          "string": "A list of case alternatives, one per union field. Each Field's name is the variant tag being matched and term is the handler applied to the variant's payload."}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}}]}}],
                                                                 "typeName": "hydra.core.AnnotatedType"}}},
@@ -5850,7 +5854,7 @@
                                               {
                                                 "record": {
                                                   "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "field"}}, "typeName": "hydra.core.Name"}}},
+                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "fieldName"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "type",
                                                       "term": {
@@ -6830,7 +6834,11 @@
                                                                                 "name": "literal",
                                                                                 "term": {
                                                                                   "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "An unwrap elimination; the inverse of a wrap"}}},
+                                                                                    "field": {
+                                                                                      "name": "string",
+                                                                                      "term": {
+                                                                                        "literal": {
+                                                                                          "string": "An unwrap elimination; the inverse of a wrap. Given the name of a wrapper type, unwraps an instance of that type to its underlying body value."}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}}]}}],
                                                                 "typeName": "hydra.core.AnnotatedType"}}},
@@ -7577,7 +7585,11 @@
                                                                                 "name": "literal",
                                                                                 "term": {
                                                                                   "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "A wrapped type (newtype)"}}},
+                                                                                    "field": {
+                                                                                      "name": "string",
+                                                                                      "term": {
+                                                                                        "literal": {
+                                                                                          "string": "A wrapped type (newtype). There is no corresponding `unwrap` variant at the type level: wrap is the introduction form, and a wrapper type's underlying body type is given by the `wrap` variant's argument."}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}}]}}],
                                                                 "typeName": "hydra.core.AnnotatedType"}}},

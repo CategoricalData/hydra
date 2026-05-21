@@ -309,7 +309,7 @@
                                                         "application": {
                                                           "argument": {"variable": "x"},
                                                           "function": {
-                                                            "typeApplication": {"body": {"project": {"field": "focus", "typeName": "hydra.util.Namespaces"}}, "type": {"variable": "t0"}}}}},
+                                                            "typeApplication": {"body": {"project": {"fieldName": "focus", "typeName": "hydra.util.Namespaces"}}, "type": {"variable": "t0"}}}}},
                                                       "function": {
                                                         "lambda": {
                                                           "body": {
@@ -351,7 +351,7 @@
                                                         "application": {
                                                           "argument": {"variable": "x"},
                                                           "function": {
-                                                            "typeApplication": {"body": {"project": {"field": "mapping", "typeName": "hydra.util.Namespaces"}}, "type": {"variable": "t0"}}}}},
+                                                            "typeApplication": {"body": {"project": {"fieldName": "mapping", "typeName": "hydra.util.Namespaces"}}, "type": {"variable": "t0"}}}}},
                                                       "function": {
                                                         "lambda": {
                                                           "body": {

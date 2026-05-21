@@ -3188,7 +3188,7 @@
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                        {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                       "typeName": "hydra.core.Projection"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {

@@ -1002,7 +1002,7 @@ inferTypeOfProjection = define "inferTypeOfProjection" $
   doc "Infer the type of a record projection (Either version)" $
   "fcx" ~> "cx" ~> "proj" ~>
   "tname" <~ Core.projectionTypeName (var "proj") $
-  "fname" <~ Core.projectionField (var "proj") $
+  "fname" <~ Core.projectionFieldName (var "proj") $
   "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $

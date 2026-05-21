@@ -58,7 +58,9 @@
                                                       "application": {
                                                         "argument": {"variable": "acc"},
                                                         "function": {
-                                                          "typeApplication": {"body": {"project": {"field": "errors", "typeName": "hydra.validation.ValidationResult"}}, "type": {"variable": "t0"}}}}},
+                                                          "typeApplication": {
+                                                            "body": {"project": {"fieldName": "errors", "typeName": "hydra.validation.ValidationResult"}},
+                                                            "type": {"variable": "t0"}}}}},
                                                     "typeScheme": {"body": {"list": {"variable": "t0"}}, "variables": []}}],
                                                 "body": {
                                                   "let": {
@@ -70,7 +72,7 @@
                                                             "argument": {"variable": "acc"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"project": {"field": "warnings", "typeName": "hydra.validation.ValidationResult"}},
+                                                                "body": {"project": {"fieldName": "warnings", "typeName": "hydra.validation.ValidationResult"}},
                                                                 "type": {"variable": "t0"}}}}},
                                                         "typeScheme": {"body": {"list": {"variable": "t0"}}, "variables": []}}],
                                                     "body": {
@@ -112,7 +114,7 @@
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "p"},
-                                                                                    "function": {"project": {"field": "maxWarnings", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                                    "function": {"project": {"fieldName": "maxWarnings", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {
@@ -131,7 +133,7 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "argument": {"variable": "p"},
-                                                                            "function": {"project": {"field": "warningRules", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                            "function": {"project": {"fieldName": "warningRules", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "ruleName"},
@@ -174,7 +176,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {"variable": "p"},
-                                                                                "function": {"project": {"field": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                                "function": {"project": {"fieldName": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
@@ -193,7 +195,7 @@
                                                                     "argument": {
                                                                       "application": {
                                                                         "argument": {"variable": "p"},
-                                                                        "function": {"project": {"field": "errorRules", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                        "function": {"project": {"fieldName": "errorRules", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "ruleName"},
@@ -294,7 +296,9 @@
                                                       "application": {
                                                         "argument": {"variable": "acc"},
                                                         "function": {
-                                                          "typeApplication": {"body": {"project": {"field": "errors", "typeName": "hydra.validation.ValidationResult"}}, "type": {"variable": "t0"}}}}},
+                                                          "typeApplication": {
+                                                            "body": {"project": {"fieldName": "errors", "typeName": "hydra.validation.ValidationResult"}},
+                                                            "type": {"variable": "t0"}}}}},
                                                     "typeScheme": {"body": {"list": {"variable": "t0"}}, "variables": []}}],
                                                 "body": {
                                                   "let": {
@@ -306,7 +310,7 @@
                                                             "argument": {"variable": "acc"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"project": {"field": "warnings", "typeName": "hydra.validation.ValidationResult"}},
+                                                                "body": {"project": {"fieldName": "warnings", "typeName": "hydra.validation.ValidationResult"}},
                                                                 "type": {"variable": "t0"}}}}},
                                                         "typeScheme": {"body": {"list": {"variable": "t0"}}, "variables": []}}],
                                                     "body": {
@@ -348,7 +352,7 @@
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "p"},
-                                                                                    "function": {"project": {"field": "maxWarnings", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                                    "function": {"project": {"fieldName": "maxWarnings", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {
@@ -367,7 +371,7 @@
                                                                         "argument": {
                                                                           "application": {
                                                                             "argument": {"variable": "p"},
-                                                                            "function": {"project": {"field": "warningRules", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                            "function": {"project": {"fieldName": "warningRules", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "ruleName"},
@@ -410,7 +414,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {"variable": "p"},
-                                                                                "function": {"project": {"field": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                                "function": {"project": {"fieldName": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
@@ -429,7 +433,7 @@
                                                                     "argument": {
                                                                       "application": {
                                                                         "argument": {"variable": "p"},
-                                                                        "function": {"project": {"field": "errorRules", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                        "function": {"project": {"fieldName": "errorRules", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "ruleName"},
@@ -491,7 +495,9 @@
                         "term": {
                           "application": {
                             "argument": {
-                              "application": {"argument": {"variable": "pkg"}, "function": {"project": {"field": "modules", "typeName": "hydra.packaging.Package"}}}},
+                              "application": {
+                                "argument": {"variable": "pkg"},
+                                "function": {"project": {"fieldName": "modules", "typeName": "hydra.packaging.Package"}}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -559,7 +565,9 @@
                                                                   {
                                                                     "name": "ns",
                                                                     "term": {
-                                                                      "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                                                                      "application": {
+                                                                        "argument": {"variable": "mod"},
+                                                                        "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                                                                     "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                                                                 "body": {
                                                                   "let": {
@@ -716,7 +724,9 @@
                       {
                         "name": "ns",
                         "term": {
-                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                     "body": {
                       "let": {
@@ -726,7 +736,7 @@
                             "term": {
                               "application": {
                                 "argument": {"variable": "mod"},
-                                "function": {"project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                                "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                             "typeScheme": {"body": {"list": {"variable": "hydra.packaging.Definition"}}, "variables": []}}],
                         "body": {
                           "let": {
@@ -800,7 +810,7 @@
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "td"},
-                                                                                    "function": {"project": {"field": "name", "typeName": "hydra.packaging.TypeDefinition"}}}},
+                                                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.TypeDefinition"}}}},
                                                                                 "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                                                             "body": {
                                                                               "let": {
@@ -819,8 +829,8 @@
                                                                                             "argument": {
                                                                                               "application": {
                                                                                                 "argument": {"variable": "td"},
-                                                                                                "function": {"project": {"field": "typeScheme", "typeName": "hydra.packaging.TypeDefinition"}}}},
-                                                                                            "function": {"project": {"field": "body", "typeName": "hydra.core.TypeScheme"}}}},
+                                                                                                "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.packaging.TypeDefinition"}}}},
+                                                                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}}}},
                                                                                         "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                                                     "body": {
                                                                                       "application": {
@@ -856,7 +866,7 @@
                                                                                                                                       {
                                                                                                                                         "name": "fieldName",
                                                                                                                                         "term": {
-                                                                                                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}}}},
+                                                                                                                                          "application": {"argument": {"variable": "field"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.FieldType"}}}},
                                                                                                                                         "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                                                                                                                                     "body": {
                                                                                                                                       "let": {
@@ -981,14 +991,16 @@
                       {
                         "name": "ns",
                         "term": {
-                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
                           "application": {
                             "argument": {"variable": "mod"},
-                            "function": {"project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                            "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                         "function": {
                           "application": {
                             "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
@@ -1034,7 +1046,7 @@
                                                                                     "term": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "td"},
-                                                                                        "function": {"project": {"field": "term", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                                                        "function": {"project": {"fieldName": "term", "typeName": "hydra.packaging.TermDefinition"}}}},
                                                                                     "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "application": {
@@ -1051,7 +1063,7 @@
                                                                                                     "argument": {
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "at"},
-                                                                                                        "function": {"project": {"field": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
+                                                                                                        "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedTerm"}}}},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.annotations.hasDescription"}, "type": {"variable": "hydra.core.Term"}}}}},
                                                                                                 "domain": {"variable": "hydra.core.AnnotatedTerm"},
                                                                                                 "parameter": "at"}}}],
@@ -1073,8 +1085,8 @@
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "argument": {"variable": "td"},
-                                                                                            "function": {"project": {"field": "typeScheme", "typeName": "hydra.packaging.TypeDefinition"}}}},
-                                                                                        "function": {"project": {"field": "body", "typeName": "hydra.core.TypeScheme"}}}},
+                                                                                            "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.packaging.TypeDefinition"}}}},
+                                                                                        "function": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}}}},
                                                                                     "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                                                 "body": {
                                                                                   "application": {
@@ -1091,7 +1103,7 @@
                                                                                                     "argument": {
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "at"},
-                                                                                                        "function": {"project": {"field": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
+                                                                                                        "function": {"project": {"fieldName": "annotation", "typeName": "hydra.core.AnnotatedType"}}}},
                                                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.annotations.hasDescription"}, "type": {"variable": "hydra.core.Term"}}}}},
                                                                                                 "domain": {"variable": "hydra.core.AnnotatedType"},
                                                                                                 "parameter": "at"}}}],
@@ -1169,14 +1181,16 @@
                       {
                         "name": "ns",
                         "term": {
-                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {
                           "application": {
                             "argument": {"variable": "mod"},
-                            "function": {"project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                            "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                         "function": {
                           "application": {
                             "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
@@ -1334,7 +1348,9 @@
                       {
                         "name": "ns",
                         "term": {
-                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                     "body": {
                       "let": {
@@ -1361,7 +1377,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "mod"},
-                                    "function": {"project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                                    "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}},
@@ -1477,7 +1493,9 @@
                       {
                         "name": "ns",
                         "term": {
-                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                     "body": {
                       "let": {
@@ -1489,7 +1507,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "mod"},
-                                    "function": {"project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                                    "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -1706,7 +1724,9 @@
                       {
                         "name": "ns",
                         "term": {
-                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                     "body": {
                       "let": {
@@ -1718,7 +1738,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "mod"},
-                                    "function": {"project": {"field": "definitions", "typeName": "hydra.packaging.Module"}}}},
+                                    "function": {"project": {"fieldName": "definitions", "typeName": "hydra.packaging.Module"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {
@@ -1896,7 +1916,9 @@
                         "term": {
                           "application": {
                             "argument": {
-                              "application": {"argument": {"variable": "pkg"}, "function": {"project": {"field": "modules", "typeName": "hydra.packaging.Package"}}}},
+                              "application": {
+                                "argument": {"variable": "pkg"},
+                                "function": {"project": {"fieldName": "modules", "typeName": "hydra.packaging.Package"}}}},
                             "function": {
                               "application": {
                                 "argument": {
@@ -1955,7 +1977,9 @@
                                                                   {
                                                                     "name": "ns",
                                                                     "term": {
-                                                                      "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                                                                      "application": {
+                                                                        "argument": {"variable": "mod"},
+                                                                        "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                                                                     "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                                                                 "body": {
                                                                   "application": {
@@ -2079,7 +2103,9 @@
                       {
                         "name": "ns",
                         "term": {
-                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
                         "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -2132,7 +2158,7 @@
                       {
                         "name": "pname",
                         "term": {
-                          "application": {"argument": {"variable": "pkg"}, "function": {"project": {"field": "name", "typeName": "hydra.packaging.Package"}}}},
+                          "application": {"argument": {"variable": "pkg"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Package"}}}},
                         "typeScheme": {"body": {"variable": "hydra.packaging.PackageName"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -2189,7 +2215,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "td"},
-                                    "function": {"project": {"field": "name", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.TermDefinition"}}}},
                                 "domain": {"variable": "hydra.packaging.TermDefinition"},
                                 "parameter": "td"}}},
                           {
@@ -2199,7 +2225,7 @@
                                 "body": {
                                   "application": {
                                     "argument": {"variable": "td"},
-                                    "function": {"project": {"field": "name", "typeName": "hydra.packaging.TypeDefinition"}}}},
+                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.TypeDefinition"}}}},
                                 "domain": {"variable": "hydra.packaging.TypeDefinition"},
                                 "parameter": "td"}}}],
                         "typeName": "hydra.packaging.Definition"}}}},
@@ -2228,7 +2254,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "p"},
-                                "function": {"project": {"field": "warningRules", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                "function": {"project": {"fieldName": "warningRules", "typeName": "hydra.validation.ValidationProfile"}}}},
                             "function": {
                               "application": {
                                 "argument": {"variable": "ruleName"},
@@ -2240,7 +2266,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "p"},
-                                    "function": {"project": {"field": "errorRules", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                    "function": {"project": {"fieldName": "errorRules", "typeName": "hydra.validation.ValidationProfile"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {"variable": "ruleName"},
@@ -2365,7 +2391,7 @@
                                     "function": {"variable": "hydra.validate.packaging.module"}}}}}}},
                         "function": {
                           "typeApplication": {
-                            "body": {"project": {"field": "errors", "typeName": "hydra.validation.ValidationResult"}},
+                            "body": {"project": {"fieldName": "errors", "typeName": "hydra.validation.ValidationResult"}},
                             "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                     "function": {
                       "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
@@ -2418,7 +2444,7 @@
                                     "function": {"variable": "hydra.validate.packaging.package"}}}}}}},
                         "function": {
                           "typeApplication": {
-                            "body": {"project": {"field": "errors", "typeName": "hydra.validation.ValidationResult"}},
+                            "body": {"project": {"fieldName": "errors", "typeName": "hydra.validation.ValidationResult"}},
                             "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                     "function": {
                       "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
@@ -2835,7 +2861,7 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {"variable": "p"},
-                                                                "function": {"project": {"field": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                "function": {"project": {"fieldName": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {
@@ -2845,7 +2871,7 @@
                                                                         "argument": {"variable": "acc"},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"project": {"field": "errors", "typeName": "hydra.validation.ValidationResult"}},
+                                                                            "body": {"project": {"fieldName": "errors", "typeName": "hydra.validation.ValidationResult"}},
                                                                             "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                                                     "function": {
                                                                       "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
@@ -3122,7 +3148,7 @@
                                                                     "argument": {
                                                                       "application": {
                                                                         "argument": {"variable": "p"},
-                                                                        "function": {"project": {"field": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                        "function": {"project": {"fieldName": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
@@ -3132,7 +3158,7 @@
                                                                                 "argument": {"variable": "acc"},
                                                                                 "function": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"project": {"field": "errors", "typeName": "hydra.validation.ValidationResult"}},
+                                                                                    "body": {"project": {"fieldName": "errors", "typeName": "hydra.validation.ValidationResult"}},
                                                                                     "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                                                             "function": {
                                                                               "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
@@ -3174,7 +3200,9 @@
                             "body": {
                               "application": {
                                 "argument": {
-                                  "application": {"argument": {"variable": "pkg"}, "function": {"project": {"field": "modules", "typeName": "hydra.packaging.Package"}}}},
+                                  "application": {
+                                    "argument": {"variable": "pkg"},
+                                    "function": {"project": {"fieldName": "modules", "typeName": "hydra.packaging.Package"}}}},
                                 "function": {
                                   "application": {
                                     "argument": {"variable": "accPkg"},
@@ -3228,7 +3256,7 @@
                                                                         "argument": {"variable": "mr"},
                                                                         "function": {
                                                                           "typeApplication": {
-                                                                            "body": {"project": {"field": "errors", "typeName": "hydra.validation.ValidationResult"}},
+                                                                            "body": {"project": {"fieldName": "errors", "typeName": "hydra.validation.ValidationResult"}},
                                                                             "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                                                     "function": {
                                                                       "application": {
@@ -3256,7 +3284,7 @@
                                                                             "argument": {"variable": "mr"},
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"project": {"field": "warnings", "typeName": "hydra.validation.ValidationResult"}},
+                                                                                "body": {"project": {"fieldName": "warnings", "typeName": "hydra.validation.ValidationResult"}},
                                                                                 "type": {"variable": "hydra.error.packaging.InvalidModuleError"}}}}},
                                                                         "function": {
                                                                           "application": {
@@ -3289,7 +3317,7 @@
                                                                                         "argument": {"variable": "acc"},
                                                                                         "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"project": {"field": "errors", "typeName": "hydra.validation.ValidationResult"}},
+                                                                                            "body": {"project": {"fieldName": "errors", "typeName": "hydra.validation.ValidationResult"}},
                                                                                             "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                                                                     "function": {
                                                                                       "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}},
@@ -3298,7 +3326,7 @@
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "p"},
-                                                                                    "function": {"project": {"field": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                                    "function": {"project": {"fieldName": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                                 "function": {
                                                                                   "typeApplication": {"body": {"variable": "hydra.lib.lists.take"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}},
                                                                         "typeScheme": {"body": {"list": {"variable": "hydra.error.packaging.InvalidPackageError"}}, "variables": []}}],
@@ -3319,7 +3347,7 @@
                                                                                             "argument": {"variable": "acc"},
                                                                                             "function": {
                                                                                               "typeApplication": {
-                                                                                                "body": {"project": {"field": "warnings", "typeName": "hydra.validation.ValidationResult"}},
+                                                                                                "body": {"project": {"fieldName": "warnings", "typeName": "hydra.validation.ValidationResult"}},
                                                                                                 "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {"body": {"variable": "hydra.lib.lists.concat2"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}},
@@ -3328,7 +3356,7 @@
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "p"},
-                                                                                        "function": {"project": {"field": "maxWarnings", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                                        "function": {"project": {"fieldName": "maxWarnings", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                                     "function": {
                                                                                       "typeApplication": {"body": {"variable": "hydra.lib.lists.take"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}}}},
                                                                             "typeScheme": {"body": {"list": {"variable": "hydra.error.packaging.InvalidPackageError"}}, "variables": []}}],
@@ -3349,7 +3377,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "p"},
-                                                                    "function": {"project": {"field": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
+                                                                    "function": {"project": {"fieldName": "maxErrors", "typeName": "hydra.validation.ValidationProfile"}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
@@ -3359,7 +3387,7 @@
                                                                             "argument": {"variable": "acc"},
                                                                             "function": {
                                                                               "typeApplication": {
-                                                                                "body": {"project": {"field": "errors", "typeName": "hydra.validation.ValidationResult"}},
+                                                                                "body": {"project": {"fieldName": "errors", "typeName": "hydra.validation.ValidationResult"}},
                                                                                 "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
                                                                         "function": {
                                                                           "typeApplication": {"body": {"variable": "hydra.lib.lists.length"}, "type": {"variable": "hydra.error.packaging.InvalidPackageError"}}}}},
