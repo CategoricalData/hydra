@@ -71,7 +71,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesNamespaces),
             moduleDescription = Just ("Utilities for constructing generic program code ASTs, used for the serialization phase of source code generation.")}
   where
    definitions = [

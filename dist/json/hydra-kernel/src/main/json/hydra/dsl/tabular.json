@@ -1274,6 +1274,12 @@
                     "application": {"argument": {"list": {"variable": "hydra.tabular.ColumnType"}}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {"application": {"argument": {"variable": "hydra.tabular.TableType"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.tabular", "hydra.phantoms", "hydra.core", "hydra.relational", "hydra.dsl.core", "hydra.dsl.relational"],
+  "dependencies": [
+    {"module": "hydra.tabular"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.core"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.dsl.core"},
+    {"module": "hydra.dsl.relational"}],
   "description": "DSL functions for hydra.tabular",
   "namespace": "hydra.dsl.tabular"}

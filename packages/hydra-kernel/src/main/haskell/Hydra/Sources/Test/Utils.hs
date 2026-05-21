@@ -98,7 +98,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Inference.ns, ShowError.ns, Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Inference.ns, ShowError.ns, Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Shared utility functions for test code generation codecs"}
   where
     definitions = [

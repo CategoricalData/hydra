@@ -64,7 +64,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, moduleNamespace DecodeCore.module_, ShowCore.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, moduleNamespace DecodeCore.module_, ShowCore.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just "A utility which instantiates a nonrecursive type with default values"}
   where
    definitions = [

@@ -43,7 +43,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [CoreTypes.ns, Coders.ns, Namespace "hydra.avro.schema", Namespace "hydra.json.model"],
+            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, Coders.ns, Namespace "hydra.avro.schema", Namespace "hydra.json.model"],
             moduleDescription = Just "Type definitions for the Avro code generation environment"}
   where
     definitions = [

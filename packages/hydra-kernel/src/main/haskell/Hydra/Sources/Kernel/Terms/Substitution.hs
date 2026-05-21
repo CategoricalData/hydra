@@ -65,7 +65,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Rewriting.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, Variables.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just ("Variable substitution in type and term expressions.")}
   where
    definitions = [

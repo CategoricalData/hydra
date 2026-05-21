@@ -32,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [JsonModel.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [JsonModel.ns, Core.ns],
             moduleDescription = Just ("A model for Avro schemas. Based on the Avro 1.11.1 specification:\n" ++
       "  https://avro.apache.org/docs/1.11.1/specification")}
   where

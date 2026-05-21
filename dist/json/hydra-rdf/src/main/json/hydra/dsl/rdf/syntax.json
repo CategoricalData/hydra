@@ -4097,6 +4097,6 @@
                   "domain": {"application": {"argument": {"variable": "hydra.rdf.syntax.Node"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {"application": {"argument": {"variable": "hydra.rdf.syntax.Triple"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.rdf.syntax", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.rdf.syntax",
   "namespace": "hydra.dsl.rdf.syntax"}

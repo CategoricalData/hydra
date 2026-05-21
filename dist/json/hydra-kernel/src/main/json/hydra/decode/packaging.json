@@ -537,7 +537,7 @@
                                                                                               "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
                                                                                             "type": {"list": {"variable": "hydra.packaging.Definition"}}}},
                                                                                         "type": {"variable": "hydra.packaging.Module"}}}}}}},
-                                                                            "domain": {"list": {"variable": "hydra.packaging.Namespace"}},
+                                                                            "domain": {"list": {"variable": "hydra.packaging.ModuleDependency"}},
                                                                             "parameter": "field_dependencies"}},
                                                                         "function": {
                                                                           "application": {
@@ -551,9 +551,9 @@
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "hydra.decode.packaging.namespace"},
+                                                                                            "argument": {"variable": "hydra.decode.packaging.moduleDependency"},
                                                                                             "function": {
-                                                                                              "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"variable": "hydra.packaging.Namespace"}}}}},
+                                                                                              "typeApplication": {"body": {"variable": "hydra.extract.core.decodeList"}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}}},
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {"literal": {"string": "dependencies"}},
@@ -564,14 +564,14 @@
                                                                                                     "body": {
                                                                                                       "typeApplication": {"body": {"variable": "hydra.extract.core.requireField"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
-                                                                                                "type": {"list": {"variable": "hydra.packaging.Namespace"}}}}}}}}}}}},
+                                                                                                "type": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}}}}}}}}}},
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {"body": {"variable": "hydra.lib.eithers.bind"}, "type": {"variable": "hydra.errors.DecodingError"}}},
-                                                                                    "type": {"list": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                    "type": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                                 "type": {"variable": "hydra.packaging.Module"}}}}}}},
                                                                     "domain": {"variable": "hydra.packaging.Namespace"},
                                                                     "parameter": "field_namespace"}},
@@ -2689,6 +2689,12 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.packaging", "hydra.util", "hydra.decode.core"],
+  "dependencies": [
+    {"module": "hydra.extract.core"},
+    {"module": "hydra.lexical"},
+    {"module": "hydra.rewriting"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.util"},
+    {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.packaging",
   "namespace": "hydra.decode.packaging"}

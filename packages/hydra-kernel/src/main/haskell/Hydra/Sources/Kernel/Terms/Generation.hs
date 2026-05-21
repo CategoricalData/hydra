@@ -90,11 +90,11 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
      Environment.ns, ShowCore.ns, ShowError.ns, Strip.ns,
      Namespace "hydra.decoding", Namespace "hydra.encoding",
      Namespace "hydra.json.decode", Namespace "hydra.json.encode", Namespace "hydra.json.writer",
-     moduleNamespace DecodeCore.module_, moduleNamespace DecodeModule.module_, moduleNamespace EncodeModule.module_] L.++ kernelTypesNamespaces,
+     moduleNamespace DecodeCore.module_, moduleNamespace DecodeModule.module_, moduleNamespace EncodeModule.module_] L.++ kernelTypesNamespaces),
             moduleDescription = Just "Pure code generation pipeline for bootstrapping Hydra across languages."}
   where
     definitions = [
@@ -542,7 +542,7 @@ moduleDepsTransitive = define "moduleDepsTransitive" $
   doc "Compute transitive closure of dependencies for a set of modules" $
   "nsMap" ~> "modules" ~>
   "closure" <~ Sets.union
-    (transitiveDeps @@ ("m" ~> Packaging.moduleDependencies (var "m")) @@ var "nsMap" @@ var "modules")
+    (transitiveDeps @@ ("m" ~> Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "m"))) @@ var "nsMap" @@ var "modules")
     (Sets.fromList $ Lists.map ("m" ~> Packaging.moduleNamespace (var "m")) (var "modules")) $
   Maybes.cat $ Lists.map
     ("n" ~> Maps.lookup (var "n") (var "nsMap"))
@@ -592,7 +592,7 @@ moduleToSourceModule = define "moduleToSourceModule" $
   Packaging.module_
     (just $ (string "Source module for ") ++ Packaging.unNamespace (Packaging.moduleNamespace $ var "m"))
     (var "sourceNs")
-    (list [var "modTypeNs"])
+    (list [Packaging.moduleDependency (var "modTypeNs") nothing])
     (list [var "moduleDef"])
 
 -- | Build a graph from a list of modules, using an explicit bootstrap graph.

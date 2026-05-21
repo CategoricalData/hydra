@@ -81,8 +81,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns,
-      Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns,
+      Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just "Utilities for reading and writing type and term annotations"}
   where
    definitions = [

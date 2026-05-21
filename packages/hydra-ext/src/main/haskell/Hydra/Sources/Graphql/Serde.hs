@@ -93,7 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Serialization functions for converting GraphQL AST to abstract expressions"}
   where
     definitions = [

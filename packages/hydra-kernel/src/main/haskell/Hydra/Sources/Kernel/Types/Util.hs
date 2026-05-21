@@ -20,7 +20,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Packaging.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Packaging.ns],
             moduleDescription = Just "General-purpose utility types used across Hydra."}
   where
     -- Note: either_ and pair are NOT included here because they correspond to built-in

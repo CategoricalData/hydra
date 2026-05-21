@@ -27080,6 +27080,6 @@
                       "body": {"list": {"variable": "hydra.lisp.syntax.SExpression"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.lisp.syntax", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.lisp.syntax"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.lisp.syntax",
   "namespace": "hydra.dsl.lisp.syntax"}

@@ -51,7 +51,7 @@ module_ cx raw =
           Core.TermLiteral v1 -> case v1 of
             Core.LiteralString v2 -> Right v2
             _ -> Left (Errors.DecodingError "expected string literal")
-          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "namespace" namespace fieldMap cx) (\field_namespace -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList namespace) fieldMap cx) (\field_dependencies -> Eithers.bind (ExtractCore.requireField "definitions" (ExtractCore.decodeList definition) fieldMap cx) (\field_definitions -> Right (Packaging.Module {
+          _ -> Left (Errors.DecodingError "expected literal")) (ExtractCore.stripWithDecodingError cx2 raw2))) fieldMap cx) (\field_description -> Eithers.bind (ExtractCore.requireField "namespace" namespace fieldMap cx) (\field_namespace -> Eithers.bind (ExtractCore.requireField "dependencies" (ExtractCore.decodeList moduleDependency) fieldMap cx) (\field_dependencies -> Eithers.bind (ExtractCore.requireField "definitions" (ExtractCore.decodeList definition) fieldMap cx) (\field_definitions -> Right (Packaging.Module {
           Packaging.moduleDescription = field_description,
           Packaging.moduleNamespace = field_namespace,
           Packaging.moduleDependencies = field_dependencies,

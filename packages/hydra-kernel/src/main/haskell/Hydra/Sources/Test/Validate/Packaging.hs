@@ -4,6 +4,7 @@ module Hydra.Sources.Test.Validate.Packaging where
 
 -- Standard imports for tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Error.Packaging
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
@@ -29,8 +30,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Namespace "hydra.validate.packaging",
-              Namespace "hydra.show.error.packaging"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Namespace "hydra.validate.packaging",
+              Namespace "hydra.show.error.packaging"] ++ kernelTypesNamespaces),
             moduleDescription = (Just "Test cases for module and package validation")}
   where
     definitions = [
@@ -73,7 +74,7 @@ mkModule :: String -> [TTerm Definition] -> TTerm Module
 mkModule nsStr defs = Packaging.module_
   (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
   (nsLit nsStr)
-  (Phantoms.list ([] :: [TTerm Namespace]))
+  (Phantoms.list ([] :: [TTerm ModuleDependency]))
   (Phantoms.list defs)
 
 -- | Build a Package with the given name and modules.

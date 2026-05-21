@@ -87,7 +87,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = (Namespace "hydra.cpp.language"),
             moduleDefinitions = [toDefinition cppLanguage, toDefinition cppReservedWords],
-            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Language constraints and reserved words for C++"}
 cppLanguage :: TTermDefinition Language
 cppLanguage = define "cppLanguage" $

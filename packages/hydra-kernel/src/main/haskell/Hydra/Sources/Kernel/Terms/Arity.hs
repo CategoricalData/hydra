@@ -61,7 +61,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesNamespaces),
             moduleDescription = Just "Functions dealing with arguments and arity."}
   where
     definitions = [

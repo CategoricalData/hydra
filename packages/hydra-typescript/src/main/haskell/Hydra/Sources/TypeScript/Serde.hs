@@ -99,7 +99,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns, TypeScriptOperators.ns] L.++ (TypeScriptSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, TypeScriptOperators.ns] L.++ (TypeScriptSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Serialization functions for converting TypeScript AST to abstract expressions"}
   where
     definitions = [

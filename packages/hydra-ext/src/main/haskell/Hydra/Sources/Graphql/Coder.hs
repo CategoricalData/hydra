@@ -96,9 +96,9 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
       moduleNamespace GraphqlLanguage.module_,
-      GraphqlSerde.ns] L.++ (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
+      GraphqlSerde.ns] L.++ (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"}
   where
     definitions = [

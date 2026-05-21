@@ -22,7 +22,7 @@ import qualified Hydra.Sources.All as All
 import qualified Hydra.Sources.Ext as Ext
 import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Json.Model as JsonModel
-import Hydra.Dsl.Bootstrap (bootstrapGraph)
+import Hydra.Dsl.Bootstrap (bootstrapGraph, unqualifiedDep)
 import qualified Hydra.PackageRouting as PackageRouting
 
 import qualified Data.Aeson as A
@@ -167,7 +167,7 @@ runSubset nsStr defSpec = do
       let syntheticDirty = Module {
             moduleNamespace = bisectNs,
             moduleDefinitions = cloned,
-            moduleDependencies = [ns],
+            moduleDependencies = unqualifiedDep <$> [ns],
             moduleDescription = Just "Bisection dummy module" }
       putStrLn $ "Universe: " ++ show (length universe) ++ " kept intact; dirty is new hydra.bisect with " ++ show (length picked) ++ " cloned defs:"
       mapM_ (\d -> putStrLn $ "  " ++ defName d ++ " → " ++ cloneName d) picked

@@ -3,6 +3,7 @@ module Hydra.Sources.Test.Differentiation where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
@@ -33,7 +34,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Diff.ns, Variables.ns, ShowCore.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, ShowCore.ns] ++ kernelTypesNamespaces),
             moduleDescription = (Just "Test cases for automatic differentiation")}
   where
     definitions = [Phantoms.toDefinition allTests]

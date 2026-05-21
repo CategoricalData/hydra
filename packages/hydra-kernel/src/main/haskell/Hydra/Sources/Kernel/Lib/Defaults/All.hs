@@ -95,7 +95,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = defaultLibNamespaces L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (defaultLibNamespaces L.++ kernelTypesNamespaces),
             moduleDescription = Just ("Registry of default term-level library implementations used by the Hydra interpreter when no native primitive is available.")}
   where
     definitions = []

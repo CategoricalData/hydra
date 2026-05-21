@@ -92,7 +92,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Names.ns, Annotations.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Names.ns, Annotations.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Utility functions for working with RDF graphs and descriptions"}
   where
     definitions = [

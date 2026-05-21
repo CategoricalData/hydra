@@ -1598,6 +1598,6 @@
                   "argument": {"application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.validation.ValidationResult"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["e"]}}}],
-  "dependencies": ["hydra.validation", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.validation"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.validation",
   "namespace": "hydra.dsl.validation"}

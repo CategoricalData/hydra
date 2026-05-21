@@ -22,7 +22,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
       ++ "  https://docs.python.org/3.14/reference/grammar.html")}
   where

@@ -109,7 +109,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ExtractCore.ns, Strip.ns] L.++ (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, Strip.ns] L.++ (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms"}
   where
     definitions = [

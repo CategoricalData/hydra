@@ -19,7 +19,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A model for Hydra namespaces, modules, and packages"}
   where
     definitions = [
@@ -64,7 +64,7 @@ module' = define "Module" $
       namespace,
     "dependencies">:
       doc "Any modules which this module directly depends on" $
-      T.list namespace,
+      T.list moduleDependency,
     "definitions">:
       doc "The definitions in this module" $
       T.list definition]

@@ -114,8 +114,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [HaskellSerde.ns, HaskellUtilsSource.ns,
-      Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([HaskellSerde.ns, HaskellUtilsSource.ns,
+      Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Functions for encoding Hydra modules as Haskell modules"}
   where
     ns = Namespace "hydra.haskell.coder"

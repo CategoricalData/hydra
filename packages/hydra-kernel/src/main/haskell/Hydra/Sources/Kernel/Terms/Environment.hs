@@ -84,7 +84,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Lexical.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just ("Graph to type environment conversions")}
   where
     definitions = [

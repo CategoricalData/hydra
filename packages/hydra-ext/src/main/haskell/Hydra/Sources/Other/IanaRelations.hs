@@ -23,7 +23,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [],
+            moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just ("All IANA Link Relation Types, as of 2022-10-11. " ++
           "See https://www.iana.org/assignments/link-relations/link-relations.xhtml")}
   where

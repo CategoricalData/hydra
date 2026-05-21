@@ -91,7 +91,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "JSON serialization functions using the Hydra AST"}
   where
     ns = Namespace "hydra.json.writer"

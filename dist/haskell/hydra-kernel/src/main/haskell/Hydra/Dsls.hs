@@ -98,9 +98,11 @@ dslModule cx graph mod =
         "DSL functions for ",
         (Packaging.unNamespace (Packaging.moduleNamespace mod))])),
       Packaging.moduleNamespace = (dslNamespace (Packaging.moduleNamespace mod)),
-      Packaging.moduleDependencies = (Lists.nub (Lists.concat2 [
+      Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
+        Packaging.moduleDependencyModule = ns,
+        Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 [
         Packaging.moduleNamespace mod,
-        (Packaging.Namespace "hydra.phantoms")] (Lists.concat2 (Packaging.moduleDependencies mod) (Lists.map dslNamespace (Packaging.moduleDependencies mod))))),
+        (Packaging.Namespace "hydra.phantoms")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionTerm = (Core.bindingTerm b),

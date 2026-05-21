@@ -3,6 +3,7 @@ module Hydra.Sources.Test.Substitution where
 
 -- Standard imports for shallow DSL tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Dsl.Meta.Core          as Core
@@ -27,7 +28,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, Substitution.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Substitution.ns] ++ kernelTypesNamespaces),
             moduleDescription = (Just "Test cases for type and term substitution operations")}
   where
     definitions = [Phantoms.toDefinition allTests]

@@ -96,7 +96,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "WebAssembly serializer: converts WAT AST to concrete WAT text format"}
   where
     definitions = [

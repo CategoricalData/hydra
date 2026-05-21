@@ -2613,6 +2613,6 @@
               "domain": {
                 "application": {"argument": {"variable": "hydra.testing.UniversalTestCase"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.testing", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.testing"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.testing",
   "namespace": "hydra.dsl.testing"}

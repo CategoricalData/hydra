@@ -17,6 +17,7 @@ module Hydra.Sources.Test.TestEnv where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
@@ -31,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Lexical.ns] Prelude.++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Lexical.ns] Prelude.++ kernelTypesNamespaces),
             moduleDescription = Just ("Type-level declarations for the hand-written Hydra.Test.TestEnv module.")}
   where
    definitions = [

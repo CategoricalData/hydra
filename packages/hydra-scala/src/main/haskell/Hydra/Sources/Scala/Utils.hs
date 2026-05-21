@@ -98,7 +98,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [scalaLanguageNs, Names.ns, Formatting.ns] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([scalaLanguageNs, Names.ns, Formatting.ns] L.++ (ScalaSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Utility functions for constructing Scala AST nodes"}
   where
     definitions = [

@@ -91,7 +91,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowPaths.ns, Names.ns, Rewriting.ns] L.++ (DotSyntax.ns:kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowPaths.ns, Names.ns, Rewriting.ns] L.++ (DotSyntax.ns:kernelTypesNamespaces)),
             moduleDescription = Just "Functions for converting Hydra terms to Graphviz DOT graphs"}
   where
     definitions = [

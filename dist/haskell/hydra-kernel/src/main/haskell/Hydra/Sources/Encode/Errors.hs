@@ -13,14 +13,30 @@ module_ =
       Packaging.moduleDescription = (Just "Term encoders for hydra.errors"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.errors"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.context",
-        (Packaging.Namespace "hydra.encode.core"),
-        (Packaging.Namespace "hydra.encode.error.checking"),
-        (Packaging.Namespace "hydra.encode.error.core"),
-        (Packaging.Namespace "hydra.encode.paths"),
-        (Packaging.Namespace "hydra.encode.typing"),
-        (Packaging.Namespace "hydra.encode.variants"),
-        (Packaging.Namespace "hydra.errors")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.context"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.error.checking"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.error.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.paths"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.typing"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.variants"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.errors"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.errors.decodingError"),

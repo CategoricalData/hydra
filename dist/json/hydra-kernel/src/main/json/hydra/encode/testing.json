@@ -40,6 +40,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.testing.Tag"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.testing"],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.testing"}],
   "description": "Term encoders for hydra.testing",
   "namespace": "hydra.encode.testing"}

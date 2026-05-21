@@ -77,7 +77,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Rewriting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just ("Annotation and type stripping and normalization")}
   where
    definitions = [

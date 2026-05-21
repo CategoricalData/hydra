@@ -4,6 +4,7 @@ module Hydra.Sources.Kernel.Terms.Dsls where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Meta.Core         as Core
@@ -46,7 +47,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just "Functions for generating domain-specific DSL modules from type modules"}
   where
     definitions = [
@@ -300,11 +301,11 @@ dslModule = define "dslModule" $
           -- DSL modules depend on:
           -- (1) the original module + its source dependencies + hydra.phantoms (for TTerm), and
           -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
-          (Lists.nub (Lists.concat2
+          (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
             (list [Packaging.moduleNamespace (var "mod"), Packaging.namespace (string "hydra.phantoms")])
             (Lists.concat2
-              (Packaging.moduleDependencies (var "mod"))
-              (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleDependencies (var "mod"))))))
+              (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
+              (primitive _lists_map @@ dslNamespace @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingTypeScheme $ var "b")))

@@ -13401,6 +13401,6 @@
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {"application": {"argument": {"variable": "hydra.core.WrappedTerm"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.phantoms", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.phantoms"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.core",
   "namespace": "hydra.dsl.core"}

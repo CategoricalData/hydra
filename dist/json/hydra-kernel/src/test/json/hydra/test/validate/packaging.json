@@ -168,7 +168,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -265,7 +265,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -279,7 +279,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.bar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -376,7 +376,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.fooBar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -390,7 +390,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foobar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -509,7 +509,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -608,7 +608,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -690,7 +690,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -831,7 +831,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -965,7 +965,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -1047,7 +1047,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -1190,7 +1190,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -1331,7 +1331,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -1492,7 +1492,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -1670,7 +1670,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -1752,7 +1752,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -1893,7 +1893,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -2064,7 +2064,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -2146,7 +2146,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -2287,7 +2287,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -2486,7 +2486,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -2703,7 +2703,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -2941,7 +2941,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -3023,7 +3023,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -3222,7 +3222,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -3541,7 +3541,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -3555,7 +3555,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.bar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -3652,7 +3652,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -3666,7 +3666,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -3782,7 +3782,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -3864,7 +3864,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo.bar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -3946,7 +3946,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.test.testGraph"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -4028,7 +4028,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.Foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -4122,7 +4122,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo_bar"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -4686,7 +4686,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -4827,7 +4827,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -4944,7 +4944,7 @@
                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                             {
                                                               "name": "dependencies",
-                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                              "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                             {
                                                               "name": "definitions",
                                                               "term": {
@@ -5188,7 +5188,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {
@@ -5344,7 +5344,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {
@@ -5512,7 +5512,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -5526,7 +5526,7 @@
                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                         {
                                                                           "name": "dependencies",
-                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                         {
                                                                           "name": "definitions",
                                                                           "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Definition"}}}}],
@@ -5658,7 +5658,7 @@
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                                     {
                                                                                       "name": "dependencies",
-                                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                                     {
                                                                                       "name": "definitions",
                                                                                       "term": {
@@ -5798,7 +5798,7 @@
                                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                                         {
                                                                                           "name": "dependencies",
-                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                                         {
                                                                                           "name": "definitions",
                                                                                           "term": {
@@ -6120,7 +6120,7 @@
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                                     {
                                                                                       "name": "dependencies",
-                                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                                     {
                                                                                       "name": "definitions",
                                                                                       "term": {
@@ -6260,7 +6260,7 @@
                                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                                         {
                                                                                           "name": "dependencies",
-                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                                         {
                                                                                           "name": "definitions",
                                                                                           "term": {
@@ -6582,7 +6582,7 @@
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                                     {
                                                                                       "name": "dependencies",
-                                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                                     {
                                                                                       "name": "definitions",
                                                                                       "term": {
@@ -6718,7 +6718,7 @@
                                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                                         {
                                                                                           "name": "dependencies",
-                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                                         {
                                                                                           "name": "definitions",
                                                                                           "term": {
@@ -7010,7 +7010,7 @@
                                                                                       "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                                     {
                                                                                       "name": "dependencies",
-                                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                      "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                                     {
                                                                                       "name": "definitions",
                                                                                       "term": {
@@ -7150,7 +7150,7 @@
                                                                                           "term": {"wrap": {"body": {"literal": {"string": "hydra.foo"}}, "typeName": "hydra.packaging.Namespace"}}},
                                                                                         {
                                                                                           "name": "dependencies",
-                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.Namespace"}}}},
+                                                                                          "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
                                                                                         {
                                                                                           "name": "definitions",
                                                                                           "term": {
@@ -7406,31 +7406,31 @@
             "typeName": "hydra.testing.TestGroup"}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [
-    "hydra.validate.packaging",
-    "hydra.show.error.packaging",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.validate.packaging"},
+    {"module": "hydra.show.error.packaging"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Test cases for module and package validation",
   "namespace": "hydra.test.validate.packaging"}

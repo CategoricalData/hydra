@@ -69,7 +69,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just ("A module for lexical operations over graphs.")}
   where
     definitions = [

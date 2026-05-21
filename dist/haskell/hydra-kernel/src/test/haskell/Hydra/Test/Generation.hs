@@ -60,7 +60,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.a"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
@@ -72,7 +74,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.a"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
@@ -111,7 +115,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.a"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
@@ -123,7 +129,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.a"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
@@ -167,7 +175,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.a"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
@@ -197,7 +207,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.a"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
@@ -236,7 +248,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.a"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
@@ -266,7 +280,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.b"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.a"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.a"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.b.useId"),
@@ -322,7 +338,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.w"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.v"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.v"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.w.useFunky"),
@@ -338,7 +356,9 @@ allTests =
                     Packaging.moduleDescription = Nothing,
                     Packaging.moduleNamespace = (Packaging.Namespace "hydra.testInput.w"),
                     Packaging.moduleDependencies = [
-                      Packaging.Namespace "hydra.testInput.v"],
+                      Packaging.ModuleDependency {
+                        Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.testInput.v"),
+                        Packaging.moduleDependencyPackage = Nothing}],
                     Packaging.moduleDefinitions = [
                       Packaging.DefinitionTerm (Packaging.TermDefinition {
                         Packaging.termDefinitionName = (Core.Name "hydra.testInput.w.useFunky"),

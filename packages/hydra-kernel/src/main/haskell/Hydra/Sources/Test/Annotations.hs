@@ -3,6 +3,7 @@ module Hydra.Sources.Test.Annotations where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -42,7 +43,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Lexical.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"],
+            moduleDependencies = unqualifiedDep <$> [Annotations.ns, Lexical.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"],
             moduleDescription = Just "Test cases for hydra.annotations functions"}
   where
     definitions = [Phantoms.toDefinition allTests]

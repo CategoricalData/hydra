@@ -13,8 +13,12 @@ module_ =
       Packaging.moduleDescription = (Just "Term encoders for hydra.packaging"),
       Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.packaging"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.packaging")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.packaging"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.packaging.definition"),
@@ -237,7 +241,7 @@ module_ =
                                         Core.fieldTerm = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
                                             Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.lists.map")),
-                                            Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace"))})),
+                                            Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleDependency"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}))}}))})),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {

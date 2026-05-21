@@ -68,7 +68,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Sorting.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Formatting.ns, Sorting.ns] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Transform test cases for code generation, filtering to tests that can be compiled to target languages"}
   where
     definitions = [

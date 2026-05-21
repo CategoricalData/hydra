@@ -26,7 +26,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.")}
   where
     definitions = [

@@ -4,6 +4,7 @@ module Hydra.Sources.Test.TestSuite where
 
 -- Standard imports for deep DSL tests (produces TTerm a with specific types)
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++))
 import Hydra.Sources.Kernel.Types.All
@@ -78,7 +79,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = namespaces ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> (namespaces ++ kernelTypesNamespaces),
             moduleDescription = Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")}
   where

@@ -3,6 +3,7 @@ module Hydra.Sources.Yaml.Language where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -28,7 +29,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = [toDefinition yamlLanguage],
-            moduleDependencies = [Strip.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Strip.ns] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Language constraints for YAML"}
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_

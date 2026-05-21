@@ -73,7 +73,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just "Functions for generating term encoders from type modules"}
   where
     definitions = [
@@ -367,9 +367,9 @@ encodeModule = define "encodeModule" $
             string "Term encoders for ",
             Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (encodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.nub (Lists.concat2
-            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleDependencies (var "mod")))
-            (list [Packaging.moduleNamespace (var "mod")])))
+          (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
+            (primitive _lists_map @@ encodeNamespace @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
+            (list [Packaging.moduleNamespace (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingTypeScheme $ var "b")))

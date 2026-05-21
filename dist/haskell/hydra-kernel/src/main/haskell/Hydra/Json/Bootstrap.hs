@@ -1951,7 +1951,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "dependencies"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.packaging.Namespace"))),
+                Core.annotatedTypeBody = (Core.TypeList (Core.TypeVariable (Core.Name "hydra.packaging.ModuleDependency"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Any modules which this module directly depends on")))])}))},
             Core.FieldType {

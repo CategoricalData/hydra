@@ -269,8 +269,10 @@ encodeModule cx graph mod =
         "Term encoders for ",
         (Packaging.unNamespace (Packaging.moduleNamespace mod))])),
       Packaging.moduleNamespace = (encodeNamespace (Packaging.moduleNamespace mod)),
-      Packaging.moduleDependencies = (Lists.nub (Lists.concat2 (Lists.map encodeNamespace (Packaging.moduleDependencies mod)) [
-        Packaging.moduleNamespace mod])),
+      Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
+        Packaging.moduleDependencyModule = ns,
+        Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 (Lists.map encodeNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))) [
+        Packaging.moduleNamespace mod]))),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionTerm = (Core.bindingTerm b),

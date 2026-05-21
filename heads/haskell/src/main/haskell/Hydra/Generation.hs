@@ -540,7 +540,7 @@ closeDirtySet universeMods initialDirty = fixedPoint initialDirty
             [ moduleNamespace m
             | m <- universeMods
             , not (moduleNamespace m `S.member` d)
-            , any (`S.member` d) (moduleDependencies m)
+            , any ((`S.member` d) . moduleDependencyModule) (moduleDependencies m)
             ]
           d' = S.union d newlyDirty
       in if S.size d' == S.size d then d else fixedPoint d'

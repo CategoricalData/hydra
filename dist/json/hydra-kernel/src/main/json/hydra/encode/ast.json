@@ -1220,6 +1220,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.ast.Ws"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.ast"],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.ast"}],
   "description": "Term encoders for hydra.ast",
   "namespace": "hydra.encode.ast"}

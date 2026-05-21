@@ -1146,6 +1146,6 @@
                   "argument": {"variable": "hydra.haskell.environment.HaskellModuleMetadata"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.haskell.environment", "hydra.phantoms"],
+  "dependencies": [{"module": "hydra.haskell.environment"}, {"module": "hydra.phantoms"}],
   "description": "DSL functions for hydra.haskell.environment",
   "namespace": "hydra.dsl.haskell.environment"}

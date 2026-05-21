@@ -8,6 +8,7 @@
 module Hydra.Sources.Coq.Generate where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.AsTerm (asTerm)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
@@ -55,8 +56,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
-     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
+     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline"}
   where
     definitions = [

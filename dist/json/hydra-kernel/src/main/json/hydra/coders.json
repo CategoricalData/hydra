@@ -375,6 +375,11 @@
                       "domain": {"variable": "hydra.core.Type"}}},
                   "domain": {"variable": "hydra.coders.AdapterContext"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.context", "hydra.errors", "hydra.graph", "hydra.variants", "hydra.core"],
+  "dependencies": [
+    {"module": "hydra.context"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.variants"},
+    {"module": "hydra.core"}],
   "description": "Abstractions for paired transformations between languages",
   "namespace": "hydra.coders"}

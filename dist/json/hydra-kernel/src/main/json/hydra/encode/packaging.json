@@ -205,13 +205,14 @@
                                                             "argument": {"variable": "xs"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.encode.packaging.namespace"},
+                                                                "argument": {"variable": "hydra.encode.packaging.moduleDependency"},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.Namespace"}}},
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleDependency"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": {"list": {"variable": "hydra.packaging.Namespace"}},
+                                                  "domain": {"list": {"variable": "hydra.packaging.ModuleDependency"}},
                                                   "parameter": "xs"}}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -887,6 +888,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.packaging.TypeDefinition"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.packaging"],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.packaging"}],
   "description": "Term encoders for hydra.packaging",
   "namespace": "hydra.encode.packaging"}

@@ -105,7 +105,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, ExtractCore.ns, Strip.ns, Resolution.ns, ShowCore.ns] L.++ (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Strip.ns, Resolution.ns, ShowCore.ns] L.++ (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Functions for mapping Hydra terms to property graph elements using mapping specifications"}
   where
     definitions = [

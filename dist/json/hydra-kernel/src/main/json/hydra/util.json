@@ -82,6 +82,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Precision to a specified number of bits"}}}],
                         "body": {"literal": {"integer": {"int32": {}}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.packaging"],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}],
   "description": "General-purpose utility types used across Hydra.",
   "namespace": "hydra.util"}

@@ -93,7 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_] L.++ KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."}
   where
     definitions = [

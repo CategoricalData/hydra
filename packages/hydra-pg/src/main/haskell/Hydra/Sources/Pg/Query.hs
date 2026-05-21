@@ -32,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [PgModel.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [PgModel.ns, Core.ns],
             moduleDescription = Just ("A common model for pattern-matching queries over property graphs")}
   where
     definitions = [

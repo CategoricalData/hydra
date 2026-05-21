@@ -63,7 +63,7 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
-                        "body": {"list": {"variable": "hydra.packaging.Namespace"}}}}},
+                        "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}}},
                   {
                     "name": "definitions",
                     "type": {
@@ -288,6 +288,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A model for Hydra namespaces, modules, and packages",
   "namespace": "hydra.packaging"}

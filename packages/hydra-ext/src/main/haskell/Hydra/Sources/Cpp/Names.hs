@@ -101,7 +101,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Names.ns, Formatting.ns, cppLanguageNs, CppUtils.ns] L.++ (CppEnvironment.ns:CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Formatting.ns, cppLanguageNs, CppUtils.ns] L.++ (CppEnvironment.ns:CppSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "C++ naming utilities: encoding Hydra names as C++ names"}
   where
     definitions = [

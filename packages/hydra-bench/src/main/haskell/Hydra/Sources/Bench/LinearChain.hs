@@ -26,6 +26,7 @@
 module Hydra.Sources.Bench.LinearChain where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
@@ -99,7 +100,7 @@ module_ :: Module
 module_ = Module {
   moduleNamespace = ns,
   moduleDefinitions = definitions,
-  moduleDependencies = [Strip.ns] `L.union` kernelTypesNamespaces,
+  moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesNamespaces),
   moduleDescription = Just "Linear-chain inference benchmark. walkerK cases on _Term variants and recurses to walker(K-1) — depth-N type-resolution stress test."
   }
   where

@@ -3,6 +3,7 @@ module Hydra.Sources.Yaml.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -51,8 +52,8 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Adapt.ns,
-     ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns] L.++ (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"]),
+            moduleDependencies = unqualifiedDep <$> ([Adapt.ns,
+     ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns] L.++ (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"])),
             moduleDescription = Just "YAML encoding and decoding for Hydra terms"}
   where
     definitions = [

@@ -81,7 +81,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Names.ns, Rewriting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Rewriting.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just ("Free variable analysis, term-level substitution, and unshadowing")}
   where
    definitions = [

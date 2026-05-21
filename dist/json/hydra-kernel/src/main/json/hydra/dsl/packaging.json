@@ -271,7 +271,7 @@
                             "argument": {
                               "annotated": {
                                 "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
-                                "body": {"list": {"variable": "hydra.packaging.Namespace"}}}},
+                                "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                             "function": {"variable": "hydra.phantoms.TTerm"}}},
                         "parameter": "dependencies"}},
                     "domain": {
@@ -312,7 +312,7 @@
                           "argument": {
                             "annotated": {
                               "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
-                              "body": {"list": {"variable": "hydra.packaging.Namespace"}}}},
+                              "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                           "function": {"variable": "hydra.phantoms.TTerm"}}}}},
                   "domain": {
                     "application": {
@@ -490,7 +490,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
-                      "body": {"list": {"variable": "hydra.packaging.Namespace"}}}},
+                      "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {"application": {"argument": {"variable": "hydra.packaging.Module"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -1030,7 +1030,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
-                            "body": {"list": {"variable": "hydra.packaging.Namespace"}}}},
+                            "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.packaging.Module"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -1046,7 +1046,7 @@
                       "argument": {
                         "annotated": {
                           "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
-                          "body": {"list": {"variable": "hydra.packaging.Namespace"}}}},
+                          "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {"application": {"argument": {"variable": "hydra.packaging.Module"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -4735,6 +4735,6 @@
               "domain": {
                 "application": {"argument": {"variable": "hydra.packaging.TypeDefinition"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.packaging", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.packaging"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.packaging",
   "namespace": "hydra.dsl.packaging"}

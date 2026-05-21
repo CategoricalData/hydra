@@ -5,6 +5,7 @@ module Hydra.Sources.Test.Dependencies where
 
 -- Standard imports for tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -35,7 +36,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, Dependencies.ns, TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Dependencies.ns, TestGraph.ns] ++ kernelTypesNamespaces),
             moduleDescription = (Just "Test cases for dependency analysis and let-term transformations")}
   where
     definitions = [Phantoms.toDefinition allTests]

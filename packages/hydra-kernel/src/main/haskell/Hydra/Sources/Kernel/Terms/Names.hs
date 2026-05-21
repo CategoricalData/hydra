@@ -66,7 +66,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Constants.ns, Formatting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, Formatting.ns] L.++ kernelTypesNamespaces),
             moduleDescription = Just ("Functions for working with qualified names.")}
   where
    definitions = [

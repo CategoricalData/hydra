@@ -2,6 +2,7 @@ module Hydra.Sources.Test.Lib.Strings where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -29,7 +30,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] ++ kernelTypesNamespaces),
             moduleDescription = (Just "Test cases for hydra.lib.strings primitives")}
   where
     definitions = [

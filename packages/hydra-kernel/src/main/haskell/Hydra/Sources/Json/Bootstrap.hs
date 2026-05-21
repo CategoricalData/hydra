@@ -13,6 +13,7 @@ module Hydra.Sources.Json.Bootstrap where
 
 -- Note: non-standard imports; this module is constructed dynamically from other modules.
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Context as Context
@@ -44,7 +45,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = [DefinitionTerm typesByNameDefinition],
-            moduleDependencies = [Namespace "hydra.core"],
+            moduleDependencies = unqualifiedDep <$> [Namespace "hydra.core"],
             moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.")}

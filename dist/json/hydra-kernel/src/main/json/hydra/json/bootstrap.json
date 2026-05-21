@@ -12098,7 +12098,7 @@
                                                                             "inject": {
                                                                               "field": {
                                                                                 "name": "variable",
-                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.ModuleDependency"}}, "typeName": "hydra.core.Name"}}},
                                                                               "typeName": "hydra.core.Type"}}},
                                                                         "typeName": "hydra.core.Type"}}},
                                                                   {
@@ -13593,6 +13593,6 @@
                                 "typeName": "hydra.core.AnnotatedType"}}},
                           "typeName": "hydra.core.Type"}}}}}]}}},
         "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}, "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A module which provides a minimal typing environment for decoding other modules from JSON. This avoids certain problems with generating entire source modules into target languages like Java, which is subject to method size limits for large modules like hydra.core.",
   "namespace": "hydra.json.bootstrap"}

@@ -4,6 +4,7 @@ module Hydra.Sources.Kernel.Lib.Names where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (qname)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
@@ -18,7 +19,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> (kernelTypesNamespaces),
             moduleDescription = Just "Namespaces and primitive names for the Hydra standard library"}
   where
     definitions = [

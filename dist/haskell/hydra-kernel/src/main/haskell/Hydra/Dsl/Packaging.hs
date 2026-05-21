@@ -30,7 +30,7 @@ fileExtension x =
       Core.wrappedTermTypeName = (Core.Name "hydra.packaging.FileExtension"),
       Core.wrappedTermBody = (Phantoms.unTTerm x)}))
 -- | DSL constructor for hydra.packaging.Module
-module_ :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm [Packaging.Namespace] -> Phantoms.TTerm [Packaging.Definition] -> Phantoms.TTerm Packaging.Module
+module_ :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm [Packaging.ModuleDependency] -> Phantoms.TTerm [Packaging.Definition] -> Phantoms.TTerm Packaging.Module
 module_ description namespace dependencies definitions =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.Module"),
@@ -56,7 +56,7 @@ moduleDefinitions x =
         Core.projectionField = (Core.Name "definitions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the dependencies field of hydra.packaging.Module
-moduleDependencies :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm [Packaging.Namespace]
+moduleDependencies :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm [Packaging.ModuleDependency]
 moduleDependencies x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -170,7 +170,7 @@ moduleWithDefinitions original newVal =
           Core.fieldName = (Core.Name "definitions"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL updater for the dependencies field of hydra.packaging.Module
-moduleWithDependencies :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm [Packaging.Namespace] -> Phantoms.TTerm Packaging.Module
+moduleWithDependencies :: Phantoms.TTerm Packaging.Module -> Phantoms.TTerm [Packaging.ModuleDependency] -> Phantoms.TTerm Packaging.Module
 moduleWithDependencies original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.packaging.Module"),

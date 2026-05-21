@@ -2,6 +2,7 @@
 module Hydra.Sources.Test.Checking.All where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing as Testing
 import Hydra.Sources.Kernel.Types.All
 import Hydra.Dsl.Meta.Phantoms as Phantoms
@@ -28,7 +29,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = namespaces Prelude.++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesNamespaces),
             moduleDescription = Just "Hydra's type checking test suite"}
   where
     definitions = [Phantoms.toDefinition allTests]

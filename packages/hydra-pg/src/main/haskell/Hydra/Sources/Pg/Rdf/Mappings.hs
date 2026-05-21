@@ -106,7 +106,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = ([RdfUtils.ns] L.++ (kernelTypesNamespaces L.++ [PgModel.ns, PgRdfEnvironment.ns, RdfSyntax.ns, ShaclModel.ns])),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (([RdfUtils.ns] L.++ (kernelTypesNamespaces L.++ [PgModel.ns, PgRdfEnvironment.ns, RdfSyntax.ns, ShaclModel.ns]))),
             moduleDescription = Just "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs"}
   where
     definitions = [

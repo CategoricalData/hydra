@@ -93,7 +93,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ (RdfSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "Serialization functions for converting RDF graphs to N-Triples format expressions"}
   where
     definitions = [

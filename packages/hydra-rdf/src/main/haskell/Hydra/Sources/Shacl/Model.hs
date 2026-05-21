@@ -32,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [RdfSyntax.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [RdfSyntax.ns, Core.ns],
             moduleDescription = Just "A SHACL syntax model. See https://www.w3.org/TR/shacl"}
   where
     definitions = [

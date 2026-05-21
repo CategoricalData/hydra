@@ -260,6 +260,6 @@
       "type": {
         "name": "hydra.avro.schema.Union",
         "typeScheme": {"body": {"wrap": {"list": {"variable": "hydra.avro.schema.Schema"}}}, "variables": []}}}],
-  "dependencies": ["hydra.json.model", "hydra.core"],
+  "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.core"}],
   "description": "A model for Avro schemas. Based on the Avro 1.11.1 specification:\n  https://avro.apache.org/docs/1.11.1/specification",
   "namespace": "hydra.avro.schema"}

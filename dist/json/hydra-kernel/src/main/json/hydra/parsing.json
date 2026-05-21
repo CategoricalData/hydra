@@ -97,6 +97,6 @@
                         "domain": {"literal": {"string": {}}}}}},
                   "parameter": "a"}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "Parser combinator types for text parsing",
   "namespace": "hydra.parsing"}

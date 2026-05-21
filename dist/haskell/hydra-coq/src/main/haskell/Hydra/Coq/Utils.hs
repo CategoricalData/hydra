@@ -341,7 +341,7 @@ localNameRaw s =
 moduleDependencyNames :: Packaging.Module -> [String]
 moduleDependencyNames m =
 
-      let allDeps = Lists.map (\ns -> Packaging.unNamespace ns) (Packaging.moduleDependencies m)
+      let allDeps = Lists.map (\dep -> Packaging.unNamespace (Packaging.moduleDependencyModule dep)) (Packaging.moduleDependencies m)
           ownNs = Packaging.unNamespace (Packaging.moduleNamespace m)
           filtered = Lists.filter (\s -> Logic.not (Equality.equal s ownNs)) allDeps
       in (Lists.nub filtered)

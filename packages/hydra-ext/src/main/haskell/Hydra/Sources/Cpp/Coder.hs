@@ -4,6 +4,7 @@ module Hydra.Sources.Cpp.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -66,11 +67,11 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [moduleNamespace CppLanguageSource.module_,
+            moduleDependencies = unqualifiedDep <$> ([moduleNamespace CppLanguageSource.module_,
       CppSerde.ns,
       Formatting.ns, Names.ns, Dependencies.ns, Strip.ns, Environment.ns, Predicates.ns, Resolution.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
-      moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_] L.++ (CppSyntax.ns:KernelTypes.kernelTypesNamespaces),
+      moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_] L.++ (CppSyntax.ns:KernelTypes.kernelTypesNamespaces)),
             moduleDescription = Just "C++ code generator: converts Hydra modules to C++ header files"}
   where
     definitions = [

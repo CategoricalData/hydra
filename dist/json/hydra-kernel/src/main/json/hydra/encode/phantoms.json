@@ -212,6 +212,6 @@
                   "domain": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}}],
-  "dependencies": ["hydra.encode.core", "hydra.phantoms"],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.phantoms"}],
   "description": "Term encoders for hydra.phantoms",
   "namespace": "hydra.encode.phantoms"}
