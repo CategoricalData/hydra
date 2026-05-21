@@ -132,6 +132,11 @@ module_ = Module {
       toDefinition objectPatternPropertyToExpr,
       toDefinition arrayPatternToExpr,
       toDefinition assignmentPatternToExpr,
+      toDefinition typedPatternToExpr,
+      toDefinition patternToString,
+      toDefinition tsTypeExpressionToString,
+      toDefinition isKernelTypeVarName,
+      toDefinition allDigits,
 
       -- Statement conversions
       toDefinition statementToExpr,
@@ -304,7 +309,17 @@ expressionToExpr = define "expressionToExpr" $
       TS._Expression_spread>>: lambda "spread" $
         Serialization.prefix @@ string "..." @@ (expressionToExpr @@ (unwrap TS._SpreadElement @@ var "spread")),
       TS._Expression_parenthesized>>: lambda "e" $
-        Serialization.parens @@ (expressionToExpr @@ var "e")]
+        Serialization.parens @@ (expressionToExpr @@ var "e"),
+      -- `<expr> as <type>` — always parenthesize the whole cast, because
+      -- the precedence of `as` is lower than most surrounding contexts
+      -- (call, member, …).
+      TS._Expression_asExpression>>: lambda "ae" $ lets [
+        "innerE">: project TS._AsExpression TS._AsExpression_expression @@ var "ae",
+        "typ">: project TS._AsExpression TS._AsExpression_type @@ var "ae"] $
+        Serialization.parens @@ (Serialization.spaceSep @@ list [
+          expressionToExpr @@ var "innerE",
+          Serialization.cst @@ string "as",
+          Serialization.cst @@ (tsTypeExpressionToString @@ var "typ")])]
 
 arrayExpressionToExpr :: TTermDefinition (TS.ArrayExpression -> Expr)
 arrayExpressionToExpr = define "arrayExpressionToExpr" $
@@ -379,9 +394,10 @@ arrowFunctionExpressionToExpr = define "arrowFunctionExpressionToExpr" $
     "asyncKw">: Logic.ifElse (var "async")
       (list [Serialization.cst @@ string "async"])
       (list ([] :: [TTerm Expr])),
-    "paramsExpr">: Logic.ifElse (Equality.equal (Lists.length $ var "params") (int32 1))
-      (Maybes.fromMaybe (Serialization.cst @@ string "") (Maybes.map patternToExpr (Lists.maybeHead $ var "params")))
-      (Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))),
+    -- Always parenthesize. A bare untyped identifier could appear without
+    -- parens (`x => x`), but a typed pattern (`(x: T) => x`) requires them.
+    -- Defaulting to parens keeps the emitter simple.
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params")),
     "bodyExpr">: cases TS._ArrowFunctionBody (var "body") Nothing [
       -- An object-literal body needs explicit parens: `() => { ... }` would
       -- otherwise be parsed as an arrow with a block body. Same for sequence
@@ -532,7 +548,136 @@ patternToExpr = define "patternToExpr" $
       TS._Pattern_array>>: lambda "arr" $ arrayPatternToExpr @@ var "arr",
       TS._Pattern_assignment>>: lambda "assign" $ assignmentPatternToExpr @@ var "assign",
       TS._Pattern_rest>>: lambda "rest" $
-        Serialization.prefix @@ string "..." @@ (patternToExpr @@ (unwrap TS._RestElement @@ var "rest"))]
+        Serialization.prefix @@ string "..." @@ (patternToExpr @@ (unwrap TS._RestElement @@ var "rest")),
+      TS._Pattern_typed>>: lambda "tp" $ typedPatternToExpr @@ var "tp"]
+
+typedPatternToExpr :: TTermDefinition (TS.TypedPattern -> Expr)
+typedPatternToExpr = define "typedPatternToExpr" $
+  doc "Render `<pattern>: <type>` (TypeScript parameter / variable type annotation)" $
+  lambda "tp" $ lets [
+    "innerPat">: project TS._TypedPattern TS._TypedPattern_pattern @@ var "tp",
+    "typ">: project TS._TypedPattern TS._TypedPattern_type @@ var "tp",
+    "innerStr">: patternToString @@ var "innerPat",
+    "typeStr">: tsTypeExpressionToString @@ var "typ"] $
+    Serialization.cst @@ (Strings.cat (list [var "innerStr", string ": ", var "typeStr"]))
+
+-- | Render a pattern as a string. Used by typedPatternToExpr; for parameter
+-- contexts the inner pattern is almost always an identifier. Destructuring
+-- patterns fall back to "_" since they are not currently produced by the
+-- TypeScript coder.
+patternToString :: TTermDefinition (TS.Pattern -> String)
+patternToString = define "patternToString" $
+  doc "Render a TS.Pattern as a plain string" $
+  lambda "pat" $
+    cases TS._Pattern (var "pat") (Just $ string "_") [
+      TS._Pattern_identifier>>: lambda "id" $ unwrap TS._Identifier @@ var "id",
+      TS._Pattern_rest>>: lambda "rest" $
+        Strings.cat2 (string "...") (patternToString @@ (unwrap TS._RestElement @@ var "rest")),
+      TS._Pattern_typed>>: lambda "tp2" $
+        Strings.cat (list [
+          patternToString @@ (project TS._TypedPattern TS._TypedPattern_pattern @@ var "tp2"),
+          string ": ",
+          tsTypeExpressionToString @@ (project TS._TypedPattern TS._TypedPattern_type @@ var "tp2")])]
+
+-- | Detect a kernel-synthesized type-variable name like `T0`, `T12`, etc.
+-- These come from encoding `Type_variable "tN"` via `capitalize`. In inline
+-- type annotations they're unbound — the function declaration has no
+-- generic-binder clause to introduce them. The renderer substitutes `any`.
+-- Implementation walks the codepoint list rather than using a substring
+-- builtin (the kernel String DSL doesn't expose one).
+isKernelTypeVarName :: TTermDefinition (String -> Bool)
+isKernelTypeVarName = define "isKernelTypeVarName" $
+  lambda "s" $ lets [
+    "cps">: Strings.toList (var "s"),
+    "len">: Lists.length (var "cps"),
+    "first">: Maybes.fromMaybe (int32 0) (Lists.maybeHead (var "cps")),
+    "rest">: Logic.ifElse (Equality.gt (var "len") (int32 0))
+      (Lists.drop (int32 1) (var "cps"))
+      (list ([] :: [TTerm Int]))] $
+    Logic.and
+      (Equality.gt (var "len") (int32 1))
+      (Logic.and
+        (Equality.equal (var "first") (int32 84))     -- 'T' = 84
+        (allDigits @@ (var "rest")))
+
+-- | True iff every codepoint is an ASCII digit '0'..'9' (and the list is non-empty).
+allDigits :: TTermDefinition ([Int] -> Bool)
+allDigits = define "allDigits" $
+  lambda "cps" $
+    Logic.and
+      (Equality.gt (Lists.length (var "cps")) (int32 0))
+      (Lists.foldl (lambda "acc" $ lambda "c" $
+        Logic.and (var "acc")
+          (Logic.and
+            (Equality.gte (var "c") (int32 48))
+            (Equality.lte (var "c") (int32 57))))
+        (boolean True)
+        (var "cps"))
+
+-- | Render a TS.TypeExpression as a TypeScript type-syntax string. Used by
+-- typedPatternToExpr and other contexts that need true TS type syntax
+-- (distinct from the JSDoc-style `typeExpressionToString`).
+tsTypeExpressionToString :: TTermDefinition (TS.TypeExpression -> String)
+tsTypeExpressionToString = define "tsTypeExpressionToString" $
+  doc "Render a TypeScript type expression as a string in TS syntax" $
+  lambda "t" $ cases TS._TypeExpression (var "t") (Just $ string "unknown") [
+    -- Render an identifier — but rewrite the synthetic kernel type-variable
+    -- names (`T0`, `T1`, …) to `any`. The Hydra type-variable `tN` is
+    -- capitalized to `TN` by encodeType, but inline annotations have no
+    -- generic-binder syntax to bind them. Substituting at the render layer
+    -- (rather than at encodeType) keeps type *definitions* — which DO bind
+    -- generics — unaffected.
+    TS._TypeExpression_identifier>>: lambda "i" $ lets [
+      "raw">: unwrap TS._Identifier @@ var "i"] $
+      Logic.ifElse (isKernelTypeVarName @@ var "raw")
+        (string "any")
+        (var "raw"),
+    TS._TypeExpression_any>>: constant $ string "any",
+    TS._TypeExpression_void>>: constant $ string "void",
+    TS._TypeExpression_never>>: constant $ string "never",
+    TS._TypeExpression_array>>: lambda "inner" $
+      Strings.cat (list [
+        string "ReadonlyArray<",
+        tsTypeExpressionToString @@ (unwrap TS._ArrayTypeExpression @@ var "inner"),
+        string ">"]),
+    TS._TypeExpression_tuple>>: lambda "ts" $
+      Strings.cat (list [
+        string "readonly [",
+        Strings.intercalate (string ", ") (Lists.map (asTerm tsTypeExpressionToString) (var "ts")),
+        string "]"]),
+    TS._TypeExpression_union>>: lambda "ts" $
+      Strings.intercalate (string " | ")
+        (Lists.map (asTerm tsTypeExpressionToString) (var "ts")),
+    TS._TypeExpression_intersection>>: lambda "ts" $
+      Strings.intercalate (string " & ")
+        (Lists.map (asTerm tsTypeExpressionToString) (var "ts")),
+    TS._TypeExpression_parameterized>>: lambda "p" $
+      Strings.cat (list [
+        tsTypeExpressionToString @@ (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_base @@ var "p"),
+        string "<",
+        Strings.intercalate (string ", ")
+          (Lists.map (asTerm tsTypeExpressionToString)
+            (project TS._ParameterizedTypeExpression TS._ParameterizedTypeExpression_arguments @@ var "p")),
+        string ">"]),
+    TS._TypeExpression_optional>>: lambda "inner" $
+      Strings.cat (list [
+        tsTypeExpressionToString @@ var "inner",
+        string " | undefined"]),
+    TS._TypeExpression_readonly>>: lambda "inner" $
+      Strings.cat2 (string "readonly ") (tsTypeExpressionToString @@ var "inner"),
+    TS._TypeExpression_unknown>>: constant $ string "unknown",
+    -- Render a function type as `(...args: any[]) => any`. Why variadic
+    -- with `any`?  Hydra encodes function types as curried (`A → B → C`),
+    -- but the coder's flat-call ABI emits multi-arg closures (`(a, b) => c`)
+    -- everywhere. A signature like `(_a0: any) => any` would reject every
+    -- such closure at every callsite (TS2345). Using rest-args sidesteps
+    -- arity mismatch without losing the "callable" shape: tsc still types
+    -- the callback as a function, while permitting any invocation arity.
+    -- Param/return types are erased to `any` because function-type
+    -- expressions appearing inline often reference type variables not
+    -- bound in the enclosing scope (TS2304 "Cannot find name 'T0'").
+    TS._TypeExpression_function>>: constant $
+      string "((...args: any[]) => any)"]
 
 objectPatternToExpr :: TTermDefinition (TS.ObjectPattern -> Expr)
 objectPatternToExpr = define "objectPatternToExpr" $
@@ -604,10 +749,10 @@ statementToExpr = define "statementToExpr" $
 
 blockStatementToExpr :: TTermDefinition (TS.BlockStatement -> Expr)
 blockStatementToExpr = define "blockStatementToExpr" $
-  doc "Convert a block statement to an AST expression" $
+  doc "Convert a block statement to an AST expression. Renders as `{ stmt1\\n stmt2\\n ... }` using curlyBlock + newlineSep: statements are separated by newlines, NOT by commas (which curlyBracesList's default would insert and which TypeScript rejects between block statements)." $
   lambda "block" $
-    Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@
-      (Lists.map (statementToExpr) (var "block"))
+    Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
+      (Serialization.newlineSep @@ (Lists.map (statementToExpr) (var "block")))
 
 variableDeclarationToExpr :: TTermDefinition (TS.VariableDeclaration -> Expr)
 variableDeclarationToExpr = define "variableDeclarationToExpr" $
@@ -670,8 +815,8 @@ switchStatementToExpr = define "switchStatementToExpr" $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "switch",
       Serialization.parens @@ (expressionToExpr @@ var "discriminant"),
-      Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@
-        (Lists.map (switchCaseToExpr) (var "cases"))]
+      Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
+        (Serialization.newlineSep @@ (Lists.map (switchCaseToExpr) (var "cases")))]
 
 switchCaseToExpr :: TTermDefinition (TS.SwitchCase -> Expr)
 switchCaseToExpr = define "switchCaseToExpr" $
@@ -881,10 +1026,15 @@ functionDeclarationToExpr = define "functionDeclarationToExpr" $
     "funcKw">: Logic.ifElse (var "generator")
       (Serialization.cst @@ string "function*")
       (Serialization.cst @@ string "function"),
-    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params"))] $
+    "paramsExpr">: Serialization.parenListAdaptive @@ (Lists.map (patternToExpr) (var "params")),
+    -- Inject `: any` between params and body so mutually-recursive nested
+    -- functions don't trigger TS7024 ("function lacks return type and is
+    -- referenced indirectly in its own return"). The AST has no
+    -- return-type slot yet; this is a low-risk post-emission heuristic.
+    "retAnnot">: Serialization.cst @@ string ": any"] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       var "asyncKw",
-      list [var "funcKw", identifierToExpr @@ var "id", var "paramsExpr", blockStatementToExpr @@ var "body"]])
+      list [var "funcKw", identifierToExpr @@ var "id", var "paramsExpr", var "retAnnot", blockStatementToExpr @@ var "body"]])
 
 classDeclarationToExpr :: TTermDefinition (TS.ClassDeclaration -> Expr)
 classDeclarationToExpr = define "classDeclarationToExpr" $
@@ -897,8 +1047,8 @@ classDeclarationToExpr = define "classDeclarationToExpr" $
       (list ([] :: [TTerm Expr]))
       (lambda "s" $ list [Serialization.cst @@ string "extends", expressionToExpr @@ var "s"])
       (var "superClass"),
-    "bodyExpr">: Serialization.curlyBracesList @@ nothing @@ Serialization.fullBlockStyle @@
-      (Lists.map (methodDefinitionToExpr) (var "body"))] $
+    "bodyExpr">: Serialization.curlyBlock @@ Serialization.fullBlockStyle @@
+      (Serialization.newlineSep @@ (Lists.map (methodDefinitionToExpr) (var "body")))] $
     Serialization.spaceSep @@ (Lists.concat $ list [
       list [Serialization.cst @@ string "class", identifierToExpr @@ var "id"],
       var "extendsClause",
@@ -1208,7 +1358,35 @@ typeExpressionToString = define "typeExpressionToString" $
       -- Simplified handling for other cases
       TS._TypeExpression_literal>>: lambda "l" $ string "literal",
       TS._TypeExpression_array>>: lambda "a" $ Strings.cat2 (typeExpressionToString @@ (unwrap TS._ArrayTypeExpression @@ var "a")) (string "[]"),
-      TS._TypeExpression_function>>: constant $ string "Function",
+      -- Render a function type as `(_a0: T0, _a1: T1, ...) => R`. Names
+      -- are synthetic (TS requires *some* name in a function-type signature)
+      -- — they bind nothing; only the types matter. Previously this arm
+      -- emitted the literal token "Function", which made every function-typed
+      -- param a reference to the (nonexistent in strict mode) `Function`
+      -- type, causing cascading downstream `unknown` errors.
+      TS._TypeExpression_function>>: lambda "f" $ lets [
+        "params">: project TS._FunctionTypeExpression TS._FunctionTypeExpression_parameters @@ var "f",
+        "rt">: project TS._FunctionTypeExpression TS._FunctionTypeExpression_returnType @@ var "f",
+        -- Pair each param with its index by a foldl-accumulating index.
+        "rendered">:
+          Pairs.second $ Lists.foldl
+            (lambda "acc" $ lambda "p" $ lets [
+              "i">: Pairs.first $ var "acc",
+              "soFar">: Pairs.second $ var "acc",
+              "this">: Strings.cat $ list [
+                string "_a", Literals.showInt32 (var "i"),
+                string ": ",
+                typeExpressionToString @@ var "p"]] $
+              pair
+                (Math.add (var "i") (int32 1))
+                (Lists.concat2 (var "soFar") (Lists.pure (var "this"))))
+            (pair (int32 0) (list ([] :: [TTerm String])))
+            (var "params")] $
+        Strings.cat $ list [
+          string "(",
+          Strings.intercalate (string ", ") (var "rendered"),
+          string ") => ",
+          typeExpressionToString @@ var "rt"],
       TS._TypeExpression_object>>: constant $ string "Object",
       TS._TypeExpression_union>>: lambda "u" $ Strings.intercalate (string "|") (Lists.map (typeExpressionToString) (var "u")),
       TS._TypeExpression_parameterized>>: lambda "p" $ lets [
