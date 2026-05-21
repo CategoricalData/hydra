@@ -378,13 +378,14 @@
                                                             "argument": {"variable": "xs"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.encode.packaging.packageName"},
+                                                                "argument": {"variable": "hydra.encode.packaging.packageDependency"},
                                                                 "function": {
                                                                   "typeApplication": {
-                                                                    "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.PackageName"}}},
+                                                                    "body": {
+                                                                      "typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.PackageDependency"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}}}}}}},
                                                       "typeName": "hydra.core.Term"}},
-                                                  "domain": {"list": {"variable": "hydra.packaging.PackageName"}},
+                                                  "domain": {"list": {"variable": "hydra.packaging.PackageDependency"}},
                                                   "parameter": "xs"}}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -437,6 +438,63 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.encode.packaging.packageDependency",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.packaging.PackageDependency"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "inject": {
+                    "field": {
+                      "name": "record",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "typeName",
+                              "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.PackageDependency"}}, "typeName": "hydra.core.Name"}}},
+                            {
+                              "name": "fields",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"field": "name", "typeName": "hydra.packaging.PackageDependency"}}}},
+                                              "function": {"variable": "hydra.encode.packaging.packageName"}}}}],
+                                      "typeName": "hydra.core.Field"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "version"}}, "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "term",
+                                          "term": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "x"},
+                                                  "function": {"project": {"field": "version", "typeName": "hydra.packaging.PackageDependency"}}}},
+                                              "function": {"variable": "hydra.encode.packaging.packageVersionSpecifier"}}}}],
+                                      "typeName": "hydra.core.Field"}}]}}],
+                          "typeName": "hydra.core.Record"}}},
+                    "typeName": "hydra.core.Term"}},
+                "domain": {"variable": "hydra.packaging.PackageDependency"},
+                "parameter": "x"}}}},
+        "typeScheme": {
+          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.packaging.PackageDependency"}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.encode.packaging.packageName",
         "term": {
           "annotated": {
@@ -474,6 +532,55 @@
                 "parameter": "x"}}}},
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.packaging.PackageName"}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.encode.packaging.packageVersionSpecifier",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.packaging.PackageVersionSpecifier"}}}],
+            "body": {
+              "cases": {
+                "cases": [
+                  {
+                    "name": "any",
+                    "term": {
+                      "lambda": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "inject",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.PackageVersionSpecifier"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "any"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "y"},
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.core.Term"}},
+                                                      "domain": {"unit": {}},
+                                                      "parameter": "_"}}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": {"unit": {}},
+                        "parameter": "y"}}}],
+                "typeName": "hydra.packaging.PackageVersionSpecifier"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.packaging.PackageVersionSpecifier"}}},
           "variables": []}}},
     {
       "term": {

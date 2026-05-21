@@ -82,14 +82,15 @@ Cache hits can also mask edits.
 A coarse "make me clean" sequence:
 
 ```sh
-rm -f dist/haskell/<pkg>/src/main/digest.json
-rm -f dist/json/<pkg>/src/main/digest.json
-rm -f dist/json/digest.main.json
+rm -rf dist/json/build dist/json/*/build dist/haskell/*/build
 rm -f heads/haskell/.stack-work/bootstrap-from-json-cache.txt
 rm -f heads/haskell/.stack-work/verify-json-kernel-cache.txt
 heads/haskell/bin/sync-haskell.sh --no-tests
 bin/sync-packages.sh <pkg> --targets haskell --no-tests
 ```
+
+The `dist/**/build/` subtree is gitignored cache state (see #379), so
+wiping it is always safe and never affects shared history.
 
 Then sync forward into whatever target language consumes the regenerated coder.
 
@@ -236,6 +237,20 @@ skipped before) registers as a regression at the
 `bin/sync-packages.sh` exit-code level, even when the underlying bug
 is older.
 
+### Cross-worktree sync contention can multiply sync time 10×+
+
+Two worktrees running `bin/sync.sh` simultaneously share GHC, Stack, the
+machine's CPU, and (transiently) the same `.stack` global cache. A sync
+that completes in a few minutes solo can stretch to an hour or more with
+a sibling sync competing. The work still succeeds — this is contention,
+not corruption — but expect dramatically longer wall-clock times.
+
+Before scheduling a long sync in your worktree, scan for sibling activity:
+`pgrep -fl "bin/sync.sh"` lists every active sync across all worktrees.
+If another session is mid-sync, prefer waiting unless the user explicitly
+authorizes parallel syncs. Don't kill the other process — it belongs to a
+different session (see CLAUDE.md "Hard rules").
+
 ### Bootstrap "Could not find module" early in compile is usually transient
 
 When `/bootstrap` reports a path failing at module 1-of-N with
@@ -260,16 +275,14 @@ concrete `FloatValue` callsites. Symptom:
 adapter callsite. Fix: list each remaining variant with an explicit
 `inject _Variant _variant_name` identity arm.
 
-### Digest conflicts on staging merges
+### Digest conflicts on staging merges — no longer applies (#379)
 
-When merging staging into a feature branch, all `dist/**/digest.json`
-and `dist/json/digest.main.json` files conflict if both branches
-touched DSL sources. Both sides' hashes are wrong post-merge — the
-correct hashes depend on the merged source state. Resolution: take
-`--ours` to satisfy git, complete the merge commit, run `/sync` to
-regenerate, then commit the digest deltas as a follow-up
-"Regenerate digests after staging merge" commit. Don't try to merge
-hash maps by hand.
+Historical: digest files used to be tracked and would conflict on every
+multi-branch merge because hashes always diverge. As of #379 the entire
+`dist/**/build/` subtree is gitignored, so digests never enter the
+diff. Merges should now be clean for digests; if you encounter a digest
+file in conflict, you're on a pre-#379 branch — run the post-merge
+recovery: `rm -rf dist/**/build` then `bin/sync.sh`.
 
 ### `run-benchmark-tests.sh` Python leg needs `.venv`
 
