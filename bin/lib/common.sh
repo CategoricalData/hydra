@@ -223,4 +223,8 @@ step_cache_record() {
 
 # Standard GHC runtime flags for code-generation executables.
 # Raises heap and allocation-area sizes to handle large module sets.
-RTS_FLAGS="+RTS -K256M -A32M -RTS"
+# -M5G caps the max heap so a runaway pass fails with a visible
+# "heap overflow" instead of being SIGKILL'd silently by a 7 GB GH
+# runner (three consecutive CI runs in 2026-05 hit silent cancels
+# inside update-json-main's kernel validation with no error message).
+RTS_FLAGS="+RTS -K256M -A32M -M5G -RTS"
