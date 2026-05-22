@@ -811,7 +811,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "typ'">: Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
       (reify Core.typeSchemeBody)
-      (project _TermDefinition _TermDefinition_typeScheme @@ var "td"),
+      (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")),
     -- Check if the type is a function type (needs def) by looking at the stripped type
     "isFunctionType">: cases _Type (Strip.deannotateType @@ var "typ'")
       (Just false)

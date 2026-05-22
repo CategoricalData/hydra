@@ -26,6 +26,7 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Coq.Syntax                      as CSyntax
 import qualified Hydra.Dsl.Packaging                       as Packaging
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
+import qualified Hydra.Sources.Kernel.Terms.Scoping         as Scoping
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.Coq.Syntax                  as CoqSyntax
 import qualified Hydra.Sources.Coq.Coder                   as CoqCoderSource
@@ -1110,7 +1111,8 @@ moduleToCoq = define "moduleToCoq" $
     ("def_" ~> cases _Definition (var "def_")
       (Just (Phantoms.nothing :: TTerm (Maybe (String, (Term, ([Name], Maybe Type)))))) [
       _Definition_term>>: "td" ~>
-        "mts" <~ (Packaging.termDefinitionTypeScheme $ var "td") $
+        "msig" <~ (Packaging.termDefinitionSignature $ var "td") $
+        "mts" <~ Maybes.map Scoping.termSignatureToTypeScheme (var "msig") $
         "vs" <~ Maybes.maybe
           (list ([] :: [TTerm Name]))
           ("ts" ~> Core.typeSchemeVariables $ var "ts")

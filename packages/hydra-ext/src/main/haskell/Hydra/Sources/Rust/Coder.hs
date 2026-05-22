@@ -26,6 +26,7 @@ import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
@@ -409,7 +410,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "typ" <~ Maybes.maybe
       (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
       (reify Core.typeSchemeBody)
-      (Packaging.termDefinitionTypeScheme (var "tdef")) $
+      (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) $
     "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
     "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (record R._ItemWithComments [

@@ -354,7 +354,7 @@ annotateLambdaArgs = def "annotateLambdaArgs" $
         "mel" <<~ right (Lexical.lookupBinding @@ var "g" @@ var "cname") $
         Maybes.cases (var "mel")
           (right (Maybes.map
-              (lambda "prim" $ Graph.primitiveTypeScheme (var "prim"))
+              (lambda "prim" $ Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "prim")))
               (Maps.lookup (var "cname") (Graph.graphPrimitives (var "g")))))
           (lambda "el" $ right (Core.bindingTypeScheme (var "el")))) $
       Maybes.cases (var "mts")
@@ -2650,7 +2650,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "ts" <~ Maybes.maybe
       (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
       ("x" ~> var "x")
-      (project _TermDefinition _TermDefinition_typeScheme @@ var "tdef") $
+      (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "tdef")) $
     -- Unshadow variables
     ("term" <~ (Variables.unshadowVariables @@ var "term0") $
       "fs" <<~ (analyzeJavaFunction @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
