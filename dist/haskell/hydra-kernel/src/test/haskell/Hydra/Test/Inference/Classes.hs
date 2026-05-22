@@ -57,7 +57,7 @@ testGroupForCollectionTerms =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -84,7 +84,7 @@ testGroupForCollectionTerms =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -131,7 +131,7 @@ testGroupForCollectionTerms =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -198,7 +198,7 @@ testGroupForCollectionTerms =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]},
@@ -232,7 +232,7 @@ testGroupForCollectionTerms =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -250,7 +250,7 @@ testGroupForCollectionTerms =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -269,7 +269,7 @@ testGroupForCollectionTerms =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]},
@@ -292,7 +292,7 @@ testGroupForCollectionTerms =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = [
                 Testing.Tag "disabledForMinimalInference"]}]}],
@@ -335,7 +335,7 @@ testGroupForComposition =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -368,7 +368,7 @@ testGroupForComposition =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t1", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -401,10 +401,10 @@ testGroupForComposition =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])}),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])}),
                     (Core.Name "t1", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
@@ -453,7 +453,7 @@ testGroupForLetBindings =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -487,7 +487,7 @@ testGroupForLetBindings =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -514,7 +514,7 @@ testGroupForLetBindings =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -552,7 +552,7 @@ testGroupForLetBindings =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -579,7 +579,7 @@ testGroupForLetBindings =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -806,10 +806,10 @@ testGroupForNestedContainers =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])}),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])}),
                     (Core.Name "t1", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -837,7 +837,7 @@ testGroupForNestedContainers =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -876,7 +876,7 @@ testGroupForNestedContainers =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}
@@ -914,7 +914,7 @@ testGroupForPartialApplication =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -945,7 +945,7 @@ testGroupForPartialApplication =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -973,7 +973,7 @@ testGroupForPartialApplication =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1006,7 +1006,7 @@ testGroupForPartialApplication =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "equality"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "equality")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1066,7 +1066,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1087,7 +1087,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1112,7 +1112,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1138,7 +1138,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t2", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1155,7 +1155,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1176,7 +1176,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1194,7 +1194,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1212,7 +1212,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1233,10 +1233,10 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])}),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])}),
                     (Core.Name "t1", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1259,7 +1259,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "equality"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "equality")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1277,7 +1277,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]},
         Testing.TestGroup {
@@ -1298,7 +1298,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "ordering"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "ordering")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1314,7 +1314,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "equality"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "equality")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []},
             Testing.TestCaseWithMetadata {
@@ -1332,7 +1332,7 @@ testGroupForPrimitiveReferences =
                   Core.typeSchemeConstraints = (Just (M.fromList [
                     (Core.Name "t0", Core.TypeVariableMetadata {
                       Core.typeVariableMetadataClasses = (S.fromList [
-                        Core.Name "equality"])})]))}))})),
+                        Core.TypeClassConstraintSimple (Core.Name "equality")])})]))}))})),
               Testing.testCaseWithMetadataDescription = Nothing,
               Testing.testCaseWithMetadataTags = []}]}],
       Testing.testGroupCases = []}

@@ -10,6 +10,7 @@ import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Haskell.Syntax as Syntax
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Haskell.Utils as Utils
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -64,7 +65,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
                     Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
                       Packaging.termDefinitionName = (Core.bindingName b),
                       Packaging.termDefinitionTerm = (Core.bindingTerm b),
-                      Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) testBindings)}
+                      Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) testBindings)}
       in (Eithers.bind (Eithers.bimap (\e -> Errors.error e) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->
         let encodedNames = Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms)
         in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))

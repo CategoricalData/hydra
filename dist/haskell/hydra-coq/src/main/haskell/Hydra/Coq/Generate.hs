@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Serialization as Serialization
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
@@ -696,7 +697,8 @@ moduleToCoq fieldMap constrCounts ambiguousNames globalSanitizedAcc mod_ defs =
           termDefs =
                   Maybes.cat (Lists.map (\def_ -> case def_ of
                     Packaging.DefinitionTerm v0 ->
-                      let mts = Packaging.termDefinitionTypeScheme v0
+                      let msig = Packaging.termDefinitionSignature v0
+                          mts = Maybes.map Scoping.termSignatureToTypeScheme msig
                           vs = Maybes.maybe [] (\ts -> Core.typeSchemeVariables ts) mts
                           mty = Maybes.map (\ts -> Core.typeSchemeBody ts) mts
                       in (Just (Utils.localName (Core.unName (Packaging.termDefinitionName v0)), (Packaging.termDefinitionTerm v0, (vs, mty))))

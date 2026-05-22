@@ -38,7 +38,7 @@ typeToScheme = go []
 testGraph :: M.Map Name Type -> M.Map Name Term -> Graph
 testGraph testTypes _testTerms = let
     allPrims = L.concatMap libraryPrimitives standardLibraries
-    primsMap = M.fromList $ fmap (\p -> (primitiveName p, p)) allPrims
+    primsMap = M.fromList $ fmap (\p -> (primitiveDefinitionName (primitiveDefinition p), p)) allPrims
     kernelSchemas = M.map typeToScheme typesByName
     testSchemas = M.map typeToScheme testTypes
     allSchemas = M.union kernelSchemas testSchemas
@@ -59,7 +59,7 @@ testGraph testTypes _testTerms = let
       [ (termDefinitionName td, termDefinitionTerm td) | DefinitionTerm td <- kernelTermDefs ]
     boundTypes = M.fromList
       [ (termDefinitionName td, ts)
-      | DefinitionTerm td <- kernelTermDefs, Just ts <- [termDefinitionTypeScheme td] ]
+      | DefinitionTerm td <- kernelTermDefs, Just sig <- [termDefinitionSignature td], let ts = termSignatureToTypeScheme sig ]
     base = emptyGraph
   in base {
     graphPrimitives = primsMap,

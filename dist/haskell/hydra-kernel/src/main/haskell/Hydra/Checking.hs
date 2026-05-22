@@ -29,6 +29,7 @@ import qualified Hydra.Paths as Paths
 import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Strip as Strip
@@ -512,7 +513,7 @@ typeOfPair cx tx typeArgs p =
 typeOfPrimitive :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.Name -> Either Errors.Error (Core.Type, Context.Context)
 typeOfPrimitive cx tx typeArgs name =
 
-      let rawTs = Maybes.map (\_p -> Graph.primitiveTypeScheme _p) (Maps.lookup name (Graph.graphPrimitives tx))
+      let rawTs = Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx))
       in (Maybes.maybe (Left (Errors.ErrorUndefinedTermVariable (ErrorCore.UndefinedTermVariableError {
         ErrorCore.undefinedTermVariableErrorLocation = (Paths.SubtermPath []),
         ErrorCore.undefinedTermVariableErrorName = name}))) (\tsRaw ->
@@ -647,7 +648,7 @@ typeOfVariable cx tx typeArgs name =
                     in (Eithers.bind (applyTypeArgumentsToType cx2 tx typeArgs t) (\applied -> Right (applied, cx2)))
       in (Maybes.maybe (Maybes.maybe (Left (Errors.ErrorUntypedTermVariable (ErrorCore.UntypedTermVariableError {
         ErrorCore.untypedTermVariableErrorLocation = (Paths.SubtermPath []),
-        ErrorCore.untypedTermVariableErrorName = name}))) forScheme (Maybes.map (\_p -> Graph.primitiveTypeScheme _p) (Maps.lookup name (Graph.graphPrimitives tx)))) forScheme rawTypeScheme)
+        ErrorCore.untypedTermVariableErrorName = name}))) forScheme (Maybes.map (\_p -> Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition _p))) (Maps.lookup name (Graph.graphPrimitives tx)))) forScheme rawTypeScheme)
 -- | Reconstruct the type of a wrapped term (Either/Context version)
 typeOfWrappedTerm :: Context.Context -> Graph.Graph -> [Core.Type] -> Core.WrappedTerm -> Either Errors.Error (Core.Type, Context.Context)
 typeOfWrappedTerm cx tx typeArgs wt =

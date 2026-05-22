@@ -4,7 +4,9 @@
 module Hydra.Scoping where
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Lib.Lists as Lists
+import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
@@ -105,3 +107,66 @@ typeSchemeToFType ts =
       in (Lists.foldl (\t -> \v -> Core.TypeForall (Core.ForallType {
         Core.forallTypeParameter = v,
         Core.forallTypeBody = t})) body (Lists.reverse vars))
+-- | Convert a TermSignature to a TypeScheme, erasing parameter names, descriptions, and laziness flags.
+termSignatureToTypeScheme :: Typing.TermSignature -> Core.TypeScheme
+termSignatureToTypeScheme sig =
+      let typeParams = Typing.termSignatureTypeParameters sig
+          params = Typing.termSignatureParameters sig
+          result = Typing.termSignatureResult sig
+          variables = Lists.map Typing.typeParameterName typeParams
+          body = Lists.foldl
+            (\acc -> \p -> Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = Typing.parameterType p,
+              Core.functionTypeCodomain = acc}))
+            (Typing.resultType result)
+            (Lists.reverse params)
+          hasConstraints = Lists.foldl
+            (\acc -> \tp -> Logic.or acc (Logic.not (Lists.null (Typing.typeParameterConstraints tp))))
+            False
+            typeParams
+          constraints = if hasConstraints
+            then Just (Maps.fromList (Lists.map
+              (\tp -> (Typing.typeParameterName tp,
+                Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = Sets.fromList (Typing.typeParameterConstraints tp)}))
+              typeParams))
+            else Nothing
+      in Core.TypeScheme {
+        Core.typeSchemeVariables = variables,
+        Core.typeSchemeBody = body,
+        Core.typeSchemeConstraints = constraints}
+-- | Convert a TypeScheme to a TermSignature. Type variables and class constraints are preserved exactly. Value-parameter names are synthesized as arg0, arg1, .... Per-parameter descriptions are nothing and isLazy defaults to false.
+typeSchemeToTermSignature :: Core.TypeScheme -> Typing.TermSignature
+typeSchemeToTermSignature ts =
+      let variables = Core.typeSchemeVariables ts
+          body = Core.typeSchemeBody ts
+          constraintsMap = Maybes.fromMaybe Maps.empty (Core.typeSchemeConstraints ts)
+          typeParams = Lists.map
+            (\v -> Typing.TypeParameter {
+              Typing.typeParameterName = v,
+              Typing.typeParameterConstraints = Maybes.maybe
+                []
+                (\tvm -> Sets.toList (Core.typeVariableMetadataClasses tvm))
+                (Maps.lookup v constraintsMap)})
+            variables
+          peel = \acc -> \t -> case t of
+            Core.TypeFunction ft -> peel
+              (Lists.cons (Core.functionTypeDomain ft) acc)
+              (Core.functionTypeCodomain ft)
+            _ -> (Lists.reverse acc, t)
+          (paramTypes, resultType) = peel [] body
+          params = Lists.zipWith
+            (\i -> \ty -> Typing.Parameter {
+              Typing.parameterName = Core.Name ("arg" Prelude.++ Prelude.show (i :: Prelude.Int)),
+              Typing.parameterDescription = Nothing,
+              Typing.parameterType = ty,
+              Typing.parameterIsLazy = False})
+            [0 ..]
+            paramTypes
+          result = Typing.Result {
+            Typing.resultDescription = Nothing,
+            Typing.resultType = resultType}
+      in Typing.TermSignature {
+        Typing.termSignatureTypeParameters = typeParams,
+        Typing.termSignatureParameters = params,
+        Typing.termSignatureResult = result}
