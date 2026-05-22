@@ -133,7 +133,7 @@ definitionAsBinding :: Definition -> Binding
 definitionAsBinding (DefinitionTerm td) = Binding {
     bindingName = termDefinitionName td,
     bindingTerm = termDefinitionTerm td,
-    bindingTypeScheme = termDefinitionTypeScheme td}
+    bindingTypeScheme = termSignatureToTypeScheme <$> termDefinitionSignature td}
 definitionAsBinding (DefinitionType td) = Binding {
     bindingName = typeDefinitionName td,
     bindingTerm = TermAnnotated $ AnnotatedTerm {
@@ -141,6 +141,11 @@ definitionAsBinding (DefinitionType td) = Binding {
       annotatedTermAnnotation = M.fromList [
         (Name "type", TermVariable (Name "hydra.core.Type"))]},
     bindingTypeScheme = Just (TypeScheme [] (TypeVariable (Name "hydra.core.Type")) Nothing)}
+-- TODO(#156): Implement DefinitionPrimitive handling once primitive modules land. For now, primitives don't appear in modules that go through this function.
+definitionAsBinding (DefinitionPrimitive pd) = Binding {
+    bindingName = primitiveDefinitionName pd,
+    bindingTerm = TermLiteral (LiteralString (primitiveDefinitionDescription pd)),
+    bindingTypeScheme = Just (termSignatureToTypeScheme (primitiveDefinitionSignature pd))}
 
 -- | Extract a module's definitions in the legacy Binding view, suitable for
 -- feeding elementsToGraph or any other API that still operates on Bindings.
