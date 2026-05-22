@@ -998,7 +998,7 @@ encodeDefinition = def "encodeDefinition" $
         "typ" <~ Maybes.maybe
           (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (wrap _Name (string "hydra.core.Unit"))) nothing)
           ("x" ~> var "x")
-          (project _TermDefinition _TermDefinition_typeScheme @@ var "td") $
+          (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")) $
         "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
         "normComment" <~ (Maybes.map Formatting.normalizeComment (var "comment")) $
         -- topLevel=true: keep public API stable (`@lru_cache(1) def name():` form
@@ -2175,7 +2175,7 @@ encodeVariable = def "encodeVariable" $
                 -- Nullary primitive: call with ()
                 (right $ var "asFunctionCall")
                 -- Non-nullary primitive: function reference
-                ("ts" <~ (Phantoms.project _Primitive _Primitive_typeScheme @@ var "prim") $
+                ("ts" <~ (Scoping.termSignatureToTypeScheme @@ (Phantoms.project _PrimitiveDefinition _PrimitiveDefinition_signature @@ (Phantoms.project _Primitive _Primitive_definition @@ var "prim"))) $
                   "asFunctionRef" <~ (Logic.ifElse (Logic.not $ Lists.null (Core.typeSchemeVariables $ var "ts"))
                       (makeSimpleLambda @@ (Arity.typeArity @@ (Core.typeSchemeBody $ var "ts")) @@ var "asVariable")
                       (var "asVariable")) $
@@ -2523,7 +2523,7 @@ gatherMetadata = def "gatherMetadata" $
           "typ" <~ Maybes.maybe
             (Core.typeVariable (wrap _Name (string "hydra.core.Unit")))
             (reify Core.typeSchemeBody)
-            (Packaging.termDefinitionTypeScheme (var "termDef")) $
+            (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "termDef")) $
           -- First extend for the type annotation (isTypeDef=True, isTermAnnot=True)
           "meta2" <~ (extendMetaForType @@ true @@ true @@ var "typ" @@ var "meta") $
           -- Then extend for the term body (isTopLevel=True)
@@ -4267,7 +4267,7 @@ withDefinitions = def "withDefinitions" $
             just $ Core.binding
               (project _TermDefinition _TermDefinition_name @@ var "td")
               (project _TermDefinition _TermDefinition_term @@ var "td")
-              (project _TermDefinition _TermDefinition_typeScheme @@ var "td"),
+              (Maybes.map Scoping.termSignatureToTypeScheme (project _TermDefinition _TermDefinition_signature @@ var "td")),
           _Definition_type>>: constant nothing])
       (var "defs")) $
     "dummyLet" <~ (Core.let_ (var "bindings") (Core.termLiteral $ Core.literalString $ string "dummy")) $

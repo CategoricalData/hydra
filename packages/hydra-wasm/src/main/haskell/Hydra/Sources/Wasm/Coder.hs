@@ -28,6 +28,7 @@ import qualified Hydra.Dsl.Packaging                     as Packaging
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Terms.Environment   as Environment
@@ -1252,7 +1253,7 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
         (var "sigEither")) $
     -- Primitives: walk graph.primitives -> Map Name Primitive, extract type from each.
     "primEntries" <~ Maybes.cat (Lists.map
-      (lambda "kv" $ var "toSigEntry" @@ pair (Pairs.first (var "kv")) (DslGraph.primitiveTypeScheme (Pairs.second (var "kv"))))
+      (lambda "kv" $ var "toSigEntry" @@ pair (Pairs.first (var "kv")) (Scoping.termSignatureToTypeScheme @@ (Packaging.primitiveDefinitionSignature $ DslGraph.primitiveDefinition (Pairs.second (var "kv")))))
       (Maps.toList (DslGraph.graphPrimitives (var "g")))) $
     -- Cross-module bound term types: walk graph.boundTypes -> Map Name TypeScheme.
     "boundEntries" <~ Maybes.cat (Lists.map
@@ -1261,7 +1262,7 @@ buildFunctionSignatures = def "buildFunctionSignatures" $
     -- Current module's own term defs: use their optional TypeScheme field directly.
     "localEntries" <~ Maybes.cat (Lists.map
       (lambda "td" $
-        Maybes.bind (Packaging.termDefinitionTypeScheme (var "td"))
+        Maybes.bind (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "td"))
           (lambda "ts" $ var "toSigEntry" @@ pair (Packaging.termDefinitionName (var "td")) (var "ts")))
       (var "termDefs")) $
     Maps.fromList (Lists.concat (list [var "primEntries", var "boundEntries", var "localEntries"]))
@@ -1280,7 +1281,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "typ" <~ Maybes.maybe
       (Core.typeUnit)
       (reify Core.typeSchemeBody)
-      (Packaging.termDefinitionTypeScheme (var "tdef")) $
+      (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature (var "tdef")) $
     -- Extract lambda parameters and inner body
     "extracted" <~ (extractLambdaParams @@ var "term") $
     "paramNames" <~ Pairs.first (var "extracted") $
