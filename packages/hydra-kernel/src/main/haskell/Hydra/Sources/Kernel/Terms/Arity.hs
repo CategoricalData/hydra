@@ -74,7 +74,8 @@ module_ = Module {
 primitiveArity :: TTermDefinition (Primitive -> Int)
 primitiveArity = define "primitiveArity" $
   doc "Find the arity (expected number of arguments) of a primitive constant or function" $
-  (typeArity <.> reify Core.typeSchemeBody <.> reify Graph.primitiveTypeScheme)
+  "prim" ~>
+  Lists.length $ Typing.termSignatureParameters $ Packaging.primitiveDefinitionSignature $ Graph.primitiveDefinition (var "prim")
 
 termArity :: TTermDefinition (Term -> Int)
 termArity = define "termArity" $
