@@ -27,4 +27,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "Type definitions for the Protobuf code generation environment",
-  "namespace": "hydra.protobuf.environment"}
+  "name": "hydra.protobuf.environment"}

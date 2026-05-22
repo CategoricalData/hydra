@@ -148,4 +148,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.context"}],
   "description": "Term encoders for hydra.context",
-  "namespace": "hydra.encode.context"}
+  "name": "hydra.encode.context"}

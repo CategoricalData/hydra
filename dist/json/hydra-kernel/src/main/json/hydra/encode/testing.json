@@ -42,4 +42,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.testing"}],
   "description": "Term encoders for hydra.testing",
-  "namespace": "hydra.encode.testing"}
+  "name": "hydra.encode.testing"}

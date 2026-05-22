@@ -514,4 +514,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.phantoms",
-  "namespace": "hydra.decode.phantoms"}
+  "name": "hydra.decode.phantoms"}

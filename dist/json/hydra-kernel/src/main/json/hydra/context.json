@@ -39,4 +39,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "Execution context for tracing and diagnostics",
-  "namespace": "hydra.context"}
+  "name": "hydra.context"}

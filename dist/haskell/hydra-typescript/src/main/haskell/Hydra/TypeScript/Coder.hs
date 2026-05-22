@@ -37,17 +37,17 @@ collectForallParams t =
       in case dt of
         Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallParams (Core.forallTypeBody v0))
         _ -> []
-collectImports :: Packaging.Namespace -> Core.Type -> S.Set Core.Name
+collectImports :: Packaging.ModuleName -> Core.Type -> S.Set Core.Name
 collectImports currentNs t =
 
       let vars = Variables.freeVariablesInType t
       in (filterNonLocalNames currentNs vars)
-collectTermImports :: Packaging.Namespace -> Core.Term -> S.Set Core.Name
+collectTermImports :: Packaging.ModuleName -> Core.Term -> S.Set Core.Name
 collectTermImports currentNs t =
 
       let vars = Variables.freeVariablesInTerm t
       in (filterNonLocalNames currentNs vars)
-encodeLazyCall :: t0 -> t1 -> Packaging.Namespace -> Core.Term -> [Core.Term] -> [Bool] -> Syntax.Expression
+encodeLazyCall :: t0 -> t1 -> Packaging.ModuleName -> Core.Term -> [Core.Term] -> [Bool] -> Syntax.Expression
 encodeLazyCall cx g currentNs headTerm args lazyFlags =
 
       let headExpr = encodeTerm cx g currentNs headTerm
@@ -114,15 +114,15 @@ encodeLiteralType lt =
         Core.IntegerTypeUint32 -> tsNamedType "number"
         Core.IntegerTypeUint64 -> tsNamedType "bigint"
       Core.LiteralTypeString -> tsNamedType "string"
-encodeTerm :: t0 -> t1 -> Packaging.Namespace -> Core.Term -> Syntax.Expression
+encodeTerm :: t0 -> t1 -> Packaging.ModuleName -> Core.Term -> Syntax.Expression
 encodeTerm cx g currentNs term =
     case term of
       Core.TermAnnotated v0 -> encodeTerm cx g currentNs (Core.annotatedTermBody v0)
       Core.TermLiteral v0 -> encodeLiteral v0
       Core.TermVariable v0 ->
         let local = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf v0)
-        in (Maybes.cases (Names.namespaceOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unNamespace currentNs) (Packaging.unNamespace ns)) (tsExprIdent local) (
-          let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unNamespace ns))
+        in (Maybes.cases (Names.namespaceOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) (tsExprIdent local) (
+          let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
               alias = Strings.cat2 "$mod_" (Strings.intercalate "_" nsSegs)
           in (tsMember (tsExprIdent alias) local))))
       Core.TermLambda v0 ->
@@ -240,7 +240,7 @@ encodeTerm cx g currentNs term =
         ("tag", (tsExprStr "right")),
         ("value", (encodeTerm cx g currentNs r))]) v0
       _ -> tsExprIdent "null"
-encodeTermDefinition :: t0 -> t1 -> Packaging.Namespace -> Packaging.TermDefinition -> Syntax.ModuleItem
+encodeTermDefinition :: t0 -> t1 -> Packaging.ModuleName -> Packaging.TermDefinition -> Syntax.ModuleItem
 encodeTermDefinition cx g currentNs td =
 
       let name = Packaging.termDefinitionName td
@@ -391,9 +391,9 @@ encodeTypeDefinition cx g tdef =
           Syntax.typeAliasDeclarationName = (tsIdent lname),
           Syntax.typeAliasDeclarationTypeParameters = typeParams,
           Syntax.typeAliasDeclarationType = styp})))
-filterNonLocalNames :: Packaging.Namespace -> S.Set Core.Name -> S.Set Core.Name
+filterNonLocalNames :: Packaging.ModuleName -> S.Set Core.Name -> S.Set Core.Name
 filterNonLocalNames currentNs names =
-    Sets.fromList (Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\nameNs -> Logic.ifElse (Equality.equal (Packaging.unNamespace currentNs) (Packaging.unNamespace nameNs)) Nothing (Just n))) (Sets.toList names)))
+    Sets.fromList (Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\nameNs -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName nameNs)) Nothing (Just n))) (Sets.toList names)))
 flattenApplication :: Core.Term -> (Core.Term, [Core.Term])
 flattenApplication t =
 
@@ -405,11 +405,11 @@ flattenApplication t =
               prevArgs = Pairs.second inner
           in (head_, (Lists.concat2 prevArgs (Lists.singleton (Core.applicationArgument v0))))
         _ -> (t, [])
-importsToText :: String -> Packaging.Namespace -> S.Set Core.Name -> String
+importsToText :: String -> Packaging.ModuleName -> S.Set Core.Name -> String
 importsToText kind currentNs names =
 
       let pairs =
-              Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\ns -> Logic.ifElse (Equality.equal (Packaging.unNamespace currentNs) (Packaging.unNamespace ns)) Nothing (Just (ns, n)))) (Sets.toList names))
+              Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) Nothing (Just (ns, n)))) (Sets.toList names))
           transformLocal =
                   \s -> Logic.ifElse (Equality.equal kind "type") (Formatting.capitalize s) (Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords s)
           importKeyword = Logic.ifElse (Equality.equal kind "type") "import type" "import"
@@ -420,7 +420,7 @@ importsToText kind currentNs names =
                         local = transformLocal (Names.localNameOf n)
                         existing = Maybes.fromMaybe [] (Maps.lookup ns acc)
                     in (Maps.insert ns (Lists.cons local existing) acc)) Maps.empty pairs
-          currentSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unNamespace currentNs))
+          currentSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName currentNs))
           currentDepth = Lists.length currentSegs
           currentIsTest =
                   Logic.and (Logic.not (Lists.null currentSegs)) (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead currentSegs)) "test")
@@ -429,7 +429,7 @@ importsToText kind currentNs names =
                   Lists.map (\entry ->
                     let ns = Pairs.first entry
                         locals = Pairs.second entry
-                        targetSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unNamespace ns))
+                        targetSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
                         targetIsTest =
                                 Logic.and (Logic.not (Lists.null targetSegs)) (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead targetSegs)) "test")
                         targetPath = Strings.intercalate "/" targetSegs
@@ -454,7 +454,7 @@ importsToText kind currentNs names =
 moduleToTypeScript :: Packaging.Module -> [Packaging.Definition] -> t0 -> t1 -> Either t2 (M.Map String String)
 moduleToTypeScript mod defs cx g =
 
-      let currentNs = Packaging.moduleNamespace mod
+      let currentNs = Packaging.moduleName mod
           partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           rawTermDefs = Pairs.second partitioned
@@ -471,7 +471,7 @@ moduleToTypeScript mod defs cx g =
             allItems = Lists.concat2 typeItems termItems
             header = "// Note: this is an automatically generated file. Do not edit.\n\n"
             body = Strings.intercalate "\n\n" (Lists.map printModuleItem allItems)
-            filePath = Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "ts") (Packaging.moduleNamespace mod)
+            filePath = Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "ts") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath (Strings.cat [
           header,
           importsBlock,

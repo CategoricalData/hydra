@@ -1165,13 +1165,13 @@
                             "typeName": "hydra.paths.SubtermGraph"}}}},
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term"}},
-                "domain": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"literal": {"string": {}}}}},
+                "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}},
                 "parameter": "namespaces"}}}},
         "typeScheme": {
           "body": {
             "function": {
               "codomain": {"function": {"codomain": {"variable": "hydra.paths.SubtermGraph"}, "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"literal": {"string": {}}}}}}},
+              "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}}},
           "variables": []}}}],
   "dependencies": [
     {"module": "hydra.names"},
@@ -1201,4 +1201,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Utilities for working with subterm steps and paths.",
-  "namespace": "hydra.show.paths"}
+  "name": "hydra.show.paths"}

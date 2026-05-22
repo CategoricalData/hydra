@@ -11,4 +11,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "Type classes",
-  "namespace": "hydra.classes"}
+  "name": "hydra.classes"}

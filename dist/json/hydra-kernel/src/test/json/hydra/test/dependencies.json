@@ -6774,4 +6774,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for dependency analysis and let-term transformations",
-  "namespace": "hydra.test.dependencies"}
+  "name": "hydra.test.dependencies"}

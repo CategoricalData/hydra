@@ -383,4 +383,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.relational"}, {"module": "hydra.tabular"}],
   "description": "Term encoders for hydra.tabular",
-  "namespace": "hydra.encode.tabular"}
+  "name": "hydra.encode.tabular"}

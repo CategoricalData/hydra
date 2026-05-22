@@ -169,4 +169,4 @@
         "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
   "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.core"}],
   "description": "A model for JSON Schema. Based on https://cswr.github.io/JsonSchema/spec/grammar",
-  "namespace": "hydra.json.schema"}
+  "name": "hydra.json.schema"}

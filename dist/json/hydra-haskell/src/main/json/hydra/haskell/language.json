@@ -241,4 +241,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints and reserved words for Haskell",
-  "namespace": "hydra.haskell.language"}
+  "name": "hydra.haskell.language"}

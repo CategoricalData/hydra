@@ -11,16 +11,16 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.typing"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.typing"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.typing"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.context"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.context"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.typing"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.typing"),
           Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {

@@ -344,4 +344,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A model which provides a common syntax tree for Hydra serializers",
-  "namespace": "hydra.ast"}
+  "name": "hydra.ast"}

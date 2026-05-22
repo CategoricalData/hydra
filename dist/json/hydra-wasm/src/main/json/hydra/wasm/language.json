@@ -252,4 +252,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints and reserved words for WebAssembly (WAT text format)",
-  "namespace": "hydra.wasm.language"}
+  "name": "hydra.wasm.language"}

@@ -6754,4 +6754,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Extraction and validation for hydra.core types",
-  "namespace": "hydra.extract.core"}
+  "name": "hydra.extract.core"}

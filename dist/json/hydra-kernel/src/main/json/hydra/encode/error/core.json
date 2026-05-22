@@ -3466,4 +3466,4 @@
     {"module": "hydra.encode.variants"},
     {"module": "hydra.error.core"}],
   "description": "Term encoders for hydra.error.core",
-  "namespace": "hydra.encode.error.core"}
+  "name": "hydra.encode.error.core"}

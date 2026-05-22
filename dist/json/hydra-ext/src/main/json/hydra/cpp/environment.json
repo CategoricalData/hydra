@@ -13,7 +13,7 @@
                     "name": "namespaces",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for code generation"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for code generation"}}}],
                         "body": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.util.Namespaces"}}}}}},
                   {
                     "name": "boundTypeVariables",
@@ -27,4 +27,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
   "description": "Type definitions for C++ code generation environment",
-  "namespace": "hydra.cpp.environment"}
+  "name": "hydra.cpp.environment"}

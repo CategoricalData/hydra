@@ -1,11 +1,11 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "c0c85dc777433545ea9070f3cd02b43f5f9047f673ca2f61830c631f9e2b0f5b",
-  "depHash:hydra-kernel": "3dac8d97baf1b1700658cef985cffb0484282e027cbca5fdf13125ff8b95d153",
+  "selfHash": "40304845f16c91e56a3f735b0de9a8573ca2fb44d63280ec000383865ced7823",
+  "depHash:hydra-kernel": "c9ca1cca5860bba8a13101d1c94b726af1125abd32f8fa960f874cca5a592672",
   "hashes": {
-    "hydra.dsl.go.syntax": "d0ed83316e0374e3603009b18b4a786df9f859a01b7639a6297b709993d117f7",
-    "hydra.go.language": "a86cf1cd720906c3867460913e8c285f3bd5773c3f4d76a2db3d2081432afb5f",
-    "hydra.go.syntax": "594c32937d54a5c634391372c22309c739fd109a6029e942b18c4f527f75a994"
+    "hydra.dsl.go.syntax": "910a489d083af907239d48e61640d7dc75526e4151cf9d83ac491f0e3afd8c90",
+    "hydra.go.language": "8d8ea5600a709984c8d8c11c88f12b8b49af2acb380c30cd88ccd283b72de7cf",
+    "hydra.go.syntax": "87fec4f3c05d08992457db642cfa635909064db59d3af3a4e4e8f68ca8b9cce9"
   }
 }

@@ -982,4 +982,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for AST serialization",
-  "namespace": "hydra.test.serialization"}
+  "name": "hydra.test.serialization"}

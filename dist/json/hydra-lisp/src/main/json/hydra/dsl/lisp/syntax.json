@@ -27086,4 +27086,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.lisp.syntax"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.lisp.syntax",
-  "namespace": "hydra.dsl.lisp.syntax"}
+  "name": "hydra.dsl.lisp.syntax"}

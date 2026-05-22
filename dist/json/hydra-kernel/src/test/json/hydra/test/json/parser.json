@@ -7706,4 +7706,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for JSON parsing",
-  "namespace": "hydra.test.json.parser"}
+  "name": "hydra.test.json.parser"}

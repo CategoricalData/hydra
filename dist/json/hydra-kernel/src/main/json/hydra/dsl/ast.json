@@ -5357,4 +5357,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.ast"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.ast",
-  "namespace": "hydra.dsl.ast"}
+  "name": "hydra.dsl.ast"}

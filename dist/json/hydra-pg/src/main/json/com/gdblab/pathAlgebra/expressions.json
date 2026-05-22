@@ -512,4 +512,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Algebraic expression trees for the path algebra by Angles et al., extended for GQL support",
-  "namespace": "com.gdblab.pathAlgebra.expressions"}
+  "name": "com.gdblab.pathAlgebra.expressions"}

@@ -941,4 +941,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.parsing",
-  "namespace": "hydra.decode.parsing"}
+  "name": "hydra.decode.parsing"}

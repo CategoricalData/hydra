@@ -75,4 +75,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Type checking failure test cases",
-  "namespace": "hydra.test.checking.failures"}
+  "name": "hydra.test.checking.failures"}

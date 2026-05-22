@@ -4993,4 +4993,4 @@
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.context"}],
   "description": "DSL functions for hydra.typing",
-  "namespace": "hydra.dsl.typing"}
+  "name": "hydra.dsl.typing"}

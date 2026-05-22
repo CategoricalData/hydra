@@ -10345,4 +10345,4 @@
     {"module": "hydra.dsl.rdf.syntax"},
     {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.shacl.model",
-  "namespace": "hydra.dsl.shacl.model"}
+  "name": "hydra.dsl.shacl.model"}

@@ -6838,4 +6838,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Validation functions for core terms and types",
-  "namespace": "hydra.validate.core"}
+  "name": "hydra.validate.core"}

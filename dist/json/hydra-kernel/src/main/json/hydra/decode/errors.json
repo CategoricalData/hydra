@@ -4143,4 +4143,4 @@
     {"module": "hydra.decode.typing"},
     {"module": "hydra.decode.variants"}],
   "description": "Term decoders for hydra.errors",
-  "namespace": "hydra.decode.errors"}
+  "name": "hydra.decode.errors"}

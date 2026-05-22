@@ -4368,4 +4368,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Default term-level implementations of List functions for the Hydra interpreter.",
-  "namespace": "hydra.lib.defaults.lists"}
+  "name": "hydra.lib.defaults.lists"}

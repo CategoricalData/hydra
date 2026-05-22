@@ -4217,4 +4217,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.query",
-  "namespace": "hydra.decode.query"}
+  "name": "hydra.decode.query"}

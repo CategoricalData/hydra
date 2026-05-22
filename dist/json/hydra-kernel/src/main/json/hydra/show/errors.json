@@ -707,4 +707,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "String representations of hydra.error types",
-  "namespace": "hydra.show.errors"}
+  "name": "hydra.show.errors"}

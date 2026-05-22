@@ -341,8 +341,8 @@ localNameRaw s =
 moduleDependencyNames :: Packaging.Module -> [String]
 moduleDependencyNames m =
 
-      let allDeps = Lists.map (\dep -> Packaging.unNamespace (Packaging.moduleDependencyModule dep)) (Packaging.moduleDependencies m)
-          ownNs = Packaging.unNamespace (Packaging.moduleNamespace m)
+      let allDeps = Lists.map (\dep -> Packaging.unModuleName (Packaging.moduleDependencyModule dep)) (Packaging.moduleDependencies m)
+          ownNs = Packaging.unModuleName (Packaging.moduleName m)
           filtered = Lists.filter (\s -> Logic.not (Equality.equal s ownNs)) allDeps
       in (Lists.nub filtered)
 -- | Rewrite inner TermTypeLambda nodes and type applications so that polymorphic helpers work under Coq's erasure-based encoding

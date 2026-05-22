@@ -2031,4 +2031,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Inference tests for examples from the Hydra kernel",
-  "namespace": "hydra.test.inference.kernelExamples"}
+  "name": "hydra.test.inference.kernelExamples"}

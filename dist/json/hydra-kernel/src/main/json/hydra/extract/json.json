@@ -710,4 +710,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Utilities for extracting values from JSON objects",
-  "namespace": "hydra.extract.json"}
+  "name": "hydra.extract.json"}

@@ -286,4 +286,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.json.model"}],
   "description": "Term encoders for hydra.json.model",
-  "namespace": "hydra.encode.json.model"}
+  "name": "hydra.encode.json.model"}

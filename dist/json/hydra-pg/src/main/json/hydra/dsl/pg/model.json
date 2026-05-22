@@ -10290,4 +10290,4 @@
           "variables": ["v"]}}}],
   "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.pg.model",
-  "namespace": "hydra.dsl.pg.model"}
+  "name": "hydra.dsl.pg.model"}

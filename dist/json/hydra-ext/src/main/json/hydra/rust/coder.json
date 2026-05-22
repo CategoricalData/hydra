@@ -4399,9 +4399,7 @@
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "mod"},
-                                                                                        "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                                                                                      "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {"wrap": {"body": {"literal": {"string": "rs"}}, "typeName": "hydra.packaging.FileExtension"}},
@@ -4965,4 +4963,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Rust code generator: converts Hydra type and term modules to Rust source code",
-  "namespace": "hydra.rust.coder"}
+  "name": "hydra.rust.coder"}

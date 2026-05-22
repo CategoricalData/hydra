@@ -1808,4 +1808,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS). Designed for code generation from Hydra types and terms.",
-  "namespace": "hydra.lisp.syntax"}
+  "name": "hydra.lisp.syntax"}

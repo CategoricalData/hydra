@@ -3509,4 +3509,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Algorithm W inference tests",
-  "namespace": "hydra.test.inference.algorithmW"}
+  "name": "hydra.test.inference.algorithmW"}

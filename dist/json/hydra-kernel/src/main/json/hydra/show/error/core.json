@@ -1177,4 +1177,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "String representations of hydra.error.core types",
-  "namespace": "hydra.show.error.core"}
+  "name": "hydra.show.error.core"}

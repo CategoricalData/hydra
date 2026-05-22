@@ -18789,4 +18789,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Inference tests for expected failures",
-  "namespace": "hydra.test.inference.failures"}
+  "name": "hydra.test.inference.failures"}

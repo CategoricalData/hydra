@@ -4889,4 +4889,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Coq code generator: converts Hydra modules to Coq source",
-  "namespace": "hydra.coq.coder"}
+  "name": "hydra.coq.coder"}

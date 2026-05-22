@@ -2098,4 +2098,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A TypeScript 5.x syntax model for Hydra code generation",
-  "namespace": "hydra.typeScript.syntax"}
+  "name": "hydra.typeScript.syntax"}

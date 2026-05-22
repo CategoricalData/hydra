@@ -4510,4 +4510,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for core term and type validation",
-  "namespace": "hydra.test.validate.core"}
+  "name": "hydra.test.validate.core"}

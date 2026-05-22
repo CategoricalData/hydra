@@ -1246,8 +1246,8 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "qn"},
-                            "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                        "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.Namespace"}}, "variables": []}},
+                            "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
+                        "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
                       {
                         "name": "local",
                         "term": {
@@ -1269,9 +1269,9 @@
                                         "argument": {"literal": {"string": "."}},
                                         "function": {
                                           "application": {
-                                            "argument": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                            "argument": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                                             "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                                    "domain": {"variable": "hydra.packaging.Namespace"},
+                                    "domain": {"variable": "hydra.packaging.ModuleName"},
                                     "parameter": "ns"}},
                                 "function": {
                                   "application": {
@@ -1279,7 +1279,7 @@
                                     "function": {
                                       "typeApplication": {
                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                        "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
+                                        "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -1289,7 +1289,7 @@
                               "application": {
                                 "argument": {"variable": "local"},
                                 "function": {"application": {"argument": {"variable": "nsPart"}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                            "typeName": "hydra.packaging.Namespace"}},
+                            "typeName": "hydra.packaging.ModuleName"}},
                         "function": {
                           "application": {
                             "argument": {"wrap": {"body": {"literal": {"string": "json"}}, "typeName": "hydra.packaging.FileExtension"}},
@@ -2768,4 +2768,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "JSON Schema code generator: converts Hydra modules to JSON Schema documents",
-  "namespace": "hydra.json.schema.coder"}
+  "name": "hydra.json.schema.coder"}

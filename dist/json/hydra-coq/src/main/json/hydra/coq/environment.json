@@ -56,4 +56,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "Environment types for Coq code generation",
-  "namespace": "hydra.coq.environment"}
+  "name": "hydra.coq.environment"}

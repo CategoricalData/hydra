@@ -689,4 +689,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.context"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.context",
-  "namespace": "hydra.dsl.context"}
+  "name": "hydra.dsl.context"}

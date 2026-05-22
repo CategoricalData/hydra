@@ -1435,4 +1435,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "General-purpose parser combinators",
-  "namespace": "hydra.parsers"}
+  "name": "hydra.parsers"}

@@ -107,4 +107,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints for Hydra Core",
-  "namespace": "hydra.languages"}
+  "name": "hydra.languages"}

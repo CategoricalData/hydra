@@ -8980,4 +8980,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for type unification operations",
-  "namespace": "hydra.test.unification"}
+  "name": "hydra.test.unification"}

@@ -5563,7 +5563,7 @@
                           "record": {
                             "fields": [
                               {
-                                "name": "namespace",
+                                "name": "moduleName",
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "mns"},
@@ -5571,13 +5571,13 @@
                                       "application": {
                                         "argument": {
                                           "lambda": {
-                                            "body": {"wrap": {"body": {"variable": "s"}, "typeName": "hydra.packaging.Namespace"}},
+                                            "body": {"wrap": {"body": {"variable": "s"}, "typeName": "hydra.packaging.ModuleName"}},
                                             "domain": {"literal": {"string": {}}},
                                             "parameter": "s"}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"literal": {"string": {}}}}},
-                                            "type": {"variable": "hydra.packaging.Namespace"}}}}}}}},
+                                            "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}},
                               {"name": "local", "term": {"variable": "local"}}],
                             "typeName": "hydra.packaging.QualifiedName"}},
                         "function": {"variable": "hydra.names.unqualifyName"}}}}},
@@ -10321,4 +10321,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms",
-  "namespace": "hydra.avro.coder"}
+  "name": "hydra.avro.coder"}

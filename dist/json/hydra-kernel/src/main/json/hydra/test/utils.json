@@ -330,4 +330,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Shared utility functions for test code generation codecs",
-  "namespace": "hydra.test.utils"}
+  "name": "hydra.test.utils"}

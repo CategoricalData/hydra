@@ -279,4 +279,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.classes",
-  "namespace": "hydra.decode.classes"}
+  "name": "hydra.decode.classes"}

@@ -15608,4 +15608,4 @@
     {"module": "hydra.reduction"},
     {"module": "hydra.show.core"}],
   "description": "Test cases for hydra.annotations functions",
-  "namespace": "hydra.test.annotations"}
+  "name": "hydra.test.annotations"}

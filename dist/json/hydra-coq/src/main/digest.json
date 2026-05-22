@@ -1,16 +1,16 @@
 {
   "formatVersion": 1,
   "version": 1,
-  "selfHash": "2a908da2eb4db299cd1f07daffe5d31cca47b53a7f6da4de47943a8970eadf5e",
-  "depHash:hydra-kernel": "3dac8d97baf1b1700658cef985cffb0484282e027cbca5fdf13125ff8b95d153",
+  "selfHash": "868dd484d615e12e3930718d74febb7914aaa40610104f5b8299ddb19e675cec",
+  "depHash:hydra-kernel": "c9ca1cca5860bba8a13101d1c94b726af1125abd32f8fa960f874cca5a592672",
   "hashes": {
-    "hydra.coq.coder": "63ddde4edbc0814768319ae04e5a82524cb8c5283325ec2eefcdf934d012ce1a",
-    "hydra.coq.environment": "7137f85cad1acf4f1036dcb5e899357b706561829cafe331dc513f3379039d08",
-    "hydra.coq.generate": "9b23865d9d7d14b192dcac9c97589d633c15bd439a62879a91f49831fa31e5bd",
-    "hydra.coq.language": "e51a15579443345476bc29a85965627bb3a37aae6830d569d0749eb01a756ef0",
-    "hydra.coq.serde": "351e919ac1bfd059c9a4e9747d45631df3d7ba7ea05de742a43d6658f9d15e44",
-    "hydra.coq.syntax": "a80ac0906eab7b8fffb5625bc876df7c349cfe290b9debebf3467bc500138289",
-    "hydra.coq.utils": "f8f43e7728691a1a517efec39284f99e1e13476b8f61696c48f9689227ef5c62",
-    "hydra.dsl.coq.syntax": "f5d5d6e0091e679ffefb6cc17476aa7709cda4300b967bbdf84a3ce351b9a941"
+    "hydra.coq.coder": "d200c8564370cd67725dfee49d9101f156d65f5b4af82c9cfb5b3a9921867b57",
+    "hydra.coq.environment": "f6d35ff985ef9c6bbfbce1edaa5c686d09bae2e3a79130a02ef8453d2ef27128",
+    "hydra.coq.generate": "4699927ebdfdb75382124c0331126ea4000403591f7dc254976974796b96daf7",
+    "hydra.coq.language": "b5505911a0cc4aff9fcceb493562bbe07a9c879263977f4005ab5abd73c0fd66",
+    "hydra.coq.serde": "510dea889147025b01d5531480d84d573093aaa2dcc104f4b0af49dbb19ced26",
+    "hydra.coq.syntax": "ef3ed2cd8c5a35263be71ab5eed1f3731ce1d6919acac68c970ced58c35bcd90",
+    "hydra.coq.utils": "aaf92df6c907bd58b777c8826b2d1e177cea2857a3d0da167e5ed6c0673b4ff2",
+    "hydra.dsl.coq.syntax": "531f1e3abaf61cba53c1059f943fb6ddf6e5b7566f14ca1d154946ec07c26306"
   }
 }

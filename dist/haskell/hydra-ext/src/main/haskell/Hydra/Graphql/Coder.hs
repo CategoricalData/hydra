@@ -43,7 +43,7 @@ encodeEnumFieldType cx g ft =
       Syntax.enumValueDefinitionDirectives = Nothing}))
 encodeFieldName :: Core.Name -> Syntax.Name
 encodeFieldName name = Syntax.Name (sanitize (Core.unName name))
-encodeFieldType :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.FieldType -> Either Errors.Error Syntax.FieldDefinition
+encodeFieldType :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.FieldType -> Either Errors.Error Syntax.FieldDefinition
 encodeFieldType cx g prefixes ft =
     Eithers.bind (encodeType cx g prefixes (Core.fieldTypeType ft)) (\gtype -> Eithers.bind (descriptionFromType cx g (Core.fieldTypeType ft)) (\desc -> Right (Syntax.FieldDefinition {
       Syntax.fieldDefinitionDescription = desc,
@@ -63,7 +63,7 @@ encodeLiteralType cx lt =
         _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected 32-bit signed integer type, found: " (ShowCore.integerType v0))))
       Core.LiteralTypeString -> Right (Syntax.NamedType (Syntax.Name "String"))
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected GraphQL-compatible literal type, found: " (ShowCore.literalType lt))))
-encodeNamedType :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.Name -> Core.Type -> Either Errors.Error Syntax.TypeDefinition
+encodeNamedType :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.Name -> Core.Type -> Either Errors.Error Syntax.TypeDefinition
 encodeNamedType cx g prefixes name typ =
     case (Strip.deannotateType typ) of
       Core.TypeRecord v0 -> Eithers.bind (Eithers.mapList (\f -> encodeFieldType cx g prefixes f) v0) (\gfields -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionObject (Syntax.ObjectTypeDefinition {
@@ -137,7 +137,7 @@ encodeNamedType cx g prefixes name typ =
           Core.fieldTypeName = (Core.Name "codomain"),
           Core.fieldTypeType = (Core.functionTypeCodomain v0)}])
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected record or union type, found: " (ShowCore.type_ typ))))
-encodeType :: t0 -> t1 -> M.Map Packaging.Namespace String -> Core.Type -> Either Errors.Error Syntax.Type
+encodeType :: t0 -> t1 -> M.Map Packaging.ModuleName String -> Core.Type -> Either Errors.Error Syntax.Type
 encodeType cx g prefixes typ =
     case (Strip.deannotateType typ) of
       Core.TypeMaybe v0 -> case (Strip.deannotateType v0) of
@@ -171,18 +171,18 @@ encodeType cx g prefixes typ =
       Core.TypeFunction _ -> Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (Syntax.Name "String"))))
       Core.TypeUnit -> Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (Syntax.Name "Boolean"))))
       _ -> Left (Errors.ErrorOther (Errors.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (ShowCore.type_ typ))))
-encodeTypeDefinition :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Packaging.TypeDefinition -> Either Errors.Error Syntax.TypeDefinition
+encodeTypeDefinition :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Packaging.TypeDefinition -> Either Errors.Error Syntax.TypeDefinition
 encodeTypeDefinition cx g prefixes tdef =
     encodeNamedType cx g prefixes (Packaging.typeDefinitionName tdef) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme tdef))
-encodeTypeName :: M.Map Packaging.Namespace String -> Core.Name -> Syntax.Name
+encodeTypeName :: M.Map Packaging.ModuleName String -> Core.Name -> Syntax.Name
 encodeTypeName prefixes name =
 
       let qualName = Names.qualifyName name
           local = Packaging.qualifiedNameLocal qualName
-          mns = Packaging.qualifiedNameNamespace qualName
+          mns = Packaging.qualifiedNameModuleName qualName
           prefix = Maybes.maybe "" (\ns_ -> Maybes.maybe "" (\p -> p) (Maps.lookup ns_ prefixes)) mns
       in (Syntax.Name (Strings.cat2 prefix (sanitize local)))
-encodeUnionFieldType :: t0 -> Graph.Graph -> M.Map Packaging.Namespace String -> Core.FieldType -> Either Errors.Error Syntax.FieldDefinition
+encodeUnionFieldType :: t0 -> Graph.Graph -> M.Map Packaging.ModuleName String -> Core.FieldType -> Either Errors.Error Syntax.FieldDefinition
 encodeUnionFieldType cx g prefixes ft =
 
       let innerType = Core.fieldTypeType ft
@@ -204,9 +204,9 @@ moduleToGraphql mod defs cx g =
                     let namespaces = Lists.nub (Maybes.cat (Lists.map (\td -> Names.namespaceOf (Packaging.typeDefinitionName td)) tdefs))
                     in (Maps.fromList (Lists.map (\ns_ -> (
                       ns_,
-                      (Logic.ifElse (Equality.equal ns_ modNs) "" (Strings.cat2 (Formatting.sanitizeWithUnderscores Sets.empty (Packaging.unNamespace ns_)) "_")))) namespaces))) (Packaging.moduleNamespace mod) typeDefs
+                      (Logic.ifElse (Equality.equal ns_ modNs) "" (Strings.cat2 (Formatting.sanitizeWithUnderscores Sets.empty (Packaging.unModuleName ns_)) "_")))) namespaces))) (Packaging.moduleName mod) typeDefs
           filePath =
-                  Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "graphql") (Packaging.moduleNamespace mod)
+                  Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "graphql") (Packaging.moduleName mod)
       in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition cx g prefixes td) typeDefs) (\gtdefs -> Right (Maps.fromList (Lists.pure (
         filePath,
         (Serialization.printExpr (Serialization.parenthesize (Serde.documentToExpr (Syntax.Document (Lists.map (\gtdef -> Syntax.DefinitionTypeSystem (Syntax.TypeSystemDefinitionOrExtensionDefinition (Syntax.TypeSystemDefinitionType gtdef))) gtdefs))))))))))

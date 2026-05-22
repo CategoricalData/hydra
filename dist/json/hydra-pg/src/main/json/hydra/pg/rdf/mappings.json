@@ -1278,4 +1278,4 @@
     {"module": "hydra.rdf.syntax"},
     {"module": "hydra.shacl.model"}],
   "description": "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs",
-  "namespace": "hydra.pg.rdf.mappings"}
+  "name": "hydra.pg.rdf.mappings"}

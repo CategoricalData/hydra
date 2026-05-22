@@ -674,7 +674,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
-                            "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
+                            "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "packages"}},
                 "domain": {
@@ -682,7 +682,7 @@
                     "argument": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "currentNamespace"}}}},
         "typeScheme": {
@@ -824,14 +824,14 @@
                       "argument": {
                         "annotated": {
                           "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
+                          "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -888,7 +888,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {"argument": {"variable": "hydra.java.environment.Aliases"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -945,7 +945,7 @@
                   "argument": {
                     "annotated": {
                       "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
-                      "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
+                      "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {"argument": {"variable": "hydra.java.environment.Aliases"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2090,7 +2090,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2108,7 +2108,7 @@
                       "argument": {
                         "annotated": {
                           "annotation": [{"key": "description", "value": {"literal": {"string": "Current module namespace context"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {"argument": {"variable": "hydra.java.environment.Aliases"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -2586,7 +2586,7 @@
                         "argument": {
                           "annotated": {
                             "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
-                            "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
+                            "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2604,7 +2604,7 @@
                       "argument": {
                         "annotated": {
                           "annotation": [{"key": "description", "value": {"literal": {"string": "Maps namespaces to Java package names"}}}],
-                          "body": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
+                          "body": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"variable": "hydra.java.syntax.PackageName"}}}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {"argument": {"variable": "hydra.java.environment.Aliases"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
@@ -8522,4 +8522,4 @@
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.typing"}],
   "description": "DSL functions for hydra.java.environment",
-  "namespace": "hydra.dsl.java.environment"}
+  "name": "hydra.dsl.java.environment"}

@@ -11,25 +11,25 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.coders"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.coders"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.coders"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.context"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.context"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.errors"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.errors"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.graph"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.graph"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.variants"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.variants"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.coders"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.coders"),
           Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {

@@ -1156,4 +1156,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.haskell.environment"}, {"module": "hydra.phantoms"}],
   "description": "DSL functions for hydra.haskell.environment",
-  "namespace": "hydra.dsl.haskell.environment"}
+  "name": "hydra.dsl.haskell.environment"}

@@ -44,7 +44,7 @@ subtermStep step =
         Paths.SubtermStepInjectionTerm -> Nothing
         Paths.SubtermStepWrappedTerm -> Nothing
 -- | Build a subterm graph from a term
-termToSubtermGraph :: M.Map Packaging.Namespace String -> Core.Term -> Paths.SubtermGraph
+termToSubtermGraph :: M.Map Packaging.ModuleName String -> Core.Term -> Paths.SubtermGraph
 termToSubtermGraph namespaces term =
 
       let dontCareStep = Paths.SubtermStepAnnotatedBody

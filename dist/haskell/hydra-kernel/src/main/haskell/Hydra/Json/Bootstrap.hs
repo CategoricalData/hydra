@@ -1813,7 +1813,7 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "namespace"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Namespace")),
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName")),
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (
                     Core.Name "description",
@@ -1949,11 +1949,13 @@ typesByName =
                 Core.annotatedTypeAnnotation = (M.fromList [
                   (Core.Name "description", (Core.TermLiteral (Core.LiteralString "An optional human-readable description of the module")))])}))},
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "namespace"),
+              Core.fieldTypeName = (Core.Name "name"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Namespace")),
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName")),
                 Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A common prefix for all element names in the module")))])}))},
+                  (
+                    Core.Name "description",
+                    (Core.TermLiteral (Core.LiteralString "The name of the module, which is also the common prefix for all element names in the module")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "dependencies"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1977,9 +1979,9 @@ typesByName =
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "module"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.Namespace")),
+                Core.annotatedTypeBody = (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName")),
                 Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The namespace of the depended-on module")))])}))},
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The name of the depended-on module")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "package"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -1991,13 +1993,15 @@ typesByName =
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "A dependency on another module, identified by its namespace and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate namespace across packages is a resolution error which can be disambiguated by naming the intended package explicitly.")))])}))),
+              (Core.TermLiteral (Core.LiteralString "A dependency on another module, identified by its name and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate module name across packages is a resolution error which can be disambiguated by naming the intended package explicitly.")))])}))),
       (
-        Core.Name "hydra.packaging.Namespace",
+        Core.Name "hydra.packaging.ModuleName",
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeWrap (Core.TypeLiteral Core.LiteralTypeString)),
           Core.annotatedTypeAnnotation = (M.fromList [
-            (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A prefix for element names")))])}))),
+            (
+              Core.Name "description",
+              (Core.TermLiteral (Core.LiteralString "The unique name of a module; a prefix for the names of elements defined in the module.")))])}))),
       (
         Core.Name "hydra.packaging.Package",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2077,11 +2081,11 @@ typesByName =
         (Core.TypeAnnotated (Core.AnnotatedType {
           Core.annotatedTypeBody = (Core.TypeRecord [
             Core.FieldType {
-              Core.fieldTypeName = (Core.Name "namespace"),
+              Core.fieldTypeName = (Core.Name "moduleName"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
-                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.Namespace"))),
+                Core.annotatedTypeBody = (Core.TypeMaybe (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName"))),
                 Core.annotatedTypeAnnotation = (M.fromList [
-                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The optional namespace")))])}))},
+                  (Core.Name "description", (Core.TermLiteral (Core.LiteralString "The optional module name")))])}))},
             Core.FieldType {
               Core.fieldTypeName = (Core.Name "local"),
               Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2091,7 +2095,7 @@ typesByName =
           Core.annotatedTypeAnnotation = (M.fromList [
             (
               Core.Name "description",
-              (Core.TermLiteral (Core.LiteralString "A qualified name consisting of an optional namespace together with a mandatory local name")))])}))),
+              (Core.TermLiteral (Core.LiteralString "A qualified name consisting of an optional module name together with a mandatory local name")))])}))),
       (
         Core.Name "hydra.packaging.TermDefinition",
         (Core.TypeAnnotated (Core.AnnotatedType {
@@ -2187,7 +2191,7 @@ typesByName =
                 Core.fieldTypeName = (Core.Name "focus"),
                 Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypePair (Core.PairType {
-                    Core.pairTypeFirst = (Core.TypeVariable (Core.Name "hydra.packaging.Namespace")),
+                    Core.pairTypeFirst = (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName")),
                     Core.pairTypeSecond = (Core.TypeVariable (Core.Name "n"))})),
                   Core.annotatedTypeAnnotation = (M.fromList [
                     (
@@ -2197,7 +2201,7 @@ typesByName =
                 Core.fieldTypeName = (Core.Name "mapping"),
                 Core.fieldTypeType = (Core.TypeAnnotated (Core.AnnotatedType {
                   Core.annotatedTypeBody = (Core.TypeMap (Core.MapType {
-                    Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.packaging.Namespace")),
+                    Core.mapTypeKeys = (Core.TypeVariable (Core.Name "hydra.packaging.ModuleName")),
                     Core.mapTypeValues = (Core.TypeVariable (Core.Name "n"))})),
                   Core.annotatedTypeAnnotation = (M.fromList [
                     (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A mapping of namespaces to values")))])}))}])})),

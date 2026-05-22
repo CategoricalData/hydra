@@ -10306,4 +10306,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Property graph element coders for mapping Hydra terms to property graph elements",
-  "namespace": "hydra.pg.coder"}
+  "name": "hydra.pg.coder"}

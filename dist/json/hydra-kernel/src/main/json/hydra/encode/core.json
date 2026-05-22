@@ -4255,4 +4255,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.core"}],
   "description": "Term encoders for hydra.core",
-  "namespace": "hydra.encode.core"}
+  "name": "hydra.encode.core"}

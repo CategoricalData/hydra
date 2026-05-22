@@ -76,4 +76,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "Variant types which describe the structure of Hydra core types and terms.",
-  "namespace": "hydra.variants"}
+  "name": "hydra.variants"}

@@ -1875,4 +1875,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Advanced type checking test cases: annotated terms and flows",
-  "namespace": "hydra.test.checking.advanced"}
+  "name": "hydra.test.checking.advanced"}

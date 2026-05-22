@@ -123,4 +123,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints for JSON Schema",
-  "namespace": "hydra.json.schema.language"}
+  "name": "hydra.json.schema.language"}

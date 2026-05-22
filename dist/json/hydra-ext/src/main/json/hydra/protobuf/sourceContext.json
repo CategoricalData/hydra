@@ -28,4 +28,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/source_context.proto",
-  "namespace": "hydra.protobuf.sourceContext"}
+  "name": "hydra.protobuf.sourceContext"}

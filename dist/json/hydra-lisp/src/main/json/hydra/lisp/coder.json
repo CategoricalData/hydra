@@ -6182,9 +6182,9 @@
                                 "function": {
                                   "application": {
                                     "argument": {"variable": "focusNs"},
-                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.delete"}, "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
-                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.packaging.Namespace"}}}}},
-                        "typeScheme": {"body": {"list": {"variable": "hydra.packaging.Namespace"}}, "variables": []}}],
+                                    "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.delete"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}}}},
+                            "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}},
+                        "typeScheme": {"body": {"list": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}}],
                     "body": {
                       "application": {
                         "argument": {"variable": "depNss"},
@@ -6199,21 +6199,21 @@
                                         "name": "module",
                                         "term": {
                                           "wrap": {
-                                            "body": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                            "body": {"application": {"argument": {"variable": "ns"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                                             "typeName": "hydra.lisp.syntax.NamespaceName"}}},
                                       {
                                         "name": "spec",
                                         "term": {"inject": {"field": {"name": "all", "term": {"unit": {}}}, "typeName": "hydra.lisp.syntax.ImportSpec"}}}],
                                     "typeName": "hydra.lisp.syntax.ImportDeclaration"}},
-                                "domain": {"variable": "hydra.packaging.Namespace"},
+                                "domain": {"variable": "hydra.packaging.ModuleName"},
                                 "parameter": "ns"}},
                             "function": {
                               "typeApplication": {
-                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.Namespace"}}},
+                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.packaging.ModuleName"}}},
                                 "type": {"variable": "hydra.lisp.syntax.ImportDeclaration"}}}}}}}}},
                 "domain": {"list": {"variable": "hydra.packaging.Definition"}},
                 "parameter": "defs"}},
-            "domain": {"variable": "hydra.packaging.Namespace"},
+            "domain": {"variable": "hydra.packaging.ModuleName"},
             "parameter": "focusNs"}},
         "typeScheme": {
           "body": {
@@ -6222,7 +6222,7 @@
                 "function": {
                   "codomain": {"list": {"variable": "hydra.lisp.syntax.ImportDeclaration"}},
                   "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
-              "domain": {"variable": "hydra.packaging.Namespace"}}},
+              "domain": {"variable": "hydra.packaging.ModuleName"}}},
           "variables": []}}},
     {
       "term": {
@@ -6347,10 +6347,8 @@
                                                                                         "term": {
                                                                                           "application": {
                                                                                             "argument": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "mod"},
-                                                                                                "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                                                                            "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                                                                              "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
+                                                                                            "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                                                                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                                                     "body": {
                                                                                       "let": {
@@ -6358,10 +6356,8 @@
                                                                                           {
                                                                                             "name": "focusNs",
                                                                                             "term": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "mod"},
-                                                                                                "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                                                                            "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}],
+                                                                                              "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
+                                                                                            "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}],
                                                                                         "body": {
                                                                                           "let": {
                                                                                             "bindings": [
@@ -6660,4 +6656,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Lisp code generator: converts Hydra type and term modules to Lisp AST",
-  "namespace": "hydra.lisp.coder"}
+  "name": "hydra.lisp.coder"}

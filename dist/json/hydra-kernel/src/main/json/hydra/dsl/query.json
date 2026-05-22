@@ -5104,4 +5104,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.query"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.query",
-  "namespace": "hydra.dsl.query"}
+  "name": "hydra.dsl.query"}

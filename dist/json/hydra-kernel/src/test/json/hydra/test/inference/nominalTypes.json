@@ -4986,4 +4986,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Inference tests for nominal types",
-  "namespace": "hydra.test.inference.nominalTypes"}
+  "name": "hydra.test.inference.nominalTypes"}

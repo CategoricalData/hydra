@@ -3686,4 +3686,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Coq serializer: converts Coq AST to concrete Coq source code",
-  "namespace": "hydra.coq.serde"}
+  "name": "hydra.coq.serde"}

@@ -55,8 +55,8 @@
                                                                               "fields": [
                                                                                 {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
-                                                                                  "name": "namespace",
-                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -66,7 +66,7 @@
                                                                                           "fields": [
                                                                                             {
                                                                                               "name": "module",
-                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                             {
                                                                                               "name": "package",
                                                                                               "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -133,8 +133,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -218,8 +218,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -229,7 +229,7 @@
                                                                                               "fields": [
                                                                                                 {
                                                                                                   "name": "module",
-                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                                 {
                                                                                                   "name": "package",
                                                                                                   "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -422,8 +422,8 @@
                                                                               "fields": [
                                                                                 {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
-                                                                                  "name": "namespace",
-                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -433,7 +433,7 @@
                                                                                           "fields": [
                                                                                             {
                                                                                               "name": "module",
-                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                             {
                                                                                               "name": "package",
                                                                                               "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -500,8 +500,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -585,8 +585,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -596,7 +596,7 @@
                                                                                               "fields": [
                                                                                                 {
                                                                                                   "name": "module",
-                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                                 {
                                                                                                   "name": "package",
                                                                                                   "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -805,8 +805,8 @@
                                                                               "fields": [
                                                                                 {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
-                                                                                  "name": "namespace",
-                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -890,8 +890,8 @@
                                                                               "fields": [
                                                                                 {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
-                                                                                  "name": "namespace",
-                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -901,7 +901,7 @@
                                                                                           "fields": [
                                                                                             {
                                                                                               "name": "module",
-                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                             {
                                                                                               "name": "package",
                                                                                               "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -968,8 +968,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1053,8 +1053,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -1064,7 +1064,7 @@
                                                                                               "fields": [
                                                                                                 {
                                                                                                   "name": "module",
-                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                                 {
                                                                                                   "name": "package",
                                                                                                   "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -1257,8 +1257,8 @@
                                                                               "fields": [
                                                                                 {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
-                                                                                  "name": "namespace",
-                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1342,8 +1342,8 @@
                                                                               "fields": [
                                                                                 {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
-                                                                                  "name": "namespace",
-                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -1353,7 +1353,7 @@
                                                                                           "fields": [
                                                                                             {
                                                                                               "name": "module",
-                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                             {
                                                                                               "name": "package",
                                                                                               "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -1420,8 +1420,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1505,8 +1505,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.b"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -1516,7 +1516,7 @@
                                                                                               "fields": [
                                                                                                 {
                                                                                                   "name": "module",
-                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.a"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                                 {
                                                                                                   "name": "package",
                                                                                                   "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -1727,8 +1727,8 @@
                                                                               "fields": [
                                                                                 {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                 {
-                                                                                  "name": "namespace",
-                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.w"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                  "name": "name",
+                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.w"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                 {
                                                                                   "name": "dependencies",
                                                                                   "term": {
@@ -1738,7 +1738,7 @@
                                                                                           "fields": [
                                                                                             {
                                                                                               "name": "module",
-                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.v"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                              "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.v"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                             {
                                                                                               "name": "package",
                                                                                               "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -1849,8 +1849,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.v"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.v"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.packaging.ModuleDependency"}}}},
@@ -1998,8 +1998,8 @@
                                                                                   "fields": [
                                                                                     {"name": "description", "term": {"typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
                                                                                     {
-                                                                                      "name": "namespace",
-                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.w"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                      "name": "name",
+                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.w"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                     {
                                                                                       "name": "dependencies",
                                                                                       "term": {
@@ -2009,7 +2009,7 @@
                                                                                               "fields": [
                                                                                                 {
                                                                                                   "name": "module",
-                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.v"}}, "typeName": "hydra.packaging.Namespace"}}},
+                                                                                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.testInput.v"}}, "typeName": "hydra.packaging.ModuleName"}}},
                                                                                                 {
                                                                                                   "name": "package",
                                                                                                   "term": {"typeApplication": {"body": {"maybe": null}, "type": {"variable": "hydra.packaging.PackageName"}}}}],
@@ -2280,4 +2280,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for code generation operations such as inferModules and inferModulesGiven",
-  "namespace": "hydra.test.generation"}
+  "name": "hydra.test.generation"}

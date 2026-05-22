@@ -1513,4 +1513,4 @@
         "typeScheme": {"body": {"wrap": {"literal": {"string": {}}}}, "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A Gremlin model, based on the Gremlin ANTLR grammar (master branch, as of 2024-06-30).",
-  "namespace": "hydra.tinkerpop.gremlin"}
+  "name": "hydra.tinkerpop.gremlin"}

@@ -4192,4 +4192,4 @@
     {"module": "hydra.tabular"},
     {"module": "hydra.relational"}],
   "description": "Functions for transforming property graph mappings into property graph elements.",
-  "namespace": "hydra.demos.genpg.transform"}
+  "name": "hydra.demos.genpg.transform"}

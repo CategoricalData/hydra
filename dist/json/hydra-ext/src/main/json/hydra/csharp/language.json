@@ -291,4 +291,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints and reserved words for C Sharp (C#)",
-  "namespace": "hydra.csharp.language"}
+  "name": "hydra.csharp.language"}

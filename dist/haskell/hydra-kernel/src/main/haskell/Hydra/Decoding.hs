@@ -1064,27 +1064,27 @@ decodeModule cx graph mod =
       in (Right (Just (Packaging.Module {
         Packaging.moduleDescription = (Just (Strings.cat [
           "Term decoders for ",
-          (Packaging.unNamespace (Packaging.moduleNamespace mod))])),
-        Packaging.moduleNamespace = (decodeNamespace (Packaging.moduleNamespace mod)),
+          (Packaging.unModuleName (Packaging.moduleName mod))])),
+        Packaging.moduleName = (decodeNamespace (Packaging.moduleName mod)),
         Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
           Packaging.moduleDependencyModule = ns,
           Packaging.moduleDependencyPackage = Nothing}) (Lists.concat2 [
-          Packaging.Namespace "hydra.extract.core",
-          (Packaging.Namespace "hydra.lexical"),
-          (Packaging.Namespace "hydra.rewriting"),
-          (Packaging.moduleNamespace mod),
-          (Packaging.Namespace "hydra.util")] allDecodedDeps)),
+          Packaging.ModuleName "hydra.extract.core",
+          (Packaging.ModuleName "hydra.lexical"),
+          (Packaging.ModuleName "hydra.rewriting"),
+          (Packaging.moduleName mod),
+          (Packaging.ModuleName "hydra.util")] allDecodedDeps)),
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionTerm = (Core.bindingTerm b),
           Packaging.termDefinitionTypeScheme = (Core.bindingTypeScheme b)})) decodedBindings)}))))))
 -- | Generate a decoder module namespace from a source module namespace
-decodeNamespace :: Packaging.Namespace -> Packaging.Namespace
+decodeNamespace :: Packaging.ModuleName -> Packaging.ModuleName
 decodeNamespace ns =
 
-      let parts = Strings.splitOn "." (Packaging.unNamespace ns)
-          fallback = Packaging.Namespace (Packaging.unNamespace ns)
-      in (Maybes.maybe fallback (\uc -> Packaging.Namespace (Strings.cat [
+      let parts = Strings.splitOn "." (Packaging.unModuleName ns)
+          fallback = Packaging.ModuleName (Packaging.unModuleName ns)
+      in (Maybes.maybe fallback (\uc -> Packaging.ModuleName (Strings.cat [
         "hydra.decode.",
         (Strings.intercalate "." (Pairs.second uc))])) (Lists.uncons parts))
 -- | Generate a decoder for a pair type

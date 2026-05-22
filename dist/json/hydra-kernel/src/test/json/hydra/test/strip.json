@@ -1201,4 +1201,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for annotation and type stripping operations",
-  "namespace": "hydra.test.strip"}
+  "name": "hydra.test.strip"}

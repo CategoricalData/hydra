@@ -8190,4 +8190,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Algebraic type checking test cases: unit, pairs, eithers, optionals",
-  "namespace": "hydra.test.checking.algebraicTypes"}
+  "name": "hydra.test.checking.algebraicTypes"}

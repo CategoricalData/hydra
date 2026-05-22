@@ -2,13 +2,13 @@
   "definitions": [
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.conflictingModuleNamespaceError",
+        "name": "hydra.dsl.error.packaging.conflictingModuleNameError",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.ConflictingModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.ConflictingModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -25,9 +25,7 @@
                                     {
                                       "name": "typeName",
                                       "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNamespaceError"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -55,16 +53,16 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The second module namespace that conflicts with the first"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "second"}},
                 "domain": {
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first module namespace"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "first"}}}},
         "typeScheme": {
@@ -74,32 +72,32 @@
                 "function": {
                   "codomain": {
                     "application": {
-                      "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                      "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                       "function": {"variable": "hydra.phantoms.TTerm"}}},
                   "domain": {
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The second module namespace that conflicts with the first"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first module namespace"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.conflictingModuleNamespaceErrorFirst",
+        "name": "hydra.dsl.error.packaging.conflictingModuleNameErrorFirst",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the first field of hydra.error.packaging.ConflictingModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the first field of hydra.error.packaging.ConflictingModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -123,9 +121,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNamespaceError"}},
-                                                    "typeName": "hydra.core.Name"}}},
+                                                  "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                               {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
@@ -137,7 +133,7 @@
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -147,23 +143,23 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first module namespace"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.conflictingModuleNamespaceErrorSecond",
+        "name": "hydra.dsl.error.packaging.conflictingModuleNameErrorSecond",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the second field of hydra.error.packaging.ConflictingModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the second field of hydra.error.packaging.ConflictingModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -187,9 +183,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNamespaceError"}},
-                                                    "typeName": "hydra.core.Name"}}},
+                                                  "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                               {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
@@ -201,7 +195,7 @@
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -211,23 +205,23 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The second module namespace that conflicts with the first"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.conflictingModuleNamespaceErrorWithFirst",
+        "name": "hydra.dsl.error.packaging.conflictingModuleNameErrorWithFirst",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the first field of hydra.error.packaging.ConflictingModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL updater for the first field of hydra.error.packaging.ConflictingModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -244,9 +238,7 @@
                                     {
                                       "name": "typeName",
                                       "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNamespaceError"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -284,9 +276,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {
-                                                                                "wrap": {
-                                                                                  "body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNamespaceError"}},
-                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
@@ -303,13 +293,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The first module namespace"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "original"}}}},
         "typeScheme": {
@@ -319,29 +309,29 @@
                 "function": {
                   "codomain": {
                     "application": {
-                      "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                      "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                       "function": {"variable": "hydra.phantoms.TTerm"}}},
                   "domain": {
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The first module namespace"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.conflictingModuleNamespaceErrorWithSecond",
+        "name": "hydra.dsl.error.packaging.conflictingModuleNameErrorWithSecond",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the second field of hydra.error.packaging.ConflictingModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL updater for the second field of hydra.error.packaging.ConflictingModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -358,9 +348,7 @@
                                     {
                                       "name": "typeName",
                                       "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNamespaceError"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -390,9 +378,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {
-                                                                                "wrap": {
-                                                                                  "body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNamespaceError"}},
-                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
@@ -417,13 +403,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The second module namespace that conflicts with the first"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "original"}}}},
         "typeScheme": {
@@ -433,18 +419,18 @@
                 "function": {
                   "codomain": {
                     "application": {
-                      "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                      "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                       "function": {"variable": "hydra.phantoms.TTerm"}}},
                   "domain": {
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The second module namespace that conflicts with the first"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.ConflictingModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -484,10 +470,10 @@
                                                   {
                                                     "record": {
                                                       "fields": [
-                                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                        {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                         {
                                                           "name": "term",
-                                                          "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                          "term": {"application": {"argument": {"variable": "moduleName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                                       "typeName": "hydra.core.Field"}},
                                                   {
                                                     "record": {
@@ -547,10 +533,10 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the conflict"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespace"}}}},
+                "parameter": "moduleName"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -592,19 +578,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the conflict"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.conflictingVariantNameErrorNamespace",
+        "name": "hydra.dsl.error.packaging.conflictingVariantNameErrorModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the namespace field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -629,7 +615,7 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingVariantNameError"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -650,8 +636,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the conflict"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
@@ -852,13 +838,13 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.conflictingVariantNameErrorWithNamespace",
+        "name": "hydra.dsl.error.packaging.conflictingVariantNameErrorWithModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the namespace field of hydra.error.packaging.ConflictingVariantNameError"}}}],
+                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.ConflictingVariantNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -883,7 +869,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -1002,8 +988,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the conflict"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -1024,8 +1010,8 @@
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the conflict"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
@@ -1065,7 +1051,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -1088,7 +1074,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingVariantNameError"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1247,7 +1233,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -1270,7 +1256,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingVariantNameError"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1430,7 +1416,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -1453,7 +1439,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.error.packaging.ConflictingVariantNameError"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1585,13 +1571,13 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.definitionNotInModuleNamespaceError",
+        "name": "hydra.dsl.error.packaging.definitionNotInModuleNameError",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1608,9 +1594,7 @@
                                     {
                                       "name": "typeName",
                                       "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -1618,10 +1602,10 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "moduleName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -1638,8 +1622,7 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {"key": "description", "value": {"literal": {"string": "The definition name that does not match the module namespace"}}}],
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "name"}},
@@ -1647,10 +1630,10 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespace"}}}},
+                "parameter": "moduleName"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -1658,34 +1641,32 @@
                 "function": {
                   "codomain": {
                     "application": {
-                      "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                      "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                       "function": {"variable": "hydra.phantoms.TTerm"}}},
                   "domain": {
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [
-                            {"key": "description", "value": {"literal": {"string": "The definition name that does not match the module namespace"}}}],
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.definitionNotInModuleNamespaceErrorNamespace",
+        "name": "hydra.dsl.error.packaging.definitionNotInModuleNameErrorModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {
-                  "literal": {"string": "DSL accessor for the namespace field of hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1709,10 +1690,8 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}},
-                                                    "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                  "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNameError"}}, "typeName": "hydra.core.Name"}}},
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -1723,7 +1702,7 @@
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -1733,23 +1712,23 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.definitionNotInModuleNamespaceErrorName",
+        "name": "hydra.dsl.error.packaging.definitionNotInModuleNameErrorName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the name field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1773,9 +1752,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {
-                                                  "wrap": {
-                                                    "body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}},
-                                                    "typeName": "hydra.core.Name"}}},
+                                                  "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                               {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
@@ -1787,7 +1764,7 @@
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -1797,25 +1774,23 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [
-                        {"key": "description", "value": {"literal": {"string": "The definition name that does not match the module namespace"}}}],
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
                       "body": {"variable": "hydra.core.Name"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.definitionNotInModuleNamespaceErrorWithNamespace",
+        "name": "hydra.dsl.error.packaging.definitionNotInModuleNameErrorWithModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {
-                  "literal": {"string": "DSL updater for the namespace field of hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1832,9 +1807,7 @@
                                     {
                                       "name": "typeName",
                                       "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -1842,7 +1815,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -1872,9 +1845,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {
-                                                                                "wrap": {
-                                                                                  "body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}},
-                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                                                             {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
@@ -1891,13 +1862,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "original"}}}},
         "typeScheme": {
@@ -1907,29 +1878,29 @@
                 "function": {
                   "codomain": {
                     "application": {
-                      "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                      "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                       "function": {"variable": "hydra.phantoms.TTerm"}}},
                   "domain": {
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.definitionNotInModuleNamespaceErrorWithName",
+        "name": "hydra.dsl.error.packaging.definitionNotInModuleNameErrorWithName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL updater for the name field of hydra.error.packaging.DefinitionNotInModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -1946,9 +1917,7 @@
                                     {
                                       "name": "typeName",
                                       "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}},
-                                          "typeName": "hydra.core.Name"}}},
+                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -1956,7 +1925,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -1978,10 +1947,8 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {
-                                                                                "wrap": {
-                                                                                  "body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}},
-                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionNotInModuleNameError"}}, "typeName": "hydra.core.Name"}}},
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2005,14 +1972,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [
-                              {"key": "description", "value": {"literal": {"string": "The definition name that does not match the module namespace"}}}],
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
                             "body": {"variable": "hydra.core.Name"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "original"}}}},
         "typeScheme": {
@@ -2022,19 +1988,18 @@
                 "function": {
                   "codomain": {
                     "application": {
-                      "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                      "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                       "function": {"variable": "hydra.phantoms.TTerm"}}},
                   "domain": {
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [
-                            {"key": "description", "value": {"literal": {"string": "The definition name that does not match the module namespace"}}}],
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
                           "body": {"variable": "hydra.core.Name"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -2072,10 +2037,10 @@
                                               {
                                                 "record": {
                                                   "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "moduleName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
                                                 "record": {
@@ -2120,12 +2085,10 @@
                     "argument": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                          {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespace"}}}},
+                "parameter": "moduleName"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -2159,21 +2122,19 @@
                   "argument": {
                     "annotated": {
                       "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                        {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorNamespace",
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the namespace field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2198,7 +2159,7 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -2220,10 +2181,8 @@
                   "argument": {
                     "annotated": {
                       "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                        {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
@@ -2363,13 +2322,13 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorWithNamespace",
+        "name": "hydra.dsl.error.packaging.definitionsOutOfOrderErrorWithModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the namespace field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
+                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DefinitionsOutOfOrderError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2394,7 +2353,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -2481,10 +2440,8 @@
                         "argument": {
                           "annotated": {
                             "annotation": [
-                              {
-                                "key": "description",
-                                "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                              {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -2506,10 +2463,8 @@
                       "argument": {
                         "annotated": {
                           "annotation": [
-                            {
-                              "key": "description",
-                              "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                            {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
@@ -2549,7 +2504,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -2572,7 +2527,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2696,7 +2651,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -2719,7 +2674,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DefinitionsOutOfOrderError"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2849,10 +2804,10 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "moduleName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -2877,10 +2832,10 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespace"}}}},
+                "parameter": "moduleName"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -2901,19 +2856,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.duplicateDefinitionNameErrorNamespace",
+        "name": "hydra.dsl.error.packaging.duplicateDefinitionNameErrorModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the namespace field of hydra.error.packaging.DuplicateDefinitionNameError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DuplicateDefinitionNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -2938,7 +2893,7 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DuplicateDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -2959,8 +2914,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
@@ -3031,13 +2986,13 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.duplicateDefinitionNameErrorWithNamespace",
+        "name": "hydra.dsl.error.packaging.duplicateDefinitionNameErrorWithModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the namespace field of hydra.error.packaging.DuplicateDefinitionNameError"}}}],
+                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DuplicateDefinitionNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3062,7 +3017,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -3109,8 +3064,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -3131,8 +3086,8 @@
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
@@ -3172,7 +3127,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -3195,7 +3150,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DuplicateDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -3251,13 +3206,13 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.duplicateModuleNamespaceError",
+        "name": "hydra.dsl.error.packaging.duplicateModuleNameError",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DuplicateModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.DuplicateModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3272,7 +3227,7 @@
                                 {
                                   "name": "typeName",
                                   "term": {
-                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DuplicateModuleNamespaceError"}}, "typeName": "hydra.core.Name"}}},
+                                    "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DuplicateModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "fields",
                                   "term": {
@@ -3280,10 +3235,10 @@
                                       {
                                         "record": {
                                           "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
-                                              "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "term": {"application": {"argument": {"variable": "moduleName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                           "typeName": "hydra.core.Field"}}]}}],
                               "typeName": "hydra.core.Record"}}},
                         "typeName": "hydra.core.Term"}},
@@ -3292,34 +3247,34 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module namespace"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespace"}}}},
+                "parameter": "moduleName"}}}},
         "typeScheme": {
           "body": {
             "function": {
               "codomain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.DuplicateModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module namespace"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.duplicateModuleNamespaceErrorNamespace",
+        "name": "hydra.dsl.error.packaging.duplicateModuleNameErrorModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the namespace field of hydra.error.packaging.DuplicateModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.DuplicateModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3343,8 +3298,8 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {
-                                                  "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DuplicateModuleNamespaceError"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                  "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DuplicateModuleNameError"}}, "typeName": "hydra.core.Name"}}},
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -3355,7 +3310,7 @@
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.DuplicateModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -3365,23 +3320,23 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module namespace"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.DuplicateModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.duplicateModuleNamespaceErrorWithNamespace",
+        "name": "hydra.dsl.error.packaging.duplicateModuleNameErrorWithModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the namespace field of hydra.error.packaging.DuplicateModuleNamespaceError"}}}],
+                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.DuplicateModuleNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3398,7 +3353,7 @@
                                     {
                                       "name": "typeName",
                                       "term": {
-                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DuplicateModuleNamespaceError"}}, "typeName": "hydra.core.Name"}}},
+                                        "wrap": {"body": {"literal": {"string": "hydra.error.packaging.DuplicateModuleNameError"}}, "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
                                       "term": {
@@ -3406,7 +3361,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -3418,13 +3373,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module namespace"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"},
+                    "argument": {"variable": "hydra.error.packaging.DuplicateModuleNameError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "original"}}}},
         "typeScheme": {
@@ -3434,18 +3389,18 @@
                 "function": {
                   "codomain": {
                     "application": {
-                      "argument": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"},
+                      "argument": {"variable": "hydra.error.packaging.DuplicateModuleNameError"},
                       "function": {"variable": "hydra.phantoms.TTerm"}}},
                   "domain": {
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module namespace"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"},
+                  "argument": {"variable": "hydra.error.packaging.DuplicateModuleNameError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -3483,10 +3438,10 @@
                                               {
                                                 "record": {
                                                   "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "term",
-                                                      "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                      "term": {"application": {"argument": {"variable": "moduleName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
                                                 "record": {
@@ -3533,10 +3488,10 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespace"}}}},
+                "parameter": "moduleName"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -3570,19 +3525,19 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorNamespace",
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the namespace field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3607,7 +3562,7 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -3628,8 +3583,8 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
@@ -3769,13 +3724,13 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorWithNamespace",
+        "name": "hydra.dsl.error.packaging.invalidDefinitionNameErrorWithModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the namespace field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
+                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.InvalidDefinitionNameError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -3800,7 +3755,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -3886,8 +3841,8 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -3908,8 +3863,8 @@
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
@@ -3949,7 +3904,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -3972,7 +3927,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4099,7 +4054,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -4122,7 +4077,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.error.packaging.InvalidDefinitionNameError"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4291,14 +4246,14 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.invalidModuleErrorDefinitionNotInModuleNamespace",
+        "name": "hydra.dsl.error.packaging.invalidModuleErrorDefinitionNotInModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
                 "value": {
-                  "literal": {"string": "DSL injection for the definitionNotInModuleNamespace variant of hydra.error.packaging.InvalidModuleError"}}}],
+                  "literal": {"string": "DSL injection for the definitionNotInModuleName variant of hydra.error.packaging.InvalidModuleError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4320,7 +4275,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {"wrap": {"body": {"literal": {"string": "definitionNotInModuleNamespace"}}, "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "definitionNotInModuleName"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -4335,8 +4290,8 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "A definition whose name does not have the module's namespace as a prefix"}}}],
-                        "body": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}},
+                            "value": {"literal": {"string": "A definition whose name does not have the module's name as a prefix"}}}],
+                        "body": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -4351,8 +4306,8 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "A definition whose name does not have the module's namespace as a prefix"}}}],
-                      "body": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}},
+                          "value": {"literal": {"string": "A definition whose name does not have the module's name as a prefix"}}}],
+                      "body": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -4555,14 +4510,14 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.invalidModuleErrorInvalidNamespaceConvention",
+        "name": "hydra.dsl.error.packaging.invalidModuleErrorInvalidModuleNameConvention",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
                 "value": {
-                  "literal": {"string": "DSL injection for the invalidNamespaceConvention variant of hydra.error.packaging.InvalidModuleError"}}}],
+                  "literal": {"string": "DSL injection for the invalidModuleNameConvention variant of hydra.error.packaging.InvalidModuleError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4584,7 +4539,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {"wrap": {"body": {"literal": {"string": "invalidNamespaceConvention"}}, "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "invalidModuleNameConvention"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -4599,8 +4554,8 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "A module whose namespace does not match the namespace naming convention"}}}],
-                        "body": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"}}},
+                            "value": {"literal": {"string": "A module whose name does not match the module-name naming convention"}}}],
+                        "body": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -4615,8 +4570,8 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "A module whose namespace does not match the namespace naming convention"}}}],
-                      "body": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"}}},
+                          "value": {"literal": {"string": "A module whose name does not match the module-name naming convention"}}}],
+                      "body": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -4681,13 +4636,13 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.invalidNamespaceConventionError",
+        "name": "hydra.dsl.error.packaging.invalidModuleNameConventionError",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.InvalidNamespaceConventionError"}}}],
+                "value": {"literal": {"string": "DSL constructor for hydra.error.packaging.InvalidModuleNameConventionError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4703,7 +4658,7 @@
                                   "name": "typeName",
                                   "term": {
                                     "wrap": {
-                                      "body": {"literal": {"string": "hydra.error.packaging.InvalidNamespaceConventionError"}},
+                                      "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleNameConventionError"}},
                                       "typeName": "hydra.core.Name"}}},
                                 {
                                   "name": "fields",
@@ -4712,10 +4667,10 @@
                                       {
                                         "record": {
                                           "fields": [
-                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                             {
                                               "name": "term",
-                                              "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "term": {"application": {"argument": {"variable": "moduleName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                           "typeName": "hydra.core.Field"}}]}}],
                               "typeName": "hydra.core.Record"}}},
                         "typeName": "hydra.core.Term"}},
@@ -4724,34 +4679,35 @@
                   "application": {
                     "argument": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespace"}}}},
+                "parameter": "moduleName"}}}},
         "typeScheme": {
           "body": {
             "function": {
               "codomain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                  "argument": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.invalidNamespaceConventionErrorNamespace",
+        "name": "hydra.dsl.error.packaging.invalidModuleNameConventionErrorModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the namespace field of hydra.error.packaging.InvalidNamespaceConventionError"}}}],
+                "value": {
+                  "literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.InvalidModuleNameConventionError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4776,9 +4732,9 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {
-                                                    "body": {"literal": {"string": "hydra.error.packaging.InvalidNamespaceConventionError"}},
+                                                    "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleNameConventionError"}},
                                                     "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -4789,7 +4745,7 @@
                     "typeName": "hydra.phantoms.TTerm"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                    "argument": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -4799,23 +4755,24 @@
                 "application": {
                   "argument": {
                     "annotated": {
-                      "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                  "argument": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.invalidNamespaceConventionErrorWithNamespace",
+        "name": "hydra.dsl.error.packaging.invalidModuleNameConventionErrorWithModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the namespace field of hydra.error.packaging.InvalidNamespaceConventionError"}}}],
+                "value": {
+                  "literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.InvalidModuleNameConventionError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4833,7 +4790,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.error.packaging.InvalidNamespaceConventionError"}},
+                                          "body": {"literal": {"string": "hydra.error.packaging.InvalidModuleNameConventionError"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
@@ -4842,7 +4799,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -4854,13 +4811,13 @@
                       "application": {
                         "argument": {
                           "annotated": {
-                            "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
                   "application": {
-                    "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                    "argument": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "original"}}}},
         "typeScheme": {
@@ -4870,30 +4827,30 @@
                 "function": {
                   "codomain": {
                     "application": {
-                      "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                      "argument": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"},
                       "function": {"variable": "hydra.phantoms.TTerm"}}},
                   "domain": {
                     "application": {
                       "argument": {
                         "annotated": {
-                          "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
-                  "argument": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"},
+                  "argument": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.invalidPackageErrorConflictingModuleNamespace",
+        "name": "hydra.dsl.error.packaging.invalidPackageErrorConflictingModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
                 "value": {
-                  "literal": {"string": "DSL injection for the conflictingModuleNamespace variant of hydra.error.packaging.InvalidPackageError"}}}],
+                  "literal": {"string": "DSL injection for the conflictingModuleName variant of hydra.error.packaging.InvalidPackageError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4915,7 +4872,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {"wrap": {"body": {"literal": {"string": "conflictingModuleNamespace"}}, "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "conflictingModuleName"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -4930,8 +4887,8 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "Two module namespaces that conflict when mapped to a target language"}}}],
-                        "body": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"}}},
+                            "value": {"literal": {"string": "Two module names that conflict when mapped to a target language"}}}],
+                        "body": {"variable": "hydra.error.packaging.ConflictingModuleNameError"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -4948,20 +4905,20 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "Two module namespaces that conflict when mapped to a target language"}}}],
-                      "body": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"}}},
+                          "value": {"literal": {"string": "Two module names that conflict when mapped to a target language"}}}],
+                      "body": {"variable": "hydra.error.packaging.ConflictingModuleNameError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.invalidPackageErrorDuplicateModuleNamespace",
+        "name": "hydra.dsl.error.packaging.invalidPackageErrorDuplicateModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
                 "value": {
-                  "literal": {"string": "DSL injection for the duplicateModuleNamespace variant of hydra.error.packaging.InvalidPackageError"}}}],
+                  "literal": {"string": "DSL injection for the duplicateModuleName variant of hydra.error.packaging.InvalidPackageError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -4983,7 +4940,7 @@
                                       "fields": [
                                         {
                                           "name": "name",
-                                          "term": {"wrap": {"body": {"literal": {"string": "duplicateModuleNamespace"}}, "typeName": "hydra.core.Name"}}},
+                                          "term": {"wrap": {"body": {"literal": {"string": "duplicateModuleName"}}, "typeName": "hydra.core.Name"}}},
                                         {
                                           "name": "term",
                                           "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -4996,10 +4953,8 @@
                     "argument": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Two or more modules in the same package share the same namespace"}}}],
-                        "body": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"}}},
+                          {"key": "description", "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}],
+                        "body": {"variable": "hydra.error.packaging.DuplicateModuleNameError"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "x"}}}},
         "typeScheme": {
@@ -5014,10 +4969,8 @@
                   "argument": {
                     "annotated": {
                       "annotation": [
-                        {
-                          "key": "description",
-                          "value": {"literal": {"string": "Two or more modules in the same package share the same namespace"}}}],
-                      "body": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"}}},
+                        {"key": "description", "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}],
+                      "body": {"variable": "hydra.error.packaging.DuplicateModuleNameError"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -5378,10 +5331,10 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
-                                                  "term": {"application": {"argument": {"variable": "namespace"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                                  "term": {"application": {"argument": {"variable": "moduleName"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
                                               "typeName": "hydra.core.Field"}},
                                           {
                                             "record": {
@@ -5409,10 +5362,10 @@
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
-                "parameter": "namespace"}}}},
+                "parameter": "moduleName"}}}},
         "typeScheme": {
           "body": {
             "function": {
@@ -5436,19 +5389,19 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.missingDocumentationErrorNamespace",
+        "name": "hydra.dsl.error.packaging.missingDocumentationErrorModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL accessor for the namespace field of hydra.error.packaging.MissingDocumentationError"}}}],
+                "value": {"literal": {"string": "DSL accessor for the moduleName field of hydra.error.packaging.MissingDocumentationError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -5473,7 +5426,7 @@
                                                 "name": "typeName",
                                                 "term": {
                                                   "wrap": {"body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -5497,8 +5450,8 @@
                       "annotation": [
                         {
                           "key": "description",
-                          "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {
                 "application": {
@@ -5569,13 +5522,13 @@
           "variables": []}}},
     {
       "term": {
-        "name": "hydra.dsl.error.packaging.missingDocumentationErrorWithNamespace",
+        "name": "hydra.dsl.error.packaging.missingDocumentationErrorWithModuleName",
         "term": {
           "annotated": {
             "annotation": [
               {
                 "key": "description",
-                "value": {"literal": {"string": "DSL updater for the namespace field of hydra.error.packaging.MissingDocumentationError"}}}],
+                "value": {"literal": {"string": "DSL updater for the moduleName field of hydra.error.packaging.MissingDocumentationError"}}}],
             "body": {
               "lambda": {
                 "body": {
@@ -5600,7 +5553,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
@@ -5650,8 +5603,8 @@
                             "annotation": [
                               {
                                 "key": "description",
-                                "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                                "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {
@@ -5675,8 +5628,8 @@
                           "annotation": [
                             {
                               "key": "description",
-                              "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                              "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {
                 "application": {
@@ -5716,7 +5669,7 @@
                                           {
                                             "record": {
                                               "fields": [
-                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                 {
                                                   "name": "term",
                                                   "term": {
@@ -5739,7 +5692,7 @@
                                                                               "name": "typeName",
                                                                               "term": {
                                                                                 "wrap": {"body": {"literal": {"string": "hydra.error.packaging.MissingDocumentationError"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5803,4 +5756,4 @@
     {"module": "hydra.dsl.packaging"},
     {"module": "hydra.dsl.util"}],
   "description": "DSL functions for hydra.error.packaging",
-  "namespace": "hydra.dsl.error.packaging"}
+  "name": "hydra.dsl.error.packaging"}

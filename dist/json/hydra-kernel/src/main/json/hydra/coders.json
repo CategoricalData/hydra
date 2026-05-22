@@ -382,4 +382,4 @@
     {"module": "hydra.variants"},
     {"module": "hydra.core"}],
   "description": "Abstractions for paired transformations between languages",
-  "namespace": "hydra.coders"}
+  "name": "hydra.coders"}
