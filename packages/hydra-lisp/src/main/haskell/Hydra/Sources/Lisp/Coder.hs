@@ -55,15 +55,15 @@ import qualified Hydra.Sources.Lisp.Language as LispLanguageSource
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.lisp.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.lisp.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([moduleNamespace LispLanguageSource.module_,
-      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns] L.++ (LispSyntax.ns:KernelTypes.kernelTypesNamespaces)),
+            moduleDependencies = unqualifiedDep <$> ([moduleName LispLanguageSource.module_,
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Sorting.ns, Lexical.ns] L.++ (LispSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Lisp code generator: converts Hydra type and term modules to Lisp AST"}
   where
     definitions = [
@@ -992,14 +992,14 @@ moduleExports = def "moduleExports" $
 --   This ensures that all forward references are resolved, making the generated code
 
 -- | Generate import declarations from the dependency namespaces of a module's definitions.
-moduleImports :: TTermDefinition (Namespace -> [Definition] -> [L.ImportDeclaration])
+moduleImports :: TTermDefinition (ModuleName -> [Definition] -> [L.ImportDeclaration])
 moduleImports = def "moduleImports" $
   "focusNs" ~> "defs" ~>
     "depNss" <~ Sets.toList (Sets.delete (var "focusNs")
       (Analysis.definitionDependencyNamespaces @@ var "defs")) $
     Lists.map ("ns" ~>
       record L._ImportDeclaration [
-        L._ImportDeclaration_module>>: wrap L._NamespaceName (Packaging.unNamespace (var "ns")),
+        L._ImportDeclaration_module>>: wrap L._NamespaceName (Packaging.unModuleName (var "ns")),
         L._ImportDeclaration_spec>>: inject L._ImportSpec L._ImportSpec_all unit])
       (var "depNss")
 
@@ -1019,8 +1019,8 @@ moduleToLisp = def "moduleToLisp" $
     "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
     "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "dialect" @@ var "cx" @@ var "g") (var "termDefs")) $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
-    "nsName" <~ Packaging.unNamespace (Packaging.moduleNamespace (var "mod")) $
-    "focusNs" <~ Packaging.moduleNamespace (var "mod") $
+    "nsName" <~ Packaging.unModuleName (Packaging.moduleName (var "mod")) $
+    "focusNs" <~ Packaging.moduleName (var "mod") $
     -- Generate imports from cross-module dependencies
     "imports" <~ (moduleImports @@ var "focusNs" @@ var "defs") $
     -- Generate exports from all forms

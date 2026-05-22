@@ -30,15 +30,15 @@ import qualified Hydra.Sources.Json.Writer as JsonWriter
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.json.parser"
+ns :: ModuleName
+ns = ModuleName "hydra.test.json.parser"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Namespace "hydra.parsers", Namespace "hydra.json.parser", Namespace "hydra.json.writer",
-     Namespace "hydra.lib.strings", Namespace "hydra.parsing"] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.parsers", ModuleName "hydra.json.parser", ModuleName "hydra.json.writer",
+     ModuleName "hydra.lib.strings", ModuleName "hydra.parsing"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for JSON parsing")}
   where
     definitions = [

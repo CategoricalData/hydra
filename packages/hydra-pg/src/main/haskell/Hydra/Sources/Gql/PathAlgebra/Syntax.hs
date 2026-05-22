@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "com.gdblab.pathAlgebra.syntax"
+ns :: ModuleName
+ns = ModuleName "com.gdblab.pathAlgebra.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -24,7 +24,7 @@ pathAlg = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A syntax model for the path algebra grammar by Angles et al."

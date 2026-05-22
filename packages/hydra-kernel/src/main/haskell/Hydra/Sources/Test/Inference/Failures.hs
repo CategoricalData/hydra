@@ -16,14 +16,14 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.inference.failures"
+ns :: ModuleName
+ns = ModuleName "hydra.test.inference.failures"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Inference tests for expected failures")}
   where
     definitions = [

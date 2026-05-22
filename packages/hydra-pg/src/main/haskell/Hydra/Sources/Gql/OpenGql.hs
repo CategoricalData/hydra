@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "openGql.grammar"
+ns :: ModuleName
+ns = ModuleName "openGql.grammar"
 
 def :: String -> Type -> Binding
 def = datatype ns
@@ -25,7 +25,7 @@ gql = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A GQL model based on the OpenGQL ANTLR grammar, version 15b256b (2024-09-05), available at:"

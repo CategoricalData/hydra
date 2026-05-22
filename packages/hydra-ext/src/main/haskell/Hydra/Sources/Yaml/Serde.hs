@@ -26,17 +26,17 @@ import qualified Data.Set                                  as S
 import qualified Hydra.Yaml.Model as YM
 
 
-ns :: Namespace
-ns = Namespace "hydra.yaml.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.yaml.serde"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ((KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"])),
+            moduleDependencies = unqualifiedDep <$> ((KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
             moduleDescription = Just "Native YAML serialization: YAML Node to String"}
   where
     definitions = [

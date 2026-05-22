@@ -16,8 +16,8 @@ import qualified Data.Maybe                      as Y
 import qualified Hydra.Sources.Json.Model        as JsonModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.geojson.model"
+ns :: ModuleName
+ns = ModuleName "hydra.geojson.model"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -30,7 +30,7 @@ json = typeref $ JsonModel.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [JsonModel.ns],
             moduleDescription = Just ("A GeoJSON model based on the specification at https://www.rfc-editor.org/rfc/rfc7946. " ++

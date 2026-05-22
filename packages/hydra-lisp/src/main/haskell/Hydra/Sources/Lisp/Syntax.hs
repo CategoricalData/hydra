@@ -18,8 +18,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.lisp.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.lisp.syntax"
 
 define :: String -> Type -> Binding
 define = datatype ns
@@ -29,7 +29,7 @@ lisp = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A unified Lisp syntax model covering Clojure, Emacs Lisp, Common Lisp, and Scheme (R7RS)."

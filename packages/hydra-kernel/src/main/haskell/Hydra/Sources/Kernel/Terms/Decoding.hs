@@ -71,14 +71,14 @@ import qualified Hydra.Dsl.Meta.DeepCore as DeepCore
 import           Hydra.Dsl.Meta.DeepCore ((@@@))
 
 
-ns :: Namespace
-ns = Namespace "hydra.decoding"
+ns :: ModuleName
+ns = ModuleName "hydra.decoding"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns] L.++ kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, ShowCore.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Functions for generating term decoders from type modules"}
   where
     definitions = [
@@ -492,15 +492,15 @@ decodeModule = define "decodeModule" $
         right (just (Packaging.module_
           (just (Strings.cat $ list [
             string "Term decoders for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
-          (decodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
+            Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+          (decodeNamespace @@ (Packaging.moduleName (var "mod")))
           (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.concat2
             (list [
-              (Packaging.namespace $ string "hydra.extract.core"),
-              (Packaging.namespace $ string "hydra.lexical"),
-              (Packaging.namespace $ string "hydra.rewriting"),
-              Packaging.moduleNamespace (var "mod"),
-              Packaging.namespace $ string "hydra.util"])
+              (Packaging.moduleName2 $ string "hydra.extract.core"),
+              (Packaging.moduleName2 $ string "hydra.lexical"),
+              (Packaging.moduleName2 $ string "hydra.rewriting"),
+              Packaging.moduleName (var "mod"),
+              Packaging.moduleName2 $ string "hydra.util"])
             (var "allDecodedDeps")))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
@@ -511,16 +511,16 @@ decodeModule = define "decodeModule" $
 -- For example, "hydra.util" -> "hydra.decode.util"
 -- | Generate a decoder module namespace from a source module namespace
 -- For example, "hydra.util" -> "hydra.decode.util"
-decodeNamespace :: TTermDefinition (Namespace -> Namespace)
+decodeNamespace :: TTermDefinition (ModuleName -> ModuleName)
 decodeNamespace = define "decodeNamespace" $
   doc "Generate a decoder module namespace from a source module namespace" $
   "ns" ~>
-  "parts" <~ Strings.splitOn (string ".") (Packaging.unNamespace (var "ns")) $
-  "fallback" <~ Packaging.namespace (Packaging.unNamespace (var "ns")) $
+  "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
+  "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $
   Maybes.maybe
     (var "fallback")
     ("uc" ~>
-      Packaging.namespace (
+      Packaging.moduleName2 (
         Strings.cat $ list [
           string "hydra.decode.",
           Strings.intercalate (string ".") (Pairs.second $ var "uc")]))

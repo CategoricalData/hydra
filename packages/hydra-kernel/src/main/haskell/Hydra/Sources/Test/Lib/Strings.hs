@@ -23,14 +23,14 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.lib.strings"
+ns :: ModuleName
+ns = ModuleName "hydra.test.lib.strings"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.reduction", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for hydra.lib.strings primitives")}
   where
     definitions = [

@@ -16,8 +16,8 @@ import qualified Data.Maybe                      as Y
 import qualified Hydra.Sources.Json.Model        as JsonModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.pegasus.pdl"
+ns :: ModuleName
+ns = ModuleName "hydra.pegasus.pdl"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -30,7 +30,7 @@ json = typeref $ JsonModel.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [JsonModel.ns, Core.ns],
             moduleDescription = Just ("A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n" ++

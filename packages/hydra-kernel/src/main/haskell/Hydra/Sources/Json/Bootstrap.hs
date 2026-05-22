@@ -26,8 +26,8 @@ import qualified Hydra.Sources.Kernel.Types.Util as Util
 import qualified Data.Map as M
 
 
-ns :: Namespace
-ns = Namespace "hydra.json.bootstrap"
+ns :: ModuleName
+ns = ModuleName "hydra.json.bootstrap"
 
 -- | The kernel type modules whose types are needed to decode Module from JSON
 -- and to provide schema types for inference tests.
@@ -43,9 +43,9 @@ bootstrapTypeModules = [
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = [DefinitionTerm typesByNameDefinition],
-            moduleDependencies = unqualifiedDep <$> [Namespace "hydra.core"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core"],
             moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.")}

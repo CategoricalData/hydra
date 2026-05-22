@@ -11,8 +11,8 @@ import qualified Hydra.Encode.Core as EncodeCore
 import qualified Data.Map as M
 
 
-ns :: Namespace
-ns = Namespace "hydra.core"
+ns :: ModuleName
+ns = ModuleName "hydra.core"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -32,7 +32,7 @@ hydraCoreGraph = elementsToGraph bootstrapGraph M.empty
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [ns],
             moduleDescription = Just "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies."}

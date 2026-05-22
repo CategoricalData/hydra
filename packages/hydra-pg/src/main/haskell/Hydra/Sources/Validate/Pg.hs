@@ -32,9 +32,9 @@ validationDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.validate.pg"),
+            moduleName = (ModuleName "hydra.validate.pg"),
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [PgModel.ns, ErrorPg.ns, Namespace "hydra.validation"],
+            moduleDependencies = unqualifiedDep <$> [PgModel.ns, ErrorPg.ns, ModuleName "hydra.validation"],
             moduleDescription = Just "Validation functions for property graphs"}
   where
    definitions = [

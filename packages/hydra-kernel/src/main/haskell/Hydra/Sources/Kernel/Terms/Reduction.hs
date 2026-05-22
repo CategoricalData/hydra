@@ -71,19 +71,19 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
-ns :: Namespace
-ns = Namespace "hydra.reduction"
+ns :: ModuleName
+ns = ModuleName "hydra.reduction"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns, Scoping.ns,
-      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces),
+      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Functions for reducing terms and types, i.e. performing computations."}
   where
    definitions = [

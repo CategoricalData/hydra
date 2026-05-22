@@ -18,14 +18,14 @@ import qualified Data.Map                     as M
 import Hydra.Sources.Libraries
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.inference.nominalTypes"
+ns :: ModuleName
+ns = ModuleName "hydra.test.inference.nominalTypes"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Inference tests for nominal types")}
   where
     definitions = [

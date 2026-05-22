@@ -17,14 +17,14 @@ import qualified Hydra.Dsl.Types              as Types
 import           Prelude hiding ((++))
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.testTypes"
+ns :: ModuleName
+ns = ModuleName "hydra.test.testTypes"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> (kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = (Just "Type definitions for the test suite")}
   where
     definitions = [

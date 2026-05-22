@@ -35,14 +35,14 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
 -- After standardization: Terms are unqualified, T is for Types.
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.rewriting"
+ns :: ModuleName
+ns = ModuleName "hydra.test.rewriting"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Rewriting.ns, TestGraph.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Rewriting.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for core rewrite/fold combinators")}
   where
     definitions = [Phantoms.toDefinition allTests]

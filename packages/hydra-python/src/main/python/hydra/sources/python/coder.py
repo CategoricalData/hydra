@@ -5,7 +5,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Coder.hs.
 
 from hydra.core import Name
 from hydra.dsl.python import Just, Nothing  # noqa: F401
-from hydra.packaging import Module, Namespace
+from hydra.packaging import Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
@@ -37,13 +37,15 @@ from hydra.sources.python import _python_helpers as PyDsl  # noqa: F401
 # Module setup
 # ----------------------------------------------------------------------
 
-NS = Namespace("hydra.python.coder")
+NS = ModuleName("hydra.python.coder")
 
 from hydra.sources.python._source_dsl import (
+
     KERNEL_TYPES_NAMESPACES,
     make_def,
     make_local,
     proj as _proj,
+    unqualified_dep,
 )
 
 # Mirror Haskell:
@@ -53,7 +55,7 @@ from hydra.sources.python._source_dsl import (
 #    ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns]
 #   L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [
-    Namespace(n) for n in [
+    unqualified_dep(ModuleName(n)) for n in [
         "hydra.python.utils",
         "hydra.python.names",
         "hydra.python.serde",
@@ -1031,7 +1033,7 @@ def _encode_application_inner():
         "proj",
         let_chain(
             [
-                ("fname", _proj("hydra.core.Projection", "field", "proj")),
+                ("fname", _proj("hydra.core.Projection", "fieldName", "proj")),
                 (
                     "fieldExpr",
                     _kref.utils_project_from_expression(var("firstArg"), _kref.names_encode_field_name(var("env"), var("fname"))),
@@ -2608,7 +2610,7 @@ def _encode_python_module():
                 ),
                 (
                     "meta0",
-                    _local("gatherMetadata")(Pkg.module_namespace(var("mod")), var("defs")),
+                    _local("gatherMetadata")(Pkg.module_name(var("mod")), var("defs")),
                 ),
                 (
                     "namespaces0",
@@ -3134,7 +3136,7 @@ def _encode_term_inline():
         "proj",
         let_chain(
             [
-                ("fname", _proj("hydra.core.Projection", "field", "proj")),
+                ("fname", _proj("hydra.core.Projection", "fieldName", "proj")),
             ],
             right(
                 _local("makeCurriedLambda")(list_([_py_name("v1")]), _kref.utils_project_from_expression(PyDsl.py_name_to_py_expression(_py_name("v1")), _kref.names_encode_field_name(var("env"), var("fname"))))
@@ -7183,7 +7185,7 @@ def _module_to_python():
                             "path",
                             var("hydra.names.namespaceToFilePath")(_kref.util_case_convention_lower_snake, wrap("hydra.packaging.FileExtension",
                                     string("py"),
-                                ), Pkg.module_namespace(var("mod"))),
+                                ), Pkg.module_name(var("mod"))),
                         ),
                     ],
                     right(
@@ -7985,7 +7987,7 @@ def _load_environment_reorder_defs():
 def _build_module() -> Module:
     return Module(
         _PLACEHOLDER.description,
-        _PLACEHOLDER.namespace,
+        _PLACEHOLDER.name,
         _PLACEHOLDER.dependencies,
         (
             _load_environment_reorder_defs(),

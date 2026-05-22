@@ -8,8 +8,8 @@ import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 
 
-ns :: Namespace
-ns = Namespace "hydra.sql.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.sql.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -19,7 +19,7 @@ sql = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just ("A subset of ANSI SQL:2003, capturing selected productions of the BNF grammar provided at "

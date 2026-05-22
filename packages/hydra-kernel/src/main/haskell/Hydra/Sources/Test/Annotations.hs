@@ -36,14 +36,14 @@ testContext = metaref Lexical.emptyContext
 
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.annotations"
+ns :: ModuleName
+ns = ModuleName "hydra.test.annotations"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [Annotations.ns, Lexical.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"],
+            moduleDependencies = unqualifiedDep <$> [Annotations.ns, Lexical.ns, ModuleName "hydra.reduction", ModuleName "hydra.show.core"],
             moduleDescription = Just "Test cases for hydra.annotations functions"}
   where
     definitions = [Phantoms.toDefinition allTests]

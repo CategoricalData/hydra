@@ -48,14 +48,14 @@ define = definitionInModule module_
 listAny :: TTerm (a -> Bool) -> TTerm [a] -> TTerm Bool
 listAny pred xs = Maybes.isJust (Lists.find pred xs)
 
-ns :: Namespace
-ns = Namespace "hydra.coq.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.coq.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Formatting.ns, CoqLanguage.ns] DL.++ (CoqEnvironmentSource.ns:CoqSyntax.ns:KernelTypes.kernelTypesNamespaces)),
+            moduleDependencies = unqualifiedDep <$> ([Formatting.ns, CoqLanguage.ns] DL.++ (CoqEnvironmentSource.ns:CoqSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Coq code generator: converts Hydra modules to Coq source"}
   where
     definitions = [

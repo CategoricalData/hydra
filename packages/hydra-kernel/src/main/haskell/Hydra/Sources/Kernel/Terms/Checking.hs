@@ -110,15 +110,15 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Variants    as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
-ns :: Namespace
-ns = Namespace "hydra.checking"
+ns :: ModuleName
+ns = ModuleName "hydra.checking"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Dependencies.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesNamespaces),
+      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"}
   where
     definitions = [

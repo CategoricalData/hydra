@@ -28,14 +28,14 @@ import qualified Hydra.Sources.Kernel.Terms.Generation as Generation
 import qualified Hydra.Sources.Kernel.Terms.Show.Core  as ShowCore
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.generation"
+ns :: ModuleName
+ns = ModuleName "hydra.test.generation"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Generation.ns, ShowCore.ns, TestGraph.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([Generation.ns, ShowCore.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for code generation operations such as inferModules and inferModulesGiven")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -63,11 +63,11 @@ infixl 1 #
 -- `inferModules` (the former only infers `targetBindings`, the latter infers
 -- the full universe).
 
-nsA :: TTerm Namespace
-nsA = Packaging.namespace (Phantoms.string "hydra.testInput.a")
+nsA :: TTerm ModuleName
+nsA = Packaging.moduleName2 (Phantoms.string "hydra.testInput.a")
 
-nsB :: TTerm Namespace
-nsB = Packaging.namespace (Phantoms.string "hydra.testInput.b")
+nsB :: TTerm ModuleName
+nsB = Packaging.moduleName2 (Phantoms.string "hydra.testInput.b")
 
 nameIdA :: TTerm Name
 nameIdA = Core.name (Phantoms.string "hydra.testInput.a.idA")
@@ -126,11 +126,11 @@ universeMods = Phantoms.list [modA, modB]
 --     (the body is irrelevant; only the scheme matters for seeding.)
 --   hydra.testInput.w.useFunky = funky "foo" 7 100
 
-nsV :: TTerm Namespace
-nsV = Packaging.namespace (Phantoms.string "hydra.testInput.v")
+nsV :: TTerm ModuleName
+nsV = Packaging.moduleName2 (Phantoms.string "hydra.testInput.v")
 
-nsW :: TTerm Namespace
-nsW = Packaging.namespace (Phantoms.string "hydra.testInput.w")
+nsW :: TTerm ModuleName
+nsW = Packaging.moduleName2 (Phantoms.string "hydra.testInput.w")
 
 nameFunky :: TTerm Name
 nameFunky = Core.name (Phantoms.string "hydra.testInput.v.funky")
