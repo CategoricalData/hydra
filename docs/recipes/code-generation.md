@@ -126,7 +126,7 @@ Generated files follow language-specific naming conventions:
 
 | Language | Path pattern | Example for `hydra.core` |
 |----------|-------------|--------------------------|
-| Haskell | `Namespace/Module.hs` | `Hydra/Core.hs` |
+| Haskell | `Prefix/Module.hs` | `Hydra/Core.hs` |
 | Java | `namespace/module/Module.java` | `hydra/core/Core.java` |
 | Python | `namespace/module/module.py` | `hydra/core/core.py` |
 | Scala | `namespace/module.scala` | `hydra/core.scala` |
