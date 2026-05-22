@@ -1,28 +1,28 @@
-# Wasm head
+# hydra-wasm
 
-Runtime infrastructure for executing Hydra kernel modules compiled to
-WebAssembly.
+The Hydra WebAssembly coder, plus pointers to the corresponding runtime
+infrastructure.
 
-The Wasm target compiles Hydra DSL modules to WAT via the coder in
-`packages/hydra-wasm/`. This directory provides the other half: a harness
-that loads those modules into a Wasm runtime, resolves their imports,
-invokes their exports, and runs the kernel test suite against them.
+`packages/hydra-wasm/` contains the **coder**: the Hydra DSL sources that
+translate kernel modules to WAT (the textual form of WebAssembly). The
+**runtime harness** — the Wasm runtime, the import/export plumbing, and
+the test driver — lives in [`heads/wasm/`](../../heads/wasm/).
 
 See [feature_325_wasm-plan.md](../../feature_325_wasm-plan.md) for the
-overall milestone plan.
+overall milestone plan, and [`heads/wasm/host-abi.md`](../../heads/wasm/host-abi.md)
+for the portable contract that runtime adapters honor.
 
 ## Layout
 
 ```
-heads/wasm/
-├── README.md               # this file
-├── host-abi.md             # contract between Wasm modules and host runtimes
+packages/hydra-wasm/      # this package — DSL sources for the WASM coder
+heads/wasm/               # runtime harness (separate directory)
+├── host-abi.md           # contract between Wasm modules and host runtimes
 ├── bin/
-│   └── test-wasm.sh        # entry point to run the test suite
+│   └── test-wasm.sh      # entry point to run the test suite
 ├── runtimes/
-│   └── node/
-│       └── harness.js      # Node.js runtime adapter (default)
-└── m1-manifest.json        # M1 smoke test manifest (temporary, per-milestone)
+│   └── node/             # Node.js runtime adapter (default)
+└── m1-manifest.json      # M1 smoke test manifest (temporary)
 ```
 
 ## Runtimes
@@ -31,8 +31,9 @@ The default runtime is **Node.js** (>= 20). It uses only the built-in
 `WebAssembly` global — no npm dependencies.
 
 A second runtime (wasmtime) is planned; it will be added under
-`runtimes/wasmtime/` once the host-import surface stabilizes. See
-[host-abi.md](host-abi.md) for the portable contract both runtimes honor.
+`heads/wasm/runtimes/wasmtime/` once the host-import surface stabilizes.
+See [`heads/wasm/host-abi.md`](../../heads/wasm/host-abi.md) for the portable
+contract both runtimes honor.
 
 ### Prerequisites
 
