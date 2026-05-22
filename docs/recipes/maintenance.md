@@ -411,6 +411,22 @@ done
 Any output is a file that should either be generated (fix the generator to emit
 the header) or be moved to `heads/` and copied in by a sync script (principle 2).
 
+**Known false positives:**
+
+- *Hand-written runtime files copied into `dist/<lang>/hydra-kernel/` for Java,
+  Python, and TypeScript.* These are deliberately copied from
+  `heads/<lang>/src/main/<lang>/` by `heads/<lang>/bin/copy-kernel-runtime.sh`
+  so the published `hydra-kernel` artifact is self-contained for foreign builds
+  (Gradle / pip / npm). They are not generated, so they don't carry the
+  generated-file header — that's correct. The canonical edit point is
+  `heads/<lang>/`. See
+  [build-system.md §Hand-written runtime in hydra-kernel](../build-system.md#hand-written-runtime-in-hydra-kernel)
+  for the catalog of paths.
+- *Lisp dialect generated files.* The Clojure, Common Lisp, Emacs Lisp, and
+  Scheme generators currently do not emit the standard "automatically generated"
+  header line — that's a generator gap, not a violation per se, but means
+  Check 2 currently surfaces every Lisp-target file. Filed separately.
+
 **Check 3: host-specific code under `packages/`.**
 Every file in `packages/` should either be a Hydra DSL module or a
 source-language helper used to write one.
