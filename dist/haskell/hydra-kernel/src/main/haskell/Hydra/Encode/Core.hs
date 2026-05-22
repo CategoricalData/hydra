@@ -673,6 +673,15 @@ typeScheme x =
         Core.Field {
           Core.fieldName = (Core.Name "constraints"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\m -> Core.TermMap (Maps.bimap name typeVariableMetadata m)) opt)) (Core.typeSchemeConstraints x))}]})
+-- | Encoder for hydra.core.TypeClassConstraint
+typeClassConstraint :: Core.TypeClassConstraint -> Core.Term
+typeClassConstraint x =
+    case x of
+      Core.TypeClassConstraintSimple v0 -> Core.TermInject (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.core.TypeClassConstraint"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "simple"),
+          Core.fieldTerm = (name v0)}})
 -- | Encoder for hydra.core.TypeVariableMetadata
 typeVariableMetadata :: Core.TypeVariableMetadata -> Core.Term
 typeVariableMetadata x =
@@ -681,7 +690,7 @@ typeVariableMetadata x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "classes"),
-          Core.fieldTerm = ((\s -> Core.TermSet (Sets.map name s)) (Core.typeVariableMetadataClasses x))}]})
+          Core.fieldTerm = ((\s -> Core.TermSet (Sets.map typeClassConstraint s)) (Core.typeVariableMetadataClasses x))}]})
 -- | Encoder for hydra.core.WrappedTerm
 wrappedTerm :: Core.WrappedTerm -> Core.Term
 wrappedTerm x =
