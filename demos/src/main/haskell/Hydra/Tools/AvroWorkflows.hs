@@ -16,7 +16,7 @@ module Hydra.Tools.AvroWorkflows (
   transformAvroJsonDirectory,
 ) where
 
-import Hydra.Kernel
+import Hydra.Kernel hiding (Result)
 import Hydra.Workflow
 import qualified Hydra.Show.Errors as ShowError
 import Hydra.Dsl.Annotations
