@@ -30,14 +30,14 @@ import qualified Hydra.Sources.Kernel.Terms.Hoisting as Hoisting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.hoisting.cases"
+ns :: ModuleName
+ns = ModuleName "hydra.test.hoisting.cases"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Hoisting.ns, Lexical.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Hoisting.ns, Lexical.ns] ++ kernelTypesModuleNames),
             moduleDescription = Just "Test cases for subterm hoisting and case statement hoisting"}
   where
     definitions = [Phantoms.toDefinition allTests]

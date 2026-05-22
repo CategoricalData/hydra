@@ -37,13 +37,13 @@ moduleFilePaths target m = case target of
   "java"        -> javaModulePaths m
   _             -> []
   where
-    ns = moduleNamespace m
+    ns = moduleName m
     oneFilePerNamespace conv ext =
       [Names.namespaceToFilePath conv (FileExtension ext) ns]
 
 -- | Mirror of Hydra.Go.Coder.goNamespaceToFilePath (not exported there).
-goNamespaceToFilePath :: Namespace -> FilePath
-goNamespaceToFilePath (Namespace ns) =
+goNamespaceToFilePath :: ModuleName -> FilePath
+goNamespaceToFilePath (ModuleName ns) =
   let parts = LS.splitOn "." ns
       dirPath = L.intercalate "/" parts
       fileName = case reverse parts of
@@ -69,5 +69,5 @@ javaModulePaths m =
         if null termDefs
           then []
           else [ JavaCoder.bindingNameToFilePath
-                   (JavaCoder.elementsQualifiedName (moduleNamespace m)) ]
+                   (JavaCoder.elementsQualifiedName (moduleName m)) ]
   in typeFiles ++ elementsFile

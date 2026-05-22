@@ -12,17 +12,23 @@ Conventions:
 """
 
 from hydra.dsl.meta.phantoms import *  # noqa: F401,F403
+from hydra.dsl.python import Nothing
 from hydra.core import Name
-from hydra.packaging import Namespace
+from hydra.packaging import ModuleDependency, ModuleName
 import hydra.dsl.python.syntax as PySyn
 
 
-# The kernel "types" namespaces — every coder package's source module list
+def unqualified_dep(module: ModuleName) -> ModuleDependency:
+    """Construct an unqualified ModuleDependency (no package qualifier)."""
+    return ModuleDependency(module, Nothing())
+
+
+# The kernel "types" module dependencies — every coder package's source module list
 # depends on these so the inferencer can resolve every TypeDefinition that the
 # DSL references. Centralized here so each source module doesn't re-declare
 # the same 24-element list.
 KERNEL_TYPES_NAMESPACES = [
-    Namespace(n) for n in [
+    unqualified_dep(ModuleName(n)) for n in [
         "hydra.paths", "hydra.ast", "hydra.classes", "hydra.coders",
         "hydra.context", "hydra.core", "hydra.error.checking", "hydra.error.core",
         "hydra.error.packaging", "hydra.errors", "hydra.graph", "hydra.json.model",

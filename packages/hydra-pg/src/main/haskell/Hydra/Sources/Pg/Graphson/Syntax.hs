@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.pg.graphson.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.graphson.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -24,7 +24,7 @@ gson = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A syntax model for TinkerPop's GraphSON format."

@@ -54,14 +54,14 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.show.core"
+ns :: ModuleName
+ns = ModuleName "hydra.show.core"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = Just "String representations of hydra.core types"}
   where
    definitions = [

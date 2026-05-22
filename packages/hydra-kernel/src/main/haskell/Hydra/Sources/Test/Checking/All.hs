@@ -22,14 +22,14 @@ import qualified Hydra.Sources.Test.Checking.Fundamentals as Fundamentals
 import qualified Hydra.Sources.Test.Checking.NominalTypes as NominalTypes
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.checking.all"
+ns :: ModuleName
+ns = ModuleName "hydra.test.checking.all"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesModuleNames),
             moduleDescription = Just "Hydra's type checking test suite"}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -40,7 +40,7 @@ module_ = Module {
       Failures.ns,
       Fundamentals.ns,
       NominalTypes.ns,
-      Namespace "hydra.rewriting"]
+      ModuleName "hydra.rewriting"]
 
 allTests :: TTermDefinition TestGroup
 allTests = definitionInModule module_ "allTests" $

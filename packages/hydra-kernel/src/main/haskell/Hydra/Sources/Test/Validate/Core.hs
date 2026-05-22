@@ -24,14 +24,14 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.validate.core"
+ns :: ModuleName
+ns = ModuleName "hydra.test.validate.core"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Namespace "hydra.validate.core", Namespace "hydra.show.error.core"] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.core", ModuleName "hydra.show.error.core"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for core term and type validation")}
   where
     definitions = [

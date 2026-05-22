@@ -27,14 +27,14 @@ import qualified Hydra.Dsl.Meta.Terms         as Terms
 import qualified Hydra.Lib.Math              as Math
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.differentiation"
+ns :: ModuleName
+ns = ModuleName "hydra.test.differentiation"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, ShowCore.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, ShowCore.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for automatic differentiation")}
   where
     definitions = [Phantoms.toDefinition allTests]

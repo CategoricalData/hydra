@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.cypher.openCypher"
+ns :: ModuleName
+ns = ModuleName "hydra.cypher.openCypher"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -24,7 +24,7 @@ cypher = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n" ++
@@ -939,7 +939,7 @@ functionInvocation = define "FunctionInvocation" $
     "distinct">: T.boolean,
     "arguments">: T.list $ cypher "Expression"]
 
--- FunctionName = Namespace, SymbolicName ;
+-- FunctionName = ModuleName, SymbolicName ;
 
 qualifiedName :: Binding
 qualifiedName = define "QualifiedName" $
@@ -981,9 +981,9 @@ procedureResultField :: Binding
 procedureResultField = define "ProcedureResultField" $
   T.wrap T.string
 
--- ProcedureName = Namespace, SymbolicName ;
+-- ProcedureName = ModuleName, SymbolicName ;
 --
--- Namespace = { SymbolicName, '.' } ;
+-- ModuleName = { SymbolicName, '.' } ;
 --
 -- Variable = SymbolicName ;
 

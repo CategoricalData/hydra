@@ -20,12 +20,12 @@ import           Prelude hiding ((++))
 -- Type alias to avoid confusion with DSL Module
 type HydraModule = Module
 
-ns :: Namespace
-ns = Namespace "hydra.test.testTerms"
+ns :: ModuleName
+ns = ModuleName "hydra.test.testTerms"
 
 module_ :: HydraModule
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> [TestTypes.ns],
             moduleDescription = (Just "Term definitions for the test suite")}

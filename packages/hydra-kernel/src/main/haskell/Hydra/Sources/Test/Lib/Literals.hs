@@ -22,14 +22,14 @@ import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as BC
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.lib.literals"
+ns :: ModuleName
+ns = ModuleName "hydra.test.lib.literals"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [Namespace "hydra.reduction", Namespace "hydra.show.core"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.show.core"],
             moduleDescription = Just "Test cases for hydra.lib.literals primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]

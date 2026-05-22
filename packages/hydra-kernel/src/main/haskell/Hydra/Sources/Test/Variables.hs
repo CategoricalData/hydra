@@ -31,14 +31,14 @@ import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 import qualified Data.Set                     as S
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.variables"
+ns :: ModuleName
+ns = ModuleName "hydra.test.variables"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Variables.ns, TestGraph.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Variables.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for variable analysis and manipulation")}
   where
     definitions = [Phantoms.toDefinition allTests]

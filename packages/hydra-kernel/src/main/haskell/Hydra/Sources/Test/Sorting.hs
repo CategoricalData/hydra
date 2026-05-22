@@ -34,14 +34,14 @@ import qualified Data.Int as I
 -- Note: We use Int for input types in helpers because int32 expects Int
 -- and produces TTerm I.Int32. The test data literals (1, 2, 3) are polymorphic.
 
-ns :: Namespace
-ns = Namespace "hydra.test.sorting"
+ns :: ModuleName
+ns = ModuleName "hydra.test.sorting"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([SortingModule.ns, ShowCore.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([SortingModule.ns, ShowCore.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for topological sorting algorithms")}
   where
     definitions = [Phantoms.toDefinition allTests]

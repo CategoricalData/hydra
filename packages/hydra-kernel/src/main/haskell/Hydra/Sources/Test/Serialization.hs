@@ -29,14 +29,14 @@ import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
 import Hydra.Ast (Expr, Op, BlockStyle)
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.serialization"
+ns :: ModuleName
+ns = ModuleName "hydra.test.serialization"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Serialization.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([Serialization.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for AST serialization")}
   where
     definitions = [

@@ -3,7 +3,7 @@ package hydra
 import hydra.core.*
 import hydra.graph.{Graph, Primitive}
 import hydra.json.model.Value
-import hydra.packaging.{Module, Namespace, Definition}
+import hydra.packaging.{Module, ModuleName, Definition}
 
 import _root_.java.io.File
 import _root_.java.nio.charset.StandardCharsets
@@ -79,7 +79,7 @@ object Generation:
       case other => other
 
   private def decodeBinaryInModule(mod: Module): Module =
-    Module(mod.description, mod.namespace, mod.dependencies, mod.definitions.map {
+    Module(mod.description, mod.name, mod.dependencies, mod.definitions.map {
       case Definition.term(td) =>
         Definition.term(hydra.packaging.TermDefinition(td.name, decodeBinaryLiterals(td.term), td.typeScheme))
       case other => other
@@ -128,7 +128,7 @@ object Generation:
 
   /** Filter to kernel-only modules (exclude hydra.*) */
   def filterKernelModules(mods: Seq[Module]): Seq[Module] =
-    mods.filter(m => !m.namespace.startsWith("hydra.") && !m.namespace.startsWith("hydra.json.yaml."))
+    mods.filter(m => !m.name.value.startsWith("hydra.") && !m.name.value.startsWith("hydra.json.yaml."))
 
   /** Generate source files and write them to disk. Returns number of files written. */
   def generateSources(

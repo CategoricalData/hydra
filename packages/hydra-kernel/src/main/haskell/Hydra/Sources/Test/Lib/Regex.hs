@@ -20,14 +20,14 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.lib.regex"
+ns :: ModuleName
+ns = ModuleName "hydra.test.lib.regex"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.reduction", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for hydra.lib.regex primitives")}
   where
     definitions = [

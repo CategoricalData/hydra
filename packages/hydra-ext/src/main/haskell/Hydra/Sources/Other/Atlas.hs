@@ -16,8 +16,8 @@ import qualified Data.Maybe                      as Y
 import qualified Hydra.Sources.Xml.Schema    as XmlSchema
 
 
-ns :: Namespace
-ns = Namespace "hydra.atlas"
+ns :: ModuleName
+ns = ModuleName "hydra.atlas"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -30,7 +30,7 @@ xsd = typeref (XmlSchema.ns)
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [XmlSchema.ns],
             moduleDescription = Just ("The Apache Atlas meta-model\n" ++

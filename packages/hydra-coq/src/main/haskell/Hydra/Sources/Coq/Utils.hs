@@ -39,14 +39,14 @@ import qualified Data.Set                                  as S
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.coq.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.coq.utils"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns] L.++ KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Pure helpers for the Coq code generator"}
   where
     definitions = [
@@ -390,8 +390,8 @@ moduleDependencyNames :: TTermDefinition (Module -> [String])
 moduleDependencyNames = define "moduleDependencyNames" $
   doc "Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace" $
   lambda "m" $ lets [
-    "allDeps">: Lists.map (lambda "dep" $ Packaging.unNamespace (Packaging.moduleDependencyModule (var "dep"))) (Packaging.moduleDependencies (var "m")),
-    "ownNs">: Packaging.unNamespace (Packaging.moduleNamespace (var "m")),
+    "allDeps">: Lists.map (lambda "dep" $ Packaging.unModuleName (Packaging.moduleDependencyModule (var "dep"))) (Packaging.moduleDependencies (var "m")),
+    "ownNs">: Packaging.unModuleName (Packaging.moduleName (var "m")),
     "filtered">: Lists.filter (lambda "s" $ Logic.not (Equality.equal (var "s") (var "ownNs"))) (var "allDeps")] $
     (Lists.nub :: TTerm [String] -> TTerm [String]) (var "filtered")
 

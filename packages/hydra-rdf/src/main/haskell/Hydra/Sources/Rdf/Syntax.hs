@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.rdf.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.rdf.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -24,7 +24,7 @@ rdf = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "An RDF 1.1 syntax model"}
