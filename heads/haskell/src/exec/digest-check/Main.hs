@@ -3,8 +3,9 @@
 -- Two subcommands:
 --
 --   digest-check fresh --inputs <file> --output-digest <file>
---     Reads the input digest (e.g. dist/json/<pkg>/digest.json) and
---     the output digest (e.g. dist/<lang>/<pkg>/digest.json).
+--     Reads the input digest (e.g.
+--     dist/json/<pkg>/build/<set>/digest.json) and the output digest
+--     (e.g. dist/<lang>/<pkg>/build/<set>/digest.json).
 --     Returns exit 0 if:
 --       * the inputs section of the output digest matches the input
 --         digest's hashes,

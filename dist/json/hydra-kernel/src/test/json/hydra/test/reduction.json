@@ -9280,6 +9280,14 @@
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
                 "typeName": "hydra.testing.TestGroup"}}}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
-  "dependencies": [{"module": "hydra.reduction"}, {"module": "hydra.inference"}, {"module": "hydra.show.core"}],
+  "dependencies": [
+    {"module": "hydra.reduction"},
+    {"module": "hydra.inference"},
+    {"module": "hydra.show.core"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.test.testGraph"},
+    {"module": "hydra.testing"}],
   "description": "Test cases for term reduction/evaluation mechanics",
   "name": "hydra.test.reduction"}

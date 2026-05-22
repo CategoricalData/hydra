@@ -182,7 +182,7 @@ run_scheme_runtime_check() {
     echo "[scheme-runtime] Setup: $before_count runtime *.scm files before run"
 
     # Invalidate the main digest so the assembler doesn't short-circuit.
-    rm -f "$dist_root/hydra-kernel/src/main/digest.json"
+    rm -f "$dist_root/hydra-kernel/build/main/digest.json"
 
     local log=/tmp/test-prune-scheme-runtime.log
     if ! "$HYDRA_ROOT_DIR/heads/lisp/scheme/bin/assemble-distribution.sh" hydra-kernel >"$log" 2>&1; then

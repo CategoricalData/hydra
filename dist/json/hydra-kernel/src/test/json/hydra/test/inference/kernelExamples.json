@@ -2006,6 +2006,9 @@
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [
     {"module": "hydra.test.testGraph"},
+    {"module": "hydra.formatting"},
+    {"module": "hydra.inference"},
+    {"module": "hydra.show.core"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},

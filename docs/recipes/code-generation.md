@@ -224,8 +224,8 @@ in a few seconds.
 
 | Phase | Cache | Skip condition |
 |-------|-------|----------------|
-| Phase 1 | `bin/lib/check-dsl-fresh.py` | Every DSL source file's hash matches the recorded digest at `dist/json/digest.main.json`. Skips stack startup + JSON regeneration entirely. |
-| Phase 2 (batch) | `bin/lib/batch-cache.sh` | Every `dist/<lang>/<pkg>/digest.json`'s recorded input hashes match the current `dist/json/<pkg>/digest.json`. Skips stack startup + `bootstrap-from-json`. |
+| Phase 1 | `bin/lib/check-dsl-fresh.py` | Every DSL source file's hash matches the recorded digest at `dist/json/build/digest.json`. Skips stack startup + JSON regeneration entirely. |
+| Phase 2 (batch) | `bin/lib/batch-cache.sh` | Every `dist/<lang>/<pkg>/build/<set>/digest.json`'s recorded input hashes match the current `dist/json/<pkg>/build/<set>/digest.json`. Skips stack startup + `bootstrap-from-json`. |
 | Phase 2 (per-pkg) | `heads/haskell/bin/digest-check fresh` + Python pre-check | Per-package input hashes match and every recorded output file exists with its recorded hash. |
 | Phase 2 (generator) | Stage 7 per-module DSL-hash skip inside `bootstrap-from-json` | Modules with unchanged DSL-source hashes are excluded from regeneration even when overall cache missed. Active only when the per-target digest exists; the per-package `assemble-distribution.sh` deletes it before invoking the generator, so Stage 7 currently benefits direct callers (`sync-haskell.sh`, batch `assemble-all.sh`) only. |
 | Phase 3 | `bin/lib/test-cache.sh` (`dist/<lang>/test-cache.json`) | Every generated source under `dist/<lang>/*` plus every hand-written test helper under `heads/<lang>/src/test/*` plus the runner script are byte-identical since the last successful run. Skips `stack test` / `gradle test` / `pytest` / `sbt test` / lisp runners entirely. |
@@ -341,7 +341,7 @@ its source-DSL modules can resolve fully-qualified DSL accessors):
    the per-package split routes the package's modules into
    `dist/json/<pkg>/src/main/json/hydra/dsl/...`.
 3. Bust caches once: delete `heads/haskell/.cache/phase1-input-cache.txt`
-   and `dist/json/digest.main.json` before the next sync, since these
+   and `dist/json/build/digest.json` before the next sync, since these
    exec edits don't otherwise invalidate Phase 1 (see "Phase 1 cache
    doesn't hash `src/exec`" below).
 
@@ -388,8 +388,10 @@ JSON modules are exported per package under `dist/json/`:
 | `dist/json/hydra-wasm/src/main/json/` | WebAssembly coder modules |
 | `dist/json/hydra-ext/src/main/json/` | Avro, Protobuf, GraphQL, Pegasus, etc. |
 
-Each package directory contains a `manifest.json` listing its modules
-and a `digest.json` recording content hashes for the freshness cache.
+Each package directory contains a `manifest.json` listing its modules.
+Content-hash freshness state lives separately in the gitignored
+`dist/json/<pkg>/build/<set>/digest.json` cache (see [build-system.md](../build-system.md)
+"Cache files are not tracked").
 
 ### The bootstrap-from-json CLI
 
@@ -547,9 +549,9 @@ To force a Phase 1 rebuild, delete `heads/haskell/.cache/phase1-input-cache.txt`
 before running sync. The Stack build itself will pick up the exec
 changes; only the freshness gate is fooled. Likewise, when the change
 adds new JSON outputs (e.g., new `hydra.dsl.*` wrappers for a newly
-enabled package), delete `dist/json/digest.main.json` and the
-per-package digests under `dist/json/*/digest.json` to force downstream
-regeneration.
+enabled package), wipe the build-cache subtree (`rm -rf dist/json/build
+dist/json/*/build`) to force downstream regeneration. The whole
+`dist/**/build/` tree is gitignored cache state.
 
 ### Renaming a generated namespace leaves orphan files in `dist/`
 

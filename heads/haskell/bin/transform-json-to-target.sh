@@ -52,6 +52,9 @@ fi
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_HASKELL_DIR="$( cd "$SCRIPT_DIR/.." && pwd )"
+HYDRA_ROOT_DIR="$( cd "$HYDRA_HASKELL_DIR/../.." && pwd )"
+
+source "$HYDRA_ROOT_DIR/bin/lib/common.sh"
 
 cd "$HYDRA_HASKELL_DIR"
 
@@ -92,4 +95,5 @@ BOOTSTRAP_FROM_JSON_BIN=$(stack path --local-install-root)/bin/bootstrap-from-js
     $LOAD_FLAGS \
     --package "$PACKAGE" \
     $TEST_FLAG \
-    "$@"
+    "$@" \
+    $RTS_FLAGS

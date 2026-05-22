@@ -19866,6 +19866,10 @@
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.rewriting"},
+    {"module": "hydra.inference"},
+    {"module": "hydra.scoping"},
+    {"module": "hydra.show.core"},
+    {"module": "hydra.test.testTypes"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},

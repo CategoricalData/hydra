@@ -31,7 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.core", ModuleName "hydra.show.error.core"] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.core", ModuleName "hydra.show.error.core", ModuleName "hydra.test.testGraph"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for core term and type validation")}
   where
     definitions = [
