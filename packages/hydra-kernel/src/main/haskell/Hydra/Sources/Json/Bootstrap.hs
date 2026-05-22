@@ -52,7 +52,7 @@ typesByNameDefinition :: TermDefinition
 typesByNameDefinition = TermDefinition {
     termDefinitionName = Name "hydra.json.bootstrap.typesByName",
     termDefinitionTerm = typesByNameTerm,
-    termDefinitionTypeScheme = Nothing}
+    termDefinitionSignature = Nothing}
 
 -- | Build a Term-level map from Name to Type, by extracting all type
 -- definitions from the bootstrap type modules. Each type definition's
