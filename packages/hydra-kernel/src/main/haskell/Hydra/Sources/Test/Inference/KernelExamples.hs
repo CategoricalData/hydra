@@ -22,7 +22,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [TestGraph.ns, Namespace "hydra.formatting", Namespace "hydra.inference", Namespace "hydra.show.core"] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Inference tests for examples from the Hydra kernel")}
   where
     definitions = [

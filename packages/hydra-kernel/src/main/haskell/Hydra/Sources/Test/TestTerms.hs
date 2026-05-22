@@ -26,7 +26,7 @@ module_ :: HydraModule
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestTypes.ns],
+            moduleDependencies = [TestTypes.ns, Namespace "hydra.core"],
             moduleDescription = (Just "Term definitions for the test suite")}
   where
     definitions = [

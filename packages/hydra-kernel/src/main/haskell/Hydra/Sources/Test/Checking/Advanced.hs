@@ -24,7 +24,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, Namespace "hydra.rewriting"] ++ kernelTypesNamespaces,
+            moduleDependencies = [TestGraph.ns, Namespace "hydra.rewriting", Namespace "hydra.inference", Namespace "hydra.scoping", Namespace "hydra.show.core", Namespace "hydra.test.testTypes"] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Advanced type checking test cases: annotated terms and flows")}
   where
     definitions = [
