@@ -77,14 +77,11 @@ library = define "Library" $
 
 primitive :: Binding
 primitive = define "Primitive" $
-  doc "A built-in function or constant" $
+  doc "A built-in function or constant, consisting of the host-independent PrimitiveDefinition (name, signature, metadata) plus a host-specific implementation." $
   T.record [
-    "name">:
-      doc "The unique name of the primitive function"
-      Core.name,
-    "typeScheme">:
-      doc "The type scheme of the primitive function"
-      Core.typeScheme,
+    "definition">:
+      doc "The host-independent declarative metadata for the primitive: name, description, signature, totality and purity flags, and an optional reference implementation."
+      Packaging.primitiveDefinition,
     "implementation">:
       doc ("A concrete implementation of the primitive function."
         ++ " The Context and Graph parameters are needed by higher-order primitives"
