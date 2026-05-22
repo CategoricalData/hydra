@@ -8852,6 +8852,7 @@
   "dependencies": [
     "hydra.typeScript.language",
     "hydra.typeScript.serde",
+    "hydra.analysis",
     "hydra.environment",
     "hydra.formatting",
     "hydra.names",
