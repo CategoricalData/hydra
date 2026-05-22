@@ -18,6 +18,11 @@ module_ =
         (Packaging.Namespace "hydra.encode.graph"),
         (Packaging.Namespace "hydra.encode.variants"),
         (Packaging.Namespace "hydra.encode.core"),
+        (Packaging.Namespace "hydra.context"),
+        (Packaging.Namespace "hydra.errors"),
+        (Packaging.Namespace "hydra.graph"),
+        (Packaging.Namespace "hydra.variants"),
+        (Packaging.Namespace "hydra.core"),
         (Packaging.Namespace "hydra.coders")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {

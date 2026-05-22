@@ -4485,6 +4485,7 @@
   "dependencies": [
     "hydra.validate.core",
     "hydra.show.error.core",
+    "hydra.test.testGraph",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

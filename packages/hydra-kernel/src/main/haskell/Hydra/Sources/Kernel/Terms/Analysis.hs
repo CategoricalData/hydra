@@ -94,7 +94,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = [Annotations.ns, Arity.ns, Checking.ns, Dependencies.ns, moduleNamespace DecodeCore.module_, Lexical.ns, Names.ns, Predicates.ns, Rewriting.ns, Scoping.ns, Strip.ns, Variables.ns, Namespace "hydra.constants", Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Module dependency namespace analysis")}
   where
     definitions = [

@@ -497,6 +497,7 @@
           "variables": []}}}],
   "dependencies": [
     "hydra.error.pg",
+    "hydra.pg.model",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

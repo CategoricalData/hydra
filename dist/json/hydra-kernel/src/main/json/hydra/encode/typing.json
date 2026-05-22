@@ -551,6 +551,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.typing.TypeSubst"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.encode.context", "hydra.typing"],
+  "dependencies": ["hydra.encode.core", "hydra.encode.context", "hydra.core", "hydra.context", "hydra.typing"],
   "description": "Term encoders for hydra.typing",
   "namespace": "hydra.encode.typing"}

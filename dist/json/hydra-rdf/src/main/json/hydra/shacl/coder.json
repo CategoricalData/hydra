@@ -3321,6 +3321,8 @@
     "hydra.formatting",
     "hydra.lexical",
     "hydra.rdf.utils",
+    "hydra.constants",
+    "hydra.encode.core",
     "hydra.shacl.model",
     "hydra.rdf.syntax",
     "hydra.paths",

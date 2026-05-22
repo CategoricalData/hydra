@@ -1059,7 +1059,8 @@ decodeModule cx graph mod =
             Core.typeSchemeBody = (Core.TypeVariable (Core.Name "hydra.core.Type")),
             Core.typeSchemeConstraints = Nothing}))}) (Packaging.typeDefinitionName v0) (Core.typeSchemeBody (Packaging.typeDefinitionTypeScheme v0)))
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->
-      let allDecodedDeps = Lists.nub (Lists.map decodeNamespace (Packaging.moduleDependencies mod))
+      let originalDeps = Packaging.moduleDependencies mod
+          allDecodedDeps = Lists.nub (Lists.map decodeNamespace originalDeps)
       in (Right (Just (Packaging.Module {
         Packaging.moduleDescription = (Just (Strings.cat [
           "Term decoders for ",
@@ -1069,8 +1070,11 @@ decodeModule cx graph mod =
           Packaging.Namespace "hydra.extract.core",
           (Packaging.Namespace "hydra.lexical"),
           (Packaging.Namespace "hydra.rewriting"),
+          (Packaging.Namespace "hydra.core"),
+          (Packaging.Namespace "hydra.errors"),
+          (Packaging.Namespace "hydra.graph"),
           (Packaging.moduleNamespace mod),
-          (Packaging.Namespace "hydra.util")] allDecodedDeps),
+          (Packaging.Namespace "hydra.util")] (Lists.concat2 originalDeps allDecodedDeps)),
         Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.bindingName b),
           Packaging.termDefinitionTerm = (Core.bindingTerm b),

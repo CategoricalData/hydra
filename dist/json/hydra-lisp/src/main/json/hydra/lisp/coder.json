@@ -6602,6 +6602,7 @@
     "hydra.predicates",
     "hydra.sorting",
     "hydra.lexical",
+    "hydra.show.core",
     "hydra.lisp.syntax",
     "hydra.paths",
     "hydra.ast",

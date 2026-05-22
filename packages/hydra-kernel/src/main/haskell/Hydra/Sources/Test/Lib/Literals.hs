@@ -28,7 +28,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Namespace "hydra.reduction", Namespace "hydra.show.core"],
+            moduleDependencies = [Namespace "hydra.reduction", Namespace "hydra.show.core", Namespace "hydra.core", Namespace "hydra.errors", Namespace "hydra.test.testGraph", Namespace "hydra.testing"],
             moduleDescription = Just "Test cases for hydra.lib.literals primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]

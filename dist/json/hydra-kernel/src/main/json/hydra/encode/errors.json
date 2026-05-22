@@ -1572,6 +1572,13 @@
     "hydra.encode.paths",
     "hydra.encode.typing",
     "hydra.encode.variants",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error.checking",
+    "hydra.error.core",
+    "hydra.paths",
+    "hydra.typing",
+    "hydra.variants",
     "hydra.errors"],
   "description": "Term encoders for hydra.errors",
   "namespace": "hydra.encode.errors"}

@@ -10307,6 +10307,6 @@
               "domain": {
                 "application": {"argument": {"variable": "hydra.shacl.model.ShapesGraph"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.shacl.model", "hydra.phantoms", "hydra.rdf.syntax", "hydra.core", "hydra.dsl.rdf.syntax", "hydra.dsl.core"],
+  "dependencies": ["hydra.shacl.model", "hydra.phantoms", "hydra.core", "hydra.rdf.syntax", "hydra.dsl.rdf.syntax", "hydra.dsl.core"],
   "description": "DSL functions for hydra.shacl.model",
   "namespace": "hydra.dsl.shacl.model"}

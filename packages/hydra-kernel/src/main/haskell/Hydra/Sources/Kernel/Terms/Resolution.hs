@@ -90,7 +90,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Lexical.ns, Names.ns, Scoping.ns, ShowCore.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = [Lexical.ns, Names.ns, Scoping.ns, ShowCore.ns, Strip.ns, Substitution.ns, Variables.ns, Namespace "hydra.decode.core"] L.++ kernelTypesNamespaces,
             moduleDescription = Just ("Type dereference, lookup, requirements, and instantiation")}
   where
     definitions = [

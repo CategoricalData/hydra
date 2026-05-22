@@ -94,7 +94,7 @@ module_ = Module {
      Environment.ns, ShowCore.ns, ShowError.ns, Strip.ns,
      Namespace "hydra.decoding", Namespace "hydra.encoding",
      Namespace "hydra.json.decode", Namespace "hydra.json.encode", Namespace "hydra.json.writer",
-     moduleNamespace DecodeCore.module_, moduleNamespace DecodeModule.module_, moduleNamespace EncodeModule.module_] L.++ kernelTypesNamespaces,
+     moduleNamespace DecodeCore.module_, moduleNamespace DecodeModule.module_, moduleNamespace EncodeModule.module_, Namespace "hydra.constants", Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Pure code generation pipeline for bootstrapping Hydra across languages."}
   where
     definitions = [

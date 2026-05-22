@@ -16,8 +16,12 @@ module_ =
         Packaging.Namespace "hydra.extract.core",
         (Packaging.Namespace "hydra.lexical"),
         (Packaging.Namespace "hydra.rewriting"),
+        (Packaging.Namespace "hydra.core"),
+        (Packaging.Namespace "hydra.errors"),
+        (Packaging.Namespace "hydra.graph"),
         (Packaging.Namespace "hydra.parsing"),
         (Packaging.Namespace "hydra.util"),
+        (Packaging.Namespace "hydra.core"),
         (Packaging.Namespace "hydra.decode.core")],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {

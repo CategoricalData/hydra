@@ -83,7 +83,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns, Scoping.ns,
-      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
+      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns, Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Functions for reducing terms and types, i.e. performing computations."}
   where
    definitions = [

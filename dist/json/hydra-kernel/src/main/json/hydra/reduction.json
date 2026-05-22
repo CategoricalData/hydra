@@ -7100,6 +7100,7 @@
     "hydra.show.errors",
     "hydra.strip",
     "hydra.variables",
+    "hydra.encode.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

@@ -113,7 +113,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [PyUtils.ns, PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns, Environment.ns, Formatting.ns, Names.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, ShowCore.ns, Reduction.ns, Sorting.ns, Inference.ns, Namespace "hydra.annotations", Namespace "hydra.arity", Namespace "hydra.checking", Namespace "hydra.lexical"] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Python code generator: converts Hydra modules to Python source code"}
   where
     definitions = [

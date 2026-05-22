@@ -969,6 +969,7 @@
     "hydra.scala.language",
     "hydra.names",
     "hydra.formatting",
+    "hydra.strip",
     "hydra.scala.syntax",
     "hydra.paths",
     "hydra.ast",

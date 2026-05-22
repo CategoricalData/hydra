@@ -379,6 +379,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.tabular.TableType"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.encode.relational", "hydra.tabular"],
+  "dependencies": ["hydra.encode.core", "hydra.encode.relational", "hydra.core", "hydra.relational", "hydra.tabular"],
   "description": "Term encoders for hydra.tabular",
   "namespace": "hydra.encode.tabular"}

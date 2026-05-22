@@ -3788,6 +3788,7 @@
     "hydra.annotations",
     "hydra.serialization",
     "hydra.show.core",
+    "hydra.dependencies",
     "hydra.pegasus.pdl",
     "hydra.paths",
     "hydra.ast",

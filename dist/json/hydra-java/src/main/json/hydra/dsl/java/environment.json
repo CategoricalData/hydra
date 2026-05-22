@@ -8381,8 +8381,8 @@
   "dependencies": [
     "hydra.java.environment",
     "hydra.phantoms",
-    "hydra.java.syntax",
     "hydra.core",
+    "hydra.java.syntax",
     "hydra.graph",
     "hydra.packaging",
     "hydra.typing",

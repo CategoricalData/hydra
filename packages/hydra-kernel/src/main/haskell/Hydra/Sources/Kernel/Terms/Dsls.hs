@@ -46,7 +46,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = [Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns, Namespace "hydra.constants", Namespace "hydra.decode.core", Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Functions for generating domain-specific DSL modules from type modules"}
   where
     definitions = [
@@ -299,9 +299,13 @@ dslModule = define "dslModule" $
           (dslNamespace @@ (Packaging.moduleNamespace (var "mod")))
           -- DSL modules depend on:
           -- (1) the original module + its source dependencies + hydra.phantoms (for TTerm), and
-          -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
+          -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions),
+          -- (3) hydra.core (for Core.Record/Term/Field constructors emitted by DSL builders).
           (Lists.nub (Lists.concat2
-            (list [Packaging.moduleNamespace (var "mod"), Packaging.namespace (string "hydra.phantoms")])
+            (list [
+              Packaging.moduleNamespace (var "mod"),
+              Packaging.namespace (string "hydra.phantoms"),
+              Packaging.namespace (string "hydra.core")])
             (Lists.concat2
               (Packaging.moduleDependencies (var "mod"))
               (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleDependencies (var "mod"))))))

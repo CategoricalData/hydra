@@ -99,7 +99,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Analysis.ns, Formatting.ns, HaskellLanguage.ns, Names.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = [Analysis.ns, Formatting.ns, HaskellLanguage.ns, Names.ns, Namespace "hydra.strip"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Utilities for working with Haskell syntax trees"}
   where
     definitions = [

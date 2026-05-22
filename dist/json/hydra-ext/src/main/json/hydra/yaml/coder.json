@@ -3843,6 +3843,7 @@
     "hydra.literals",
     "hydra.yaml.language",
     "hydra.strip",
+    "hydra.show.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

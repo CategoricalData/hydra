@@ -15389,6 +15389,9 @@
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [
     "hydra.test.testGraph",
+    "hydra.reduction",
+    "hydra.show.core",
+    "hydra.test.testTypes",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

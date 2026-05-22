@@ -31,7 +31,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core", Namespace "hydra.test.testTypes"] ++ kernelTypesNamespaces,
             moduleDescription = (Just "Test cases for eta expansion of terms")}
   where
     definitions = [

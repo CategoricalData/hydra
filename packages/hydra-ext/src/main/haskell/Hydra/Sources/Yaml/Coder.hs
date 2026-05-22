@@ -52,7 +52,7 @@ module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
             moduleDependencies = [Adapt.ns,
-     ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns] L.++ (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"]),
+     ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns, Namespace "hydra.show.core"] L.++ (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"]),
             moduleDescription = Just "YAML encoding and decoding for Hydra terms"}
   where
     definitions = [

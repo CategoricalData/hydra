@@ -4790,8 +4790,8 @@
   "dependencies": [
     "hydra.errors",
     "hydra.phantoms",
-    "hydra.context",
     "hydra.core",
+    "hydra.context",
     "hydra.error.checking",
     "hydra.error.core",
     "hydra.paths",

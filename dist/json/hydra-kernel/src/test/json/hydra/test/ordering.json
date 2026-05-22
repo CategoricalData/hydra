@@ -4936,6 +4936,7 @@
     "hydra.reduction",
     "hydra.show.core",
     "hydra.show.util",
+    "hydra.test.testTypes",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

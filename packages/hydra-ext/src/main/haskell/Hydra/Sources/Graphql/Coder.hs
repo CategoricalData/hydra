@@ -98,7 +98,7 @@ module_ = Module {
             moduleDefinitions = definitions,
             moduleDependencies = [Formatting.ns, Names.ns, Strip.ns, Environment.ns, Predicates.ns, Annotations.ns, Serialization.ns,
       moduleNamespace GraphqlLanguage.module_,
-      GraphqlSerde.ns] L.++ (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
+      GraphqlSerde.ns, Namespace "hydra.show.core"] L.++ (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "GraphQL code generator: converts Hydra modules to GraphQL schema definitions"}
   where
     definitions = [

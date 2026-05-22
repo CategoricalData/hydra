@@ -2713,6 +2713,16 @@
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.extract.core", "hydra.lexical", "hydra.rewriting", "hydra.variants", "hydra.util", "hydra.decode.core"],
+  "dependencies": [
+    "hydra.extract.core",
+    "hydra.lexical",
+    "hydra.rewriting",
+    "hydra.core",
+    "hydra.errors",
+    "hydra.graph",
+    "hydra.variants",
+    "hydra.util",
+    "hydra.core",
+    "hydra.decode.core"],
   "description": "Term decoders for hydra.variants",
   "namespace": "hydra.decode.variants"}
