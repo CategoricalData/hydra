@@ -1847,6 +1847,7 @@
   "dependencies": [
     "hydra.extract.core",
     "hydra.pg.coder",
+    "hydra.show.core",
     "hydra.pg.model",
     "hydra.pg.mapping",
     "hydra.json.model",

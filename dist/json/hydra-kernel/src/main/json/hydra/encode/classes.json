@@ -83,6 +83,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.classes.TypeClass"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.classes"],
+  "dependencies": ["hydra.encode.core", "hydra.core", "hydra.classes"],
   "description": "Term encoders for hydra.classes",
   "namespace": "hydra.encode.classes"}
