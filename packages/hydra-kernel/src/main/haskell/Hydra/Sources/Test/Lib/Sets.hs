@@ -27,14 +27,14 @@ import qualified Hydra.Dsl.Meta.Lib.Math as Math
 import qualified Hydra.Dsl.Meta.Lib.Sets as Sets
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
-ns :: Namespace
-ns = Namespace "hydra.test.lib.sets"
+ns :: ModuleName
+ns = ModuleName "hydra.test.lib.sets"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Namespace "hydra.reduction", ShowCore.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ShowCore.ns] ++ kernelTypesModuleNames),
             moduleDescription = Just "Test cases for hydra.lib.sets primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]

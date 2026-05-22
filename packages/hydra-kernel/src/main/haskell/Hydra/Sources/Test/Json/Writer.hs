@@ -27,14 +27,14 @@ import qualified Hydra.Dsl.Json.Model as Json
 import qualified Hydra.Sources.Json.Writer as JsonWriter
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.json.writer"
+ns :: ModuleName
+ns = ModuleName "hydra.test.json.writer"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Namespace "hydra.json.writer"] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.json.writer"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for JSON serialization")}
   where
     definitions = [

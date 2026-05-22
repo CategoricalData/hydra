@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.pg.model"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.model"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -24,7 +24,7 @@ pg = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A typed property graph data model. " ++

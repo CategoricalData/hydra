@@ -25,14 +25,14 @@ import Hydra.Sources.Libraries
 import Prelude hiding (foldl)
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.etaExpansion"
+ns :: ModuleName
+ns = ModuleName "hydra.test.etaExpansion"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for eta expansion of terms")}
   where
     definitions = [

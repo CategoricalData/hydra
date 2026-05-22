@@ -5,7 +5,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Names.hs.
 
 from hydra.core import Name
 from hydra.dsl.python import Just
-from hydra.packaging import Module, Namespace
+from hydra.packaging import Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
@@ -27,7 +27,7 @@ from hydra.sources.python._kernel_refs import (
     packaging_namespaces_focus,
     packaging_qualified_name_local,
     packaging_qualified_name_namespace,
-    packaging_un_namespace,
+    packaging_un_module_name,
     util_case_convention_camel,
     util_case_convention_lower_snake,
     util_case_convention_pascal,
@@ -39,22 +39,24 @@ from hydra.sources.python._kernel_refs import (
 # Namespaces and dependencies (mirroring Haskell)
 # ----------------------------------------------------------------------
 
-NS = Namespace("hydra.python.names")
+NS = ModuleName("hydra.python.names")
 
 # moduleDependencies = [Names.ns, Formatting.ns, PySerde.ns, pyLanguageNs] L.++
 #                       (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 from hydra.sources.python._source_dsl import (
+
     KERNEL_TYPES_NAMESPACES,
     make_def,
     make_local,
+    unqualified_dep,
 )
 DEPENDENCIES = [
-    Namespace("hydra.names"),
-    Namespace("hydra.formatting"),
-    Namespace("hydra.python.serde"),
-    Namespace("hydra.python.language"),
-    Namespace("hydra.python.environment"),
-    Namespace("hydra.python.syntax"),
+    unqualified_dep(ModuleName("hydra.names")),
+    unqualified_dep(ModuleName("hydra.formatting")),
+    unqualified_dep(ModuleName("hydra.python.serde")),
+    unqualified_dep(ModuleName("hydra.python.language")),
+    unqualified_dep(ModuleName("hydra.python.environment")),
+    unqualified_dep(ModuleName("hydra.python.syntax")),
 ] + KERNEL_TYPES_NAMESPACES
 
 
@@ -146,7 +148,7 @@ def _encode_name():
                             formatting_convert_case(util_case_convention_camel, util_case_convention_lower_snake),
                             Strings.split_on(
                                 string("."),
-                                packaging_un_namespace(var("nsVal")),
+                                packaging_un_module_name(var("nsVal")),
                             ),
                         ),
                     ),
@@ -300,7 +302,7 @@ def _encode_namespace():
                         ),
                         Strings.split_on(
                             string("."),
-                            packaging_un_namespace(var("nsVal")),
+                            packaging_un_module_name(var("nsVal")),
                         ),
                     ),
                 ),
@@ -497,7 +499,7 @@ def _build_module() -> Module:
     )
     return Module(
         _PLACEHOLDER.description,
-        _PLACEHOLDER.namespace,
+        _PLACEHOLDER.name,
         _PLACEHOLDER.dependencies,
         defs,
     )

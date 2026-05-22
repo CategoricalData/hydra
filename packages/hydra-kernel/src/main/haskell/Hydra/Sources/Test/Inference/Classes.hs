@@ -16,14 +16,14 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.inference.classes"
+ns :: ModuleName
+ns = ModuleName "hydra.test.inference.classes"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Inference tests for type class constraints (ordering and equality)")}
   where
     definitions = [

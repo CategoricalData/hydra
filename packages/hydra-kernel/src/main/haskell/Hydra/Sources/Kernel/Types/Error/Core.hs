@@ -10,15 +10,15 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
-ns :: Namespace
-ns = Namespace "hydra.error.core"
+ns :: ModuleName
+ns = ModuleName "hydra.error.core"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Paths.ns, Core.ns, Variants.ns],
             moduleDescription = Just "Error types for core type and term validation"}

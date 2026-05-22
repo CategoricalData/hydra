@@ -26,14 +26,14 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.reduction"
+ns :: ModuleName
+ns = ModuleName "hydra.test.reduction"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [Namespace "hydra.reduction", Namespace "hydra.inference", Namespace "hydra.show.core"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.inference", ModuleName "hydra.show.core"],
             moduleDescription = Just "Test cases for term reduction/evaluation mechanics"}
   where
     definitions = [Phantoms.toDefinition allTests]

@@ -71,15 +71,15 @@ emptyList :: TTerm [a]
 emptyList = TTerm $ TermList []
 
 
-ns :: Namespace
-ns = Namespace "hydra.scala.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.scala.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([ScalaUtilsSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Scoping.ns, Strip.ns, Variables.ns, Analysis.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
-      Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns] L.++ (ScalaSyntax.ns:moduleNamespace ScalaLanguageSource.module_:KernelTypes.kernelTypesNamespaces)),
+      Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns] L.++ (ScalaSyntax.ns:moduleName ScalaLanguageSource.module_:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Scala code generator: converts Hydra modules to Scala source code"}
   where
     definitions = [
@@ -135,7 +135,7 @@ constructModule = def "constructModule" $
     "partitioned">: Environment.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned"),
     "termDefs">: Pairs.second (var "partitioned"),
-    "nsName">: Packaging.unNamespace (Packaging.moduleNamespace (var "mod")),
+    "nsName">: Packaging.unModuleName (Packaging.moduleName (var "mod")),
     "pname">: toScalaName (var "nsName"),
     "pref">: inject _RefData _RefData_name (var "pname")] $
     Eithers.bind
@@ -1293,7 +1293,7 @@ moduleToScala = def "moduleToScala" $
       ("pkg" ~> lets [
         "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TTerm (TermVariable (Name "hydra.scala.serde.pkgToExpr")) @@ var "pkg"))] $
         right (Maps.singleton
-          (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Packaging.moduleNamespace (var "mod"))
+          (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Packaging.moduleName (var "mod"))
           (var "s")))
 
 -- | Strip wrap eliminations from a term (newtypes are erased in Scala)
@@ -1322,7 +1322,7 @@ stripWrapEliminations = def "stripWrapEliminations" $
                   _Application_function>>: var "innerArg",
                   _Application_argument>>: var "appArg"]))])])]
 
-toElImport :: TTermDefinition (Namespace -> Scala.Stat)
+toElImport :: TTermDefinition (ModuleName -> Scala.Stat)
 toElImport = def "toElImport" $
   doc "Create an element import statement" $
   lambda "ns" $
@@ -1334,10 +1334,10 @@ toElImport = def "toElImport" $
               _Importer_ref>>: inject _RefData _RefData_name (
                 record _NameData [
                   _NameData_value>>: wrap _PredefString (
-                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]),
+                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))))]),
               _Importer_importees>>: list [inject _Importee _Importee_wildcard unit]]]]))
 
-toPrimImport :: TTermDefinition (Namespace -> Scala.Stat)
+toPrimImport :: TTermDefinition (ModuleName -> Scala.Stat)
 toPrimImport = def "toPrimImport" $
   doc "Create a primitive import statement" $
   lambda "ns" $
@@ -1349,7 +1349,7 @@ toPrimImport = def "toPrimImport" $
               _Importer_ref>>: inject _RefData _RefData_name (
                 record _NameData [
                   _NameData_value>>: wrap _PredefString (
-                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))))]),
+                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))))]),
               _Importer_importees>>: emptyList]]]))
 
 typeParamToTypeVar :: TTermDefinition (Scala.ParamType -> Scala.Type)

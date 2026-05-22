@@ -45,7 +45,8 @@ from hydra.generation import (
     load_modules_from_json,
     read_manifest_field,
 )
-from hydra.packaging import DefinitionTerm, Module, Namespace, TermDefinition
+from hydra.dsl.python import Nothing
+from hydra.packaging import DefinitionTerm, Module, ModuleDependency, ModuleName, TermDefinition
 
 KERNEL_JSON = os.path.join(_ROOT, "dist/json/hydra-kernel/src/main/json")
 BENCH_JSON = os.path.join(_ROOT, "dist/json/hydra-bench/src/main/json")
@@ -74,7 +75,7 @@ def _load_universe() -> tuple[Module, ...]:
 
 def _find_bench_module(universe: tuple[Module, ...], ns: str) -> Module:
     for m in universe:
-        if m.namespace.value == ns:
+        if m.name.value == ns:
             return m
     raise RuntimeError(
         f"bench module {ns} not found in kernel JSON. "
@@ -100,7 +101,7 @@ def _make_synthetic_module(bench: Module, n: int) -> Module:
     defs = [d for d in bench.definitions if isinstance(d, DefinitionTerm)]
     # Defs come in order walker0, walker1, ...; take first n.
     take = defs[:n]
-    target_ns = Namespace("z.bench.scaling")
+    target_ns = ModuleName("z.bench.scaling")
     renamed: list[DefinitionTerm] = []
     for td in take:
         local = td.value.name.value.split(".")[-1]
@@ -113,7 +114,7 @@ def _make_synthetic_module(bench: Module, n: int) -> Module:
                 )
             )
         )
-    deps = (bench.namespace,) + tuple(bench.dependencies)
+    deps = (ModuleDependency(bench.name, Nothing()),) + tuple(bench.dependencies)
     return Module(
         bench.description,
         target_ns,

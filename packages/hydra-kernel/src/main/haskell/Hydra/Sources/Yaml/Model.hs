@@ -11,15 +11,15 @@ import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-ns :: Namespace
-ns = Namespace "hydra.yaml.model"
+ns :: ModuleName
+ns = ModuleName "hydra.yaml.model"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A basic YAML representation model. Based on:\n" ++

@@ -21,14 +21,14 @@ import qualified Data.ByteString              as B
 import qualified Data.ByteString.Char8        as BC
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.checking.fundamentals"
+ns :: ModuleName
+ns = ModuleName "hydra.test.checking.fundamentals"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Namespace "hydra.rewriting"] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives")}
   where
     definitions = [

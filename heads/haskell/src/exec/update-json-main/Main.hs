@@ -57,7 +57,7 @@ dedupByNamespace = go S.empty
     go seen (m:ms)
       | ns `S.member` seen = go seen ms
       | otherwise          = m : go (S.insert ns seen) ms
-      where ns = Kernel.moduleNamespace m
+      where ns = Kernel.moduleName m
 
 main :: IO ()
 main = do
@@ -113,7 +113,7 @@ main = do
   -- remain as a historical reference through 0.15 but no longer drive
   -- dist/json/hydra-{java,python}/. To be deleted before 0.16.
   let isNativeOwned m =
-        let ns = Packaging.unNamespace (Kernel.moduleNamespace m)
+        let ns = Packaging.unModuleName (Kernel.moduleName m)
         in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
       writeUniverse
         | includeJavaPython = universe
@@ -255,14 +255,14 @@ validateKernelModulesOrExit mods = do
            []    -> Nothing
            err:_ -> Just err
     reportPkgFailure (m, err) = do
-      putStrLn $ "  [packaging] " ++ Packaging.unNamespace (Kernel.moduleNamespace m)
+      putStrLn $ "  [packaging] " ++ Packaging.unModuleName (Kernel.moduleName m)
                        ++ ": " ++ ShowErrorPackaging.invalidModuleError err
     reportTypeFailure (m, td, err) = do
-      putStrLn $ "  [core/type] " ++ Packaging.unNamespace (Kernel.moduleNamespace m)
+      putStrLn $ "  [core/type] " ++ Packaging.unModuleName (Kernel.moduleName m)
                        ++ "." ++ Core.unName (Packaging.typeDefinitionName td)
                        ++ ": " ++ ShowErrorCore.invalidTypeError err
     reportTermFailure (m, td, err) = do
-      putStrLn $ "  [core/term] " ++ Packaging.unNamespace (Kernel.moduleNamespace m)
+      putStrLn $ "  [core/term] " ++ Packaging.unModuleName (Kernel.moduleName m)
                        ++ "." ++ Core.unName (Packaging.termDefinitionName td)
                        ++ ": " ++ ShowErrorCore.invalidTermError err
 

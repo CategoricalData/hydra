@@ -12,13 +12,13 @@
 --
 -- Routing contract:
 --
---   namespaceToPackage :: Namespace -> String
+--   namespaceToPackage :: ModuleName -> String
 --
 --     Returns the package name (e.g. "hydra-kernel", "hydra-ext") that owns
 --     a given Hydra namespace. Falls back to "hydra-kernel" for any
 --     namespace that does not match an explicit prefix.
 --
---   namespaceToPackageJsonDir :: FilePath -> Namespace -> FilePath
+--   namespaceToPackageJsonDir :: FilePath -> ModuleName -> FilePath
 --
 --     Given the dist-json root (e.g. "../../dist/json") and a namespace,
 --     returns the absolute directory under which that module's JSON file
@@ -56,8 +56,8 @@ defaultDistJsonRoot = "../../dist/json"
 -- The ordering of 'packagePrefixes' matters: more specific prefixes must
 -- come before less specific ones. The fallback "hydra-kernel" covers all
 -- namespaces that don't match any explicit prefix.
-namespaceToPackage :: Namespace -> String
-namespaceToPackage (Namespace ns) = go packagePrefixes
+namespaceToPackage :: ModuleName -> String
+namespaceToPackage (ModuleName ns) = go packagePrefixes
   where
     go []                    = "hydra-kernel"
     go ((prefix, pkg) : rest)
@@ -66,12 +66,12 @@ namespaceToPackage (Namespace ns) = go packagePrefixes
 
 -- | Given a dist-json root and a namespace, compute the directory under
 -- which that module's JSON file should be written.
-namespaceToPackageJsonDir :: FilePath -> Namespace -> FilePath
+namespaceToPackageJsonDir :: FilePath -> ModuleName -> FilePath
 namespaceToPackageJsonDir root ns =
   root FP.</> namespaceToPackage ns FP.</> "src" FP.</> "main" FP.</> "json"
 
 -- | Like 'namespaceToPackageJsonDir' but for test JSON output.
-namespaceToPackageTestJsonDir :: FilePath -> Namespace -> FilePath
+namespaceToPackageTestJsonDir :: FilePath -> ModuleName -> FilePath
 namespaceToPackageTestJsonDir root ns =
   root FP.</> namespaceToPackage ns FP.</> "src" FP.</> "test" FP.</> "json"
 
@@ -83,7 +83,7 @@ groupByPackage mods =
     fmap collapse
       $ groupBy ((==) `on` fst)
       $ sortOn fst
-      $ fmap (\m -> (namespaceToPackage (moduleNamespace m), m)) mods
+      $ fmap (\m -> (namespaceToPackage (moduleName m), m)) mods
   where
     collapse [] = ("", [])  -- unreachable; groupBy never returns empty inner lists
     collapse grp@((pkg, _) : _) = (pkg, fmap snd grp)

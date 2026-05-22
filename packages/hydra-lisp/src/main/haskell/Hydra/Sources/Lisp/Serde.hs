@@ -41,14 +41,14 @@ import qualified Hydra.Lisp.Syntax as L
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.lisp.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.lisp.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Constants.ns, Formatting.ns, Serialization.ns] DL.++ (LispSyntax.ns:KernelTypes.kernelTypesNamespaces)),
+            moduleDependencies = unqualifiedDep <$> ([Constants.ns, Formatting.ns, Serialization.ns] DL.++ (LispSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Lisp serializer: converts Lisp AST to concrete syntax for Clojure, Emacs Lisp, Common Lisp, or Scheme"}
   where
     definitions = [

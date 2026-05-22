@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.azure.dtld"
+ns :: ModuleName
+ns = ModuleName "hydra.azure.dtld"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -86,7 +86,7 @@ writableField cat = "writable">:
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("An Azure Digital Twin Definition Language (DTLD) model. Based on:\n" ++

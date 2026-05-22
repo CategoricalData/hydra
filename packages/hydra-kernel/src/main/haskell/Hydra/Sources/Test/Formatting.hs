@@ -21,14 +21,14 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import Hydra.Testing
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.formatting"
+ns :: ModuleName
+ns = ModuleName "hydra.test.formatting"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Formatting.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Formatting.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for string formatting and case conversion")}
   where
     definitions = [

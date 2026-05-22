@@ -18,14 +18,14 @@ import qualified Hydra.Sources.Test.Hoisting.Cases as Cases
 import qualified Hydra.Sources.Test.Hoisting.Let as Let
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.hoisting.all"
+ns :: ModuleName
+ns = ModuleName "hydra.test.hoisting.all"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesModuleNames),
             moduleDescription = Just "Hydra's hoisting test suite"}
   where
     definitions = [Phantoms.toDefinition allTests]

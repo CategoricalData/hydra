@@ -18,14 +18,14 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.checking.algebraicTypes"
+ns :: ModuleName
+ns = ModuleName "hydra.test.checking.algebraicTypes"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, Namespace "hydra.rewriting"] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Algebraic type checking test cases: unit, pairs, eithers, optionals")}
   where
     definitions = [

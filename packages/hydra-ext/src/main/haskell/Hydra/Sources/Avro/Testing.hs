@@ -12,8 +12,8 @@ import qualified Hydra.Sources.Json.Model        as JsonModel
 import qualified Hydra.Sources.Avro.Schema   as AvroSchema
 
 
-ns :: Namespace
-ns = Namespace "hydra.avro.testing"
+ns :: ModuleName
+ns = ModuleName "hydra.avro.testing"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -29,7 +29,7 @@ local = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns, AvroSchema.ns, JsonModel.ns],
             moduleDescription = Just "Test case types for the bidirectional Avro coder"}

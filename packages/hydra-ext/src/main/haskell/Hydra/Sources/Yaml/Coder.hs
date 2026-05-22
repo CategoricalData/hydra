@@ -42,18 +42,18 @@ import qualified Hydra.Yaml.Model as YM
 liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either Error a)
 liftStringError cx = Eithers.bimap ("_s" ~> Error.errorOther (Error.otherError $ var "_s")) ("_x" ~> var "_x")
 
-ns :: Namespace
-ns = Namespace "hydra.yaml.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.yaml.coder"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
             moduleDependencies = unqualifiedDep <$> ([Adapt.ns,
-     ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns] L.++ (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"])),
+     ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns] L.++ (KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
             moduleDescription = Just "YAML encoding and decoding for Hydra terms"}
   where
     definitions = [

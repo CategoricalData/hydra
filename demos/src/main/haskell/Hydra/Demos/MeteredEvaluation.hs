@@ -25,11 +25,11 @@ import qualified Data.Set as S
 import Prelude hiding ((++))
 
 
-testNs = Namespace "hydra.demos.meteredEvaluation"
+testNs = ModuleName "hydra.demos.meteredEvaluation"
 
 testModule :: Module
 testModule = Module {
-               moduleNamespace = testNs,
+               moduleName = testNs,
                moduleDefinitions = definitions,
                moduleDependencies = [] :: [ModuleDependency],
                moduleDescription = Nothing}

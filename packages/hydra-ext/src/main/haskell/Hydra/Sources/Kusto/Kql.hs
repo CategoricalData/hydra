@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.kusto.kql"
+ns :: ModuleName
+ns = ModuleName "hydra.kusto.kql"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -24,7 +24,7 @@ kql = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.")}

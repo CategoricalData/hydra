@@ -54,15 +54,15 @@ import qualified Hydra.Sources.Wasm.Language as WasmLanguageSource
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.wasm.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.wasm.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([moduleNamespace WasmSerdeSource.module_, moduleNamespace WasmLanguageSource.module_,
-      Analysis.ns, Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesNamespaces)),
+            moduleDependencies = unqualifiedDep <$> ([moduleName WasmSerdeSource.module_, moduleName WasmLanguageSource.module_,
+      Analysis.ns, Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "WebAssembly code generator: converts Hydra type and term modules to WAT source code"}
   where
     definitions = [
@@ -1746,5 +1746,5 @@ moduleToWasm = def "moduleToWasm" $
         var "funcExports",
         var "allFields"])]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (WasmSerdeSource.moduleToExpr @@ var "wasmMod"))) $
-    "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "wat") @@ (Packaging.moduleNamespace (var "mod"))) $
+    "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "wat") @@ (Packaging.moduleName (var "mod"))) $
       right (Maps.singleton (var "filePath") (var "code"))

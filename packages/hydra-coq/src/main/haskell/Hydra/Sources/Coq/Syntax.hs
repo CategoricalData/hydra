@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.coq.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.coq.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -24,7 +24,7 @@ coq = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just ("A model for Coq core and extensions. Based on the Coq 8.15 grammar:\n" ++

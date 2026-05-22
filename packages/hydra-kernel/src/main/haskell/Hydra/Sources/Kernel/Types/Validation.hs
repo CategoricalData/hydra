@@ -8,15 +8,15 @@ import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-ns :: Namespace
-ns = Namespace "hydra.validation"
+ns :: ModuleName
+ns = ModuleName "hydra.validation"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "Framework types for configurable validation: profiles classify checks as errors or warnings, and results accumulate findings up to caller-specified bounds."}

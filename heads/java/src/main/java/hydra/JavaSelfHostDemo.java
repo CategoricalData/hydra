@@ -6,7 +6,7 @@ import hydra.core.Type;
 import hydra.errors.Error_;
 import hydra.graph.Graph;
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
 import hydra.util.Either;
 
 import java.io.File;
@@ -96,7 +96,7 @@ public class JavaSelfHostDemo {
         long t0 = System.nanoTime();
         System.err.println("Loading universe from " + kernelJson + " ...");
         Map<Name, Type> bootstrapSchema = Generation.bootstrapSchemaMap();
-        List<Namespace> mainModulesNs = Generation.readManifestField(kernelJson, "mainModules");
+        List<ModuleName> mainModulesNs = Generation.readManifestField(kernelJson, "mainModules");
         List<Module> universe = Generation.loadModulesFromJson(kernelJson, bootstrapSchema, mainModulesNs);
         double tUniverse = (System.nanoTime() - t0) / 1e9;
         System.err.println("  loaded " + universe.size() + " kernel modules ("
@@ -118,7 +118,7 @@ public class JavaSelfHostDemo {
                 Module m = (Module) val;
                 sources.add(m);
                 int nDefs = m.definitions.size();
-                System.err.println("    " + m.namespace.value + ": " + nDefs + " definitions");
+                System.err.println("    " + m.name.value + ": " + nDefs + " definitions");
             } catch (ClassNotFoundException e) {
                 System.err.println("  MISSING: " + className
                     + " (skipping; expected when port is incomplete)");
@@ -189,11 +189,11 @@ public class JavaSelfHostDemo {
             Either<Error_, String> encoded = Codegen.moduleToJson(schemaMap, m);
             if (encoded instanceof Either.Left) {
                 Error_ err = ((Either.Left<Error_, String>) encoded).value;
-                System.err.println("  ENCODE FAILED for " + m.namespace.value + ": " + err);
+                System.err.println("  ENCODE FAILED for " + m.name.value + ": " + err);
                 System.exit(5);
             }
             String jsonStr = ((Either.Right<Error_, String>) encoded).value;
-            String namespacePath = m.namespace.value.replace('.', '/');
+            String namespacePath = m.name.value.replace('.', '/');
             Path filePath = Paths.get(outRoot, namespacePath + ".json");
             Files.createDirectories(filePath.getParent());
             String newContent = jsonStr + "\n";

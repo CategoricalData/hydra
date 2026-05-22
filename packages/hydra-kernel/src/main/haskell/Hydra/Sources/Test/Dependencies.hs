@@ -29,14 +29,14 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Strings as Strings
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.dependencies"
+ns :: ModuleName
+ns = ModuleName "hydra.test.dependencies"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Dependencies.ns, TestGraph.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Dependencies.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for dependency analysis and let-term transformations")}
   where
     definitions = [Phantoms.toDefinition allTests]

@@ -25,14 +25,14 @@ import qualified Hydra.Dsl.Meta.Lib.Literals as Literals
 import qualified Hydra.Sources.Kernel.Terms.Show.Util as ShowUtil
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.ordering"
+ns :: ModuleName
+ns = ModuleName "hydra.test.ordering"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Namespace "hydra.reduction", Namespace "hydra.show.core", ShowUtil.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.show.core", ShowUtil.ns] ++ kernelTypesModuleNames),
             moduleDescription = Just "Test cases for Ord instance comparisons on complex Hydra types"}
   where
     definitions = [Phantoms.toDefinition allTests]

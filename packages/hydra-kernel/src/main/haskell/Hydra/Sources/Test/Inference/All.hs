@@ -23,14 +23,14 @@ import qualified Hydra.Sources.Test.Inference.KernelExamples as KernelExamples
 import qualified Hydra.Sources.Test.Inference.NominalTypes as NominalTypes
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.inference.all"
+ns :: ModuleName
+ns = ModuleName "hydra.test.inference.all"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> (namespaces Prelude.++ kernelTypesModuleNames),
             moduleDescription = Just "Hydra's inference test suite"}
   where
     definitions = [Phantoms.toDefinition allTests]

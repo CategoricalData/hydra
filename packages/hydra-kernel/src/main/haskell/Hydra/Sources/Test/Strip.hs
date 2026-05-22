@@ -26,14 +26,14 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.strip"
+ns :: ModuleName
+ns = ModuleName "hydra.test.strip"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Strip.ns, TestGraph.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([ShowCore.ns, Strip.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for annotation and type stripping operations")}
   where
     definitions = [Phantoms.toDefinition allTests]

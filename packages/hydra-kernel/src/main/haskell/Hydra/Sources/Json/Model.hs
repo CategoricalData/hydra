@@ -11,15 +11,15 @@ import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 
-ns :: Namespace
-ns = Namespace "hydra.json.model"
+ns :: ModuleName
+ns = ModuleName "hydra.json.model"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A JSON syntax model. See the BNF at https://www.json.org"}

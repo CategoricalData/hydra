@@ -29,7 +29,7 @@
 module Main where
 
 import Hydra.Digest
-import Hydra.Packaging (Namespace(..))
+import Hydra.Packaging (ModuleName(..))
 
 import Control.Monad (when, forM)
 import Data.List (isPrefixOf)
@@ -125,7 +125,7 @@ doFresh opts = do
   -- by 'refresh' below.)
   let recordedInputs = M.map entryHash (digestInputs outputDigest)
       currentInputs  = M.fromList
-        [ (k, v) | (Namespace k, v) <- M.toList inputDigest ]
+        [ (k, v) | (ModuleName k, v) <- M.toList inputDigest ]
 
   if recordedInputs /= currentInputs
     then do
@@ -197,7 +197,7 @@ doRefresh opts = do
   let inputDigest = Hydra.Digest.ppHashes inputPpd
       inputsAsMap = M.fromList
         [ (k, DigestEntry KindOther v)
-        | (Namespace k, v) <- M.toList inputDigest
+        | (ModuleName k, v) <- M.toList inputDigest
         ]
 
   -- Walk the output dir. Paths are stored relative to outputDir for

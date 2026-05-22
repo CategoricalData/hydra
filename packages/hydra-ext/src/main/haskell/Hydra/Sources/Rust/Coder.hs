@@ -50,15 +50,15 @@ import qualified Hydra.Sources.Rust.Language as RustLanguageSource
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.rust.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.rust.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([moduleNamespace RustSerdeSource.module_, moduleNamespace RustLanguageSource.module_,
-      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesNamespaces)),
+            moduleDependencies = unqualifiedDep <$> ([moduleName RustSerdeSource.module_, moduleName RustLanguageSource.module_,
+      Formatting.ns, Names.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Rust code generator: converts Hydra type and term modules to Rust source code"}
   where
     definitions = [
@@ -668,7 +668,7 @@ moduleToRust = def "moduleToRust" $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
     "crate" <~ (record R._Crate [R._Crate_items>>: var "allItems"]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (RustSerdeSource.crateToExpr @@ var "crate"))) $
-    "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "rs") @@ (Packaging.moduleNamespace (var "mod"))) $
+    "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "rs") @@ (Packaging.moduleName (var "mod"))) $
       right (Maps.singleton (var "filePath") (var "code"))
 
 -- | Apply a type constructor to one type argument (e.g., Vec<T>)

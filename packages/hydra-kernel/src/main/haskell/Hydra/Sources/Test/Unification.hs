@@ -33,14 +33,14 @@ import Hydra.Sources.Libraries
 import qualified Hydra.Sources.Kernel.Terms.Unification as UnificationModule
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.unification"
+ns :: ModuleName
+ns = ModuleName "hydra.test.unification"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([UnificationModule.ns, Lexical.ns, ShowCore.ns] ++ kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([UnificationModule.ns, Lexical.ns, ShowCore.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for type unification operations")}
   where
     definitions = [Phantoms.toDefinition allTests]

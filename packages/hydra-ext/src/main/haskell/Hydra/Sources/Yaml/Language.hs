@@ -22,14 +22,14 @@ import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 
 
-ns :: Namespace
-ns = Namespace "hydra.yaml.language"
+ns :: ModuleName
+ns = ModuleName "hydra.yaml.language"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = [toDefinition yamlLanguage],
-            moduleDependencies = unqualifiedDep <$> ([Strip.ns] L.++ KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for YAML"}
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_

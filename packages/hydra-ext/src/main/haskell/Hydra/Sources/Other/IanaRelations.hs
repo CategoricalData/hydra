@@ -13,15 +13,15 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.iana.linkrelations"
+ns :: ModuleName
+ns = ModuleName "hydra.iana.linkrelations"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just ("All IANA Link Relation Types, as of 2022-10-11. " ++

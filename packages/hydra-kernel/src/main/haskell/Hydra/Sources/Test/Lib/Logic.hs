@@ -20,14 +20,14 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.lib.logic"
+ns :: ModuleName
+ns = ModuleName "hydra.test.lib.logic"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [Namespace "hydra.reduction", Namespace "hydra.show.core"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.show.core"],
             moduleDescription = Just "Test cases for hydra.lib.logic primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]

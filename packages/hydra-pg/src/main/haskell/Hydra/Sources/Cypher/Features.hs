@@ -16,8 +16,8 @@ import qualified Data.Maybe                      as Y
 import Hydra.Sources.Cypher.Functions
 
 
-ns :: Namespace
-ns = Namespace "hydra.cypher.features"
+ns :: ModuleName
+ns = ModuleName "hydra.cypher.features"
 
 cypherFeatures :: String -> Type
 cypherFeatures = typeref ns
@@ -29,7 +29,7 @@ data FeatureSet = FeatureSet {
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
             moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A model for characterizing OpenCypher queries and implementations in terms of included features."
@@ -222,12 +222,12 @@ openCypherFeatures =  FeatureSet "Cypher"
 --   writeProtobuf "/tmp/proto" [openCypherFeaturesEnumModule]
 openCypherFeaturesEnumModule :: Module
 openCypherFeaturesEnumModule = Module {
-                                 moduleNamespace = ns2,
+                                 moduleName = ns2,
                                  moduleDefinitions = (map toTypeDef definitions),
                                  moduleDependencies = unqualifiedDep <$> [Core.ns],
                                  moduleDescription = Just ("A model with an enumeration of (Open)Cypher features.")}
   where
-    ns2 = Namespace "hydra.org/opencypher/features"
+    ns2 = ModuleName "hydra.org/opencypher/features"
     def = datatype ns2
     definitions = [
       def "CypherFeature" $

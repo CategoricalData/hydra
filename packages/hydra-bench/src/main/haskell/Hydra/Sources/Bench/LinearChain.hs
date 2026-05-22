@@ -37,8 +37,8 @@ import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Data.List                   as L
 import           Prelude                     hiding ((++))
 
-ns :: Namespace
-ns = Namespace "hydra.bench.linearChain"
+ns :: ModuleName
+ns = ModuleName "hydra.bench.linearChain"
 
 -- | Number of walker definitions in the chain. Bench runners take prefixes
 -- (e.g. first 10 / 25 / 50 / 100) to build scaling curves.
@@ -94,13 +94,13 @@ mkWalker k = define (L.concat ["walker", show k])
   $ walkerBody k
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-  moduleNamespace = ns,
+  moduleName = ns,
   moduleDefinitions = definitions,
-  moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesNamespaces),
+  moduleDependencies = unqualifiedDep <$> ([Strip.ns] `L.union` kernelTypesModuleNames),
   moduleDescription = Just "Linear-chain inference benchmark. walkerK cases on _Term variants and recurses to walker(K-1) — depth-N type-resolution stress test."
   }
   where
