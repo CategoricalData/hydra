@@ -68,6 +68,7 @@ module_ = Module {
             moduleDependencies =
               [moduleNamespace TypeScriptLanguageSource.module_,
                moduleNamespace TypeScriptSerdeSource.module_,
+               Analysis.ns,
                Environment.ns, Formatting.ns, Names.ns, Rewriting.ns,
                Serialization.ns, Sorting.ns, Strip.ns, Variables.ns]
               L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesNamespaces),
