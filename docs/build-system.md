@@ -293,11 +293,16 @@ next bottleneck the per-package design might run into.
 
 ### 4. Java and Python self-host pipelines
 
-Phase 5 (native DSL → JSON for hydra-java and hydra-python) still runs whole-universe
-inference via `bin/generate-hydra-java-from-java.sh` and
-`bin/generate-hydra-python-from-python.sh`. The same per-package treatment that landed
-in Phase 1 applies. Out of scope for #381; will land separately once the Haskell side
-is stable.
+Phase 5 (native DSL → JSON for hydra-java and hydra-python) now routes through a
+per-package iterative driver that mirrors the Haskell-side
+`inferAndWriteByPackage`: `Generation.inferAndWriteByPackage` in
+`heads/java/src/main/java/hydra/Generation.java` and `infer_and_write_by_package`
+in `heads/python/src/main/python/hydra/generation.py`. Both demos
+(`bin/python-self-host-demo.py` and `JavaSelfHostDemo`) call this driver after
+loading the kernel universe and the package's source modules. Today's runs
+collapse to a one-iteration loop (only hydra-java or hydra-python is being
+re-inferred); the structure is in place for multi-package self-hosts once
+additional packages are owned by these native pipelines.
 
 ## The end-state design
 
