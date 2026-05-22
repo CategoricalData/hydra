@@ -4187,4 +4187,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Source-to-source automatic differentiation for Float64 terms.",
-  "namespace": "hydra.differentiation"}
+  "name": "hydra.differentiation"}

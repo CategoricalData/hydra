@@ -499,4 +499,4 @@
     {"module": "hydra.typing"},
     {"module": "hydra.variants"}],
   "description": "Top-level error types for the Hydra kernel",
-  "namespace": "hydra.errors"}
+  "name": "hydra.errors"}

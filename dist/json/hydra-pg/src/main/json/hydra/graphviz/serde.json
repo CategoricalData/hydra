@@ -947,4 +947,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Serialization functions for converting Graphviz DOT AST to abstract expressions",
-  "namespace": "hydra.graphviz.serde"}
+  "name": "hydra.graphviz.serde"}

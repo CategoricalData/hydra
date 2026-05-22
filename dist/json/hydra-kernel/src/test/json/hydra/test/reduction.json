@@ -9282,4 +9282,4 @@
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [{"module": "hydra.reduction"}, {"module": "hydra.inference"}, {"module": "hydra.show.core"}],
   "description": "Test cases for term reduction/evaluation mechanics",
-  "namespace": "hydra.test.reduction"}
+  "name": "hydra.test.reduction"}

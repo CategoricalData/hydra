@@ -649,8 +649,8 @@
                             "term": {
                               "application": {
                                 "argument": {"variable": "qualName"},
-                                "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.Namespace"}}, "variables": []}},
+                                "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
+                            "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
                           {
                             "name": "local_",
                             "term": {
@@ -670,14 +670,14 @@
                                         "argument": {"variable": "gname"},
                                         "function": {
                                           "application": {
-                                            "argument": {"unwrap": "hydra.packaging.Namespace"},
+                                            "argument": {"unwrap": "hydra.packaging.ModuleName"},
                                             "function": {
                                               "application": {
                                                 "argument": {"literal": {"string": ""}},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                    "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
+                                                    "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
                                     {"literal": {"string": "#"}},
                                     {"application": {"argument": {"variable": "local_"}, "function": {"variable": "hydra.formatting.decapitalize"}}},
                                     {
@@ -868,4 +868,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Utility functions for working with RDF graphs and descriptions",
-  "namespace": "hydra.rdf.utils"}
+  "name": "hydra.rdf.utils"}

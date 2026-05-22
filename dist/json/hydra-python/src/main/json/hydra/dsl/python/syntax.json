@@ -59369,4 +59369,4 @@
     {"module": "hydra.core"},
     {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.python.syntax",
-  "namespace": "hydra.dsl.python.syntax"}
+  "name": "hydra.dsl.python.syntax"}

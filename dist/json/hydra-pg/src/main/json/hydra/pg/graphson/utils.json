@@ -1016,4 +1016,4 @@
     {"module": "hydra.pg.model"},
     {"module": "hydra.json.model"}],
   "description": "Utility functions for GraphSON encoding and property graph conversion.",
-  "namespace": "hydra.pg.graphson.utils"}
+  "name": "hydra.pg.graphson.utils"}

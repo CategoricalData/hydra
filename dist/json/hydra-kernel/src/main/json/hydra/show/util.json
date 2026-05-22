@@ -87,4 +87,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "String representations of hydra.util types",
-  "namespace": "hydra.show.util"}
+  "name": "hydra.show.util"}

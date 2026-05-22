@@ -526,4 +526,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "String representations of hydra.error.pg types",
-  "namespace": "hydra.show.error.pg"}
+  "name": "hydra.show.error.pg"}

@@ -1067,4 +1067,4 @@
     {"module": "hydra.pg.model"},
     {"module": "hydra.json.model"}],
   "description": "Functions for constructing GraphSON vertices from property graph vertices.",
-  "namespace": "hydra.pg.graphson.construct"}
+  "name": "hydra.pg.graphson.construct"}

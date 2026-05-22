@@ -214,4 +214,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "A module for tier-0 constants.",
-  "namespace": "hydra.constants"}
+  "name": "hydra.constants"}

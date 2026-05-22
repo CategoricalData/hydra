@@ -385,4 +385,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.paths"}, {"module": "hydra.typing"}, {"module": "hydra.variants"}],
   "description": "Error types for type checking",
-  "namespace": "hydra.error.checking"}
+  "name": "hydra.error.checking"}

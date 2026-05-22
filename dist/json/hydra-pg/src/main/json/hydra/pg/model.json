@@ -539,4 +539,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A typed property graph data model. Property graphs are parameterized a type for property and id values, while property graph schemas are parameterized by a type for property and id types",
-  "namespace": "hydra.pg.model"}
+  "name": "hydra.pg.model"}

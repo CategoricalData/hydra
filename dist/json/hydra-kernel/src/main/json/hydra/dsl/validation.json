@@ -1608,4 +1608,4 @@
           "variables": ["e"]}}}],
   "dependencies": [{"module": "hydra.validation"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.validation",
-  "namespace": "hydra.dsl.validation"}
+  "name": "hydra.dsl.validation"}

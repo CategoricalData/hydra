@@ -18428,4 +18428,4 @@
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [{"module": "hydra.reduction"}, {"module": "hydra.show.core"}],
   "description": "Test cases for hydra.lib.literals primitives",
-  "namespace": "hydra.test.lib.literals"}
+  "name": "hydra.test.lib.literals"}

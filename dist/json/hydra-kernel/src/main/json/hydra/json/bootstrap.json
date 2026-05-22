@@ -11169,7 +11169,7 @@
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "variable",
-                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.ModuleName"}}, "typeName": "hydra.core.Name"}}},
                                                                         "typeName": "hydra.core.Type"}}},
                                                                   {
                                                                     "name": "annotation",
@@ -12051,7 +12051,7 @@
                                               {
                                                 "record": {
                                                   "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "type",
                                                       "term": {
@@ -12067,7 +12067,7 @@
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "variable",
-                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.ModuleName"}}, "typeName": "hydra.core.Name"}}},
                                                                         "typeName": "hydra.core.Type"}}},
                                                                   {
                                                                     "name": "annotation",
@@ -12081,7 +12081,9 @@
                                                                                 "name": "literal",
                                                                                 "term": {
                                                                                   "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "A common prefix for all element names in the module"}}},
+                                                                                    "field": {
+                                                                                      "name": "string",
+                                                                                      "term": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}}]}}],
                                                                 "typeName": "hydra.core.AnnotatedType"}}},
@@ -12235,7 +12237,7 @@
                                                                       "inject": {
                                                                         "field": {
                                                                           "name": "variable",
-                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                                          "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.ModuleName"}}, "typeName": "hydra.core.Name"}}},
                                                                         "typeName": "hydra.core.Type"}}},
                                                                   {
                                                                     "name": "annotation",
@@ -12249,7 +12251,7 @@
                                                                                 "name": "literal",
                                                                                 "term": {
                                                                                   "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "The namespace of the depended-on module"}}},
+                                                                                    "field": {"name": "string", "term": {"literal": {"string": "The name of the depended-on module"}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}}]}}],
                                                                 "typeName": "hydra.core.AnnotatedType"}}},
@@ -12318,13 +12320,13 @@
                                                       "name": "string",
                                                       "term": {
                                                         "literal": {
-                                                          "string": "A dependency on another module, identified by its namespace and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate namespace across packages is a resolution error which can be disambiguated by naming the intended package explicitly."}}},
+                                                          "string": "A dependency on another module, identified by its name and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate module name across packages is a resolution error which can be disambiguated by naming the intended package explicitly."}}},
                                                     "typeName": "hydra.core.Literal"}}},
                                               "typeName": "hydra.core.Term"}}}]}}],
                                 "typeName": "hydra.core.AnnotatedType"}}},
                           "typeName": "hydra.core.Type"}}}}},
                 {
-                  "key": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}},
+                  "key": {"wrap": {"body": {"literal": {"string": "hydra.packaging.ModuleName"}}, "typeName": "hydra.core.Name"}},
                   "value": {
                     "annotated": {
                       "annotation": [{"key": "type", "value": {"variable": "hydra.core.Type"}}],
@@ -12360,7 +12362,9 @@
                                                 "name": "literal",
                                                 "term": {
                                                   "inject": {
-                                                    "field": {"name": "string", "term": {"literal": {"string": "A prefix for element names"}}},
+                                                    "field": {
+                                                      "name": "string",
+                                                      "term": {"literal": {"string": "The unique name of a module; a prefix for the names of elements defined in the module."}}},
                                                     "typeName": "hydra.core.Literal"}}},
                                               "typeName": "hydra.core.Term"}}}]}}],
                                 "typeName": "hydra.core.AnnotatedType"}}},
@@ -12836,7 +12840,7 @@
                                               {
                                                 "record": {
                                                   "fields": [
-                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                    {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "moduleName"}}, "typeName": "hydra.core.Name"}}},
                                                     {
                                                       "name": "type",
                                                       "term": {
@@ -12856,7 +12860,7 @@
                                                                             "inject": {
                                                                               "field": {
                                                                                 "name": "variable",
-                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.ModuleName"}}, "typeName": "hydra.core.Name"}}},
                                                                               "typeName": "hydra.core.Type"}}},
                                                                         "typeName": "hydra.core.Type"}}},
                                                                   {
@@ -12871,7 +12875,7 @@
                                                                                 "name": "literal",
                                                                                 "term": {
                                                                                   "inject": {
-                                                                                    "field": {"name": "string", "term": {"literal": {"string": "The optional namespace"}}},
+                                                                                    "field": {"name": "string", "term": {"literal": {"string": "The optional module name"}}},
                                                                                     "typeName": "hydra.core.Literal"}}},
                                                                               "typeName": "hydra.core.Term"}}}]}}],
                                                                 "typeName": "hydra.core.AnnotatedType"}}},
@@ -12929,7 +12933,7 @@
                                                   "inject": {
                                                     "field": {
                                                       "name": "string",
-                                                      "term": {"literal": {"string": "A qualified name consisting of an optional namespace together with a mandatory local name"}}},
+                                                      "term": {"literal": {"string": "A qualified name consisting of an optional module name together with a mandatory local name"}}},
                                                     "typeName": "hydra.core.Literal"}}},
                                               "typeName": "hydra.core.Term"}}}]}}],
                                 "typeName": "hydra.core.AnnotatedType"}}},
@@ -13384,7 +13388,7 @@
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "variable",
-                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.ModuleName"}}, "typeName": "hydra.core.Name"}}},
                                                                                                     "typeName": "hydra.core.Type"}}},
                                                                                               {
                                                                                                 "name": "second",
@@ -13440,7 +13444,7 @@
                                                                                                   "inject": {
                                                                                                     "field": {
                                                                                                       "name": "variable",
-                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.Namespace"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.packaging.ModuleName"}}, "typeName": "hydra.core.Name"}}},
                                                                                                     "typeName": "hydra.core.Type"}}},
                                                                                               {
                                                                                                 "name": "values",
@@ -13607,4 +13611,4 @@
         "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}, "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A module which provides a minimal typing environment for decoding other modules from JSON. This avoids certain problems with generating entire source modules into target languages like Java, which is subject to method size limits for large modules like hydra.core.",
-  "namespace": "hydra.json.bootstrap"}
+  "name": "hydra.json.bootstrap"}

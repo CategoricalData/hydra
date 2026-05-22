@@ -1258,4 +1258,4 @@
     {"module": "hydra.encode.variants"},
     {"module": "hydra.error.checking"}],
   "description": "Term encoders for hydra.error.checking",
-  "namespace": "hydra.encode.error.checking"}
+  "name": "hydra.encode.error.checking"}

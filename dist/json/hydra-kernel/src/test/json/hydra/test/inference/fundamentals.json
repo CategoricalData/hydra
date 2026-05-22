@@ -22040,4 +22040,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Inference tests for fundamental language features",
-  "namespace": "hydra.test.inference.fundamentals"}
+  "name": "hydra.test.inference.fundamentals"}

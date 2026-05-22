@@ -34,7 +34,7 @@ import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pur
 import qualified Data.Scientific as Sci
 import qualified Data.Set as S
 -- | Add names to existing namespaces mapping
-addNamesToNamespaces :: (Packaging.Namespace -> t0) -> S.Set Core.Name -> Util.Namespaces t0 -> Util.Namespaces t0
+addNamesToNamespaces :: (Packaging.ModuleName -> t0) -> S.Set Core.Name -> Util.Namespaces t0 -> Util.Namespaces t0
 addNamesToNamespaces encodeNamespace names ns0 =
 
       let nss = Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList names)))
@@ -93,7 +93,7 @@ analyzeFunctionTermWithGather cx forBinding getTC setTC argMode gEnv tparams arg
         in (analyzeFunctionTermWithGather cx forBinding getTC setTC argMode newEnv (Lists.cons tvar tparams) args bindings doms tapps tlBody)
       _ -> analyzeFunctionTermWithFinish cx getTC gEnv tparams args bindings doms tapps t
 -- | Get dependency namespaces from definitions
-definitionDependencyNamespaces :: [Packaging.Definition] -> S.Set Packaging.Namespace
+definitionDependencyNamespaces :: [Packaging.Definition] -> S.Set Packaging.ModuleName
 definitionDependencyNamespaces defs =
 
       let defNames =
@@ -103,7 +103,7 @@ definitionDependencyNamespaces defs =
           allNames = Sets.unions (Lists.map defNames defs)
       in (Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList allNames))))
 -- | Find dependency namespaces in all of a set of terms (Either version)
-dependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.Namespace)
+dependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> [Core.Binding] -> Either Errors.Error (S.Set Packaging.ModuleName)
 dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
 
       let depNames =
@@ -255,7 +255,7 @@ moduleContainsDecimalLiterals mod =
                     _ -> Nothing) (Packaging.moduleDefinitions mod))
       in (Lists.foldl (\acc -> \t -> Logic.or acc (termContainsDecimal t)) False defTerms)
 -- | Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)
-moduleDependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.Namespace)
+moduleDependencyNamespaces :: t0 -> Graph.Graph -> Bool -> Bool -> Bool -> Bool -> Packaging.Module -> Either Errors.Error (S.Set Packaging.ModuleName)
 moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
 
       let allBindings =
@@ -279,9 +279,9 @@ moduleDependencyNamespaces cx graph binds withPrims withNoms withSchema mod =
                   Core.bindingTerm = (Packaging.termDefinitionTerm v0),
                   Core.bindingTypeScheme = (Packaging.termDefinitionTypeScheme v0)})
                 _ -> Nothing) (Packaging.moduleDefinitions mod))
-      in (Eithers.map (\deps -> Sets.delete (Packaging.moduleNamespace mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema allBindings))
+      in (Eithers.map (\deps -> Sets.delete (Packaging.moduleName mod) deps) (dependencyNamespaces cx graph binds withPrims withNoms withSchema allBindings))
 -- | Create namespaces mapping for definitions
-namespacesForDefinitions :: (Packaging.Namespace -> t0) -> Packaging.Namespace -> [Packaging.Definition] -> Util.Namespaces t0
+namespacesForDefinitions :: (Packaging.ModuleName -> t0) -> Packaging.ModuleName -> [Packaging.Definition] -> Util.Namespaces t0
 namespacesForDefinitions encodeNamespace focusNs defs =
 
       let nss = Sets.delete focusNs (definitionDependencyNamespaces defs)

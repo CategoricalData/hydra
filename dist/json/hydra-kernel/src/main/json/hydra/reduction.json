@@ -7207,4 +7207,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Functions for reducing terms and types, i.e. performing computations.",
-  "namespace": "hydra.reduction"}
+  "name": "hydra.reduction"}

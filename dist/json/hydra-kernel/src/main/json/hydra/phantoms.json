@@ -62,4 +62,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "Phantom types for use with Hydra DSLs",
-  "namespace": "hydra.phantoms"}
+  "name": "hydra.phantoms"}

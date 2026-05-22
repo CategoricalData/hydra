@@ -289,4 +289,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints and reserved words for Scala",
-  "namespace": "hydra.scala.language"}
+  "name": "hydra.scala.language"}

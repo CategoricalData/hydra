@@ -36,4 +36,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "Based on https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto",
-  "namespace": "hydra.protobuf.any"}
+  "name": "hydra.protobuf.any"}

@@ -12,15 +12,15 @@
                   "wrap": {
                     "body": {
                       "application": {
-                        "argument": {"application": {"argument": {"variable": "ns_"}, "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                        "argument": {"application": {"argument": {"variable": "ns_"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                         "function": {
                           "application": {"argument": {"literal": {"string": "generation."}}, "function": {"variable": "hydra.lib.strings.cat2"}}}}},
-                    "typeName": "hydra.packaging.Namespace"}},
-                "domain": {"variable": "hydra.packaging.Namespace"},
+                    "typeName": "hydra.packaging.ModuleName"}},
+                "domain": {"variable": "hydra.packaging.ModuleName"},
                 "parameter": "ns_"}}}},
         "typeScheme": {
           "body": {
-            "function": {"codomain": {"variable": "hydra.packaging.Namespace"}, "domain": {"variable": "hydra.packaging.Namespace"}}},
+            "function": {"codomain": {"variable": "hydra.packaging.ModuleName"}, "domain": {"variable": "hydra.packaging.ModuleName"}}},
           "variables": []}}},
     {
       "term": {
@@ -560,13 +560,11 @@
                             "argument": {"variable": "m"},
                             "function": {"project": {"fieldName": "description", "typeName": "hydra.packaging.Module"}}}}},
                       {
-                        "name": "namespace",
+                        "name": "name",
                         "term": {
                           "application": {
                             "argument": {
-                              "application": {
-                                "argument": {"variable": "m"},
-                                "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                              "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
                             "function": {"variable": "hydra.test.transform.addGenerationPrefix"}}}},
                       {
                         "name": "dependencies",
@@ -750,4 +748,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Transform test cases for code generation, filtering to tests that can be compiled to target languages",
-  "namespace": "hydra.test.transform"}
+  "name": "hydra.test.transform"}

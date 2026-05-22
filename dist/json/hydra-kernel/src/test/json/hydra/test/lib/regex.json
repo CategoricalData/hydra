@@ -4496,4 +4496,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for hydra.lib.regex primitives",
-  "namespace": "hydra.test.lib.regex"}
+  "name": "hydra.test.lib.regex"}

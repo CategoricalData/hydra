@@ -9627,4 +9627,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for core rewrite/fold combinators",
-  "namespace": "hydra.test.rewriting"}
+  "name": "hydra.test.rewriting"}

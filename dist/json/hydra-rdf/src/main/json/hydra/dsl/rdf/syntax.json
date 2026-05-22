@@ -4105,4 +4105,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.rdf.syntax"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.rdf.syntax",
-  "namespace": "hydra.dsl.rdf.syntax"}
+  "name": "hydra.dsl.rdf.syntax"}

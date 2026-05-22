@@ -234,4 +234,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints for Protobuf v3",
-  "namespace": "hydra.protobuf.language"}
+  "name": "hydra.protobuf.language"}

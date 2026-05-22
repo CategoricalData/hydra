@@ -52,4 +52,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Type-level declarations for the hand-written Hydra.Test.TestEnv module.",
-  "namespace": "hydra.test.testEnv"}
+  "name": "hydra.test.testEnv"}

@@ -9999,9 +9999,7 @@
                                                                                                                                                                         "term": {
                                                                                                                                                                           "application": {
                                                                                                                                                                             "argument": {
-                                                                                                                                                                              "application": {
-                                                                                                                                                                                "argument": {"variable": "mod"},
-                                                                                                                                                                                "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
+                                                                                                                                                                              "application": {"argument": {"variable": "mod"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
                                                                                                                                                                             "function": {
                                                                                                                                                                               "application": {
                                                                                                                                                                                 "argument": {"wrap": {"body": {"literal": {"string": "wat"}}, "typeName": "hydra.packaging.FileExtension"}},
@@ -10444,4 +10442,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "WebAssembly code generator: converts Hydra type and term modules to WAT source code",
-  "namespace": "hydra.wasm.coder"}
+  "name": "hydra.wasm.coder"}

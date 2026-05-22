@@ -214,4 +214,4 @@
     {"module": "hydra.encode.core"},
     {"module": "hydra.coders"}],
   "description": "Term encoders for hydra.coders",
-  "namespace": "hydra.encode.coders"}
+  "name": "hydra.encode.coders"}

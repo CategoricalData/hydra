@@ -512,4 +512,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Printing functions for property graph elements",
-  "namespace": "hydra.pg.printing"}
+  "name": "hydra.pg.printing"}

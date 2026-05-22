@@ -47,4 +47,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Hydra's hoisting test suite",
-  "namespace": "hydra.test.hoisting.all"}
+  "name": "hydra.test.hoisting.all"}

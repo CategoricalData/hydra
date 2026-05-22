@@ -1550,4 +1550,4 @@
     {"module": "hydra.variants"},
     {"module": "hydra.yaml.model"}],
   "description": "Native YAML serialization: YAML Node to String",
-  "namespace": "hydra.yaml.serde"}
+  "name": "hydra.yaml.serde"}

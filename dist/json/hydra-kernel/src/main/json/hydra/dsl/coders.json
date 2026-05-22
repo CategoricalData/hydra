@@ -5852,4 +5852,4 @@
     {"module": "hydra.dsl.variants"},
     {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.coders",
-  "namespace": "hydra.dsl.coders"}
+  "name": "hydra.dsl.coders"}

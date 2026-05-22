@@ -1056,4 +1056,4 @@
           "variables": ["a"]}}}],
   "dependencies": [{"module": "hydra.parsing"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.parsing",
-  "namespace": "hydra.dsl.parsing"}
+  "name": "hydra.dsl.parsing"}

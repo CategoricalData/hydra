@@ -3120,4 +3120,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for topological sorting algorithms",
-  "namespace": "hydra.test.sorting"}
+  "name": "hydra.test.sorting"}

@@ -59,7 +59,7 @@ constructModule cx g mod defs =
       let partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
-          nsName = Packaging.unNamespace (Packaging.moduleNamespace mod)
+          nsName = Packaging.unModuleName (Packaging.moduleName mod)
           pname =
                   Syntax.NameData {
                     Syntax.nameDataValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." nsName)))}
@@ -840,7 +840,7 @@ moduleToScala :: Packaging.Module -> [Packaging.Definition] -> t0 -> Graph.Graph
 moduleToScala mod defs cx g =
     Eithers.bind (constructModule cx g mod defs) (\pkg ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.pkgToExpr pkg))
-      in (Right (Maps.singleton (Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "scala") (Packaging.moduleNamespace mod)) s)))
+      in (Right (Maps.singleton (Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "scala") (Packaging.moduleName mod)) s)))
 -- | Strip wrap eliminations from terms (newtypes are erased in Scala)
 stripWrapEliminations :: Core.Term -> Core.Term
 stripWrapEliminations t =
@@ -861,23 +861,23 @@ stripWrapEliminations t =
           _ -> t
       _ -> t
 -- | Create an element import statement
-toElImport :: Packaging.Namespace -> Syntax.Stat
+toElImport :: Packaging.ModuleName -> Syntax.Stat
 toElImport ns =
     Syntax.StatImportExport (Syntax.ImportExportStatImport (Syntax.Import {
       Syntax.importImporters = [
         Syntax.Importer {
           Syntax.importerRef = (Syntax.RefDataName (Syntax.NameData {
-            Syntax.nameDataValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Packaging.unNamespace ns))))})),
+            Syntax.nameDataValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Packaging.unModuleName ns))))})),
           Syntax.importerImportees = [
             Syntax.ImporteeWildcard]}]}))
 -- | Create a primitive import statement
-toPrimImport :: Packaging.Namespace -> Syntax.Stat
+toPrimImport :: Packaging.ModuleName -> Syntax.Stat
 toPrimImport ns =
     Syntax.StatImportExport (Syntax.ImportExportStatImport (Syntax.Import {
       Syntax.importImporters = [
         Syntax.Importer {
           Syntax.importerRef = (Syntax.RefDataName (Syntax.NameData {
-            Syntax.nameDataValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Packaging.unNamespace ns))))})),
+            Syntax.nameDataValue = (Syntax.PredefString (Strings.intercalate "." (Strings.splitOn "." (Packaging.unModuleName ns))))})),
           Syntax.importerImportees = []}]}))
 -- | Convert a type parameter to a type variable reference
 typeParamToTypeVar :: Syntax.ParamType -> Syntax.Type

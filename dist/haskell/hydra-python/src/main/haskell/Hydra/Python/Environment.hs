@@ -21,7 +21,7 @@ _PythonVersion_python312 = Core.Name "python312"
 -- | Environment for Python code generation
 data PythonEnvironment =
   PythonEnvironment {
-    -- | Namespace mapping for imports
+    -- | ModuleName mapping for imports
     pythonEnvironmentNamespaces :: (Util.Namespaces Syntax.DottedName),
     -- | Type variables in scope, with their Python names
     pythonEnvironmentBoundTypeVariables :: ([Core.Name], (M.Map Core.Name Syntax.Name)),
@@ -46,7 +46,7 @@ _PythonEnvironment_inlineVariables = Core.Name "inlineVariables"
 -- | Temporary metadata used to create the header section of a Python file
 data PythonModuleMetadata =
   PythonModuleMetadata {
-    -- | Namespace mapping for imports
+    -- | ModuleName mapping for imports
     pythonModuleMetadataNamespaces :: (Util.Namespaces Syntax.DottedName),
     -- | Type variables used in the module
     pythonModuleMetadataTypeVariables :: (S.Set Core.Name),

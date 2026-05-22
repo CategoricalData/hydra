@@ -5399,4 +5399,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.pg.model",
-  "namespace": "hydra.decode.pg.model"}
+  "name": "hydra.decode.pg.model"}

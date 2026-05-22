@@ -13337,4 +13337,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Core rewrite and fold combinators for terms and types",
-  "namespace": "hydra.rewriting"}
+  "name": "hydra.rewriting"}

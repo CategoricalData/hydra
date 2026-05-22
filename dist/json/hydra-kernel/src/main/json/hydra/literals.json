@@ -231,4 +231,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Conversion functions for literal values.",
-  "namespace": "hydra.literals"}
+  "name": "hydra.literals"}

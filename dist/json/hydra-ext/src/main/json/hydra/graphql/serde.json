@@ -773,4 +773,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Serialization functions for converting GraphQL AST to abstract expressions",
-  "namespace": "hydra.graphql.serde"}
+  "name": "hydra.graphql.serde"}

@@ -109,4 +109,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A model for simple graphs as adjacency lists",
-  "namespace": "hydra.topology"}
+  "name": "hydra.topology"}

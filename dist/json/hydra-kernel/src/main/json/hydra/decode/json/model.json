@@ -785,4 +785,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.json.model",
-  "namespace": "hydra.decode.json.model"}
+  "name": "hydra.decode.json.model"}

@@ -1578,4 +1578,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.relational",
-  "namespace": "hydra.decode.relational"}
+  "name": "hydra.decode.relational"}

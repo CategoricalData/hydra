@@ -148,4 +148,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints for YAML",
-  "namespace": "hydra.yaml.language"}
+  "name": "hydra.yaml.language"}

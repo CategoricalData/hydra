@@ -400,4 +400,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.context",
-  "namespace": "hydra.decode.context"}
+  "name": "hydra.decode.context"}

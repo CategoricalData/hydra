@@ -7973,4 +7973,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for automatic differentiation",
-  "namespace": "hydra.test.differentiation"}
+  "name": "hydra.test.differentiation"}

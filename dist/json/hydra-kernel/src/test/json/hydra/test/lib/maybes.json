@@ -2610,4 +2610,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for hydra.lib.maybes primitives",
-  "namespace": "hydra.test.lib.maybes"}
+  "name": "hydra.test.lib.maybes"}

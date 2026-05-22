@@ -1,18 +1,18 @@
 {
   "version": 2,
-  "generator": "1138634cc8df1399",
-  "selfHash": "faa3ce8587d886b81fcaa61beb1ed680fa9a33c94927ce8a25f0115d9f696671",
-  "depHash:hydra-kernel": "ef87b417371ec4b69defe1a5c486cc8838b5bb84acf5899e65245d1a86d150c4",
+  "generator": "933f8b5689c5c4be",
+  "selfHash": "07d53dcfc80b426df76a5de700dcbee71478c68993ec0234c995dca74384edf5",
+  "depHash:hydra-kernel": "c9ca1cca5860bba8a13101d1c94b726af1125abd32f8fa960f874cca5a592672",
   "inputs": {
-    "hydra.dsl.lisp.syntax": { "kind": "Other", "hash": "623f011bf0048ef3bf42bcc46e9ef193ee6288f068e3abe27c5cf56c7bd8968a" },
-    "hydra.lisp.coder": { "kind": "Other", "hash": "8c221addcaea55efd1f377c1fd5b9d36435e4168e7fbe57f388c1fa2ff59c5d2" },
-    "hydra.lisp.language": { "kind": "Other", "hash": "ea092e75e18392266b2785c78f81810cd36f67607e68f36a01522a7ed497d8c9" },
-    "hydra.lisp.serde": { "kind": "Other", "hash": "712986fba2b7f61e5281055d3057b77ce426b4b079f3b2e4f80069bd647576d5" },
-    "hydra.lisp.syntax": { "kind": "Other", "hash": "1d7ef92ae8e5ea307ba28945f3823f664f91c9c6a74c6d44ff491c53e4ba7c36" }
+    "hydra.dsl.lisp.syntax": { "kind": "Other", "hash": "f371f8cedaa1e7b8b5d49d4a4c714a32bcbb02f7aabfb112bb89716ccc80be84" },
+    "hydra.lisp.coder": { "kind": "Other", "hash": "5ec1d6231ec31a7591e59cbaa7d7ed8b2fe45c495f7d51e76b6d63a9f3cac1c1" },
+    "hydra.lisp.language": { "kind": "Other", "hash": "3255c31b6872fc27e28645459bffbbde8454d13ced43493da0442f14d4d8e951" },
+    "hydra.lisp.serde": { "kind": "Other", "hash": "e27611f0c0547422724637cec23118a9d4e3fa309e0a9366aaeca653c45ef8b4" },
+    "hydra.lisp.syntax": { "kind": "Other", "hash": "b681e57b16eccc91ccea082830b5b5f3f9d6e8b99ff1d601126befe44266aca5" }
   },
   "outputs": {
-    "Hydra/Dsl/Lisp/Syntax.hs": { "kind": "TargetFile", "hash": "d3a96b3e2f5ab089ed36f9acdab35a25a14c88c526144d57cc0c7f6b9c1e7d8a" },
-    "Hydra/Lisp/Coder.hs": { "kind": "TargetFile", "hash": "3d923109781ec3ae0f416b7be0e4485734e3828fb1dfbb856350e35a7cc6cf83" },
+    "Hydra/Dsl/Lisp/Syntax.hs": { "kind": "TargetFile", "hash": "2a4c912e7a292283cd3d702b710a054a931447b81b69cdab822234744a481a79" },
+    "Hydra/Lisp/Coder.hs": { "kind": "TargetFile", "hash": "a99c74beca4311d3141c687fd690915d2fde26238714aff96b1064588f86706f" },
     "Hydra/Lisp/Language.hs": { "kind": "TargetFile", "hash": "f77b4dae801d5b89bd2c423dea37df6a439429d15748806974fb3e3fc9fa8f93" },
     "Hydra/Lisp/Serde.hs": { "kind": "TargetFile", "hash": "92daca151d0b513c83fbd0281d03357398edcf64c5a81b44431dd3eecc1137d7" },
     "Hydra/Lisp/Syntax.hs": { "kind": "TargetFile", "hash": "39e6b1d906a987f1fa3a403c24f86a0788c2b02c6cb0d6e00fa69105dbb1f583" }

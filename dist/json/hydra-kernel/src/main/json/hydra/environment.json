@@ -1606,4 +1606,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Graph to type environment conversions",
-  "namespace": "hydra.environment"}
+  "name": "hydra.environment"}

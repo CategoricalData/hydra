@@ -3463,4 +3463,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "JSON decoding for Hydra terms. Converts JSON Values to Terms using Either for error handling.",
-  "namespace": "hydra.json.decode"}
+  "name": "hydra.json.decode"}

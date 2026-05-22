@@ -4443,10 +4443,8 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "m"},
-                                                        "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                                    "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                                      "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
+                                                    "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                               {
                                                 "name": "fromDef",
@@ -6648,10 +6646,8 @@
                                             "term": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {
-                                                    "argument": {"variable": "mod_"},
-                                                    "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                                "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                                  "application": {"argument": {"variable": "mod_"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
+                                                "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                         "body": {
                                           "let": {
@@ -7364,4 +7360,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline",
-  "namespace": "hydra.coq.generate"}
+  "name": "hydra.coq.generate"}

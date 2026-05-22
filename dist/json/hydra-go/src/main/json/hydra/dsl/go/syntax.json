@@ -34092,4 +34092,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.go.syntax"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.go.syntax",
-  "namespace": "hydra.dsl.go.syntax"}
+  "name": "hydra.dsl.go.syntax"}

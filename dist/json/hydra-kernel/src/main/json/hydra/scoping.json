@@ -923,4 +923,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Graph context extension and type scheme conversion",
-  "namespace": "hydra.scoping"}
+  "name": "hydra.scoping"}

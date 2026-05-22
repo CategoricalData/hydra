@@ -881,4 +881,4 @@
     {"module": "hydra.decode.core"},
     {"module": "hydra.decode.relational"}],
   "description": "Term decoders for hydra.tabular",
-  "namespace": "hydra.decode.tabular"}
+  "name": "hydra.decode.tabular"}

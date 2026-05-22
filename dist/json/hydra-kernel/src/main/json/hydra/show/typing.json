@@ -170,4 +170,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "String representations of hydra.typing types",
-  "namespace": "hydra.show.typing"}
+  "name": "hydra.show.typing"}

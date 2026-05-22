@@ -43,8 +43,8 @@ elementReference namespaces name =
           qname = Names.qualifyName name
           local = Packaging.qualifiedNameLocal qname
           escLocal = sanitizeHaskellName local
-          mns = Packaging.qualifiedNameNamespace qname
-      in (Maybes.cases (Packaging.qualifiedNameNamespace qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
+          mns = Packaging.qualifiedNameModuleName qname
+      in (Maybes.cases (Packaging.qualifiedNameModuleName qname) (simpleName local) (\ns -> Maybes.cases (Maps.lookup ns namespacesMap) (simpleName local) (\mn ->
         let aliasStr = Syntax.unModuleName mn
         in (Logic.ifElse (Equality.equal ns gname) (simpleName escLocal) (rawName (Strings.cat [
           aliasStr,
@@ -73,8 +73,8 @@ hsvar s = Syntax.ExpressionVariable (rawName s)
 namespacesForModule :: Packaging.Module -> t0 -> Graph.Graph -> Either Errors.Error (Util.Namespaces Syntax.ModuleName)
 namespacesForModule mod cx g =
     Eithers.bind (Analysis.moduleDependencyNamespaces cx g True True True True mod) (\nss ->
-      let ns = Packaging.moduleNamespace mod
-          segmentsOf = \namespace -> Strings.splitOn "." (Packaging.unNamespace namespace)
+      let ns = Packaging.moduleName mod
+          segmentsOf = \namespace -> Strings.splitOn "." (Packaging.unModuleName namespace)
           aliasFromSuffix =
                   \segs -> \n ->
                     let dropCount = Math.sub (Lists.length segs) n
@@ -147,14 +147,14 @@ recordFieldReference namespaces sname fname =
 
       let fnameStr = Core.unName fname
           qname = Names.qualifyName sname
-          ns = Packaging.qualifiedNameNamespace qname
+          ns = Packaging.qualifiedNameModuleName qname
           typeNameStr = typeNameForRecord sname
           decapitalized = Formatting.decapitalize typeNameStr
           capitalized = Formatting.capitalize fnameStr
           nm = Strings.cat2 decapitalized capitalized
           qualName =
                   Packaging.QualifiedName {
-                    Packaging.qualifiedNameNamespace = ns,
+                    Packaging.qualifiedNameModuleName = ns,
                     Packaging.qualifiedNameLocal = nm}
           unqualName = Names.unqualifyName qualName
       in (elementReference namespaces unqualName)
@@ -204,7 +204,7 @@ unionFieldReference boundNames namespaces sname fname =
 
       let fnameStr = Core.unName fname
           qname = Names.qualifyName sname
-          ns = Packaging.qualifiedNameNamespace qname
+          ns = Packaging.qualifiedNameModuleName qname
           typeNameStr = typeNameForRecord sname
           capitalizedTypeName = Formatting.capitalize typeNameStr
           capitalizedFieldName = Formatting.capitalize fnameStr
@@ -212,13 +212,13 @@ unionFieldReference boundNames namespaces sname fname =
                   \name ->
                     let tname =
                             Names.unqualifyName (Packaging.QualifiedName {
-                              Packaging.qualifiedNameNamespace = ns,
+                              Packaging.qualifiedNameModuleName = ns,
                               Packaging.qualifiedNameLocal = name})
                     in (Logic.ifElse (Sets.member tname boundNames) (deconflict (Strings.cat2 name "_")) name)
           nm = deconflict (Strings.cat2 capitalizedTypeName capitalizedFieldName)
           qualName =
                   Packaging.QualifiedName {
-                    Packaging.qualifiedNameNamespace = ns,
+                    Packaging.qualifiedNameModuleName = ns,
                     Packaging.qualifiedNameLocal = nm}
           unqualName = Names.unqualifyName qualName
       in (elementReference namespaces unqualName)

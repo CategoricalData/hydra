@@ -894,4 +894,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Annotation and type stripping and normalization",
-  "namespace": "hydra.strip"}
+  "name": "hydra.strip"}

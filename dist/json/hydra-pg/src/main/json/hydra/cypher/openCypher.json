@@ -888,4 +888,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A Cypher model based on the OpenCypher specification (version 23), copyright Neo Technology, available at:\n  https://opencypher.org/resources/",
-  "namespace": "hydra.cypher.openCypher"}
+  "name": "hydra.cypher.openCypher"}

@@ -1586,4 +1586,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.variants"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.variants",
-  "namespace": "hydra.dsl.variants"}
+  "name": "hydra.dsl.variants"}

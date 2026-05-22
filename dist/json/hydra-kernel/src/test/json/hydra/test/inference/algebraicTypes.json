@@ -11620,4 +11620,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Inference tests for algebraic data types",
-  "namespace": "hydra.test.inference.algebraicTypes"}
+  "name": "hydra.test.inference.algebraicTypes"}

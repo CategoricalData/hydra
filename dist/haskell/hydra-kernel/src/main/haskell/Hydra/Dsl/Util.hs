@@ -66,7 +66,7 @@ comparisonLessThan =
         Core.fieldName = (Core.Name "lessThan"),
         Core.fieldTerm = Core.TermUnit}}))
 -- | DSL constructor for hydra.util.Namespaces
-namespaces :: Phantoms.TTerm (Packaging.Namespace, n) -> Phantoms.TTerm (M.Map Packaging.Namespace n) -> Phantoms.TTerm (Util.Namespaces n)
+namespaces :: Phantoms.TTerm (Packaging.ModuleName, n) -> Phantoms.TTerm (M.Map Packaging.ModuleName n) -> Phantoms.TTerm (Util.Namespaces n)
 namespaces focus mapping =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
@@ -78,7 +78,7 @@ namespaces focus mapping =
           Core.fieldName = (Core.Name "mapping"),
           Core.fieldTerm = (Phantoms.unTTerm mapping)}]}))
 -- | DSL accessor for the focus field of hydra.util.Namespaces
-namespacesFocus :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (Packaging.Namespace, n)
+namespacesFocus :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (Packaging.ModuleName, n)
 namespacesFocus x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -86,7 +86,7 @@ namespacesFocus x =
         Core.projectionFieldName = (Core.Name "focus")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the mapping field of hydra.util.Namespaces
-namespacesMapping :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (M.Map Packaging.Namespace n)
+namespacesMapping :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (M.Map Packaging.ModuleName n)
 namespacesMapping x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -94,7 +94,7 @@ namespacesMapping x =
         Core.projectionFieldName = (Core.Name "mapping")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the focus field of hydra.util.Namespaces
-namespacesWithFocus :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (Packaging.Namespace, n) -> Phantoms.TTerm (Util.Namespaces n)
+namespacesWithFocus :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (Packaging.ModuleName, n) -> Phantoms.TTerm (Util.Namespaces n)
 namespacesWithFocus original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),
@@ -110,7 +110,7 @@ namespacesWithFocus original newVal =
               Core.projectionFieldName = (Core.Name "mapping")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the mapping field of hydra.util.Namespaces
-namespacesWithMapping :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (M.Map Packaging.Namespace n) -> Phantoms.TTerm (Util.Namespaces n)
+namespacesWithMapping :: Phantoms.TTerm (Util.Namespaces n) -> Phantoms.TTerm (M.Map Packaging.ModuleName n) -> Phantoms.TTerm (Util.Namespaces n)
 namespacesWithMapping original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.util.Namespaces"),

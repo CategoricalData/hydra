@@ -2622,4 +2622,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "A module for lexical operations over graphs.",
-  "namespace": "hydra.lexical"}
+  "name": "hydra.lexical"}

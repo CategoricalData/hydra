@@ -10576,4 +10576,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Inference tests for type class constraints (ordering and equality)",
-  "namespace": "hydra.test.inference.classes"}
+  "name": "hydra.test.inference.classes"}

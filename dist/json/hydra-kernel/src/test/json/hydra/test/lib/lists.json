@@ -30973,4 +30973,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for hydra.lib.lists primitives",
-  "namespace": "hydra.test.lib.lists"}
+  "name": "hydra.test.lib.lists"}

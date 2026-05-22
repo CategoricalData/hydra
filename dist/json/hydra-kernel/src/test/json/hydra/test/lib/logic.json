@@ -2033,4 +2033,4 @@
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [{"module": "hydra.reduction"}, {"module": "hydra.show.core"}],
   "description": "Test cases for hydra.lib.logic primitives",
-  "namespace": "hydra.test.lib.logic"}
+  "name": "hydra.test.lib.logic"}

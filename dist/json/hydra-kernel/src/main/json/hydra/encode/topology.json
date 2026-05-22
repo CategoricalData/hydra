@@ -366,4 +366,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.topology"}],
   "description": "Term encoders for hydra.topology",
-  "namespace": "hydra.encode.topology"}
+  "name": "hydra.encode.topology"}

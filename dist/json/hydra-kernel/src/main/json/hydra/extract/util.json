@@ -187,4 +187,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Extraction and validation for hydra.util types",
-  "namespace": "hydra.extract.util"}
+  "name": "hydra.extract.util"}

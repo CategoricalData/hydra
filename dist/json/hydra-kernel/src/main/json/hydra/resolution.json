@@ -2270,4 +2270,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Type dereference, lookup, requirements, and instantiation",
-  "namespace": "hydra.resolution"}
+  "name": "hydra.resolution"}

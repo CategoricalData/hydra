@@ -1798,4 +1798,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Utilities for type unification.",
-  "namespace": "hydra.unification"}
+  "name": "hydra.unification"}

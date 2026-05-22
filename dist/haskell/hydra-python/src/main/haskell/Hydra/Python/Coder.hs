@@ -787,7 +787,7 @@ encodePythonModule :: Context.Context -> Graph.Graph -> Packaging.Module -> [Pac
 encodePythonModule cx g mod defs0 =
 
       let defs = Environment.reorderDefs defs0
-          meta0 = gatherMetadata (Packaging.moduleNamespace mod) defs
+          meta0 = gatherMetadata (Packaging.moduleName mod) defs
           namespaces0 = PythonEnvironment.pythonModuleMetadataNamespaces meta0
           env0 = initialEnvironment namespaces0 g
           isTypeMod = isTypeModuleCheck defs0
@@ -1553,7 +1553,7 @@ gatherLambdas term =
                 _ -> (params, t)
       in (go [] term)
 -- | Gather metadata from definitions
-gatherMetadata :: Packaging.Namespace -> [Packaging.Definition] -> PythonEnvironment.PythonModuleMetadata
+gatherMetadata :: Packaging.ModuleName -> [Packaging.Definition] -> PythonEnvironment.PythonModuleMetadata
 gatherMetadata focusNs defs =
 
       let start = emptyMetadata (Utils.findNamespaces focusNs defs)
@@ -1609,7 +1609,7 @@ initialEnvironment namespaces tcontext =
       PythonEnvironment.pythonEnvironmentSkipCasts = True,
       PythonEnvironment.pythonEnvironmentInlineVariables = Sets.empty}
 -- | Create initial empty metadata for a Python module
-initialMetadata :: Packaging.Namespace -> PythonEnvironment.PythonModuleMetadata
+initialMetadata :: Packaging.ModuleName -> PythonEnvironment.PythonModuleMetadata
 initialMetadata ns =
 
       let dottedNs = PythonNames.encodeNamespace ns
@@ -1827,8 +1827,7 @@ moduleToPython :: Packaging.Module -> [Packaging.Definition] -> Context.Context 
 moduleToPython mod defs cx g =
     Eithers.bind (encodePythonModule cx g mod defs) (\file ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr file))
-          path =
-                  Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleNamespace mod)
+          path = Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "py") (Packaging.moduleName mod)
       in (Right (Maps.singleton path s)))
 -- | Accessor for the graph field of PyGraph
 pyGraphGraph :: PythonEnvironment.PyGraph -> Graph.Graph

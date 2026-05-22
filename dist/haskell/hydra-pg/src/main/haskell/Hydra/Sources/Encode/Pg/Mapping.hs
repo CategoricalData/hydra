@@ -11,12 +11,12 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.pg.mapping"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.pg.mapping"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.pg.mapping"),
       Packaging.moduleDependencies = [
-        (Packaging.ModuleDependency (Packaging.Namespace "hydra.encode.pg.model") Nothing),
-        (Packaging.ModuleDependency (Packaging.Namespace "hydra.encode.coders") Nothing),
-        (Packaging.ModuleDependency (Packaging.Namespace "hydra.encode.core") Nothing),
-        (Packaging.ModuleDependency (Packaging.Namespace "hydra.pg.mapping") Nothing)],
+        (Packaging.ModuleDependency (Packaging.ModuleName "hydra.encode.pg.model") Nothing),
+        (Packaging.ModuleDependency (Packaging.ModuleName "hydra.encode.coders") Nothing),
+        (Packaging.ModuleDependency (Packaging.ModuleName "hydra.encode.core") Nothing),
+        (Packaging.ModuleDependency (Packaging.ModuleName "hydra.pg.mapping") Nothing)],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.mapping.annotationSchema"),

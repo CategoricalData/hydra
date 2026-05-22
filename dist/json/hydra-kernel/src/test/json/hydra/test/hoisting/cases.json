@@ -19023,4 +19023,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for subterm hoisting and case statement hoisting",
-  "namespace": "hydra.test.hoisting.cases"}
+  "name": "hydra.test.hoisting.cases"}

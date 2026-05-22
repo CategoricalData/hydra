@@ -85,4 +85,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.relational"}],
   "description": "A simple, untyped tabular data model, suitable for CSVs and TSVs",
-  "namespace": "hydra.tabular"}
+  "name": "hydra.tabular"}

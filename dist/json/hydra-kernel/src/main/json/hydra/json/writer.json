@@ -592,4 +592,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "JSON serialization functions using the Hydra AST",
-  "namespace": "hydra.json.writer"}
+  "name": "hydra.json.writer"}

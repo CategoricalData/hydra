@@ -1581,4 +1581,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.variants"}],
   "description": "Term encoders for hydra.variants",
-  "namespace": "hydra.encode.variants"}
+  "name": "hydra.encode.variants"}

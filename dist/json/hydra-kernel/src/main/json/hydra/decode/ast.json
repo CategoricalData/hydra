@@ -3821,4 +3821,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.ast",
-  "namespace": "hydra.decode.ast"}
+  "name": "hydra.decode.ast"}

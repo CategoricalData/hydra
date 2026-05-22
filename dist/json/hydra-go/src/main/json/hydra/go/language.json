@@ -288,4 +288,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints and reserved words for Go 1.22+",
-  "namespace": "hydra.go.language"}
+  "name": "hydra.go.language"}

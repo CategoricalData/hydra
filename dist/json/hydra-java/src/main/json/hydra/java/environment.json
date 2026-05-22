@@ -193,6 +193,11 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Graph context for type inference"}}}],
                         "body": {"variable": "hydra.graph.Graph"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.java.syntax", "hydra.core", "hydra.graph", "hydra.packaging", "hydra.typing"],
+  "dependencies": [
+    {"module": "hydra.java.syntax"},
+    {"module": "hydra.core"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.typing"}],
   "description": "Environment types for Java code generation",
-  "namespace": "hydra.java.environment"}
+  "name": "hydra.java.environment"}

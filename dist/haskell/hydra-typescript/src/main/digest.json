@@ -1,17 +1,17 @@
 {
   "version": 2,
-  "generator": "1138634cc8df1399",
-  "selfHash": "6cddd5c1719d3d6f261bf36c10fdd8b8ab8f0851d13233712f1b4f7163857e0c",
-  "depHash:hydra-kernel": "ef87b417371ec4b69defe1a5c486cc8838b5bb84acf5899e65245d1a86d150c4",
+  "generator": "933f8b5689c5c4be",
+  "selfHash": "574dc36b355080137ed6d228653bec3668d55b2191ba1100687f0b7d903c0129",
+  "depHash:hydra-kernel": "c9ca1cca5860bba8a13101d1c94b726af1125abd32f8fa960f874cca5a592672",
   "inputs": {
-    "hydra.typeScript.coder": { "kind": "Other", "hash": "3af673ff799cb4081ed7611b29a69f957b13b67cb0e58c63c5baf1a64bad79be" },
-    "hydra.typeScript.language": { "kind": "Other", "hash": "f66bc23090e6f3b286e789e14e3a605b0105b92f7ccfa78bbbe8ae61700f9356" },
-    "hydra.typeScript.operators": { "kind": "Other", "hash": "8b6da32e547cb6606e092dbf897c2b588e7f3d192d586b72680d2b45de7d721e" },
-    "hydra.typeScript.serde": { "kind": "Other", "hash": "b4090c37b69741986adfec33f258953d6787c47bb85a6e4c0e7b69015d2e04a7" },
-    "hydra.typeScript.syntax": { "kind": "Other", "hash": "758598b31a2abf71647e336fcad05a7eb1f45a04dc13e12b47907221091d3697" }
+    "hydra.typeScript.coder": { "kind": "Other", "hash": "85b8006f6e5cd5930c519ac6f09eb02b9514f6e19b13afa02d544076a46fef4d" },
+    "hydra.typeScript.language": { "kind": "Other", "hash": "7d21f03f701db2c4ca06905d63a7d159e34f5c73b7fb7905d684c6bc2c4e9ec7" },
+    "hydra.typeScript.operators": { "kind": "Other", "hash": "b4d06f0dae084db11d0bb358046fb8097ca1514fb54bc4020bbe17bc830d58c7" },
+    "hydra.typeScript.serde": { "kind": "Other", "hash": "37320071be29d1117712f934937e1f01cd96ce5489dd2a2e28aed2f2e2ace0c7" },
+    "hydra.typeScript.syntax": { "kind": "Other", "hash": "dd731b6482d6b0abbf27cfc0724c241ec089aebe9fc8be38f922dfce0ed33119" }
   },
   "outputs": {
-    "Hydra/TypeScript/Coder.hs": { "kind": "TargetFile", "hash": "c1ee6b54adc83ec6aeb220e235a5fa3930d7b6136505817d0e42053d0008367c" },
+    "Hydra/TypeScript/Coder.hs": { "kind": "TargetFile", "hash": "ff772e586ef1c49ab7d186f0064a0944e4fbbaccedd838e886f1bf4271b599a0" },
     "Hydra/TypeScript/Language.hs": { "kind": "TargetFile", "hash": "46a31d5fa610c33eb48438660b7e3b3150217b1b83c30853638299e8d356ae42" },
     "Hydra/TypeScript/Operators.hs": { "kind": "TargetFile", "hash": "c6f38c880f1421c572d64d896c32f7c6b4e486f3609387c9a56413cee7eca4c9" },
     "Hydra/TypeScript/Serde.hs": { "kind": "TargetFile", "hash": "8bfdedba9988a987dba2cae38eb1a25a508a49d8acefc37a95ac8b4463c4182a" },

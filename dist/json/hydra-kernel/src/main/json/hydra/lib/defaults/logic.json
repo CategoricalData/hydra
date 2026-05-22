@@ -335,4 +335,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Default term-level implementations of Logic functions for the Hydra interpreter.",
-  "namespace": "hydra.lib.defaults.logic"}
+  "name": "hydra.lib.defaults.logic"}

@@ -3400,4 +3400,4 @@
           "variables": ["t0", "t1"]}}}],
   "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.error.pg"}, {"module": "hydra.validation"}],
   "description": "Validation functions for property graphs",
-  "namespace": "hydra.validate.pg"}
+  "name": "hydra.validate.pg"}

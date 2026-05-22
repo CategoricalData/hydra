@@ -13265,4 +13265,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Type inference following Algorithm W, extended for nominal terms and types",
-  "namespace": "hydra.inference"}
+  "name": "hydra.inference"}

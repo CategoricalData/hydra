@@ -2587,4 +2587,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Serialization functions for converting Scala AST to abstract expressions",
-  "namespace": "hydra.scala.serde"}
+  "name": "hydra.scala.serde"}
