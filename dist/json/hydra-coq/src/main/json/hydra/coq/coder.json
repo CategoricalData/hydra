@@ -4862,6 +4862,7 @@
   "dependencies": [
     {"module": "hydra.formatting"},
     {"module": "hydra.coq.language"},
+    {"module": "hydra.coq.utils"},
     {"module": "hydra.coq.environment"},
     {"module": "hydra.coq.syntax"},
     {"module": "hydra.paths"},

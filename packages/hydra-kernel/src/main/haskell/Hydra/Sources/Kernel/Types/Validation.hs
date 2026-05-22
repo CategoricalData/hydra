@@ -18,7 +18,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = unqualifiedDep <$> [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, ModuleName "hydra.error.core"],
             moduleDescription = Just "Framework types for configurable validation: profiles classify checks as errors or warnings, and results accumulate findings up to caller-specified bounds."}
   where
     definitions = [

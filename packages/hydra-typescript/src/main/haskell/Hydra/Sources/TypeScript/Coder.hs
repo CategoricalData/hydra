@@ -34,6 +34,7 @@ import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Errors                          as Error
 import qualified Hydra.Dsl.Packaging                       as Packaging
 import qualified Hydra.Dsl.Util                            as Util
+import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Environment    as Environment
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
@@ -65,10 +66,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> (              [moduleName TypeScriptLanguageSource.module_,
-               moduleName TypeScriptSerdeSource.module_,
-               Environment.ns, Formatting.ns, Names.ns, Rewriting.ns,
-               Serialization.ns, Sorting.ns, Strip.ns, Variables.ns]
+            moduleDependencies = unqualifiedDep <$> (              [moduleName TypeScriptLanguageSource.module_, moduleName TypeScriptSerdeSource.module_, Environment.ns, Formatting.ns, Names.ns, Rewriting.ns, Serialization.ns, Sorting.ns, Strip.ns, Variables.ns, Analysis.ns]
               L.++ (TypeScriptSyntax.ns : KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "TypeScript code generator: emits TypeScript type declarations from Hydra modules"}
   where

@@ -6,7 +6,7 @@
 // (a `Map<string, unknown>`); strict typing is provided at use sites by the
 // generated code, not by this layer.
 
-import { Name } from "./core.js";
+import { Name } from "./runtime.js";
 
 export interface Primitive<T = unknown> {
   readonly name: Name;

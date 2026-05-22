@@ -8,13 +8,18 @@ import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Math as Math
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.TypeScript.Operators as Operators
 import qualified Hydra.TypeScript.Syntax as Syntax
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
+allDigits :: [Int] -> Bool
+allDigits cps =
+    Logic.and (Equality.gt (Lists.length cps) 0) (Lists.foldl (\acc -> \c -> Logic.and acc (Logic.and (Equality.gte c 48) (Equality.lte c 57))) True cps)
 -- | Convert an array element to an AST expression
 arrayElementToExpr :: Syntax.ArrayElement -> Ast.Expr
 arrayElementToExpr elem =
@@ -38,8 +43,7 @@ arrowFunctionExpressionToExpr arrow =
           async = Syntax.arrowFunctionExpressionAsync arrow
           asyncKw = Logic.ifElse async [
                 Serialization.cst "async"] []
-          paramsExpr =
-                  Logic.ifElse (Equality.equal (Lists.length params) 1) (Maybes.fromMaybe (Serialization.cst "") (Maybes.map patternToExpr (Lists.maybeHead params))) (Serialization.parenListAdaptive (Lists.map patternToExpr params))
+          paramsExpr = Serialization.parenListAdaptive (Lists.map patternToExpr params)
           bodyExpr =
                   case body of
                     Syntax.ArrowFunctionBodyExpression v0 -> case v0 of
@@ -127,10 +131,10 @@ binaryOperatorToExpr op =
       Syntax.BinaryOperatorUnsignedRightShift -> Operators.unsignedRightShiftOp
       Syntax.BinaryOperatorIn -> Operators.inOp
       Syntax.BinaryOperatorInstanceof -> Operators.instanceOfOp
--- | Convert a block statement to an AST expression
+-- | Convert a block statement to an AST expression. Renders as `{ stmt1\n stmt2\n ... }` using curlyBlock + newlineSep: statements are separated by newlines, NOT by commas (which curlyBracesList's default would insert and which TypeScript rejects between block statements).
 blockStatementToExpr :: [Syntax.Statement] -> Ast.Expr
 blockStatementToExpr block =
-    Serialization.curlyBracesList Nothing Serialization.fullBlockStyle (Lists.map statementToExpr block)
+    Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map statementToExpr block))
 -- | Convert a break statement to an AST expression
 breakStatementToExpr :: Maybe Syntax.Identifier -> Ast.Expr
 breakStatementToExpr b =
@@ -185,7 +189,8 @@ classDeclarationToExpr cls =
                   Maybes.maybe [] (\s -> [
                     Serialization.cst "extends",
                     (expressionToExpr s)]) superClass
-          bodyExpr = Serialization.curlyBracesList Nothing Serialization.fullBlockStyle (Lists.map methodDefinitionToExpr body)
+          bodyExpr =
+                  Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map methodDefinitionToExpr body))
       in (Serialization.spaceSep (Lists.concat [
         [
           Serialization.cst "class",
@@ -349,6 +354,13 @@ expressionToExpr expr =
         (expressionToExpr v0)]
       Syntax.ExpressionSpread v0 -> Serialization.prefix "..." (expressionToExpr (Syntax.unSpreadElement v0))
       Syntax.ExpressionParenthesized v0 -> Serialization.parens (expressionToExpr v0)
+      Syntax.ExpressionAsExpression v0 ->
+        let innerE = Syntax.asExpressionExpression v0
+            typ = Syntax.asExpressionType v0
+        in (Serialization.parens (Serialization.spaceSep [
+          expressionToExpr innerE,
+          (Serialization.cst "as"),
+          (Serialization.cst (tsTypeExpressionToString typ))]))
 -- | Convert a for-in statement to an AST expression
 forInStatementToExpr :: Syntax.ForInStatement -> Ast.Expr
 forInStatementToExpr f =
@@ -424,12 +436,14 @@ functionDeclarationToExpr fn =
                 Serialization.cst "async"] []
           funcKw = Logic.ifElse generator (Serialization.cst "function*") (Serialization.cst "function")
           paramsExpr = Serialization.parenListAdaptive (Lists.map patternToExpr params)
+          retAnnot = Serialization.cst ": any"
       in (Serialization.spaceSep (Lists.concat [
         asyncKw,
         [
           funcKw,
           (identifierToExpr id),
           paramsExpr,
+          retAnnot,
           (blockStatementToExpr body)]]))
 -- | Convert a function declaration with comments to an AST expression
 functionDeclarationWithCommentsToExpr :: Syntax.FunctionDeclarationWithComments -> Ast.Expr
@@ -513,6 +527,14 @@ importSpecifierToExpr spec =
         Serialization.cst "*",
         (Serialization.cst "as"),
         (identifierToExpr (Syntax.unImportNamespaceSpecifier v0))]
+isKernelTypeVarName :: String -> Bool
+isKernelTypeVarName s =
+
+      let cps = Strings.toList s
+          len = Lists.length cps
+          first = Maybes.fromMaybe 0 (Lists.maybeHead cps)
+          rest = Logic.ifElse (Equality.gt len 0) (Lists.drop 1 cps) []
+      in (Logic.and (Equality.gt len 1) (Logic.and (Equality.equal first 84) (allDigits rest)))
 -- | Convert a labeled statement to an AST expression
 labeledStatementToExpr :: Syntax.LabeledStatement -> Ast.Expr
 labeledStatementToExpr l =
@@ -652,6 +674,18 @@ patternToExpr pat =
       Syntax.PatternArray v0 -> arrayPatternToExpr v0
       Syntax.PatternAssignment v0 -> assignmentPatternToExpr v0
       Syntax.PatternRest v0 -> Serialization.prefix "..." (patternToExpr (Syntax.unRestElement v0))
+      Syntax.PatternTyped v0 -> typedPatternToExpr v0
+-- | Render a TS.Pattern as a plain string
+patternToString :: Syntax.Pattern -> String
+patternToString pat =
+    case pat of
+      Syntax.PatternIdentifier v0 -> Syntax.unIdentifier v0
+      Syntax.PatternRest v0 -> Strings.cat2 "..." (patternToString (Syntax.unRestElement v0))
+      Syntax.PatternTyped v0 -> Strings.cat [
+        patternToString (Syntax.typedPatternPattern v0),
+        ": ",
+        (tsTypeExpressionToString (Syntax.typedPatternType v0))]
+      _ -> "_"
 -- | Convert a TypeScript program to an AST expression
 programToExpr :: Syntax.Program -> Ast.Expr
 programToExpr prog =
@@ -737,7 +771,7 @@ switchStatementToExpr switchStmt =
       in (Serialization.spaceSep [
         Serialization.cst "switch",
         (Serialization.parens (expressionToExpr discriminant)),
-        (Serialization.curlyBracesList Nothing Serialization.fullBlockStyle (Lists.map switchCaseToExpr cases))])
+        (Serialization.curlyBlock Serialization.fullBlockStyle (Serialization.newlineSep (Lists.map switchCaseToExpr cases)))])
 -- | Convert a template literal to an AST expression
 templateLiteralToExpr :: Syntax.TemplateLiteral -> Ast.Expr
 templateLiteralToExpr t =
@@ -798,6 +832,38 @@ tryStatementToExpr t =
           tryPart],
         catchPart,
         finallyPart]))
+-- | Render a TypeScript type expression as a string in TS syntax
+tsTypeExpressionToString :: Syntax.TypeExpression -> String
+tsTypeExpressionToString t =
+    case t of
+      Syntax.TypeExpressionIdentifier v0 ->
+        let raw = Syntax.unIdentifier v0
+        in (Logic.ifElse (isKernelTypeVarName raw) "any" raw)
+      Syntax.TypeExpressionAny -> "any"
+      Syntax.TypeExpressionVoid -> "void"
+      Syntax.TypeExpressionNever -> "never"
+      Syntax.TypeExpressionArray v0 -> Strings.cat [
+        "ReadonlyArray<",
+        (tsTypeExpressionToString (Syntax.unArrayTypeExpression v0)),
+        ">"]
+      Syntax.TypeExpressionTuple v0 -> Strings.cat [
+        "readonly [",
+        (Strings.intercalate ", " (Lists.map tsTypeExpressionToString v0)),
+        "]"]
+      Syntax.TypeExpressionUnion v0 -> Strings.intercalate " | " (Lists.map tsTypeExpressionToString v0)
+      Syntax.TypeExpressionIntersection v0 -> Strings.intercalate " & " (Lists.map tsTypeExpressionToString v0)
+      Syntax.TypeExpressionParameterized v0 -> Strings.cat [
+        tsTypeExpressionToString (Syntax.parameterizedTypeExpressionBase v0),
+        "<",
+        (Strings.intercalate ", " (Lists.map tsTypeExpressionToString (Syntax.parameterizedTypeExpressionArguments v0))),
+        ">"]
+      Syntax.TypeExpressionOptional v0 -> Strings.cat [
+        tsTypeExpressionToString v0,
+        " | undefined"]
+      Syntax.TypeExpressionReadonly v0 -> Strings.cat2 "readonly " (tsTypeExpressionToString v0)
+      Syntax.TypeExpressionUnknown -> "unknown"
+      Syntax.TypeExpressionFunction _ -> "((...args: any[]) => any)"
+      _ -> "unknown"
 -- | Convert a type expression to a string for JSDoc
 typeExpressionToString :: Syntax.TypeExpression -> String
 typeExpressionToString typ =
@@ -808,7 +874,25 @@ typeExpressionToString typ =
       Syntax.TypeExpressionNever -> "never"
       Syntax.TypeExpressionLiteral _ -> "literal"
       Syntax.TypeExpressionArray v0 -> Strings.cat2 (typeExpressionToString (Syntax.unArrayTypeExpression v0)) "[]"
-      Syntax.TypeExpressionFunction _ -> "Function"
+      Syntax.TypeExpressionFunction v0 ->
+        let params = Syntax.functionTypeExpressionParameters v0
+            rt = Syntax.functionTypeExpressionReturnType v0
+            rendered =
+                    Pairs.second (Lists.foldl (\acc -> \p ->
+                      let i = Pairs.first acc
+                          soFar = Pairs.second acc
+                          this =
+                                  Strings.cat [
+                                    "_a",
+                                    (Literals.showInt32 i),
+                                    ": ",
+                                    (typeExpressionToString p)]
+                      in (Math.add i 1, (Lists.concat2 soFar (Lists.pure this)))) (0, []) params)
+        in (Strings.cat [
+          "(",
+          (Strings.intercalate ", " rendered),
+          ") => ",
+          (typeExpressionToString rt)])
       Syntax.TypeExpressionObject _ -> "Object"
       Syntax.TypeExpressionUnion v0 -> Strings.intercalate "|" (Lists.map typeExpressionToString v0)
       Syntax.TypeExpressionParameterized v0 ->
@@ -820,6 +904,18 @@ typeExpressionToString typ =
           (Strings.intercalate ", " (Lists.map typeExpressionToString args)),
           ">"])
       Syntax.TypeExpressionOptional v0 -> Strings.cat2 "?" (typeExpressionToString v0)
+-- | Render `<pattern>: <type>` (TypeScript parameter / variable type annotation)
+typedPatternToExpr :: Syntax.TypedPattern -> Ast.Expr
+typedPatternToExpr tp =
+
+      let innerPat = Syntax.typedPatternPattern tp
+          typ = Syntax.typedPatternType tp
+          innerStr = patternToString innerPat
+          typeStr = tsTypeExpressionToString typ
+      in (Serialization.cst (Strings.cat [
+        innerStr,
+        ": ",
+        typeStr]))
 -- | Convert a unary expression to an AST expression
 unaryExpressionToExpr :: Syntax.UnaryExpression -> Ast.Expr
 unaryExpressionToExpr un =

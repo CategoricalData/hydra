@@ -3873,6 +3873,7 @@
     {"module": "hydra.literals"},
     {"module": "hydra.yaml.language"},
     {"module": "hydra.strip"},
+    {"module": "hydra.show.core"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},

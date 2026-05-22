@@ -27,7 +27,7 @@ module_ :: HydraModule
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [TestTypes.ns],
+            moduleDependencies = unqualifiedDep <$> [TestTypes.ns, ModuleName "hydra.core"],
             moduleDescription = (Just "Term definitions for the test suite")}
   where
     definitions = [

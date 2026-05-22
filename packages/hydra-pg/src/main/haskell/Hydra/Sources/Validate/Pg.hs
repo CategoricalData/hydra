@@ -34,7 +34,7 @@ module_ :: Module
 module_ = Module {
             moduleName = (ModuleName "hydra.validate.pg"),
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> [PgModel.ns, ErrorPg.ns, ModuleName "hydra.validation"],
+            moduleDependencies = unqualifiedDep <$> [PgModel.ns, ErrorPg.ns, ModuleName "hydra.validation", ModuleName "hydra.core"],
             moduleDescription = Just "Validation functions for property graphs"}
   where
    definitions = [

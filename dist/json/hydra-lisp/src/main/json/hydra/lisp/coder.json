@@ -6630,6 +6630,7 @@
     {"module": "hydra.predicates"},
     {"module": "hydra.sorting"},
     {"module": "hydra.lexical"},
+    {"module": "hydra.show.core"},
     {"module": "hydra.lisp.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

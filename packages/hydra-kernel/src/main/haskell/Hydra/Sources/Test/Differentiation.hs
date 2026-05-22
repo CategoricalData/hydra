@@ -34,7 +34,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, ShowCore.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([Diff.ns, Variables.ns, ShowCore.ns, ModuleName "hydra.reduction", ModuleName "hydra.test.testGraph"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for automatic differentiation")}
   where
     definitions = [Phantoms.toDefinition allTests]

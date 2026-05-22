@@ -1606,6 +1606,12 @@
                   "argument": {"application": {"argument": {"variable": "e"}, "function": {"variable": "hydra.validation.ValidationResult"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": ["e"]}}}],
-  "dependencies": [{"module": "hydra.validation"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
+  "dependencies": [
+    {"module": "hydra.validation"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.dsl.core"},
+    {"module": "hydra.dsl.error.core"}],
   "description": "DSL functions for hydra.validation",
   "name": "hydra.dsl.validation"}

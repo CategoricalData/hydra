@@ -45,7 +45,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = [DefinitionTerm typesByNameDefinition],
-            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.coders", ModuleName "hydra.context", ModuleName "hydra.error.checking", ModuleName "hydra.error.core", ModuleName "hydra.errors", ModuleName "hydra.graph", ModuleName "hydra.packaging", ModuleName "hydra.paths", ModuleName "hydra.util", ModuleName "hydra.variants"],
             moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.")}

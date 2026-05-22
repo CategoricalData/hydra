@@ -593,7 +593,35 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A parenthesized expression"}}}],
-                        "body": {"variable": "hydra.typeScript.syntax.Expression"}}}}]}}},
+                        "body": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+                  {
+                    "name": "asExpression",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A TypeScript type assertion `<expr> as <type>`"}}}],
+                        "body": {"variable": "hydra.typeScript.syntax.AsExpression"}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.typeScript.syntax.AsExpression",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A TypeScript `<expression> as <type>` cast"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "expression",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The expression being cast"}}}],
+                        "body": {"variable": "hydra.typeScript.syntax.Expression"}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The target type"}}}],
+                        "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -954,7 +982,13 @@
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A rest element (...x)"}}}],
-                        "body": {"variable": "hydra.typeScript.syntax.RestElement"}}}}]}}},
+                        "body": {"variable": "hydra.typeScript.syntax.RestElement"}}}},
+                  {
+                    "name": "typed",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern with a TypeScript type annotation (`x: T`)"}}}],
+                        "body": {"variable": "hydra.typeScript.syntax.TypedPattern"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -1013,6 +1047,28 @@
             "annotated": {
               "annotation": [{"key": "description", "value": {"literal": {"string": "A rest element pattern (...x)"}}}],
               "body": {"wrap": {"variable": "hydra.typeScript.syntax.Pattern"}}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.typeScript.syntax.TypedPattern",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [{"key": "description", "value": {"literal": {"string": "A pattern with a TypeScript type annotation (`x: T`)"}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "pattern",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The underlying binding pattern"}}}],
+                        "body": {"variable": "hydra.typeScript.syntax.Pattern"}}}},
+                  {
+                    "name": "type",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The TypeScript type annotation"}}}],
+                        "body": {"variable": "hydra.typeScript.syntax.TypeExpression"}}}}]}}},
           "variables": []}}},
     {
       "type": {

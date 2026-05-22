@@ -52,8 +52,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([Adapt.ns,
-     ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns] L.++ (KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
+            moduleDependencies = unqualifiedDep <$> ([Adapt.ns, ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns, ModuleName "hydra.show.core"] L.++ (KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
             moduleDescription = Just "YAML encoding and decoding for Hydra terms"}
   where
     definitions = [

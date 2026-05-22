@@ -4936,6 +4936,7 @@
     {"module": "hydra.reduction"},
     {"module": "hydra.show.core"},
     {"module": "hydra.show.util"},
+    {"module": "hydra.test.testTypes"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},
