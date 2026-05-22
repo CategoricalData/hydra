@@ -622,7 +622,7 @@ import hydra.dsl.meta.core as Core
 from hydra.dsl.python import Just, Nothing
 from hydra.phantoms import TBinding
 
-ns = hydra.packaging.Namespace("my.namespace")
+ns = hydra.packaging.ModuleName("my.namespace")
 
 def define(lname: str, term) -> TBinding:
     return definition_in_namespace(ns, lname, term)

@@ -117,7 +117,7 @@ import qualified Data.Maybe as Y
 import qualified Data.Set  as S
 ```
 
-`Hydra.Sources.Kernel.Types.All` is unqualified to expose `kernelTypesNamespaces` and
+`Hydra.Sources.Kernel.Types.All` is unqualified to expose `kernelTypesModuleNames` and
 the constants like `_Term`, `_Field` directly. (Cross-references to other type modules
 in the same package are written as e.g. `Core.binding` — `Core` being already in scope
 via `Hydra.Sources.Kernel.Types.All`.)

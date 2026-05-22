@@ -1014,7 +1014,7 @@ To run all checks in sequence (invoked via `/maintenance` in CLAUDE.md):
 
    main :: IO ()
    main = do
-     let bad = [(moduleNamespace m, e) | m <- kernelModules, Just e <- [VP.kernelModule m]]
+     let bad = [(moduleName m, e) | m <- kernelModules, Just e <- [VP.kernelModule m]]
      putStrLn $ "Modules with errors: " ++ show (length bad)
      mapM_ (\(ns, e) -> putStrLn $ "  " ++ show ns ++ ": " ++ show e) bad
    ```

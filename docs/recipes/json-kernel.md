@@ -151,7 +151,7 @@ Output (failure):
 === FAILED ===
 3 modules failed verification:
   hydra.core: element count differs: 42 vs 41
-  hydra.packaging: type differs for moduleNamespace
+  hydra.packaging: type differs for moduleName
   ...
 ```
 

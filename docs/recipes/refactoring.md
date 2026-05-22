@@ -62,16 +62,18 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 -- ... other standard imports (copy from an existing module)
 
--- Define the namespace
-ns :: Namespace
-ns = Namespace "hydra.mymodule"
+-- Define the module name
+ns :: ModuleName
+ns = ModuleName "hydra.mymodule"
 
 -- Define the module
 module_ :: Module
-module_ = Module ns definitions
-    [DependencyModule1.ns, DependencyModule2.ns]  -- dependencies
-    kernelTypesNamespaces $
-    Just "Description of this module"
+module_ = Module {
+    moduleName = ns,
+    moduleDefinitions = definitions,
+    moduleDependencies = unqualifiedDep <$>
+      ([DependencyModule1.ns, DependencyModule2.ns] L.++ kernelTypesModuleNames),
+    moduleDescription = Just "Description of this module"}
   where
     definitions = [
       toDefinition myFunction1,
@@ -390,9 +392,9 @@ This is the most complex refactoring operation. A Hydra namespace like `hydra.fo
 2. **Update the namespace declaration**
    ```haskell
    -- Change from:
-   ns = Namespace "hydra.foo"
+   ns = ModuleName "hydra.foo"
    -- To:
-   ns = Namespace "hydra.foo.bar"
+   ns = ModuleName "hydra.foo.bar"
    ```
 
 3. **Update the Haskell module declaration**
@@ -681,7 +683,7 @@ We created `hydra.hoisting` to separate these concerns.
 1. **Created source file**: `Hydra/Sources/Kernel/Terms/Hoisting.hs`
 
    Created the new module with:
-   - Namespace: `hydra.hoisting`
+   - Module name: `hydra.hoisting`
    - Dependencies: `Rewriting.ns`, `Schemas.ns`
    - Module description: "Functions for hoisting subterms into let bindings."
 
