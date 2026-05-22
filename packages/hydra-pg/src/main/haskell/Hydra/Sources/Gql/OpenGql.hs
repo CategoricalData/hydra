@@ -1,7 +1,7 @@
 module Hydra.Sources.Gql.OpenGql where
 
 -- Standard imports for type-level sources outside of the kernel
-import           Hydra.Kernel
+import           Hydra.Kernel hiding (parameterName)
 import           Hydra.Dsl.Annotations
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types                 ((>:))
