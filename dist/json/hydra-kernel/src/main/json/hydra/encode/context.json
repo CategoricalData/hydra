@@ -146,6 +146,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.context"],
+  "dependencies": ["hydra.encode.core", "hydra.core", "hydra.context"],
   "description": "Term encoders for hydra.context",
   "namespace": "hydra.encode.context"}
