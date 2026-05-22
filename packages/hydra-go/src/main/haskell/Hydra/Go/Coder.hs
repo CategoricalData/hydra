@@ -2140,9 +2140,9 @@ unpackForallType t = case deannotateType t of
 -- Unpacks lambda chains into proper func declarations with typed parameters.
 encodeTermDefinition :: Context -> Graph -> TermDefinition -> GoState
   -> GoResult Go.TopLevelDecl
-encodeTermDefinition cx g tdef st = case termDefinitionTypeScheme tdef of
+encodeTermDefinition cx g tdef st = case termDefinitionSignature tdef of
   Nothing -> failGo cx $ "Go coder requires inferred type schemes; missing on " ++ show (termDefinitionName tdef)
-  Just tscheme -> encodeTermDefinitionWithScheme cx g tdef tscheme st
+  Just sig -> encodeTermDefinitionWithScheme cx g tdef (termSignatureToTypeScheme sig) st
 
 encodeTermDefinitionWithScheme :: Context -> Graph -> TermDefinition -> Core.TypeScheme -> GoState
   -> GoResult Go.TopLevelDecl

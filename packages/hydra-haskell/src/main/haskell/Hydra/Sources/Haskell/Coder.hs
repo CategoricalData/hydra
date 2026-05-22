@@ -67,6 +67,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Analysis       as Analysis
 import qualified Hydra.Sources.Kernel.Terms.Predicates     as Predicates
 import qualified Hydra.Sources.Kernel.Terms.Resolution     as Resolution
+import qualified Hydra.Sources.Kernel.Terms.Scoping        as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Strip          as Strip
 import qualified Hydra.Sources.Kernel.Terms.Variables      as Variables
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
@@ -766,7 +767,7 @@ gatherMetadata = haskellCoderDefinition "gatherMetadata" $
             ("ts" ~>
               Rewriting.foldOverType @@ Coders.traversalOrderPre
                 @@ ("m" ~> "t" ~> extendMetaForType @@ var "m" @@ var "t") @@ var "metaWithTerm" @@ (Core.typeSchemeBody $ var "ts"))
-            (Packaging.termDefinitionTypeScheme $ var "termDef"),
+            (Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "termDef"),
         _Definition_type>>: "typeDef" ~>
           "typ" <~ (Core.typeSchemeBody $ Packaging.typeDefinitionTypeScheme (var "typeDef")) $
           Rewriting.foldOverType @@ Coders.traversalOrderPre
@@ -875,7 +876,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
     "name">: Packaging.termDefinitionName $ var "def",
     "term">: Packaging.termDefinitionTerm $ var "def",
-    "typ">: Packaging.termDefinitionTypeScheme $ var "def",
+    "typ">: Maybes.map Scoping.termSignatureToTypeScheme $ Packaging.termDefinitionSignature $ var "def",
     "hname">: HaskellUtilsSource.simpleName @@ (Names.localNameOf @@ var "name"),
     "rewriteValueBinding">: "vb" ~>
       cases H._ValueBinding (var "vb") Nothing [
@@ -1115,21 +1116,22 @@ typeSchemeConstraintsToClassMap :: TTermDefinition (Maybe (M.Map Name TypeVariab
 typeSchemeConstraintsToClassMap = haskellCoderDefinition "typeSchemeConstraintsToClassMap" $
   doc "Convert type scheme constraints to a map of type variables to typeclasses" $
   "maybeConstraints" ~> lets [
-    -- Convert a class name to a TypeClass, returning Nothing for unknown classes
-    "nameToTypeClass">: "className" ~> lets [
-      "classNameStr">: Core.unName $ var "className",
-      "isEq">: Equality.equal (var "classNameStr") (Core.unName $ Core.nameLift _TypeClass_equality),
-      "isOrd">: Equality.equal (var "classNameStr") (Core.unName $ Core.nameLift _TypeClass_ordering)] $
-      Logic.ifElse (var "isEq")
-        (just $ inject _TypeClass _TypeClass_equality unit)
-        (Logic.ifElse (var "isOrd")
-          (just $ inject _TypeClass _TypeClass_ordering unit)
-          nothing)] $
+    -- Convert a TypeClassConstraint to a TypeClass, returning Nothing for unknown classes
+    "constraintToTypeClass">: "tcc" ~> match _TypeClassConstraint Nothing [
+      _TypeClassConstraint_simple>>: "className" ~> lets [
+        "classNameStr">: Core.unName $ var "className",
+        "isEq">: Equality.equal (var "classNameStr") (Core.unName $ Core.nameLift _TypeClass_equality),
+        "isOrd">: Equality.equal (var "classNameStr") (Core.unName $ Core.nameLift _TypeClass_ordering)] $
+        Logic.ifElse (var "isEq")
+          (just $ inject _TypeClass _TypeClass_equality unit)
+          (Logic.ifElse (var "isOrd")
+            (just $ inject _TypeClass _TypeClass_ordering unit)
+            nothing)] @@ (var "tcc")] $
     Maybes.maybe
       Maps.empty
       ("constraints" ~>
         Maps.map
           ("meta" ~> Sets.fromList $
-            Maybes.cat $ Lists.map (var "nameToTypeClass") $ Sets.toList $ Core.typeVariableMetadataClasses (var "meta"))
+            Maybes.cat $ Lists.map (var "constraintToTypeClass") $ Sets.toList $ Core.typeVariableMetadataClasses (var "meta"))
           (var "constraints"))
       (var "maybeConstraints")
