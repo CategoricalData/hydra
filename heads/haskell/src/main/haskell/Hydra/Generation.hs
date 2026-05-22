@@ -216,6 +216,95 @@ inferModulesGivenIO universeMods targetMods = do
     Left err -> fail $ "Incremental type inference failed: " ++ showError err
     Right mods -> return mods
 
+-- | Per-package iterative inference driver for #381.
+--
+-- Replaces the flat-universe 'inferModulesIO' fallback in the slow path
+-- of 'writeModulesJsonPackageSplit'. Processes packages in dependency
+-- order (topo sort over each package.json's "dependencies" field) and
+-- runs 'inferModulesGiven' once per package, threading the typed-so-far
+-- output of upstream packages through as the universe.
+--
+-- Peak memory per iteration is bounded by:
+--    type-schemes of transitive deps + bindings of the focus package
+-- rather than the universe-wide
+--    bindings of every module + full substitution map + constraint set.
+--
+-- Returns the full set of inferred target modules (concatenated across
+-- packages, in topo order). The caller's downstream JSON-write / digest
+-- refresh code is unchanged — only the universe-load shape is different.
+--
+-- Each iteration writes its package's JSON to disk *immediately* via
+-- 'writePackageSplitJson' before moving on. That side effect forces the
+-- inferred modules through to NF, which is what dodges the lazy
+-- thunk chain that wrecked the per-SCC attempt
+-- (see docs/history/inferModules-per-scc-attempt.md on staging).
+inferAndWriteByPackage :: FilePath -> [Module] -> [Module] -> IO [Module]
+inferAndWriteByPackage distJsonRoot universeMods mods = do
+  -- Group both the target set (mods, what we write) and the full universe
+  -- (universeMods, what participates in type resolution) by owning package.
+  -- pkgsInScope is the union — every package whose modules appear in either
+  -- set must take its turn in the iteration so that cross-package type
+  -- references resolve. Packages that have universe modules but no target
+  -- modules (e.g. hydra-java when #344 excludes its JSON from this write
+  -- pass) still get inferred so their TypeSchemes seed the typed universe
+  -- for downstream packages; their inferred output is held in the
+  -- accumulator but never reaches writePackageSplitJson.
+  let targetGroups    = groupByPackage mods
+      universeGroups  = groupByPackage universeMods
+      pkgToMods       = M.fromList targetGroups
+      pkgToUniverse   = M.fromList universeGroups
+      pkgsInScope     = L.nub (map fst universeGroups ++ map fst targetGroups)
+  -- Build the package dep graph from each package's package.json.
+  pkgDeps <- CM.forM pkgsInScope $ \p -> do
+    deps <- loadPackageDeps p
+    -- Restrict deps to packages actually present in the in-scope set.
+    let inScope = filter (`elem` pkgsInScope) deps
+    return (p, inScope)
+  -- Topological sort: deps first, then dependents.
+  topoResult <- case topologicalSort pkgDeps of
+    Right ordered -> return ordered
+    Left cycles -> fail $ "inferAndWriteByPackage: package dep graph has cycles: "
+                       ++ show cycles
+  putStrLn $ "  Per-package inference: " ++ show (length topoResult)
+    ++ " packages in dep order: " ++ L.intercalate " -> " topoResult
+  -- Iterate packages in topo order, accumulating typed-so-far modules.
+  -- Strictness: each iteration ends with a writePackageSplitJson call,
+  -- which forces the inferred modules through JSON serialization. That
+  -- forces the spine of the [Module] list AND every TypeScheme inside,
+  -- so the accumulator passed to the next iteration is fully evaluated.
+  -- Without this, the lazy thunk chain hypothesis from the per-SCC
+  -- write-up would apply at package granularity too.
+  let processOne acc pkg = do
+        let pkgTargets   = M.findWithDefault [] pkg pkgToMods
+            pkgUniverse  = M.findWithDefault [] pkg pkgToUniverse
+            targetNs     = S.fromList (map moduleNamespace pkgTargets)
+            -- All this package's modules go into the universe so cross-
+            -- references within the package resolve; only the subset that's
+            -- in the original target set gets re-inferred + written.
+            -- (For packages with no target modules — e.g. hydra-java
+            -- under #344 — we still infer the whole package so its types
+            -- seed downstream packages, but skip the write step below.)
+            inferTargets = if null pkgTargets then pkgUniverse else pkgTargets
+            typedUniverse = acc ++ pkgUniverse
+        putStrLn $ "  [" ++ pkg ++ "] "
+          ++ show (length pkgTargets) ++ " write / "
+          ++ show (length inferTargets) ++ " infer / "
+          ++ show (length acc) ++ " typed-so-far"
+        inferred <- if null inferTargets
+          then return []
+          else inferModulesGivenIO typedUniverse inferTargets
+        -- Filter inferred modules down to those in the original target set
+        -- for the write step. Packages with no target mods (e.g. hydra-java
+        -- under #344) write nothing; their inferred output flows into the
+        -- accumulator so dependents can resolve cross-package type refs.
+        let toWrite = filter (\m -> moduleNamespace m `S.member` targetNs) inferred
+        CM.when (not (null toWrite)) $
+          writePackageSplitJson distJsonRoot typedUniverse inferred toWrite
+        return (acc ++ inferred)
+  L.foldl' (\ioAcc pkg -> ioAcc >>= \acc -> processOne acc pkg)
+           (return [])
+           topoResult
+
 ----------------------------------------
 -- JSON Module Export
 ----------------------------------------
@@ -339,9 +428,16 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests distJsonRoot universeMods allMods
         Nothing -> do
-          putStrLn "  Incremental inference unavailable; running full inference."
-          allMods <- inferModulesIO universeMods mods
-          writePackageSplitJson distJsonRoot universeMods allMods allMods
+          -- #381: per-package iterative inference. Replaces the
+          -- universe-wide 'inferModulesIO universeMods mods' that runs
+          -- one giant inference over every binding (peak >7 GB on CI).
+          -- 'inferAndWriteByPackage' processes packages in topo order
+          -- and writes each package's JSON before moving to the next,
+          -- bounding peak memory by per-package size. JSON writes are
+          -- emitted as a side effect inside the loop; we still need to
+          -- refresh the universe-wide + per-package digests below.
+          putStrLn "  Incremental inference unavailable; running per-package inference."
+          allMods <- inferAndWriteByPackage distJsonRoot universeMods mods
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests distJsonRoot universeMods allMods
