@@ -115,7 +115,7 @@ module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
             moduleDependencies = [HaskellSerde.ns, HaskellUtilsSource.ns,
-      Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+      Adapt.ns, Analysis.ns, Dependencies.ns, Predicates.ns, Resolution.ns, Rewriting.ns, Serialization.ns, ShowError.ns, Strip.ns, Variables.ns, Namespace "hydra.annotations", Namespace "hydra.constants", Namespace "hydra.encode.core", Namespace "hydra.formatting", Namespace "hydra.haskell.language", Namespace "hydra.lexical", Namespace "hydra.names", Namespace "hydra.show.core"] L.++ (HaskellEnvironment.ns:HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Functions for encoding Hydra modules as Haskell modules"}
   where
     ns = Namespace "hydra.haskell.coder"

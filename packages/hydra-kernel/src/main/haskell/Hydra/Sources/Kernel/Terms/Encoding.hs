@@ -73,7 +73,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns, Namespace "hydra.constants", Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
             moduleDescription = Just "Functions for generating term encoders from type modules"}
   where
     definitions = [
@@ -361,15 +361,25 @@ encodeModule = define "encodeModule" $
           ("_e" ~> Error.errorDecoding $ var "_e")
           ("x" ~> var "x")
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
-        -- The encoder module depends on encoder modules of the source's dependencies, plus the original module
+        -- Encoder modules need:
+        -- 1. hydra.core: encoder bodies build Core.Field/Injection/Term values.
+        -- 2. The original module's namespace (the schema being encoded).
+        -- 3. The original module's declared dependencies, BOTH verbatim AND
+        --    encoded-namespace-prefixed: verbatim because encoder bodies case-match
+        --    on constructors of dep types; prefixed because encoder bodies call
+        --    encoders of dependent types.
         right (just (Packaging.module_
           (just (Strings.cat $ list [
             string "Term encoders for ",
             Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
           (encodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
           (Lists.nub (Lists.concat2
-            (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleDependencies (var "mod")))
-            (list [Packaging.moduleNamespace (var "mod")])))
+            (Lists.concat2
+              (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleDependencies (var "mod")))
+              (Packaging.moduleDependencies (var "mod")))
+            (list [
+              Packaging.namespace $ string "hydra.core",
+              Packaging.moduleNamespace (var "mod")])))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Core.bindingTypeScheme $ var "b")))

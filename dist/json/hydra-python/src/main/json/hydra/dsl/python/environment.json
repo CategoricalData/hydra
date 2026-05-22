@@ -24029,9 +24029,9 @@
   "dependencies": [
     "hydra.python.environment",
     "hydra.phantoms",
+    "hydra.core",
     "hydra.python.syntax",
     "hydra.util",
-    "hydra.core",
     "hydra.graph",
     "hydra.packaging",
     "hydra.typing",

@@ -5793,11 +5793,11 @@
   "dependencies": [
     "hydra.coders",
     "hydra.phantoms",
+    "hydra.core",
     "hydra.context",
     "hydra.errors",
     "hydra.graph",
     "hydra.variants",
-    "hydra.core",
     "hydra.dsl.context",
     "hydra.dsl.errors",
     "hydra.dsl.graph",
