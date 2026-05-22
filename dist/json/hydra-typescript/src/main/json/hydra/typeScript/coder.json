@@ -7490,6 +7490,7 @@
     {"module": "hydra.sorting"},
     {"module": "hydra.strip"},
     {"module": "hydra.variables"},
+    {"module": "hydra.analysis"},
     {"module": "hydra.typeScript.syntax"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},

@@ -7948,6 +7948,8 @@
     {"module": "hydra.differentiation"},
     {"module": "hydra.variables"},
     {"module": "hydra.show.core"},
+    {"module": "hydra.reduction"},
+    {"module": "hydra.test.testGraph"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},

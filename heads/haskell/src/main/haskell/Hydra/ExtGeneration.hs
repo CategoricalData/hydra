@@ -124,11 +124,13 @@ writeRust = generateSources moduleToRust rustLanguage True False False False
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
--- Note: today the TypeScript coder emits only type declarations (records →
--- interfaces, unions → discriminated-union type aliases). Term-level
--- definitions are deferred to a later iteration; #126.
+-- doExpand=True so the kernel's adapt step eta-expands partially-applied
+-- top-level terms (e.g. `capitalize = mapFirstLetter toUpper`) up to their
+-- declared scheme arity. Matches Python's behavior. Without this, the TS
+-- coder emits `export const capitalize = mapFirstLetter(toUpper)` which
+-- calls a 2-arg function with 1 arg and crashes at runtime.
 writeTypeScript :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]
-writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage True False False False
+writeTypeScript = generateSources moduleToTypeScript typeScriptLanguage False True False False
 
 -- | Generate Coq (.v) source files from modules.
 -- First argument: output directory

@@ -55,8 +55,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([HaskellUtilsSource.ns, Formatting.ns, Names.ns,
-     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
+            moduleDependencies = unqualifiedDep <$> ([HaskellUtilsSource.ns, Formatting.ns, Names.ns, Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns, ModuleName "hydra.decode.core"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Haskell test code generation for HSpec-based generation tests"}
   where
     definitions = [

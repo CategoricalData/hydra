@@ -32,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.reduction", ModuleName "hydra.show.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for eta expansion of terms")}
   where
     definitions = [

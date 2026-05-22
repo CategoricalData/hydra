@@ -11,7 +11,7 @@
 
 import { describe, expect, it } from "vitest";
 
-import { allTests } from "../../../../../dist/typescript/hydra-kernel/src/test/typescript/hydra/test/testSuite.ts";
+import { allTests } from "../../../../../dist/typescript/hydra-kernel/src/test/typescript/hydra/test/testSuite.js";
 
 interface TestCaseUniversal {
   readonly actual: (_: void) => string;
@@ -71,7 +71,17 @@ function runCase(c: TestCaseWithMetadata): void {
   });
 }
 
+function hasAnyCases(g: TestGroup): boolean {
+  if (g.cases.length > 0) return true;
+  for (const sub of g.subgroups) if (hasAnyCases(sub)) return true;
+  return false;
+}
+
 function runGroup(g: TestGroup): void {
+  // Vitest fails a describe block with no tests. Skip placeholder groups
+  // that have no transitive cases (e.g. checking > Failures, which is
+  // declared in the common test suite but has no cases yet).
+  if (!hasAnyCases(g)) return;
   describe(g.name, () => {
     for (const sub of g.subgroups) runGroup(sub);
     for (const c of g.cases) runCase(c);

@@ -37,8 +37,28 @@ fi
 
 mkdir -p "$OUT_DIR/hydra"
 
+# Write a minimal package.json marking the dist tree as ESM. Without this,
+# tsc walks up to /Users/<you>/package.json (or wherever it finds the first
+# package.json without a "type" field) and decides the dist files are
+# CommonJS — which then rejects `import.meta.url` (TS1470) and forces
+# `.ts` → `.js` rewrites. Hand-written test runtime depends on ESM.
+cat > "$DIST_ROOT/hydra-kernel/package.json" <<'EOF'
+{
+  "name": "hydra-kernel-dist",
+  "private": true,
+  "type": "module"
+}
+EOF
+
 # Top-level runtime files (core types, primitive registry).
-for f in core.ts primitives.ts bootstrap.ts; do
+# `runtime.ts` lives alongside the GENERATED `core.ts` — they used to
+# share the name and the hand-written file clobbered the generated kernel
+# core every sync, masking all kernel exports (Term, Type, Literal, …) at
+# tsc-check time. Now `runtime.ts` provides the JS-native value
+# constructors (Just/Nothing/Left/Right/Pair/Unit + Name/Namespace
+# factories), while generated `core.ts` provides the kernel type
+# definitions imported by every other generated file.
+for f in runtime.ts primitives.ts bootstrap.ts; do
     if [ -f "$SRC_DIR/hydra/$f" ]; then
         cp "$SRC_DIR/hydra/$f" "$OUT_DIR/hydra/$f"
     fi

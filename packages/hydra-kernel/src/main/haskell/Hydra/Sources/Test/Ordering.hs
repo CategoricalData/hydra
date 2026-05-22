@@ -32,7 +32,7 @@ module_ :: Module
 module_ = Module {
             moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.show.core", ShowUtil.ns] ++ kernelTypesModuleNames),
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.reduction", ModuleName "hydra.show.core", ShowUtil.ns, ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
             moduleDescription = Just "Test cases for Ord instance comparisons on complex Hydra types"}
   where
     definitions = [Phantoms.toDefinition allTests]

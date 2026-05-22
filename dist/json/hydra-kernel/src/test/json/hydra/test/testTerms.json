@@ -221,6 +221,6 @@
                       "typeName": "hydra.core.TypeScheme"}}}}],
             "typeName": "hydra.core.Binding"}},
         "typeScheme": {"body": {"variable": "hydra.core.Binding"}, "variables": []}}}],
-  "dependencies": [{"module": "hydra.test.testTypes"}],
+  "dependencies": [{"module": "hydra.test.testTypes"}, {"module": "hydra.core"}],
   "description": "Term definitions for the test suite",
   "name": "hydra.test.testTerms"}

@@ -4485,6 +4485,7 @@
   "dependencies": [
     {"module": "hydra.validate.core"},
     {"module": "hydra.show.error.core"},
+    {"module": "hydra.test.testGraph"},
     {"module": "hydra.paths"},
     {"module": "hydra.ast"},
     {"module": "hydra.classes"},
