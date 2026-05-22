@@ -1,23 +1,13 @@
 package hydra;
 
-import hydra.context.Context;
 import hydra.core.Name;
 import hydra.core.Type;
-import hydra.errors.Error_;
-import hydra.graph.Graph;
 import hydra.packaging.Module;
 import hydra.packaging.Namespace;
-import hydra.util.Either;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +80,36 @@ public class JavaSelfHostDemo {
             outRoot = hydraRoot + "/dist/json/hydra-java/src/main/json";
         }
 
+        // Resolve the dist/json root from --out-root. Canonical layout has the
+        // four-segment ".../hydra-java/src/main/json" tail; strip it to recover
+        // the dist-json root that the per-package driver expects. Non-canonical
+        // paths (e.g. /tmp targets for --compare) are treated verbatim.
+        Path outRootPath = Paths.get(outRoot).toAbsolutePath().normalize();
+        String[] tail = {"hydra-java", "src", "main", "json"};
+        String distJsonRoot;
+        boolean canonicalLayout = true;
+        if (outRootPath.getNameCount() >= tail.length) {
+            for (int k = 0; k < tail.length; k++) {
+                if (!tail[k].equals(outRootPath.getName(
+                        outRootPath.getNameCount() - tail.length + k).toString())) {
+                    canonicalLayout = false;
+                    break;
+                }
+            }
+        } else {
+            canonicalLayout = false;
+        }
+        if (canonicalLayout) {
+            distJsonRoot = outRootPath.subpath(0, outRootPath.getNameCount() - tail.length)
+                .toString();
+            if (outRootPath.isAbsolute()) {
+                distJsonRoot = "/" + distJsonRoot;
+            }
+        } else {
+            distJsonRoot = outRootPath.toString();
+        }
+        System.err.println("Output dist/json root: " + distJsonRoot);
+
         String kernelJson = hydraRoot + "/dist/json/hydra-kernel/src/main/json";
 
         // 1. Load the kernel universe.
@@ -138,95 +158,36 @@ public class JavaSelfHostDemo {
         System.err.println("  imported " + sources.size() + " java source modules ("
             + String.format("%.1f", tImport) + "s)");
 
-        // 3. Inference over universe + sources.
-        // Bindings arrive pre-annotated from module_to_source_module, so inference
-        // is a no-op pass-through for the source modules; we still run it to keep
-        // the pipeline shape identical to other hosts.
+        // 3. Per-package iterative inference + JSON write (mirrors the
+        // Haskell-side inferAndWriteByPackage). For today's single-package
+        // demo (hydra-java sources only) this is effectively a one-iteration
+        // loop, but the driver shape is in place for future multi-package
+        // self-hosts.
         t0 = System.nanoTime();
-        System.err.println("Inferring " + sources.size() + " java source modules ...");
-        Context ctx = new Context(
-            Collections.emptyList(),
-            Collections.emptyList(),
-            Collections.emptyMap());
-        Graph bsGraph = Generation.bootstrapGraph();
+        System.err.println("Per-package inference + write ...");
         List<Module> universePlusSources = new ArrayList<>(universe);
         universePlusSources.addAll(sources);
-        Either<Error_, List<Module>> result =
-            Codegen.inferModulesGiven(ctx, bsGraph, universePlusSources, sources);
-        double tInfer = (System.nanoTime() - t0) / 1e9;
-        if (result instanceof Either.Left) {
-            Error_ err = ((Either.Left<Error_, List<Module>>) result).value;
-            System.err.println("  INFERENCE FAILED: " + err);
-            try {
-                String shown = hydra.show.Errors.error(err);
-                System.err.println("  details: " + shown);
-            } catch (Throwable t) {
-                System.err.println("  (no detail formatter available: " + t.getMessage() + ")");
+        try {
+            Generation.inferAndWriteByPackage(
+                hydraRoot, distJsonRoot, universePlusSources, sources, universe);
+        } catch (RuntimeException ex) {
+            System.err.println("  FAILED: " + ex.getMessage());
+            Throwable cause = ex.getCause();
+            if (cause != null) {
+                System.err.println("  cause: " + cause);
             }
             System.exit(4);
         }
-        List<Module> inferred =
-            ((Either.Right<Error_, List<Module>>) result).value;
-        System.err.println("  inferred (" + String.format("%.1f", tInfer) + "s)");
+        double tPkg = (System.nanoTime() - t0) / 1e9;
+        System.err.println("  done (" + String.format("%.1f", tPkg) + "s)");
 
-        // 4. Build graph + schema_map.
-        t0 = System.nanoTime();
-        System.err.println("Building graph + schema_map ...");
-        List<Module> graphInput = new ArrayList<>(universe);
-        graphInput.addAll(inferred);
-        Graph graph = Codegen.modulesToGraph(bsGraph, graphInput, inferred);
-        Map<Name, Type> schemaMap = Codegen.buildSchemaMap(graph);
-        double tGraph = (System.nanoTime() - t0) / 1e9;
-        System.err.println("  built (" + String.format("%.1f", tGraph) + "s; schema_map has "
-            + schemaMap.size() + " entries)");
-
-        // 5. Encode each module + write to disk.
-        t0 = System.nanoTime();
-        System.err.println("Writing JSON to " + outRoot + " ...");
-        Files.createDirectories(Paths.get(outRoot));
-        int nWritten = 0, nUnchanged = 0;
-        for (Module m : inferred) {
-            Either<Error_, String> encoded = Codegen.moduleToJson(schemaMap, m);
-            if (encoded instanceof Either.Left) {
-                Error_ err = ((Either.Left<Error_, String>) encoded).value;
-                System.err.println("  ENCODE FAILED for " + m.namespace.value + ": " + err);
-                System.exit(5);
-            }
-            String jsonStr = ((Either.Right<Error_, String>) encoded).value;
-            String namespacePath = m.namespace.value.replace('.', '/');
-            Path filePath = Paths.get(outRoot, namespacePath + ".json");
-            Files.createDirectories(filePath.getParent());
-            String newContent = jsonStr + "\n";
-            boolean skip = false;
-            if (Files.exists(filePath)) {
-                String oldContent = new String(Files.readAllBytes(filePath));
-                if (oldContent.equals(newContent)) {
-                    skip = true;
-                    nUnchanged++;
-                    System.err.println("  unchanged: " + filePath);
-                }
-            }
-            if (!skip) {
-                try (PrintWriter pw = new PrintWriter(filePath.toFile())) {
-                    pw.print(newContent);
-                }
-                nWritten++;
-                System.err.println("  wrote: " + filePath);
-            }
-        }
-        double tWrite = (System.nanoTime() - t0) / 1e9;
-        System.err.println("  wrote " + nWritten + " files (" + nUnchanged + " unchanged) ("
-            + String.format("%.1f", tWrite) + "s)");
-
-        // 6. Summary.
-        double tTotal = tUniverse + tImport + tInfer + tGraph + tWrite;
+        // 4. Summary.
+        double tTotal = tUniverse + tImport + tPkg;
         System.err.println("");
         System.err.println("Summary:");
-        System.err.println("  universe load: " + String.format("%6.1f", tUniverse) + "s");
-        System.err.println("  source load:   " + String.format("%6.1f", tImport) + "s");
-        System.err.println("  inference:     " + String.format("%6.1f", tInfer) + "s");
-        System.err.println("  graph+schema:  " + String.format("%6.1f", tGraph) + "s");
-        System.err.println("  json write:    " + String.format("%6.1f", tWrite) + "s");
-        System.err.println("  total:         " + String.format("%6.1f", tTotal) + "s");
+        System.err.println("  universe load:        " + String.format("%6.1f", tUniverse) + "s");
+        System.err.println("  source load:          " + String.format("%6.1f", tImport) + "s");
+        System.err.println("  per-package + write:  " + String.format("%6.1f", tPkg) + "s");
+        System.err.println("  total:                " + String.format("%6.1f", tTotal) + "s");
     }
 }
