@@ -322,3 +322,319 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
         lisp_coder, lisp_language(),
         False, False, False, False,
         base_path, universe, mods)
+
+
+# Prefix-to-package table. Order matters: more-specific prefixes first.
+# Any namespace not matching any prefix falls through to "hydra-kernel".
+# Mirrors Hydra.PackageRouting.packagePrefixes on the Haskell side.
+_PACKAGE_PREFIXES = [
+    # Coder packages (main runtime modules)
+    ("hydra.haskell.",              "hydra-haskell"),
+    ("hydra.java.",                 "hydra-java"),
+    ("hydra.python.",               "hydra-python"),
+    ("hydra.scala.",                "hydra-scala"),
+    ("hydra.lisp.",                 "hydra-lisp"),
+    ("hydra.coq.",                  "hydra-coq"),
+    ("hydra.typeScript.",           "hydra-typescript"),
+    ("hydra.go.",                   "hydra-go"),
+    # DSL wrapper modules for coder packages
+    ("hydra.dsl.haskell.",          "hydra-haskell"),
+    ("hydra.dsl.java.",             "hydra-java"),
+    ("hydra.dsl.python.",           "hydra-python"),
+    ("hydra.dsl.scala.",            "hydra-scala"),
+    ("hydra.dsl.lisp.",             "hydra-lisp"),
+    ("hydra.dsl.coq.",              "hydra-coq"),
+    ("hydra.dsl.typeScript.",       "hydra-typescript"),
+    ("hydra.dsl.go.",               "hydra-go"),
+    # Synthesized decoder source modules for coder packages
+    ("hydra.sources.decode.haskell.",    "hydra-haskell"),
+    ("hydra.sources.decode.java.",       "hydra-java"),
+    ("hydra.sources.decode.python.",     "hydra-python"),
+    ("hydra.sources.decode.scala.",      "hydra-scala"),
+    ("hydra.sources.decode.lisp.",       "hydra-lisp"),
+    ("hydra.sources.decode.coq.",        "hydra-coq"),
+    ("hydra.sources.decode.typeScript.", "hydra-typescript"),
+    # Synthesized encoder source modules for coder packages
+    ("hydra.sources.encode.haskell.",    "hydra-haskell"),
+    ("hydra.sources.encode.java.",       "hydra-java"),
+    ("hydra.sources.encode.python.",     "hydra-python"),
+    ("hydra.sources.encode.scala.",      "hydra-scala"),
+    ("hydra.sources.encode.lisp.",       "hydra-lisp"),
+    ("hydra.sources.encode.coq.",        "hydra-coq"),
+    ("hydra.sources.encode.typeScript.", "hydra-typescript"),
+    # Property graph package
+    ("hydra.pg.",                   "hydra-pg"),
+    ("hydra.cypher.",               "hydra-pg"),
+    ("hydra.graphviz.",             "hydra-pg"),
+    ("hydra.tinkerpop.",            "hydra-pg"),
+    ("hydra.error.pg",              "hydra-pg"),
+    ("hydra.show.error.pg",         "hydra-pg"),
+    ("hydra.validate.pg",           "hydra-pg"),
+    ("hydra.decode.pg.",            "hydra-pg"),
+    ("hydra.encode.pg.",            "hydra-pg"),
+    ("hydra.sources.decode.pg.",    "hydra-pg"),
+    ("hydra.sources.encode.pg.",    "hydra-pg"),
+    ("hydra.demos.genpg.",          "hydra-pg"),
+    ("openGql.grammar",             "hydra-pg"),
+    ("com.gdblab.pathAlgebra.",     "hydra-pg"),
+    ("hydra.dsl.pg.",               "hydra-pg"),
+    ("hydra.dsl.cypher.",           "hydra-pg"),
+    ("hydra.dsl.graphviz.",         "hydra-pg"),
+    ("hydra.dsl.tinkerpop.",        "hydra-pg"),
+    ("hydra.dsl.error.pg",          "hydra-pg"),
+    ("hydra.dsl.openGql.",          "hydra-pg"),
+    ("hydra.dsl.com.gdblab.pathAlgebra.", "hydra-pg"),
+    # RDF / OWL / SHACL / ShEx / XML schema package
+    ("hydra.rdf.",                  "hydra-rdf"),
+    ("hydra.owl.",                  "hydra-rdf"),
+    ("hydra.shacl.",                "hydra-rdf"),
+    ("hydra.shex.",                 "hydra-rdf"),
+    ("hydra.xml.schema",            "hydra-rdf"),
+    ("hydra.dsl.rdf.",              "hydra-rdf"),
+    ("hydra.dsl.owl.",              "hydra-rdf"),
+    ("hydra.dsl.shacl.",            "hydra-rdf"),
+    ("hydra.dsl.shex.",             "hydra-rdf"),
+    ("hydra.dsl.xml.schema",        "hydra-rdf"),
+    # WebAssembly package
+    ("hydra.wasm.",                 "hydra-wasm"),
+    ("hydra.dsl.wasm.",             "hydra-wasm"),
+    # Benchmark package
+    ("hydra.bench.",                "hydra-bench"),
+    # Extension package (truly-ext coders: Avro, Protobuf, GraphQL, etc.)
+    ("hydra.atlas",                 "hydra-ext"),
+    ("hydra.avro.",                 "hydra-ext"),
+    ("hydra.azure.",                "hydra-ext"),
+    ("hydra.cpp.",                  "hydra-ext"),
+    ("hydra.csharp.",               "hydra-ext"),
+    ("hydra.datalog.",              "hydra-ext"),
+    ("hydra.delta.",                "hydra-ext"),
+    ("hydra.geojson.",              "hydra-ext"),
+    ("hydra.graphql.",              "hydra-ext"),
+    ("hydra.iana.",                 "hydra-ext"),
+    ("hydra.json.schema",           "hydra-ext"),
+    ("hydra.kusto.",                "hydra-ext"),
+    ("hydra.osv.",                  "hydra-ext"),
+    ("hydra.parquet.",              "hydra-ext"),
+    ("hydra.pegasus.",              "hydra-ext"),
+    ("hydra.protobuf.",             "hydra-ext"),
+    ("hydra.rust.",                 "hydra-ext"),
+    ("hydra.sql.",                  "hydra-ext"),
+    ("hydra.stac.",                 "hydra-ext"),
+    ("hydra.typeScript.",           "hydra-ext"),
+    ("hydra.workflow",              "hydra-ext"),
+    ("hydra.dsl.atlas",             "hydra-ext"),
+    ("hydra.dsl.avro.",             "hydra-ext"),
+    ("hydra.dsl.azure.",            "hydra-ext"),
+    ("hydra.dsl.cpp.",              "hydra-ext"),
+    ("hydra.dsl.csharp.",           "hydra-ext"),
+    ("hydra.dsl.datalog.",          "hydra-ext"),
+    ("hydra.dsl.delta.",            "hydra-ext"),
+    ("hydra.dsl.geojson.",          "hydra-ext"),
+    ("hydra.dsl.graphql.",          "hydra-ext"),
+    ("hydra.dsl.iana.",             "hydra-ext"),
+    ("hydra.dsl.json.schema",       "hydra-ext"),
+    ("hydra.dsl.kusto.",            "hydra-ext"),
+    ("hydra.dsl.osv.",              "hydra-ext"),
+    ("hydra.dsl.parquet.",          "hydra-ext"),
+    ("hydra.dsl.pegasus.",          "hydra-ext"),
+    ("hydra.dsl.protobuf.",         "hydra-ext"),
+    ("hydra.dsl.rust.",             "hydra-ext"),
+    ("hydra.dsl.sql.",              "hydra-ext"),
+    ("hydra.dsl.stac.",             "hydra-ext"),
+    ("hydra.dsl.typeScript.",       "hydra-ext"),
+    ("hydra.dsl.workflow",          "hydra-ext"),
+    # hydra.yaml.model lives in hydra-kernel; route ext-owned yaml modules explicitly.
+    ("hydra.yaml.coder",            "hydra-ext"),
+    ("hydra.yaml.language",         "hydra-ext"),
+    ("hydra.yaml.serde",            "hydra-ext"),
+]
+
+
+def namespace_to_package(namespace):
+    """Map a Namespace to its owning package name.
+
+    Mirrors Hydra.PackageRouting.namespaceToPackage. Falls back to
+    "hydra-kernel" if no prefix matches.
+    """
+    ns = namespace.value if hasattr(namespace, "value") else namespace
+    for prefix, pkg in _PACKAGE_PREFIXES:
+        if ns.startswith(prefix):
+            return pkg
+    return "hydra-kernel"
+
+
+def group_by_package(mods):
+    """Partition a list of modules by owning package.
+
+    Returns a list of (package_name, modules) pairs sorted by package name
+    for deterministic output. Mirrors Hydra.PackageRouting.groupByPackage.
+    """
+    groups = {}
+    for m in mods:
+        pkg = namespace_to_package(m.namespace)
+        groups.setdefault(pkg, []).append(m)
+    return sorted(groups.items(), key=lambda kv: kv[0])
+
+
+def load_package_deps(hydra_root, pkg):
+    """Read a package's declared dependencies from packages/<pkg>/package.json.
+
+    Returns the list of "dependencies" values, or [] if the field is absent
+    or the file can't be read. Mirrors Hydra.Generation.loadPackageDeps.
+    """
+    path = os.path.join(hydra_root, "packages", pkg, "package.json")
+    if not os.path.isfile(path):
+        return []
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            obj = json.load(f)
+    except (OSError, ValueError):
+        return []
+    deps = obj.get("dependencies")
+    if not isinstance(deps, list):
+        return []
+    return [d for d in deps if isinstance(d, str)]
+
+
+def infer_and_write_by_package(
+        hydra_root, dist_json_root, universe_mods, mods, seed_acc=()):
+    """Per-package iterative inference + JSON write driver.
+
+    Mirrors Hydra.Generation.inferAndWriteByPackage. Processes packages in
+    dependency order (topo sort over each package.json's "dependencies"
+    field) and runs codegen.infer_modules_given once per package, threading
+    the typed-so-far output of upstream packages through as the universe.
+
+    Each iteration writes its package's JSON to disk immediately. That side
+    effect forces the inferred modules through serialization, which on the
+    Haskell side defeats lazy-thunk retention; on Python it's a no-op for
+    laziness but preserves the same control-flow shape so the two drivers
+    can evolve together.
+
+    Parameters:
+      hydra_root      Worktree root; used to locate packages/<pkg>/package.json.
+      dist_json_root  Output JSON root, e.g. <root>/dist/json. Per-package
+                      outputs are written to <root>/dist/json/<pkg>/src/main/json/.
+      universe_mods   All modules participating in type resolution
+                      (kernel + sources). Grouped + iterated.
+      mods            Subset that should actually be re-inferred + written.
+                      Other packages in universe_mods seed the typed
+                      accumulator without producing output.
+      seed_acc        Pre-typed modules to seed the accumulator with (e.g.
+                      kernel modules whose schemes are already in place from
+                      JSON load). Excluded from grouping/iteration.
+
+    Returns the full set of inferred target modules concatenated across
+    packages, in topo order.
+    """
+    from hydra import codegen
+    from hydra import sorting as Sorting
+    from hydra.context import Context
+    from hydra.dsl.python import FrozenDict, Left, Right
+
+    seed_ns = {m.namespace.value for m in seed_acc}
+    grouping_universe = [m for m in universe_mods if m.namespace.value not in seed_ns]
+    grouping_targets  = [m for m in mods          if m.namespace.value not in seed_ns]
+
+    target_groups   = group_by_package(grouping_targets)
+    universe_groups = group_by_package(grouping_universe)
+    pkg_to_mods     = dict(target_groups)
+    pkg_to_universe = dict(universe_groups)
+
+    seen = set()
+    pkgs_in_scope = []
+    for pkg, _ in universe_groups:
+        if pkg not in seen:
+            seen.add(pkg); pkgs_in_scope.append(pkg)
+    for pkg, _ in target_groups:
+        if pkg not in seen:
+            seen.add(pkg); pkgs_in_scope.append(pkg)
+
+    pkg_deps = []
+    for p in pkgs_in_scope:
+        deps = load_package_deps(hydra_root, p)
+        in_scope = [d for d in deps if d in pkgs_in_scope]
+        pkg_deps.append((p, tuple(in_scope)))
+
+    topo_result = Sorting.topological_sort(tuple(pkg_deps))
+    match topo_result:
+        case Right(value=ordered):
+            ordered = list(ordered)
+        case Left(value=cycles):
+            raise RuntimeError(
+                f"infer_and_write_by_package: package dep graph has cycles: {list(cycles)}")
+        case _:
+            raise RuntimeError(
+                f"infer_and_write_by_package: unexpected topo_result {topo_result!r}")
+
+    print(f"  Per-package inference: {len(ordered)} packages in dep order: "
+          f"{' -> '.join(ordered)}", flush=True)
+
+    ctx = Context((), (), FrozenDict({}))
+    bs_graph = bootstrap_graph()
+    acc = list(seed_acc)
+    inferred_all = []
+    for pkg in ordered:
+        pkg_targets  = pkg_to_mods.get(pkg, [])
+        pkg_universe = pkg_to_universe.get(pkg, [])
+        target_ns    = {m.namespace.value for m in pkg_targets}
+        infer_targets = pkg_targets if pkg_targets else pkg_universe
+        typed_universe = acc + pkg_universe
+        print(f"  [{pkg}] {len(pkg_targets)} write / "
+              f"{len(infer_targets)} infer / {len(acc)} typed-so-far",
+              flush=True)
+        if not infer_targets:
+            continue
+        result = codegen.infer_modules_given(
+            ctx, bs_graph, tuple(typed_universe), tuple(infer_targets))
+        match result:
+            case Right(value=inferred):
+                inferred = list(inferred)
+            case Left(value=err):
+                raise RuntimeError(f"infer_and_write_by_package: inference failed for {pkg}: {err}")
+            case _:
+                raise RuntimeError(
+                    f"infer_and_write_by_package: unexpected inference result {result!r}")
+        to_write = [m for m in inferred if m.namespace.value in target_ns]
+        if to_write:
+            _write_package_split_json(dist_json_root, typed_universe, inferred, to_write)
+        acc = acc + inferred
+        inferred_all.extend(inferred)
+    return inferred_all
+
+
+def _write_package_split_json(dist_json_root, universe_mods, universe_for_schema, to_write):
+    """Encode a set of inferred modules to JSON and write them under
+    dist_json_root/<pkg>/src/main/json/. Mirrors
+    Hydra.Generation.writePackageSplitJson.
+    """
+    from hydra import codegen
+    graph = codegen.modules_to_graph(
+        bootstrap_graph(),
+        tuple(universe_mods) + tuple(universe_for_schema),
+        tuple(universe_mods))
+    schema_map = codegen.build_schema_map(graph)
+    for pkg, pkg_mods in group_by_package(to_write):
+        pkg_dir = os.path.join(dist_json_root, pkg, "src", "main", "json")
+        print(f"  {pkg}: {len(pkg_mods)} modules -> {pkg_dir}", flush=True)
+        for m in pkg_mods:
+            result = codegen.module_to_json(schema_map, m)
+            match result:
+                case Right(value=json_str):
+                    file_path = os.path.join(pkg_dir, namespace_to_path(m.namespace) + ".json")
+                    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                    new_content = json_str + "\n"
+                    if os.path.exists(file_path):
+                        with open(file_path, "r", encoding="utf-8") as f:
+                            old = f.read()
+                        if old == new_content:
+                            continue
+                    with open(file_path, "w", encoding="utf-8") as f:
+                        f.write(new_content)
+                case Left(value=err):
+                    raise RuntimeError(
+                        f"_write_package_split_json: encode failed for "
+                        f"{m.namespace.value}: {err}")
+                case _:
+                    raise RuntimeError(
+                        f"_write_package_split_json: unexpected encode result {result!r}")
