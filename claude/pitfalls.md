@@ -613,3 +613,35 @@ be fully consumed even after parsing nominally completes.
 Affects any `readDigest`/`readPerPackageDigest`/`readDigestV2`-style
 function in `Hydra.Digest` that might be followed by `writeFile` to
 the same path during a single `update-json-main` run.
+
+### `pgrep` + frozen log doesn't mean `bin/sync.sh` died
+
+During Phase 2's stack builds the parent `sync.sh` shell is blocked in
+`wait` on a `stack exec ...` child, and stdout is buffered inside
+GHC's runtime. The result: `pgrep -fl "<branch>.*sync"` can return
+empty (the matching process at that moment is a child not matching
+your filter) and `/tmp/<log>` can sit unmodified for many minutes,
+while the sync is still happily compiling. Don't relaunch in panic;
+that just produces a second contending sync. The authoritative "is it
+still running" signal is the background-task completion notification.
+If you must check directly, `pgrep -fl "stack\\|sync.sh\\|update-json"`
+under your worktree CWD is more reliable than filtering on the branch
+name.
+
+### Branches forked from pre-#379 staging regen to obsolete digest paths
+
+Until #379 landed on `main`, sync-pipeline digests lived under
+`dist/json/<pkg>/src/main/digest.json` (tracked). #379 moved them to
+`dist/json/<pkg>/build/main/digest.json` and gitignored the subtree.
+
+A feature branch forked from staging *before* #379 propagated still
+runs the old code, so every Phase 1 run writes digests at the old
+paths. That looks like a tracked-file regression on `git status` even
+though no real change happened — the regen is catching up to the
+committed *content* but writing to the wrong *path*.
+
+When you see modified `dist/json/<pkg>/src/main/digest.json` files on
+a feature branch, check `git merge-base --is-ancestor 443e036c36
+HEAD`. If "NOT ancestor," merge `main` first, then re-run sync — the
+old-path files will get deleted by the merge and the new path will be
+gitignored.
