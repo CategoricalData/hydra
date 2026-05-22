@@ -686,7 +686,14 @@ Each TermCoder contains:
 
 ### Multi-language generation
 
-Primitives defined once in Haskell generate implementations in multiple languages:
+Primitive *signatures* are defined once in Haskell (in
+`packages/hydra-kernel/src/main/haskell/Hydra/Sources/Libraries.hs`) and become
+part of the generated kernel in every target language. The *implementations*
+shown below are hand-written in each host language under `heads/<host>/`, then
+copied into the published `dist/<host>/hydra-kernel/` artifact by
+`heads/<host>/bin/copy-kernel-runtime.sh` — see
+[build-system.md §Hand-written runtime in hydra-kernel](build-system.md#hand-written-runtime-in-hydra-kernel)
+for the full mechanism and the catalog of which subtrees are copied per language.
 
 #### Java Generation
 
