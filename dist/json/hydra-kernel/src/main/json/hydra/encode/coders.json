@@ -212,6 +212,11 @@
     "hydra.encode.graph",
     "hydra.encode.variants",
     "hydra.encode.core",
+    "hydra.context",
+    "hydra.errors",
+    "hydra.graph",
+    "hydra.variants",
+    "hydra.core",
     "hydra.coders"],
   "description": "Term encoders for hydra.coders",
   "namespace": "hydra.encode.coders"}

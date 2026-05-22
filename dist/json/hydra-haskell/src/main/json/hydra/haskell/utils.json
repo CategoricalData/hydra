@@ -2264,6 +2264,7 @@
     "hydra.formatting",
     "hydra.haskell.language",
     "hydra.names",
+    "hydra.strip",
     "hydra.haskell.syntax",
     "hydra.paths",
     "hydra.ast",

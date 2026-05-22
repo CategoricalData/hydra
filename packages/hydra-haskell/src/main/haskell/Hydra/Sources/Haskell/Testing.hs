@@ -55,7 +55,7 @@ module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
             moduleDependencies = [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
-     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns, Namespace "hydra.decode.core"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "Haskell test code generation for HSpec-based generation tests"}
   where
     definitions = [

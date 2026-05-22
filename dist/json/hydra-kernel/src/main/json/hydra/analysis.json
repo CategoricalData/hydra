@@ -3189,6 +3189,8 @@
     "hydra.scoping",
     "hydra.strip",
     "hydra.variables",
+    "hydra.constants",
+    "hydra.encode.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
