@@ -7115,4 +7115,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Collection type checking test cases: lists, sets, maps",
-  "namespace": "hydra.test.checking.collections"}
+  "name": "hydra.test.checking.collections"}

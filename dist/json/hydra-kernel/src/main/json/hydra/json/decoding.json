@@ -374,4 +374,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Decoding functions for JSON data",
-  "namespace": "hydra.json.decoding"}
+  "name": "hydra.json.decoding"}

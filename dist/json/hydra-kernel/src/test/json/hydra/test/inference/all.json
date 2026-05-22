@@ -60,4 +60,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Hydra's inference test suite",
-  "namespace": "hydra.test.inference.all"}
+  "name": "hydra.test.inference.all"}

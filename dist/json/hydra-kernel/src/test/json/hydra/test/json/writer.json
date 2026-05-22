@@ -1395,4 +1395,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for JSON serialization",
-  "namespace": "hydra.test.json.writer"}
+  "name": "hydra.test.json.writer"}

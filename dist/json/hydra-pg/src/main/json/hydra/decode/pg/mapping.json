@@ -3199,4 +3199,4 @@
     {"module": "hydra.decode.coders"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.pg.mapping",
-  "namespace": "hydra.decode.pg.mapping"}
+  "name": "hydra.decode.pg.mapping"}

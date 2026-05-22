@@ -5128,4 +5128,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.paths"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.paths",
-  "namespace": "hydra.dsl.paths"}
+  "name": "hydra.dsl.paths"}

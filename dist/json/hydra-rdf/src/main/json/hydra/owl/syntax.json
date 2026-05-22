@@ -861,4 +861,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.rdf.syntax"}, {"module": "hydra.xml.schema"}],
   "description": "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax",
-  "namespace": "hydra.owl.syntax"}
+  "name": "hydra.owl.syntax"}

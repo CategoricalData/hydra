@@ -2615,4 +2615,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.testing"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.testing",
-  "namespace": "hydra.dsl.testing"}
+  "name": "hydra.dsl.testing"}

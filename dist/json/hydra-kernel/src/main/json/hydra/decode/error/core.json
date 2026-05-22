@@ -8690,4 +8690,4 @@
     {"module": "hydra.decode.core"},
     {"module": "hydra.decode.variants"}],
   "description": "Term decoders for hydra.error.core",
-  "namespace": "hydra.decode.error.core"}
+  "name": "hydra.decode.error.core"}

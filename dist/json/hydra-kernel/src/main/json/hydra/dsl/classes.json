@@ -72,4 +72,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.classes"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.classes",
-  "namespace": "hydra.dsl.classes"}
+  "name": "hydra.dsl.classes"}

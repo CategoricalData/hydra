@@ -214,4 +214,4 @@
           "variables": ["t0", "t1"]}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.phantoms"}],
   "description": "Term encoders for hydra.phantoms",
-  "namespace": "hydra.encode.phantoms"}
+  "name": "hydra.encode.phantoms"}

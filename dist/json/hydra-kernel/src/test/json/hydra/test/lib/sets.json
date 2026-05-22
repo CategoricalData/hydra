@@ -2756,4 +2756,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for hydra.lib.sets primitives",
-  "namespace": "hydra.test.lib.sets"}
+  "name": "hydra.test.lib.sets"}

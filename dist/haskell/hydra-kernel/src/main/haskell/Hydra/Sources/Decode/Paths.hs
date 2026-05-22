@@ -11,25 +11,25 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term decoders for hydra.paths"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.paths"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.decode.paths"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.extract.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.extract.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.lexical"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.lexical"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.rewriting"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.rewriting"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.paths"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.paths"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.util"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.util"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.core"),
           Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {

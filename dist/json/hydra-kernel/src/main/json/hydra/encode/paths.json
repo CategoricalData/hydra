@@ -1957,4 +1957,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.paths"}],
   "description": "Term encoders for hydra.paths",
-  "namespace": "hydra.encode.paths"}
+  "name": "hydra.encode.paths"}

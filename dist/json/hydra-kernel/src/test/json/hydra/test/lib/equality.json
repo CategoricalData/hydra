@@ -6599,4 +6599,4 @@
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [{"module": "hydra.reduction"}, {"module": "hydra.show.core"}],
   "description": "Test cases for hydra.lib.equality primitives",
-  "namespace": "hydra.test.lib.equality"}
+  "name": "hydra.test.lib.equality"}

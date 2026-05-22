@@ -1282,4 +1282,4 @@
     {"module": "hydra.dsl.core"},
     {"module": "hydra.dsl.relational"}],
   "description": "DSL functions for hydra.tabular",
-  "namespace": "hydra.dsl.tabular"}
+  "name": "hydra.dsl.tabular"}

@@ -35908,4 +35908,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.coq.syntax"}, {"module": "hydra.phantoms"}],
   "description": "DSL functions for hydra.coq.syntax",
-  "namespace": "hydra.dsl.coq.syntax"}
+  "name": "hydra.dsl.coq.syntax"}

@@ -2655,4 +2655,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Default term-level implementations of Either functions for the Hydra interpreter.",
-  "namespace": "hydra.lib.defaults.eithers"}
+  "name": "hydra.lib.defaults.eithers"}

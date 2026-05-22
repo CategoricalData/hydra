@@ -13452,4 +13452,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.phantoms"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.core",
-  "namespace": "hydra.dsl.core"}
+  "name": "hydra.dsl.core"}

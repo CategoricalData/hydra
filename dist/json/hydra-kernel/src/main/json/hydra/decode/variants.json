@@ -2721,4 +2721,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.variants",
-  "namespace": "hydra.decode.variants"}
+  "name": "hydra.decode.variants"}

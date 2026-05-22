@@ -2687,4 +2687,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "String representations of hydra.core types",
-  "namespace": "hydra.show.core"}
+  "name": "hydra.show.core"}

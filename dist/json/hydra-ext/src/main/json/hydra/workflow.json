@@ -104,4 +104,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.graph"}, {"module": "hydra.packaging"}, {"module": "hydra.core"}],
   "description": "A model for Hydra transformation workflows",
-  "namespace": "hydra.workflow"}
+  "name": "hydra.workflow"}

@@ -3878,7 +3878,7 @@
                                           "application": {
                                             "argument": {"variable": "dep"},
                                             "function": {"project": {"fieldName": "module", "typeName": "hydra.packaging.ModuleDependency"}}}},
-                                        "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                        "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                                     "domain": {"variable": "hydra.packaging.ModuleDependency"},
                                     "parameter": "dep"}},
                                 "function": {
@@ -3892,10 +3892,8 @@
                         "term": {
                           "application": {
                             "argument": {
-                              "application": {
-                                "argument": {"variable": "m"},
-                                "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                            "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                              "application": {"argument": {"variable": "m"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
+                            "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "filtered",
@@ -7321,4 +7319,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Pure helpers for the Coq code generator",
-  "namespace": "hydra.coq.utils"}
+  "name": "hydra.coq.utils"}

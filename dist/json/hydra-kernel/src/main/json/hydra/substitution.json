@@ -1680,4 +1680,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Variable substitution in type and term expressions.",
-  "namespace": "hydra.substitution"}
+  "name": "hydra.substitution"}

@@ -2419,4 +2419,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.topology"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.topology",
-  "namespace": "hydra.dsl.topology"}
+  "name": "hydra.dsl.topology"}

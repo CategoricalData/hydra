@@ -4349,4 +4349,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.paths",
-  "namespace": "hydra.decode.paths"}
+  "name": "hydra.decode.paths"}

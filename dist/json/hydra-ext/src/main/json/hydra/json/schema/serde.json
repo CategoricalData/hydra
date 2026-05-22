@@ -1962,4 +1962,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Serialization functions for converting JSON Schema documents to JSON values",
-  "namespace": "hydra.json.schema.serde"}
+  "name": "hydra.json.schema.serde"}

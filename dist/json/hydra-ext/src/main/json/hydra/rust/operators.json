@@ -739,4 +739,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "AST operators for Rust serialization",
-  "namespace": "hydra.rust.operators"}
+  "name": "hydra.rust.operators"}

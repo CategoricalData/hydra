@@ -809,4 +809,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.topology",
-  "namespace": "hydra.decode.topology"}
+  "name": "hydra.decode.topology"}

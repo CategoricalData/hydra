@@ -328,7 +328,7 @@ avroNameToHydraName qname =
       let mns = Environment.avroQualifiedNameNamespace qname
           local = Environment.avroQualifiedNameName qname
       in (Names.unqualifyName (Packaging.QualifiedName {
-        Packaging.qualifiedNameNamespace = (Maybes.map (\s -> Packaging.Namespace s) mns),
+        Packaging.qualifiedNameModuleName = (Maybes.map (\s -> Packaging.ModuleName s) mns),
         Packaging.qualifiedNameLocal = local}))
 avro_foreignKey :: String
 avro_foreignKey = "@foreignKey"

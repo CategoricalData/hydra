@@ -431,4 +431,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A model for language-agnostic graph pattern queries",
-  "namespace": "hydra.query"}
+  "name": "hydra.query"}

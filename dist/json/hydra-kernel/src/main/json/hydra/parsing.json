@@ -99,4 +99,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "Parser combinator types for text parsing",
-  "namespace": "hydra.parsing"}
+  "name": "hydra.parsing"}

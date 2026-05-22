@@ -3262,7 +3262,7 @@
                           {
                             "key": "description",
                             "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}},
+                        "body": {"variable": "hydra.packaging.ModuleName"}}},
                     "function": {"variable": "hydra.phantoms.TTerm"}}},
                 "parameter": "namespace"}}}},
         "typeScheme": {
@@ -3298,7 +3298,7 @@
                         {
                           "key": "description",
                           "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
     {
@@ -3353,7 +3353,7 @@
                         {
                           "key": "description",
                           "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                      "body": {"variable": "hydra.packaging.Namespace"}}},
+                      "body": {"variable": "hydra.packaging.ModuleName"}}},
                   "function": {"variable": "hydra.phantoms.TTerm"}}},
               "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -3578,7 +3578,7 @@
                               {
                                 "key": "description",
                                 "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                            "body": {"variable": "hydra.packaging.Namespace"}}},
+                            "body": {"variable": "hydra.packaging.ModuleName"}}},
                         "function": {"variable": "hydra.phantoms.TTerm"}}},
                     "parameter": "newVal"}},
                 "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
@@ -3597,7 +3597,7 @@
                             {
                               "key": "description",
                               "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                          "body": {"variable": "hydra.packaging.Namespace"}}},
+                          "body": {"variable": "hydra.packaging.ModuleName"}}},
                       "function": {"variable": "hydra.phantoms.TTerm"}}}}},
               "domain": {"application": {"argument": {"variable": "hydra.graph.Library"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}},
@@ -5401,4 +5401,4 @@
     {"module": "hydra.dsl.errors"},
     {"module": "hydra.dsl.packaging"}],
   "description": "DSL functions for hydra.graph",
-  "namespace": "hydra.dsl.graph"}
+  "name": "hydra.dsl.graph"}

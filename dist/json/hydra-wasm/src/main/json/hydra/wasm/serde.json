@@ -2908,4 +2908,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "WebAssembly serializer: converts WAT AST to concrete WAT text format",
-  "namespace": "hydra.wasm.serde"}
+  "name": "hydra.wasm.serde"}

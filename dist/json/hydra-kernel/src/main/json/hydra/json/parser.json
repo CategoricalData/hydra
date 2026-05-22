@@ -1212,4 +1212,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "JSON parser using Hydra parser combinators",
-  "namespace": "hydra.json.parser"}
+  "name": "hydra.json.parser"}

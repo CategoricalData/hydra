@@ -515,4 +515,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "AST operators for Haskell",
-  "namespace": "hydra.haskell.operators"}
+  "name": "hydra.haskell.operators"}

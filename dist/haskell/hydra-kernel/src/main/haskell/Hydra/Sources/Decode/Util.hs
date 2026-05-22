@@ -11,28 +11,28 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term decoders for hydra.util"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.util"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.decode.util"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.extract.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.extract.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.lexical"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.lexical"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.rewriting"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.rewriting"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.util"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.util"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.util"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.util"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.packaging"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.packaging"),
           Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -535,7 +535,7 @@ module_ =
                                               Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                 Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodePair")),
-                                                  Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.namespace"))})),
+                                                  Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.moduleName"))})),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "n"))}))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
@@ -554,7 +554,7 @@ module_ =
                                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                                     Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.core.decodeMap")),
-                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.namespace"))})),
+                                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.packaging.moduleName"))})),
                                                     Core.applicationArgument = (Core.TermVariable (Core.Name "n"))}))})),
                                                 Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),

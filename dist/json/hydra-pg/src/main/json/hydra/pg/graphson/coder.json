@@ -1332,4 +1332,4 @@
     {"module": "hydra.pg.graphson.syntax"},
     {"module": "hydra.json.model"}],
   "description": "Encoding functions for converting GraphSON syntax to JSON.",
-  "namespace": "hydra.pg.graphson.coder"}
+  "name": "hydra.pg.graphson.coder"}

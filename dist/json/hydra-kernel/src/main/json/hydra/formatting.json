@@ -1710,4 +1710,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "String formatting types and functions.",
-  "namespace": "hydra.formatting"}
+  "name": "hydra.formatting"}

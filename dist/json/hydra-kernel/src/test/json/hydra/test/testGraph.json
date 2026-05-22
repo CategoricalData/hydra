@@ -257,13 +257,13 @@
     {
       "term": {
         "name": "hydra.test.testGraph.testNamespace",
-        "term": {"wrap": {"body": {"literal": {"string": "testGraph"}}, "typeName": "hydra.packaging.Namespace"}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+        "term": {"wrap": {"body": {"literal": {"string": "testGraph"}}, "typeName": "hydra.packaging.ModuleName"}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testSchemaNamespace",
-        "term": {"wrap": {"body": {"literal": {"string": "testSchemaGraph"}}, "typeName": "hydra.packaging.Namespace"}},
-        "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}}},
+        "term": {"wrap": {"body": {"literal": {"string": "testSchemaGraph"}}, "typeName": "hydra.packaging.ModuleName"}},
+        "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}}},
     {
       "term": {
         "name": "hydra.test.testGraph.testGraph",
@@ -316,4 +316,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "A module defining the graph used in the test suite.",
-  "namespace": "hydra.test.testGraph"}
+  "name": "hydra.test.testGraph"}

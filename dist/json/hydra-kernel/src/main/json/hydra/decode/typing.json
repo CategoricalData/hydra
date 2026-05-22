@@ -1213,4 +1213,4 @@
     {"module": "hydra.decode.core"},
     {"module": "hydra.decode.context"}],
   "description": "Term decoders for hydra.typing",
-  "namespace": "hydra.decode.typing"}
+  "name": "hydra.decode.typing"}

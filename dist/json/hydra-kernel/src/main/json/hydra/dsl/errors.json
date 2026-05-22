@@ -4805,4 +4805,4 @@
     {"module": "hydra.dsl.typing"},
     {"module": "hydra.dsl.variants"}],
   "description": "DSL functions for hydra.errors",
-  "namespace": "hydra.dsl.errors"}
+  "name": "hydra.dsl.errors"}

@@ -547,4 +547,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.avro.schema"}, {"module": "hydra.json.model"}],
   "description": "Test case types for the bidirectional Avro coder",
-  "namespace": "hydra.avro.testing"}
+  "name": "hydra.avro.testing"}

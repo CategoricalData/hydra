@@ -9523,4 +9523,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for variable analysis and manipulation",
-  "namespace": "hydra.test.variables"}
+  "name": "hydra.test.variables"}

@@ -89,7 +89,7 @@
                           {
                             "key": "description",
                             "value": {"literal": {"string": "A common prefix for all primitive function names in the library"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "prefix",
                     "type": {
@@ -201,4 +201,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.context"}, {"module": "hydra.core"}, {"module": "hydra.errors"}, {"module": "hydra.packaging"}],
   "description": "The extension to graphs of Hydra's core type system (hydra.core)",
-  "namespace": "hydra.graph"}
+  "name": "hydra.graph"}

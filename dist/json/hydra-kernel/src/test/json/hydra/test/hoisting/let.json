@@ -17287,4 +17287,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for let-binding hoisting transformations",
-  "namespace": "hydra.test.hoisting.let"}
+  "name": "hydra.test.hoisting.let"}

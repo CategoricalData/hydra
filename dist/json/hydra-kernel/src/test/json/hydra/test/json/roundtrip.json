@@ -7355,4 +7355,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Round-trip test cases for JSON encoding and decoding",
-  "namespace": "hydra.test.json.roundtrip"}
+  "name": "hydra.test.json.roundtrip"}

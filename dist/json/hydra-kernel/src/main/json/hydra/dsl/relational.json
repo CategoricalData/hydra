@@ -2480,4 +2480,4 @@
           "variables": ["v"]}}}],
   "dependencies": [{"module": "hydra.relational"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.relational",
-  "namespace": "hydra.dsl.relational"}
+  "name": "hydra.dsl.relational"}

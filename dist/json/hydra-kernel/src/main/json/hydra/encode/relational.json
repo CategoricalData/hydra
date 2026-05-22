@@ -687,4 +687,4 @@
           "variables": ["t0"]}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.relational"}],
   "description": "Term encoders for hydra.relational",
-  "namespace": "hydra.encode.relational"}
+  "name": "hydra.encode.relational"}

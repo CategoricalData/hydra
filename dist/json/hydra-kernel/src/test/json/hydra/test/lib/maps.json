@@ -5107,4 +5107,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for hydra.lib.maps primitives",
-  "namespace": "hydra.test.lib.maps"}
+  "name": "hydra.test.lib.maps"}

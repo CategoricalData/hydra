@@ -85,4 +85,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.classes"}],
   "description": "Term encoders for hydra.classes",
-  "namespace": "hydra.encode.classes"}
+  "name": "hydra.encode.classes"}

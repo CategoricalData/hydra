@@ -61048,4 +61048,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.scala.syntax"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.scala.syntax",
-  "namespace": "hydra.dsl.scala.syntax"}
+  "name": "hydra.dsl.scala.syntax"}

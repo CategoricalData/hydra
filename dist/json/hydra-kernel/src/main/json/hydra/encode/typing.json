@@ -571,4 +571,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.context"}, {"module": "hydra.typing"}],
   "description": "Term encoders for hydra.typing",
-  "namespace": "hydra.encode.typing"}
+  "name": "hydra.encode.typing"}

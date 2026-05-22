@@ -133,4 +133,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints for W3C SHACL",
-  "namespace": "hydra.shacl.language"}
+  "name": "hydra.shacl.language"}

@@ -571,7 +571,7 @@ graphWithTypeVariables original newVal =
           Core.fieldName = (Core.Name "typeVariables"),
           Core.fieldTerm = (Phantoms.unTTerm newVal)}]}))
 -- | DSL constructor for hydra.graph.Library
-library :: Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm String -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Graph.Library
+library :: Phantoms.TTerm Packaging.ModuleName -> Phantoms.TTerm String -> Phantoms.TTerm [Graph.Primitive] -> Phantoms.TTerm Graph.Library
 library namespace prefix primitives =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Library"),
@@ -586,7 +586,7 @@ library namespace prefix primitives =
           Core.fieldName = (Core.Name "primitives"),
           Core.fieldTerm = (Phantoms.unTTerm primitives)}]}))
 -- | DSL accessor for the namespace field of hydra.graph.Library
-libraryNamespace :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm Packaging.Namespace
+libraryNamespace :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm Packaging.ModuleName
 libraryNamespace x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
@@ -610,7 +610,7 @@ libraryPrimitives x =
         Core.projectionFieldName = (Core.Name "primitives")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the namespace field of hydra.graph.Library
-libraryWithNamespace :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm Packaging.Namespace -> Phantoms.TTerm Graph.Library
+libraryWithNamespace :: Phantoms.TTerm Graph.Library -> Phantoms.TTerm Packaging.ModuleName -> Phantoms.TTerm Graph.Library
 libraryWithNamespace original newVal =
     Phantoms.TTerm (Core.TermRecord (Core.Record {
       Core.recordTypeName = (Core.Name "hydra.graph.Library"),

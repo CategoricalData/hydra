@@ -37741,4 +37741,4 @@
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [{"module": "hydra.reduction"}, {"module": "hydra.show.core"}],
   "description": "Test cases for hydra.lib.math primitives",
-  "namespace": "hydra.test.lib.math"}
+  "name": "hydra.test.lib.math"}

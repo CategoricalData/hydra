@@ -201,4 +201,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "An RDF 1.1 syntax model",
-  "namespace": "hydra.rdf.syntax"}
+  "name": "hydra.rdf.syntax"}

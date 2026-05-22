@@ -362,4 +362,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Default term-level implementations of Pair functions for the Hydra interpreter.",
-  "namespace": "hydra.lib.defaults.pairs"}
+  "name": "hydra.lib.defaults.pairs"}

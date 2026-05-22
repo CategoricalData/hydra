@@ -6406,4 +6406,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Test cases for hydra.lib.strings primitives",
-  "namespace": "hydra.test.lib.strings"}
+  "name": "hydra.test.lib.strings"}

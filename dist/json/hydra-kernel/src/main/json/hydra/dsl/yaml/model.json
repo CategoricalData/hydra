@@ -487,4 +487,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.yaml.model"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.yaml.model",
-  "namespace": "hydra.dsl.yaml.model"}
+  "name": "hydra.dsl.yaml.model"}

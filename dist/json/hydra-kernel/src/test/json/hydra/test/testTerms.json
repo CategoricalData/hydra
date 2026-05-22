@@ -223,4 +223,4 @@
         "typeScheme": {"body": {"variable": "hydra.core.Binding"}, "variables": []}}}],
   "dependencies": [{"module": "hydra.test.testTypes"}],
   "description": "Term definitions for the test suite",
-  "namespace": "hydra.test.testTerms"}
+  "name": "hydra.test.testTerms"}

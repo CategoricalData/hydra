@@ -59,4 +59,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Hydra's type checking test suite",
-  "namespace": "hydra.test.checking.all"}
+  "name": "hydra.test.checking.all"}

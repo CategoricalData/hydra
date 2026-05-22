@@ -811,4 +811,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Round-trip test cases for the JSON<->YAML bridge, focused on decimal precision",
-  "namespace": "hydra.test.json.yaml"}
+  "name": "hydra.test.json.yaml"}

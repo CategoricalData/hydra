@@ -315,4 +315,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.json.model",
-  "namespace": "hydra.dsl.json.model"}
+  "name": "hydra.dsl.json.model"}

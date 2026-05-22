@@ -12,13 +12,13 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.relational"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.relational"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.relational"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.encode.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.relational"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.relational"),
           Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {

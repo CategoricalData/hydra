@@ -195,4 +195,4 @@
     {"module": "hydra.util"},
     {"module": "hydra.decode.core"}],
   "description": "Term decoders for hydra.testing",
-  "namespace": "hydra.decode.testing"}
+  "name": "hydra.decode.testing"}

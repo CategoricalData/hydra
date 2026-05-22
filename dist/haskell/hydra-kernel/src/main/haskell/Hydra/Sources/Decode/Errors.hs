@@ -11,43 +11,43 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term decoders for hydra.errors"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.decode.errors"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.decode.errors"),
       Packaging.moduleDependencies = [
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.extract.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.extract.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.lexical"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.lexical"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.rewriting"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.rewriting"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.errors"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.errors"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.util"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.util"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.context"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.context"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.error.checking"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.error.checking"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.error.core"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.error.core"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.paths"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.paths"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.typing"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.typing"),
           Packaging.moduleDependencyPackage = Nothing},
         Packaging.ModuleDependency {
-          Packaging.moduleDependencyModule = (Packaging.Namespace "hydra.decode.variants"),
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.decode.variants"),
           Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {

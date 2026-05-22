@@ -416,4 +416,4 @@
         "typeScheme": {"body": {"union": [{"name": "inner", "type": {"unit": {}}}, {"name": "outer", "type": {"unit": {}}}]}, "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A partial KQL (Kusto Query Language) model, based on examples from the documentation. Not normative.",
-  "namespace": "hydra.kusto.kql"}
+  "name": "hydra.kusto.kql"}

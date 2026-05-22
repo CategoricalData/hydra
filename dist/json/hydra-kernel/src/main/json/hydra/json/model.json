@@ -46,4 +46,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}],
   "description": "A JSON syntax model. See the BNF at https://www.json.org",
-  "namespace": "hydra.json.model"}
+  "name": "hydra.json.model"}

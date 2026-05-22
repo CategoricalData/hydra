@@ -299,4 +299,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Language constraints for Coq code generation",
-  "namespace": "hydra.coq.language"}
+  "name": "hydra.coq.language"}

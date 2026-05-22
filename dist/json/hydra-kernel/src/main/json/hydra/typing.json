@@ -163,4 +163,4 @@
           "variables": []}}}],
   "dependencies": [{"module": "hydra.core"}, {"module": "hydra.context"}],
   "description": "Types supporting type inference and type reconstruction.",
-  "namespace": "hydra.typing"}
+  "name": "hydra.typing"}

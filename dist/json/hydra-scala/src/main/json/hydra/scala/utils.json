@@ -596,13 +596,13 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "qname"},
-                                    "function": {"project": {"fieldName": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                    "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
                                 "function": {
                                   "application": {
-                                    "argument": {"wrap": {"body": {"literal": {"string": ""}}, "typeName": "hydra.packaging.Namespace"}},
+                                    "argument": {"wrap": {"body": {"literal": {"string": ""}}, "typeName": "hydra.packaging.ModuleName"}},
                                     "function": {
-                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.packaging.Namespace"}}}}}}},
-                            "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                      "typeApplication": {"body": {"variable": "hydra.lib.maybes.fromMaybe"}, "type": {"variable": "hydra.packaging.ModuleName"}}}}}}},
+                            "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "local",
@@ -1005,4 +1005,4 @@
     {"module": "hydra.validation"},
     {"module": "hydra.variants"}],
   "description": "Utility functions for constructing Scala AST nodes",
-  "namespace": "hydra.scala.utils"}
+  "name": "hydra.scala.utils"}
