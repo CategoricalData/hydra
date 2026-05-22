@@ -4,13 +4,15 @@
 module Hydra.Arity where
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Typing as Typing
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Math as Math
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Find the arity (expected number of arguments) of a primitive constant or function
 primitiveArity :: Graph.Primitive -> Int
-primitiveArity arg_ = (\arg_2 -> typeArity (Core.typeSchemeBody arg_2)) (Graph.primitiveTypeScheme arg_)
+primitiveArity arg_ = Lists.length (Typing.termSignatureParameters (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition arg_)))
 -- | Find the arity (expected number of arguments) of a term
 termArity :: Core.Term -> Int
 termArity x =

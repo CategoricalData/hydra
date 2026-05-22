@@ -11,6 +11,8 @@ import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Packaging as Packaging
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -56,7 +58,7 @@ isComplexVariable tc name =
         let typeLookup = Maps.lookup name (Graph.graphBoundTypes tc)
         in (Maybes.maybe (
           let primLookup = Maps.lookup name (Graph.graphPrimitives tc)
-          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Graph.primitiveTypeScheme prim)) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
+          in (Maybes.maybe True (\prim -> Equality.gt (Arity.typeSchemeArity (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))) 0) primLookup)) (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
 -- | Determines whether a given term is an encoded term (meta-level term)
 isEncodedTerm :: Core.Term -> Bool
 isEncodedTerm t =

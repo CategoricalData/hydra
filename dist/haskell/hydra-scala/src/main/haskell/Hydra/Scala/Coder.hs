@@ -457,7 +457,7 @@ encodeTermDefinition cx g td =
           term = Packaging.termDefinitionTerm td
           lname = Utils.scalaEscapeName (Names.localNameOf name)
           typ_ =
-                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Packaging.termDefinitionTypeScheme td)
+                  Maybes.maybe (Core.TypeVariable (Core.Name "hydra.core.Unit")) Core.typeSchemeBody (Maybes.map Scoping.termSignatureToTypeScheme (Packaging.termDefinitionSignature td))
           isFunctionType =
                   case (Strip.deannotateType typ_) of
                     Core.TypeFunction _ -> True
