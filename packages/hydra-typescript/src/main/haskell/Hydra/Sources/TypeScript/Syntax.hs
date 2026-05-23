@@ -75,6 +75,7 @@ module_ = Module {
 
       -- Expressions
       expression,
+      asExpression,
       arrayExpression,
       objectExpression,
       functionExpression,
@@ -100,6 +101,7 @@ module_ = Module {
       arrayPattern,
       assignmentPattern,
       restElement,
+      typedPattern,
 
       -- Statements
       statement,
@@ -481,7 +483,21 @@ expression = define "Expression" $
       ts "SpreadElement",
     "parenthesized">:
       doc "A parenthesized expression" $
-      ts "Expression"]
+      ts "Expression",
+    "asExpression">:
+      doc "A TypeScript type assertion `<expr> as <type>`" $
+      ts "AsExpression"]
+
+asExpression :: Binding
+asExpression = define "AsExpression" $
+  doc "A TypeScript `<expression> as <type>` cast" $
+  T.record [
+    "expression">:
+      doc "The expression being cast" $
+      ts "Expression",
+    "type">:
+      doc "The target type" $
+      ts "TypeExpression"]
 
 arrayExpression :: Binding
 arrayExpression = define "ArrayExpression" $
@@ -674,7 +690,10 @@ pattern_ = define "Pattern" $
       ts "AssignmentPattern",
     "rest">:
       doc "A rest element (...x)" $
-      ts "RestElement"]
+      ts "RestElement",
+    "typed">:
+      doc "A pattern with a TypeScript type annotation (`x: T`)" $
+      ts "TypedPattern"]
 
 objectPattern :: Binding
 objectPattern = define "ObjectPattern" $
@@ -707,6 +726,17 @@ restElement :: Binding
 restElement = define "RestElement" $
   doc "A rest element pattern (...x)" $
   T.wrap $ ts "Pattern"
+
+typedPattern :: Binding
+typedPattern = define "TypedPattern" $
+  doc "A pattern with a TypeScript type annotation (`x: T`)" $
+  T.record [
+    "pattern">:
+      doc "The underlying binding pattern" $
+      ts "Pattern",
+    "type">:
+      doc "The TypeScript type annotation" $
+      ts "TypeExpression"]
 
 -- ============================================================================
 -- Statements
@@ -1204,10 +1234,10 @@ comment = define "Comment" $
       doc "A single-line comment (// ...)"
       T.string,
     "block">:
-      doc "A block comment (/* ... */)"
+      doc "A block comment, delimited by slash-star and star-slash"
       T.string,
     "documentation">:
-      doc "A documentation comment (/** ... */, i.e. JSDoc)" $
+      doc "A documentation comment, delimited by slash-double-star and star-slash (JSDoc)" $
       ts "DocumentationComment"]
 
 documentationComment :: Binding

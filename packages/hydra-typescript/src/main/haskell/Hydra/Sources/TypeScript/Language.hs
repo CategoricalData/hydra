@@ -183,7 +183,7 @@ typeScriptReservedWords = define "typeScriptReservedWords" $
     "strictModeReserved">:
       doc "Additional words reserved in strict mode" $
       list $ string <$> [
-        "arguments", "eval"],
+        "arguments", "eval", "static", "yield"],
     "typeScriptKeywords">:
       doc "TypeScript-only keywords and contextual keywords (TS 5.x)" $
       list $ string <$> [
