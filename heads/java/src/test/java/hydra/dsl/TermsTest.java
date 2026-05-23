@@ -95,7 +95,7 @@ public class TermsTest {
         assertTrue(longitude instanceof Term.Project);
         Projection proj = ((Term.Project) longitude).value;
         assertEquals(name("LatLon"), proj.typeName);
-        assertEquals(name("lon"), proj.field);
+        assertEquals(name("lon"), proj.fieldName);
 
         assertTrue(longitudeAnnotated instanceof Term.Annotated);
         // Notice that annotations, here, are String-valued
