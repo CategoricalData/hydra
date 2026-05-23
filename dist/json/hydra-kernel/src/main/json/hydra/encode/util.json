@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.encode.util.caseConvention",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.CaseConvention"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.CaseConvention"}}}],
@@ -149,13 +153,14 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.util.CaseConvention"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.util.CaseConvention"}}},
-          "variables": []}}},
+                "typeName": "hydra.util.CaseConvention"}}}}}},
     {
       "term": {
         "name": "hydra.encode.util.comparison",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.Comparison"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.Comparison"}}}],
@@ -267,13 +272,22 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"unit": {}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.util.Comparison"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.util.Comparison"}}},
-          "variables": []}}},
+                "typeName": "hydra.util.Comparison"}}}}}},
     {
       "term": {
         "name": "hydra.encode.util.namespaces",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "t0"}}}},
+            {
+              "isLazy": false,
+              "name": "arg1",
+              "type": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.util.Namespaces"}}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -387,19 +401,14 @@
                         "parameter": "x"}},
                     "domain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "t0"}}},
                     "parameter": "n"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.core.Term"},
-                  "domain": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.util.Namespaces"}}}}},
-              "domain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "t0"}}}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.encode.util.precision",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.util.Precision"}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encoder for hydra.util.Precision"}}}],
@@ -486,10 +495,7 @@
                             "typeName": "hydra.core.Term"}},
                         "domain": {"literal": {"integer": {"int32": {}}}},
                         "parameter": "y"}}}],
-                "typeName": "hydra.util.Precision"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.util.Precision"}}},
-          "variables": []}}}],
+                "typeName": "hydra.util.Precision"}}}}}}],
   "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.encode.packaging"}, {"module": "hydra.util"}],
   "description": "Term encoders for hydra.util",
   "name": "hydra.encode.util"}

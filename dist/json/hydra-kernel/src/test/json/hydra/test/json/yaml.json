@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.test.json.yaml.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Round-trip test cases for the JSON<->YAML decimal bridge"}}}],
@@ -779,8 +780,7 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+                "typeName": "hydra.testing.TestGroup"}}}}}}],
   "dependencies": [
     {"module": "hydra.json.writer"},
     {"module": "hydra.json.yaml.encode"},

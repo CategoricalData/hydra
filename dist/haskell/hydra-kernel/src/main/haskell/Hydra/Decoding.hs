@@ -1563,8 +1563,10 @@ decoderTypeScheme typ =
           allOrdVars = collectOrdConstrainedVariables typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = (decoderType typ),
@@ -1577,8 +1579,10 @@ decoderTypeSchemeNamed ename typ =
           allOrdVars = collectOrdConstrainedVariables typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = (decoderTypeNamed ename typ),

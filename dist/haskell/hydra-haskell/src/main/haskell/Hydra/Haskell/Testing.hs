@@ -10,7 +10,6 @@ import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Haskell.Syntax as Syntax
-import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Haskell.Utils as Utils
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
@@ -28,6 +27,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Predicates as Predicates
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Errors as Errors
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Testing as Testing

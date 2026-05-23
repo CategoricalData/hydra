@@ -199,15 +199,18 @@ adaptPrimitive constraints litmap prim0 =
 
       let def0 = Graph.primitiveDefinition prim0
           ts0 = Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature def0)
-      in (Eithers.bind (adaptTypeScheme constraints litmap ts0) (\ts1 -> Right (Graph.Primitive {
-        Graph.primitiveDefinition = (Packaging.PrimitiveDefinition {
-          Packaging.primitiveDefinitionName = (Packaging.primitiveDefinitionName def0),
-          Packaging.primitiveDefinitionDescription = (Packaging.primitiveDefinitionDescription def0),
-          Packaging.primitiveDefinitionSignature = (Scoping.typeSchemeToTermSignature ts1),
-          Packaging.primitiveDefinitionIsPure = (Packaging.primitiveDefinitionIsPure def0),
-          Packaging.primitiveDefinitionIsTotal = (Packaging.primitiveDefinitionIsTotal def0),
-          Packaging.primitiveDefinitionDefaultImplementation = (Packaging.primitiveDefinitionDefaultImplementation def0)}),
-        Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)})))
+      in (Eithers.bind (adaptTypeScheme constraints litmap ts0) (\ts1 ->
+        let def1 =
+                Packaging.PrimitiveDefinition {
+                  Packaging.primitiveDefinitionName = (Packaging.primitiveDefinitionName def0),
+                  Packaging.primitiveDefinitionDescription = (Packaging.primitiveDefinitionDescription def0),
+                  Packaging.primitiveDefinitionSignature = (Scoping.typeSchemeToTermSignature ts1),
+                  Packaging.primitiveDefinitionIsPure = (Packaging.primitiveDefinitionIsPure def0),
+                  Packaging.primitiveDefinitionIsTotal = (Packaging.primitiveDefinitionIsTotal def0),
+                  Packaging.primitiveDefinitionDefaultImplementation = (Packaging.primitiveDefinitionDefaultImplementation def0)}
+        in (Right (Graph.Primitive {
+          Graph.primitiveDefinition = def1,
+          Graph.primitiveImplementation = (Graph.primitiveImplementation prim0)}))))
 -- | Adapt a term using the given language constraints
 adaptTerm :: Coders.LanguageConstraints -> M.Map Core.LiteralType Core.LiteralType -> t0 -> Graph.Graph -> Core.Term -> Either Errors.Error Core.Term
 adaptTerm constraints litmap cx graph term0 =

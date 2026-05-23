@@ -3,6 +3,10 @@
     {
       "term": {
         "name": "hydra.shacl.coder.common",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}}}],
+          "result": {"type": {"variable": "hydra.shacl.model.CommonProperties"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -50,16 +54,11 @@
                         "term": {"typeApplication": {"body": {"variable": "hydra.lib.sets.empty"}, "type": {"variable": "hydra.rdf.syntax.Property"}}}}],
                     "typeName": "hydra.shacl.model.CommonProperties"}},
                 "domain": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}},
-                "parameter": "constraints"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.shacl.model.CommonProperties"},
-              "domain": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
-          "variables": []}}},
+                "parameter": "constraints"}}}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.defaultCommonProperties",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.shacl.model.CommonProperties"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -69,11 +68,14 @@
             "body": {
               "application": {
                 "argument": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.shacl.model.CommonConstraint"}}},
-                "function": {"variable": "hydra.shacl.coder.common"}}}}},
-        "typeScheme": {"body": {"variable": "hydra.shacl.model.CommonProperties"}, "variables": []}}},
+                "function": {"variable": "hydra.shacl.coder.common"}}}}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.elementIri",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Binding"}}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Iri"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Convert a binding's name to an RDF IRI"}}}],
@@ -85,13 +87,23 @@
                       "application": {"argument": {"variable": "el"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
                     "function": {"variable": "hydra.rdf.utils.nameToIri"}}},
                 "domain": {"variable": "hydra.core.Binding"},
-                "parameter": "el"}}}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"variable": "hydra.core.Binding"}}},
-          "variables": []}}},
+                "parameter": "el"}}}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.encodeField",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.rdf.syntax.Resource"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Field"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg4", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {"pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Triple"}}, "second": {"variable": "hydra.context.Context"}}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a record field as RDF triples with a given subject"}}}],
@@ -230,31 +242,23 @@
                     "domain": {"variable": "hydra.rdf.syntax.Resource"},
                     "parameter": "subject"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "rname"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "function": {
-                              "codomain": {
-                                "either": {
-                                  "left": {"variable": "hydra.errors.Error"},
-                                  "right": {"pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Triple"}}, "second": {"variable": "hydra.context.Context"}}}}},
-                              "domain": {"variable": "hydra.graph.Graph"}}},
-                          "domain": {"variable": "hydra.context.Context"}}},
-                      "domain": {"variable": "hydra.core.Field"}}},
-                  "domain": {"variable": "hydra.rdf.syntax.Resource"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}},
+                "parameter": "rname"}}}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.encodeFieldType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"maybe": {"literal": {"integer": {"bigint": {}}}}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.FieldType"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "t0"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {
+                  "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.shacl.model.Definition"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -524,29 +528,23 @@
                         "parameter": "order"}},
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "rname"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "either": {
-                              "left": {"variable": "hydra.errors.Error"},
-                              "right": {
-                                "application": {"argument": {"variable": "hydra.shacl.model.PropertyShape"}, "function": {"variable": "hydra.shacl.model.Definition"}}}}},
-                          "domain": {"variable": "t0"}}},
-                      "domain": {"variable": "hydra.core.FieldType"}}},
-                  "domain": {"maybe": {"literal": {"integer": {"bigint": {}}}}}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.encodeList",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.core.Term"}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {
+                  "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"variable": "hydra.context.Context"}}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a list of terms as RDF list structure"}}}],
@@ -907,29 +905,14 @@
                     "domain": {"list": {"variable": "hydra.core.Term"}},
                     "parameter": "terms"}},
                 "domain": {"variable": "hydra.rdf.syntax.Resource"},
-                "parameter": "subj"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "either": {
-                              "left": {"variable": "hydra.errors.Error"},
-                              "right": {
-                                "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"variable": "hydra.context.Context"}}}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}},
-                      "domain": {"variable": "hydra.context.Context"}}},
-                  "domain": {"list": {"variable": "hydra.core.Term"}}}},
-              "domain": {"variable": "hydra.rdf.syntax.Resource"}}},
-          "variables": []}}},
+                "parameter": "subj"}}}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.encodeLiteralType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.LiteralType"}}],
+          "result": {"type": {"variable": "hydra.shacl.model.CommonProperties"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -1093,14 +1076,23 @@
                                     "parameter": "_"}}}],
                             "typeName": "hydra.core.LiteralType"}}}}}},
                 "domain": {"variable": "hydra.core.LiteralType"},
-                "parameter": "lt"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.shacl.model.CommonProperties"}, "domain": {"variable": "hydra.core.LiteralType"}}},
-          "variables": []}}},
+                "parameter": "lt"}}}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.encodeTerm",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.rdf.syntax.Resource"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Term"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.context.Context"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {
+                  "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"variable": "hydra.context.Context"}}}}}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Encode a Hydra term as a list of RDF Descriptions"}}}],
@@ -2013,29 +2005,18 @@
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term"}},
                 "domain": {"variable": "hydra.rdf.syntax.Resource"},
-                "parameter": "subject"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "either": {
-                              "left": {"variable": "hydra.errors.Error"},
-                              "right": {
-                                "pair": {"first": {"list": {"variable": "hydra.rdf.syntax.Description"}}, "second": {"variable": "hydra.context.Context"}}}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}},
-                      "domain": {"variable": "hydra.context.Context"}}},
-                  "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"variable": "hydra.rdf.syntax.Resource"}}},
-          "variables": []}}},
+                "parameter": "subject"}}}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.encodeType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.core.Type"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.shacl.model.CommonProperties"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -2469,22 +2450,16 @@
                         "parameter": "typ"}},
                     "domain": {"variable": "hydra.core.Name"},
                     "parameter": "tname"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.shacl.model.CommonProperties"}}},
-                      "domain": {"variable": "t0"}}},
-                  "domain": {"variable": "hydra.core.Type"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.err",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -2513,19 +2488,32 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}},
-                  "domain": {"literal": {"string": {}}}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.foldAccumResult",
+        "signature": {
+          "parameters": [
+            {
+              "isLazy": false,
+              "name": "arg0",
+              "type": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"pair": {"first": {"variable": "t3"}, "second": {"variable": "t0"}}}}},
+                      "domain": {"variable": "t1"}}},
+                  "domain": {"variable": "t0"}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg2", "type": {"list": {"variable": "t1"}}}],
+          "result": {
+            "type": {
+              "either": {"left": {"variable": "t2"}, "right": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}}},
+          "typeParameters": [
+            {"constraints": [], "name": "t0"},
+            {"constraints": [], "name": "t1"},
+            {"constraints": [], "name": "t2"},
+            {"constraints": [], "name": "t3"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -2707,29 +2695,14 @@
                         "parameter": "t3"}},
                     "parameter": "t2"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "either": {"left": {"variable": "t2"}, "right": {"pair": {"first": {"list": {"variable": "t3"}}, "second": {"variable": "t0"}}}}},
-                      "domain": {"list": {"variable": "t1"}}}},
-                  "domain": {"variable": "t0"}}},
-              "domain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "t2"}, "right": {"pair": {"first": {"variable": "t3"}, "second": {"variable": "t0"}}}}},
-                      "domain": {"variable": "t1"}}},
-                  "domain": {"variable": "t0"}}}}},
-          "variables": ["t0", "t1", "t2", "t3"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.node",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}}}],
+          "result": {"type": {"variable": "hydra.shacl.model.Shape"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -2751,16 +2724,14 @@
                           "typeName": "hydra.shacl.model.NodeShape"}}},
                     "typeName": "hydra.shacl.model.Shape"}},
                 "domain": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}},
-                "parameter": "constraints"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"variable": "hydra.shacl.model.Shape"},
-              "domain": {"list": {"variable": "hydra.shacl.model.CommonConstraint"}}}},
-          "variables": []}}},
+                "parameter": "constraints"}}}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.property",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.rdf.syntax.Iri"}}],
+          "result": {"type": {"variable": "hydra.shacl.model.PropertyShape"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [
@@ -2806,14 +2777,21 @@
                       {"name": "path", "term": {"variable": "iri"}}],
                     "typeName": "hydra.shacl.model.PropertyShape"}},
                 "domain": {"variable": "hydra.rdf.syntax.Iri"},
-                "parameter": "iri"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {"codomain": {"variable": "hydra.shacl.model.PropertyShape"}, "domain": {"variable": "hydra.rdf.syntax.Iri"}}},
-          "variables": []}}},
+                "parameter": "iri"}}}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.shaclCoder",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.graph.Graph"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {"pair": {"first": {"variable": "hydra.shacl.model.ShapesGraph"}, "second": {"variable": "t0"}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -3142,25 +3120,17 @@
                         "parameter": "cx"}},
                     "domain": {"variable": "hydra.packaging.Module"},
                     "parameter": "mod"}}}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "either": {
-                          "left": {"variable": "hydra.errors.Error"},
-                          "right": {"pair": {"first": {"variable": "hydra.shacl.model.ShapesGraph"}, "second": {"variable": "t0"}}}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}},
-                  "domain": {"variable": "t0"}}},
-              "domain": {"variable": "hydra.packaging.Module"}}},
-          "variables": ["t0"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.unexpectedE",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg2", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -3202,22 +3172,16 @@
                         "domain": {"variable": "t0"},
                         "parameter": "cx"}}}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "t1"}}},
-                      "domain": {"literal": {"string": {}}}}},
-                  "domain": {"literal": {"string": {}}}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.shacl.coder.withType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.rdf.syntax.Description"}}],
+          "result": {"type": {"variable": "hydra.rdf.syntax.Description"}},
+          "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Add an rdf:type triple to an RDF Description"}}}],
@@ -3308,14 +3272,7 @@
                     "domain": {"variable": "hydra.rdf.syntax.Description"},
                     "parameter": "desc"}},
                 "domain": {"variable": "hydra.core.Name"},
-                "parameter": "name"}}}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.rdf.syntax.Description"}, "domain": {"variable": "hydra.rdf.syntax.Description"}}},
-              "domain": {"variable": "hydra.core.Name"}}},
-          "variables": []}}}],
+                "parameter": "name"}}}}}}],
   "dependencies": [
     {"module": "hydra.names"},
     {"module": "hydra.strip"},

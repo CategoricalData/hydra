@@ -11,8 +11,6 @@ import qualified Hydra.Dependencies as Dependencies
 import qualified Hydra.Errors as Errors
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Packaging as Packaging
-import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -22,8 +20,10 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Strip as Strip
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)

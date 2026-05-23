@@ -74,7 +74,8 @@ formatPrimitive :: Graph.Primitive -> String
 formatPrimitive prim =
 
       let name = Core.unName (Packaging.primitiveDefinitionName (Graph.primitiveDefinition prim))
-          typeStr = ShowCore.typeScheme (Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim)))
+          typ = Scoping.termSignatureToTypeScheme (Packaging.primitiveDefinitionSignature (Graph.primitiveDefinition prim))
+          typeStr = ShowCore.typeScheme typ
       in (Strings.cat2 (Strings.cat2 (Strings.cat2 "  " name) " : ") typeStr)
 -- | Format a term binding for the lexicon
 formatTermBinding :: Core.Binding -> String

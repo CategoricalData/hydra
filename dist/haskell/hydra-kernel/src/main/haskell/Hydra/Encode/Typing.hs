@@ -70,13 +70,13 @@ parameter x =
           Core.fieldTerm = (EncodeCore.name (Typing.parameterName x))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\s -> Core.TermLiteral (Core.LiteralString s)) opt)) (Typing.parameterDescription x))},
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Typing.parameterDescription x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.type_ (Typing.parameterType x))},
         Core.Field {
           Core.fieldName = (Core.Name "isLazy"),
-          Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean (Typing.parameterIsLazy x)))}]})
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Typing.parameterIsLazy x))}]})
 -- | Encoder for hydra.typing.Result
 result :: Typing.Result -> Core.Term
 result x =
@@ -85,7 +85,7 @@ result x =
       Core.recordFields = [
         Core.Field {
           Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\s -> Core.TermLiteral (Core.LiteralString s)) opt)) (Typing.resultDescription x))},
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map (\x2 -> Core.TermLiteral (Core.LiteralString x2)) opt)) (Typing.resultDescription x))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (EncodeCore.type_ (Typing.resultType x))}]})

@@ -4,7 +4,7 @@
 module Hydra.Encode.Packaging where
 import qualified Hydra.Core as Core
 import qualified Hydra.Encode.Core as EncodeCore
-import qualified Hydra.Encode.Typing as EncodeTyping
+import qualified Hydra.Encode.Typing as Typing
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Packaging as Packaging
@@ -127,16 +127,16 @@ primitiveDefinition x =
           Core.fieldTerm = (EncodeCore.name (Packaging.primitiveDefinitionName x))},
         Core.Field {
           Core.fieldName = (Core.Name "description"),
-          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString (Packaging.primitiveDefinitionDescription x)))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralString x2)) (Packaging.primitiveDefinitionDescription x))},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = (EncodeTyping.termSignature (Packaging.primitiveDefinitionSignature x))},
+          Core.fieldTerm = (Typing.termSignature (Packaging.primitiveDefinitionSignature x))},
         Core.Field {
           Core.fieldName = (Core.Name "isPure"),
-          Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean (Packaging.primitiveDefinitionIsPure x)))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Packaging.primitiveDefinitionIsPure x))},
         Core.Field {
           Core.fieldName = (Core.Name "isTotal"),
-          Core.fieldTerm = (Core.TermLiteral (Core.LiteralBoolean (Packaging.primitiveDefinitionIsTotal x)))},
+          Core.fieldTerm = ((\x2 -> Core.TermLiteral (Core.LiteralBoolean x2)) (Packaging.primitiveDefinitionIsTotal x))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultImplementation"),
           Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeCore.term opt)) (Packaging.primitiveDefinitionDefaultImplementation x))}]})
@@ -166,7 +166,7 @@ termDefinition x =
           Core.fieldTerm = (EncodeCore.term (Packaging.termDefinitionTerm x))},
         Core.Field {
           Core.fieldName = (Core.Name "signature"),
-          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map EncodeTyping.termSignature opt)) (Packaging.termDefinitionSignature x))}]})
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Typing.termSignature opt)) (Packaging.termDefinitionSignature x))}]})
 -- | Encoder for hydra.packaging.TypeDefinition
 typeDefinition :: Packaging.TypeDefinition -> Core.Term
 typeDefinition x =

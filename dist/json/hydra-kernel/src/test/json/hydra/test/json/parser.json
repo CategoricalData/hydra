@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.test.json.parser.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Test cases for JSON parsing"}}}],
@@ -7673,8 +7674,7 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+                "typeName": "hydra.testing.TestGroup"}}}}}}],
   "dependencies": [
     {"module": "hydra.parsers"},
     {"module": "hydra.json.parser"},

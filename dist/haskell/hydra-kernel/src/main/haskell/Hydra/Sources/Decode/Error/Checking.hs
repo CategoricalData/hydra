@@ -4,7 +4,7 @@
 module Hydra.Sources.Decode.Error.Checking where
 import qualified Hydra.Core as Core
 import qualified Hydra.Packaging as Packaging
-import qualified Hydra.Scoping as Scoping
+import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 import qualified Data.Map as M
@@ -438,16 +438,24 @@ module_ =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.CheckingError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.CheckingError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))}),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.CheckingError"))}))}}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.incorrectUnificationError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -519,16 +527,24 @@ module_ =
               (
                 Core.Name "description",
                 (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.IncorrectUnificationError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.IncorrectUnificationError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.IncorrectUnificationError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.notAForallTypeError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -618,16 +634,24 @@ module_ =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.NotAForallTypeError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.NotAForallTypeError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.NotAForallTypeError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.notAFunctionTypeError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -697,16 +721,24 @@ module_ =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.NotAFunctionTypeError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.NotAFunctionTypeError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.NotAFunctionTypeError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.otherCheckingError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -842,16 +874,24 @@ module_ =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.OtherCheckingError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.OtherCheckingError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.OtherCheckingError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.typeArityMismatchError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -1089,16 +1129,24 @@ module_ =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.TypeArityMismatchError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.TypeArityMismatchError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.TypeArityMismatchError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.typeMismatchError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -1186,16 +1234,24 @@ module_ =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.TypeMismatchError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.TypeMismatchError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.TypeMismatchError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.unboundTypeVariablesError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -1287,16 +1343,24 @@ module_ =
               (
                 Core.Name "description",
                 (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.UnboundTypeVariablesError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UnboundTypeVariablesError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UnboundTypeVariablesError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.undefinedTermVariableCheckingError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -1386,16 +1450,24 @@ module_ =
               (
                 Core.Name "description",
                 (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.UndefinedTermVariableCheckingError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UndefinedTermVariableCheckingError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.unequalTypesError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -1533,16 +1605,24 @@ module_ =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.UnequalTypesError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UnequalTypesError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UnequalTypesError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.unsupportedTermVariantError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -1614,16 +1694,24 @@ module_ =
               (
                 Core.Name "description",
                 (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.UnsupportedTermVariantError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UnsupportedTermVariantError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UnsupportedTermVariantError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.untypedLambdaError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -1675,16 +1763,24 @@ module_ =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.UntypedLambdaError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UntypedLambdaError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UntypedLambdaError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.untypedLetBindingError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -1754,16 +1850,24 @@ module_ =
                     Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.UntypedLetBindingError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UntypedLetBindingError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))})),
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UntypedLetBindingError"))}))}}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.decode.error.checking.untypedTermVariableCheckingError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
@@ -1853,13 +1957,21 @@ module_ =
               (
                 Core.Name "description",
                 (Core.TermLiteral (Core.LiteralString "Decoder for hydra.error.checking.UntypedTermVariableCheckingError")))])})),
-          Packaging.termDefinitionSignature = (Just (Scoping.typeSchemeToTermSignature (Core.TypeScheme {
-            Core.typeSchemeVariables = [],
-            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-              Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-                Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-                  Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
-                  Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"))}))}))})),
-            Core.typeSchemeConstraints = Nothing})))}))]}
+          Packaging.termDefinitionSignature = (Just (Typing.TermSignature {
+            Typing.termSignatureTypeParameters = [],
+            Typing.termSignatureParameters = [
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg0"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
+                Typing.parameterIsLazy = False},
+              Typing.Parameter {
+                Typing.parameterName = (Core.Name "arg1"),
+                Typing.parameterDescription = Nothing,
+                Typing.parameterType = (Core.TypeVariable (Core.Name "hydra.core.Term")),
+                Typing.parameterIsLazy = False}],
+            Typing.termSignatureResult = Typing.Result {
+              Typing.resultDescription = Nothing,
+              Typing.resultType = (Core.TypeEither (Core.EitherType {
+                Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.errors.DecodingError")),
+                Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.error.checking.UntypedTermVariableCheckingError"))}))}}))}))]}

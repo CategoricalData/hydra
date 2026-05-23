@@ -3,6 +3,7 @@
     {
       "term": {
         "name": "hydra.test.inference.failures.allTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "annotated": {
             "annotation": [{"key": "description", "value": {"literal": {"string": "Expected failure tests"}}}],
@@ -31,11 +32,11 @@
                   {
                     "name": "cases",
                     "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-                "typeName": "hydra.testing.TestGroup"}}}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+                "typeName": "hydra.testing.TestGroup"}}}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.undefinedVariableTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -1200,11 +1201,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.unificationFailureTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -3313,11 +3314,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.invalidApplicationTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -4771,11 +4772,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.selfApplicationTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -5584,11 +5585,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.arityMismatchTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -6557,11 +6558,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.recursiveTypeTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -7875,11 +7876,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.occurCheckTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -9012,11 +9013,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.typeConstructorMisuseTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -10520,11 +10521,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.polymorphismViolationTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -12289,11 +12290,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.letBindingMismatchTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -13857,11 +13858,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.constraintSolverEdgeCaseTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -15413,11 +15414,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.primitiveTypeErrorTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -17074,11 +17075,11 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}},
+            "typeName": "hydra.testing.TestGroup"}}}},
     {
       "term": {
         "name": "hydra.test.inference.failures.complexConstraintFailureTests",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.testing.TestGroup"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -18760,8 +18761,7 @@
               {
                 "name": "cases",
                 "term": {"typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.TestCaseWithMetadata"}}}}],
-            "typeName": "hydra.testing.TestGroup"}},
-        "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
+            "typeName": "hydra.testing.TestGroup"}}}}],
   "dependencies": [
     {"module": "hydra.test.testGraph"},
     {"module": "hydra.inference"},
