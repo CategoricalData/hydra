@@ -140,6 +140,15 @@ The committed CI heap cap is `RTS_FLAGS=-M6G`. Local syncs are free to raise it;
 must surface a heap-overflow diagnostic if the per-package cap is ever exceeded, not
 silently cancel.
 
+Phase 1 has two paths into per-package iteration: the cold-cache fallback (above) and
+the warm-cache **incremental** path that fires when a digest already exists. The
+incremental path also routes through the same driver via `inferAndWriteByPackageSeeded`,
+which takes the JSON-loaded clean modules as a pre-typed seed for the accumulator —
+they participate in cross-package type resolution but are not re-grouped or re-inferred.
+A change that dirties most of the universe (e.g. a kernel-wide rename) thus stays
+within the per-package memory envelope on the incremental path too, instead of falling
+back to a single mega-inference over the full dirty set.
+
 ## The cache model
 
 Every layer of the pipeline caches its work. All caches are content-hash based
