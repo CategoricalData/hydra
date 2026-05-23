@@ -65,6 +65,60 @@ heads/typescript/bin/test-distribution.sh hydra-kernel
 
 ## Design notes
 
+### Flat-call ABI
+
+The coder emits multi-argument closures and call sites — `f(a, b, c)`
+rather than the curried `f(a)(b)(c)` that Hydra's term-level `App`
+chains would naively suggest. The peeling lives in
+`encodeTermDefinition` and the `_Term_lambda` arm: nested `App(App(f,a),b)`
+flattens via `flattenApplication`, and nested `λa.λb.body` peels via
+`analyzeFunctionTerm` into a single function declaration with multiple
+typed parameters. Inner lambdas peel the same way (matching Python's
+`makeUncurriedLambda`).
+
+Consequence: every site that consumes a Hydra function value must
+agree on this ABI. The hand-written `heads/typescript/src/main/typescript/hydra/lib/*.ts`
+primitives use flat positional signatures; the test runtime's
+`testGraph` is flat (`(testTypes, testTerms) => Graph`); HOF primitives
+that re-enter the reducer call `reduceTerm(cx, g, true, term)` flat.
+
+### Encoding mismatches that need `as any` casts
+
+Several Hydra term shapes can't be emitted as well-typed TypeScript
+without expensive type annotations the AST doesn't yet carry. Each is
+wrapped in an `as any` cast at emission time (`tsAsAny` helper, backed
+by the `Expression_asExpression` AST node added in #126):
+
+- **Term_pair** — `[a, b] as any` so TS infers tuple, not `(A|B)[]`.
+- **Term_inject / Term_maybe / Term_either** — discriminated-union
+  literals like `{tag:"just", value:x}` need the cast because the
+  literal's narrow tag type doesn't unify with the broader nominal
+  target (`Term`, `Type`, `Maybe<T>`, …).
+- **Term_cases** — the discriminator binds via `(u as any)` so `.value`
+  access compiles on unit-shaped variants (`{tag: "lessThan"}`).
+
+### Function-type rendering
+
+`Type_function A → B` renders as `((...args: any[]) => any)`, not
+`(a: A) => B`. Hydra's curried function types don't match the flat-call
+ABI (`(a, b) => c`), so a curried rendering would reject every closure
+at every callsite. Type variables (`t0` → `T0`) are also substituted to
+`any` in inline annotations because nested helper functions have no
+generic-binder syntax to introduce them.
+
+### Why `runtime.ts`, not `core.ts`
+
+The hand-written runtime lives at
+`heads/typescript/src/main/typescript/hydra/runtime.ts`. It used to be
+named `core.ts`, but `bin/copy-kernel-runtime.sh` copies it into the
+same dist directory as the GENERATED kernel `core.ts` — and the
+hand-written file silently overwrote the generated module, masking
+every kernel type export (`Term`, `Type`, `Literal`, …) at type-check
+time. Future hand-written runtime files should pick names that cannot
+collide with kernel-namespace modules. See
+`claude/pitfalls.md` ("Hand-written runtime files clobber generated
+kernel modules").
+
 ### Type representation
 
 Hydra types map onto TypeScript-native constructs:
