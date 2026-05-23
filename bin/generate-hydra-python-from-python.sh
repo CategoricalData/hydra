@@ -102,9 +102,20 @@ case "$INTERP" in
 esac
 
 if [ "$DO_COMPARE" = "1" ]; then
+    # Per-package driver writes under <dist-json-root>/hydra-python/src/main/json/.
+    # When --out-root was the per-package tail path (canonical mode), the demo
+    # strips four segments to recover the dist-json root and writes back
+    # through the same tail; ours_path matches the original out-root. When
+    # --out-root was a tmp directory (the default --compare-without-out-root
+    # flow), the demo treats it as the dist-json root, so the actual
+    # per-package output lives at <out-root>/hydra-python/src/main/json/.
+    OURS_PATH="$ACTUAL_OUT_ROOT"
+    if [ "$USER_SET_OUT_ROOT" = "0" ]; then
+        OURS_PATH="$ACTUAL_OUT_ROOT/hydra-python/src/main/json"
+    fi
     echo ""
-    echo "=== Byte-comparing $ACTUAL_OUT_ROOT against the Haskell-generated canonical at $CANON_ROOT ==="
-    "$HYDRA_ROOT/bin/compare-self-host.py" --ours "$ACTUAL_OUT_ROOT" --canon "$CANON_ROOT"
+    echo "=== Byte-comparing $OURS_PATH against the Haskell-generated canonical at $CANON_ROOT ==="
+    "$HYDRA_ROOT/bin/compare-self-host.py" --ours "$OURS_PATH" --canon "$CANON_ROOT"
     if [ -n "$COMPARE_CLEANUP" ]; then
         rm -rf "$COMPARE_CLEANUP"
     fi
