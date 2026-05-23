@@ -1,9 +1,14 @@
 # Hydra-Kernel
 
-The **language-independent core** of Hydra: types, terms, type inference, validation,
-primitive functions, JSON encoding/decoding, and the coder framework. Every other
-Hydra package depends on `hydra-kernel`; every host language imports a generated
-form of it.
+The **Hydra kernel** — the code that fundamentally defines what Hydra is and how
+it operates. Hydra's core data types (`Type`, `Term`, `Graph`, `Module`, etc.) and
+its fundamental programming logic (inference, checking, reduction, rewriting,
+validation, the coder framework, the primitive standard library) live here.
+The kernel uses the Hydra language to define the Hydra language itself.
+
+Every other Hydra package is peripheral, adding capabilities like Haskell or Java
+support, RDF or property graph functionality, and so on. Every package depends on
+`hydra-kernel`; every host language imports a generated form of it.
 
 Hydra is a functional programming language based on the
 [LambdaGraph](https://bit.ly/lg-kgc2024) data model, exploring an isomorphism
