@@ -15,10 +15,8 @@ For library users the common use cases are:
 The library shape is the same on every host: depend on the package, import what you need, call functions.
 There is no CLI to invoke; you are integrating Hydra into your own application.
 
-> **Reference projects.** Two real downstream consumers live outside this repo and are good places to learn from:
-> [HydraPop](https://github.com/joshsh/HydraPop) (Java + Python, TinkerPop validation) and
-> [chatgraph](https://github.com/joshsh/cognisee/tree/main/chatgraph) (Python, voice-driven knowledge graph extraction
-> built on top of HydraPop).
+> **Reference project.** A real downstream consumer lives outside this repo and is a good place to learn from:
+> [HydraPop](https://github.com/CategoricalData/HydraPop) (Java + Python, TinkerPop validation).
 
 ---
 
@@ -117,7 +115,7 @@ that `validateGraph` returns in its accumulator. See
 for a complete worked example.
 
 For a project that wraps this further into a one-call `Validate.validate(schema, gremlinGraph)` API,
-read [HydraPop's `Validate.java`](https://github.com/joshsh/HydraPop/blob/main/src/main/java/net/fortytwo/hydra/hydrapop/Validate.java).
+read [HydraPop's `Validate.java`](https://github.com/CategoricalData/HydraPop/blob/main/src/main/java/net/fortytwo/hydra/hydrapop/Validate.java).
 
 ---
 
@@ -161,9 +159,8 @@ so once `uv sync` finishes you can import all the kernel modules.
 
 ### Construct a schema and validate a graph
 
-[chatgraph](https://github.com/joshsh/cognisee/tree/main/chatgraph) is the canonical Python downstream example.
-It uses HydraPop's `hydrapop.dsl.pg` for schema construction and `hydrapop.validate.validate(schema, g)` for the
-one-call validation API:
+[HydraPop](https://github.com/CategoricalData/HydraPop) provides a one-call validation API on top of Hydra-PG.
+It exposes `hydrapop.dsl.pg` for schema construction and `hydrapop.validate.validate(schema, g)` for validation:
 
 ```python
 from hydrapop.dsl.pg import edge_type, graph_schema, int32, string, vertex_type
@@ -262,6 +259,4 @@ The full primitive lexicon is in
 - **Construct a typed schema**: see the per-language DSL guides ([Java](dsl-guide-java.md), [Python](dsl-guide-python.md), [Haskell](dsl-guide.md)).
 - **Convert schemas between formats**: see the coder documentation in `hydra-ext` (Avro ↔ Protobuf ↔ JSON Schema ↔ GraphQL, etc.).
 - **Generate code from a schema**: see [Generating code with Hydra](recipes/code-generation.md).
-- **Reference projects**:
-  - [HydraPop](https://github.com/joshsh/HydraPop) — TinkerPop validation, Java + Python.
-  - [chatgraph](https://github.com/joshsh/cognisee/tree/main/chatgraph) — Python knowledge-graph extractor built on HydraPop.
+- **Reference project**: [HydraPop](https://github.com/CategoricalData/HydraPop) — TinkerPop validation, Java + Python.

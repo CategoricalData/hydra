@@ -2,6 +2,7 @@ module Hydra.Sources.Test.Lib.Lists where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -19,14 +20,14 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.lib.lists"
+ns :: ModuleName
+ns = ModuleName "hydra.test.lib.lists"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, Namespace "hydra.reduction", Namespace "hydra.show.core"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.reduction", ModuleName "hydra.show.core"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for hydra.lib.lists primitives")}
   where
     definitions = [

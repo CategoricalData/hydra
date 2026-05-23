@@ -342,6 +342,6 @@
                     "type": {
                       "annotated": {"annotation": [{"key": "description", "value": {"literal": {"string": "Two line breaks"}}}], "body": {"unit": {}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A model which provides a common syntax tree for Hydra serializers",
-  "namespace": "hydra.ast"}
+  "name": "hydra.ast"}

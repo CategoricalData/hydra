@@ -33,9 +33,9 @@ _Comparison_greaterThan = Core.Name "greaterThan"
 data Namespaces n =
   Namespaces {
     -- | The namespace in focus, together with its associated value
-    namespacesFocus :: (Packaging.Namespace, n),
+    namespacesFocus :: (Packaging.ModuleName, n),
     -- | A mapping of namespaces to values
-    namespacesMapping :: (M.Map Packaging.Namespace n)}
+    namespacesMapping :: (M.Map Packaging.ModuleName n)}
   deriving (Eq, Ord, Read, Show)
 _Namespaces = Core.Name "hydra.util.Namespaces"
 _Namespaces_focus = Core.Name "focus"

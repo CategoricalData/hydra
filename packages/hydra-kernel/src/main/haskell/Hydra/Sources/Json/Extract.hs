@@ -84,14 +84,14 @@ import qualified Data.Maybe                                as Y
 import Hydra.Json.Model
 
 
-ns :: Namespace
-ns = Namespace "hydra.extract.json"
+ns :: ModuleName
+ns = ModuleName "hydra.extract.json"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Utilities for extracting values from JSON objects"}
   where
     definitions = [

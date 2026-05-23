@@ -100,14 +100,14 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
-ns :: Namespace
-ns = Namespace "hydra.python.testing"
+ns :: ModuleName
+ns = ModuleName "hydra.python.testing"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Python test code generation codec for pytest-based generation tests"}
   where
     definitions = [
@@ -216,8 +216,8 @@ generateTestFileWithPythonCodec = define "generateTestFileWithPythonCodec" $
     Eithers.map
       (lambda "testBody" $ lets [
         "testModuleContent">: buildPythonTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody",
-        "ns_">: Packaging.moduleNamespace (var "testModule"),
-        "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_"),
+        "ns_">: Packaging.moduleName (var "testModule"),
+        "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_"),
         "dirParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts")),
         "fileName">: Strings.cat (list [string "test_", Maybes.fromMaybe (string "") (Lists.maybeLast (var "parts")), string ".py"]),
         "filePath">: Strings.cat (list [Strings.intercalate (string "/") (var "dirParts"), string "/", var "fileName"])] $

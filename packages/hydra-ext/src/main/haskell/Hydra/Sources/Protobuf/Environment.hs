@@ -9,8 +9,8 @@ import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 
-ns :: Namespace
-ns = Namespace "hydra.protobuf.environment"
+ns :: ModuleName
+ns = ModuleName "hydra.protobuf.environment"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -20,9 +20,9 @@ coreType = typeref CoreTypes.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [CoreTypes.ns],
+            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns],
             moduleDescription = Just "Type definitions for the Protobuf code generation environment"}
   where
     definitions = [

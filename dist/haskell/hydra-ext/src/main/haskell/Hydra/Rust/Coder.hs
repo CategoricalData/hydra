@@ -116,7 +116,7 @@ encodeLiteralType lt =
 encodeProjectionElim :: t0 -> t1 -> Core.Projection -> Maybe Core.Term -> Either Errors.Error Syntax.Expression
 encodeProjectionElim cx g proj marg =
 
-      let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField proj))
+      let fname = Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionFieldName proj))
       in (Maybes.cases marg (Right (rustClosure [
         "v"] (Syntax.ExpressionFieldAccess (Syntax.FieldAccessExpr {
         Syntax.fieldAccessExprObject = (rustExprPath "v"),
@@ -370,7 +370,7 @@ moduleToRust mod defs cx g =
                   Syntax.crateItems = allItems}
             code = Serialization.printExpr (Serialization.parenthesize (Serde.crateToExpr crate))
             filePath =
-                    Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "rs") (Packaging.moduleNamespace mod)
+                    Names.namespaceToFilePath Util.CaseConventionLowerSnake (Packaging.FileExtension "rs") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath code)))))
 rustApply1 :: String -> Syntax.Type -> Syntax.Type
 rustApply1 name arg =

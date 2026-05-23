@@ -44,12 +44,12 @@ collectForallParams t =
       in case dt of
         Core.TypeForall v0 -> Lists.cons (Core.forallTypeParameter v0) (collectForallParams (Core.forallTypeBody v0))
         _ -> []
-collectImports :: Packaging.Namespace -> Core.Type -> S.Set Core.Name
+collectImports :: Packaging.ModuleName -> Core.Type -> S.Set Core.Name
 collectImports currentNs t =
 
       let vars = Variables.freeVariablesInType t
       in (filterNonLocalNames currentNs vars)
-collectInnerTypeImports :: Packaging.Namespace -> Core.Term -> S.Set Core.Name
+collectInnerTypeImports :: Packaging.ModuleName -> Core.Term -> S.Set Core.Name
 collectInnerTypeImports currentNs term =
 
       let subs = Rewriting.subterms term
@@ -62,12 +62,12 @@ collectInnerTypeImports currentNs term =
                     _ -> Sets.empty
           childVars = Lists.foldl (\acc -> \s -> Sets.union acc (collectInnerTypeImports currentNs s)) Sets.empty subs
       in (filterNonLocalNames currentNs (Sets.union ownVars childVars))
-collectTermImports :: Packaging.Namespace -> Core.Term -> S.Set Core.Name
+collectTermImports :: Packaging.ModuleName -> Core.Term -> S.Set Core.Name
 collectTermImports currentNs t =
 
       let vars = Variables.freeVariablesInTerm t
       in (filterNonLocalNames currentNs vars)
-encodeBindingAsStatement :: Context.Context -> Graph.Graph -> Packaging.Namespace -> Core.Binding -> Syntax.Statement
+encodeBindingAsStatement :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Binding -> Syntax.Statement
 encodeBindingAsStatement cx g currentNs b =
 
       let bname = Core.bindingName b
@@ -91,7 +91,7 @@ encodeBindingAsStatement cx g currentNs b =
                         Syntax.variableDeclarationDeclarations = [
                           declarator]}
           in (Syntax.StatementVariableDeclaration varDecl)
-encodeLazyCall :: Context.Context -> Graph.Graph -> Packaging.Namespace -> Core.Term -> [Core.Term] -> [Bool] -> Syntax.Expression
+encodeLazyCall :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> [Core.Term] -> [Bool] -> Syntax.Expression
 encodeLazyCall cx g currentNs headTerm args lazyFlags =
 
       let headExpr = encodeTerm cx g currentNs headTerm
@@ -165,15 +165,15 @@ encodeParam cx g pname dom =
       in case (Strip.deannotateType dom) of
         Core.TypeVariable _ -> tsTypedIdent nstr Syntax.TypeExpressionAny
         _ -> tsTypedIdent nstr (encodeTypeOrAny cx g dom)
-encodeTerm :: Context.Context -> Graph.Graph -> Packaging.Namespace -> Core.Term -> Syntax.Expression
+encodeTerm :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Core.Term -> Syntax.Expression
 encodeTerm cx g currentNs term =
     case term of
       Core.TermAnnotated v0 -> encodeTerm cx g currentNs (Core.annotatedTermBody v0)
       Core.TermLiteral v0 -> encodeLiteral v0
       Core.TermVariable v0 ->
         let local = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Names.localNameOf v0)
-        in (Maybes.cases (Names.namespaceOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unNamespace currentNs) (Packaging.unNamespace ns)) (tsExprIdent local) (
-          let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unNamespace ns))
+        in (Maybes.cases (Names.namespaceOf v0) (tsExprIdent local) (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) (tsExprIdent local) (
+          let nsSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
               alias = Strings.cat2 "$mod_" (Strings.intercalate "_" nsSegs)
           in (tsMember (tsExprIdent alias) local))))
       Core.TermLambda v0 ->
@@ -243,7 +243,7 @@ encodeTerm cx g currentNs term =
             Core.TermProject v1 -> Logic.ifElse (Lists.null encArgs) (
               let headExpr = encodeTerm cx g currentNs headTerm
               in headExpr) (
-              let fname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.projectionField v1))
+              let fname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.projectionFieldName v1))
                   firstA = Maybes.fromMaybe (tsExprIdent "undefined") (Lists.maybeHead encArgs)
                   restA = Lists.drop 1 encArgs
                   fieldExpr = tsMember firstA fname
@@ -308,7 +308,7 @@ encodeTerm cx g currentNs term =
       Core.TermTypeApplication v0 -> encodeTerm cx g currentNs (Core.typeApplicationTermBody v0)
       Core.TermTypeLambda v0 -> encodeTerm cx g currentNs (Core.typeLambdaBody v0)
       Core.TermProject v0 ->
-        let fname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.projectionField v0))
+        let fname = Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords (Core.unName (Core.projectionFieldName v0))
         in (tsArrowTyped [
           tsTypedIdent "x" Syntax.TypeExpressionAny] (tsMember (tsExprIdent "x") fname))
       Core.TermUnwrap _ -> tsArrowTyped [
@@ -340,7 +340,7 @@ encodeTerm cx g currentNs term =
         ("tag", (tsExprStr "right")),
         ("value", (encodeTerm cx g currentNs r))])) v0
       _ -> tsExprIdent "null"
-encodeTermDefinition :: Context.Context -> Graph.Graph -> Packaging.Namespace -> Packaging.TermDefinition -> Syntax.ModuleItem
+encodeTermDefinition :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> Packaging.TermDefinition -> Syntax.ModuleItem
 encodeTermDefinition cx g currentNs td =
 
       let name = Packaging.termDefinitionName td
@@ -489,9 +489,9 @@ encodeTypeDefinition cx g tdef =
           Syntax.typeAliasDeclarationType = styp})))
 encodeTypeOrAny :: t0 -> t1 -> Core.Type -> Syntax.TypeExpression
 encodeTypeOrAny cx g typ = Eithers.either (\_e -> Syntax.TypeExpressionAny) (\te -> te) (encodeType cx g typ)
-filterNonLocalNames :: Packaging.Namespace -> S.Set Core.Name -> S.Set Core.Name
+filterNonLocalNames :: Packaging.ModuleName -> S.Set Core.Name -> S.Set Core.Name
 filterNonLocalNames currentNs names =
-    Sets.fromList (Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\nameNs -> Logic.ifElse (Equality.equal (Packaging.unNamespace currentNs) (Packaging.unNamespace nameNs)) Nothing (Just n))) (Sets.toList names)))
+    Sets.fromList (Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\nameNs -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName nameNs)) Nothing (Just n))) (Sets.toList names)))
 flattenApplication :: Core.Term -> (Core.Term, [Core.Term])
 flattenApplication t =
 
@@ -503,7 +503,7 @@ flattenApplication t =
               prevArgs = Pairs.second inner
           in (head_, (Lists.concat2 prevArgs (Lists.singleton (Core.applicationArgument v0))))
         _ -> (t, [])
-functionDeclarationFromTerm :: Context.Context -> Graph.Graph -> Packaging.Namespace -> String -> Core.Term -> Maybe Core.Type -> Syntax.FunctionDeclaration
+functionDeclarationFromTerm :: Context.Context -> Graph.Graph -> Packaging.ModuleName -> String -> Core.Term -> Maybe Core.Type -> Syntax.FunctionDeclaration
 functionDeclarationFromTerm cx g currentNs lname term _mScheme =
 
       let fsE = analyzeTypeScriptFunction cx g term
@@ -537,11 +537,11 @@ functionDeclarationFromTerm cx g currentNs lname term _mScheme =
         Syntax.functionDeclarationBody = block,
         Syntax.functionDeclarationAsync = False,
         Syntax.functionDeclarationGenerator = False}
-importsToText :: String -> Packaging.Namespace -> S.Set Core.Name -> String
+importsToText :: String -> Packaging.ModuleName -> S.Set Core.Name -> String
 importsToText kind currentNs names =
 
       let pairs =
-              Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\ns -> Logic.ifElse (Equality.equal (Packaging.unNamespace currentNs) (Packaging.unNamespace ns)) Nothing (Just (ns, n)))) (Sets.toList names))
+              Maybes.cat (Lists.map (\n -> Maybes.cases (Names.namespaceOf n) Nothing (\ns -> Logic.ifElse (Equality.equal (Packaging.unModuleName currentNs) (Packaging.unModuleName ns)) Nothing (Just (ns, n)))) (Sets.toList names))
           transformLocal =
                   \s -> Logic.ifElse (Equality.equal kind "type") (Formatting.capitalize s) (Formatting.sanitizeWithUnderscores Language.typeScriptReservedWords s)
           importKeyword = Logic.ifElse (Equality.equal kind "type") "import type" "import"
@@ -552,7 +552,7 @@ importsToText kind currentNs names =
                         local = transformLocal (Names.localNameOf n)
                         existing = Maybes.fromMaybe [] (Maps.lookup ns acc)
                     in (Maps.insert ns (Lists.cons local existing) acc)) Maps.empty pairs
-          currentSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unNamespace currentNs))
+          currentSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName currentNs))
           currentDepth = Lists.length currentSegs
           currentIsTest =
                   Logic.and (Logic.not (Lists.null currentSegs)) (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead currentSegs)) "test")
@@ -561,7 +561,7 @@ importsToText kind currentNs names =
                   Lists.map (\entry ->
                     let ns = Pairs.first entry
                         locals = Pairs.second entry
-                        targetSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unNamespace ns))
+                        targetSegs = Lists.drop 1 (Strings.splitOn "." (Packaging.unModuleName ns))
                         targetIsTest =
                                 Logic.and (Logic.not (Lists.null targetSegs)) (Equality.equal (Maybes.fromMaybe "" (Lists.maybeHead targetSegs)) "test")
                         targetPath = Strings.intercalate "/" targetSegs
@@ -586,7 +586,7 @@ importsToText kind currentNs names =
 moduleToTypeScript :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either t0 (M.Map String String)
 moduleToTypeScript mod defs cx g =
 
-      let currentNs = Packaging.moduleNamespace mod
+      let currentNs = Packaging.moduleName mod
           partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           rawTermDefs = Pairs.second partitioned
@@ -608,7 +608,7 @@ moduleToTypeScript mod defs cx g =
             allItems = Lists.concat2 typeItems termItems
             header = "// Note: this is an automatically generated file. Do not edit.\n\n"
             body = Strings.intercalate "\n\n" (Lists.map printModuleItem allItems)
-            filePath = Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "ts") (Packaging.moduleNamespace mod)
+            filePath = Names.namespaceToFilePath Util.CaseConventionCamel (Packaging.FileExtension "ts") (Packaging.moduleName mod)
         in (Right (Maps.singleton filePath (Strings.cat [
           header,
           importsBlock,

@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.parquet.format"
+ns :: ModuleName
+ns = ModuleName "hydra.parquet.format"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -25,9 +25,9 @@ parquet = typeref ns
 -- Note: deprecated and trivial/empty type definitions are excluded from this model
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A model for the Parquet format. Based on the Thrift-based specification at:\n" ++
       "  https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift")}
   where

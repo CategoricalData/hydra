@@ -570,21 +570,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "lit"},
-                            "function": {"project": {"field": "lexicalForm", "typeName": "hydra.rdf.syntax.Literal"}}}},
+                            "function": {"project": {"fieldName": "lexicalForm", "typeName": "hydra.rdf.syntax.Literal"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "dt",
                         "term": {
                           "application": {
                             "argument": {"variable": "lit"},
-                            "function": {"project": {"field": "datatypeIri", "typeName": "hydra.rdf.syntax.Literal"}}}},
+                            "function": {"project": {"fieldName": "datatypeIri", "typeName": "hydra.rdf.syntax.Literal"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                       {
                         "name": "lang",
                         "term": {
                           "application": {
                             "argument": {"variable": "lit"},
-                            "function": {"project": {"field": "languageTag", "typeName": "hydra.rdf.syntax.Literal"}}}},
+                            "function": {"project": {"fieldName": "languageTag", "typeName": "hydra.rdf.syntax.Literal"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.rdf.syntax.LanguageTag"}}, "variables": []}},
                       {
                         "name": "lexExpr",
@@ -720,17 +720,21 @@
                       {
                         "name": "subj",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "subject", "typeName": "hydra.rdf.syntax.Triple"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "subject", "typeName": "hydra.rdf.syntax.Triple"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Resource"}, "variables": []}},
                       {
                         "name": "pred",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "predicate", "typeName": "hydra.rdf.syntax.Triple"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "predicate", "typeName": "hydra.rdf.syntax.Triple"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Iri"}, "variables": []}},
                       {
                         "name": "obj",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "object", "typeName": "hydra.rdf.syntax.Triple"}}}},
+                          "application": {"argument": {"variable": "t"}, "function": {"project": {"fieldName": "object", "typeName": "hydra.rdf.syntax.Triple"}}}},
                         "typeScheme": {"body": {"variable": "hydra.rdf.syntax.Node"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -747,31 +751,31 @@
           "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.rdf.syntax.Triple"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.serialization",
-    "hydra.rdf.syntax",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.serialization"},
+    {"module": "hydra.rdf.syntax"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Serialization functions for converting RDF graphs to N-Triples format expressions",
-  "namespace": "hydra.rdf.serde"}
+  "name": "hydra.rdf.serde"}

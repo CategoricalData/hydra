@@ -33,7 +33,7 @@ module Hydra.Digest (
     generatorStamp,
 ) where
 
-import Hydra.Packaging (Module(..), Namespace(..))
+import Hydra.Packaging (Module(..), ModuleName(..))
 
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC
@@ -49,7 +49,7 @@ import qualified Control.Exception as E
 import qualified Control.Monad as CM
 
 
-type DigestMap = M.Map Namespace String
+type DigestMap = M.Map ModuleName String
 
 
 -- | Root directory where DSL source files live. Relative paths are resolved
@@ -61,10 +61,10 @@ packagesRoot = ".." FP.</> ".." FP.</> "packages"
 
 -- | Walk packages/*/src/main/haskell/Hydra/Sources/ to build a namespace →
 -- file map. Each source file must declare its namespace with a top-level
--- line of the form: ns = Namespace "hydra.foo.bar"
+-- line of the form: ns = ModuleName "hydra.foo.bar"
 --
 -- Files without a recognizable ns declaration are silently skipped.
-discoverNamespaceFiles :: IO (M.Map Namespace FilePath)
+discoverNamespaceFiles :: IO (M.Map ModuleName FilePath)
 discoverNamespaceFiles = do
     exists <- SD.doesDirectoryExist packagesRoot
     if not exists then return M.empty else do
@@ -90,28 +90,28 @@ discoverNamespaceFiles = do
           else if ".hs" `L.isSuffixOf` e then return [p] else return []
       return $ concat subResults
 
-    extractNs :: FilePath -> IO (Maybe (Namespace, FilePath))
+    extractNs :: FilePath -> IO (Maybe (ModuleName, FilePath))
     extractNs fp = do
       content <- E.try (readFile fp) :: IO (Either E.SomeException String)
       case content of
         Left _ -> return Nothing
         Right s ->
           -- Three namespace declaration idioms appear across the source tree:
-          --   1. Top-level `ns = Namespace "..."` (kernel + most term-level sources).
-          --   2. Inline `moduleNamespace = (Namespace "...")` inside a Module
+          --   1. Top-level `ns = ModuleName "..."` (kernel + most term-level sources).
+          --   2. Inline `moduleName = (ModuleName "...")` inside a Module
           --      record (~half of non-kernel sources, e.g. hydra-pg, hydra-ext).
-          --   3. Indented `ns = Namespace "..."` inside a where clause
+          --   3. Indented `ns = ModuleName "..."` inside a where clause
           --      (e.g. packages/hydra-haskell/.../Sources/Haskell/Coder.hs).
           -- We accept all three. Without cases 2 and 3, those files are
           -- absent from the per-package digest, which causes silent cache hits
           -- in Phase 3 when those sources change.
-          let pat1 = "^[[:space:]]*ns = Namespace \"([^\"]+)\"" :: String
-              pat2 = "moduleNamespace = .Namespace \"([^\"]+)\"" :: String
+          let pat1 = "^[[:space:]]*ns = ModuleName \"([^\"]+)\"" :: String
+              pat2 = "moduleName = .ModuleName \"([^\"]+)\"" :: String
               try1 = (s RE.=~ pat1 :: [[String]])
               try2 = (s RE.=~ pat2 :: [[String]])
           in case (try1, try2) of
-               (([_, nsName]:_), _) -> return $ Just (Namespace nsName, fp)
-               (_, ([_, nsName]:_)) -> return $ Just (Namespace nsName, fp)
+               (([_, nsName]:_), _) -> return $ Just (ModuleName nsName, fp)
+               (_, ([_, nsName]:_)) -> return $ Just (ModuleName nsName, fp)
                _                    -> return Nothing
 
 
@@ -128,9 +128,9 @@ hashFile fp = do
 -- they have no DSL source — e.g. generated coder modules loaded from JSON)
 -- are absent from the returned map. The caller treats that as "cannot verify
 -- freshness," which always falls through to full inference.
-hashUniverse :: M.Map Namespace FilePath -> [Module] -> IO DigestMap
+hashUniverse :: M.Map ModuleName FilePath -> [Module] -> IO DigestMap
 hashUniverse nsFiles mods = do
-    let namespaces = map moduleNamespace mods
+    let namespaces = map moduleName mods
     pairs <- CM.forM namespaces $ \ns ->
       case M.lookup ns nsFiles of
         Nothing -> return Nothing
@@ -214,7 +214,7 @@ parseDigest :: String -> DigestMap
 parseDigest s =
     let kvPattern = "\"([^\"]+)\"[[:space:]]*:[[:space:]]*\"([^\"]+)\"" :: String
         matches   = s RE.=~ kvPattern :: [[String]]
-    in M.fromList [ (Namespace k, v)
+    in M.fromList [ (ModuleName k, v)
                   | (_:k:v:_) <- matches
                   , k /= "encoderId"
                   , k /= "selfHash"
@@ -236,7 +236,7 @@ serializeDigest digest = unlines $
   where
     entries = L.sortBy (\a b -> compare (fst a) (fst b)) (M.toList digest)
     hashLines = zipWith renderEntry [0..] entries
-    renderEntry i (Namespace ns, h) =
+    renderEntry i (ModuleName ns, h) =
       let sep = if i == length entries - 1 then "" else ","
       in "    \"" ++ ns ++ "\": \"" ++ h ++ "\"" ++ sep
 
@@ -292,7 +292,7 @@ emptyPerPackageDigest = PerPackageDigest M.empty "" M.empty
 computeSelfHash :: DigestMap -> String
 computeSelfHash digest =
     let entries = L.sortBy (\(a,_) (b,_) -> compare a b) (M.toList digest)
-        rendered = concatMap (\(Namespace ns, h) -> ns ++ "\t" ++ h ++ "\n") entries
+        rendered = concatMap (\(ModuleName ns, h) -> ns ++ "\t" ++ h ++ "\n") entries
     in SHA.showDigest (SHA.sha256 (BLC.pack rendered))
 
 readPerPackageDigest :: FilePath -> IO PerPackageDigest
@@ -314,7 +314,7 @@ parsePerPackageDigest s =
         matches   = s RE.=~ kvPattern :: [[String]]
         pairs     = [(k, v) | (_:k:v:_) <- matches]
         hashesMap = M.fromList
-          [ (Namespace k, v) | (k, v) <- pairs
+          [ (ModuleName k, v) | (k, v) <- pairs
           , k /= "encoderId"
           , k /= "selfHash"
           , not ("depHash:" `L.isPrefixOf` k)
@@ -352,7 +352,7 @@ serializePerPackageDigest (PerPackageDigest hashes selfH deps) = unlines $
       "  \"depHash:" ++ pkg ++ "\": \"" ++ h ++ "\",") depEntries
     hashEntries = L.sortBy (\a b -> compare (fst a) (fst b)) (M.toList hashes)
     hashLines = zipWith renderEntry [0..] hashEntries
-    renderEntry i (Namespace ns, h) =
+    renderEntry i (ModuleName ns, h) =
       let sep = if i == length hashEntries - 1 then "" else ","
       in "    \"" ++ ns ++ "\": \"" ++ h ++ "\"" ++ sep
 

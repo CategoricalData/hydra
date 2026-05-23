@@ -22,7 +22,7 @@
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "testGroup"},
-                                        "function": {"project": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}},
+                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.testing.TestGroup"}}}},
                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                   {
                                     "name": "header",
@@ -128,14 +128,14 @@
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "tcm"},
-                                    "function": {"project": {"field": "name", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
+                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                               {
                                 "name": "tcase",
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "tcm"},
-                                    "function": {"project": {"field": "case", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
+                                    "function": {"project": {"fieldName": "case", "typeName": "hydra.testing.TestCaseWithMetadata"}}}},
                                 "typeScheme": {"body": {"variable": "hydra.testing.TestCase"}, "variables": []}}],
                             "body": {
                               "application": {
@@ -158,7 +158,7 @@
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "ucase"},
-                                                            "function": {"project": {"field": "actual", "typeName": "hydra.testing.UniversalTestCase"}}}}}},
+                                                            "function": {"project": {"fieldName": "actual", "typeName": "hydra.testing.UniversalTestCase"}}}}}},
                                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                   {
                                                     "name": "expected_",
@@ -168,7 +168,7 @@
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "ucase"},
-                                                            "function": {"project": {"field": "expected", "typeName": "hydra.testing.UniversalTestCase"}}}}}},
+                                                            "function": {"project": {"fieldName": "expected", "typeName": "hydra.testing.UniversalTestCase"}}}}}},
                                                     "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                   {
                                                     "name": "fullName",
@@ -308,14 +308,14 @@
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "testGroup"},
-                                    "function": {"project": {"field": "cases", "typeName": "hydra.testing.TestGroup"}}}},
+                                    "function": {"project": {"fieldName": "cases", "typeName": "hydra.testing.TestGroup"}}}},
                                 "typeScheme": {"body": {"list": {"variable": "hydra.testing.TestCaseWithMetadata"}}, "variables": []}},
                               {
                                 "name": "subgroups",
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "testGroup"},
-                                    "function": {"project": {"field": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
+                                    "function": {"project": {"fieldName": "subgroups", "typeName": "hydra.testing.TestGroup"}}}},
                                 "typeScheme": {"body": {"list": {"variable": "hydra.testing.TestGroup"}}, "variables": []}}],
                             "body": {
                               "application": {
@@ -409,7 +409,7 @@
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "subgroup"},
-                                                                    "function": {"project": {"field": "name", "typeName": "hydra.testing.TestGroup"}}}},
+                                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.testing.TestGroup"}}}},
                                                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                                                               {
                                                                 "name": "header",
@@ -565,13 +565,13 @@
                                             "term": {
                                               "application": {
                                                 "argument": {"variable": "testModule"},
-                                                "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.Module"}}}},
-                                            "typeScheme": {"body": {"variable": "hydra.packaging.Namespace"}, "variables": []}},
+                                                "function": {"project": {"fieldName": "name", "typeName": "hydra.packaging.Module"}}}},
+                                            "typeScheme": {"body": {"variable": "hydra.packaging.ModuleName"}, "variables": []}},
                                           {
                                             "name": "parts",
                                             "term": {
                                               "application": {
-                                                "argument": {"application": {"argument": {"variable": "ns_"}, "function": {"unwrap": "hydra.packaging.Namespace"}}},
+                                                "argument": {"application": {"argument": {"variable": "ns_"}, "function": {"unwrap": "hydra.packaging.ModuleName"}}},
                                                 "function": {"application": {"argument": {"literal": {"string": "."}}, "function": {"variable": "hydra.lib.strings.splitOn"}}}}},
                                             "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                           {
@@ -655,35 +655,35 @@
               "domain": {"variable": "hydra.packaging.Module"}}},
           "variables": ["t0"]}}}],
   "dependencies": [
-    "hydra.serialization",
-    "hydra.formatting",
-    "hydra.names",
-    "hydra.test.utils",
-    "hydra.constants",
-    "hydra.python.syntax",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.serialization"},
+    {"module": "hydra.formatting"},
+    {"module": "hydra.names"},
+    {"module": "hydra.test.utils"},
+    {"module": "hydra.constants"},
+    {"module": "hydra.python.syntax"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Python test code generation codec for pytest-based generation tests",
-  "namespace": "hydra.python.testing"}
+  "name": "hydra.python.testing"}

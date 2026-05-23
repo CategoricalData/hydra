@@ -2,7 +2,7 @@
   "definitions": [
     {
       "type": {
-        "name": "hydra.error.packaging.ConflictingModuleNamespaceError",
+        "name": "hydra.error.packaging.ConflictingModuleNameError",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -11,21 +11,21 @@
                   "key": "description",
                   "value": {
                     "literal": {
-                      "string": "A module namespace which, when mapped to a target language's directory or package structure, conflicts with another module's mapped namespace. For example, hydra.foo.bar and hydra.fooBar might both map to the same directory in a case-insensitive filesystem."}}}],
+                      "string": "A module name which, when mapped to a target language's directory or package structure, conflicts with another module's mapped name. For example, hydra.foo.bar and hydra.fooBar might both map to the same directory in a case-insensitive filesystem."}}}],
               "body": {
                 "record": [
                   {
                     "name": "first",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first module namespace"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The first module name"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "second",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second module namespace that conflicts with the first"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The second module name that conflicts with the first"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -42,11 +42,11 @@
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the conflict"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the conflict"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "typeName",
                     "type": {
@@ -71,7 +71,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.error.packaging.DefinitionNotInModuleNamespaceError",
+        "name": "hydra.error.packaging.DefinitionNotInModuleNameError",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -80,21 +80,20 @@
                   "key": "description",
                   "value": {
                     "literal": {
-                      "string": "A definition whose name does not have the module's namespace as a prefix. If the module namespace is foo.bar, all definition names must have the form foo.bar.quux."}}}],
+                      "string": "A definition whose name does not have the module's name as a prefix. If the module name is foo.bar, all definition names must have the form foo.bar.quux."}}}],
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [
-                          {"key": "description", "value": {"literal": {"string": "The definition name that does not match the module namespace"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The definition name that does not match the module name"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}},
     {
@@ -112,14 +111,12 @@
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "moduleName",
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "The namespace of the module containing the misordered definitions"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                          {"key": "description", "value": {"literal": {"string": "The name of the module containing the misordered definitions"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "precedingName",
                     "type": {
@@ -149,11 +146,11 @@
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the duplicates"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the duplicates"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "name",
                     "type": {
@@ -163,22 +160,20 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.error.packaging.DuplicateModuleNamespaceError",
+        "name": "hydra.error.packaging.DuplicateModuleNameError",
         "typeScheme": {
           "body": {
             "annotated": {
               "annotation": [
-                {
-                  "key": "description",
-                  "value": {"literal": {"string": "Two or more modules in the same package share the same namespace"}}}],
+                {"key": "description", "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}],
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module namespace"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The duplicated module name"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -195,11 +190,11 @@
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace of the module containing the definition"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the module containing the definition"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "name",
                     "type": {
@@ -237,14 +232,14 @@
                               "literal": {"string": "A union variant name that conflicts with another type definition when mapped to a target language"}}}],
                         "body": {"variable": "hydra.error.packaging.ConflictingVariantNameError"}}}},
                   {
-                    "name": "definitionNotInModuleNamespace",
+                    "name": "definitionNotInModuleName",
                     "type": {
                       "annotated": {
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "A definition whose name does not have the module's namespace as a prefix"}}}],
-                        "body": {"variable": "hydra.error.packaging.DefinitionNotInModuleNamespaceError"}}}},
+                            "value": {"literal": {"string": "A definition whose name does not have the module's name as a prefix"}}}],
+                        "body": {"variable": "hydra.error.packaging.DefinitionNotInModuleNameError"}}}},
                   {
                     "name": "definitionsOutOfOrder",
                     "type": {
@@ -273,14 +268,14 @@
                             "value": {"literal": {"string": "A definition whose local name does not match the expected naming convention"}}}],
                         "body": {"variable": "hydra.error.packaging.InvalidDefinitionNameError"}}}},
                   {
-                    "name": "invalidNamespaceConvention",
+                    "name": "invalidModuleNameConvention",
                     "type": {
                       "annotated": {
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "A module whose namespace does not match the namespace naming convention"}}}],
-                        "body": {"variable": "hydra.error.packaging.InvalidNamespaceConventionError"}}}},
+                            "value": {"literal": {"string": "A module whose name does not match the module-name naming convention"}}}],
+                        "body": {"variable": "hydra.error.packaging.InvalidModuleNameConventionError"}}}},
                   {
                     "name": "missingDocumentation",
                     "type": {
@@ -290,7 +285,7 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.error.packaging.InvalidNamespaceConventionError",
+        "name": "hydra.error.packaging.InvalidModuleNameConventionError",
         "typeScheme": {
           "body": {
             "annotated": {
@@ -299,15 +294,15 @@
                   "key": "description",
                   "value": {
                     "literal": {
-                      "string": "A module whose namespace does not match the dotted-lowercase naming convention. Namespaces must be dot-separated lowercase segments, each starting with a letter, e.g. hydra.core or hydra.lib.lists."}}}],
+                      "string": "A module whose name does not match the dotted-lowercase naming convention. Module names must be dot-separated lowercase segments, each starting with a letter, e.g. hydra.core or hydra.lib.lists."}}}],
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The namespace that violates the convention"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}}]}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The module name that violates the convention"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}}]}}},
           "variables": []}}},
     {
       "type": {
@@ -319,23 +314,21 @@
               "body": {
                 "union": [
                   {
-                    "name": "conflictingModuleNamespace",
+                    "name": "conflictingModuleName",
                     "type": {
                       "annotated": {
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "Two module namespaces that conflict when mapped to a target language"}}}],
-                        "body": {"variable": "hydra.error.packaging.ConflictingModuleNamespaceError"}}}},
+                            "value": {"literal": {"string": "Two module names that conflict when mapped to a target language"}}}],
+                        "body": {"variable": "hydra.error.packaging.ConflictingModuleNameError"}}}},
                   {
-                    "name": "duplicateModuleNamespace",
+                    "name": "duplicateModuleName",
                     "type": {
                       "annotated": {
                         "annotation": [
-                          {
-                            "key": "description",
-                            "value": {"literal": {"string": "Two or more modules in the same package share the same namespace"}}}],
-                        "body": {"variable": "hydra.error.packaging.DuplicateModuleNamespaceError"}}}},
+                          {"key": "description", "value": {"literal": {"string": "Two or more modules in the same package share the same name"}}}],
+                        "body": {"variable": "hydra.error.packaging.DuplicateModuleNameError"}}}},
                   {
                     "name": "invalidModule",
                     "type": {
@@ -388,14 +381,14 @@
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "moduleName",
                     "type": {
                       "annotated": {
                         "annotation": [
                           {
                             "key": "description",
-                            "value": {"literal": {"string": "The namespace of the module containing the undocumented definition"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                            "value": {"literal": {"string": "The name of the module containing the undocumented definition"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "name",
                     "type": {
@@ -403,6 +396,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the undocumented definition"}}}],
                         "body": {"variable": "hydra.core.Name"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.packaging", "hydra.util"],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.packaging"}, {"module": "hydra.util"}],
   "description": "Error types for module and package validation",
-  "namespace": "hydra.error.packaging"}
+  "name": "hydra.error.packaging"}

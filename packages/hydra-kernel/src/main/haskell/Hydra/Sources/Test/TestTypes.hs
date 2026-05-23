@@ -2,6 +2,7 @@ module Hydra.Sources.Test.TestTypes where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++), (>:))
 import Hydra.Sources.Kernel.Types.All
@@ -16,14 +17,14 @@ import qualified Hydra.Dsl.Types              as Types
 import           Prelude hiding ((++))
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.testTypes"
+ns :: ModuleName
+ns = ModuleName "hydra.test.testTypes"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = (Just "Type definitions for the test suite")}
   where
     definitions = [

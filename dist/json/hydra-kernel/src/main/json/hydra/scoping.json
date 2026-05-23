@@ -16,7 +16,7 @@
                           {
                             "name": "var",
                             "term": {
-                              "application": {"argument": {"variable": "lam"}, "function": {"project": {"field": "parameter", "typeName": "hydra.core.Lambda"}}}},
+                              "application": {"argument": {"variable": "lam"}, "function": {"project": {"fieldName": "parameter", "typeName": "hydra.core.Lambda"}}}},
                             "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                         "body": {
                           "record": {
@@ -24,13 +24,13 @@
                               {
                                 "name": "boundTerms",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "boundTerms", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "boundTypes",
                                 "term": {
                                   "application": {
                                     "argument": {
-                                      "application": {"argument": {"variable": "lam"}, "function": {"project": {"field": "domain", "typeName": "hydra.core.Lambda"}}}},
+                                      "application": {"argument": {"variable": "lam"}, "function": {"project": {"fieldName": "domain", "typeName": "hydra.core.Lambda"}}}},
                                     "function": {
                                       "application": {
                                         "argument": {
@@ -38,7 +38,7 @@
                                             "body": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}},
+                                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "boundTypes", "typeName": "hydra.graph.Graph"}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {"application": {"argument": {"variable": "dom"}, "function": {"variable": "hydra.scoping.fTypeToTypeScheme"}}},
@@ -54,7 +54,7 @@
                                         "function": {
                                           "application": {
                                             "argument": {
-                                              "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}},
+                                              "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "boundTypes", "typeName": "hydra.graph.Graph"}}}},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -65,13 +65,17 @@
                               {
                                 "name": "classConstraints",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {
+                                    "argument": {"variable": "g"},
+                                    "function": {"project": {"fieldName": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "lambdaVariables",
                                 "term": {
                                   "application": {
                                     "argument": {
-                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}},
+                                      "application": {
+                                        "argument": {"variable": "g"},
+                                        "function": {"project": {"fieldName": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}},
                                     "function": {
                                       "application": {
                                         "argument": {"variable": "var"},
@@ -81,7 +85,7 @@
                                 "term": {
                                   "application": {
                                     "argument": {
-                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}},
+                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "metadata", "typeName": "hydra.graph.Graph"}}}},
                                     "function": {
                                       "application": {
                                         "argument": {"variable": "var"},
@@ -92,15 +96,17 @@
                               {
                                 "name": "primitives",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "primitives", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "schemaTypes",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "typeVariables",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}],
+                                  "application": {
+                                    "argument": {"variable": "g"},
+                                    "function": {"project": {"fieldName": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}],
                             "typeName": "hydra.graph.Graph"}}}},
                     "domain": {"variable": "hydra.core.Lambda"},
                     "parameter": "lam"}},
@@ -130,7 +136,7 @@
                               {
                                 "name": "bindings",
                                 "term": {
-                                  "application": {"argument": {"variable": "letrec"}, "function": {"project": {"field": "bindings", "typeName": "hydra.core.Let"}}}},
+                                  "application": {"argument": {"variable": "letrec"}, "function": {"project": {"fieldName": "bindings", "typeName": "hydra.core.Let"}}}},
                                 "typeScheme": {"body": {"list": {"variable": "hydra.core.Binding"}}, "variables": []}}],
                             "body": {
                               "let": {
@@ -151,7 +157,7 @@
                                         "term": {
                                           "application": {
                                             "argument": {
-                                              "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}},
+                                              "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "boundTerms", "typeName": "hydra.graph.Graph"}}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
@@ -170,9 +176,9 @@
                                                                         "body": {
                                                                           "pair": {
                                                                             "first": {
-                                                                              "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
+                                                                              "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
                                                                             "second": {
-                                                                              "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
+                                                                              "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Binding"}}}}}},
                                                                         "type": {"variable": "hydra.core.Name"}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                 "domain": {"variable": "hydra.core.Binding"},
@@ -194,7 +200,7 @@
                                         "term": {
                                           "application": {
                                             "argument": {
-                                              "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}},
+                                              "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "boundTypes", "typeName": "hydra.graph.Graph"}}}},
                                             "function": {
                                               "application": {
                                                 "argument": {
@@ -211,7 +217,7 @@
                                                                     "body": {
                                                                       "application": {
                                                                         "argument": {
-                                                                          "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "typeScheme", "typeName": "hydra.core.Binding"}}}},
+                                                                          "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.core.Binding"}}}},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
@@ -223,7 +229,7 @@
                                                                                         "body": {
                                                                                           "pair": {
                                                                                             "first": {
-                                                                                              "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
+                                                                                              "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
                                                                                             "second": {"variable": "ts"}}},
                                                                                         "type": {"variable": "hydra.core.Name"}}},
                                                                                     "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -254,7 +260,9 @@
                                       {
                                         "name": "classConstraints",
                                         "term": {
-                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
+                                          "application": {
+                                            "argument": {"variable": "g"},
+                                            "function": {"project": {"fieldName": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
                                       {
                                         "name": "lambdaVariables",
                                         "term": {
@@ -263,7 +271,9 @@
                                             "function": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}},
+                                                  "application": {
+                                                    "argument": {"variable": "g"},
+                                                    "function": {"project": {"fieldName": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}},
                                                 "function": {
                                                   "application": {
                                                     "argument": {
@@ -276,7 +286,7 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
+                                                                      "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.delete"}, "type": {"variable": "hydra.core.Name"}}}}}}},
                                                             "domain": {"variable": "hydra.core.Binding"},
                                                             "parameter": "b"}},
@@ -308,7 +318,7 @@
                                                                       {
                                                                         "name": "m",
                                                                         "term": {
-                                                                          "application": {"argument": {"variable": "gAcc"}, "function": {"project": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}},
+                                                                          "application": {"argument": {"variable": "gAcc"}, "function": {"project": {"fieldName": "metadata", "typeName": "hydra.graph.Graph"}}}},
                                                                         "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Term"}}}, "variables": []}}],
                                                                     "body": {
                                                                       "let": {
@@ -334,7 +344,7 @@
                                                                                                 "function": {
                                                                                                   "application": {
                                                                                                     "argument": {
-                                                                                                      "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
+                                                                                                      "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
                                                                                                     "function": {
                                                                                                       "typeApplication": {
                                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.insert"}, "type": {"variable": "hydra.core.Name"}}},
@@ -349,7 +359,7 @@
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {
-                                                                                                  "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
+                                                                                                  "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maps.delete"}, "type": {"variable": "hydra.core.Name"}}},
@@ -368,36 +378,46 @@
                                                                               {
                                                                                 "name": "boundTerms",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "gAcc"}, "function": {"project": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "gAcc"},
+                                                                                    "function": {"project": {"fieldName": "boundTerms", "typeName": "hydra.graph.Graph"}}}}},
                                                                               {
                                                                                 "name": "boundTypes",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "gAcc"}, "function": {"project": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "gAcc"},
+                                                                                    "function": {"project": {"fieldName": "boundTypes", "typeName": "hydra.graph.Graph"}}}}},
                                                                               {
                                                                                 "name": "classConstraints",
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "gAcc"},
-                                                                                    "function": {"project": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
+                                                                                    "function": {"project": {"fieldName": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
                                                                               {
                                                                                 "name": "lambdaVariables",
                                                                                 "term": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "gAcc"},
-                                                                                    "function": {"project": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}},
+                                                                                    "function": {"project": {"fieldName": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}},
                                                                               {"name": "metadata", "term": {"variable": "newMeta"}},
                                                                               {
                                                                                 "name": "primitives",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "gAcc"}, "function": {"project": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "gAcc"},
+                                                                                    "function": {"project": {"fieldName": "primitives", "typeName": "hydra.graph.Graph"}}}}},
                                                                               {
                                                                                 "name": "schemaTypes",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "gAcc"}, "function": {"project": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "gAcc"},
+                                                                                    "function": {"project": {"fieldName": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
                                                                               {
                                                                                 "name": "typeVariables",
                                                                                 "term": {
-                                                                                  "application": {"argument": {"variable": "gAcc"}, "function": {"project": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}],
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "gAcc"},
+                                                                                    "function": {"project": {"fieldName": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}],
                                                                             "typeName": "hydra.graph.Graph"}}}}}},
                                                                 "domain": {"variable": "hydra.core.Binding"},
                                                                 "parameter": "b"}},
@@ -407,19 +427,21 @@
                                                           "typeApplication": {
                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.foldl"}, "type": {"variable": "hydra.graph.Graph"}}},
                                                             "type": {"variable": "hydra.core.Binding"}}}}}}}}},
-                                            "function": {"project": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}},
+                                            "function": {"project": {"fieldName": "metadata", "typeName": "hydra.graph.Graph"}}}}},
                                       {
                                         "name": "primitives",
                                         "term": {
-                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}},
+                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "primitives", "typeName": "hydra.graph.Graph"}}}}},
                                       {
                                         "name": "schemaTypes",
                                         "term": {
-                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
+                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
                                       {
                                         "name": "typeVariables",
                                         "term": {
-                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}],
+                                          "application": {
+                                            "argument": {"variable": "g"},
+                                            "function": {"project": {"fieldName": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}],
                                     "typeName": "hydra.graph.Graph"}}}}}},
                         "domain": {"variable": "hydra.core.Let"},
                         "parameter": "letrec"}},
@@ -458,7 +480,9 @@
                           {
                             "name": "name",
                             "term": {
-                              "application": {"argument": {"variable": "tlam"}, "function": {"project": {"field": "parameter", "typeName": "hydra.core.TypeLambda"}}}},
+                              "application": {
+                                "argument": {"variable": "tlam"},
+                                "function": {"project": {"fieldName": "parameter", "typeName": "hydra.core.TypeLambda"}}}},
                             "typeScheme": {"body": {"variable": "hydra.core.Name"}, "variables": []}}],
                         "body": {
                           "record": {
@@ -466,37 +490,43 @@
                               {
                                 "name": "boundTerms",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "boundTerms", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "boundTypes",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "boundTypes", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "classConstraints",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {
+                                    "argument": {"variable": "g"},
+                                    "function": {"project": {"fieldName": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "lambdaVariables",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {
+                                    "argument": {"variable": "g"},
+                                    "function": {"project": {"fieldName": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "metadata",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "metadata", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "primitives",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "primitives", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "schemaTypes",
                                 "term": {
-                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
+                                  "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
                               {
                                 "name": "typeVariables",
                                 "term": {
                                   "application": {
                                     "argument": {
-                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}},
+                                      "application": {
+                                        "argument": {"variable": "g"},
+                                        "function": {"project": {"fieldName": "typeVariables", "typeName": "hydra.graph.Graph"}}}},
                                     "function": {
                                       "application": {
                                         "argument": {"variable": "name"},
@@ -543,9 +573,9 @@
                                                     "body": {
                                                       "pair": {
                                                         "first": {
-                                                          "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
+                                                          "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
                                                         "second": {
-                                                          "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
+                                                          "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Binding"}}}}}},
                                                     "type": {"variable": "hydra.core.Name"}}},
                                                 "type": {"variable": "hydra.core.Term"}}},
                                             "domain": {"variable": "hydra.core.Binding"},
@@ -578,7 +608,7 @@
                                                     "body": {
                                                       "application": {
                                                         "argument": {
-                                                          "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "typeScheme", "typeName": "hydra.core.Binding"}}}},
+                                                          "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.core.Binding"}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
@@ -590,7 +620,7 @@
                                                                         "body": {
                                                                           "pair": {
                                                                             "first": {
-                                                                              "application": {"argument": {"variable": "b"}, "function": {"project": {"field": "name", "typeName": "hydra.core.Binding"}}}},
+                                                                              "application": {"argument": {"variable": "b"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}}}},
                                                                             "second": {"variable": "ts"}}},
                                                                         "type": {"variable": "hydra.core.Name"}}},
                                                                     "type": {"variable": "hydra.core.TypeScheme"}}},
@@ -625,7 +655,7 @@
                                     "term": {
                                       "application": {
                                         "argument": {
-                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}},
+                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "boundTerms", "typeName": "hydra.graph.Graph"}}}},
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "newTerms"},
@@ -638,7 +668,7 @@
                                     "term": {
                                       "application": {
                                         "argument": {
-                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}},
+                                          "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "boundTypes", "typeName": "hydra.graph.Graph"}}}},
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "newTypes"},
@@ -649,27 +679,33 @@
                                   {
                                     "name": "classConstraints",
                                     "term": {
-                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
+                                      "application": {
+                                        "argument": {"variable": "g"},
+                                        "function": {"project": {"fieldName": "classConstraints", "typeName": "hydra.graph.Graph"}}}}},
                                   {
                                     "name": "lambdaVariables",
                                     "term": {
-                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}},
+                                      "application": {
+                                        "argument": {"variable": "g"},
+                                        "function": {"project": {"fieldName": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}},
                                   {
                                     "name": "metadata",
                                     "term": {
-                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}},
+                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "metadata", "typeName": "hydra.graph.Graph"}}}}},
                                   {
                                     "name": "primitives",
                                     "term": {
-                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}},
+                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "primitives", "typeName": "hydra.graph.Graph"}}}}},
                                   {
                                     "name": "schemaTypes",
                                     "term": {
-                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
+                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"fieldName": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}},
                                   {
                                     "name": "typeVariables",
                                     "term": {
-                                      "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}],
+                                      "application": {
+                                        "argument": {"variable": "g"},
+                                        "function": {"project": {"fieldName": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}],
                                 "typeName": "hydra.graph.Graph"}}}}}},
                     "domain": {"variable": "hydra.graph.Graph"},
                     "parameter": "g"}},
@@ -709,7 +745,7 @@
                                             "body": {
                                               "application": {
                                                 "argument": {
-                                                  "application": {"argument": {"variable": "at"}, "function": {"project": {"field": "body", "typeName": "hydra.core.AnnotatedType"}}}},
+                                                  "application": {"argument": {"variable": "at"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.core.AnnotatedType"}}}},
                                                 "function": {"variable": "stripAnnotations"}}},
                                             "domain": {"variable": "hydra.core.AnnotatedType"},
                                             "parameter": "at"}}}],
@@ -742,7 +778,7 @@
                                                     "body": {
                                                       "application": {
                                                         "argument": {
-                                                          "application": {"argument": {"variable": "ft"}, "function": {"project": {"field": "body", "typeName": "hydra.core.ForallType"}}}},
+                                                          "application": {"argument": {"variable": "ft"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.core.ForallType"}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
@@ -751,7 +787,9 @@
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "application": {"argument": {"variable": "ft"}, "function": {"project": {"field": "parameter", "typeName": "hydra.core.ForallType"}}}},
+                                                                      "application": {
+                                                                        "argument": {"variable": "ft"},
+                                                                        "function": {"project": {"fieldName": "parameter", "typeName": "hydra.core.ForallType"}}}},
                                                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.lists.cons"}, "type": {"variable": "hydra.core.Name"}}}}}}},
                                                             "function": {"variable": "gatherForall"}}}}},
                                                     "domain": {"variable": "hydra.core.ForallType"},
@@ -810,7 +848,9 @@
                       {
                         "name": "vars",
                         "term": {
-                          "application": {"argument": {"variable": "ts"}, "function": {"project": {"field": "variables", "typeName": "hydra.core.TypeScheme"}}}},
+                          "application": {
+                            "argument": {"variable": "ts"},
+                            "function": {"project": {"fieldName": "variables", "typeName": "hydra.core.TypeScheme"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.core.Name"}}, "variables": []}}],
                     "body": {
                       "let": {
@@ -818,7 +858,7 @@
                           {
                             "name": "body",
                             "term": {
-                              "application": {"argument": {"variable": "ts"}, "function": {"project": {"field": "body", "typeName": "hydra.core.TypeScheme"}}}},
+                              "application": {"argument": {"variable": "ts"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}}}},
                             "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                         "body": {
                           "application": {
@@ -858,29 +898,29 @@
           "body": {"function": {"codomain": {"variable": "hydra.core.Type"}, "domain": {"variable": "hydra.core.TypeScheme"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Graph context extension and type scheme conversion",
-  "namespace": "hydra.scoping"}
+  "name": "hydra.scoping"}

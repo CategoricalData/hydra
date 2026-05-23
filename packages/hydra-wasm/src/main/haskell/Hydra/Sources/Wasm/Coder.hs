@@ -6,6 +6,7 @@ module Hydra.Sources.Wasm.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -53,15 +54,15 @@ import qualified Hydra.Sources.Wasm.Language as WasmLanguageSource
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.wasm.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.wasm.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [moduleNamespace WasmSerdeSource.module_, moduleNamespace WasmLanguageSource.module_,
-      Analysis.ns, Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([moduleName WasmSerdeSource.module_, moduleName WasmLanguageSource.module_,
+      Analysis.ns, Formatting.ns, Names.ns, Rewriting.ns, Strip.ns, Variables.ns, Environment.ns, Lexical.ns, SerializationSource.ns] L.++ (WasmSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "WebAssembly code generator: converts Hydra type and term modules to WAT source code"}
   where
     definitions = [
@@ -903,7 +904,7 @@ encodeProjection :: TTermDefinition (Context -> Graph -> M.Map Name [(Name, Int)
 encodeProjection = def "encodeProjection" $
   "cx" ~> "g" ~> "fieldOffsets" ~> lambda "proj" $ lambda "scrutineeInstrs" $
     "typeName" <~ Core.projectionTypeName (var "proj") $
-    "fieldName" <~ Core.projectionField (var "proj") $
+    "fieldName" <~ Core.projectionFieldName (var "proj") $
     "mFields" <~ Maps.lookup (var "typeName") (var "fieldOffsets") $
     -- Compute the offset if the type is known and the field exists in it. Returns
     -- Maybe Int — Nothing if the type is unknown or the field name doesn't match
@@ -1745,5 +1746,5 @@ moduleToWasm = def "moduleToWasm" $
         var "funcExports",
         var "allFields"])]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (WasmSerdeSource.moduleToExpr @@ var "wasmMod"))) $
-    "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "wat") @@ (Packaging.moduleNamespace (var "mod"))) $
+    "filePath" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ wrap _FileExtension (string "wat") @@ (Packaging.moduleName (var "mod"))) $
       right (Maps.singleton (var "filePath") (var "code"))

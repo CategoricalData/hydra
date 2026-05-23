@@ -82,14 +82,14 @@ import qualified Data.Maybe                                as Y
 haskellLanguageDefinition :: String -> TTerm a -> TTermDefinition a
 haskellLanguageDefinition = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.haskell.language"
+ns :: ModuleName
+ns = ModuleName "hydra.haskell.language"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = [toDefinition haskellLanguage, toDefinition reservedWords],
-            moduleDependencies = KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for Haskell"}
 haskellLanguage :: TTermDefinition Language
 haskellLanguage = haskellLanguageDefinition "haskellLanguage" $

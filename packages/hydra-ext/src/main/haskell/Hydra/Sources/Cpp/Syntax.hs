@@ -15,8 +15,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.cpp.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.cpp.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -26,9 +26,9 @@ cpp = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A C++ syntax model, focusing on features for representing algebraic data types and declarative computations"}
   where
     definitions = accessSpecifiers ++ declarationTypes ++ expressionTypes ++ statementTypes

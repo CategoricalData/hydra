@@ -58,14 +58,14 @@ import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
-ns :: Namespace
-ns = Namespace "hydra.unification"
+ns :: ModuleName
+ns = ModuleName "hydra.unification"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Rewriting.ns, ShowCore.ns, Strip.ns, Substitution.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Utilities for type unification.")}
   where
    definitions = [

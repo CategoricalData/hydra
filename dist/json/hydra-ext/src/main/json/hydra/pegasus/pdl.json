@@ -178,6 +178,6 @@
                 {"key": "description", "value": {"literal": {"string": "Note: unions are not allowed as member types of other unions"}}}],
               "body": {"wrap": {"list": {"variable": "hydra.pegasus.pdl.UnionMember"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.json.model", "hydra.core"],
+  "dependencies": [{"module": "hydra.json.model"}, {"module": "hydra.core"}],
   "description": "A model for PDL (Pegasus Data Language) schemas. Based on the specification at:\n  https://linkedin.github.io/rest.li/pdl_schema",
-  "namespace": "hydra.pegasus.pdl"}
+  "name": "hydra.pegasus.pdl"}

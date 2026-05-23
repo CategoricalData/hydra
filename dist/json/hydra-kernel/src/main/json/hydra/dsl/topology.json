@@ -117,7 +117,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.OrderingIsomorphism"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -178,7 +178,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.OrderingIsomorphism"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -269,7 +269,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.OrderingIsomorphism"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -369,7 +369,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.OrderingIsomorphism"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -660,7 +660,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -717,7 +717,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -775,7 +775,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -835,7 +835,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -892,7 +892,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -949,7 +949,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -1039,7 +1039,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1073,7 +1073,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1107,7 +1107,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1141,7 +1141,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1175,7 +1175,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1269,7 +1269,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1311,7 +1311,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1345,7 +1345,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1379,7 +1379,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1413,7 +1413,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1509,7 +1509,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1543,7 +1543,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1585,7 +1585,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1619,7 +1619,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1653,7 +1653,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1753,7 +1753,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1787,7 +1787,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1821,7 +1821,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1863,7 +1863,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1897,7 +1897,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1991,7 +1991,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2025,7 +2025,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2059,7 +2059,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2093,7 +2093,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2135,7 +2135,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "sccs"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2227,7 +2227,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "counter"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2261,7 +2261,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "indices"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2295,7 +2295,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lowLinks"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2329,7 +2329,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "stack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2363,7 +2363,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.topology.TarjanState"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "onStack"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2417,6 +2417,6 @@
               "domain": {
                 "application": {"argument": {"variable": "hydra.topology.TarjanState"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.topology", "hydra.phantoms", "hydra.core", "hydra.dsl.core"],
+  "dependencies": [{"module": "hydra.topology"}, {"module": "hydra.phantoms"}, {"module": "hydra.core"}, {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.topology",
-  "namespace": "hydra.dsl.topology"}
+  "name": "hydra.dsl.topology"}

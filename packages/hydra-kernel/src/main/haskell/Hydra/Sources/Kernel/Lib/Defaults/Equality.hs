@@ -51,17 +51,17 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.lib.defaults.equality"
+ns :: ModuleName
+ns = ModuleName "hydra.lib.defaults.equality"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = Just ("Default term-level implementations of Equality functions for the Hydra interpreter.")}
   where
     definitions = [

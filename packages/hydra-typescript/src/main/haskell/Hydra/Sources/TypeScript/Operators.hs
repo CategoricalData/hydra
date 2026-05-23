@@ -90,14 +90,14 @@ import Hydra.Ast
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.typeScript.operators"
+ns :: ModuleName
+ns = ModuleName "hydra.typeScript.operators"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "AST operators for TypeScript with precedence and associativity"}
   where
     definitions = [

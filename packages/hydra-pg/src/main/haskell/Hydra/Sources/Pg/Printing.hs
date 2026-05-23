@@ -86,14 +86,14 @@ import qualified Hydra.Sources.Pg.Model as PgModel
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.pg.printing"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.printing"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = (PgModel.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ((PgModel.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Printing functions for property graph elements"}
   where
     definitions = [

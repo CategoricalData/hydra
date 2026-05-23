@@ -26,7 +26,7 @@
                                       "application": {
                                         "argument": {"variable": "edge"},
                                         "function": {
-                                          "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.AdjacentEdge"}}, "type": {"variable": "t0"}}}}},
+                                          "typeApplication": {"body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.AdjacentEdge"}}, "type": {"variable": "t0"}}}}},
                                     "typeScheme": {"body": {"variable": "hydra.pg.model.EdgeLabel"}, "variables": []}}],
                                 "body": {
                                   "let": {
@@ -37,7 +37,7 @@
                                           "application": {
                                             "argument": {"variable": "edge"},
                                             "function": {
-                                              "typeApplication": {"body": {"project": {"field": "id", "typeName": "hydra.pg.model.AdjacentEdge"}}, "type": {"variable": "t0"}}}}},
+                                              "typeApplication": {"body": {"project": {"fieldName": "id", "typeName": "hydra.pg.model.AdjacentEdge"}}, "type": {"variable": "t0"}}}}},
                                         "typeScheme": {"body": {"variable": "t0"}, "variables": []}}],
                                     "body": {
                                       "let": {
@@ -48,7 +48,7 @@
                                               "application": {
                                                 "argument": {"variable": "edge"},
                                                 "function": {
-                                                  "typeApplication": {"body": {"project": {"field": "vertex", "typeName": "hydra.pg.model.AdjacentEdge"}}, "type": {"variable": "t0"}}}}},
+                                                  "typeApplication": {"body": {"project": {"fieldName": "vertex", "typeName": "hydra.pg.model.AdjacentEdge"}}, "type": {"variable": "t0"}}}}},
                                             "typeScheme": {"body": {"variable": "t0"}, "variables": []}}],
                                         "body": {
                                           "let": {
@@ -59,7 +59,9 @@
                                                   "application": {
                                                     "argument": {"variable": "edge"},
                                                     "function": {
-                                                      "typeApplication": {"body": {"project": {"field": "properties", "typeName": "hydra.pg.model.AdjacentEdge"}}, "type": {"variable": "t0"}}}}},
+                                                      "typeApplication": {
+                                                        "body": {"project": {"fieldName": "properties", "typeName": "hydra.pg.model.AdjacentEdge"}},
+                                                        "type": {"variable": "t0"}}}}},
                                                 "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}, "variables": []}}],
                                             "body": {
                                               "application": {
@@ -545,7 +547,7 @@
                                         "argument": {"variable": "vae"},
                                         "function": {
                                           "typeApplication": {
-                                            "body": {"project": {"field": "vertex", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                            "body": {"project": {"fieldName": "vertex", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                             "type": {"variable": "t0"}}}}},
                                     "typeScheme": {
                                       "body": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.Vertex"}}},
@@ -560,7 +562,7 @@
                                             "argument": {"variable": "vae"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"project": {"field": "ins", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                "body": {"project": {"fieldName": "ins", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                                 "type": {"variable": "t0"}}}}},
                                         "typeScheme": {
                                           "body": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}},
@@ -575,7 +577,7 @@
                                                 "argument": {"variable": "vae"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"project": {"field": "outs", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
+                                                    "body": {"project": {"fieldName": "outs", "typeName": "hydra.pg.model.VertexWithAdjacentEdges"}},
                                                     "type": {"variable": "t0"}}}}},
                                             "typeScheme": {
                                               "body": {"list": {"application": {"argument": {"variable": "t0"}, "function": {"variable": "hydra.pg.model.AdjacentEdge"}}}},
@@ -589,7 +591,7 @@
                                                   "application": {
                                                     "argument": {"variable": "vertex"},
                                                     "function": {
-                                                      "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
+                                                      "typeApplication": {"body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}}],
                                             "body": {
                                               "let": {
@@ -600,7 +602,7 @@
                                                       "application": {
                                                         "argument": {"variable": "vertex"},
                                                         "function": {
-                                                          "typeApplication": {"body": {"project": {"field": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
+                                                          "typeApplication": {"body": {"project": {"fieldName": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
                                                     "typeScheme": {"body": {"variable": "t0"}, "variables": []}}],
                                                 "body": {
                                                   "let": {
@@ -611,7 +613,7 @@
                                                           "application": {
                                                             "argument": {"variable": "vertex"},
                                                             "function": {
-                                                              "typeApplication": {"body": {"project": {"field": "properties", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
+                                                              "typeApplication": {"body": {"project": {"fieldName": "properties", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "t0"}}}}},
                                                         "typeScheme": {"body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "t0"}}}, "variables": []}}],
                                                     "body": {
                                                       "application": {
@@ -1036,33 +1038,33 @@
                   "domain": {"variable": "t0"}}}}},
           "variables": ["t0", "t1"]}}}],
   "dependencies": [
-    "hydra.pg.graphson.coder",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants",
-    "hydra.pg.graphson.syntax",
-    "hydra.pg.model",
-    "hydra.json.model"],
+    {"module": "hydra.pg.graphson.coder"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"},
+    {"module": "hydra.pg.graphson.syntax"},
+    {"module": "hydra.pg.model"},
+    {"module": "hydra.json.model"}],
   "description": "Functions for constructing GraphSON vertices from property graph vertices.",
-  "namespace": "hydra.pg.graphson.construct"}
+  "name": "hydra.pg.graphson.construct"}

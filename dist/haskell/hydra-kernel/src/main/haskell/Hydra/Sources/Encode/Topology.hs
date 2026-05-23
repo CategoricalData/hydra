@@ -11,11 +11,14 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.topology"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.topology"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.topology"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.core"),
-        (Packaging.Namespace "hydra.topology")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.topology"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.topology.graph"),
@@ -106,7 +109,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-                                      Core.projectionField = (Core.Name "counter")})),
+                                      Core.projectionFieldName = (Core.Name "counter")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -151,7 +154,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-                                      Core.projectionField = (Core.Name "indices")})),
+                                      Core.projectionFieldName = (Core.Name "indices")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -196,7 +199,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-                                      Core.projectionField = (Core.Name "lowLinks")})),
+                                      Core.projectionFieldName = (Core.Name "lowLinks")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -224,7 +227,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-                                      Core.projectionField = (Core.Name "stack")})),
+                                      Core.projectionFieldName = (Core.Name "stack")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -252,7 +255,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-                                      Core.projectionField = (Core.Name "onStack")})),
+                                      Core.projectionFieldName = (Core.Name "onStack")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -291,7 +294,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.topology.TarjanState"),
-                                      Core.projectionField = (Core.Name "sccs")})),
+                                      Core.projectionFieldName = (Core.Name "sccs")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.topology.TarjanState")))])})),

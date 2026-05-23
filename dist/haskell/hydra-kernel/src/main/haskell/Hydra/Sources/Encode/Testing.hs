@@ -11,11 +11,14 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.testing"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.testing"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.testing"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.core"),
-        (Packaging.Namespace "hydra.testing")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.testing"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.testing.tag"),

@@ -328,7 +328,7 @@ main = do
   putStrLn $ "  Time: " ++ formatTime (elapsed loadEnd loadStart)
   putStrLn ""
 
-  let allKernelNamespaces = fmap moduleNamespace baselineMods
+  let allKernelNamespaces = fmap moduleName baselineMods
 
   -- Step 2: Optionally load coder-package main modules.
   coderMods <- if optIncludeCoders opts
@@ -396,9 +396,9 @@ main = do
       putStrLn "Step 2c: Loading ext package modules from JSON..."
       loadStart4 <- getCurrentTime
       allExtMods <- fmap concat $ CM.forM extPackagesToLoad loadPackageMain
-      let coderNsSet = fmap (unNamespace . moduleNamespace) (baselineMods ++ coderMods)
+      let coderNsSet = fmap (unModuleName . moduleName) (baselineMods ++ coderMods)
           mods = Prelude.filter
-            (\m -> unNamespace (moduleNamespace m) `notElem` coderNsSet)
+            (\m -> unModuleName (moduleName m) `notElem` coderNsSet)
             allExtMods
       loadEnd4 <- getCurrentTime
       putStrLn $ "  Loaded " ++ show (length mods) ++ " ext modules."
@@ -408,9 +408,9 @@ main = do
 
   -- Apply filters
   let allMods = baselineMods ++ coderMods ++ extMods ++ dslMods
-  let kernelNsStrings = fmap unNamespace allKernelNamespaces
+  let kernelNsStrings = fmap unModuleName allKernelNamespaces
   let filtered1 = if optKernelOnly opts
-        then Prelude.filter (\m -> unNamespace (moduleNamespace m) `elem` kernelNsStrings) allMods
+        then Prelude.filter (\m -> unModuleName (moduleName m) `elem` kernelNsStrings) allMods
         else allMods
   let filtered2 = if optTypesOnly opts
         then Prelude.filter moduleHasTypeDefinition filtered1
@@ -443,9 +443,9 @@ main = do
       -- hydra.avro.*, ...) produce synth output whose references can't
       -- be resolved in the generator's lexical env during batch-mode
       -- iteration.
-      let kernelNsList = fmap unNamespace allKernelNamespaces
+      let kernelNsList = fmap unModuleName allKernelNamespaces
       let isSynthInput m =
-            let nsStr = unNamespace (moduleNamespace m)
+            let nsStr = unModuleName (moduleName m)
                 isCoder = any (\(pfx, _) -> pfx `isPrefixOf` nsStr) packagePrefixes
                 isYaml  = "hydra.yaml." `isPrefixOf` nsStr
                 isPgSynthInput = nsStr `elem` pgSynthNs
@@ -479,9 +479,9 @@ main = do
       extMods <- fmap concat $ CM.forM extDemoPackages loadPackageMain
       -- Filter out any namespace already present in the baseline/coder set
       -- so that downstream generation doesn't see duplicates.
-      let loadedNsSet = fmap (unNamespace . moduleNamespace) allMainMods
+      let loadedNsSet = fmap (unModuleName . moduleName) allMainMods
           extMods' = Prelude.filter
-            (\m -> unNamespace (moduleNamespace m) `notElem` loadedNsSet)
+            (\m -> unModuleName (moduleName m) `notElem` loadedNsSet)
             extMods
       putStrLn $ "  Loaded " ++ show (length extMods') ++ " ext demo modules"
       putStrLn ""
@@ -496,7 +496,7 @@ main = do
     Nothing  -> return modsToGenerate
     Just pkg -> do
       let owned = Prelude.filter
-            (\m -> namespaceToPackage (moduleNamespace m) == pkg)
+            (\m -> namespaceToPackage (moduleName m) == pkg)
             modsToGenerate
       putStrLn $ "Scoping to package " ++ pkg ++ ": "
         ++ show (length owned) ++ " of " ++ show (length modsToGenerate) ++ " modules"
@@ -662,7 +662,7 @@ main = do
       -- These are type-only stubs whose hand-written per-language
       -- counterparts are the source of truth; emitting them would
       -- overwrite hand-written code.
-      let notSkipEmit m = moduleNamespace m `notElem` testSkipEmitNamespaces
+      let notSkipEmit m = moduleName m `notElem` testSkipEmitNamespaces
       -- Package-scoped test modules including skip-emit ones — used to
       -- populate the prune keep-set (skip-emit files are hand-written and
       -- must survive prune). Generation itself filters skip-emit out via
@@ -671,7 +671,7 @@ main = do
             Nothing  -> testModsAll
             Just pkg ->
               Prelude.filter
-                (\m -> namespaceToPackage (moduleNamespace m) == pkg)
+                (\m -> namespaceToPackage (moduleName m) == pkg)
                 testModsAll
       let testMods = Prelude.filter notSkipEmit testModsForKeep
       case optPackage opts of
@@ -688,9 +688,9 @@ main = do
       -- depends on hydra.haskell.operators). Generate those modules to outMain
       -- so test code can reference them.
       when (optKernelOnly opts) $ do
-        let testExtraDeps = Prelude.filter (\ns -> unNamespace ns `notElem` kernelNsStrings)
-              $ concatMap moduleDependencies testMods
-            extModsForTests = Prelude.filter (\m -> moduleNamespace m `elem` testExtraDeps) allMods
+        let testExtraDeps = Prelude.filter (\ns -> unModuleName ns `notElem` kernelNsStrings)
+              $ fmap moduleDependencyModule $ concatMap moduleDependencies testMods
+            extModsForTests = Prelude.filter (\m -> moduleName m `elem` testExtraDeps) allMods
         when (not (Prelude.null extModsForTests)) $ do
           putStrLn $ "Generating " ++ show (length extModsForTests) ++ " ext module(s) needed by tests..."
           case target of
@@ -858,8 +858,8 @@ filterByTargetDigest outBase pkg sourceSet mods = do
           nsFiles <- Digest.discoverNamespaceFiles
           currentDigest <- Digest.hashUniverse nsFiles mods
           let isFresh m =
-                let nsStr = unNamespace (moduleNamespace m)
-                in case (M.lookup nsStr recordedInputs, M.lookup (Namespace nsStr) currentDigest) of
+                let nsStr = unModuleName (moduleName m)
+                in case (M.lookup nsStr recordedInputs, M.lookup (ModuleName nsStr) currentDigest) of
                      (Just rec, Just cur) -> Digest.entryHash rec == cur
                      _                    -> False
               (fresh, dirty) = partition isFresh mods

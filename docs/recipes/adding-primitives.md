@@ -143,17 +143,20 @@ import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 -- ... other imports
 
-ns :: Namespace
-ns = Namespace "hydra.eval.lib.eithers"
+ns :: ModuleName
+ns = ModuleName "hydra.eval.lib.eithers"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
-module_ = Module ns definitions
-    [Monads.module_, ShowCore.module_]
-    kernelTypesModules $
-    Just "Evaluation-level implementations of Either functions."
+module_ = Module {
+    moduleName = ns,
+    moduleDefinitions = definitions,
+    moduleDependencies = unqualifiedDep <$>
+      ([moduleName Monads.module_, moduleName ShowCore.module_]
+       L.++ kernelTypesModuleNames),
+    moduleDescription = Just "Evaluation-level implementations of Either functions."}
   where
     definitions = [toDefinition bimap_]
 

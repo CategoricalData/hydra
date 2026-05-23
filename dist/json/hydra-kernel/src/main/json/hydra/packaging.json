@@ -53,17 +53,20 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "An optional human-readable description of the module"}}}],
                         "body": {"maybe": {"literal": {"string": {}}}}}}},
                   {
-                    "name": "namespace",
+                    "name": "name",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A common prefix for all element names in the module"}}}],
-                        "body": {"variable": "hydra.packaging.Namespace"}}}},
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The name of the module, which is also the common prefix for all element names in the module"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
                   {
                     "name": "dependencies",
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Any modules which this module directly depends on"}}}],
-                        "body": {"list": {"variable": "hydra.packaging.Namespace"}}}}},
+                        "body": {"list": {"variable": "hydra.packaging.ModuleDependency"}}}}},
                   {
                     "name": "definitions",
                     "type": {
@@ -73,11 +76,44 @@
           "variables": []}}},
     {
       "type": {
-        "name": "hydra.packaging.Namespace",
+        "name": "hydra.packaging.ModuleDependency",
         "typeScheme": {
           "body": {
             "annotated": {
-              "annotation": [{"key": "description", "value": {"literal": {"string": "A prefix for element names"}}}],
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {
+                    "literal": {
+                      "string": "A dependency on another module, identified by its name and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate module name across packages is a resolution error which can be disambiguated by naming the intended package explicitly."}}}],
+              "body": {
+                "record": [
+                  {
+                    "name": "module",
+                    "type": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the depended-on module"}}}],
+                        "body": {"variable": "hydra.packaging.ModuleName"}}}},
+                  {
+                    "name": "package",
+                    "type": {
+                      "annotated": {
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {"literal": {"string": "The package providing the depended-on module, if disambiguation is required"}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.PackageName"}}}}}]}}},
+          "variables": []}}},
+    {
+      "type": {
+        "name": "hydra.packaging.ModuleName",
+        "typeScheme": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "key": "description",
+                  "value": {"literal": {"string": "The unique name of a module; a prefix for the names of elements defined in the module."}}}],
               "body": {"wrap": {"literal": {"string": {}}}}}},
           "variables": []}}},
     {
@@ -185,15 +221,15 @@
               "annotation": [
                 {
                   "key": "description",
-                  "value": {"literal": {"string": "A qualified name consisting of an optional namespace together with a mandatory local name"}}}],
+                  "value": {"literal": {"string": "A qualified name consisting of an optional module name together with a mandatory local name"}}}],
               "body": {
                 "record": [
                   {
-                    "name": "namespace",
+                    "name": "moduleName",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "The optional namespace"}}}],
-                        "body": {"maybe": {"variable": "hydra.packaging.Namespace"}}}}},
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "The optional module name"}}}],
+                        "body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}}}},
                   {
                     "name": "local",
                     "type": {
@@ -258,6 +294,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The type scheme being defined"}}}],
                         "body": {"variable": "hydra.core.TypeScheme"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A model for Hydra namespaces, modules, and packages",
-  "namespace": "hydra.packaging"}
+  "name": "hydra.packaging"}

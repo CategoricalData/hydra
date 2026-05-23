@@ -19,8 +19,8 @@ import qualified Data.Scientific as Sci
 buildJavaTestModule :: Packaging.Module -> Testing.TestGroup -> String -> String
 buildJavaTestModule testModule testGroup testBody =
 
-      let ns_ = Packaging.moduleNamespace testModule
-          parts = Strings.splitOn "." (Packaging.unNamespace ns_)
+      let ns_ = Packaging.moduleName testModule
+          parts = Strings.splitOn "." (Packaging.unModuleName ns_)
           packageName = Strings.intercalate "." (Maybes.fromMaybe [] (Lists.maybeInit parts))
           className_ = Strings.cat2 (Formatting.capitalize (Maybes.fromMaybe "" (Lists.maybeLast parts))) "Test"
           groupName_ = Testing.testGroupName testGroup
@@ -120,8 +120,8 @@ generateTestFileWithJavaCodec :: Packaging.Module -> Testing.TestGroup -> Either
 generateTestFileWithJavaCodec testModule testGroup =
     Eithers.map (\testBody ->
       let testModuleContent = buildJavaTestModule testModule testGroup testBody
-          ns_ = Packaging.moduleNamespace testModule
-          parts = Strings.splitOn "." (Packaging.unNamespace ns_)
+          ns_ = Packaging.moduleName testModule
+          parts = Strings.splitOn "." (Packaging.unModuleName ns_)
           dirParts = Lists.drop 1 (Maybes.fromMaybe [] (Lists.maybeInit parts))
           className_ = Strings.cat2 (Formatting.capitalize (Maybes.fromMaybe "" (Lists.maybeLast parts))) "Test"
           fileName = Strings.cat2 className_ ".java"
@@ -132,6 +132,6 @@ generateTestFileWithJavaCodec testModule testGroup =
                     fileName]
       in (filePath, testModuleContent)) (generateJavaTestGroupHierarchy [] testGroup)
 -- | Convert namespace to Java class name
-namespaceToJavaClassName :: Packaging.Namespace -> String
+namespaceToJavaClassName :: Packaging.ModuleName -> String
 namespaceToJavaClassName ns_ =
-    Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unNamespace ns_)))
+    Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Packaging.unModuleName ns_)))

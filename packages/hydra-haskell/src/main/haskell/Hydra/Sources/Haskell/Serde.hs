@@ -89,14 +89,14 @@ import qualified Hydra.Sources.Haskell.Operators as HaskellOperators
 haskellSerdeDefinition :: String -> TTerm a -> TTermDefinition a
 haskellSerdeDefinition = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.haskell.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.haskell.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns, HaskellOperators.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, HaskellOperators.ns] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just ("Haskell operator precendence and associativity are drawn from:\n"
       <> "https://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\n"
       <> "Other operators were investigated using GHCi, e.g. \":info (->)\"\n"

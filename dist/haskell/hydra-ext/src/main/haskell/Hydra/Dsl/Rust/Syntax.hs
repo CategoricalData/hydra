@@ -26,7 +26,7 @@ angleBracketedArgsArgs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.AngleBracketedArgs"),
-        Core.projectionField = (Core.Name "args")})),
+        Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 angleBracketedArgsWithArgs :: Phantoms.TTerm Syntax.AngleBracketedArgs -> Phantoms.TTerm [Syntax.GenericArg] -> Phantoms.TTerm Syntax.AngleBracketedArgs
@@ -71,7 +71,7 @@ arrayRepeatElement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ArrayRepeat"),
-        Core.projectionField = (Core.Name "element")})),
+        Core.projectionFieldName = (Core.Name "element")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayRepeatLength :: Phantoms.TTerm Syntax.ArrayRepeat -> Phantoms.TTerm Syntax.Expression
@@ -79,7 +79,7 @@ arrayRepeatLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ArrayRepeat"),
-        Core.projectionField = (Core.Name "length")})),
+        Core.projectionFieldName = (Core.Name "length")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayRepeatWithElement :: Phantoms.TTerm Syntax.ArrayRepeat -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ArrayRepeat
@@ -95,7 +95,7 @@ arrayRepeatWithElement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ArrayRepeat"),
-              Core.projectionField = (Core.Name "length")})),
+              Core.projectionFieldName = (Core.Name "length")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 arrayRepeatWithLength :: Phantoms.TTerm Syntax.ArrayRepeat -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ArrayRepeat
@@ -108,7 +108,7 @@ arrayRepeatWithLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ArrayRepeat"),
-              Core.projectionField = (Core.Name "element")})),
+              Core.projectionFieldName = (Core.Name "element")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "length"),
@@ -131,7 +131,7 @@ arrayTypeElement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ArrayType"),
-        Core.projectionField = (Core.Name "element")})),
+        Core.projectionFieldName = (Core.Name "element")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayTypeLength :: Phantoms.TTerm Syntax.ArrayType -> Phantoms.TTerm Syntax.Expression
@@ -139,7 +139,7 @@ arrayTypeLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ArrayType"),
-        Core.projectionField = (Core.Name "length")})),
+        Core.projectionFieldName = (Core.Name "length")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 arrayTypeWithElement :: Phantoms.TTerm Syntax.ArrayType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ArrayType
@@ -155,7 +155,7 @@ arrayTypeWithElement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ArrayType"),
-              Core.projectionField = (Core.Name "length")})),
+              Core.projectionFieldName = (Core.Name "length")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 arrayTypeWithLength :: Phantoms.TTerm Syntax.ArrayType -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ArrayType
@@ -168,7 +168,7 @@ arrayTypeWithLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ArrayType"),
-              Core.projectionField = (Core.Name "element")})),
+              Core.projectionFieldName = (Core.Name "element")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "length"),
@@ -191,7 +191,7 @@ assignExprTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.AssignExpr"),
-        Core.projectionField = (Core.Name "target")})),
+        Core.projectionFieldName = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 assignExprValue :: Phantoms.TTerm Syntax.AssignExpr -> Phantoms.TTerm Syntax.Expression
@@ -199,7 +199,7 @@ assignExprValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.AssignExpr"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 assignExprWithTarget :: Phantoms.TTerm Syntax.AssignExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.AssignExpr
@@ -215,7 +215,7 @@ assignExprWithTarget original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.AssignExpr"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 assignExprWithValue :: Phantoms.TTerm Syntax.AssignExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.AssignExpr
@@ -228,7 +228,7 @@ assignExprWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.AssignExpr"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -254,7 +254,7 @@ attributeInner x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Attribute"),
-        Core.projectionField = (Core.Name "inner")})),
+        Core.projectionFieldName = (Core.Name "inner")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 attributePath :: Phantoms.TTerm Syntax.Attribute -> Phantoms.TTerm [String]
@@ -262,7 +262,7 @@ attributePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Attribute"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 attributeTokens :: Phantoms.TTerm Syntax.Attribute -> Phantoms.TTerm (Maybe String)
@@ -270,7 +270,7 @@ attributeTokens x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Attribute"),
-        Core.projectionField = (Core.Name "tokens")})),
+        Core.projectionFieldName = (Core.Name "tokens")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 attributeWithInner :: Phantoms.TTerm Syntax.Attribute -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Attribute
@@ -286,14 +286,14 @@ attributeWithInner original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Attribute"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tokens"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Attribute"),
-              Core.projectionField = (Core.Name "tokens")})),
+              Core.projectionFieldName = (Core.Name "tokens")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 attributeWithPath :: Phantoms.TTerm Syntax.Attribute -> Phantoms.TTerm [String] -> Phantoms.TTerm Syntax.Attribute
@@ -306,7 +306,7 @@ attributeWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Attribute"),
-              Core.projectionField = (Core.Name "inner")})),
+              Core.projectionFieldName = (Core.Name "inner")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
@@ -316,7 +316,7 @@ attributeWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Attribute"),
-              Core.projectionField = (Core.Name "tokens")})),
+              Core.projectionFieldName = (Core.Name "tokens")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 attributeWithTokens :: Phantoms.TTerm Syntax.Attribute -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.Attribute
@@ -329,14 +329,14 @@ attributeWithTokens original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Attribute"),
-              Core.projectionField = (Core.Name "inner")})),
+              Core.projectionFieldName = (Core.Name "inner")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "path"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Attribute"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tokens"),
@@ -362,7 +362,7 @@ binaryExprLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.BinaryExpr"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryExprOp :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.BinaryOp
@@ -370,7 +370,7 @@ binaryExprOp x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.BinaryExpr"),
-        Core.projectionField = (Core.Name "op")})),
+        Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryExprRight :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.Expression
@@ -378,7 +378,7 @@ binaryExprRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.BinaryExpr"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryExprWithLeft :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.BinaryExpr
@@ -394,14 +394,14 @@ binaryExprWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binaryExprWithOp :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.BinaryOp -> Phantoms.TTerm Syntax.BinaryExpr
@@ -414,7 +414,7 @@ binaryExprWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "op"),
@@ -424,7 +424,7 @@ binaryExprWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binaryExprWithRight :: Phantoms.TTerm Syntax.BinaryExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.BinaryExpr
@@ -437,14 +437,14 @@ binaryExprWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "op"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.BinaryExpr"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -611,7 +611,7 @@ blockExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Block"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 blockStatements :: Phantoms.TTerm Syntax.Block -> Phantoms.TTerm [Syntax.Statement]
@@ -619,7 +619,7 @@ blockStatements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Block"),
-        Core.projectionField = (Core.Name "statements")})),
+        Core.projectionFieldName = (Core.Name "statements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 blockWithExpression :: Phantoms.TTerm Syntax.Block -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.Block
@@ -632,7 +632,7 @@ blockWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Block"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -651,7 +651,7 @@ blockWithStatements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Block"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 callExpr :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.CallExpr
@@ -671,7 +671,7 @@ callExprArgs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CallExpr"),
-        Core.projectionField = (Core.Name "args")})),
+        Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 callExprFunction :: Phantoms.TTerm Syntax.CallExpr -> Phantoms.TTerm Syntax.Expression
@@ -679,7 +679,7 @@ callExprFunction x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CallExpr"),
-        Core.projectionField = (Core.Name "function")})),
+        Core.projectionFieldName = (Core.Name "function")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 callExprWithArgs :: Phantoms.TTerm Syntax.CallExpr -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.CallExpr
@@ -692,7 +692,7 @@ callExprWithArgs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CallExpr"),
-              Core.projectionField = (Core.Name "function")})),
+              Core.projectionFieldName = (Core.Name "function")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "args"),
@@ -711,7 +711,7 @@ callExprWithFunction original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CallExpr"),
-              Core.projectionField = (Core.Name "args")})),
+              Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 castExpr :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.CastExpr
@@ -731,7 +731,7 @@ castExprExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CastExpr"),
-        Core.projectionField = (Core.Name "expr")})),
+        Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 castExprType :: Phantoms.TTerm Syntax.CastExpr -> Phantoms.TTerm Syntax.Type
@@ -739,7 +739,7 @@ castExprType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CastExpr"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 castExprWithExpr :: Phantoms.TTerm Syntax.CastExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.CastExpr
@@ -755,7 +755,7 @@ castExprWithExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CastExpr"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 castExprWithType :: Phantoms.TTerm Syntax.CastExpr -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.CastExpr
@@ -768,7 +768,7 @@ castExprWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CastExpr"),
-              Core.projectionField = (Core.Name "expr")})),
+              Core.projectionFieldName = (Core.Name "expr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -797,7 +797,7 @@ closureExprBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closureExprMove :: Phantoms.TTerm Syntax.ClosureExpr -> Phantoms.TTerm Bool
@@ -805,7 +805,7 @@ closureExprMove x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-        Core.projectionField = (Core.Name "move")})),
+        Core.projectionFieldName = (Core.Name "move")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closureExprParams :: Phantoms.TTerm Syntax.ClosureExpr -> Phantoms.TTerm [Syntax.ClosureParam]
@@ -813,7 +813,7 @@ closureExprParams x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-        Core.projectionField = (Core.Name "params")})),
+        Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closureExprReturnType :: Phantoms.TTerm Syntax.ClosureExpr -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -821,7 +821,7 @@ closureExprReturnType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-        Core.projectionField = (Core.Name "returnType")})),
+        Core.projectionFieldName = (Core.Name "returnType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closureExprWithBody :: Phantoms.TTerm Syntax.ClosureExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ClosureExpr
@@ -834,21 +834,21 @@ closureExprWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "move")})),
+              Core.projectionFieldName = (Core.Name "move")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -867,21 +867,21 @@ closureExprWithMove original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 closureExprWithParams :: Phantoms.TTerm Syntax.ClosureExpr -> Phantoms.TTerm [Syntax.ClosureParam] -> Phantoms.TTerm Syntax.ClosureExpr
@@ -894,7 +894,7 @@ closureExprWithParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "move")})),
+              Core.projectionFieldName = (Core.Name "move")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
@@ -904,14 +904,14 @@ closureExprWithParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 closureExprWithReturnType :: Phantoms.TTerm Syntax.ClosureExpr -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.ClosureExpr
@@ -924,14 +924,14 @@ closureExprWithReturnType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "move")})),
+              Core.projectionFieldName = (Core.Name "move")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
@@ -941,7 +941,7 @@ closureExprWithReturnType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureExpr"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 closureParam :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.ClosureParam
@@ -961,7 +961,7 @@ closureParamPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureParam"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closureParamType :: Phantoms.TTerm Syntax.ClosureParam -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -969,7 +969,7 @@ closureParamType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureParam"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closureParamWithPattern :: Phantoms.TTerm Syntax.ClosureParam -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.ClosureParam
@@ -985,7 +985,7 @@ closureParamWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureParam"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 closureParamWithType :: Phantoms.TTerm Syntax.ClosureParam -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.ClosureParam
@@ -998,7 +998,7 @@ closureParamWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ClosureParam"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1024,7 +1024,7 @@ compoundAssignExprOp x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CompoundAssignExpr"),
-        Core.projectionField = (Core.Name "op")})),
+        Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 compoundAssignExprTarget :: Phantoms.TTerm Syntax.CompoundAssignExpr -> Phantoms.TTerm Syntax.Expression
@@ -1032,7 +1032,7 @@ compoundAssignExprTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CompoundAssignExpr"),
-        Core.projectionField = (Core.Name "target")})),
+        Core.projectionFieldName = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 compoundAssignExprValue :: Phantoms.TTerm Syntax.CompoundAssignExpr -> Phantoms.TTerm Syntax.Expression
@@ -1040,7 +1040,7 @@ compoundAssignExprValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CompoundAssignExpr"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 compoundAssignExprWithOp :: Phantoms.TTerm Syntax.CompoundAssignExpr -> Phantoms.TTerm Syntax.CompoundAssignOp -> Phantoms.TTerm Syntax.CompoundAssignExpr
@@ -1053,7 +1053,7 @@ compoundAssignExprWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CompoundAssignExpr"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "op"),
@@ -1063,7 +1063,7 @@ compoundAssignExprWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CompoundAssignExpr"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 compoundAssignExprWithTarget :: Phantoms.TTerm Syntax.CompoundAssignExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.CompoundAssignExpr
@@ -1079,14 +1079,14 @@ compoundAssignExprWithTarget original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CompoundAssignExpr"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CompoundAssignExpr"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 compoundAssignExprWithValue :: Phantoms.TTerm Syntax.CompoundAssignExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.CompoundAssignExpr
@@ -1099,14 +1099,14 @@ compoundAssignExprWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CompoundAssignExpr"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "op"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.CompoundAssignExpr"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1218,7 +1218,7 @@ constDefDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constDefName :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm String
@@ -1226,7 +1226,7 @@ constDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constDefPublic :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm Bool
@@ -1234,7 +1234,7 @@ constDefPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constDefType :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm Syntax.Type
@@ -1242,7 +1242,7 @@ constDefType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constDefValue :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm Syntax.Expression
@@ -1250,7 +1250,7 @@ constDefValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 constDefWithDoc :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.ConstDef
@@ -1263,28 +1263,28 @@ constDefWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -1303,28 +1303,28 @@ constDefWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 constDefWithPublic :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ConstDef
@@ -1337,21 +1337,21 @@ constDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -1361,7 +1361,7 @@ constDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 constDefWithType :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ConstDef
@@ -1374,7 +1374,7 @@ constDefWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1384,21 +1384,21 @@ constDefWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 constDefWithValue :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.ConstDef
@@ -1411,14 +1411,14 @@ constDefWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1428,14 +1428,14 @@ constDefWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ConstDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 crate :: Phantoms.TTerm [Syntax.ItemWithComments] -> Phantoms.TTerm Syntax.Crate
@@ -1452,7 +1452,7 @@ crateItems x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Crate"),
-        Core.projectionField = (Core.Name "items")})),
+        Core.projectionFieldName = (Core.Name "items")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 crateWithItems :: Phantoms.TTerm Syntax.Crate -> Phantoms.TTerm [Syntax.ItemWithComments] -> Phantoms.TTerm Syntax.Crate
@@ -1496,7 +1496,7 @@ enumDefDerives x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-        Core.projectionField = (Core.Name "derives")})),
+        Core.projectionFieldName = (Core.Name "derives")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumDefDoc :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm (Maybe String)
@@ -1504,7 +1504,7 @@ enumDefDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumDefGenerics :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm [Syntax.GenericParam]
@@ -1512,7 +1512,7 @@ enumDefGenerics x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-        Core.projectionField = (Core.Name "generics")})),
+        Core.projectionFieldName = (Core.Name "generics")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumDefName :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm String
@@ -1520,7 +1520,7 @@ enumDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumDefPublic :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm Bool
@@ -1528,7 +1528,7 @@ enumDefPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumDefVariants :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm [Syntax.EnumVariant]
@@ -1536,7 +1536,7 @@ enumDefVariants x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-        Core.projectionField = (Core.Name "variants")})),
+        Core.projectionFieldName = (Core.Name "variants")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumDefWhereClause :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm (Maybe Syntax.WhereClause)
@@ -1544,7 +1544,7 @@ enumDefWhereClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-        Core.projectionField = (Core.Name "whereClause")})),
+        Core.projectionFieldName = (Core.Name "whereClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumDefWithDerives :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm [String] -> Phantoms.TTerm Syntax.EnumDef
@@ -1557,28 +1557,28 @@ enumDefWithDerives original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "variants")})),
+              Core.projectionFieldName = (Core.Name "variants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
@@ -1588,14 +1588,14 @@ enumDefWithDerives original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 enumDefWithDoc :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.EnumDef
@@ -1608,42 +1608,42 @@ enumDefWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "variants")})),
+              Core.projectionFieldName = (Core.Name "variants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -1659,7 +1659,7 @@ enumDefWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
@@ -1669,35 +1669,35 @@ enumDefWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "variants")})),
+              Core.projectionFieldName = (Core.Name "variants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 enumDefWithName :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.EnumDef
@@ -1713,42 +1713,42 @@ enumDefWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "variants")})),
+              Core.projectionFieldName = (Core.Name "variants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 enumDefWithPublic :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.EnumDef
@@ -1761,35 +1761,35 @@ enumDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variants"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "variants")})),
+              Core.projectionFieldName = (Core.Name "variants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -1799,7 +1799,7 @@ enumDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 enumDefWithVariants :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm [Syntax.EnumVariant] -> Phantoms.TTerm Syntax.EnumDef
@@ -1812,21 +1812,21 @@ enumDefWithVariants original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variants"),
@@ -1836,21 +1836,21 @@ enumDefWithVariants original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 enumDefWithWhereClause :: Phantoms.TTerm Syntax.EnumDef -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm Syntax.EnumDef
@@ -1863,14 +1863,14 @@ enumDefWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
@@ -1880,28 +1880,28 @@ enumDefWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "variants")})),
+              Core.projectionFieldName = (Core.Name "variants")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 enumVariant :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.EnumVariantBody -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.EnumVariant
@@ -1924,7 +1924,7 @@ enumVariantBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumVariant"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumVariantBodyStruct :: Phantoms.TTerm [Syntax.StructField] -> Phantoms.TTerm Syntax.EnumVariantBody
@@ -1956,7 +1956,7 @@ enumVariantDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumVariant"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumVariantName :: Phantoms.TTerm Syntax.EnumVariant -> Phantoms.TTerm String
@@ -1964,7 +1964,7 @@ enumVariantName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumVariant"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 enumVariantWithBody :: Phantoms.TTerm Syntax.EnumVariant -> Phantoms.TTerm Syntax.EnumVariantBody -> Phantoms.TTerm Syntax.EnumVariant
@@ -1977,7 +1977,7 @@ enumVariantWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumVariant"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -1987,7 +1987,7 @@ enumVariantWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumVariant"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 enumVariantWithDoc :: Phantoms.TTerm Syntax.EnumVariant -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.EnumVariant
@@ -2000,14 +2000,14 @@ enumVariantWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumVariant"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumVariant"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -2026,14 +2026,14 @@ enumVariantWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumVariant"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.EnumVariant"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 exprPath :: Phantoms.TTerm Bool -> Phantoms.TTerm [Syntax.PathSegment] -> Phantoms.TTerm Syntax.ExprPath
@@ -2053,7 +2053,7 @@ exprPathGlobal x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ExprPath"),
-        Core.projectionField = (Core.Name "global")})),
+        Core.projectionFieldName = (Core.Name "global")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 exprPathSegments :: Phantoms.TTerm Syntax.ExprPath -> Phantoms.TTerm [Syntax.PathSegment]
@@ -2061,7 +2061,7 @@ exprPathSegments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ExprPath"),
-        Core.projectionField = (Core.Name "segments")})),
+        Core.projectionFieldName = (Core.Name "segments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 exprPathWithGlobal :: Phantoms.TTerm Syntax.ExprPath -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ExprPath
@@ -2077,7 +2077,7 @@ exprPathWithGlobal original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ExprPath"),
-              Core.projectionField = (Core.Name "segments")})),
+              Core.projectionFieldName = (Core.Name "segments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 exprPathWithSegments :: Phantoms.TTerm Syntax.ExprPath -> Phantoms.TTerm [Syntax.PathSegment] -> Phantoms.TTerm Syntax.ExprPath
@@ -2090,7 +2090,7 @@ exprPathWithSegments original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ExprPath"),
-              Core.projectionField = (Core.Name "global")})),
+              Core.projectionFieldName = (Core.Name "global")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "segments"),
@@ -2377,7 +2377,7 @@ fieldAccessExprField x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldAccessExpr"),
-        Core.projectionField = (Core.Name "field")})),
+        Core.projectionFieldName = (Core.Name "field")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldAccessExprObject :: Phantoms.TTerm Syntax.FieldAccessExpr -> Phantoms.TTerm Syntax.Expression
@@ -2385,7 +2385,7 @@ fieldAccessExprObject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldAccessExpr"),
-        Core.projectionField = (Core.Name "object")})),
+        Core.projectionFieldName = (Core.Name "object")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldAccessExprWithField :: Phantoms.TTerm Syntax.FieldAccessExpr -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.FieldAccessExpr
@@ -2398,7 +2398,7 @@ fieldAccessExprWithField original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldAccessExpr"),
-              Core.projectionField = (Core.Name "object")})),
+              Core.projectionFieldName = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "field"),
@@ -2417,7 +2417,7 @@ fieldAccessExprWithObject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldAccessExpr"),
-              Core.projectionField = (Core.Name "field")})),
+              Core.projectionFieldName = (Core.Name "field")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldPattern :: Phantoms.TTerm String -> Phantoms.TTerm (Maybe Syntax.Pattern) -> Phantoms.TTerm Syntax.FieldPattern
@@ -2437,7 +2437,7 @@ fieldPatternName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldPattern"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldPatternPattern :: Phantoms.TTerm Syntax.FieldPattern -> Phantoms.TTerm (Maybe Syntax.Pattern)
@@ -2445,7 +2445,7 @@ fieldPatternPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldPattern"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldPatternWithName :: Phantoms.TTerm Syntax.FieldPattern -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.FieldPattern
@@ -2461,7 +2461,7 @@ fieldPatternWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldPattern"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldPatternWithPattern :: Phantoms.TTerm Syntax.FieldPattern -> Phantoms.TTerm (Maybe Syntax.Pattern) -> Phantoms.TTerm Syntax.FieldPattern
@@ -2474,7 +2474,7 @@ fieldPatternWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldPattern"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
@@ -2497,7 +2497,7 @@ fieldValueName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldValue"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldValueValue :: Phantoms.TTerm Syntax.FieldValue -> Phantoms.TTerm (Maybe Syntax.Expression)
@@ -2505,7 +2505,7 @@ fieldValueValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldValue"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldValueWithName :: Phantoms.TTerm Syntax.FieldValue -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.FieldValue
@@ -2521,7 +2521,7 @@ fieldValueWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldValue"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldValueWithValue :: Phantoms.TTerm Syntax.FieldValue -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.FieldValue
@@ -2534,7 +2534,7 @@ fieldValueWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FieldValue"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -2557,7 +2557,7 @@ floatLiteralSuffix x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FloatLiteral"),
-        Core.projectionField = (Core.Name "suffix")})),
+        Core.projectionFieldName = (Core.Name "suffix")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 floatLiteralValue :: Phantoms.TTerm Syntax.FloatLiteral -> Phantoms.TTerm Double
@@ -2565,7 +2565,7 @@ floatLiteralValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FloatLiteral"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 floatLiteralWithSuffix :: Phantoms.TTerm Syntax.FloatLiteral -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.FloatLiteral
@@ -2578,7 +2578,7 @@ floatLiteralWithSuffix original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FloatLiteral"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "suffix"),
@@ -2597,7 +2597,7 @@ floatLiteralWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FloatLiteral"),
-              Core.projectionField = (Core.Name "suffix")})),
+              Core.projectionFieldName = (Core.Name "suffix")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDef :: Phantoms.TTerm String -> Phantoms.TTerm [Syntax.GenericParam] -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm [Syntax.FnParam] -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.FnDef
@@ -2644,7 +2644,7 @@ fnDefAsync x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "async")})),
+        Core.projectionFieldName = (Core.Name "async")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefBody :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm Syntax.Block
@@ -2652,7 +2652,7 @@ fnDefBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefConst :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm Bool
@@ -2660,7 +2660,7 @@ fnDefConst x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "const")})),
+        Core.projectionFieldName = (Core.Name "const")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefDoc :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm (Maybe String)
@@ -2668,7 +2668,7 @@ fnDefDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefGenerics :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm [Syntax.GenericParam]
@@ -2676,7 +2676,7 @@ fnDefGenerics x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "generics")})),
+        Core.projectionFieldName = (Core.Name "generics")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefName :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm String
@@ -2684,7 +2684,7 @@ fnDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefParams :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm [Syntax.FnParam]
@@ -2692,7 +2692,7 @@ fnDefParams x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "params")})),
+        Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefPublic :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm Bool
@@ -2700,7 +2700,7 @@ fnDefPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefReturnType :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -2708,7 +2708,7 @@ fnDefReturnType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "returnType")})),
+        Core.projectionFieldName = (Core.Name "returnType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefUnsafe :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm Bool
@@ -2716,7 +2716,7 @@ fnDefUnsafe x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "unsafe")})),
+        Core.projectionFieldName = (Core.Name "unsafe")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefWhereClause :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm (Maybe Syntax.WhereClause)
@@ -2724,7 +2724,7 @@ fnDefWhereClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-        Core.projectionField = (Core.Name "whereClause")})),
+        Core.projectionFieldName = (Core.Name "whereClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnDefWithAsync :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.FnDef
@@ -2737,49 +2737,49 @@ fnDefWithAsync original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
@@ -2789,21 +2789,21 @@ fnDefWithAsync original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDefWithBody :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.FnDef
@@ -2816,35 +2816,35 @@ fnDefWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -2854,35 +2854,35 @@ fnDefWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDefWithConst :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.FnDef
@@ -2895,56 +2895,56 @@ fnDefWithConst original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
@@ -2954,14 +2954,14 @@ fnDefWithConst original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDefWithDoc :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.FnDef
@@ -2974,70 +2974,70 @@ fnDefWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -3053,7 +3053,7 @@ fnDefWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
@@ -3063,63 +3063,63 @@ fnDefWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDefWithName :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.FnDef
@@ -3135,70 +3135,70 @@ fnDefWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDefWithParams :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm [Syntax.FnParam] -> Phantoms.TTerm Syntax.FnDef
@@ -3211,21 +3211,21 @@ fnDefWithParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
@@ -3235,49 +3235,49 @@ fnDefWithParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDefWithPublic :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.FnDef
@@ -3290,42 +3290,42 @@ fnDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -3335,28 +3335,28 @@ fnDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDefWithReturnType :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.FnDef
@@ -3369,28 +3369,28 @@ fnDefWithReturnType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
@@ -3400,42 +3400,42 @@ fnDefWithReturnType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDefWithUnsafe :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.FnDef
@@ -3448,63 +3448,63 @@ fnDefWithUnsafe original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
@@ -3514,7 +3514,7 @@ fnDefWithUnsafe original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnDefWithWhereClause :: Phantoms.TTerm Syntax.FnDef -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm Syntax.FnDef
@@ -3527,14 +3527,14 @@ fnDefWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
@@ -3544,56 +3544,56 @@ fnDefWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "async"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "async")})),
+              Core.projectionFieldName = (Core.Name "async")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "const"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "const")})),
+              Core.projectionFieldName = (Core.Name "const")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnParam :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.FnParam
@@ -3613,7 +3613,7 @@ fnParamPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnParam"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnParamType :: Phantoms.TTerm Syntax.FnParam -> Phantoms.TTerm Syntax.Type
@@ -3621,7 +3621,7 @@ fnParamType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnParam"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnParamWithPattern :: Phantoms.TTerm Syntax.FnParam -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.FnParam
@@ -3637,7 +3637,7 @@ fnParamWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnParam"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnParamWithType :: Phantoms.TTerm Syntax.FnParam -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.FnParam
@@ -3650,7 +3650,7 @@ fnParamWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnParam"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -3673,7 +3673,7 @@ fnPointerTypeParams x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnPointerType"),
-        Core.projectionField = (Core.Name "params")})),
+        Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnPointerTypeReturnType :: Phantoms.TTerm Syntax.FnPointerType -> Phantoms.TTerm Syntax.Type
@@ -3681,7 +3681,7 @@ fnPointerTypeReturnType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnPointerType"),
-        Core.projectionField = (Core.Name "returnType")})),
+        Core.projectionFieldName = (Core.Name "returnType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fnPointerTypeWithParams :: Phantoms.TTerm Syntax.FnPointerType -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.FnPointerType
@@ -3697,7 +3697,7 @@ fnPointerTypeWithParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnPointerType"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fnPointerTypeWithReturnType :: Phantoms.TTerm Syntax.FnPointerType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.FnPointerType
@@ -3710,7 +3710,7 @@ fnPointerTypeWithReturnType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.FnPointerType"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
@@ -3739,7 +3739,7 @@ forExprBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forExprIter :: Phantoms.TTerm Syntax.ForExpr -> Phantoms.TTerm Syntax.Expression
@@ -3747,7 +3747,7 @@ forExprIter x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-        Core.projectionField = (Core.Name "iter")})),
+        Core.projectionFieldName = (Core.Name "iter")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forExprLabel :: Phantoms.TTerm Syntax.ForExpr -> Phantoms.TTerm (Maybe String)
@@ -3755,7 +3755,7 @@ forExprLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forExprPattern :: Phantoms.TTerm Syntax.ForExpr -> Phantoms.TTerm Syntax.Pattern
@@ -3763,7 +3763,7 @@ forExprPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forExprWithBody :: Phantoms.TTerm Syntax.ForExpr -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.ForExpr
@@ -3776,21 +3776,21 @@ forExprWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "iter"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "iter")})),
+              Core.projectionFieldName = (Core.Name "iter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -3806,14 +3806,14 @@ forExprWithIter original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "iter"),
@@ -3823,7 +3823,7 @@ forExprWithIter original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 forExprWithLabel :: Phantoms.TTerm Syntax.ForExpr -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.ForExpr
@@ -3839,21 +3839,21 @@ forExprWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "iter"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "iter")})),
+              Core.projectionFieldName = (Core.Name "iter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 forExprWithPattern :: Phantoms.TTerm Syntax.ForExpr -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.ForExpr
@@ -3866,7 +3866,7 @@ forExprWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
@@ -3876,14 +3876,14 @@ forExprWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "iter")})),
+              Core.projectionFieldName = (Core.Name "iter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ForExpr"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 genericArgBinding :: Phantoms.TTerm Syntax.TypeBinding -> Phantoms.TTerm Syntax.GenericArg
@@ -3959,7 +3959,7 @@ genericParamBounds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.GenericParam"),
-        Core.projectionField = (Core.Name "bounds")})),
+        Core.projectionFieldName = (Core.Name "bounds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 genericParamName :: Phantoms.TTerm Syntax.GenericParam -> Phantoms.TTerm String
@@ -3967,7 +3967,7 @@ genericParamName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.GenericParam"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 genericParamWithBounds :: Phantoms.TTerm Syntax.GenericParam -> Phantoms.TTerm [Syntax.TypeParamBound] -> Phantoms.TTerm Syntax.GenericParam
@@ -3980,7 +3980,7 @@ genericParamWithBounds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.GenericParam"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bounds"),
@@ -3999,7 +3999,7 @@ genericParamWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.GenericParam"),
-              Core.projectionField = (Core.Name "bounds")})),
+              Core.projectionFieldName = (Core.Name "bounds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 identifierPattern :: Phantoms.TTerm String -> Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe Syntax.Pattern) -> Phantoms.TTerm Syntax.IdentifierPattern
@@ -4022,7 +4022,7 @@ identifierPatternAtPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IdentifierPattern"),
-        Core.projectionField = (Core.Name "atPattern")})),
+        Core.projectionFieldName = (Core.Name "atPattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 identifierPatternMutable :: Phantoms.TTerm Syntax.IdentifierPattern -> Phantoms.TTerm Bool
@@ -4030,7 +4030,7 @@ identifierPatternMutable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IdentifierPattern"),
-        Core.projectionField = (Core.Name "mutable")})),
+        Core.projectionFieldName = (Core.Name "mutable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 identifierPatternName :: Phantoms.TTerm Syntax.IdentifierPattern -> Phantoms.TTerm String
@@ -4038,7 +4038,7 @@ identifierPatternName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IdentifierPattern"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 identifierPatternWithAtPattern :: Phantoms.TTerm Syntax.IdentifierPattern -> Phantoms.TTerm (Maybe Syntax.Pattern) -> Phantoms.TTerm Syntax.IdentifierPattern
@@ -4051,14 +4051,14 @@ identifierPatternWithAtPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IdentifierPattern"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IdentifierPattern"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "atPattern"),
@@ -4074,7 +4074,7 @@ identifierPatternWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IdentifierPattern"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
@@ -4084,7 +4084,7 @@ identifierPatternWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IdentifierPattern"),
-              Core.projectionField = (Core.Name "atPattern")})),
+              Core.projectionFieldName = (Core.Name "atPattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 identifierPatternWithName :: Phantoms.TTerm Syntax.IdentifierPattern -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.IdentifierPattern
@@ -4100,14 +4100,14 @@ identifierPatternWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IdentifierPattern"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "atPattern"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IdentifierPattern"),
-              Core.projectionField = (Core.Name "atPattern")})),
+              Core.projectionFieldName = (Core.Name "atPattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 ifConditionBool :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.IfCondition
@@ -4146,7 +4146,7 @@ ifExprCondition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IfExpr"),
-        Core.projectionField = (Core.Name "condition")})),
+        Core.projectionFieldName = (Core.Name "condition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ifExprElseBranch :: Phantoms.TTerm Syntax.IfExpr -> Phantoms.TTerm (Maybe Syntax.Expression)
@@ -4154,7 +4154,7 @@ ifExprElseBranch x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IfExpr"),
-        Core.projectionField = (Core.Name "elseBranch")})),
+        Core.projectionFieldName = (Core.Name "elseBranch")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ifExprThenBlock :: Phantoms.TTerm Syntax.IfExpr -> Phantoms.TTerm Syntax.Block
@@ -4162,7 +4162,7 @@ ifExprThenBlock x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IfExpr"),
-        Core.projectionField = (Core.Name "thenBlock")})),
+        Core.projectionFieldName = (Core.Name "thenBlock")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ifExprWithCondition :: Phantoms.TTerm Syntax.IfExpr -> Phantoms.TTerm Syntax.IfCondition -> Phantoms.TTerm Syntax.IfExpr
@@ -4178,14 +4178,14 @@ ifExprWithCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IfExpr"),
-              Core.projectionField = (Core.Name "thenBlock")})),
+              Core.projectionFieldName = (Core.Name "thenBlock")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elseBranch"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IfExpr"),
-              Core.projectionField = (Core.Name "elseBranch")})),
+              Core.projectionFieldName = (Core.Name "elseBranch")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 ifExprWithElseBranch :: Phantoms.TTerm Syntax.IfExpr -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.IfExpr
@@ -4198,14 +4198,14 @@ ifExprWithElseBranch original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IfExpr"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thenBlock"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IfExpr"),
-              Core.projectionField = (Core.Name "thenBlock")})),
+              Core.projectionFieldName = (Core.Name "thenBlock")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elseBranch"),
@@ -4221,7 +4221,7 @@ ifExprWithThenBlock original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IfExpr"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "thenBlock"),
@@ -4231,7 +4231,7 @@ ifExprWithThenBlock original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IfExpr"),
-              Core.projectionField = (Core.Name "elseBranch")})),
+              Core.projectionFieldName = (Core.Name "elseBranch")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implBlock :: Phantoms.TTerm [Syntax.GenericParam] -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm (Maybe Syntax.TypePath) -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm [Syntax.ImplItem] -> Phantoms.TTerm Syntax.ImplBlock
@@ -4263,7 +4263,7 @@ implBlockGenerics x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-        Core.projectionField = (Core.Name "generics")})),
+        Core.projectionFieldName = (Core.Name "generics")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implBlockItems :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm [Syntax.ImplItem]
@@ -4271,7 +4271,7 @@ implBlockItems x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-        Core.projectionField = (Core.Name "items")})),
+        Core.projectionFieldName = (Core.Name "items")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implBlockNegative :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm Bool
@@ -4279,7 +4279,7 @@ implBlockNegative x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-        Core.projectionField = (Core.Name "negative")})),
+        Core.projectionFieldName = (Core.Name "negative")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implBlockSelfType :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm Syntax.Type
@@ -4287,7 +4287,7 @@ implBlockSelfType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-        Core.projectionField = (Core.Name "selfType")})),
+        Core.projectionFieldName = (Core.Name "selfType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implBlockTrait :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm (Maybe Syntax.TypePath)
@@ -4295,7 +4295,7 @@ implBlockTrait x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-        Core.projectionField = (Core.Name "trait")})),
+        Core.projectionFieldName = (Core.Name "trait")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implBlockWhereClause :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm (Maybe Syntax.WhereClause)
@@ -4303,7 +4303,7 @@ implBlockWhereClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-        Core.projectionField = (Core.Name "whereClause")})),
+        Core.projectionFieldName = (Core.Name "whereClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implBlockWithGenerics :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm [Syntax.GenericParam] -> Phantoms.TTerm Syntax.ImplBlock
@@ -4319,35 +4319,35 @@ implBlockWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trait"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "trait")})),
+              Core.projectionFieldName = (Core.Name "trait")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "negative"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "negative")})),
+              Core.projectionFieldName = (Core.Name "negative")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "selfType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "selfType")})),
+              Core.projectionFieldName = (Core.Name "selfType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implBlockWithItems :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm [Syntax.ImplItem] -> Phantoms.TTerm Syntax.ImplBlock
@@ -4360,35 +4360,35 @@ implBlockWithItems original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trait"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "trait")})),
+              Core.projectionFieldName = (Core.Name "trait")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "negative"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "negative")})),
+              Core.projectionFieldName = (Core.Name "negative")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "selfType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "selfType")})),
+              Core.projectionFieldName = (Core.Name "selfType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
@@ -4404,21 +4404,21 @@ implBlockWithNegative original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trait"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "trait")})),
+              Core.projectionFieldName = (Core.Name "trait")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "negative"),
@@ -4428,14 +4428,14 @@ implBlockWithNegative original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "selfType")})),
+              Core.projectionFieldName = (Core.Name "selfType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implBlockWithSelfType :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ImplBlock
@@ -4448,28 +4448,28 @@ implBlockWithSelfType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trait"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "trait")})),
+              Core.projectionFieldName = (Core.Name "trait")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "negative"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "negative")})),
+              Core.projectionFieldName = (Core.Name "negative")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "selfType"),
@@ -4479,7 +4479,7 @@ implBlockWithSelfType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implBlockWithTrait :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm (Maybe Syntax.TypePath) -> Phantoms.TTerm Syntax.ImplBlock
@@ -4492,14 +4492,14 @@ implBlockWithTrait original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trait"),
@@ -4509,21 +4509,21 @@ implBlockWithTrait original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "negative")})),
+              Core.projectionFieldName = (Core.Name "negative")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "selfType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "selfType")})),
+              Core.projectionFieldName = (Core.Name "selfType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implBlockWithWhereClause :: Phantoms.TTerm Syntax.ImplBlock -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm Syntax.ImplBlock
@@ -4536,7 +4536,7 @@ implBlockWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
@@ -4546,28 +4546,28 @@ implBlockWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "trait")})),
+              Core.projectionFieldName = (Core.Name "trait")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "negative"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "negative")})),
+              Core.projectionFieldName = (Core.Name "negative")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "selfType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "selfType")})),
+              Core.projectionFieldName = (Core.Name "selfType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplBlock"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implItemConst :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm Syntax.ImplItem
@@ -4632,7 +4632,7 @@ implMethodBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implMethodDefault :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm Bool
@@ -4640,7 +4640,7 @@ implMethodDefault x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-        Core.projectionField = (Core.Name "default")})),
+        Core.projectionFieldName = (Core.Name "default")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implMethodDoc :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm (Maybe String)
@@ -4648,7 +4648,7 @@ implMethodDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implMethodGenerics :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm [Syntax.GenericParam]
@@ -4656,7 +4656,7 @@ implMethodGenerics x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-        Core.projectionField = (Core.Name "generics")})),
+        Core.projectionFieldName = (Core.Name "generics")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implMethodName :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm String
@@ -4664,7 +4664,7 @@ implMethodName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implMethodParams :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm [Syntax.MethodParam]
@@ -4672,7 +4672,7 @@ implMethodParams x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-        Core.projectionField = (Core.Name "params")})),
+        Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implMethodPublic :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm Bool
@@ -4680,7 +4680,7 @@ implMethodPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implMethodReturnType :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -4688,7 +4688,7 @@ implMethodReturnType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-        Core.projectionField = (Core.Name "returnType")})),
+        Core.projectionFieldName = (Core.Name "returnType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implMethodWhereClause :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm (Maybe Syntax.WhereClause)
@@ -4696,7 +4696,7 @@ implMethodWhereClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-        Core.projectionField = (Core.Name "whereClause")})),
+        Core.projectionFieldName = (Core.Name "whereClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 implMethodWithBody :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.ImplMethod
@@ -4709,35 +4709,35 @@ implMethodWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -4747,21 +4747,21 @@ implMethodWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implMethodWithDefault :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ImplMethod
@@ -4774,49 +4774,49 @@ implMethodWithDefault original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
@@ -4826,7 +4826,7 @@ implMethodWithDefault original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implMethodWithDoc :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.ImplMethod
@@ -4839,56 +4839,56 @@ implMethodWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -4904,7 +4904,7 @@ implMethodWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
@@ -4914,49 +4914,49 @@ implMethodWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implMethodWithName :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.ImplMethod
@@ -4972,56 +4972,56 @@ implMethodWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implMethodWithParams :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm [Syntax.MethodParam] -> Phantoms.TTerm Syntax.ImplMethod
@@ -5034,21 +5034,21 @@ implMethodWithParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
@@ -5058,35 +5058,35 @@ implMethodWithParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implMethodWithPublic :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ImplMethod
@@ -5099,42 +5099,42 @@ implMethodWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -5144,14 +5144,14 @@ implMethodWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implMethodWithReturnType :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.ImplMethod
@@ -5164,28 +5164,28 @@ implMethodWithReturnType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
@@ -5195,28 +5195,28 @@ implMethodWithReturnType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 implMethodWithWhereClause :: Phantoms.TTerm Syntax.ImplMethod -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm Syntax.ImplMethod
@@ -5229,14 +5229,14 @@ implMethodWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
@@ -5246,42 +5246,42 @@ implMethodWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ImplMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 indexExpr :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.IndexExpr
@@ -5301,7 +5301,7 @@ indexExprIndex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IndexExpr"),
-        Core.projectionField = (Core.Name "index")})),
+        Core.projectionFieldName = (Core.Name "index")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 indexExprObject :: Phantoms.TTerm Syntax.IndexExpr -> Phantoms.TTerm Syntax.Expression
@@ -5309,7 +5309,7 @@ indexExprObject x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IndexExpr"),
-        Core.projectionField = (Core.Name "object")})),
+        Core.projectionFieldName = (Core.Name "object")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 indexExprWithIndex :: Phantoms.TTerm Syntax.IndexExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.IndexExpr
@@ -5322,7 +5322,7 @@ indexExprWithIndex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IndexExpr"),
-              Core.projectionField = (Core.Name "object")})),
+              Core.projectionFieldName = (Core.Name "object")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "index"),
@@ -5341,7 +5341,7 @@ indexExprWithObject original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IndexExpr"),
-              Core.projectionField = (Core.Name "index")})),
+              Core.projectionFieldName = (Core.Name "index")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 integerLiteral :: Phantoms.TTerm Integer -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.IntegerLiteral
@@ -5361,7 +5361,7 @@ integerLiteralSuffix x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IntegerLiteral"),
-        Core.projectionField = (Core.Name "suffix")})),
+        Core.projectionFieldName = (Core.Name "suffix")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integerLiteralValue :: Phantoms.TTerm Syntax.IntegerLiteral -> Phantoms.TTerm Integer
@@ -5369,7 +5369,7 @@ integerLiteralValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IntegerLiteral"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integerLiteralWithSuffix :: Phantoms.TTerm Syntax.IntegerLiteral -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.IntegerLiteral
@@ -5382,7 +5382,7 @@ integerLiteralWithSuffix original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IntegerLiteral"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "suffix"),
@@ -5401,7 +5401,7 @@ integerLiteralWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.IntegerLiteral"),
-              Core.projectionField = (Core.Name "suffix")})),
+              Core.projectionFieldName = (Core.Name "suffix")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 itemConst :: Phantoms.TTerm Syntax.ConstDef -> Phantoms.TTerm Syntax.Item
@@ -5512,7 +5512,7 @@ itemWithCommentsDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ItemWithComments"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 itemWithCommentsItem :: Phantoms.TTerm Syntax.ItemWithComments -> Phantoms.TTerm Syntax.Item
@@ -5520,7 +5520,7 @@ itemWithCommentsItem x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ItemWithComments"),
-        Core.projectionField = (Core.Name "item")})),
+        Core.projectionFieldName = (Core.Name "item")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 itemWithCommentsVisibility :: Phantoms.TTerm Syntax.ItemWithComments -> Phantoms.TTerm Syntax.Visibility
@@ -5528,7 +5528,7 @@ itemWithCommentsVisibility x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ItemWithComments"),
-        Core.projectionField = (Core.Name "visibility")})),
+        Core.projectionFieldName = (Core.Name "visibility")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 itemWithCommentsWithDoc :: Phantoms.TTerm Syntax.ItemWithComments -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.ItemWithComments
@@ -5544,14 +5544,14 @@ itemWithCommentsWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ItemWithComments"),
-              Core.projectionField = (Core.Name "visibility")})),
+              Core.projectionFieldName = (Core.Name "visibility")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "item"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ItemWithComments"),
-              Core.projectionField = (Core.Name "item")})),
+              Core.projectionFieldName = (Core.Name "item")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 itemWithCommentsWithItem :: Phantoms.TTerm Syntax.ItemWithComments -> Phantoms.TTerm Syntax.Item -> Phantoms.TTerm Syntax.ItemWithComments
@@ -5564,14 +5564,14 @@ itemWithCommentsWithItem original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ItemWithComments"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "visibility"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ItemWithComments"),
-              Core.projectionField = (Core.Name "visibility")})),
+              Core.projectionFieldName = (Core.Name "visibility")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "item"),
@@ -5587,7 +5587,7 @@ itemWithCommentsWithVisibility original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ItemWithComments"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "visibility"),
@@ -5597,7 +5597,7 @@ itemWithCommentsWithVisibility original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ItemWithComments"),
-              Core.projectionField = (Core.Name "item")})),
+              Core.projectionFieldName = (Core.Name "item")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letCondition :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.LetCondition
@@ -5617,7 +5617,7 @@ letConditionExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetCondition"),
-        Core.projectionField = (Core.Name "expr")})),
+        Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letConditionPattern :: Phantoms.TTerm Syntax.LetCondition -> Phantoms.TTerm Syntax.Pattern
@@ -5625,7 +5625,7 @@ letConditionPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetCondition"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letConditionWithExpr :: Phantoms.TTerm Syntax.LetCondition -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.LetCondition
@@ -5638,7 +5638,7 @@ letConditionWithExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetCondition"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
@@ -5657,7 +5657,7 @@ letConditionWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetCondition"),
-              Core.projectionField = (Core.Name "expr")})),
+              Core.projectionFieldName = (Core.Name "expr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letStatement :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.LetStatement
@@ -5683,7 +5683,7 @@ letStatementInit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-        Core.projectionField = (Core.Name "init")})),
+        Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letStatementMutable :: Phantoms.TTerm Syntax.LetStatement -> Phantoms.TTerm Bool
@@ -5691,7 +5691,7 @@ letStatementMutable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-        Core.projectionField = (Core.Name "mutable")})),
+        Core.projectionFieldName = (Core.Name "mutable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letStatementPattern :: Phantoms.TTerm Syntax.LetStatement -> Phantoms.TTerm Syntax.Pattern
@@ -5699,7 +5699,7 @@ letStatementPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letStatementType :: Phantoms.TTerm Syntax.LetStatement -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -5707,7 +5707,7 @@ letStatementType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letStatementWithInit :: Phantoms.TTerm Syntax.LetStatement -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.LetStatement
@@ -5720,21 +5720,21 @@ letStatementWithInit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "init"),
@@ -5750,7 +5750,7 @@ letStatementWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
@@ -5760,14 +5760,14 @@ letStatementWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "init"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letStatementWithPattern :: Phantoms.TTerm Syntax.LetStatement -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.LetStatement
@@ -5783,21 +5783,21 @@ letStatementWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "init"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letStatementWithType :: Phantoms.TTerm Syntax.LetStatement -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.LetStatement
@@ -5810,14 +5810,14 @@ letStatementWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -5827,7 +5827,7 @@ letStatementWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LetStatement"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 lifetime :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Lifetime
@@ -5844,7 +5844,7 @@ lifetimeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.Lifetime"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 lifetimeWithName :: Phantoms.TTerm Syntax.Lifetime -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.Lifetime
@@ -5937,7 +5937,7 @@ loopExprBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LoopExpr"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 loopExprLabel :: Phantoms.TTerm Syntax.LoopExpr -> Phantoms.TTerm (Maybe String)
@@ -5945,7 +5945,7 @@ loopExprLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LoopExpr"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 loopExprWithBody :: Phantoms.TTerm Syntax.LoopExpr -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.LoopExpr
@@ -5958,7 +5958,7 @@ loopExprWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LoopExpr"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -5977,7 +5977,7 @@ loopExprWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.LoopExpr"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 macroDelimiterBrace :: Phantoms.TTerm Syntax.MacroDelimiter
@@ -6024,7 +6024,7 @@ macroInvocationDelimiter x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MacroInvocation"),
-        Core.projectionField = (Core.Name "delimiter")})),
+        Core.projectionFieldName = (Core.Name "delimiter")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 macroInvocationPath :: Phantoms.TTerm Syntax.MacroInvocation -> Phantoms.TTerm [String]
@@ -6032,7 +6032,7 @@ macroInvocationPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MacroInvocation"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 macroInvocationTokens :: Phantoms.TTerm Syntax.MacroInvocation -> Phantoms.TTerm String
@@ -6040,7 +6040,7 @@ macroInvocationTokens x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MacroInvocation"),
-        Core.projectionField = (Core.Name "tokens")})),
+        Core.projectionFieldName = (Core.Name "tokens")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 macroInvocationWithDelimiter :: Phantoms.TTerm Syntax.MacroInvocation -> Phantoms.TTerm Syntax.MacroDelimiter -> Phantoms.TTerm Syntax.MacroInvocation
@@ -6053,7 +6053,7 @@ macroInvocationWithDelimiter original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MacroInvocation"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "delimiter"),
@@ -6063,7 +6063,7 @@ macroInvocationWithDelimiter original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MacroInvocation"),
-              Core.projectionField = (Core.Name "tokens")})),
+              Core.projectionFieldName = (Core.Name "tokens")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 macroInvocationWithPath :: Phantoms.TTerm Syntax.MacroInvocation -> Phantoms.TTerm [String] -> Phantoms.TTerm Syntax.MacroInvocation
@@ -6079,14 +6079,14 @@ macroInvocationWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MacroInvocation"),
-              Core.projectionField = (Core.Name "delimiter")})),
+              Core.projectionFieldName = (Core.Name "delimiter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tokens"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MacroInvocation"),
-              Core.projectionField = (Core.Name "tokens")})),
+              Core.projectionFieldName = (Core.Name "tokens")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 macroInvocationWithTokens :: Phantoms.TTerm Syntax.MacroInvocation -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.MacroInvocation
@@ -6099,14 +6099,14 @@ macroInvocationWithTokens original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MacroInvocation"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "delimiter"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MacroInvocation"),
-              Core.projectionField = (Core.Name "delimiter")})),
+              Core.projectionFieldName = (Core.Name "delimiter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tokens"),
@@ -6132,7 +6132,7 @@ matchArmBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchArm"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchArmGuard :: Phantoms.TTerm Syntax.MatchArm -> Phantoms.TTerm (Maybe Syntax.Expression)
@@ -6140,7 +6140,7 @@ matchArmGuard x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchArm"),
-        Core.projectionField = (Core.Name "guard")})),
+        Core.projectionFieldName = (Core.Name "guard")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchArmPattern :: Phantoms.TTerm Syntax.MatchArm -> Phantoms.TTerm Syntax.Pattern
@@ -6148,7 +6148,7 @@ matchArmPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchArm"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchArmWithBody :: Phantoms.TTerm Syntax.MatchArm -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.MatchArm
@@ -6161,14 +6161,14 @@ matchArmWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchArm"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guard"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchArm"),
-              Core.projectionField = (Core.Name "guard")})),
+              Core.projectionFieldName = (Core.Name "guard")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -6184,7 +6184,7 @@ matchArmWithGuard original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchArm"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "guard"),
@@ -6194,7 +6194,7 @@ matchArmWithGuard original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchArm"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 matchArmWithPattern :: Phantoms.TTerm Syntax.MatchArm -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.MatchArm
@@ -6210,14 +6210,14 @@ matchArmWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchArm"),
-              Core.projectionField = (Core.Name "guard")})),
+              Core.projectionFieldName = (Core.Name "guard")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchArm"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 matchExpr :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm [Syntax.MatchArm] -> Phantoms.TTerm Syntax.MatchExpr
@@ -6237,7 +6237,7 @@ matchExprArms x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchExpr"),
-        Core.projectionField = (Core.Name "arms")})),
+        Core.projectionFieldName = (Core.Name "arms")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchExprScrutinee :: Phantoms.TTerm Syntax.MatchExpr -> Phantoms.TTerm Syntax.Expression
@@ -6245,7 +6245,7 @@ matchExprScrutinee x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchExpr"),
-        Core.projectionField = (Core.Name "scrutinee")})),
+        Core.projectionFieldName = (Core.Name "scrutinee")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 matchExprWithArms :: Phantoms.TTerm Syntax.MatchExpr -> Phantoms.TTerm [Syntax.MatchArm] -> Phantoms.TTerm Syntax.MatchExpr
@@ -6258,7 +6258,7 @@ matchExprWithArms original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchExpr"),
-              Core.projectionField = (Core.Name "scrutinee")})),
+              Core.projectionFieldName = (Core.Name "scrutinee")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arms"),
@@ -6277,7 +6277,7 @@ matchExprWithScrutinee original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MatchExpr"),
-              Core.projectionField = (Core.Name "arms")})),
+              Core.projectionFieldName = (Core.Name "arms")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 methodCallExpr :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm String -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.MethodCallExpr
@@ -6303,7 +6303,7 @@ methodCallExprArgs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-        Core.projectionField = (Core.Name "args")})),
+        Core.projectionFieldName = (Core.Name "args")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 methodCallExprMethod :: Phantoms.TTerm Syntax.MethodCallExpr -> Phantoms.TTerm String
@@ -6311,7 +6311,7 @@ methodCallExprMethod x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-        Core.projectionField = (Core.Name "method")})),
+        Core.projectionFieldName = (Core.Name "method")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 methodCallExprReceiver :: Phantoms.TTerm Syntax.MethodCallExpr -> Phantoms.TTerm Syntax.Expression
@@ -6319,7 +6319,7 @@ methodCallExprReceiver x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-        Core.projectionField = (Core.Name "receiver")})),
+        Core.projectionFieldName = (Core.Name "receiver")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 methodCallExprTurbofish :: Phantoms.TTerm Syntax.MethodCallExpr -> Phantoms.TTerm [Syntax.Type]
@@ -6327,7 +6327,7 @@ methodCallExprTurbofish x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-        Core.projectionField = (Core.Name "turbofish")})),
+        Core.projectionFieldName = (Core.Name "turbofish")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 methodCallExprWithArgs :: Phantoms.TTerm Syntax.MethodCallExpr -> Phantoms.TTerm [Syntax.Expression] -> Phantoms.TTerm Syntax.MethodCallExpr
@@ -6340,21 +6340,21 @@ methodCallExprWithArgs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "receiver")})),
+              Core.projectionFieldName = (Core.Name "receiver")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "method"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "method")})),
+              Core.projectionFieldName = (Core.Name "method")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "turbofish"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "turbofish")})),
+              Core.projectionFieldName = (Core.Name "turbofish")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "args"),
@@ -6370,7 +6370,7 @@ methodCallExprWithMethod original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "receiver")})),
+              Core.projectionFieldName = (Core.Name "receiver")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "method"),
@@ -6380,14 +6380,14 @@ methodCallExprWithMethod original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "turbofish")})),
+              Core.projectionFieldName = (Core.Name "turbofish")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "args")})),
+              Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 methodCallExprWithReceiver :: Phantoms.TTerm Syntax.MethodCallExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.MethodCallExpr
@@ -6403,21 +6403,21 @@ methodCallExprWithReceiver original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "method")})),
+              Core.projectionFieldName = (Core.Name "method")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "turbofish"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "turbofish")})),
+              Core.projectionFieldName = (Core.Name "turbofish")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "args"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "args")})),
+              Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 methodCallExprWithTurbofish :: Phantoms.TTerm Syntax.MethodCallExpr -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.MethodCallExpr
@@ -6430,14 +6430,14 @@ methodCallExprWithTurbofish original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "receiver")})),
+              Core.projectionFieldName = (Core.Name "receiver")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "method"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "method")})),
+              Core.projectionFieldName = (Core.Name "method")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "turbofish"),
@@ -6447,7 +6447,7 @@ methodCallExprWithTurbofish original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.MethodCallExpr"),
-              Core.projectionField = (Core.Name "args")})),
+              Core.projectionFieldName = (Core.Name "args")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 methodParamRegular :: Phantoms.TTerm Syntax.FnParam -> Phantoms.TTerm Syntax.MethodParam
@@ -6489,7 +6489,7 @@ modDefBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 modDefDoc :: Phantoms.TTerm Syntax.ModDef -> Phantoms.TTerm (Maybe String)
@@ -6497,7 +6497,7 @@ modDefDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 modDefName :: Phantoms.TTerm Syntax.ModDef -> Phantoms.TTerm String
@@ -6505,7 +6505,7 @@ modDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 modDefPublic :: Phantoms.TTerm Syntax.ModDef -> Phantoms.TTerm Bool
@@ -6513,7 +6513,7 @@ modDefPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 modDefWithBody :: Phantoms.TTerm Syntax.ModDef -> Phantoms.TTerm (Maybe [Syntax.Item]) -> Phantoms.TTerm Syntax.ModDef
@@ -6526,7 +6526,7 @@ modDefWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -6536,14 +6536,14 @@ modDefWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 modDefWithDoc :: Phantoms.TTerm Syntax.ModDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.ModDef
@@ -6556,21 +6556,21 @@ modDefWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -6589,21 +6589,21 @@ modDefWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 modDefWithPublic :: Phantoms.TTerm Syntax.ModDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ModDef
@@ -6616,14 +6616,14 @@ modDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -6633,7 +6633,7 @@ modDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ModDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parenthesizedArgs :: Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.ParenthesizedArgs
@@ -6653,7 +6653,7 @@ parenthesizedArgsInputs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ParenthesizedArgs"),
-        Core.projectionField = (Core.Name "inputs")})),
+        Core.projectionFieldName = (Core.Name "inputs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parenthesizedArgsOutput :: Phantoms.TTerm Syntax.ParenthesizedArgs -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -6661,7 +6661,7 @@ parenthesizedArgsOutput x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ParenthesizedArgs"),
-        Core.projectionField = (Core.Name "output")})),
+        Core.projectionFieldName = (Core.Name "output")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parenthesizedArgsWithInputs :: Phantoms.TTerm Syntax.ParenthesizedArgs -> Phantoms.TTerm [Syntax.Type] -> Phantoms.TTerm Syntax.ParenthesizedArgs
@@ -6677,7 +6677,7 @@ parenthesizedArgsWithInputs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ParenthesizedArgs"),
-              Core.projectionField = (Core.Name "output")})),
+              Core.projectionFieldName = (Core.Name "output")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parenthesizedArgsWithOutput :: Phantoms.TTerm Syntax.ParenthesizedArgs -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.ParenthesizedArgs
@@ -6690,7 +6690,7 @@ parenthesizedArgsWithOutput original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ParenthesizedArgs"),
-              Core.projectionField = (Core.Name "inputs")})),
+              Core.projectionFieldName = (Core.Name "inputs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "output"),
@@ -6713,7 +6713,7 @@ pathSegmentArguments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.PathSegment"),
-        Core.projectionField = (Core.Name "arguments")})),
+        Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathSegmentName :: Phantoms.TTerm Syntax.PathSegment -> Phantoms.TTerm String
@@ -6721,7 +6721,7 @@ pathSegmentName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.PathSegment"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathSegmentWithArguments :: Phantoms.TTerm Syntax.PathSegment -> Phantoms.TTerm Syntax.GenericArguments -> Phantoms.TTerm Syntax.PathSegment
@@ -6734,7 +6734,7 @@ pathSegmentWithArguments original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.PathSegment"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
@@ -6753,7 +6753,7 @@ pathSegmentWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.PathSegment"),
-              Core.projectionField = (Core.Name "arguments")})),
+              Core.projectionFieldName = (Core.Name "arguments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 patternIdentifier :: Phantoms.TTerm Syntax.IdentifierPattern -> Phantoms.TTerm Syntax.Pattern
@@ -6880,7 +6880,7 @@ rangeExprFrom x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangeExpr"),
-        Core.projectionField = (Core.Name "from")})),
+        Core.projectionFieldName = (Core.Name "from")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rangeExprInclusive :: Phantoms.TTerm Syntax.RangeExpr -> Phantoms.TTerm Bool
@@ -6888,7 +6888,7 @@ rangeExprInclusive x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangeExpr"),
-        Core.projectionField = (Core.Name "inclusive")})),
+        Core.projectionFieldName = (Core.Name "inclusive")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rangeExprTo :: Phantoms.TTerm Syntax.RangeExpr -> Phantoms.TTerm (Maybe Syntax.Expression)
@@ -6896,7 +6896,7 @@ rangeExprTo x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangeExpr"),
-        Core.projectionField = (Core.Name "to")})),
+        Core.projectionFieldName = (Core.Name "to")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rangeExprWithFrom :: Phantoms.TTerm Syntax.RangeExpr -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.RangeExpr
@@ -6912,14 +6912,14 @@ rangeExprWithFrom original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangeExpr"),
-              Core.projectionField = (Core.Name "to")})),
+              Core.projectionFieldName = (Core.Name "to")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inclusive"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangeExpr"),
-              Core.projectionField = (Core.Name "inclusive")})),
+              Core.projectionFieldName = (Core.Name "inclusive")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 rangeExprWithInclusive :: Phantoms.TTerm Syntax.RangeExpr -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.RangeExpr
@@ -6932,14 +6932,14 @@ rangeExprWithInclusive original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangeExpr"),
-              Core.projectionField = (Core.Name "from")})),
+              Core.projectionFieldName = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "to"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangeExpr"),
-              Core.projectionField = (Core.Name "to")})),
+              Core.projectionFieldName = (Core.Name "to")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inclusive"),
@@ -6955,7 +6955,7 @@ rangeExprWithTo original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangeExpr"),
-              Core.projectionField = (Core.Name "from")})),
+              Core.projectionFieldName = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "to"),
@@ -6965,7 +6965,7 @@ rangeExprWithTo original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangeExpr"),
-              Core.projectionField = (Core.Name "inclusive")})),
+              Core.projectionFieldName = (Core.Name "inclusive")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 rangePattern :: Phantoms.TTerm (Maybe Syntax.Pattern) -> Phantoms.TTerm (Maybe Syntax.Pattern) -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.RangePattern
@@ -6988,7 +6988,7 @@ rangePatternFrom x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangePattern"),
-        Core.projectionField = (Core.Name "from")})),
+        Core.projectionFieldName = (Core.Name "from")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rangePatternInclusive :: Phantoms.TTerm Syntax.RangePattern -> Phantoms.TTerm Bool
@@ -6996,7 +6996,7 @@ rangePatternInclusive x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangePattern"),
-        Core.projectionField = (Core.Name "inclusive")})),
+        Core.projectionFieldName = (Core.Name "inclusive")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rangePatternTo :: Phantoms.TTerm Syntax.RangePattern -> Phantoms.TTerm (Maybe Syntax.Pattern)
@@ -7004,7 +7004,7 @@ rangePatternTo x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangePattern"),
-        Core.projectionField = (Core.Name "to")})),
+        Core.projectionFieldName = (Core.Name "to")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rangePatternWithFrom :: Phantoms.TTerm Syntax.RangePattern -> Phantoms.TTerm (Maybe Syntax.Pattern) -> Phantoms.TTerm Syntax.RangePattern
@@ -7020,14 +7020,14 @@ rangePatternWithFrom original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangePattern"),
-              Core.projectionField = (Core.Name "to")})),
+              Core.projectionFieldName = (Core.Name "to")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inclusive"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangePattern"),
-              Core.projectionField = (Core.Name "inclusive")})),
+              Core.projectionFieldName = (Core.Name "inclusive")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 rangePatternWithInclusive :: Phantoms.TTerm Syntax.RangePattern -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.RangePattern
@@ -7040,14 +7040,14 @@ rangePatternWithInclusive original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangePattern"),
-              Core.projectionField = (Core.Name "from")})),
+              Core.projectionFieldName = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "to"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangePattern"),
-              Core.projectionField = (Core.Name "to")})),
+              Core.projectionFieldName = (Core.Name "to")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "inclusive"),
@@ -7063,7 +7063,7 @@ rangePatternWithTo original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangePattern"),
-              Core.projectionField = (Core.Name "from")})),
+              Core.projectionFieldName = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "to"),
@@ -7073,7 +7073,7 @@ rangePatternWithTo original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RangePattern"),
-              Core.projectionField = (Core.Name "inclusive")})),
+              Core.projectionFieldName = (Core.Name "inclusive")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 rawPointerType :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.RawPointerType
@@ -7093,7 +7093,7 @@ rawPointerTypeMutable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RawPointerType"),
-        Core.projectionField = (Core.Name "mutable")})),
+        Core.projectionFieldName = (Core.Name "mutable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rawPointerTypeType :: Phantoms.TTerm Syntax.RawPointerType -> Phantoms.TTerm Syntax.Type
@@ -7101,7 +7101,7 @@ rawPointerTypeType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RawPointerType"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rawPointerTypeWithMutable :: Phantoms.TTerm Syntax.RawPointerType -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.RawPointerType
@@ -7117,7 +7117,7 @@ rawPointerTypeWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RawPointerType"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 rawPointerTypeWithType :: Phantoms.TTerm Syntax.RawPointerType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.RawPointerType
@@ -7130,7 +7130,7 @@ rawPointerTypeWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RawPointerType"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -7153,7 +7153,7 @@ refExprExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RefExpr"),
-        Core.projectionField = (Core.Name "expr")})),
+        Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 refExprMutable :: Phantoms.TTerm Syntax.RefExpr -> Phantoms.TTerm Bool
@@ -7161,7 +7161,7 @@ refExprMutable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RefExpr"),
-        Core.projectionField = (Core.Name "mutable")})),
+        Core.projectionFieldName = (Core.Name "mutable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 refExprWithExpr :: Phantoms.TTerm Syntax.RefExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.RefExpr
@@ -7174,7 +7174,7 @@ refExprWithExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RefExpr"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expr"),
@@ -7193,7 +7193,7 @@ refExprWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RefExpr"),
-              Core.projectionField = (Core.Name "expr")})),
+              Core.projectionFieldName = (Core.Name "expr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 refPattern :: Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.RefPattern
@@ -7213,7 +7213,7 @@ refPatternMutable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RefPattern"),
-        Core.projectionField = (Core.Name "mutable")})),
+        Core.projectionFieldName = (Core.Name "mutable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 refPatternPattern :: Phantoms.TTerm Syntax.RefPattern -> Phantoms.TTerm Syntax.Pattern
@@ -7221,7 +7221,7 @@ refPatternPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RefPattern"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 refPatternWithMutable :: Phantoms.TTerm Syntax.RefPattern -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.RefPattern
@@ -7237,7 +7237,7 @@ refPatternWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RefPattern"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 refPatternWithPattern :: Phantoms.TTerm Syntax.RefPattern -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.RefPattern
@@ -7250,7 +7250,7 @@ refPatternWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.RefPattern"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
@@ -7276,7 +7276,7 @@ referenceTypeLifetime x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ReferenceType"),
-        Core.projectionField = (Core.Name "lifetime")})),
+        Core.projectionFieldName = (Core.Name "lifetime")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 referenceTypeMutable :: Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Bool
@@ -7284,7 +7284,7 @@ referenceTypeMutable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ReferenceType"),
-        Core.projectionField = (Core.Name "mutable")})),
+        Core.projectionFieldName = (Core.Name "mutable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 referenceTypeType :: Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Syntax.Type
@@ -7292,7 +7292,7 @@ referenceTypeType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ReferenceType"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 referenceTypeWithLifetime :: Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm (Maybe Syntax.Lifetime) -> Phantoms.TTerm Syntax.ReferenceType
@@ -7308,14 +7308,14 @@ referenceTypeWithLifetime original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ReferenceType"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ReferenceType"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 referenceTypeWithMutable :: Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.ReferenceType
@@ -7328,7 +7328,7 @@ referenceTypeWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ReferenceType"),
-              Core.projectionField = (Core.Name "lifetime")})),
+              Core.projectionFieldName = (Core.Name "lifetime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
@@ -7338,7 +7338,7 @@ referenceTypeWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ReferenceType"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 referenceTypeWithType :: Phantoms.TTerm Syntax.ReferenceType -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.ReferenceType
@@ -7351,14 +7351,14 @@ referenceTypeWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ReferenceType"),
-              Core.projectionField = (Core.Name "lifetime")})),
+              Core.projectionFieldName = (Core.Name "lifetime")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.ReferenceType"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -7449,7 +7449,7 @@ staticDefDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 staticDefMutable :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm Bool
@@ -7457,7 +7457,7 @@ staticDefMutable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-        Core.projectionField = (Core.Name "mutable")})),
+        Core.projectionFieldName = (Core.Name "mutable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 staticDefName :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm String
@@ -7465,7 +7465,7 @@ staticDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 staticDefPublic :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm Bool
@@ -7473,7 +7473,7 @@ staticDefPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 staticDefType :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm Syntax.Type
@@ -7481,7 +7481,7 @@ staticDefType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 staticDefValue :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm Syntax.Expression
@@ -7489,7 +7489,7 @@ staticDefValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 staticDefWithDoc :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.StaticDef
@@ -7502,35 +7502,35 @@ staticDefWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -7546,21 +7546,21 @@ staticDefWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
@@ -7570,14 +7570,14 @@ staticDefWithMutable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 staticDefWithName :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.StaticDef
@@ -7593,35 +7593,35 @@ staticDefWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 staticDefWithPublic :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.StaticDef
@@ -7634,28 +7634,28 @@ staticDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -7665,7 +7665,7 @@ staticDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 staticDefWithType :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.StaticDef
@@ -7678,7 +7678,7 @@ staticDefWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -7688,28 +7688,28 @@ staticDefWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mutable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 staticDefWithValue :: Phantoms.TTerm Syntax.StaticDef -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.StaticDef
@@ -7722,14 +7722,14 @@ staticDefWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -7739,21 +7739,21 @@ staticDefWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "mutable")})),
+              Core.projectionFieldName = (Core.Name "mutable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StaticDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structBodyNamed :: Phantoms.TTerm [Syntax.StructField] -> Phantoms.TTerm Syntax.StructBody
@@ -7812,7 +7812,7 @@ structDefBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structDefDerives :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm [String]
@@ -7820,7 +7820,7 @@ structDefDerives x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-        Core.projectionField = (Core.Name "derives")})),
+        Core.projectionFieldName = (Core.Name "derives")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structDefDoc :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm (Maybe String)
@@ -7828,7 +7828,7 @@ structDefDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structDefGenerics :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm [Syntax.GenericParam]
@@ -7836,7 +7836,7 @@ structDefGenerics x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-        Core.projectionField = (Core.Name "generics")})),
+        Core.projectionFieldName = (Core.Name "generics")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structDefName :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm String
@@ -7844,7 +7844,7 @@ structDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structDefPublic :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm Bool
@@ -7852,7 +7852,7 @@ structDefPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structDefWhereClause :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm (Maybe Syntax.WhereClause)
@@ -7860,7 +7860,7 @@ structDefWhereClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-        Core.projectionField = (Core.Name "whereClause")})),
+        Core.projectionFieldName = (Core.Name "whereClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structDefWithBody :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm Syntax.StructBody -> Phantoms.TTerm Syntax.StructDef
@@ -7873,21 +7873,21 @@ structDefWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -7897,21 +7897,21 @@ structDefWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structDefWithDerives :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm [String] -> Phantoms.TTerm Syntax.StructDef
@@ -7924,28 +7924,28 @@ structDefWithDerives original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
@@ -7955,14 +7955,14 @@ structDefWithDerives original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structDefWithDoc :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.StructDef
@@ -7975,42 +7975,42 @@ structDefWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -8026,7 +8026,7 @@ structDefWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
@@ -8036,35 +8036,35 @@ structDefWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structDefWithName :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.StructDef
@@ -8080,42 +8080,42 @@ structDefWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structDefWithPublic :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.StructDef
@@ -8128,35 +8128,35 @@ structDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -8166,7 +8166,7 @@ structDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structDefWithWhereClause :: Phantoms.TTerm Syntax.StructDef -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm Syntax.StructDef
@@ -8179,14 +8179,14 @@ structDefWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
@@ -8196,28 +8196,28 @@ structDefWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "derives"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "derives")})),
+              Core.projectionFieldName = (Core.Name "derives")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structExpr :: Phantoms.TTerm Syntax.ExprPath -> Phantoms.TTerm [Syntax.FieldValue] -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.StructExpr
@@ -8240,7 +8240,7 @@ structExprFields x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructExpr"),
-        Core.projectionField = (Core.Name "fields")})),
+        Core.projectionFieldName = (Core.Name "fields")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structExprPath :: Phantoms.TTerm Syntax.StructExpr -> Phantoms.TTerm Syntax.ExprPath
@@ -8248,7 +8248,7 @@ structExprPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructExpr"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structExprRest :: Phantoms.TTerm Syntax.StructExpr -> Phantoms.TTerm (Maybe Syntax.Expression)
@@ -8256,7 +8256,7 @@ structExprRest x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructExpr"),
-        Core.projectionField = (Core.Name "rest")})),
+        Core.projectionFieldName = (Core.Name "rest")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structExprWithFields :: Phantoms.TTerm Syntax.StructExpr -> Phantoms.TTerm [Syntax.FieldValue] -> Phantoms.TTerm Syntax.StructExpr
@@ -8269,7 +8269,7 @@ structExprWithFields original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructExpr"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
@@ -8279,7 +8279,7 @@ structExprWithFields original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructExpr"),
-              Core.projectionField = (Core.Name "rest")})),
+              Core.projectionFieldName = (Core.Name "rest")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structExprWithPath :: Phantoms.TTerm Syntax.StructExpr -> Phantoms.TTerm Syntax.ExprPath -> Phantoms.TTerm Syntax.StructExpr
@@ -8295,14 +8295,14 @@ structExprWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructExpr"),
-              Core.projectionField = (Core.Name "fields")})),
+              Core.projectionFieldName = (Core.Name "fields")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructExpr"),
-              Core.projectionField = (Core.Name "rest")})),
+              Core.projectionFieldName = (Core.Name "rest")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structExprWithRest :: Phantoms.TTerm Syntax.StructExpr -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.StructExpr
@@ -8315,14 +8315,14 @@ structExprWithRest original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructExpr"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructExpr"),
-              Core.projectionField = (Core.Name "fields")})),
+              Core.projectionFieldName = (Core.Name "fields")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
@@ -8351,7 +8351,7 @@ structFieldDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structFieldName :: Phantoms.TTerm Syntax.StructField -> Phantoms.TTerm String
@@ -8359,7 +8359,7 @@ structFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structFieldPublic :: Phantoms.TTerm Syntax.StructField -> Phantoms.TTerm Bool
@@ -8367,7 +8367,7 @@ structFieldPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structFieldType :: Phantoms.TTerm Syntax.StructField -> Phantoms.TTerm Syntax.Type
@@ -8375,7 +8375,7 @@ structFieldType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structFieldWithDoc :: Phantoms.TTerm Syntax.StructField -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.StructField
@@ -8388,21 +8388,21 @@ structFieldWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -8421,21 +8421,21 @@ structFieldWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structFieldWithPublic :: Phantoms.TTerm Syntax.StructField -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.StructField
@@ -8448,14 +8448,14 @@ structFieldWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -8465,7 +8465,7 @@ structFieldWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structFieldWithType :: Phantoms.TTerm Syntax.StructField -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.StructField
@@ -8478,7 +8478,7 @@ structFieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -8488,14 +8488,14 @@ structFieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructField"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structPattern :: Phantoms.TTerm Syntax.ExprPath -> Phantoms.TTerm [Syntax.FieldPattern] -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.StructPattern
@@ -8518,7 +8518,7 @@ structPatternFields x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructPattern"),
-        Core.projectionField = (Core.Name "fields")})),
+        Core.projectionFieldName = (Core.Name "fields")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structPatternPath :: Phantoms.TTerm Syntax.StructPattern -> Phantoms.TTerm Syntax.ExprPath
@@ -8526,7 +8526,7 @@ structPatternPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructPattern"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structPatternRest :: Phantoms.TTerm Syntax.StructPattern -> Phantoms.TTerm Bool
@@ -8534,7 +8534,7 @@ structPatternRest x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructPattern"),
-        Core.projectionField = (Core.Name "rest")})),
+        Core.projectionFieldName = (Core.Name "rest")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 structPatternWithFields :: Phantoms.TTerm Syntax.StructPattern -> Phantoms.TTerm [Syntax.FieldPattern] -> Phantoms.TTerm Syntax.StructPattern
@@ -8547,7 +8547,7 @@ structPatternWithFields original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructPattern"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
@@ -8557,7 +8557,7 @@ structPatternWithFields original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructPattern"),
-              Core.projectionField = (Core.Name "rest")})),
+              Core.projectionFieldName = (Core.Name "rest")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structPatternWithPath :: Phantoms.TTerm Syntax.StructPattern -> Phantoms.TTerm Syntax.ExprPath -> Phantoms.TTerm Syntax.StructPattern
@@ -8573,14 +8573,14 @@ structPatternWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructPattern"),
-              Core.projectionField = (Core.Name "fields")})),
+              Core.projectionFieldName = (Core.Name "fields")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructPattern"),
-              Core.projectionField = (Core.Name "rest")})),
+              Core.projectionFieldName = (Core.Name "rest")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 structPatternWithRest :: Phantoms.TTerm Syntax.StructPattern -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.StructPattern
@@ -8593,14 +8593,14 @@ structPatternWithRest original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructPattern"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.StructPattern"),
-              Core.projectionField = (Core.Name "fields")})),
+              Core.projectionFieldName = (Core.Name "fields")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rest"),
@@ -8629,7 +8629,7 @@ traitConstDefault x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-        Core.projectionField = (Core.Name "default")})),
+        Core.projectionFieldName = (Core.Name "default")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitConstDoc :: Phantoms.TTerm Syntax.TraitConst -> Phantoms.TTerm (Maybe String)
@@ -8637,7 +8637,7 @@ traitConstDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitConstName :: Phantoms.TTerm Syntax.TraitConst -> Phantoms.TTerm String
@@ -8645,7 +8645,7 @@ traitConstName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitConstType :: Phantoms.TTerm Syntax.TraitConst -> Phantoms.TTerm Syntax.Type
@@ -8653,7 +8653,7 @@ traitConstType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitConstWithDefault :: Phantoms.TTerm Syntax.TraitConst -> Phantoms.TTerm (Maybe Syntax.Expression) -> Phantoms.TTerm Syntax.TraitConst
@@ -8666,14 +8666,14 @@ traitConstWithDefault original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
@@ -8683,7 +8683,7 @@ traitConstWithDefault original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitConstWithDoc :: Phantoms.TTerm Syntax.TraitConst -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TraitConst
@@ -8696,21 +8696,21 @@ traitConstWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -8729,21 +8729,21 @@ traitConstWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitConstWithType :: Phantoms.TTerm Syntax.TraitConst -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TraitConst
@@ -8756,7 +8756,7 @@ traitConstWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -8766,14 +8766,14 @@ traitConstWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitConst"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitDef :: Phantoms.TTerm String -> Phantoms.TTerm [Syntax.GenericParam] -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm [Syntax.TypeParamBound] -> Phantoms.TTerm [Syntax.TraitItem] -> Phantoms.TTerm Bool -> Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TraitDef
@@ -8811,7 +8811,7 @@ traitDefDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitDefGenerics :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm [Syntax.GenericParam]
@@ -8819,7 +8819,7 @@ traitDefGenerics x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-        Core.projectionField = (Core.Name "generics")})),
+        Core.projectionFieldName = (Core.Name "generics")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitDefItems :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm [Syntax.TraitItem]
@@ -8827,7 +8827,7 @@ traitDefItems x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-        Core.projectionField = (Core.Name "items")})),
+        Core.projectionFieldName = (Core.Name "items")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitDefName :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm String
@@ -8835,7 +8835,7 @@ traitDefName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitDefPublic :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm Bool
@@ -8843,7 +8843,7 @@ traitDefPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitDefSuperTraits :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm [Syntax.TypeParamBound]
@@ -8851,7 +8851,7 @@ traitDefSuperTraits x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-        Core.projectionField = (Core.Name "superTraits")})),
+        Core.projectionFieldName = (Core.Name "superTraits")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitDefUnsafe :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm Bool
@@ -8859,7 +8859,7 @@ traitDefUnsafe x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-        Core.projectionField = (Core.Name "unsafe")})),
+        Core.projectionFieldName = (Core.Name "unsafe")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitDefWhereClause :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm (Maybe Syntax.WhereClause)
@@ -8867,7 +8867,7 @@ traitDefWhereClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-        Core.projectionField = (Core.Name "whereClause")})),
+        Core.projectionFieldName = (Core.Name "whereClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitDefWithDoc :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TraitDef
@@ -8880,49 +8880,49 @@ traitDefWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTraits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "superTraits")})),
+              Core.projectionFieldName = (Core.Name "superTraits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -8938,7 +8938,7 @@ traitDefWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
@@ -8948,42 +8948,42 @@ traitDefWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTraits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "superTraits")})),
+              Core.projectionFieldName = (Core.Name "superTraits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitDefWithItems :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm [Syntax.TraitItem] -> Phantoms.TTerm Syntax.TraitDef
@@ -8996,28 +8996,28 @@ traitDefWithItems original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTraits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "superTraits")})),
+              Core.projectionFieldName = (Core.Name "superTraits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
@@ -9027,21 +9027,21 @@ traitDefWithItems original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitDefWithName :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.TraitDef
@@ -9057,49 +9057,49 @@ traitDefWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTraits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "superTraits")})),
+              Core.projectionFieldName = (Core.Name "superTraits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitDefWithPublic :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.TraitDef
@@ -9112,35 +9112,35 @@ traitDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTraits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "superTraits")})),
+              Core.projectionFieldName = (Core.Name "superTraits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -9150,14 +9150,14 @@ traitDefWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitDefWithSuperTraits :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm [Syntax.TypeParamBound] -> Phantoms.TTerm Syntax.TraitDef
@@ -9170,21 +9170,21 @@ traitDefWithSuperTraits original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTraits"),
@@ -9194,28 +9194,28 @@ traitDefWithSuperTraits original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitDefWithUnsafe :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.TraitDef
@@ -9228,42 +9228,42 @@ traitDefWithUnsafe original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "superTraits"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "superTraits")})),
+              Core.projectionFieldName = (Core.Name "superTraits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
@@ -9273,7 +9273,7 @@ traitDefWithUnsafe original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitDefWithWhereClause :: Phantoms.TTerm Syntax.TraitDef -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm Syntax.TraitDef
@@ -9286,14 +9286,14 @@ traitDefWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
@@ -9303,35 +9303,35 @@ traitDefWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "superTraits")})),
+              Core.projectionFieldName = (Core.Name "superTraits")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unsafe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "unsafe")})),
+              Core.projectionFieldName = (Core.Name "unsafe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitDef"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitItemConst :: Phantoms.TTerm Syntax.TraitConst -> Phantoms.TTerm Syntax.TraitItem
@@ -9390,7 +9390,7 @@ traitMethodDefaultBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-        Core.projectionField = (Core.Name "defaultBody")})),
+        Core.projectionFieldName = (Core.Name "defaultBody")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitMethodDoc :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm (Maybe String)
@@ -9398,7 +9398,7 @@ traitMethodDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitMethodGenerics :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm [Syntax.GenericParam]
@@ -9406,7 +9406,7 @@ traitMethodGenerics x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-        Core.projectionField = (Core.Name "generics")})),
+        Core.projectionFieldName = (Core.Name "generics")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitMethodName :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm String
@@ -9414,7 +9414,7 @@ traitMethodName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitMethodParams :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm [Syntax.MethodParam]
@@ -9422,7 +9422,7 @@ traitMethodParams x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-        Core.projectionField = (Core.Name "params")})),
+        Core.projectionFieldName = (Core.Name "params")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitMethodReturnType :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -9430,7 +9430,7 @@ traitMethodReturnType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-        Core.projectionField = (Core.Name "returnType")})),
+        Core.projectionFieldName = (Core.Name "returnType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitMethodWhereClause :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm (Maybe Syntax.WhereClause)
@@ -9438,7 +9438,7 @@ traitMethodWhereClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-        Core.projectionField = (Core.Name "whereClause")})),
+        Core.projectionFieldName = (Core.Name "whereClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitMethodWithDefaultBody :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm (Maybe Syntax.Block) -> Phantoms.TTerm Syntax.TraitMethod
@@ -9451,35 +9451,35 @@ traitMethodWithDefaultBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultBody"),
@@ -9489,7 +9489,7 @@ traitMethodWithDefaultBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitMethodWithDoc :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TraitMethod
@@ -9502,42 +9502,42 @@ traitMethodWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultBody"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "defaultBody")})),
+              Core.projectionFieldName = (Core.Name "defaultBody")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -9553,7 +9553,7 @@ traitMethodWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
@@ -9563,35 +9563,35 @@ traitMethodWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultBody"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "defaultBody")})),
+              Core.projectionFieldName = (Core.Name "defaultBody")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitMethodWithName :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.TraitMethod
@@ -9607,42 +9607,42 @@ traitMethodWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultBody"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "defaultBody")})),
+              Core.projectionFieldName = (Core.Name "defaultBody")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitMethodWithParams :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm [Syntax.MethodParam] -> Phantoms.TTerm Syntax.TraitMethod
@@ -9655,21 +9655,21 @@ traitMethodWithParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
@@ -9679,21 +9679,21 @@ traitMethodWithParams original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultBody"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "defaultBody")})),
+              Core.projectionFieldName = (Core.Name "defaultBody")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitMethodWithReturnType :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.TraitMethod
@@ -9706,28 +9706,28 @@ traitMethodWithReturnType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "params"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
@@ -9737,14 +9737,14 @@ traitMethodWithReturnType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "defaultBody")})),
+              Core.projectionFieldName = (Core.Name "defaultBody")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitMethodWithWhereClause :: Phantoms.TTerm Syntax.TraitMethod -> Phantoms.TTerm (Maybe Syntax.WhereClause) -> Phantoms.TTerm Syntax.TraitMethod
@@ -9757,14 +9757,14 @@ traitMethodWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
@@ -9774,28 +9774,28 @@ traitMethodWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "params")})),
+              Core.projectionFieldName = (Core.Name "params")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "returnType")})),
+              Core.projectionFieldName = (Core.Name "returnType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "defaultBody"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "defaultBody")})),
+              Core.projectionFieldName = (Core.Name "defaultBody")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitMethod"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitType :: Phantoms.TTerm String -> Phantoms.TTerm [Syntax.TypeParamBound] -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TraitType
@@ -9821,7 +9821,7 @@ traitTypeBounds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-        Core.projectionField = (Core.Name "bounds")})),
+        Core.projectionFieldName = (Core.Name "bounds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitTypeDefault :: Phantoms.TTerm Syntax.TraitType -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -9829,7 +9829,7 @@ traitTypeDefault x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-        Core.projectionField = (Core.Name "default")})),
+        Core.projectionFieldName = (Core.Name "default")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitTypeDoc :: Phantoms.TTerm Syntax.TraitType -> Phantoms.TTerm (Maybe String)
@@ -9837,7 +9837,7 @@ traitTypeDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitTypeName :: Phantoms.TTerm Syntax.TraitType -> Phantoms.TTerm String
@@ -9845,7 +9845,7 @@ traitTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 traitTypeWithBounds :: Phantoms.TTerm Syntax.TraitType -> Phantoms.TTerm [Syntax.TypeParamBound] -> Phantoms.TTerm Syntax.TraitType
@@ -9858,7 +9858,7 @@ traitTypeWithBounds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bounds"),
@@ -9868,14 +9868,14 @@ traitTypeWithBounds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitTypeWithDefault :: Phantoms.TTerm Syntax.TraitType -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.TraitType
@@ -9888,14 +9888,14 @@ traitTypeWithDefault original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bounds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "bounds")})),
+              Core.projectionFieldName = (Core.Name "bounds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
@@ -9905,7 +9905,7 @@ traitTypeWithDefault original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 traitTypeWithDoc :: Phantoms.TTerm Syntax.TraitType -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TraitType
@@ -9918,21 +9918,21 @@ traitTypeWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bounds"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "bounds")})),
+              Core.projectionFieldName = (Core.Name "bounds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -9951,21 +9951,21 @@ traitTypeWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "bounds")})),
+              Core.projectionFieldName = (Core.Name "bounds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "default"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "default")})),
+              Core.projectionFieldName = (Core.Name "default")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TraitType"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tupleField :: Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.TupleField
@@ -9985,7 +9985,7 @@ tupleFieldPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleField"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tupleFieldType :: Phantoms.TTerm Syntax.TupleField -> Phantoms.TTerm Syntax.Type
@@ -9993,7 +9993,7 @@ tupleFieldType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleField"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tupleFieldWithPublic :: Phantoms.TTerm Syntax.TupleField -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.TupleField
@@ -10006,7 +10006,7 @@ tupleFieldWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleField"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -10025,7 +10025,7 @@ tupleFieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleField"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tupleIndexExpr :: Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Int -> Phantoms.TTerm Syntax.TupleIndexExpr
@@ -10045,7 +10045,7 @@ tupleIndexExprIndex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleIndexExpr"),
-        Core.projectionField = (Core.Name "index")})),
+        Core.projectionFieldName = (Core.Name "index")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tupleIndexExprTuple :: Phantoms.TTerm Syntax.TupleIndexExpr -> Phantoms.TTerm Syntax.Expression
@@ -10053,7 +10053,7 @@ tupleIndexExprTuple x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleIndexExpr"),
-        Core.projectionField = (Core.Name "tuple")})),
+        Core.projectionFieldName = (Core.Name "tuple")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tupleIndexExprWithIndex :: Phantoms.TTerm Syntax.TupleIndexExpr -> Phantoms.TTerm Int -> Phantoms.TTerm Syntax.TupleIndexExpr
@@ -10066,7 +10066,7 @@ tupleIndexExprWithIndex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleIndexExpr"),
-              Core.projectionField = (Core.Name "tuple")})),
+              Core.projectionFieldName = (Core.Name "tuple")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "index"),
@@ -10085,7 +10085,7 @@ tupleIndexExprWithTuple original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleIndexExpr"),
-              Core.projectionField = (Core.Name "index")})),
+              Core.projectionFieldName = (Core.Name "index")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tupleStructPattern :: Phantoms.TTerm Syntax.ExprPath -> Phantoms.TTerm [Syntax.Pattern] -> Phantoms.TTerm Syntax.TupleStructPattern
@@ -10105,7 +10105,7 @@ tupleStructPatternElements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleStructPattern"),
-        Core.projectionField = (Core.Name "elements")})),
+        Core.projectionFieldName = (Core.Name "elements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tupleStructPatternPath :: Phantoms.TTerm Syntax.TupleStructPattern -> Phantoms.TTerm Syntax.ExprPath
@@ -10113,7 +10113,7 @@ tupleStructPatternPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleStructPattern"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tupleStructPatternWithElements :: Phantoms.TTerm Syntax.TupleStructPattern -> Phantoms.TTerm [Syntax.Pattern] -> Phantoms.TTerm Syntax.TupleStructPattern
@@ -10126,7 +10126,7 @@ tupleStructPatternWithElements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleStructPattern"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
@@ -10145,7 +10145,7 @@ tupleStructPatternWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TupleStructPattern"),
-              Core.projectionField = (Core.Name "elements")})),
+              Core.projectionFieldName = (Core.Name "elements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeAlias :: Phantoms.TTerm String -> Phantoms.TTerm [Syntax.GenericParam] -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TypeAlias
@@ -10174,7 +10174,7 @@ typeAliasDoc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-        Core.projectionField = (Core.Name "doc")})),
+        Core.projectionFieldName = (Core.Name "doc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeAliasGenerics :: Phantoms.TTerm Syntax.TypeAlias -> Phantoms.TTerm [Syntax.GenericParam]
@@ -10182,7 +10182,7 @@ typeAliasGenerics x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-        Core.projectionField = (Core.Name "generics")})),
+        Core.projectionFieldName = (Core.Name "generics")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeAliasName :: Phantoms.TTerm Syntax.TypeAlias -> Phantoms.TTerm String
@@ -10190,7 +10190,7 @@ typeAliasName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeAliasPublic :: Phantoms.TTerm Syntax.TypeAlias -> Phantoms.TTerm Bool
@@ -10198,7 +10198,7 @@ typeAliasPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeAliasType :: Phantoms.TTerm Syntax.TypeAlias -> Phantoms.TTerm Syntax.Type
@@ -10206,7 +10206,7 @@ typeAliasType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeAliasWithDoc :: Phantoms.TTerm Syntax.TypeAlias -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.TypeAlias
@@ -10219,28 +10219,28 @@ typeAliasWithDoc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
@@ -10256,7 +10256,7 @@ typeAliasWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
@@ -10266,21 +10266,21 @@ typeAliasWithGenerics original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeAliasWithName :: Phantoms.TTerm Syntax.TypeAlias -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.TypeAlias
@@ -10296,28 +10296,28 @@ typeAliasWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeAliasWithPublic :: Phantoms.TTerm Syntax.TypeAlias -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.TypeAlias
@@ -10330,21 +10330,21 @@ typeAliasWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "public"),
@@ -10354,7 +10354,7 @@ typeAliasWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeAliasWithType :: Phantoms.TTerm Syntax.TypeAlias -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeAlias
@@ -10367,14 +10367,14 @@ typeAliasWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generics"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "generics")})),
+              Core.projectionFieldName = (Core.Name "generics")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -10384,14 +10384,14 @@ typeAliasWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "doc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAlias"),
-              Core.projectionField = (Core.Name "doc")})),
+              Core.projectionFieldName = (Core.Name "doc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeArray :: Phantoms.TTerm Syntax.ArrayType -> Phantoms.TTerm Syntax.Type
@@ -10419,7 +10419,7 @@ typeAscriptionExprExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAscriptionExpr"),
-        Core.projectionField = (Core.Name "expr")})),
+        Core.projectionFieldName = (Core.Name "expr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeAscriptionExprType :: Phantoms.TTerm Syntax.TypeAscriptionExpr -> Phantoms.TTerm Syntax.Type
@@ -10427,7 +10427,7 @@ typeAscriptionExprType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAscriptionExpr"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeAscriptionExprWithExpr :: Phantoms.TTerm Syntax.TypeAscriptionExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.TypeAscriptionExpr
@@ -10443,7 +10443,7 @@ typeAscriptionExprWithExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAscriptionExpr"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeAscriptionExprWithType :: Phantoms.TTerm Syntax.TypeAscriptionExpr -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeAscriptionExpr
@@ -10456,7 +10456,7 @@ typeAscriptionExprWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeAscriptionExpr"),
-              Core.projectionField = (Core.Name "expr")})),
+              Core.projectionFieldName = (Core.Name "expr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -10479,7 +10479,7 @@ typeBindingName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeBinding"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeBindingType :: Phantoms.TTerm Syntax.TypeBinding -> Phantoms.TTerm Syntax.Type
@@ -10487,7 +10487,7 @@ typeBindingType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeBinding"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typeBindingWithName :: Phantoms.TTerm Syntax.TypeBinding -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.TypeBinding
@@ -10503,7 +10503,7 @@ typeBindingWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeBinding"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typeBindingWithType :: Phantoms.TTerm Syntax.TypeBinding -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeBinding
@@ -10516,7 +10516,7 @@ typeBindingWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypeBinding"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -10599,7 +10599,7 @@ typePathGlobal x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypePath"),
-        Core.projectionField = (Core.Name "global")})),
+        Core.projectionFieldName = (Core.Name "global")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typePathSegments :: Phantoms.TTerm Syntax.TypePath -> Phantoms.TTerm [Syntax.PathSegment]
@@ -10607,7 +10607,7 @@ typePathSegments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypePath"),
-        Core.projectionField = (Core.Name "segments")})),
+        Core.projectionFieldName = (Core.Name "segments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typePathWithGlobal :: Phantoms.TTerm Syntax.TypePath -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.TypePath
@@ -10623,7 +10623,7 @@ typePathWithGlobal original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypePath"),
-              Core.projectionField = (Core.Name "segments")})),
+              Core.projectionFieldName = (Core.Name "segments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typePathWithSegments :: Phantoms.TTerm Syntax.TypePath -> Phantoms.TTerm [Syntax.PathSegment] -> Phantoms.TTerm Syntax.TypePath
@@ -10636,7 +10636,7 @@ typePathWithSegments original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.TypePath"),
-              Core.projectionField = (Core.Name "global")})),
+              Core.projectionFieldName = (Core.Name "global")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "segments"),
@@ -10711,7 +10711,7 @@ unaryExprOp x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UnaryExpr"),
-        Core.projectionField = (Core.Name "op")})),
+        Core.projectionFieldName = (Core.Name "op")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unaryExprOperand :: Phantoms.TTerm Syntax.UnaryExpr -> Phantoms.TTerm Syntax.Expression
@@ -10719,7 +10719,7 @@ unaryExprOperand x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UnaryExpr"),
-        Core.projectionField = (Core.Name "operand")})),
+        Core.projectionFieldName = (Core.Name "operand")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unaryExprWithOp :: Phantoms.TTerm Syntax.UnaryExpr -> Phantoms.TTerm Syntax.UnaryOp -> Phantoms.TTerm Syntax.UnaryExpr
@@ -10735,7 +10735,7 @@ unaryExprWithOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UnaryExpr"),
-              Core.projectionField = (Core.Name "operand")})),
+              Core.projectionFieldName = (Core.Name "operand")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unaryExprWithOperand :: Phantoms.TTerm Syntax.UnaryExpr -> Phantoms.TTerm Syntax.Expression -> Phantoms.TTerm Syntax.UnaryExpr
@@ -10748,7 +10748,7 @@ unaryExprWithOperand original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UnaryExpr"),
-              Core.projectionField = (Core.Name "op")})),
+              Core.projectionFieldName = (Core.Name "op")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operand"),
@@ -10787,7 +10787,7 @@ useDeclarationPublic x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseDeclaration"),
-        Core.projectionField = (Core.Name "public")})),
+        Core.projectionFieldName = (Core.Name "public")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 useDeclarationTree :: Phantoms.TTerm Syntax.UseDeclaration -> Phantoms.TTerm Syntax.UseTree
@@ -10795,7 +10795,7 @@ useDeclarationTree x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseDeclaration"),
-        Core.projectionField = (Core.Name "tree")})),
+        Core.projectionFieldName = (Core.Name "tree")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 useDeclarationWithPublic :: Phantoms.TTerm Syntax.UseDeclaration -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.UseDeclaration
@@ -10811,7 +10811,7 @@ useDeclarationWithPublic original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseDeclaration"),
-              Core.projectionField = (Core.Name "tree")})),
+              Core.projectionFieldName = (Core.Name "tree")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 useDeclarationWithTree :: Phantoms.TTerm Syntax.UseDeclaration -> Phantoms.TTerm Syntax.UseTree -> Phantoms.TTerm Syntax.UseDeclaration
@@ -10824,7 +10824,7 @@ useDeclarationWithTree original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseDeclaration"),
-              Core.projectionField = (Core.Name "public")})),
+              Core.projectionFieldName = (Core.Name "public")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tree"),
@@ -10847,7 +10847,7 @@ useGroupPrefix x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseGroup"),
-        Core.projectionField = (Core.Name "prefix")})),
+        Core.projectionFieldName = (Core.Name "prefix")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 useGroupTrees :: Phantoms.TTerm Syntax.UseGroup -> Phantoms.TTerm [Syntax.UseTree]
@@ -10855,7 +10855,7 @@ useGroupTrees x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseGroup"),
-        Core.projectionField = (Core.Name "trees")})),
+        Core.projectionFieldName = (Core.Name "trees")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 useGroupWithPrefix :: Phantoms.TTerm Syntax.UseGroup -> Phantoms.TTerm [String] -> Phantoms.TTerm Syntax.UseGroup
@@ -10871,7 +10871,7 @@ useGroupWithPrefix original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseGroup"),
-              Core.projectionField = (Core.Name "trees")})),
+              Core.projectionFieldName = (Core.Name "trees")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 useGroupWithTrees :: Phantoms.TTerm Syntax.UseGroup -> Phantoms.TTerm [Syntax.UseTree] -> Phantoms.TTerm Syntax.UseGroup
@@ -10884,7 +10884,7 @@ useGroupWithTrees original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseGroup"),
-              Core.projectionField = (Core.Name "prefix")})),
+              Core.projectionFieldName = (Core.Name "prefix")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "trees"),
@@ -10904,7 +10904,7 @@ usePathSegments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UsePath"),
-        Core.projectionField = (Core.Name "segments")})),
+        Core.projectionFieldName = (Core.Name "segments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 usePathWithSegments :: Phantoms.TTerm Syntax.UsePath -> Phantoms.TTerm [String] -> Phantoms.TTerm Syntax.UsePath
@@ -10933,7 +10933,7 @@ useRenameAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseRename"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 useRenamePath :: Phantoms.TTerm Syntax.UseRename -> Phantoms.TTerm [String]
@@ -10941,7 +10941,7 @@ useRenamePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseRename"),
-        Core.projectionField = (Core.Name "path")})),
+        Core.projectionFieldName = (Core.Name "path")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 useRenameWithAlias :: Phantoms.TTerm Syntax.UseRename -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.UseRename
@@ -10954,7 +10954,7 @@ useRenameWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseRename"),
-              Core.projectionField = (Core.Name "path")})),
+              Core.projectionFieldName = (Core.Name "path")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
@@ -10973,7 +10973,7 @@ useRenameWithPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.UseRename"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 useTreeGlob :: Phantoms.TTerm [String] -> Phantoms.TTerm Syntax.UseTree
@@ -11054,7 +11054,7 @@ whereClausePredicates x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhereClause"),
-        Core.projectionField = (Core.Name "predicates")})),
+        Core.projectionFieldName = (Core.Name "predicates")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 whereClauseWithPredicates :: Phantoms.TTerm Syntax.WhereClause -> Phantoms.TTerm [Syntax.WherePredicate] -> Phantoms.TTerm Syntax.WhereClause
@@ -11083,7 +11083,7 @@ wherePredicateBounds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WherePredicate"),
-        Core.projectionField = (Core.Name "bounds")})),
+        Core.projectionFieldName = (Core.Name "bounds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 wherePredicateType :: Phantoms.TTerm Syntax.WherePredicate -> Phantoms.TTerm Syntax.Type
@@ -11091,7 +11091,7 @@ wherePredicateType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WherePredicate"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 wherePredicateWithBounds :: Phantoms.TTerm Syntax.WherePredicate -> Phantoms.TTerm [Syntax.TypeParamBound] -> Phantoms.TTerm Syntax.WherePredicate
@@ -11104,7 +11104,7 @@ wherePredicateWithBounds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WherePredicate"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bounds"),
@@ -11123,7 +11123,7 @@ wherePredicateWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WherePredicate"),
-              Core.projectionField = (Core.Name "bounds")})),
+              Core.projectionFieldName = (Core.Name "bounds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 whileExpr :: Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.IfCondition -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.WhileExpr
@@ -11146,7 +11146,7 @@ whileExprBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhileExpr"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 whileExprCondition :: Phantoms.TTerm Syntax.WhileExpr -> Phantoms.TTerm Syntax.IfCondition
@@ -11154,7 +11154,7 @@ whileExprCondition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhileExpr"),
-        Core.projectionField = (Core.Name "condition")})),
+        Core.projectionFieldName = (Core.Name "condition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 whileExprLabel :: Phantoms.TTerm Syntax.WhileExpr -> Phantoms.TTerm (Maybe String)
@@ -11162,7 +11162,7 @@ whileExprLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhileExpr"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 whileExprWithBody :: Phantoms.TTerm Syntax.WhileExpr -> Phantoms.TTerm Syntax.Block -> Phantoms.TTerm Syntax.WhileExpr
@@ -11175,14 +11175,14 @@ whileExprWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhileExpr"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhileExpr"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -11198,7 +11198,7 @@ whileExprWithCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhileExpr"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "condition"),
@@ -11208,7 +11208,7 @@ whileExprWithCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhileExpr"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 whileExprWithLabel :: Phantoms.TTerm Syntax.WhileExpr -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.WhileExpr
@@ -11224,12 +11224,12 @@ whileExprWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhileExpr"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.rust.syntax.WhileExpr"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))

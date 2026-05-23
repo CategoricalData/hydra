@@ -155,6 +155,6 @@
                                         "argument": {"variable": "hydra.avro.schema.Schema"},
                                         "function": {"application": {"argument": {"variable": "hydra.core.Type"}, "function": {"variable": "hydra.coders.Adapter"}}}}}}}}}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.coders", "hydra.avro.schema", "hydra.json.model"],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.coders"}, {"module": "hydra.avro.schema"}, {"module": "hydra.json.model"}],
   "description": "Type definitions for the Avro code generation environment",
-  "namespace": "hydra.avro.environment"}
+  "name": "hydra.avro.environment"}

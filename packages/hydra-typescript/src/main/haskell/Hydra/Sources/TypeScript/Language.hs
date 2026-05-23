@@ -86,9 +86,9 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.typeScript.language"),
+            moduleName = (ModuleName "hydra.typeScript.language"),
             moduleDefinitions = [toDefinition typeScriptLanguage, toDefinition typeScriptReservedWords],
-            moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for TypeScript 5.x (ECMAScript 2024 base)"}
 typeScriptLanguage :: TTermDefinition Language
 typeScriptLanguage = define "typeScriptLanguage" $
