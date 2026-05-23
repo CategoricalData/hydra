@@ -438,6 +438,17 @@ public class Generation {
     }
 
     /**
+     * Generate TypeScript source files from modules.
+     */
+    public static void writeTypeScript(String basePath, List<Module> universe, List<Module> mods) {
+        generateSources(
+                mod -> defs -> cx -> g -> hydra.typeScript.Coder.moduleToTypeScript(mod, defs, cx, g),
+                hydra.typeScript.Language.typeScriptLanguage(),
+                false, true, false, false,
+                basePath, universe, mods);
+    }
+
+    /**
      * Generate Haskell source files from modules.
      */
     public static void writeHaskell(String basePath, List<Module> universe, List<Module> mods) {

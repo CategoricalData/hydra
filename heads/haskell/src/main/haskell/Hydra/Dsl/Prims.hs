@@ -4,7 +4,6 @@
 module Hydra.Dsl.Prims where
 
 import Hydra.Core
-import Hydra.Classes
 import Hydra.Graph
 import Hydra.Util
 import qualified Hydra.Encode.Core as EncodeCore
@@ -44,11 +43,11 @@ v name = TypeVar name []
 
 -- | Create a type variable with Ord constraint
 vOrd :: String -> TypeVar
-vOrd name = TypeVar name [_TypeClass_ordering]
+vOrd name = TypeVar name [Name "ordering"]
 
 -- | Create a type variable with Eq constraint
 vEq :: String -> TypeVar
-vEq name = TypeVar name [_TypeClass_equality]
+vEq name = TypeVar name [Name "equality"]
 
 -- | Convert a list of TypeVars to the format needed by polyConstrained
 -- Filters out variables with no constraints

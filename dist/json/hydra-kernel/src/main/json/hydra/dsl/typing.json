@@ -4201,6 +4201,181 @@
           "variables": []}}},
     {
       "term": {
+        "name": "hydra.dsl.typing.typeClass",
+        "term": {
+          "annotated": {
+            "annotation": [{"key": "description", "value": {"literal": {"string": "DSL constructor for hydra.typing.TypeClass"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "record",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "typeName",
+                                  "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.TypeClass"}}, "typeName": "hydra.core.Name"}}},
+                                {
+                                  "name": "fields",
+                                  "term": {
+                                    "list": [
+                                      {
+                                        "record": {
+                                          "fields": [
+                                            {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {"application": {"argument": {"variable": "description"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                          "typeName": "hydra.core.Field"}}]}}],
+                              "typeName": "hydra.core.Record"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {
+                  "application": {
+                    "argument": {
+                      "annotated": {
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                        "body": {"literal": {"string": {}}}}},
+                    "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "description"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.typing.typeClassDescription",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL accessor for the description field of hydra.typing.TypeClass"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "wrap": {
+                    "body": {
+                      "inject": {
+                        "field": {
+                          "name": "application",
+                          "term": {
+                            "record": {
+                              "fields": [
+                                {
+                                  "name": "function",
+                                  "term": {
+                                    "inject": {
+                                      "field": {
+                                        "name": "project",
+                                        "term": {
+                                          "record": {
+                                            "fields": [
+                                              {
+                                                "name": "typeName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.TypeClass"}}, "typeName": "hydra.core.Name"}}},
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}}}],
+                                            "typeName": "hydra.core.Projection"}}},
+                                      "typeName": "hydra.core.Term"}}},
+                                {
+                                  "name": "argument",
+                                  "term": {"application": {"argument": {"variable": "x"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                              "typeName": "hydra.core.Application"}}},
+                        "typeName": "hydra.core.Term"}},
+                    "typeName": "hydra.phantoms.TTerm"}},
+                "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "x"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "application": {
+                  "argument": {
+                    "annotated": {
+                      "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                      "body": {"literal": {"string": {}}}}},
+                  "function": {"variable": "hydra.phantoms.TTerm"}}},
+              "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
+        "name": "hydra.dsl.typing.typeClassWithDescription",
+        "term": {
+          "annotated": {
+            "annotation": [
+              {
+                "key": "description",
+                "value": {"literal": {"string": "DSL updater for the description field of hydra.typing.TypeClass"}}}],
+            "body": {
+              "lambda": {
+                "body": {
+                  "lambda": {
+                    "body": {
+                      "wrap": {
+                        "body": {
+                          "inject": {
+                            "field": {
+                              "name": "record",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {"wrap": {"body": {"literal": {"string": "hydra.typing.TypeClass"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "fields",
+                                      "term": {
+                                        "list": [
+                                          {
+                                            "record": {
+                                              "fields": [
+                                                {"name": "name", "term": {"wrap": {"body": {"literal": {"string": "description"}}, "typeName": "hydra.core.Name"}}},
+                                                {
+                                                  "name": "term",
+                                                  "term": {"application": {"argument": {"variable": "newVal"}, "function": {"unwrap": "hydra.phantoms.TTerm"}}}}],
+                                              "typeName": "hydra.core.Field"}}]}}],
+                                  "typeName": "hydra.core.Record"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "typeName": "hydra.phantoms.TTerm"}},
+                    "domain": {
+                      "application": {
+                        "argument": {
+                          "annotated": {
+                            "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                            "body": {"literal": {"string": {}}}}},
+                        "function": {"variable": "hydra.phantoms.TTerm"}}},
+                    "parameter": "newVal"}},
+                "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                "parameter": "original"}}}},
+        "typeScheme": {
+          "body": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
+                  "domain": {
+                    "application": {
+                      "argument": {
+                        "annotated": {
+                          "annotation": [{"key": "description", "value": {"literal": {"string": "A human-readable description of the type class"}}}],
+                          "body": {"literal": {"string": {}}}}},
+                      "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+              "domain": {"application": {"argument": {"variable": "hydra.typing.TypeClass"}, "function": {"variable": "hydra.phantoms.TTerm"}}}}},
+          "variables": []}}},
+    {
+      "term": {
         "name": "hydra.dsl.typing.typeConstraint",
         "term": {
           "annotated": {

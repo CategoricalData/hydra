@@ -88,7 +88,7 @@ fi
 echo "  Copying coder packages from baseline..."
 JAVA_GEN="$OUTPUT_DIR/src/main/java"
 mkdir -p "$JAVA_GEN/hydra"
-for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp; do
+for coder_pkg in hydra-haskell hydra-java hydra-python hydra-scala hydra-lisp hydra-typescript; do
     coder_base="$HYDRA_ROOT/dist/java/$coder_pkg/src/main/java"
     if [ -d "$coder_base/hydra" ]; then
         for ns in $(ls "$coder_base/hydra"); do

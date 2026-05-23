@@ -410,6 +410,63 @@ module_ =
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.typing.typeClass"),
+          Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
+            Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermInject (Core.Injection {
+                Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                Core.injectionField = Core.Field {
+                  Core.fieldName = (Core.Name "record"),
+                  Core.fieldTerm = (Core.TermRecord (Core.Record {
+                    Core.recordTypeName = (Core.Name "hydra.core.Record"),
+                    Core.recordFields = [
+                      Core.Field {
+                        Core.fieldName = (Core.Name "typeName"),
+                        Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                          Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.typing.TypeClass"))}))},
+                      Core.Field {
+                        Core.fieldName = (Core.Name "fields"),
+                        Core.fieldTerm = (Core.TermList [
+                          Core.TermRecord (Core.Record {
+                            Core.recordTypeName = (Core.Name "hydra.core.Field"),
+                            Core.recordFields = [
+                              Core.Field {
+                                Core.fieldName = (Core.Name "name"),
+                                Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
+                                  Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "description"))}))},
+                              Core.Field {
+                                Core.fieldName = (Core.Name "term"),
+                                Core.fieldTerm = (Core.TermApplication (Core.Application {
+                                  Core.applicationFunction = (Core.TermLambda (Core.Lambda {
+                                    Core.lambdaParameter = (Core.Name "x"),
+                                    Core.lambdaDomain = Nothing,
+                                    Core.lambdaBody = (Core.TermInject (Core.Injection {
+                                      Core.injectionTypeName = (Core.Name "hydra.core.Term"),
+                                      Core.injectionField = Core.Field {
+                                        Core.fieldName = (Core.Name "literal"),
+                                        Core.fieldTerm = (Core.TermInject (Core.Injection {
+                                          Core.injectionTypeName = (Core.Name "hydra.core.Literal"),
+                                          Core.injectionField = Core.Field {
+                                            Core.fieldName = (Core.Name "string"),
+                                            Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))})),
+                                  Core.applicationArgument = (Core.TermApplication (Core.Application {
+                                    Core.applicationFunction = (Core.TermProject (Core.Projection {
+                                      Core.projectionTypeName = (Core.Name "hydra.typing.TypeClass"),
+                                      Core.projectionFieldName = (Core.Name "description")})),
+                                    Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
+            Core.annotatedTermAnnotation = (M.fromList [
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.typing.TypeClass")))])})),
+          Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
+            Core.typeSchemeVariables = [],
+            Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
+              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.TypeClass")),
+              Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+            Core.typeSchemeConstraints = Nothing}))})),
+        (Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.typing.typeConstraint"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
