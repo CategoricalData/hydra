@@ -164,12 +164,12 @@
                       {
                         "name": "pat",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "pat", "typeName": "hydra.scala.syntax.Case"}}}},
+                          "application": {"argument": {"variable": "c"}, "function": {"project": {"fieldName": "pat", "typeName": "hydra.scala.syntax.Case"}}}},
                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Pat"}, "variables": []}},
                       {
                         "name": "term",
                         "term": {
-                          "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "body", "typeName": "hydra.scala.syntax.Case"}}}},
+                          "application": {"argument": {"variable": "c"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.scala.syntax.Case"}}}},
                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -201,14 +201,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "f"},
-                            "function": {"project": {"field": "params", "typeName": "hydra.scala.syntax.FunctionData"}}}},
+                            "function": {"project": {"fieldName": "params", "typeName": "hydra.scala.syntax.FunctionData"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.ParamData"}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
                           "application": {
                             "argument": {"variable": "f"},
-                            "function": {"project": {"field": "body", "typeName": "hydra.scala.syntax.FunctionData"}}}},
+                            "function": {"project": {"fieldName": "body", "typeName": "hydra.scala.syntax.FunctionData"}}}},
                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
                       {
                         "name": "bodyExpr",
@@ -291,7 +291,9 @@
                     "argument": {
                       "application": {
                         "argument": {
-                          "application": {"argument": {"variable": "dn"}, "function": {"project": {"field": "value", "typeName": "hydra.scala.syntax.NameData"}}}},
+                          "application": {
+                            "argument": {"variable": "dn"},
+                            "function": {"project": {"fieldName": "value", "typeName": "hydra.scala.syntax.NameData"}}}},
                         "function": {"unwrap": "hydra.scala.syntax.PredefString"}}},
                     "function": {"variable": "hydra.serialization.cst"}}},
                 "domain": {"variable": "hydra.scala.syntax.NameData"},
@@ -313,14 +315,16 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "dp"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.ParamData"}}}},
+                          "application": {
+                            "argument": {"variable": "dp"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.ParamData"}}}},
                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Name"}, "variables": []}},
                       {
                         "name": "stype",
                         "term": {
                           "application": {
                             "argument": {"variable": "dp"},
-                            "function": {"project": {"field": "decltpe", "typeName": "hydra.scala.syntax.ParamData"}}}},
+                            "function": {"project": {"fieldName": "decltpe", "typeName": "hydra.scala.syntax.ParamData"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.scala.syntax.Type"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -409,14 +413,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "sel"},
-                            "function": {"project": {"field": "qual", "typeName": "hydra.scala.syntax.SelectData"}}}},
+                            "function": {"project": {"fieldName": "qual", "typeName": "hydra.scala.syntax.SelectData"}}}},
                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
                       {
                         "name": "name",
                         "term": {
                           "application": {
                             "argument": {"variable": "sel"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.SelectData"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.SelectData"}}}},
                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.NameData"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -463,33 +467,37 @@
                                       {
                                         "name": "name",
                                         "term": {
-                                          "application": {"argument": {"variable": "dd"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.DefDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dd"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.DefDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.NameData"}, "variables": []}},
                                       {
                                         "name": "tparams",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "dd"},
-                                            "function": {"project": {"field": "tparams", "typeName": "hydra.scala.syntax.DefDefn"}}}},
+                                            "function": {"project": {"fieldName": "tparams", "typeName": "hydra.scala.syntax.DefDefn"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.ParamType"}}, "variables": []}},
                                       {
                                         "name": "paramss",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "dd"},
-                                            "function": {"project": {"field": "paramss", "typeName": "hydra.scala.syntax.DefDefn"}}}},
+                                            "function": {"project": {"fieldName": "paramss", "typeName": "hydra.scala.syntax.DefDefn"}}}},
                                         "typeScheme": {"body": {"list": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}, "variables": []}},
                                       {
                                         "name": "scod",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "dd"},
-                                            "function": {"project": {"field": "decltpe", "typeName": "hydra.scala.syntax.DefDefn"}}}},
+                                            "function": {"project": {"fieldName": "decltpe", "typeName": "hydra.scala.syntax.DefDefn"}}}},
                                         "typeScheme": {"body": {"maybe": {"variable": "hydra.scala.syntax.Type"}}, "variables": []}},
                                       {
                                         "name": "body",
                                         "term": {
-                                          "application": {"argument": {"variable": "dd"}, "function": {"project": {"field": "body", "typeName": "hydra.scala.syntax.DefDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dd"},
+                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.scala.syntax.DefDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
                                       {
                                         "name": "tparamsExpr",
@@ -685,19 +693,23 @@
                                       {
                                         "name": "name",
                                         "term": {
-                                          "application": {"argument": {"variable": "dt"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.TypeDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dt"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.TypeDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.NameType"}, "variables": []}},
                                       {
                                         "name": "tparams",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "dt"},
-                                            "function": {"project": {"field": "tparams", "typeName": "hydra.scala.syntax.TypeDefn"}}}},
+                                            "function": {"project": {"fieldName": "tparams", "typeName": "hydra.scala.syntax.TypeDefn"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.ParamType"}}, "variables": []}},
                                       {
                                         "name": "body",
                                         "term": {
-                                          "application": {"argument": {"variable": "dt"}, "function": {"project": {"field": "body", "typeName": "hydra.scala.syntax.TypeDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dt"},
+                                            "function": {"project": {"fieldName": "body", "typeName": "hydra.scala.syntax.TypeDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Type"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -767,24 +779,30 @@
                                       {
                                         "name": "mods",
                                         "term": {
-                                          "application": {"argument": {"variable": "dv"}, "function": {"project": {"field": "mods", "typeName": "hydra.scala.syntax.ValDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dv"},
+                                            "function": {"project": {"fieldName": "mods", "typeName": "hydra.scala.syntax.ValDefn"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Mod"}}, "variables": []}},
                                       {
                                         "name": "pats",
                                         "term": {
-                                          "application": {"argument": {"variable": "dv"}, "function": {"project": {"field": "pats", "typeName": "hydra.scala.syntax.ValDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dv"},
+                                            "function": {"project": {"fieldName": "pats", "typeName": "hydra.scala.syntax.ValDefn"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Pat"}}, "variables": []}},
                                       {
                                         "name": "typ",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "dv"},
-                                            "function": {"project": {"field": "decltpe", "typeName": "hydra.scala.syntax.ValDefn"}}}},
+                                            "function": {"project": {"fieldName": "decltpe", "typeName": "hydra.scala.syntax.ValDefn"}}}},
                                         "typeScheme": {"body": {"maybe": {"variable": "hydra.scala.syntax.Type"}}, "variables": []}},
                                       {
                                         "name": "rhs",
                                         "term": {
-                                          "application": {"argument": {"variable": "dv"}, "function": {"project": {"field": "rhs", "typeName": "hydra.scala.syntax.ValDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dv"},
+                                            "function": {"project": {"fieldName": "rhs", "typeName": "hydra.scala.syntax.ValDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
                                       {
                                         "name": "nameStr",
@@ -816,7 +834,9 @@
                                                                             "term": {
                                                                               "lambda": {
                                                                                 "body": {
-                                                                                  "application": {"argument": {"variable": "pv"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.VarPat"}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "pv"},
+                                                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.VarPat"}}}},
                                                                                 "domain": {"variable": "hydra.scala.syntax.VarPat"},
                                                                                 "parameter": "pv"}}}],
                                                                         "typeName": "hydra.scala.syntax.Pat"}}}},
@@ -826,7 +846,7 @@
                                                                 "argument": {
                                                                   "application": {
                                                                     "argument": {"variable": "patName"},
-                                                                    "function": {"project": {"field": "value", "typeName": "hydra.scala.syntax.NameData"}}}},
+                                                                    "function": {"project": {"fieldName": "value", "typeName": "hydra.scala.syntax.NameData"}}}},
                                                                 "function": {"unwrap": "hydra.scala.syntax.PredefString"}}}}},
                                                         "domain": {"variable": "hydra.scala.syntax.Pat"},
                                                         "parameter": "firstPat"}},
@@ -908,31 +928,37 @@
                                       {
                                         "name": "mods",
                                         "term": {
-                                          "application": {"argument": {"variable": "dc"}, "function": {"project": {"field": "mods", "typeName": "hydra.scala.syntax.ClassDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dc"},
+                                            "function": {"project": {"fieldName": "mods", "typeName": "hydra.scala.syntax.ClassDefn"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Mod"}}, "variables": []}},
                                       {
                                         "name": "name",
                                         "term": {
-                                          "application": {"argument": {"variable": "dc"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.ClassDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dc"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.ClassDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.NameType"}, "variables": []}},
                                       {
                                         "name": "tparams",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "dc"},
-                                            "function": {"project": {"field": "tparams", "typeName": "hydra.scala.syntax.ClassDefn"}}}},
+                                            "function": {"project": {"fieldName": "tparams", "typeName": "hydra.scala.syntax.ClassDefn"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.ParamType"}}, "variables": []}},
                                       {
                                         "name": "ctor",
                                         "term": {
-                                          "application": {"argument": {"variable": "dc"}, "function": {"project": {"field": "ctor", "typeName": "hydra.scala.syntax.ClassDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "dc"},
+                                            "function": {"project": {"fieldName": "ctor", "typeName": "hydra.scala.syntax.ClassDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.PrimaryCtor"}, "variables": []}},
                                       {
                                         "name": "paramss",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "ctor"},
-                                            "function": {"project": {"field": "paramss", "typeName": "hydra.scala.syntax.PrimaryCtor"}}}},
+                                            "function": {"project": {"fieldName": "paramss", "typeName": "hydra.scala.syntax.PrimaryCtor"}}}},
                                         "typeScheme": {"body": {"list": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}, "variables": []}},
                                       {
                                         "name": "tparamsExpr",
@@ -1056,28 +1082,30 @@
                                       {
                                         "name": "name",
                                         "term": {
-                                          "application": {"argument": {"variable": "de"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.EnumDefn"}}}},
+                                          "application": {
+                                            "argument": {"variable": "de"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.EnumDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.NameType"}, "variables": []}},
                                       {
                                         "name": "tparams",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "de"},
-                                            "function": {"project": {"field": "tparams", "typeName": "hydra.scala.syntax.EnumDefn"}}}},
+                                            "function": {"project": {"fieldName": "tparams", "typeName": "hydra.scala.syntax.EnumDefn"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.ParamType"}}, "variables": []}},
                                       {
                                         "name": "template",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "de"},
-                                            "function": {"project": {"field": "template", "typeName": "hydra.scala.syntax.EnumDefn"}}}},
+                                            "function": {"project": {"fieldName": "template", "typeName": "hydra.scala.syntax.EnumDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Template"}, "variables": []}},
                                       {
                                         "name": "stats",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "template"},
-                                            "function": {"project": {"field": "stats", "typeName": "hydra.scala.syntax.Template"}}}},
+                                            "function": {"project": {"fieldName": "stats", "typeName": "hydra.scala.syntax.Template"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Stat"}}, "variables": []}},
                                       {
                                         "name": "enumHeader",
@@ -1177,28 +1205,28 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "dec"},
-                                            "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.EnumCaseDefn"}}}},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.EnumCaseDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.NameData"}, "variables": []}},
                                       {
                                         "name": "ctor",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "dec"},
-                                            "function": {"project": {"field": "ctor", "typeName": "hydra.scala.syntax.EnumCaseDefn"}}}},
+                                            "function": {"project": {"fieldName": "ctor", "typeName": "hydra.scala.syntax.EnumCaseDefn"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.PrimaryCtor"}, "variables": []}},
                                       {
                                         "name": "inits",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "dec"},
-                                            "function": {"project": {"field": "inits", "typeName": "hydra.scala.syntax.EnumCaseDefn"}}}},
+                                            "function": {"project": {"fieldName": "inits", "typeName": "hydra.scala.syntax.EnumCaseDefn"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Init"}}, "variables": []}},
                                       {
                                         "name": "paramss",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "ctor"},
-                                            "function": {"project": {"field": "paramss", "typeName": "hydra.scala.syntax.PrimaryCtor"}}}},
+                                            "function": {"project": {"fieldName": "paramss", "typeName": "hydra.scala.syntax.PrimaryCtor"}}}},
                                         "typeScheme": {"body": {"list": {"list": {"variable": "hydra.scala.syntax.ParamData"}}}, "variables": []}},
                                       {
                                         "name": "allParams",
@@ -1320,7 +1348,7 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "imp"},
-                                            "function": {"project": {"field": "importers", "typeName": "hydra.scala.syntax.Import"}}}},
+                                            "function": {"project": {"fieldName": "importers", "typeName": "hydra.scala.syntax.Import"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Importer"}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -1358,14 +1386,16 @@
                       {
                         "name": "ref",
                         "term": {
-                          "application": {"argument": {"variable": "imp"}, "function": {"project": {"field": "ref", "typeName": "hydra.scala.syntax.Importer"}}}},
+                          "application": {
+                            "argument": {"variable": "imp"},
+                            "function": {"project": {"fieldName": "ref", "typeName": "hydra.scala.syntax.Importer"}}}},
                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.RefData"}, "variables": []}},
                       {
                         "name": "importees",
                         "term": {
                           "application": {
                             "argument": {"variable": "imp"},
-                            "function": {"project": {"field": "importees", "typeName": "hydra.scala.syntax.Importer"}}}},
+                            "function": {"project": {"fieldName": "importees", "typeName": "hydra.scala.syntax.Importer"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Importee"}}, "variables": []}},
                       {
                         "name": "refName",
@@ -1382,7 +1412,9 @@
                                         "body": {
                                           "application": {
                                             "argument": {
-                                              "application": {"argument": {"variable": "dn"}, "function": {"project": {"field": "value", "typeName": "hydra.scala.syntax.NameData"}}}},
+                                              "application": {
+                                                "argument": {"variable": "dn"},
+                                                "function": {"project": {"fieldName": "value", "typeName": "hydra.scala.syntax.NameData"}}}},
                                             "function": {"unwrap": "hydra.scala.syntax.PredefString"}}},
                                         "domain": {"variable": "hydra.scala.syntax.NameData"},
                                         "parameter": "dn"}}}],
@@ -1432,7 +1464,7 @@
                                                                                 "argument": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "in"},
-                                                                                    "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.NameImportee"}}}},
+                                                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.NameImportee"}}}},
                                                                                 "function": {
                                                                                   "cases": {
                                                                                     "cases": [
@@ -1502,7 +1534,7 @@
                                                                                     "argument": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "in"},
-                                                                                        "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.NameImportee"}}}},
+                                                                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.NameImportee"}}}},
                                                                                     "function": {
                                                                                       "cases": {
                                                                                         "cases": [
@@ -1579,7 +1611,7 @@
                 "body": {
                   "application": {
                     "argument": {
-                      "application": {"argument": {"variable": "init"}, "function": {"project": {"field": "tpe", "typeName": "hydra.scala.syntax.Init"}}}},
+                      "application": {"argument": {"variable": "init"}, "function": {"project": {"fieldName": "tpe", "typeName": "hydra.scala.syntax.Init"}}}},
                     "function": {"variable": "hydra.scala.serde.typeToExpr"}}},
                 "domain": {"variable": "hydra.scala.syntax.Init"},
                 "parameter": "init"}}}},
@@ -1921,14 +1953,16 @@
                                       {
                                         "name": "fun",
                                         "term": {
-                                          "application": {"argument": {"variable": "pe"}, "function": {"project": {"field": "fun", "typeName": "hydra.scala.syntax.ExtractPat"}}}},
+                                          "application": {
+                                            "argument": {"variable": "pe"},
+                                            "function": {"project": {"fieldName": "fun", "typeName": "hydra.scala.syntax.ExtractPat"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
                                       {
                                         "name": "args",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "pe"},
-                                            "function": {"project": {"field": "args", "typeName": "hydra.scala.syntax.ExtractPat"}}}},
+                                            "function": {"project": {"fieldName": "args", "typeName": "hydra.scala.syntax.ExtractPat"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Pat"}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -1970,7 +2004,9 @@
                                 "body": {
                                   "application": {
                                     "argument": {
-                                      "application": {"argument": {"variable": "pv"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.VarPat"}}}},
+                                      "application": {
+                                        "argument": {"variable": "pv"},
+                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.VarPat"}}}},
                                     "function": {"variable": "hydra.scala.serde.dataNameToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.VarPat"},
                                 "parameter": "pv"}}},
@@ -2001,12 +2037,12 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "pkg"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.Pkg"}}}},
+                          "application": {"argument": {"variable": "pkg"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.Pkg"}}}},
                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.NameData"}, "variables": []}},
                       {
                         "name": "stats",
                         "term": {
-                          "application": {"argument": {"variable": "pkg"}, "function": {"project": {"field": "stats", "typeName": "hydra.scala.syntax.Pkg"}}}},
+                          "application": {"argument": {"variable": "pkg"}, "function": {"project": {"fieldName": "stats", "typeName": "hydra.scala.syntax.Pkg"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Stat"}}, "variables": []}},
                       {
                         "name": "package",
@@ -2121,14 +2157,16 @@
                                       {
                                         "name": "fun",
                                         "term": {
-                                          "application": {"argument": {"variable": "app"}, "function": {"project": {"field": "fun", "typeName": "hydra.scala.syntax.ApplyData"}}}},
+                                          "application": {
+                                            "argument": {"variable": "app"},
+                                            "function": {"project": {"fieldName": "fun", "typeName": "hydra.scala.syntax.ApplyData"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
                                       {
                                         "name": "args",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "app"},
-                                            "function": {"project": {"field": "args", "typeName": "hydra.scala.syntax.ApplyData"}}}},
+                                            "function": {"project": {"fieldName": "args", "typeName": "hydra.scala.syntax.ApplyData"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Data"}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -2161,12 +2199,16 @@
                                       {
                                         "name": "lhs",
                                         "term": {
-                                          "application": {"argument": {"variable": "a"}, "function": {"project": {"field": "lhs", "typeName": "hydra.scala.syntax.AssignData"}}}},
+                                          "application": {
+                                            "argument": {"variable": "a"},
+                                            "function": {"project": {"fieldName": "lhs", "typeName": "hydra.scala.syntax.AssignData"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
                                       {
                                         "name": "rhs",
                                         "term": {
-                                          "application": {"argument": {"variable": "a"}, "function": {"project": {"field": "rhs", "typeName": "hydra.scala.syntax.AssignData"}}}},
+                                          "application": {
+                                            "argument": {"variable": "a"},
+                                            "function": {"project": {"fieldName": "rhs", "typeName": "hydra.scala.syntax.AssignData"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -2189,7 +2231,7 @@
                                         "argument": {
                                           "application": {
                                             "argument": {"variable": "tup"},
-                                            "function": {"project": {"field": "args", "typeName": "hydra.scala.syntax.TupleData"}}}},
+                                            "function": {"project": {"fieldName": "args", "typeName": "hydra.scala.syntax.TupleData"}}}},
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "hydra.scala.serde.termToExpr"},
@@ -2210,12 +2252,16 @@
                                       {
                                         "name": "expr",
                                         "term": {
-                                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "expr", "typeName": "hydra.scala.syntax.MatchData"}}}},
+                                          "application": {
+                                            "argument": {"variable": "m"},
+                                            "function": {"project": {"fieldName": "expr", "typeName": "hydra.scala.syntax.MatchData"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Data"}, "variables": []}},
                                       {
                                         "name": "mCases",
                                         "term": {
-                                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "cases", "typeName": "hydra.scala.syntax.MatchData"}}}},
+                                          "application": {
+                                            "argument": {"variable": "m"},
+                                            "function": {"project": {"fieldName": "cases", "typeName": "hydra.scala.syntax.MatchData"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Case"}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -2258,7 +2304,7 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "blk"},
-                                            "function": {"project": {"field": "stats", "typeName": "hydra.scala.syntax.BlockData"}}}},
+                                            "function": {"project": {"fieldName": "stats", "typeName": "hydra.scala.syntax.BlockData"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Stat"}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -2331,12 +2377,16 @@
                                       {
                                         "name": "fun",
                                         "term": {
-                                          "application": {"argument": {"variable": "ta"}, "function": {"project": {"field": "tpe", "typeName": "hydra.scala.syntax.ApplyType"}}}},
+                                          "application": {
+                                            "argument": {"variable": "ta"},
+                                            "function": {"project": {"fieldName": "tpe", "typeName": "hydra.scala.syntax.ApplyType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Type"}, "variables": []}},
                                       {
                                         "name": "args",
                                         "term": {
-                                          "application": {"argument": {"variable": "ta"}, "function": {"project": {"field": "args", "typeName": "hydra.scala.syntax.ApplyType"}}}},
+                                          "application": {
+                                            "argument": {"variable": "ta"},
+                                            "function": {"project": {"fieldName": "args", "typeName": "hydra.scala.syntax.ApplyType"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.Type"}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -2374,7 +2424,7 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "tf"},
-                                            "function": {"project": {"field": "res", "typeName": "hydra.scala.syntax.FunctionType"}}}},
+                                            "function": {"project": {"fieldName": "res", "typeName": "hydra.scala.syntax.FunctionType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Type"}, "variables": []}},
                                       {
                                         "name": "dom",
@@ -2385,7 +2435,7 @@
                                                 "argument": {
                                                   "application": {
                                                     "argument": {"variable": "tf"},
-                                                    "function": {"project": {"field": "params", "typeName": "hydra.scala.syntax.FunctionType"}}}},
+                                                    "function": {"project": {"fieldName": "params", "typeName": "hydra.scala.syntax.FunctionType"}}}},
                                                 "function": {
                                                   "typeApplication": {"body": {"variable": "hydra.lib.lists.maybeHead"}, "type": {"variable": "hydra.scala.syntax.Type"}}}}},
                                             "function": {
@@ -2416,12 +2466,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "tl"},
-                                            "function": {"project": {"field": "tparams", "typeName": "hydra.scala.syntax.LambdaType"}}}},
+                                            "function": {"project": {"fieldName": "tparams", "typeName": "hydra.scala.syntax.LambdaType"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.scala.syntax.ParamType"}}, "variables": []}},
                                       {
                                         "name": "body",
                                         "term": {
-                                          "application": {"argument": {"variable": "tl"}, "function": {"project": {"field": "tpe", "typeName": "hydra.scala.syntax.LambdaType"}}}},
+                                          "application": {
+                                            "argument": {"variable": "tl"},
+                                            "function": {"project": {"fieldName": "tpe", "typeName": "hydra.scala.syntax.LambdaType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.scala.syntax.Type"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -2454,7 +2506,9 @@
                                 "body": {
                                   "application": {
                                     "argument": {
-                                      "application": {"argument": {"variable": "tv"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.VarType"}}}},
+                                      "application": {
+                                        "argument": {"variable": "tv"},
+                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.VarType"}}}},
                                     "function": {"variable": "hydra.scala.serde.typeNameToExpr"}}},
                                 "domain": {"variable": "hydra.scala.syntax.VarType"},
                                 "parameter": "tv"}}}],
@@ -2475,7 +2529,9 @@
                 "body": {
                   "application": {
                     "argument": {
-                      "application": {"argument": {"variable": "tn"}, "function": {"project": {"field": "value", "typeName": "hydra.scala.syntax.NameType"}}}},
+                      "application": {
+                        "argument": {"variable": "tn"},
+                        "function": {"project": {"fieldName": "value", "typeName": "hydra.scala.syntax.NameType"}}}},
                     "function": {"variable": "hydra.serialization.cst"}}},
                 "domain": {"variable": "hydra.scala.syntax.NameType"},
                 "parameter": "tn"}}}},
@@ -2493,7 +2549,9 @@
                 "body": {
                   "application": {
                     "argument": {
-                      "application": {"argument": {"variable": "tp"}, "function": {"project": {"field": "name", "typeName": "hydra.scala.syntax.ParamType"}}}},
+                      "application": {
+                        "argument": {"variable": "tp"},
+                        "function": {"project": {"fieldName": "name", "typeName": "hydra.scala.syntax.ParamType"}}}},
                     "function": {"variable": "hydra.scala.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.scala.syntax.ParamType"},
                 "parameter": "tp"}}}},
@@ -2501,32 +2559,32 @@
           "body": {"function": {"codomain": {"variable": "hydra.ast.Expr"}, "domain": {"variable": "hydra.scala.syntax.ParamType"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.serialization",
-    "hydra.java.serde",
-    "hydra.scala.syntax",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.serialization"},
+    {"module": "hydra.java.serde"},
+    {"module": "hydra.scala.syntax"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Serialization functions for converting Scala AST to abstract expressions",
-  "namespace": "hydra.scala.serde"}
+  "name": "hydra.scala.serde"}

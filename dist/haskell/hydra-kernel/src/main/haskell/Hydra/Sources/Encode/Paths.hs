@@ -12,11 +12,14 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.paths"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.paths"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.paths"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.core"),
-        (Packaging.Namespace "hydra.paths")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.paths"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.paths.subtermEdge"),
@@ -54,7 +57,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-                                      Core.projectionField = (Core.Name "source")})),
+                                      Core.projectionFieldName = (Core.Name "source")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -71,7 +74,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-                                      Core.projectionField = (Core.Name "path")})),
+                                      Core.projectionFieldName = (Core.Name "path")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -88,7 +91,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtermEdge"),
-                                      Core.projectionField = (Core.Name "target")})),
+                                      Core.projectionFieldName = (Core.Name "target")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.paths.SubtermEdge")))])})),
@@ -145,7 +148,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-                                      Core.projectionField = (Core.Name "nodes")})),
+                                      Core.projectionFieldName = (Core.Name "nodes")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -173,7 +176,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtermGraph"),
-                                      Core.projectionField = (Core.Name "edges")})),
+                                      Core.projectionFieldName = (Core.Name "edges")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.paths.SubtermGraph")))])})),
@@ -219,7 +222,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-                                      Core.projectionField = (Core.Name "name")})),
+                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -247,7 +250,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-                                      Core.projectionField = (Core.Name "label")})),
+                                      Core.projectionFieldName = (Core.Name "label")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -275,7 +278,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtermNode"),
-                                      Core.projectionField = (Core.Name "id")})),
+                                      Core.projectionFieldName = (Core.Name "id")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.paths.SubtermNode")))])})),
@@ -1179,7 +1182,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-                                      Core.projectionField = (Core.Name "source")})),
+                                      Core.projectionFieldName = (Core.Name "source")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1196,7 +1199,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-                                      Core.projectionField = (Core.Name "path")})),
+                                      Core.projectionFieldName = (Core.Name "path")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1213,7 +1216,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeEdge"),
-                                      Core.projectionField = (Core.Name "target")})),
+                                      Core.projectionFieldName = (Core.Name "target")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.paths.SubtypeEdge")))])})),
@@ -1270,7 +1273,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-                                      Core.projectionField = (Core.Name "nodes")})),
+                                      Core.projectionFieldName = (Core.Name "nodes")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1298,7 +1301,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeGraph"),
-                                      Core.projectionField = (Core.Name "edges")})),
+                                      Core.projectionFieldName = (Core.Name "edges")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.paths.SubtypeGraph")))])})),
@@ -1344,7 +1347,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-                                      Core.projectionField = (Core.Name "name")})),
+                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1372,7 +1375,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-                                      Core.projectionField = (Core.Name "label")})),
+                                      Core.projectionFieldName = (Core.Name "label")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1400,7 +1403,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.paths.SubtypeNode"),
-                                      Core.projectionField = (Core.Name "id")})),
+                                      Core.projectionFieldName = (Core.Name "id")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.paths.SubtypeNode")))])})),

@@ -10,17 +10,17 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 
 
-ns :: Namespace
-ns = Namespace "hydra.util"
+ns :: ModuleName
+ns = ModuleName "hydra.util"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, Packaging.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, Packaging.ns],
             moduleDescription = Just "General-purpose utility types used across Hydra."}
   where
     -- Note: either_ and pair are NOT included here because they correspond to built-in
@@ -52,10 +52,10 @@ namespaces = define "Namespaces" $
   T.forAll "n" $ T.record [
     "focus">:
       doc "The namespace in focus, together with its associated value" $
-      T.pair Packaging.namespace "n",
+      T.pair Packaging.moduleNameDef "n",
     "mapping">:
       doc "A mapping of namespaces to values" $
-      T.map Packaging.namespace "n"]
+      T.map Packaging.moduleNameDef "n"]
 
 either_ :: Binding
 either_ = define "Either" $

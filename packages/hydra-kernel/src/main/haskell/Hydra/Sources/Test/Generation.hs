@@ -8,6 +8,7 @@
 module Hydra.Sources.Test.Generation where
 
 import Hydra.Kernel hiding (inferModules)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import qualified Hydra.Dsl.Meta.Terms         as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -28,14 +29,14 @@ import qualified Hydra.Sources.Kernel.Terms.Scoping    as Scoping
 import qualified Hydra.Sources.Kernel.Terms.Show.Core  as ShowCore
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.generation"
+ns :: ModuleName
+ns = ModuleName "hydra.test.generation"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Generation.ns, ShowCore.ns, TestGraph.ns] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Generation.ns, ShowCore.ns, TestGraph.ns] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for code generation operations such as inferModules and inferModulesGiven")}
   where
     definitions = [Phantoms.toDefinition allTests]
@@ -63,11 +64,11 @@ infixl 1 #
 -- `inferModules` (the former only infers `targetBindings`, the latter infers
 -- the full universe).
 
-nsA :: TTerm Namespace
-nsA = Packaging.namespace (Phantoms.string "hydra.testInput.a")
+nsA :: TTerm ModuleName
+nsA = Packaging.moduleName2 (Phantoms.string "hydra.testInput.a")
 
-nsB :: TTerm Namespace
-nsB = Packaging.namespace (Phantoms.string "hydra.testInput.b")
+nsB :: TTerm ModuleName
+nsB = Packaging.moduleName2 (Phantoms.string "hydra.testInput.b")
 
 nameIdA :: TTerm Name
 nameIdA = Core.name (Phantoms.string "hydra.testInput.a.idA")
@@ -98,7 +99,7 @@ modA :: TTerm Module
 modA = Packaging.module_
   Phantoms.nothing
   nsA
-  (Phantoms.list ([] :: [TTerm Namespace]))
+  (Phantoms.list ([] :: [TTerm ModuleDependency]))
   (Phantoms.list [
     typedTermDef nameIdA (Terms.lambda "x" (Terms.var "x")) idAScheme])
 
@@ -106,7 +107,7 @@ modB :: TTerm Module
 modB = Packaging.module_
   Phantoms.nothing
   nsB
-  (Phantoms.list [nsA])
+  (Phantoms.list [Packaging.moduleDependency nsA Phantoms.nothing])
   (Phantoms.list [
     untypedTermDef nameUseId (Terms.apply (Terms.var "hydra.testInput.a.idA") (Terms.int32 42))])
 
@@ -126,11 +127,11 @@ universeMods = Phantoms.list [modA, modB]
 --     (the body is irrelevant; only the scheme matters for seeding.)
 --   hydra.testInput.w.useFunky = funky "foo" 7 100
 
-nsV :: TTerm Namespace
-nsV = Packaging.namespace (Phantoms.string "hydra.testInput.v")
+nsV :: TTerm ModuleName
+nsV = Packaging.moduleName2 (Phantoms.string "hydra.testInput.v")
 
-nsW :: TTerm Namespace
-nsW = Packaging.namespace (Phantoms.string "hydra.testInput.w")
+nsW :: TTerm ModuleName
+nsW = Packaging.moduleName2 (Phantoms.string "hydra.testInput.w")
 
 nameFunky :: TTerm Name
 nameFunky = Core.name (Phantoms.string "hydra.testInput.v.funky")
@@ -156,7 +157,7 @@ modV :: TTerm Module
 modV = Packaging.module_
   Phantoms.nothing
   nsV
-  (Phantoms.list ([] :: [TTerm Namespace]))
+  (Phantoms.list ([] :: [TTerm ModuleDependency]))
   (Phantoms.list [typedTermDef nameFunky funkyTerm funkyScheme])
 
 -- useFunky = funky "foo" 7 100
@@ -164,7 +165,7 @@ modW :: TTerm Module
 modW = Packaging.module_
   Phantoms.nothing
   nsW
-  (Phantoms.list [nsV])
+  (Phantoms.list [Packaging.moduleDependency nsV Phantoms.nothing])
   (Phantoms.list [
     untypedTermDef nameUseFunky
       (Terms.apply

@@ -2,6 +2,7 @@ module Hydra.Sources.Test.TestGraph where
 
 -- Standard imports for kernel test fixtures
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
 import Hydra.Sources.Kernel.Types.All
@@ -35,14 +36,14 @@ import qualified Data.Set                     as S
 import qualified Data.Maybe                   as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.testGraph"
+ns :: ModuleName
+ns = ModuleName "hydra.test.testGraph"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestTerms.ns, TestTypes.ns, TestEnv.ns, Lexical.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([TestTerms.ns, TestTypes.ns, TestEnv.ns, Lexical.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("A module defining the graph used in the test suite.")}
   where
    definitions = [
@@ -61,8 +62,8 @@ testTerms = define "testTerms" $
   Maps.fromList $ Phantoms.list [
     Phantoms.pair (name "testDataArthur") TestTerms.testDataArthur]
 
-testNamespace :: TTermDefinition Namespace
-testNamespace = define "testNamespace" $ DPackaging.namespace $ Phantoms.string "testGraph"
+testNamespace :: TTermDefinition ModuleName
+testNamespace = define "testNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testGraph"
 
 -- | The test graph. Emits a call to the hand-written
 -- Hydra.Test.TestEnv.testGraph (applied to testTypes and testTerms).
@@ -101,5 +102,5 @@ testTypes = define "testTypes" $
     Phantoms.pair TestTypes.testTypeUnionPolymorphicRecursiveName TestTypes.testTypeUnionPolymorphicRecursive,
     Phantoms.pair TestTypes.testTypeUnitName TestTypes.testTypeUnit]
 
-testSchemaNamespace :: TTermDefinition Namespace
-testSchemaNamespace = define "testSchemaNamespace" $ DPackaging.namespace $ Phantoms.string "testSchemaGraph"
+testSchemaNamespace :: TTermDefinition ModuleName
+testSchemaNamespace = define "testSchemaNamespace" $ DPackaging.moduleName2 $ Phantoms.string "testSchemaGraph"

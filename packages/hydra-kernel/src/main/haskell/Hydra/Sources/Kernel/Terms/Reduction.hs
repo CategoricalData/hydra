@@ -71,19 +71,19 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
-ns :: Namespace
-ns = Namespace "hydra.reduction"
+ns :: ModuleName
+ns = ModuleName "hydra.reduction"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns, Scoping.ns,
-      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns, Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
+      Resolution.ns, ShowCore.ns, ShowError.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Functions for reducing terms and types, i.e. performing computations."}
   where
    definitions = [
@@ -769,10 +769,10 @@ reduceTerm = define "reduceTerm" $
   "applyProjection" <~ ("proj" ~> "reducedArg" ~>
     "fields" <<~ ExtractCore.record @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Strip.deannotateTerm @@ var "reducedArg") $
     "matching" <~ (Lists.find
-      ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
+      ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionFieldName $ var "proj"))
       (var "fields")) $
     Maybes.maybe
-      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionField $ var "proj")) (var "cx"))
+      (Ctx.failInContext (Error.errorResolution $ Error.resolutionErrorNoMatchingField $ Error.noMatchingFieldError (Core.projectionFieldName $ var "proj")) (var "cx"))
       ("mf" ~> right $ Core.fieldTerm $ var "mf")
       (var "matching")) $
   "applyCases" <~ ("cs" ~> "reducedArg" ~>

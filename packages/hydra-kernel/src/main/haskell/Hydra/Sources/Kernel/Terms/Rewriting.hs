@@ -73,17 +73,17 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Kernel.Terms.Scoping as Scoping
 
 
-ns :: Namespace
-ns = Namespace "hydra.rewriting"
+ns :: ModuleName
+ns = ModuleName "hydra.rewriting"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Scoping.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Scoping.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Core rewrite and fold combinators for terms and types"}
   where
    definitions = [

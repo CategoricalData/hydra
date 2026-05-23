@@ -166,7 +166,7 @@ encodeLiteralType lt =
 encodeProjectionElim :: Environment.CoqEnvironment -> Core.Projection -> Syntax.Term
 encodeProjectionElim env p =
 
-      let fname = Core.projectionField p
+      let fname = Core.projectionFieldName p
           rawFname = Core.unName fname
           sanitizedSet = Environment.coqEnvironmentSanitizedAccessors env
       in (Logic.ifElse (Sets.member rawFname sanitizedSet) (Syntax.TermForallOrFun (Syntax.ForallOrFunFun (Syntax.Fun {

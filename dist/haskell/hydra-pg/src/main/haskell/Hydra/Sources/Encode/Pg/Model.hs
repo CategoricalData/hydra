@@ -13,10 +13,10 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.pg.model"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.pg.model"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.pg.model"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.pg.model")],
+        (Packaging.ModuleDependency (Packaging.ModuleName "hydra.encode.core") Nothing),
+        (Packaging.ModuleDependency (Packaging.ModuleName "hydra.pg.model") Nothing)],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.pg.model.adjacentEdge"),
@@ -57,7 +57,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-                                        Core.projectionField = (Core.Name "label")})),
+                                        Core.projectionFieldName = (Core.Name "label")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -74,7 +74,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-                                        Core.projectionField = (Core.Name "id")})),
+                                        Core.projectionFieldName = (Core.Name "id")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -91,7 +91,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-                                        Core.projectionField = (Core.Name "vertex")})),
+                                        Core.projectionFieldName = (Core.Name "vertex")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -121,7 +121,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.AdjacentEdge"),
-                                        Core.projectionField = (Core.Name "properties")})),
+                                        Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.AdjacentEdge")))])})),
@@ -348,7 +348,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-                                        Core.projectionField = (Core.Name "label")})),
+                                        Core.projectionFieldName = (Core.Name "label")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -365,7 +365,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-                                        Core.projectionField = (Core.Name "id")})),
+                                        Core.projectionFieldName = (Core.Name "id")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -382,7 +382,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-                                        Core.projectionField = (Core.Name "out")})),
+                                        Core.projectionFieldName = (Core.Name "out")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -399,7 +399,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-                                        Core.projectionField = (Core.Name "in")})),
+                                        Core.projectionFieldName = (Core.Name "in")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -429,7 +429,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Edge"),
-                                        Core.projectionField = (Core.Name "properties")})),
+                                        Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Edge")))])})),
@@ -529,7 +529,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-                                        Core.projectionField = (Core.Name "label")})),
+                                        Core.projectionFieldName = (Core.Name "label")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -546,7 +546,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-                                        Core.projectionField = (Core.Name "id")})),
+                                        Core.projectionFieldName = (Core.Name "id")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -563,7 +563,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-                                        Core.projectionField = (Core.Name "out")})),
+                                        Core.projectionFieldName = (Core.Name "out")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -580,7 +580,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-                                        Core.projectionField = (Core.Name "in")})),
+                                        Core.projectionFieldName = (Core.Name "in")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -610,7 +610,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.EdgeType"),
-                                        Core.projectionField = (Core.Name "properties")})),
+                                        Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.EdgeType")))])})),
@@ -854,7 +854,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTree"),
-                                        Core.projectionField = (Core.Name "self")})),
+                                        Core.projectionFieldName = (Core.Name "self")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -884,7 +884,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTree"),
-                                        Core.projectionField = (Core.Name "dependencies")})),
+                                        Core.projectionFieldName = (Core.Name "dependencies")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementTree")))])})),
@@ -1035,7 +1035,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTypeTree"),
-                                        Core.projectionField = (Core.Name "self")})),
+                                        Core.projectionFieldName = (Core.Name "self")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1065,7 +1065,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.ElementTypeTree"),
-                                        Core.projectionField = (Core.Name "dependencies")})),
+                                        Core.projectionFieldName = (Core.Name "dependencies")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.ElementTypeTree")))])})),
@@ -1136,7 +1136,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Graph"),
-                                        Core.projectionField = (Core.Name "vertices")})),
+                                        Core.projectionFieldName = (Core.Name "vertices")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1168,7 +1168,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Graph"),
-                                        Core.projectionField = (Core.Name "edges")})),
+                                        Core.projectionFieldName = (Core.Name "edges")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Graph")))])})),
@@ -1242,7 +1242,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
-                                        Core.projectionField = (Core.Name "vertices")})),
+                                        Core.projectionFieldName = (Core.Name "vertices")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1274,7 +1274,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.GraphSchema"),
-                                        Core.projectionField = (Core.Name "edges")})),
+                                        Core.projectionFieldName = (Core.Name "edges")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.GraphSchema")))])})),
@@ -1422,7 +1422,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
-                                        Core.projectionField = (Core.Name "vertices")})),
+                                        Core.projectionFieldName = (Core.Name "vertices")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1452,7 +1452,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.LazyGraph"),
-                                        Core.projectionField = (Core.Name "edges")})),
+                                        Core.projectionFieldName = (Core.Name "edges")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.LazyGraph")))])})),
@@ -1508,7 +1508,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Property"),
-                                        Core.projectionField = (Core.Name "key")})),
+                                        Core.projectionFieldName = (Core.Name "key")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1525,7 +1525,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Property"),
-                                        Core.projectionField = (Core.Name "value")})),
+                                        Core.projectionFieldName = (Core.Name "value")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Property")))])})),
@@ -1625,7 +1625,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-                                        Core.projectionField = (Core.Name "key")})),
+                                        Core.projectionFieldName = (Core.Name "key")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1642,7 +1642,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-                                        Core.projectionField = (Core.Name "value")})),
+                                        Core.projectionFieldName = (Core.Name "value")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1670,7 +1670,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.PropertyType"),
-                                        Core.projectionField = (Core.Name "required")})),
+                                        Core.projectionFieldName = (Core.Name "required")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.PropertyType")))])})),
@@ -1726,7 +1726,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-                                        Core.projectionField = (Core.Name "label")})),
+                                        Core.projectionFieldName = (Core.Name "label")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1743,7 +1743,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-                                        Core.projectionField = (Core.Name "id")})),
+                                        Core.projectionFieldName = (Core.Name "id")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1773,7 +1773,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.Vertex"),
-                                        Core.projectionField = (Core.Name "properties")})),
+                                        Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.Vertex")))])})),
@@ -1873,7 +1873,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-                                        Core.projectionField = (Core.Name "label")})),
+                                        Core.projectionFieldName = (Core.Name "label")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1890,7 +1890,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-                                        Core.projectionField = (Core.Name "id")})),
+                                        Core.projectionFieldName = (Core.Name "id")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1920,7 +1920,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexType"),
-                                        Core.projectionField = (Core.Name "properties")})),
+                                        Core.projectionFieldName = (Core.Name "properties")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.VertexType")))])})),
@@ -1978,7 +1978,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-                                        Core.projectionField = (Core.Name "vertex")})),
+                                        Core.projectionFieldName = (Core.Name "vertex")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -2008,7 +2008,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-                                        Core.projectionField = (Core.Name "ins")})),
+                                        Core.projectionFieldName = (Core.Name "ins")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -2038,7 +2038,7 @@ module_ =
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges"),
-                                        Core.projectionField = (Core.Name "outs")})),
+                                        Core.projectionFieldName = (Core.Name "outs")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.pg.model.VertexWithAdjacentEdges")))])})),

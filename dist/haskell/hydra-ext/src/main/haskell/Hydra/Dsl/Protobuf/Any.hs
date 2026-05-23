@@ -28,7 +28,7 @@ anyTypeUrl x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.protobuf.any.Any"),
-        Core.projectionField = (Core.Name "typeUrl")})),
+        Core.projectionFieldName = (Core.Name "typeUrl")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyValue :: Phantoms.TTerm Any.Any -> Phantoms.TTerm B.ByteString
@@ -36,7 +36,7 @@ anyValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.protobuf.any.Any"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyWithTypeUrl :: Phantoms.TTerm Any.Any -> Phantoms.TTerm String -> Phantoms.TTerm Any.Any
@@ -52,7 +52,7 @@ anyWithTypeUrl original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.protobuf.any.Any"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 anyWithValue :: Phantoms.TTerm Any.Any -> Phantoms.TTerm B.ByteString -> Phantoms.TTerm Any.Any
@@ -65,7 +65,7 @@ anyWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.protobuf.any.Any"),
-              Core.projectionField = (Core.Name "typeUrl")})),
+              Core.projectionFieldName = (Core.Name "typeUrl")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),

@@ -60,14 +60,14 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Typing as ShowTyping
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 
-ns :: Namespace
-ns = Namespace "hydra.show.errors"
+ns :: ModuleName
+ns = ModuleName "hydra.show.errors"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, ShowErrorCore.ns, ShowVariants.ns, ShowTyping.ns, Formatting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowCore.ns, ShowErrorCore.ns, ShowVariants.ns, ShowTyping.ns, Formatting.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "String representations of hydra.error types"}
   where
    definitions = [

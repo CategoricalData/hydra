@@ -12,17 +12,17 @@ import qualified Hydra.Sources.Kernel.Types.Errors as Error
 import qualified Hydra.Sources.Kernel.Types.Packaging as Packaging
 
 
-ns :: Namespace
-ns = Namespace "hydra.graph"
+ns :: ModuleName
+ns = ModuleName "hydra.graph"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Context.ns, Core.ns, Error.ns, Packaging.ns],
+            moduleDependencies = unqualifiedDep <$> [Context.ns, Core.ns, Error.ns, Packaging.ns],
             moduleDescription = Just "The extension to graphs of Hydra's core type system (hydra.core)"}
   where
     definitions = [
@@ -67,7 +67,7 @@ library = define "Library" $
   T.record [
     "namespace">:
       doc "A common prefix for all primitive function names in the library"
-      Packaging.namespace,
+      Packaging.moduleNameDef,
     "prefix">:
       doc "A preferred namespace prefix for function names in the library"
       T.string,

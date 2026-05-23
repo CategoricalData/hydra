@@ -10,19 +10,19 @@ import qualified Hydra.Show.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Show a conflicting module namespace error as a string
-conflictingModuleNamespaceError :: ErrorPackaging.ConflictingModuleNamespaceError -> String
-conflictingModuleNamespaceError e =
+conflictingModuleNameError :: ErrorPackaging.ConflictingModuleNameError -> String
+conflictingModuleNameError e =
     Strings.cat [
       "module namespaces conflict when mapped to target language path: ",
-      (Packaging.unNamespace (ErrorPackaging.conflictingModuleNamespaceErrorFirst e)),
+      (Packaging.unModuleName (ErrorPackaging.conflictingModuleNameErrorFirst e)),
       " vs ",
-      (Packaging.unNamespace (ErrorPackaging.conflictingModuleNamespaceErrorSecond e))]
+      (Packaging.unModuleName (ErrorPackaging.conflictingModuleNameErrorSecond e))]
 -- | Show a conflicting variant name error as a string
 conflictingVariantNameError :: ErrorPackaging.ConflictingVariantNameError -> String
 conflictingVariantNameError e =
     Strings.cat [
       "in module ",
-      (Packaging.unNamespace (ErrorPackaging.conflictingVariantNameErrorNamespace e)),
+      (Packaging.unModuleName (ErrorPackaging.conflictingVariantNameErrorModuleName e)),
       ": variant ",
       (Core.unName (ErrorPackaging.conflictingVariantNameErrorVariantName e)),
       " of type ",
@@ -31,19 +31,19 @@ conflictingVariantNameError e =
       (Core.unName (ErrorPackaging.conflictingVariantNameErrorConflictingName e)),
       " which conflicts with another type definition"]
 -- | Show a definition-not-in-module-namespace error as a string
-definitionNotInModuleNamespaceError :: ErrorPackaging.DefinitionNotInModuleNamespaceError -> String
-definitionNotInModuleNamespaceError e =
+definitionNotInModuleNameError :: ErrorPackaging.DefinitionNotInModuleNameError -> String
+definitionNotInModuleNameError e =
     Strings.cat [
       "definition ",
-      (Core.unName (ErrorPackaging.definitionNotInModuleNamespaceErrorName e)),
+      (Core.unName (ErrorPackaging.definitionNotInModuleNameErrorName e)),
       " is not in module namespace ",
-      (Packaging.unNamespace (ErrorPackaging.definitionNotInModuleNamespaceErrorNamespace e))]
+      (Packaging.unModuleName (ErrorPackaging.definitionNotInModuleNameErrorModuleName e))]
 -- | Show a definitions-out-of-order error as a string
 definitionsOutOfOrderError :: ErrorPackaging.DefinitionsOutOfOrderError -> String
 definitionsOutOfOrderError e =
     Strings.cat [
       "in module ",
-      (Packaging.unNamespace (ErrorPackaging.definitionsOutOfOrderErrorNamespace e)),
+      (Packaging.unModuleName (ErrorPackaging.definitionsOutOfOrderErrorModuleName e)),
       ": definitions out of order: ",
       (Core.unName (ErrorPackaging.definitionsOutOfOrderErrorPrecedingName e)),
       " precedes ",
@@ -53,21 +53,21 @@ duplicateDefinitionNameError :: ErrorPackaging.DuplicateDefinitionNameError -> S
 duplicateDefinitionNameError e =
     Strings.cat [
       "in module ",
-      (Packaging.unNamespace (ErrorPackaging.duplicateDefinitionNameErrorNamespace e)),
+      (Packaging.unModuleName (ErrorPackaging.duplicateDefinitionNameErrorModuleName e)),
       ": duplicate definition name ",
       (Core.unName (ErrorPackaging.duplicateDefinitionNameErrorName e))]
 -- | Show a duplicate module namespace error as a string
-duplicateModuleNamespaceError :: ErrorPackaging.DuplicateModuleNamespaceError -> String
-duplicateModuleNamespaceError e =
+duplicateModuleNameError :: ErrorPackaging.DuplicateModuleNameError -> String
+duplicateModuleNameError e =
     Strings.cat [
       "duplicate module namespace ",
-      (Packaging.unNamespace (ErrorPackaging.duplicateModuleNamespaceErrorNamespace e))]
+      (Packaging.unModuleName (ErrorPackaging.duplicateModuleNameErrorModuleName e))]
 -- | Show an invalid definition name error as a string
 invalidDefinitionNameError :: ErrorPackaging.InvalidDefinitionNameError -> String
 invalidDefinitionNameError e =
     Strings.cat [
       "in module ",
-      (Packaging.unNamespace (ErrorPackaging.invalidDefinitionNameErrorNamespace e)),
+      (Packaging.unModuleName (ErrorPackaging.invalidDefinitionNameErrorModuleName e)),
       ": definition ",
       (Core.unName (ErrorPackaging.invalidDefinitionNameErrorName e)),
       " does not match expected ",
@@ -77,25 +77,25 @@ invalidModuleError :: ErrorPackaging.InvalidModuleError -> String
 invalidModuleError e =
     Strings.cat2 "invalid module: " (case e of
       ErrorPackaging.InvalidModuleErrorConflictingVariantName v0 -> conflictingVariantNameError v0
-      ErrorPackaging.InvalidModuleErrorDefinitionNotInModuleNamespace v0 -> definitionNotInModuleNamespaceError v0
+      ErrorPackaging.InvalidModuleErrorDefinitionNotInModuleName v0 -> definitionNotInModuleNameError v0
       ErrorPackaging.InvalidModuleErrorDefinitionsOutOfOrder v0 -> definitionsOutOfOrderError v0
       ErrorPackaging.InvalidModuleErrorDuplicateDefinitionName v0 -> duplicateDefinitionNameError v0
       ErrorPackaging.InvalidModuleErrorInvalidDefinitionName v0 -> invalidDefinitionNameError v0
-      ErrorPackaging.InvalidModuleErrorInvalidNamespaceConvention v0 -> invalidNamespaceConventionError v0
+      ErrorPackaging.InvalidModuleErrorInvalidModuleNameConvention v0 -> invalidModuleNameConventionError v0
       ErrorPackaging.InvalidModuleErrorMissingDocumentation v0 -> missingDocumentationError v0)
 -- | Show an invalid namespace convention error as a string
-invalidNamespaceConventionError :: ErrorPackaging.InvalidNamespaceConventionError -> String
-invalidNamespaceConventionError e =
+invalidModuleNameConventionError :: ErrorPackaging.InvalidModuleNameConventionError -> String
+invalidModuleNameConventionError e =
     Strings.cat [
       "namespace ",
-      (Packaging.unNamespace (ErrorPackaging.invalidNamespaceConventionErrorNamespace e)),
+      (Packaging.unModuleName (ErrorPackaging.invalidModuleNameConventionErrorModuleName e)),
       " does not match the dotted-camelCase naming convention"]
 -- | Show an invalid package error as a string
 invalidPackageError :: ErrorPackaging.InvalidPackageError -> String
 invalidPackageError e =
     Strings.cat2 "invalid package: " (case e of
-      ErrorPackaging.InvalidPackageErrorConflictingModuleNamespace v0 -> conflictingModuleNamespaceError v0
-      ErrorPackaging.InvalidPackageErrorDuplicateModuleNamespace v0 -> duplicateModuleNamespaceError v0
+      ErrorPackaging.InvalidPackageErrorConflictingModuleName v0 -> conflictingModuleNameError v0
+      ErrorPackaging.InvalidPackageErrorDuplicateModuleName v0 -> duplicateModuleNameError v0
       ErrorPackaging.InvalidPackageErrorInvalidModule v0 -> invalidModuleError v0
       ErrorPackaging.InvalidPackageErrorInvalidPackageName v0 -> invalidPackageNameError v0)
 -- | Show an invalid package name error as a string
@@ -110,7 +110,7 @@ missingDocumentationError :: ErrorPackaging.MissingDocumentationError -> String
 missingDocumentationError e =
     Strings.cat [
       "in module ",
-      (Packaging.unNamespace (ErrorPackaging.missingDocumentationErrorNamespace e)),
+      (Packaging.unModuleName (ErrorPackaging.missingDocumentationErrorModuleName e)),
       ": definition ",
       (Core.unName (ErrorPackaging.missingDocumentationErrorName e)),
       " lacks a description annotation"]

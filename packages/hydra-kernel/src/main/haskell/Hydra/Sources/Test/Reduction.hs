@@ -5,6 +5,7 @@ module Hydra.Sources.Test.Reduction where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -25,14 +26,14 @@ import qualified Hydra.Sources.Kernel.Terms.Reduction as Reduction
 import qualified Hydra.Dsl.Meta.Lib.Eithers as Eithers
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.reduction"
+ns :: ModuleName
+ns = ModuleName "hydra.test.reduction"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Namespace "hydra.reduction", Namespace "hydra.inference", Namespace "hydra.show.core", Namespace "hydra.context", Namespace "hydra.core", Namespace "hydra.errors", Namespace "hydra.test.testGraph", Namespace "hydra.testing"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.inference", ModuleName "hydra.show.core", ModuleName "hydra.context", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
             moduleDescription = Just "Test cases for term reduction/evaluation mechanics"}
   where
     definitions = [Phantoms.toDefinition allTests]

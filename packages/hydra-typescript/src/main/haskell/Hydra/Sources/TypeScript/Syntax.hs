@@ -30,8 +30,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.typeScript.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.typeScript.syntax"
 
 define :: String -> Type -> Binding
 define = datatype ns
@@ -41,9 +41,9 @@ ts = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just "A TypeScript 5.x syntax model for Hydra code generation"}
   where
     definitions = [

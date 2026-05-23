@@ -18,8 +18,8 @@ import qualified Hydra.Sources.Rdf.Syntax as RdfSyntax
 import qualified Hydra.Sources.Xml.Schema as XmlSchema
 
 
-ns :: Namespace
-ns = Namespace "hydra.owl.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.owl.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -59,9 +59,9 @@ withAnns fields = T.record $
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns, RdfSyntax.ns, XmlSchema.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns, RdfSyntax.ns, XmlSchema.ns],
             moduleDescription = Just "An OWL 2 syntax model. See https://www.w3.org/TR/owl2-syntax"}
   where
     definitions = generalDefinitions ++ owl2Definitions

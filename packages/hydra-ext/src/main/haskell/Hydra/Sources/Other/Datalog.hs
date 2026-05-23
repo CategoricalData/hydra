@@ -8,8 +8,8 @@ import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 
 
-ns :: Namespace
-ns = Namespace "hydra.datalog.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.datalog.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -19,9 +19,9 @@ dl = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [],
+            moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just "A basic Datalog model"}
   where
     definitions = [

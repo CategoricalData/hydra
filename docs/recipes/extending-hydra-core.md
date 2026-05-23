@@ -1458,7 +1458,7 @@ The deltas worth knowing:
 
 2. **List-concat surfaces in source files that hide Prelude `(++)`.** When
    collapsing two list fields into one, callsites that previously read both
-   lists separately (e.g. `[X.ns] ++ kernelTypesNamespaces` on the
+   lists separately (e.g. `[X.ns] ++ kernelTypesModuleNames` on the
    non-empty side, or `Lists.concat2 listA listB` semantics from the dist
    side) now produce host-level Haskell `++`. Many DSL source files import
    `Prelude hiding ((++))` so the DSL's own polymorphic `(++)` (defined for
@@ -1472,7 +1472,7 @@ The deltas worth knowing:
    may already define a top-level helper using one of the names you're
    collapsing into. Concrete case: `Hydra.Sources.Coq.Utils.moduleDependencies
    :: TTermDefinition (Module -> [String])` (a per-element helper) shadowed
-   the new kernel field `moduleDependencies :: [Namespace]`. Renamed to
+   the new kernel field `moduleDependencies :: [ModuleDependency]`. Renamed to
    `moduleDependencyNames` and updated 2 callers. Search for top-level
    `<newField>` definitions across all hosts before declaring the merge done.
 

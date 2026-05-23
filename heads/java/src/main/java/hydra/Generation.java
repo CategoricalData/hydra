@@ -14,7 +14,7 @@ import hydra.lib.Libraries;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
 import hydra.packaging.TermDefinition;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
 import hydra.Rewriting;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Either;
@@ -320,10 +320,10 @@ public class Generation {
      * Load modules from JSON files using a pre-built schema map (from Bootstrap.typesByName()).
      */
     public static List<Module> loadModulesFromJson(String basePath,
-            Map<Name, hydra.core.Type> schemaMap, List<Namespace> namespaces) throws IOException {
+            Map<Name, hydra.core.Type> schemaMap, List<ModuleName> namespaces) throws IOException {
         Graph bsGraph = bootstrapGraph();
         List<Module> modules = new ArrayList<>();
-        for (Namespace ns : namespaces) {
+        for (ModuleName ns : namespaces) {
             String filePath = basePath + File.separator
                     + Codegen.namespaceToPath(ns) + ".json";
             Value jsonVal = parseJsonFile(filePath);
@@ -360,14 +360,14 @@ public class Generation {
      * Read the manifest.json file from a JSON base directory and extract a named
      * field (e.g. "kernelModules", "mainModules", "testModules") as a list of Namespaces.
      */
-    public static List<Namespace> readManifestField(String basePath, String fieldName) throws IOException {
+    public static List<ModuleName> readManifestField(String basePath, String fieldName) throws IOException {
         String manifestPath = basePath + File.separator + "manifest.json";
         Value manifestVal = parseJsonFile(manifestPath);
         Map<String, Value> obj = expectObject(manifestVal, "manifest.json");
         List<Value> arr = expectArray(obj.get(fieldName), "manifest." + fieldName);
-        List<Namespace> result = new ArrayList<>(arr.size());
+        List<ModuleName> result = new ArrayList<>(arr.size());
         for (Value v : arr) {
-            result.add(new Namespace(expectString(v, fieldName + " entry")));
+            result.add(new ModuleName(expectString(v, fieldName + " entry")));
         }
         return result;
     }
@@ -489,7 +489,7 @@ public class Generation {
                             hydra.Serialization.parenthesize(
                                     hydra.lisp.Serde.programToExpr(program)));
                     String filePath = hydra.Names.namespaceToFilePath(
-                            cc, new hydra.packaging.FileExtension(fileExt), mod.namespace);
+                            cc, new hydra.packaging.FileExtension(fileExt), mod.name);
                     Map<String, String> fileMap = new java.util.TreeMap<>();
                     fileMap.put(filePath, code);
                     return new hydra.util.Either.Right(fileMap);
@@ -502,7 +502,7 @@ public class Generation {
     /**
      * Convert a namespace to a file path.
      */
-    public static String namespaceToPath(Namespace ns) {
+    public static String namespaceToPath(ModuleName ns) {
         return Codegen.namespaceToPath(ns);
     }
 
@@ -531,7 +531,7 @@ public class Generation {
                 }
             });
         }
-        return new Module(m.description, m.namespace, m.dependencies, stripped);
+        return new Module(m.description, m.name, m.dependencies, stripped);
     }
 
     /**
@@ -551,7 +551,7 @@ public class Generation {
     public static List<Module> filterKernelModules(List<Module> modules) {
         List<Module> result = new ArrayList<>();
         for (Module m : modules) {
-            if (!m.namespace.value.startsWith("hydra.") && !m.namespace.value.startsWith("hydra.json.yaml.")) {
+            if (!m.name.value.startsWith("hydra.") && !m.name.value.startsWith("hydra.json.yaml.")) {
                 result.add(m);
             }
         }

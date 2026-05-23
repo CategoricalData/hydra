@@ -195,7 +195,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "isLossy"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "isLossy"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -274,7 +274,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -350,7 +350,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -426,7 +426,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "coder"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "coder"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -538,7 +538,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -572,7 +572,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -606,7 +606,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "coder"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "coder"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -736,7 +736,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "isLossy"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "isLossy"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -778,7 +778,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -812,7 +812,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "coder"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "coder"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -936,7 +936,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "isLossy"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "isLossy"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -970,7 +970,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1012,7 +1012,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "coder"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "coder"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1136,7 +1136,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "isLossy"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "isLossy"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1170,7 +1170,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "source"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1204,7 +1204,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Adapter"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "target"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1463,7 +1463,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.AdapterContext"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "graph"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "graph"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -1520,7 +1520,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.AdapterContext"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "language"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "language"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -1577,7 +1577,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.AdapterContext"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "adapters"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "adapters"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -1676,7 +1676,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.AdapterContext"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "language"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "language"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1710,7 +1710,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.AdapterContext"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "adapters"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "adapters"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1804,7 +1804,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.AdapterContext"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "graph"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "graph"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1846,7 +1846,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.AdapterContext"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "adapters"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "adapters"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1940,7 +1940,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.AdapterContext"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "graph"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "graph"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -1974,7 +1974,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.AdapterContext"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "language"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "language"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2217,7 +2217,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Bicoder"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -2305,7 +2305,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Bicoder"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -2423,7 +2423,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Bicoder"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2571,7 +2571,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Bicoder"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -2829,7 +2829,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Coder"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -2902,7 +2902,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Coder"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -3005,7 +3005,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Coder"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -3129,7 +3129,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Coder"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -3393,7 +3393,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Language"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -3448,7 +3448,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Language"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "constraints"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "constraints"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -3530,7 +3530,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Language"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "constraints"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "constraints"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -3621,7 +3621,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Language"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "name"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -3895,7 +3895,9 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -3952,7 +3954,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -4009,7 +4011,9 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -4066,7 +4070,9 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -4123,7 +4129,9 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                              {
+                                                "name": "fieldName",
+                                                "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -4180,7 +4188,7 @@
                                               {
                                                 "name": "typeName",
                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
+                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
                                             "typeName": "hydra.core.Projection"}}},
                                       "typeName": "hydra.core.Term"}}},
                                 {
@@ -4270,7 +4278,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4304,7 +4312,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4338,7 +4348,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4372,7 +4384,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4406,7 +4420,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4500,7 +4514,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4542,7 +4558,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4576,7 +4594,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4610,7 +4630,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4644,7 +4666,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4738,7 +4760,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4772,7 +4796,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4814,7 +4838,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4848,7 +4874,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4882,7 +4910,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -4976,7 +5004,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5010,7 +5040,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5044,7 +5074,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5086,7 +5118,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5120,7 +5154,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5214,7 +5248,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5248,7 +5284,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5282,7 +5318,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5316,7 +5354,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5358,7 +5398,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "types"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5452,7 +5492,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "literalVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5486,7 +5528,7 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "floatTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5520,7 +5562,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "integerTypes"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5554,7 +5598,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "termVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5588,7 +5634,9 @@
                                                                             {
                                                                               "name": "typeName",
                                                                               "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.LanguageConstraints"}}, "typeName": "hydra.core.Name"}}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {
+                                                                              "name": "fieldName",
+                                                                              "term": {"wrap": {"body": {"literal": {"string": "typeVariants"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}},
                                                               {
@@ -5791,17 +5839,17 @@
             "application": {"argument": {"variable": "hydra.coders.TraversalOrder"}, "function": {"variable": "hydra.phantoms.TTerm"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.coders",
-    "hydra.phantoms",
-    "hydra.core",
-    "hydra.context",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.variants",
-    "hydra.dsl.context",
-    "hydra.dsl.errors",
-    "hydra.dsl.graph",
-    "hydra.dsl.variants",
-    "hydra.dsl.core"],
+    {"module": "hydra.coders"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.context"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.variants"},
+    {"module": "hydra.core"},
+    {"module": "hydra.dsl.context"},
+    {"module": "hydra.dsl.errors"},
+    {"module": "hydra.dsl.graph"},
+    {"module": "hydra.dsl.variants"},
+    {"module": "hydra.dsl.core"}],
   "description": "DSL functions for hydra.coders",
-  "namespace": "hydra.dsl.coders"}
+  "name": "hydra.dsl.coders"}

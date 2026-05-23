@@ -134,7 +134,7 @@ encodeModulesAsRdf cx graph mods = go cx mods [] 0
   where
     go _ [] descs nSkip = return (descs, nSkip)
     go cx' (m:ms) descs nSkip = do
-      let ns = unNamespace (moduleNamespace m)
+      let ns = unModuleName (moduleName m)
           subject = Rdf.ResourceIri $ Rdf.Iri ("urn:hydra:module:" ++ ns)
           simplified = simplifyModule m
           moduleTerm = EncodePackaging.module_ simplified
@@ -181,8 +181,8 @@ generateInvalidData = triplesToNtriples $
   [ triple "urn:invalid:module1" (rdfType) "urn:hydra.module.Module"
   , tripleL "urn:invalid:module1" "urn:hydra.module#moduleDescription" "A module with no namespace"
   ] ++
-  -- A Namespace with a non-string value (integer instead of string)
-  [ triple "urn:invalid:ns1" (rdfType) "urn:hydra.module.Namespace"
+  -- A ModuleName with a non-string value (integer instead of string)
+  [ triple "urn:invalid:ns1" (rdfType) "urn:hydra.module.ModuleName"
   , tripleInt "urn:invalid:ns1" "urn:hydra.module#namespace" 42
   ] ++
   -- A QualifiedName missing its required "local" field

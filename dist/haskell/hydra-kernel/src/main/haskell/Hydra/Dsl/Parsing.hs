@@ -25,7 +25,7 @@ parseErrorMessage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
-        Core.projectionField = (Core.Name "message")})),
+        Core.projectionFieldName = (Core.Name "message")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the remainder field of hydra.parsing.ParseError
 parseErrorRemainder :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String
@@ -33,7 +33,7 @@ parseErrorRemainder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
-        Core.projectionField = (Core.Name "remainder")})),
+        Core.projectionFieldName = (Core.Name "remainder")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the message field of hydra.parsing.ParseError
 parseErrorWithMessage :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String -> Phantoms.TTerm Parsing.ParseError
@@ -49,7 +49,7 @@ parseErrorWithMessage original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
-              Core.projectionField = (Core.Name "remainder")})),
+              Core.projectionFieldName = (Core.Name "remainder")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the remainder field of hydra.parsing.ParseError
 parseErrorWithRemainder :: Phantoms.TTerm Parsing.ParseError -> Phantoms.TTerm String -> Phantoms.TTerm Parsing.ParseError
@@ -62,7 +62,7 @@ parseErrorWithRemainder original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseError"),
-              Core.projectionField = (Core.Name "message")})),
+              Core.projectionFieldName = (Core.Name "message")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
@@ -101,7 +101,7 @@ parseSuccessRemainder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-        Core.projectionField = (Core.Name "remainder")})),
+        Core.projectionFieldName = (Core.Name "remainder")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the value field of hydra.parsing.ParseSuccess
 parseSuccessValue :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm a
@@ -109,7 +109,7 @@ parseSuccessValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the remainder field of hydra.parsing.ParseSuccess
 parseSuccessWithRemainder :: Phantoms.TTerm (Parsing.ParseSuccess a) -> Phantoms.TTerm String -> Phantoms.TTerm (Parsing.ParseSuccess a)
@@ -122,7 +122,7 @@ parseSuccessWithRemainder original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "remainder"),
@@ -141,7 +141,7 @@ parseSuccessWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-              Core.projectionField = (Core.Name "remainder")})),
+              Core.projectionFieldName = (Core.Name "remainder")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.parsing.Parser wrapper
 parser :: Phantoms.TTerm (String -> Parsing.ParseResult a) -> Phantoms.TTerm (Parsing.Parser a)

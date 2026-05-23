@@ -93,23 +93,23 @@ type AvroHydraAdapter = Adapter Avro.Schema Type JM.Value Term
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-avroSchemaPhantomNs :: Namespace
-avroSchemaPhantomNs = Namespace "hydra.avro.schema"
+avroSchemaPhantomNs :: ModuleName
+avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
 
-jsonModelNs :: Namespace
-jsonModelNs = Namespace "hydra.json.model"
+jsonModelNs :: ModuleName
+jsonModelNs = ModuleName "hydra.json.model"
 
-ns :: Namespace
-ns = Namespace "hydra.avro.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.avro.coder"
 
-avroEnvironmentNs :: Namespace
-avroEnvironmentNs = Namespace "hydra.avro.environment"
+avroEnvironmentNs :: ModuleName
+avroEnvironmentNs = ModuleName "hydra.avro.environment"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ExtractCore.ns, Strip.ns, Namespace "hydra.names"] L.++ (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ExtractCore.ns, Strip.ns] L.++ (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms"}
   where
     definitions = [
@@ -475,7 +475,7 @@ avroNameToHydraName = define "avroNameToHydraName" $
     "mns">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_namespace @@ var "qname",
     "local">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_name @@ var "qname"] $
     Names.unqualifyName @@ Packaging.qualifiedName
-      (Maybes.map (lambda "s" $ wrap _Namespace (var "s")) (var "mns"))
+      (Maybes.map (lambda "s" $ wrap _ModuleName (var "s")) (var "mns"))
       (var "local")
 
 avro_foreignKey :: TTermDefinition String

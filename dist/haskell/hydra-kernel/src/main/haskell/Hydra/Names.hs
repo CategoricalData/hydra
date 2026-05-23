@@ -23,11 +23,11 @@ import qualified Data.Scientific as Sci
 import qualified Data.Map as M
 import qualified Data.Set as S
 -- | Given a mapping of namespaces to prefixes, convert a name to a compact string representation
-compactName :: M.Map Packaging.Namespace String -> Core.Name -> String
+compactName :: M.Map Packaging.ModuleName String -> Core.Name -> String
 compactName namespaces name =
 
       let qualName = qualifyName name
-          mns = Packaging.qualifiedNameNamespace qualName
+          mns = Packaging.qualifiedNameModuleName qualName
           local = Packaging.qualifiedNameLocal qualName
       in (Maybes.maybe (Core.unName name) (\ns -> Maybes.maybe local (\pre -> Strings.cat [
         pre,
@@ -60,10 +60,10 @@ nameToFilePath :: Util.CaseConvention -> Util.CaseConvention -> Packaging.FileEx
 nameToFilePath nsConv localConv ext name =
 
       let qualName = qualifyName name
-          ns = Packaging.qualifiedNameNamespace qualName
+          ns = Packaging.qualifiedNameModuleName qualName
           local = Packaging.qualifiedNameLocal qualName
           nsToFilePath =
-                  \nsArg -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Packaging.unNamespace nsArg)))
+                  \nsArg -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Packaging.unModuleName nsArg)))
           prefix = Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns
           suffix = Formatting.convertCase Util.CaseConventionPascal localConv local
       in (Strings.cat [
@@ -72,22 +72,22 @@ nameToFilePath nsConv localConv ext name =
         ".",
         (Packaging.unFileExtension ext)])
 -- | Extract the namespace of a name, if any
-namespaceOf :: Core.Name -> Maybe Packaging.Namespace
-namespaceOf arg_ = Packaging.qualifiedNameNamespace (qualifyName arg_)
+namespaceOf :: Core.Name -> Maybe Packaging.ModuleName
+namespaceOf arg_ = Packaging.qualifiedNameModuleName (qualifyName arg_)
 -- | Convert a namespace to a file path with the given case convention and file extension
-namespaceToFilePath :: Util.CaseConvention -> Packaging.FileExtension -> Packaging.Namespace -> String
+namespaceToFilePath :: Util.CaseConvention -> Packaging.FileExtension -> Packaging.ModuleName -> String
 namespaceToFilePath caseConv ext ns =
 
-      let parts = Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Packaging.unNamespace ns))
+      let parts = Lists.map (Formatting.convertCase Util.CaseConventionCamel caseConv) (Strings.splitOn "." (Packaging.unModuleName ns))
       in (Strings.cat2 (Strings.cat2 (Strings.intercalate "/" parts) ".") (Packaging.unFileExtension ext))
 -- | Type variable naming convention follows Haskell: t0, t1, etc.
 normalTypeVariable :: Int -> Core.Name
 normalTypeVariable i = Core.Name (Strings.cat2 "t" (Literals.showInt32 i))
 -- | Construct a qualified (dot-separated) name
-qname :: Packaging.Namespace -> String -> Core.Name
+qname :: Packaging.ModuleName -> String -> Core.Name
 qname ns name =
     Core.Name (Strings.cat [
-      Packaging.unNamespace ns,
+      Packaging.unModuleName ns,
       ".",
       name])
 -- | Split a dot-separated name into a namespace and local name
@@ -96,14 +96,14 @@ qualifyName name =
 
       let parts = Lists.reverse (Strings.splitOn "." (Core.unName name))
       in (Maybes.maybe (Packaging.QualifiedName {
-        Packaging.qualifiedNameNamespace = Nothing,
+        Packaging.qualifiedNameModuleName = Nothing,
         Packaging.qualifiedNameLocal = (Core.unName name)}) (\uc ->
         let localName = Pairs.first uc
             restReversed = Pairs.second uc
         in (Logic.ifElse (Lists.null restReversed) (Packaging.QualifiedName {
-          Packaging.qualifiedNameNamespace = Nothing,
+          Packaging.qualifiedNameModuleName = Nothing,
           Packaging.qualifiedNameLocal = (Core.unName name)}) (Packaging.QualifiedName {
-          Packaging.qualifiedNameNamespace = (Just (Packaging.Namespace (Strings.intercalate "." (Lists.reverse restReversed)))),
+          Packaging.qualifiedNameModuleName = (Just (Packaging.ModuleName (Strings.intercalate "." (Lists.reverse restReversed)))),
           Packaging.qualifiedNameLocal = localName}))) (Lists.uncons parts))
 -- | Generate a unique label by appending a suffix if the label is already in use
 uniqueLabel :: S.Set String -> String -> String
@@ -112,5 +112,5 @@ uniqueLabel visited l = Logic.ifElse (Sets.member l visited) (uniqueLabel visite
 unqualifyName :: Packaging.QualifiedName -> Core.Name
 unqualifyName qname =
 
-      let prefix = Maybes.maybe "" (\n -> Strings.cat2 (Packaging.unNamespace n) ".") (Packaging.qualifiedNameNamespace qname)
+      let prefix = Maybes.maybe "" (\n -> Strings.cat2 (Packaging.unModuleName n) ".") (Packaging.qualifiedNameModuleName qname)
       in (Core.Name (Strings.cat2 prefix (Packaging.qualifiedNameLocal qname)))

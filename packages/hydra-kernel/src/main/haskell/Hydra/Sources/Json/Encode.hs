@@ -83,17 +83,17 @@ import qualified Data.Maybe                                as Y
 import Hydra.Json.Model
 
 
-ns :: Namespace
-ns = Namespace "hydra.json.encode"
+ns :: ModuleName
+ns = ModuleName "hydra.json.encode"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Strip.ns, moduleNamespace Literals.module_, moduleNamespace ExtractCore.module_, Namespace "hydra.show.core"] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, moduleName Literals.module_, moduleName ExtractCore.module_] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "JSON encoding for Hydra terms. Converts Terms to JSON Values using Either for error handling."}
   where
     definitions = [

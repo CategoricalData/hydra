@@ -42,7 +42,7 @@ _Graph_typeVariables = Core.Name "typeVariables"
 data Library =
   Library {
     -- | A common prefix for all primitive function names in the library
-    libraryNamespace :: Packaging.Namespace,
+    libraryNamespace :: Packaging.ModuleName,
     -- | A preferred namespace prefix for function names in the library
     libraryPrefix :: String,
     -- | The primitives defined in this library

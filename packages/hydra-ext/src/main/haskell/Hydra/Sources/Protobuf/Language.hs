@@ -84,9 +84,9 @@ definition_ = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.protobuf.language"),
+            moduleName = (ModuleName "hydra.protobuf.language"),
             moduleDefinitions = [toDefinition protobufLanguage, toDefinition protobufReservedWords],
-            moduleDependencies = [Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for Protobuf v3"}
 protobufLanguage :: TTermDefinition Language
 protobufLanguage = definition_ "protobufLanguage" $

@@ -5,6 +5,7 @@ module Hydra.Sources.Java.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -82,15 +83,15 @@ getTypeE cx g ann = Eithers.bimap
 encodeTypeAsTerm :: TTerm (Type -> Term)
 encodeTypeAsTerm = TTerm $ TermVariable $ Name "hydra.encode.core.type"
 
-ns :: Namespace
-ns = Namespace "hydra.java.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.java.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
-      Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns] L.++ (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleName JavaLanguageSource.module_, Analysis.ns, Checking.ns, Formatting.ns, Names.ns, Rewriting.ns, Dependencies.ns, Scoping.ns, Strip.ns, Variables.ns, Lexical.ns, Environment.ns, Predicates.ns, Resolution.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+      Inference.ns, Sorting.ns, Arity.ns, moduleName DecodeCore.module_, moduleName EncodeCore.module_, SerializationSource.ns] L.++ (JavaEnvironmentSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Java code generator: converts Hydra modules to Java source code"}
   where
     definitions = [
@@ -612,7 +613,7 @@ bindingNameToFilePath :: TTermDefinition (Name -> String)
 bindingNameToFilePath = def "bindingNameToFilePath" $
   lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
     "local">: Packaging.qualifiedNameLocal (var "qn"),
     "sanitized">: Formatting.sanitizeWithUnderscores @@ JavaLanguageSource.reservedWords @@ var "local",
     "unq">: Names.unqualifyName @@ Packaging.qualifiedName (var "ns_") (var "sanitized")] $
@@ -1353,7 +1354,7 @@ constantDeclForTypeName = def "constantDeclForTypeName" $
 constructElementsInterface :: TTermDefinition (Module -> [Java.InterfaceMemberDeclarationWithComments] -> (Name, Java.CompilationUnit))
 constructElementsInterface = def "constructElementsInterface" $
   lambda "mod" $ lambda "members" $ lets [
-    "ns">: Packaging.moduleNamespace (var "mod"),
+    "ns">: Packaging.moduleName (var "mod"),
     "parentNs">: namespaceParent @@ var "ns",
     "pkg">: Maybes.cases (var "parentNs")
       (JavaUtilsSource.javaPackageDeclaration @@ var "ns")
@@ -1928,7 +1929,7 @@ elementJavaIdentifier :: TTermDefinition (Bool -> Bool -> JavaHelpers.Aliases ->
 elementJavaIdentifier = def "elementJavaIdentifier" $
   lambda "isPrim" $ lambda "isMethod" $ lambda "aliases" $ lambda "name" $ lets [
     "qn">: Names.qualifyName @@ var "name",
-    "ns_">: Packaging.qualifiedNameNamespace (var "qn"),
+    "ns_">: Packaging.qualifiedNameModuleName (var "qn"),
     "local">: Packaging.qualifiedNameLocal (var "qn"),
     "sep">: Logic.ifElse (var "isMethod") (string "::") (string ".")] $
     Logic.ifElse (var "isPrim")
@@ -1948,24 +1949,24 @@ elementJavaIdentifier = def "elementJavaIdentifier" $
           (JavaUtilsSource.sanitizeJavaName @@ var "local"))))
 
 -- | Helper for elementJavaIdentifier: qualify a name through the aliases
-elementJavaIdentifier_qualify :: TTermDefinition (JavaHelpers.Aliases -> Maybe Namespace -> String -> String)
+elementJavaIdentifier_qualify :: TTermDefinition (JavaHelpers.Aliases -> Maybe ModuleName -> String -> String)
 elementJavaIdentifier_qualify = def "elementJavaIdentifier_qualify" $
   lambda "aliases" $ lambda "mns" $ lambda "s" $
     unwrap Java._Identifier @@ (JavaUtilsSource.nameToJavaName @@ var "aliases"
       @@ (Names.unqualifyName @@ Packaging.qualifiedName (var "mns") (var "s")))
 
 -- | Convert a namespace to an elements class name (e.g., "hydra.java.syntax" -> "Syntax")
-elementsClassName :: TTermDefinition (Namespace -> String)
+elementsClassName :: TTermDefinition (ModuleName -> String)
 elementsClassName = def "elementsClassName" $
   lambda "ns" $ lets [
-    "nsStr">: unwrap _Namespace @@ var "ns",
+    "nsStr">: unwrap _ModuleName @@ var "ns",
     "parts">: Strings.splitOn (string ".") (var "nsStr")] $
     Formatting.sanitizeWithUnderscores @@ JavaLanguageSource.reservedWords
       @@ (Formatting.capitalize @@ (Maybes.fromMaybe (var "nsStr") (Lists.maybeLast (var "parts"))))
 
 -- | Produce the qualified name for a term module's elements interface.
 -- Uses the parent namespace so that e.g. "hydra.formatting" -> "hydra.Formatting" (not "hydra.formatting.Formatting").
-elementsQualifiedName :: TTermDefinition (Namespace -> Name)
+elementsQualifiedName :: TTermDefinition (ModuleName -> Name)
 elementsQualifiedName = def "elementsQualifiedName" $
   lambda "ns" $
     Names.unqualifyName @@ Packaging.qualifiedName (namespaceParent @@ var "ns") (elementsClassName @@ var "ns")
@@ -2109,7 +2110,7 @@ encodeDefinitions = def "encodeDefinitions" $
     "env" <~ (record JavaHelpers._JavaEnvironment [
       JavaHelpers._JavaEnvironment_aliases>>: var "aliases",
       JavaHelpers._JavaEnvironment_graph>>: var "g"]) $
-    "pkg" <~ (JavaUtilsSource.javaPackageDeclaration @@ (Packaging.moduleNamespace (var "mod"))) $
+    "pkg" <~ (JavaUtilsSource.javaPackageDeclaration @@ (Packaging.moduleName (var "mod"))) $
     "partitioned" <~ (Environment.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $
@@ -2139,7 +2140,7 @@ encodeElimination = def "encodeElimination" $
 
       -- Projection: field projection
       _Term_project>>: lambda "proj" $
-        "fname" <~ (Core.projectionField (var "proj")) $
+        "fname" <~ (Core.projectionFieldName (var "proj")) $
         "jdom0" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "dom" @@ var "cx" @@ var "g") $
         "jdomr" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jdom0" @@ var "cx") $
         Maybes.cases (var "marg")
@@ -4014,7 +4015,7 @@ functionCall = def "functionCall" $
                   (JavaDsl.methodInvocation_ (var "header") (var "jargs"))))
               -- With type applications: need qualified invocation
               ("qn" <~ (Names.qualifyName @@ var "name") $
-                "mns" <~ (Packaging.qualifiedNameNamespace (var "qn")) $
+                "mns" <~ (Packaging.qualifiedNameModuleName (var "qn")) $
                 "localName" <~ (Packaging.qualifiedNameLocal (var "qn")) $
                 Maybes.cases (var "mns")
                   -- No namespace: simple header
@@ -4256,7 +4257,7 @@ isLambdaBoundIn = def "isLambdaBoundIn" $
 -- | Helper: check if a name is qualified (has a namespace)
 isLambdaBoundIn_isQualified :: TTermDefinition (Name -> Bool)
 isLambdaBoundIn_isQualified = def "isLambdaBoundIn_isQualified" $
-  lambda "n" $ Maybes.isJust (Packaging.qualifiedNameNamespace (Names.qualifyName @@ var "n"))
+  lambda "n" $ Maybes.isJust (Packaging.qualifiedNameModuleName (Names.qualifyName @@ var "n"))
 
 -- | Check if a name (possibly qualified) is lambda-bound
 
@@ -4269,7 +4270,7 @@ isLambdaBoundVariable = def "isLambdaBoundVariable" $
 isLocalVariable :: TTermDefinition (Name -> Bool)
 isLocalVariable = def "isLocalVariable" $
   lambda "name" $ Maybes.isNothing
-    (Packaging.qualifiedNameNamespace (Names.qualifyName @@ var "name"))
+    (Packaging.qualifiedNameModuleName (Names.qualifyName @@ var "name"))
 
 -- | Check whether a Hydra type maps to a Java type that does not implement Comparable
 isNonComparableType :: TTermDefinition (Type -> Bool)
@@ -4436,14 +4437,14 @@ nameMapToTypeMap = def "nameMapToTypeMap" $
 
 -- | Get the parent namespace (all but last segment), or Nothing if there is no parent.
 -- E.g., "hydra.formatting" -> Just "hydra", "hydra.java.syntax" -> Just "hydra.java"
-namespaceParent :: TTermDefinition (Namespace -> Maybe Namespace)
+namespaceParent :: TTermDefinition (ModuleName -> Maybe ModuleName)
 namespaceParent = def "namespaceParent" $
   lambda "ns" $ lets [
-    "parts">: Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns"),
+    "parts">: Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns"),
     "initParts">: Maybes.fromMaybe (list ([] :: [TTerm String])) (Lists.maybeInit (var "parts"))] $
     Logic.ifElse (Lists.null (var "initParts"))
       nothing
-      (just (wrap _Namespace (Strings.intercalate (string ".") (var "initParts"))))
+      (just (wrap _ModuleName (Strings.intercalate (string ".") (var "initParts"))))
 
 -- | Check if a term structurally needs lazy evaluation.
 needsThunking :: TTermDefinition (Term -> Bool)
@@ -5192,7 +5193,7 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
       lambda "cls" $ lambda "allTypeArgs" $
         "cx" ~> "g" ~>
         "qn" <~ (Names.qualifyName @@ var "varName") $
-        "mns" <~ Packaging.qualifiedNameNamespace (var "qn") $
+        "mns" <~ Packaging.qualifiedNameModuleName (var "qn") $
         "localName" <~ Packaging.qualifiedNameLocal (var "qn") $
         cases JavaHelpers._JavaSymbolClass (var "cls")
           (Just $ typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"

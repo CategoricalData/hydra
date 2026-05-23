@@ -96,17 +96,17 @@ import qualified Hydra.Dsl.Shacl.Model         as ShaclDsl -- Generated SHACL DS
 import qualified Hydra.Dsl.Rdf.Syntax          as RdfDsl   -- Generated RDF DSL
 
 
-ns :: Namespace
-ns = Namespace "hydra.pg.rdf.mappings"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.rdf.mappings"
 
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = ([RdfUtils.ns] L.++ (kernelTypesNamespaces L.++ [PgModel.ns, PgRdfEnvironment.ns, RdfSyntax.ns, ShaclModel.ns])),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (([RdfUtils.ns] L.++ (kernelTypesModuleNames L.++ [PgModel.ns, PgRdfEnvironment.ns, RdfSyntax.ns, ShaclModel.ns]))),
             moduleDescription = Just "Mappings from property graph schemas to SHACL shapes graphs, and from property graph data to RDF graphs"}
   where
     definitions = [

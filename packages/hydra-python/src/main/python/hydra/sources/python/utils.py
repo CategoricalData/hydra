@@ -5,7 +5,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Utils.hs.
 
 from hydra.core import Name
 from hydra.dsl.python import Just, Nothing
-from hydra.packaging import Module, Namespace
+from hydra.packaging import Module, ModuleName
 
 import hydra.dsl.meta.lib.equality as Equality
 import hydra.dsl.meta.lib.lists as Lists
@@ -26,24 +26,26 @@ from hydra.sources.python import _python_helpers as PyDsl
 # Module setup
 # ----------------------------------------------------------------------
 
-NS = Namespace("hydra.python.utils")
+NS = ModuleName("hydra.python.utils")
 
 from hydra.sources.python._source_dsl import (
+
     KERNEL_TYPES_NAMESPACES,
     make_def,
     make_local,
+    unqualified_dep,
 )
 
 # Mirror Haskell:
 #   [PyNames.ns, PySerde.ns, Serialization.ns, Analysis.ns] L.++
 #   (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [
-    Namespace("hydra.python.names"),
-    Namespace("hydra.python.serde"),
-    Namespace("hydra.serialization"),
-    Namespace("hydra.analysis"),
-    Namespace("hydra.python.environment"),
-    Namespace("hydra.python.syntax"),
+    unqualified_dep(ModuleName("hydra.python.names")),
+    unqualified_dep(ModuleName("hydra.python.serde")),
+    unqualified_dep(ModuleName("hydra.serialization")),
+    unqualified_dep(ModuleName("hydra.analysis")),
+    unqualified_dep(ModuleName("hydra.python.environment")),
+    unqualified_dep(ModuleName("hydra.python.syntax")),
 ] + KERNEL_TYPES_NAMESPACES
 
 
@@ -401,7 +403,7 @@ def _find_namespaces():
     body = lets(
         [
             field("coreNs",
-                Packaging.namespace(string("hydra.core")),
+                Packaging.module_name2(string("hydra.core")),
             ),
             field("namespaces",
                 _analysis_namespaces_for_definitions(_pynames_encode_namespace, var("focusNs"), var("defs")),
@@ -409,10 +411,10 @@ def _find_namespaces():
         ],
         Logic.if_else(
             Equality.equal(
-                Packaging.un_namespace(
+                Packaging.un_module_name(
                     Pairs.first(Util.namespaces_focus(var("namespaces"))),
                 ),
-                Packaging.un_namespace(var("coreNs")),
+                Packaging.un_module_name(var("coreNs")),
             ),
             var("namespaces"),
             Util.namespaces(
@@ -1367,7 +1369,7 @@ def _unit_variant_methods():
 def _build_module() -> Module:
     return Module(
         _PLACEHOLDER.description,
-        _PLACEHOLDER.namespace,
+        _PLACEHOLDER.name,
         _PLACEHOLDER.dependencies,
         (
             to_definition(_annotated_expression()),

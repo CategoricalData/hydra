@@ -382,12 +382,12 @@
                                                                           {
                                                                             "name": "bindings",
                                                                             "term": {
-                                                                              "application": {"argument": {"variable": "letExpr"}, "function": {"project": {"field": "bindings", "typeName": "hydra.core.Let"}}}},
+                                                                              "application": {"argument": {"variable": "letExpr"}, "function": {"project": {"fieldName": "bindings", "typeName": "hydra.core.Let"}}}},
                                                                             "typeScheme": {"body": {"list": {"variable": "hydra.core.Binding"}}, "variables": []}},
                                                                           {
                                                                             "name": "env",
                                                                             "term": {
-                                                                              "application": {"argument": {"variable": "letExpr"}, "function": {"project": {"field": "body", "typeName": "hydra.core.Let"}}}},
+                                                                              "application": {"argument": {"variable": "letExpr"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.core.Let"}}}},
                                                                             "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}},
                                                                           {
                                                                             "name": "bindingNames",
@@ -396,7 +396,7 @@
                                                                                 "argument": {"variable": "bindings"},
                                                                                 "function": {
                                                                                   "application": {
-                                                                                    "argument": {"project": {"field": "name", "typeName": "hydra.core.Binding"}},
+                                                                                    "argument": {"project": {"fieldName": "name", "typeName": "hydra.core.Binding"}},
                                                                                     "function": {
                                                                                       "typeApplication": {
                                                                                         "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.Binding"}}},
@@ -695,7 +695,7 @@
                                                                                           {
                                                                                             "name": "term1",
                                                                                             "term": {
-                                                                                              "application": {"argument": {"variable": "binding"}, "function": {"project": {"field": "term", "typeName": "hydra.core.Binding"}}}},
+                                                                                              "application": {"argument": {"variable": "binding"}, "function": {"project": {"fieldName": "term", "typeName": "hydra.core.Binding"}}}},
                                                                                             "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                                                                         "body": {
                                                                                           "application": {
@@ -1165,40 +1165,40 @@
                             "typeName": "hydra.paths.SubtermGraph"}}}},
                     "domain": {"variable": "hydra.core.Term"},
                     "parameter": "term"}},
-                "domain": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"literal": {"string": {}}}}},
+                "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}},
                 "parameter": "namespaces"}}}},
         "typeScheme": {
           "body": {
             "function": {
               "codomain": {"function": {"codomain": {"variable": "hydra.paths.SubtermGraph"}, "domain": {"variable": "hydra.core.Term"}}},
-              "domain": {"map": {"keys": {"variable": "hydra.packaging.Namespace"}, "values": {"literal": {"string": {}}}}}}},
+              "domain": {"map": {"keys": {"variable": "hydra.packaging.ModuleName"}, "values": {"literal": {"string": {}}}}}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.names",
-    "hydra.rewriting",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.names"},
+    {"module": "hydra.rewriting"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Utilities for working with subterm steps and paths.",
-  "namespace": "hydra.show.paths"}
+  "name": "hydra.show.paths"}

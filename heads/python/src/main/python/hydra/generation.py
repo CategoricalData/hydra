@@ -24,7 +24,7 @@ from hydra.core import Binding
 from hydra.dsl.python import FrozenDict, Just, Left, Nothing, Right
 from hydra.graph import Graph
 from hydra.json import model as JsonModel
-from hydra.packaging import Module, Namespace
+from hydra.packaging import Module, ModuleName
 from hydra.strip import deannotate_type_recursive, remove_types_from_term
 from hydra.scoping import f_type_to_type_scheme
 from hydra.sources.libraries import standard_library
@@ -173,7 +173,7 @@ def read_manifest_field(base_path, field_name):
     manifest_path = os.path.join(base_path, "manifest.json")
     with open(manifest_path, "r", encoding="utf-8") as f:
         manifest = json.load(f)
-    return [Namespace(ns) for ns in manifest[field_name]]
+    return [ModuleName(ns) for ns in manifest[field_name]]
 
 
 def generate_sources(coder, language, do_infer, do_expand, do_hoist_case, do_hoist_poly,
@@ -217,7 +217,7 @@ def strip_term_types(m):
             stripped.append(DefinitionTerm(TermDefinition(td.name, new_term, Nothing())))
         else:
             stripped.append(d)
-    return Module(m.description, m.namespace, m.dependencies, tuple(stripped))
+    return Module(m.description, m.name, m.dependencies, tuple(stripped))
 
 
 def strip_all_term_types(modules):
@@ -227,7 +227,7 @@ def strip_all_term_types(modules):
 
 def filter_kernel_modules(modules):
     """Filter modules to only kernel modules (exclude hydra.* namespaces)."""
-    return [m for m in modules if not m.namespace.value.startswith("hydra.") and not m.namespace.value.startswith("hydra.json.yaml.")]
+    return [m for m in modules if not m.name.value.startswith("hydra.") and not m.name.value.startswith("hydra.json.yaml.")]
 
 
 def filter_type_modules(modules):
@@ -295,7 +295,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
     from hydra.lisp.syntax import Dialect
     from hydra.serialization import print_expr, parenthesize
     from hydra.names import namespace_to_file_path
-    from hydra.packaging import FileExtension, Namespace
+    from hydra.packaging import FileExtension, ModuleName
     from hydra.util import CaseConvention
 
     dialect_map = {
@@ -315,7 +315,7 @@ def write_lisp_dialect(base_path, dialect_name, ext, universe, mods):
                 return result
             case Right(value=program):
                 code = print_expr(parenthesize(program_to_expr(program)))
-                file_path = namespace_to_file_path(case_conv, FileExtension(ext), mod.namespace)
+                file_path = namespace_to_file_path(case_conv, FileExtension(ext), mod.name)
                 return Right(FrozenDict({file_path: code}))
 
     generate_sources(

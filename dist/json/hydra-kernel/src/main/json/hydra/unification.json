@@ -242,7 +242,7 @@
                                                                                         "argument": {"variable": "right"},
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "argument": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}},
+                                                                                            "argument": {"project": {"fieldName": "type", "typeName": "hydra.core.FieldType"}},
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.FieldType"}}},
@@ -254,7 +254,7 @@
                                                                                             "argument": {"variable": "left"},
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "argument": {"project": {"field": "type", "typeName": "hydra.core.FieldType"}},
+                                                                                                "argument": {"project": {"fieldName": "type", "typeName": "hydra.core.FieldType"}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.FieldType"}}},
@@ -273,7 +273,7 @@
                                                                                                     "argument": {"variable": "right"},
                                                                                                     "function": {
                                                                                                       "application": {
-                                                                                                        "argument": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}},
+                                                                                                        "argument": {"project": {"fieldName": "name", "typeName": "hydra.core.FieldType"}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.FieldType"}}},
@@ -285,7 +285,7 @@
                                                                                                         "argument": {"variable": "left"},
                                                                                                         "function": {
                                                                                                           "application": {
-                                                                                                            "argument": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}},
+                                                                                                            "argument": {"project": {"fieldName": "name", "typeName": "hydra.core.FieldType"}},
                                                                                                             "function": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.FieldType"}}},
@@ -335,7 +335,7 @@
                                                                                                         "argument": {"variable": "right"},
                                                                                                         "function": {
                                                                                                           "application": {
-                                                                                                            "argument": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}},
+                                                                                                            "argument": {"project": {"fieldName": "name", "typeName": "hydra.core.FieldType"}},
                                                                                                             "function": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.FieldType"}}},
@@ -350,7 +350,7 @@
                                                                                                             "argument": {"variable": "left"},
                                                                                                             "function": {
                                                                                                               "application": {
-                                                                                                                "argument": {"project": {"field": "name", "typeName": "hydra.core.FieldType"}},
+                                                                                                                "argument": {"project": {"fieldName": "name", "typeName": "hydra.core.FieldType"}},
                                                                                                                 "function": {
                                                                                                                   "typeApplication": {
                                                                                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.core.FieldType"}}},
@@ -410,26 +410,26 @@
                                                                                                                 "argument": {
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "r"},
-                                                                                                                    "function": {"project": {"field": "function", "typeName": "hydra.core.ApplicationType"}}}},
+                                                                                                                    "function": {"project": {"fieldName": "function", "typeName": "hydra.core.ApplicationType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
                                                                                                                       "application": {
                                                                                                                         "argument": {"variable": "l"},
-                                                                                                                        "function": {"project": {"field": "function", "typeName": "hydra.core.ApplicationType"}}}},
+                                                                                                                        "function": {"project": {"fieldName": "function", "typeName": "hydra.core.ApplicationType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}},
                                                                                                             {
                                                                                                               "application": {
                                                                                                                 "argument": {
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "r"},
-                                                                                                                    "function": {"project": {"field": "argument", "typeName": "hydra.core.ApplicationType"}}}},
+                                                                                                                    "function": {"project": {"fieldName": "argument", "typeName": "hydra.core.ApplicationType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
                                                                                                                       "application": {
                                                                                                                         "argument": {"variable": "l"},
-                                                                                                                        "function": {"project": {"field": "argument", "typeName": "hydra.core.ApplicationType"}}}},
+                                                                                                                        "function": {"project": {"fieldName": "argument", "typeName": "hydra.core.ApplicationType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}}]}}},
                                                                                                     "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
@@ -465,20 +465,20 @@
                                                                                                             {
                                                                                                               "application": {
                                                                                                                 "argument": {
-                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "left", "typeName": "hydra.core.EitherType"}}}},
+                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"fieldName": "left", "typeName": "hydra.core.EitherType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "left", "typeName": "hydra.core.EitherType"}}}},
+                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"fieldName": "left", "typeName": "hydra.core.EitherType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}},
                                                                                                             {
                                                                                                               "application": {
                                                                                                                 "argument": {
-                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "right", "typeName": "hydra.core.EitherType"}}}},
+                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"fieldName": "right", "typeName": "hydra.core.EitherType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "right", "typeName": "hydra.core.EitherType"}}}},
+                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"fieldName": "right", "typeName": "hydra.core.EitherType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}}]}}},
                                                                                                     "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
@@ -514,20 +514,24 @@
                                                                                                             {
                                                                                                               "application": {
                                                                                                                 "argument": {
-                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "domain", "typeName": "hydra.core.FunctionType"}}}},
+                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"fieldName": "domain", "typeName": "hydra.core.FunctionType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "domain", "typeName": "hydra.core.FunctionType"}}}},
+                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"fieldName": "domain", "typeName": "hydra.core.FunctionType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}},
                                                                                                             {
                                                                                                               "application": {
                                                                                                                 "argument": {
-                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "codomain", "typeName": "hydra.core.FunctionType"}}}},
+                                                                                                                  "application": {
+                                                                                                                    "argument": {"variable": "r"},
+                                                                                                                    "function": {"project": {"fieldName": "codomain", "typeName": "hydra.core.FunctionType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "codomain", "typeName": "hydra.core.FunctionType"}}}},
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "l"},
+                                                                                                                        "function": {"project": {"fieldName": "codomain", "typeName": "hydra.core.FunctionType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}}]}}},
                                                                                                     "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
@@ -605,20 +609,20 @@
                                                                                                             {
                                                                                                               "application": {
                                                                                                                 "argument": {
-                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "keys", "typeName": "hydra.core.MapType"}}}},
+                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"fieldName": "keys", "typeName": "hydra.core.MapType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "keys", "typeName": "hydra.core.MapType"}}}},
+                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"fieldName": "keys", "typeName": "hydra.core.MapType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}},
                                                                                                             {
                                                                                                               "application": {
                                                                                                                 "argument": {
-                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "values", "typeName": "hydra.core.MapType"}}}},
+                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"fieldName": "values", "typeName": "hydra.core.MapType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "values", "typeName": "hydra.core.MapType"}}}},
+                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"fieldName": "values", "typeName": "hydra.core.MapType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}}]}}},
                                                                                                     "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
@@ -689,20 +693,20 @@
                                                                                                             {
                                                                                                               "application": {
                                                                                                                 "argument": {
-                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "first", "typeName": "hydra.core.PairType"}}}},
+                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"fieldName": "first", "typeName": "hydra.core.PairType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "first", "typeName": "hydra.core.PairType"}}}},
+                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"fieldName": "first", "typeName": "hydra.core.PairType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}},
                                                                                                             {
                                                                                                               "application": {
                                                                                                                 "argument": {
-                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"field": "second", "typeName": "hydra.core.PairType"}}}},
+                                                                                                                  "application": {"argument": {"variable": "r"}, "function": {"project": {"fieldName": "second", "typeName": "hydra.core.PairType"}}}},
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {
-                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "second", "typeName": "hydra.core.PairType"}}}},
+                                                                                                                      "application": {"argument": {"variable": "l"}, "function": {"project": {"fieldName": "second", "typeName": "hydra.core.PairType"}}}},
                                                                                                                     "function": {"variable": "joinOne"}}}}}]}}},
                                                                                                     "type": {"variable": "hydra.errors.UnificationError"}}},
                                                                                                 "type": {"list": {"variable": "hydra.typing.TypeConstraint"}}}},
@@ -955,7 +959,9 @@
                                                         "term": {
                                                           "application": {
                                                             "argument": {
-                                                              "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                              "application": {
+                                                                "argument": {"variable": "c"},
+                                                                "function": {"project": {"fieldName": "left", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                             "function": {"variable": "hydra.strip.deannotateType"}}},
                                                         "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                     "body": {
@@ -966,7 +972,9 @@
                                                             "term": {
                                                               "application": {
                                                                 "argument": {
-                                                                  "application": {"argument": {"variable": "c"}, "function": {"project": {"field": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                  "application": {
+                                                                    "argument": {"variable": "c"},
+                                                                    "function": {"project": {"fieldName": "right", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                 "function": {"variable": "hydra.strip.deannotateType"}}},
                                                             "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                                                         "body": {
@@ -977,7 +985,7 @@
                                                                 "term": {
                                                                   "application": {
                                                                     "argument": {"variable": "c"},
-                                                                    "function": {"project": {"field": "comment", "typeName": "hydra.typing.TypeConstraint"}}}},
+                                                                    "function": {"project": {"fieldName": "comment", "typeName": "hydra.typing.TypeConstraint"}}}},
                                                                 "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                             "body": {
                                                               "let": {
@@ -1761,33 +1769,33 @@
               "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.rewriting",
-    "hydra.show.core",
-    "hydra.strip",
-    "hydra.substitution",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.rewriting"},
+    {"module": "hydra.show.core"},
+    {"module": "hydra.strip"},
+    {"module": "hydra.substitution"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Utilities for type unification.",
-  "namespace": "hydra.unification"}
+  "name": "hydra.unification"}

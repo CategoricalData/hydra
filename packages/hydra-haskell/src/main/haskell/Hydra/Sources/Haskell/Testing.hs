@@ -5,6 +5,7 @@ module Hydra.Sources.Haskell.Testing where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -48,15 +49,14 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 
-ns :: Namespace
-ns = Namespace "hydra.haskell.testing"
+ns :: ModuleName
+ns = ModuleName "hydra.haskell.testing"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [HaskellUtilsSource.ns, Formatting.ns, Names.ns,
-     Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns, Namespace "hydra.decode.core"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = unqualifiedDep <$> ([HaskellUtilsSource.ns, Formatting.ns, Names.ns, Constants.ns, Dependencies.ns, Predicates.ns, Rewriting.ns, ShowError.ns, Lexical.ns, Strip.ns, ModuleName "hydra.decode.core"] L.++ (HaskellSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Haskell test code generation for HSpec-based generation tests"}
   where
     definitions = [
@@ -82,7 +82,7 @@ addNamespacesToNamespaces = define "addNamespacesToNamespaces" $
   lambda "ns0" $ lambda "names" $ lets [
     "newNamespaces">: Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (var "names")))),
     "toModuleName">: lambda "namespace" $
-      wrap H._ModuleName (Formatting.capitalize @@ (Maybes.fromMaybe (unwrap _Namespace @@ var "namespace") (Lists.maybeLast (Strings.splitOn (string ".") (unwrap _Namespace @@ var "namespace"))))),
+      wrap H._ModuleName (Formatting.capitalize @@ (Maybes.fromMaybe (unwrap _ModuleName @@ var "namespace") (Lists.maybeLast (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "namespace"))))),
     "newMappings">: Maps.fromList (Lists.map (lambda "ns_" $ pair (var "ns_") (var "toModuleName" @@ var "ns_")) (Sets.toList (var "newNamespaces")))] $
     record _Namespaces [
       _Namespaces_focus>>: project _Namespaces _Namespaces_focus @@ var "ns0",
@@ -105,7 +105,7 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       (var "testTerms"),
     "tempModule">: record _Module [
       _Module_description>>: project _Module _Module_description @@ var "mod",
-      _Module_namespace>>: Packaging.moduleNamespace (var "mod"),
+      _Module_name>>: Packaging.moduleName (var "mod"),
       _Module_dependencies>>: project _Module _Module_dependencies @@ var "mod",
       _Module_definitions>>: Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
         (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
@@ -126,8 +126,8 @@ buildTestModule :: TTermDefinition (Module -> TestGroup -> String -> Namespaces 
 buildTestModule = define "buildTestModule" $
   doc "Build the complete test module for Haskell HSpec" $
   lambda "testModule" $ lambda "testGroup" $ lambda "testBody" $ lambda "namespaces" $ lets [
-    "ns_">: Packaging.moduleNamespace (var "testModule"),
-    "specNs">: wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ var "ns_") (string "Spec")),
+    "ns_">: Packaging.moduleName (var "testModule"),
+    "specNs">: wrap _ModuleName (Strings.cat2 (unwrap _ModuleName @@ var "ns_") (string "Spec")),
     "moduleNameString">: namespaceToModuleName @@ var "specNs",
     "groupName_">: project _TestGroup _TestGroup_name @@ var "testGroup",
     "domainImports">: findHaskellImports @@ var "namespaces" @@ Sets.empty,
@@ -207,13 +207,13 @@ findHaskellImports = define "findHaskellImports" $
     "filtered">: Maps.filterWithKey
       (lambda "ns_" $ lambda "_v" $
         Logic.not (Equality.equal
-          (Maybes.fromMaybe (string "") (Lists.maybeHead (Strings.splitOn (string "hydra.test.") (unwrap _Namespace @@ var "ns_"))))
+          (Maybes.fromMaybe (string "") (Lists.maybeHead (Strings.splitOn (string "hydra.test.") (unwrap _ModuleName @@ var "ns_"))))
           (string "")))
       (var "mapping_")] $
     Lists.map
       (lambda "entry" $ Strings.cat (list [
         string "import qualified ",
-        Strings.intercalate (string ".") (Lists.map Formatting.capitalize (Strings.splitOn (string ".") (unwrap _Namespace @@ Pairs.first (var "entry")))),
+        Strings.intercalate (string ".") (Lists.map Formatting.capitalize (Strings.splitOn (string ".") (unwrap _ModuleName @@ Pairs.first (var "entry")))),
         string " as ",
         unwrap H._ModuleName @@ Pairs.second (var "entry")]))
       (Maps.toList (var "filtered"))
@@ -254,8 +254,8 @@ generateTestFile = define "generateTestFile" $
     Eithers.map
       (lambda "testBody" $ lets [
         "testModuleContent">: buildTestModule @@ var "testModule" @@ var "testGroup" @@ var "testBody" @@ var "namespaces",
-        "ns_">: Packaging.moduleNamespace (var "testModule"),
-        "specNs">: wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ var "ns_") (string "Spec")),
+        "ns_">: Packaging.moduleName (var "testModule"),
+        "specNs">: wrap _ModuleName (Strings.cat2 (unwrap _ModuleName @@ var "ns_") (string "Spec")),
         "filePath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension (string "hs")) @@ var "specNs"] $
         pair (var "filePath") (var "testModuleContent"))
       (generateTestGroupHierarchy @@ int32 1 @@ var "testGroup")
@@ -304,10 +304,10 @@ generateTestGroupHierarchy = define "generateTestGroupHierarchy" $
 
 
 -- | Convert namespace to Haskell module name
-namespaceToModuleName :: TTermDefinition (Namespace -> String)
+namespaceToModuleName :: TTermDefinition (ModuleName -> String)
 namespaceToModuleName = define "namespaceToModuleName" $
   doc "Convert namespace to Haskell module name" $
   lambda "ns_" $
-    Strings.intercalate (string ".") (Lists.map Formatting.capitalize (Strings.splitOn (string ".") (unwrap _Namespace @@ var "ns_")))
+    Strings.intercalate (string ".") (Lists.map Formatting.capitalize (Strings.splitOn (string ".") (unwrap _ModuleName @@ var "ns_")))
 
 

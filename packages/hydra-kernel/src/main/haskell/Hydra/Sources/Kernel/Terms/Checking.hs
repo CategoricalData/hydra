@@ -110,15 +110,15 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Variants    as ShowVariants
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
 
-ns :: Namespace
-ns = Namespace "hydra.checking"
+ns :: ModuleName
+ns = ModuleName "hydra.checking"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Dependencies.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
-      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Dependencies.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
+      Scoping.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowVariants.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"}
   where
     definitions = [
@@ -736,7 +736,7 @@ typeOfProjection = define "typeOfProjection" $
   doc "Reconstruct the type of a record projection (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "p" ~>
   "tname" <~ Core.projectionTypeName (var "p") $
-  "fname" <~ Core.projectionField (var "p") $
+  "fname" <~ Core.projectionFieldName (var "p") $
   "schemaResult" <<~ Resolution.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $

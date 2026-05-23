@@ -97,26 +97,27 @@ dslModule cx graph mod =
       _ -> Nothing) (Packaging.moduleDefinitions mod)))) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\_e -> Errors.ErrorDecoding _e) (\x -> x) (generateBindingsForType cx graph b)) typeBindings) (\dslBindings -> Right (Just (Packaging.Module {
       Packaging.moduleDescription = (Just (Strings.cat [
         "DSL functions for ",
-        (Packaging.unNamespace (Packaging.moduleNamespace mod))])),
-      Packaging.moduleNamespace = (dslNamespace (Packaging.moduleNamespace mod)),
-      Packaging.moduleDependencies = (Lists.nub (Lists.concat2 [
-        Packaging.moduleNamespace mod,
-        (Packaging.Namespace "hydra.phantoms"),
-        (Packaging.Namespace "hydra.core")] (Lists.concat2 (Packaging.moduleDependencies mod) (Lists.map dslNamespace (Packaging.moduleDependencies mod))))),
+        (Packaging.unModuleName (Packaging.moduleName mod))])),
+      Packaging.moduleName = (dslNamespace (Packaging.moduleName mod)),
+      Packaging.moduleDependencies = (Lists.map (\ns -> Packaging.ModuleDependency {
+        Packaging.moduleDependencyModule = ns,
+        Packaging.moduleDependencyPackage = Nothing}) (Lists.nub (Lists.concat2 [
+        Packaging.moduleName mod,
+        (Packaging.ModuleName "hydra.phantoms")] (Lists.concat2 (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod)) (Lists.map dslNamespace (Lists.map (\dep -> Packaging.moduleDependencyModule dep) (Packaging.moduleDependencies mod))))))),
       Packaging.moduleDefinitions = (Lists.map (\b -> Packaging.DefinitionTerm (Packaging.TermDefinition {
         Packaging.termDefinitionName = (Core.bindingName b),
         Packaging.termDefinitionTerm = (Core.bindingTerm b),
         Packaging.termDefinitionSignature = (Maybes.map Scoping.typeSchemeToTermSignature (Core.bindingTypeScheme b))})) (deduplicateBindings (Lists.concat dslBindings)))})))))
 -- | Generate a DSL module namespace from a source module namespace
-dslNamespace :: Packaging.Namespace -> Packaging.Namespace
+dslNamespace :: Packaging.ModuleName -> Packaging.ModuleName
 dslNamespace ns =
 
-      let parts = Strings.splitOn "." (Packaging.unNamespace ns)
+      let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           prefixFull =
-                  Packaging.Namespace (Strings.cat [
+                  Packaging.ModuleName (Strings.cat [
                     "hydra.dsl.",
-                    (Packaging.unNamespace ns)])
-      in (Maybes.maybe prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.Namespace (Strings.cat [
+                    (Packaging.unModuleName ns)])
+      in (Maybes.maybe prefixFull (\ht -> Logic.ifElse (Equality.equal (Pairs.first ht) "hydra") (Packaging.ModuleName (Strings.cat [
         "hydra.dsl.",
         (Strings.intercalate "." (Pairs.second ht))])) prefixFull) (Lists.uncons parts))
 -- | Build a TypeScheme with TTerm-wrapped parameter and result types
@@ -199,7 +200,7 @@ generateRecordAccessor origType typeName ft =
                                             Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))},
                                         Core.Field {
-                                          Core.fieldName = (Core.Name "field"),
+                                          Core.fieldName = (Core.Name "fieldName"),
                                           Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                             Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                             Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName fieldName)))}))}]}))}}))},
@@ -327,7 +328,7 @@ generateRecordWithUpdater origType typeName allFields targetField =
                                               Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                               Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName typeName)))}))},
                                           Core.Field {
-                                            Core.fieldName = (Core.Name "field"),
+                                            Core.fieldName = (Core.Name "fieldName"),
                                             Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                               Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
                                               Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Core.unName (Core.fieldTypeName ft))))}))}]}))}}))},
@@ -557,7 +558,7 @@ isDslEligibleBinding :: t0 -> t1 -> Core.Binding -> Either t2 (Maybe Core.Bindin
 isDslEligibleBinding cx graph b =
 
       let ns = Names.namespaceOf (Core.bindingName b)
-      in (Logic.ifElse (Equality.equal (Maybes.maybe "" Packaging.unNamespace ns) "hydra.phantoms") (Right Nothing) (Right (Just b)))
+      in (Logic.ifElse (Equality.equal (Maybes.maybe "" Packaging.unModuleName ns) "hydra.phantoms") (Right Nothing) (Right (Just b)))
 -- | Build the nominal result type with type applications for forall variables
 nominalResultType :: Core.Name -> Core.Type -> Core.Type
 nominalResultType typeName origType =

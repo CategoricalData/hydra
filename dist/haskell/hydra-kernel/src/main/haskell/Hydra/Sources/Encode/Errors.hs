@@ -12,23 +12,32 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.errors"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.errors"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.errors"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.context",
-        (Packaging.Namespace "hydra.encode.core"),
-        (Packaging.Namespace "hydra.encode.error.checking"),
-        (Packaging.Namespace "hydra.encode.error.core"),
-        (Packaging.Namespace "hydra.encode.paths"),
-        (Packaging.Namespace "hydra.encode.typing"),
-        (Packaging.Namespace "hydra.encode.variants"),
-        (Packaging.Namespace "hydra.context"),
-        (Packaging.Namespace "hydra.core"),
-        (Packaging.Namespace "hydra.error.checking"),
-        (Packaging.Namespace "hydra.error.core"),
-        (Packaging.Namespace "hydra.paths"),
-        (Packaging.Namespace "hydra.typing"),
-        (Packaging.Namespace "hydra.variants"),
-        (Packaging.Namespace "hydra.errors")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.context"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.error.checking"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.error.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.paths"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.typing"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.variants"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.errors"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.errors.decodingError"),
@@ -974,7 +983,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.MultipleBindingsError"),
-                                      Core.projectionField = (Core.Name "name")})),
+                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.errors.MultipleBindingsError")))])})),
@@ -1020,7 +1029,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.MultipleFieldsError"),
-                                      Core.projectionField = (Core.Name "fieldName")})),
+                                      Core.projectionFieldName = (Core.Name "fieldName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.errors.MultipleFieldsError")))])})),
@@ -1066,7 +1075,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.NoMatchingFieldError"),
-                                      Core.projectionField = (Core.Name "fieldName")})),
+                                      Core.projectionFieldName = (Core.Name "fieldName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.errors.NoMatchingFieldError")))])})),
@@ -1112,7 +1121,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.NoSuchBindingError"),
-                                      Core.projectionField = (Core.Name "name")})),
+                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.errors.NoSuchBindingError")))])})),
@@ -1158,7 +1167,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.NoSuchPrimitiveError"),
-                                      Core.projectionField = (Core.Name "name")})),
+                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.errors.NoSuchPrimitiveError")))])})),
@@ -1267,7 +1276,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.OtherInferenceError"),
-                                      Core.projectionField = (Core.Name "path")})),
+                                      Core.projectionFieldName = (Core.Name "path")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1295,7 +1304,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.OtherInferenceError"),
-                                      Core.projectionField = (Core.Name "message")})),
+                                      Core.projectionFieldName = (Core.Name "message")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.errors.OtherInferenceError")))])})),
@@ -1571,7 +1580,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.UnexpectedShapeError"),
-                                      Core.projectionField = (Core.Name "expected")})),
+                                      Core.projectionFieldName = (Core.Name "expected")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1599,7 +1608,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.UnexpectedShapeError"),
-                                      Core.projectionField = (Core.Name "actual")})),
+                                      Core.projectionFieldName = (Core.Name "actual")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.errors.UnexpectedShapeError")))])})),
@@ -1645,7 +1654,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-                                      Core.projectionField = (Core.Name "leftType")})),
+                                      Core.projectionFieldName = (Core.Name "leftType")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1662,7 +1671,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-                                      Core.projectionField = (Core.Name "rightType")})),
+                                      Core.projectionFieldName = (Core.Name "rightType")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1690,7 +1699,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.UnificationError"),
-                                      Core.projectionField = (Core.Name "message")})),
+                                      Core.projectionFieldName = (Core.Name "message")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.errors.UnificationError")))])})),
@@ -1736,7 +1745,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.UnificationInferenceError"),
-                                      Core.projectionField = (Core.Name "path")})),
+                                      Core.projectionFieldName = (Core.Name "path")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1753,7 +1762,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.errors.UnificationInferenceError"),
-                                      Core.projectionField = (Core.Name "cause")})),
+                                      Core.projectionFieldName = (Core.Name "cause")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.errors.UnificationInferenceError")))])})),

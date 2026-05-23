@@ -282,7 +282,7 @@ inferAndWriteByPackage distJsonRoot universeMods mods = do
   let processOne acc pkg = do
         let pkgTargets   = M.findWithDefault [] pkg pkgToMods
             pkgUniverse  = M.findWithDefault [] pkg pkgToUniverse
-            targetNs     = S.fromList (map moduleNamespace pkgTargets)
+            targetNs     = S.fromList (map moduleName pkgTargets)
             -- All this package's modules go into the universe so cross-
             -- references within the package resolve; only the subset that's
             -- in the original target set gets re-inferred + written.
@@ -302,7 +302,7 @@ inferAndWriteByPackage distJsonRoot universeMods mods = do
         -- for the write step. Packages with no target mods (e.g. hydra-java
         -- under #344) write nothing; their inferred output flows into the
         -- accumulator so dependents can resolve cross-package type refs.
-        let toWrite = filter (\m -> moduleNamespace m `S.member` targetNs) inferred
+        let toWrite = filter (\m -> moduleName m `S.member` targetNs) inferred
         CM.when (not (null toWrite)) $
           writePackageSplitJson distJsonRoot typedUniverse inferred toWrite
         return (acc ++ inferred)
@@ -328,9 +328,9 @@ buildSchemaMap g = M.map extractType (graphSchemaTypes g)
 writeModuleJson :: M.Map Name Type -> FilePath -> Module -> IO ()
 writeModuleJson schemaMap basePath mod = do
     case CodeGeneration.moduleToJson schemaMap mod of
-      Left err -> fail $ "Failed to convert module to JSON: " ++ unNamespace (moduleNamespace mod) ++ ": " ++ showError err
+      Left err -> fail $ "Failed to convert module to JSON: " ++ unModuleName (moduleName mod) ++ ": " ++ showError err
       Right jsonStr -> do
-        let filePath = basePath FP.</> CodeGeneration.namespaceToPath (moduleNamespace mod) ++ ".json"
+        let filePath = basePath FP.</> CodeGeneration.namespaceToPath (moduleName mod) ++ ".json"
             newContent = jsonStr ++ "\n"
         SD.createDirectoryIfMissing True $ FP.takeDirectory filePath
         -- Skip the write (and the putStrLn spam) when the on-disk content
@@ -635,15 +635,15 @@ ensurePerPackageDigests distJsonRoot mods = do
 -- namespace without declaring it as a dep will not be picked up — but
 -- such files would fail at inference time anyway, so the omission is
 -- self-correcting in practice. See #347.
-closeDirtySet :: [Module] -> S.Set Namespace -> S.Set Namespace
+closeDirtySet :: [Module] -> S.Set ModuleName -> S.Set ModuleName
 closeDirtySet universeMods initialDirty = fixedPoint initialDirty
   where
     fixedPoint d =
       let newlyDirty = S.fromList
-            [ moduleNamespace m
+            [ moduleName m
             | m <- universeMods
-            , not (moduleNamespace m `S.member` d)
-            , any (`S.member` d) (moduleDependencies m)
+            , not (moduleName m `S.member` d)
+            , any ((`S.member` d) . moduleDependencyModule) (moduleDependencies m)
             ]
           d' = S.union d newlyDirty
       in if S.size d' == S.size d then d else fixedPoint d'
@@ -695,14 +695,14 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
           -- in stored AND aren't in currentDigest, no source change
           -- is detectable so they're effectively unchanged.
           let isSourceClean m =
-                let ns = moduleNamespace m
+                let ns = moduleName m
                 in case (M.lookup ns currentDigest, M.lookup ns stored) of
                      (Just c, Just s) -> c == s
                      (Nothing, Nothing) -> True
                      _                -> False
               -- Initial dirty set: modules whose own source hash changed.
               initialDirty = L.filter (not . isSourceClean) universeMods
-              initialDirtyNs = S.fromList (fmap moduleNamespace initialDirty)
+              initialDirtyNs = S.fromList (fmap moduleName initialDirty)
               -- Transitive expansion: add any module that imports a dirty
               -- module, by closure over moduleDependencies. Without this
               -- step a kernel-type rename invalidates the renamed module
@@ -722,13 +722,13 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
               --    universe for inference? Everything in universeMods that
               --    isn't in dirtyMods, so cross-package type references
               --    still resolve.
-              targetNs = S.fromList (fmap moduleNamespace targetMods)
+              targetNs = S.fromList (fmap moduleName targetMods)
               isDirty m =
-                let ns = moduleNamespace m
+                let ns = moduleName m
                 in ns `S.member` allDirtyNs && ns `S.member` targetNs
               dirtyMods = filter isDirty targetMods
-              dirtyNs = S.fromList (fmap moduleNamespace dirtyMods)
-              cleanMods = filter (\m -> not (moduleNamespace m `S.member` dirtyNs))
+              dirtyNs = S.fromList (fmap moduleName dirtyMods)
+              cleanMods = filter (\m -> not (moduleName m `S.member` dirtyNs))
                                  universeMods
               addedByClosure = S.size (S.intersection allDirtyNs targetNs)
                              - S.size (S.intersection initialDirtyNs targetNs)
@@ -747,7 +747,7 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
                 ++ show (length dirtyMods) ++ " dirty / "
                 ++ show (length cleanMods) ++ " clean"
               -- Load clean modules from JSON (they carry inferred types).
-              let cleanNs = fmap moduleNamespace cleanMods
+              let cleanNs = fmap moduleName cleanMods
               loaded <- E.try (loadCleanFromJson distJsonRoot universeMods cleanNs)
                         :: IO (Either E.SomeException [Module])
               case loaded of
@@ -768,7 +768,7 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
 -- layout is dist/json/<pkg>/src/main/json/<ns-path>.json; we route
 -- each namespace through namespaceToPackage to find its package
 -- subdirectory.
-loadCleanFromJson :: FilePath -> [Module] -> [Namespace] -> IO [Module]
+loadCleanFromJson :: FilePath -> [Module] -> [ModuleName] -> IO [Module]
 loadCleanFromJson distJsonRoot universeModules namespaces =
   CM.forM namespaces $ \ns -> do
     let pkg = namespaceToPackage ns
@@ -777,10 +777,10 @@ loadCleanFromJson distJsonRoot universeModules namespaces =
     parseResult <- parseJsonFile filePath
     case parseResult of
       Left err -> fail $ "Incremental: JSON parse error for "
-        ++ unNamespace ns ++ " at " ++ filePath ++ ": " ++ err
+        ++ unModuleName ns ++ " at " ++ filePath ++ ": " ++ err
       Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universeModules jsonVal of
         Left err -> fail $ "Incremental: module decode error for "
-          ++ unNamespace ns ++ ": " ++ showError err
+          ++ unModuleName ns ++ ": " ++ showError err
         Right m  -> return m
 
 -- | If every universe module's DSL source hash matches the stored digest,
@@ -790,14 +790,14 @@ loadCleanFromJson distJsonRoot universeModules namespaces =
 tryCacheHit :: FilePath -> [Module] -> [Module] -> IO (Maybe Digest.DigestMap)
 tryCacheHit basePath universeMods targetMods = do
   let digestFile = Digest.digestPath basePath
-      targetPaths = [basePath FP.</> CodeGeneration.namespaceToPath (moduleNamespace m) ++ ".json" | m <- targetMods]
+      targetPaths = [basePath FP.</> CodeGeneration.namespaceToPath (moduleName m) ++ ".json" | m <- targetMods]
   checkCacheHit digestFile universeMods targetPaths
 
 tryCacheHitSplit :: FilePath -> [Module] -> [Module] -> IO (Maybe Digest.DigestMap)
 tryCacheHitSplit distJsonRoot universeMods targetMods = do
   let digestFile = packageSplitDigestAnchor distJsonRoot
       targetPaths = [ distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
-                                    FP.</> CodeGeneration.namespaceToPath (moduleNamespace m) ++ ".json"
+                                    FP.</> CodeGeneration.namespaceToPath (moduleName m) ++ ".json"
                     | (pkg, pkgMods) <- groupByPackage targetMods, m <- pkgMods]
   checkCacheHit digestFile universeMods targetPaths
 
@@ -805,7 +805,7 @@ tryCacheHitSplit distJsonRoot universeMods targetMods = do
 -- digest and check that every target JSON file exists on disk.
 --
 -- Only modules whose DSL source was discoverable contribute hashes; derived
--- modules without a `ns = Namespace "..."` source file (e.g. kernel
+-- modules without a `ns = ModuleName "..."` source file (e.g. kernel
 -- decode/encode modules generated from 'Hydra.Sources.Kernel.Terms.*') are
 -- transparently handled because their generator's source IS in the map, so
 -- any change upstream invalidates the cache.
@@ -884,7 +884,7 @@ mergeDslJsonIntoPerPackageDigests distJsonRoot dslMods = do
     CM.forM_ groups $ \(pkg, pkgMods) -> do
       let pkgJsonDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
       newEntries <- fmap (M.fromList . Y.catMaybes) $ CM.forM pkgMods $ \m -> do
-        let ns      = moduleNamespace m
+        let ns      = moduleName m
             jsonFp  = pkgJsonDir FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
         exists <- SD.doesFileExist jsonFp
         if not exists
@@ -932,7 +932,7 @@ writeManifestJson basePath kernelModules kernelTypesModules mainModules testModu
     -- Sort namespace strings lexicographically for cross-host byte stability;
     -- see docs/json-format.md "Stability of byte order".
     namespacesJson mods = Json.ValueArray $ fmap Json.ValueString
-      (L.sort (fmap (unNamespace . moduleNamespace) mods))
+      (L.sort (fmap (unModuleName . moduleName) mods))
 
 -- | Write per-package manifest.json files at
 -- <root>/<pkg>/src/main/json/manifest.json for every package owning at least
@@ -986,7 +986,7 @@ writePerPackageManifestsJson distJsonRoot dslSynthUniverse kernelTypesModules ma
     -- Sort namespace strings lexicographically for cross-host byte stability;
     -- see docs/json-format.md "Stability of byte order".
     namespacesJson mods = Json.ValueArray $ fmap Json.ValueString
-      (L.sort (fmap (unNamespace . moduleNamespace) mods))
+      (L.sort (fmap (unModuleName . moduleName) mods))
 
 ----------------------------------------
 -- JSON Module Import
@@ -1020,7 +1020,7 @@ escapeControlCharsInJson input =
   BS.pack $ fmap fromIntegral $ CodeGeneration.escapeControlCharsInJson $ fmap fromIntegral $ BS.unpack input
 
 -- | Read a field from manifest.json as a list of Namespaces.
-readManifestField :: FilePath -> String -> IO [Namespace]
+readManifestField :: FilePath -> String -> IO [ModuleName]
 readManifestField basePath fieldName = do
     let manifestPath = basePath FP.</> "manifest.json"
     parseResult <- parseJsonFile manifestPath
@@ -1033,13 +1033,13 @@ readManifestField basePath fieldName = do
           Just _ -> fail $ "manifest.json field " ++ fieldName ++ " is not an array"
         _ -> fail "manifest.json is not a JSON object"
   where
-    toNamespace (Json.ValueString s) = Namespace s
+    toNamespace (Json.ValueString s) = ModuleName s
     toNamespace _ = error $ "manifest.json: expected string in " ++ fieldName
 
 -- | Read a manifest field or return an empty list if the field (or the
 -- manifest itself) is missing. Differs from 'readManifestField', which
 -- fails hard on a missing field.
-readManifestFieldOrEmpty :: FilePath -> String -> IO [Namespace]
+readManifestFieldOrEmpty :: FilePath -> String -> IO [ModuleName]
 readManifestFieldOrEmpty basePath fieldName = do
     let manifestPath = basePath FP.</> "manifest.json"
     exists <- SD.doesFileExist manifestPath
@@ -1055,11 +1055,11 @@ readManifestFieldOrEmpty basePath fieldName = do
               _                          -> return []
             _ -> return []
   where
-    toNamespace (Json.ValueString s) = Namespace s
+    toNamespace (Json.ValueString s) = ModuleName s
     toNamespace _ = error $ "manifest.json: expected string in " ++ fieldName
 
 -- | Read a manifest field, trying a primary name first and falling back to an alternative.
-readManifestFieldWithFallback :: FilePath -> String -> String -> IO [Namespace]
+readManifestFieldWithFallback :: FilePath -> String -> String -> IO [ModuleName]
 readManifestFieldWithFallback basePath primaryField fallbackField = do
     let manifestPath = basePath FP.</> "manifest.json"
     parseResult <- parseJsonFile manifestPath
@@ -1074,21 +1074,21 @@ readManifestFieldWithFallback basePath primaryField fallbackField = do
             Just _ -> fail $ "manifest.json field " ++ fallbackField ++ " is not an array"
         _ -> fail "manifest.json is not a JSON object"
   where
-    toNamespace (Json.ValueString s) = Namespace s
+    toNamespace (Json.ValueString s) = ModuleName s
     toNamespace _ = error $ "manifest.json: expected string in " ++ primaryField ++ "/" ++ fallbackField
 
 -- | Load modules from JSON files for a list of namespaces.
 -- Uses the universe modules to build the graph for type resolution.
-loadModulesFromJson :: FilePath -> [Module] -> [Namespace] -> IO [Module]
+loadModulesFromJson :: FilePath -> [Module] -> [ModuleName] -> IO [Module]
 loadModulesFromJson basePath universeModules namespaces = do
     CM.forM namespaces $ \ns -> do
       let filePath = basePath FP.</> CodeGeneration.namespaceToPath ns ++ ".json"
       parseResult <- parseJsonFile filePath
       case parseResult of
-        Left err -> fail $ "JSON parse error for " ++ unNamespace ns ++ ": " ++ err
+        Left err -> fail $ "JSON parse error for " ++ unModuleName ns ++ ": " ++ err
         Right jsonVal -> case CodeGeneration.decodeModuleFromJson bootstrapGraph universeModules jsonVal of
-          Left err -> fail $ "Module decode error for " ++ unNamespace ns ++ ": " ++ showError err
+          Left err -> fail $ "Module decode error for " ++ unModuleName ns ++ ": " ++ showError err
           Right mod -> do
-            putStrLn $ "  Loaded: " ++ unNamespace ns
+            putStrLn $ "  Loaded: " ++ unModuleName ns
             return mod
 

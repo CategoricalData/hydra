@@ -17,8 +17,8 @@ import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Sources.Java.Syntax as JavaSyntax
 
 
-ns :: Namespace
-ns = Namespace "hydra.java.environment"
+ns :: ModuleName
+ns = ModuleName "hydra.java.environment"
 
 def :: String -> Type -> Binding
 def = datatype ns
@@ -43,9 +43,9 @@ typing = typeref Typing.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [JavaSyntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
+            moduleDependencies = unqualifiedDep <$> [JavaSyntax.ns, Core.ns, Graph.ns, Module.ns, Typing.ns],
             moduleDescription = Just "Environment types for Java code generation"}
   where
     definitions = [
@@ -93,10 +93,10 @@ aliases = def "Aliases" $
   T.record [
     "currentNamespace">:
       doc "Current module namespace context" $
-      modul "Namespace",
+      modul "ModuleName",
     "packages">:
       doc "Maps namespaces to Java package names" $
-      T.map (modul "Namespace") (syntax "PackageName"),
+      T.map (modul "ModuleName") (syntax "PackageName"),
     "branchVars">:
       doc "Variables bound in pattern matching branches" $
       T.set (core "Name"),

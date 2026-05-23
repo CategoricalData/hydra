@@ -147,7 +147,12 @@
                     "name": "cases",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A list of case alternatives, one per union field"}}}],
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "A list of case alternatives, one per union field. Each Field's name is the variant tag being matched and term is the handler applied to the variant's payload."}}}],
                         "body": {"list": {"variable": "hydra.core.Field"}}}}}]}}},
           "variables": []}}},
     {
@@ -684,7 +689,7 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the record type"}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
-                    "name": "field",
+                    "name": "fieldName",
                     "type": {
                       "annotated": {
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The name of the projected field"}}}],
@@ -833,7 +838,12 @@
                     "name": "unwrap",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "An unwrap elimination; the inverse of a wrap"}}}],
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "An unwrap elimination; the inverse of a wrap. Given the name of a wrapper type, unwraps an instance of that type to its underlying body value."}}}],
                         "body": {"variable": "hydra.core.Name"}}}},
                   {
                     "name": "variable",
@@ -955,7 +965,12 @@
                     "name": "wrap",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "A wrapped type (newtype)"}}}],
+                        "annotation": [
+                          {
+                            "key": "description",
+                            "value": {
+                              "literal": {
+                                "string": "A wrapped type (newtype). There is no corresponding `unwrap` variant at the type level: wrap is the introduction form, and a wrapper type's underlying body type is given by the `wrap` variant's argument."}}}],
                         "body": {"variable": "hydra.core.Type"}}}}]}}},
           "variables": []}}},
     {
@@ -1079,6 +1094,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "The wrapped term"}}}],
                         "body": {"variable": "hydra.core.Term"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "Hydra's core data model, consisting of the fundamental hydra.core.Term type and all of its dependencies.",
-  "namespace": "hydra.core"}
+  "name": "hydra.core"}

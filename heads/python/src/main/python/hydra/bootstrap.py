@@ -84,8 +84,8 @@ def _read_manifest_field_or_empty(pkg_dir, field_name):
     if field_name not in manifest:
         return []
     # Reuse Namespace-wrapping behavior from read_manifest_field.
-    from hydra.packaging import Namespace
-    return [Namespace(ns) for ns in manifest[field_name]]
+    from hydra.packaging import ModuleName
+    return [ModuleName(ns) for ns in manifest[field_name]]
 
 
 def _load_package_main(root, pkg):
@@ -167,7 +167,7 @@ def main():
     # Namespaces in the bootstrap baseline (used for --kernel-only filtering).
     # Both hydra-kernel and hydra-haskell are baseline: hydra-haskell provides
     # the runtime AST modules that the generated DSL source modules import.
-    kernel_ns_set = {m.namespace.value for m in baseline_mods}
+    kernel_ns_set = {m.name.value for m in baseline_mods}
 
     # Step 2: Optionally load coder packages.
     coder_mods = []
@@ -190,8 +190,8 @@ def main():
     mods_to_generate = all_main_mods
     if args.kernel_only:
         before = len(mods_to_generate)
-        mods_to_generate = [m for m in mods_to_generate if m.namespace.value in kernel_ns_set]
-        all_main_mods = [m for m in all_main_mods if m.namespace.value in kernel_ns_set]
+        mods_to_generate = [m for m in mods_to_generate if m.name.value in kernel_ns_set]
+        all_main_mods = [m for m in all_main_mods if m.name.value in kernel_ns_set]
         print("Filtering to kernel modules...", flush=True)
         print(f"  Before: {before} modules", flush=True)
         print(f"  After:  {len(mods_to_generate)} kernel modules", flush=True)
@@ -277,7 +277,7 @@ def main():
         # hand-written code that registers primitives for the test graph.
         # Mirrors testSkipEmitNamespaces in Hydra.Sources.Test.All.
         _test_skip_emit = {"hydra.test.testEnv"}
-        test_mods = [m for m in test_mods if m.namespace.value not in _test_skip_emit]
+        test_mods = [m for m in test_mods if m.name.value not in _test_skip_emit]
         out_test = os.path.join(out_dir, "src/test")
 
         # When --kernel-only is active, ext modules are excluded from the main
@@ -287,11 +287,11 @@ def main():
         if args.kernel_only:
             test_ext_deps = set()
             for m in test_mods:
-                for ns in m.dependencies:
-                    if ns.value.startswith("hydra."):
-                        test_ext_deps.add(ns.value)
+                for dep in m.dependencies:
+                    if dep.module.value.startswith("hydra."):
+                        test_ext_deps.add(dep.module.value)
             if test_ext_deps:
-                ext_mods_for_tests = [m for m in full_mods if m.namespace.value in test_ext_deps]
+                ext_mods_for_tests = [m for m in full_mods if m.name.value in test_ext_deps]
                 if ext_mods_for_tests:
                     print(f"Generating {len(ext_mods_for_tests)} ext module(s) needed by tests...", flush=True)
                     out_main_sub = os.path.join(out_dir, "src/main")

@@ -95,7 +95,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "colType"},
-                                    "function": {"project": {"field": "name", "typeName": "hydra.tabular.ColumnType"}}}},
+                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.tabular.ColumnType"}}}},
                                 "function": {"unwrap": "hydra.relational.ColumnName"}}},
                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
@@ -106,7 +106,7 @@
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "colType"},
-                                    "function": {"project": {"field": "type", "typeName": "hydra.tabular.ColumnType"}}}},
+                                    "function": {"project": {"fieldName": "type", "typeName": "hydra.tabular.ColumnType"}}}},
                                 "typeScheme": {"body": {"variable": "hydra.core.Type"}, "variables": []}}],
                             "body": {
                               "let": {
@@ -659,7 +659,7 @@
                             "term": {
                               "application": {
                                 "argument": {"variable": "tableType"},
-                                "function": {"project": {"field": "columns", "typeName": "hydra.tabular.TableType"}}}},
+                                "function": {"project": {"fieldName": "columns", "typeName": "hydra.tabular.TableType"}}}},
                             "typeScheme": {"body": {"list": {"variable": "hydra.tabular.ColumnType"}}, "variables": []}}],
                         "body": {
                           "let": {
@@ -670,7 +670,7 @@
                                   "application": {
                                     "argument": {"variable": "table"},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "header", "typeName": "hydra.tabular.Table"}}, "type": {"literal": {"string": {}}}}}}},
+                                      "typeApplication": {"body": {"project": {"fieldName": "header", "typeName": "hydra.tabular.Table"}}, "type": {"literal": {"string": {}}}}}}},
                                 "typeScheme": {"body": {"maybe": {"variable": "hydra.tabular.HeaderRow"}}, "variables": []}}],
                             "body": {
                               "let": {
@@ -681,7 +681,7 @@
                                       "application": {
                                         "argument": {"variable": "table"},
                                         "function": {
-                                          "typeApplication": {"body": {"project": {"field": "data", "typeName": "hydra.tabular.Table"}}, "type": {"literal": {"string": {}}}}}}},
+                                          "typeApplication": {"body": {"project": {"fieldName": "data", "typeName": "hydra.tabular.Table"}}, "type": {"literal": {"string": {}}}}}}},
                                     "typeScheme": {
                                       "body": {"list": {"application": {"argument": {"literal": {"string": {}}}, "function": {"variable": "hydra.tabular.DataRow"}}}},
                                       "variables": []}}],
@@ -844,7 +844,7 @@
                             "argument": {"variable": "graph"},
                             "function": {
                               "typeApplication": {
-                                "body": {"project": {"field": "vertices", "typeName": "hydra.pg.model.LazyGraph"}},
+                                "body": {"project": {"fieldName": "vertices", "typeName": "hydra.pg.model.LazyGraph"}},
                                 "type": {"variable": "hydra.core.Term"}}}}},
                         "typeScheme": {
                           "body": {
@@ -860,7 +860,7 @@
                                 "argument": {"variable": "graph"},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"project": {"field": "edges", "typeName": "hydra.pg.model.LazyGraph"}},
+                                    "body": {"project": {"fieldName": "edges", "typeName": "hydra.pg.model.LazyGraph"}},
                                     "type": {"variable": "hydra.core.Term"}}}}},
                             "typeScheme": {
                               "body": {
@@ -1474,7 +1474,9 @@
                                       "application": {
                                         "argument": {"variable": "edgeSpec"},
                                         "function": {
-                                          "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                          "typeApplication": {
+                                            "body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.Edge"}},
+                                            "type": {"variable": "hydra.core.Term"}}}}},
                                     "typeScheme": {"body": {"variable": "hydra.pg.model.EdgeLabel"}, "variables": []}}],
                                 "body": {
                                   "let": {
@@ -1485,7 +1487,7 @@
                                           "application": {
                                             "argument": {"variable": "edgeSpec"},
                                             "function": {
-                                              "typeApplication": {"body": {"project": {"field": "id", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                              "typeApplication": {"body": {"project": {"fieldName": "id", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
                                         "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                     "body": {
                                       "let": {
@@ -1496,7 +1498,7 @@
                                               "application": {
                                                 "argument": {"variable": "edgeSpec"},
                                                 "function": {
-                                                  "typeApplication": {"body": {"project": {"field": "out", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                                  "typeApplication": {"body": {"project": {"fieldName": "out", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
                                             "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                         "body": {
                                           "let": {
@@ -1507,7 +1509,7 @@
                                                   "application": {
                                                     "argument": {"variable": "edgeSpec"},
                                                     "function": {
-                                                      "typeApplication": {"body": {"project": {"field": "in", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                                      "typeApplication": {"body": {"project": {"fieldName": "in", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                             "body": {
                                               "let": {
@@ -1519,7 +1521,7 @@
                                                         "argument": {"variable": "edgeSpec"},
                                                         "function": {
                                                           "typeApplication": {
-                                                            "body": {"project": {"field": "properties", "typeName": "hydra.pg.model.Edge"}},
+                                                            "body": {"project": {"fieldName": "properties", "typeName": "hydra.pg.model.Edge"}},
                                                             "type": {"variable": "hydra.core.Term"}}}}},
                                                     "typeScheme": {
                                                       "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.Term"}}},
@@ -2061,7 +2063,9 @@
                                       "application": {
                                         "argument": {"variable": "vertexSpec"},
                                         "function": {
-                                          "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                          "typeApplication": {
+                                            "body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.Vertex"}},
+                                            "type": {"variable": "hydra.core.Term"}}}}},
                                     "typeScheme": {"body": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}}],
                                 "body": {
                                   "let": {
@@ -2072,7 +2076,7 @@
                                           "application": {
                                             "argument": {"variable": "vertexSpec"},
                                             "function": {
-                                              "typeApplication": {"body": {"project": {"field": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                              "typeApplication": {"body": {"project": {"fieldName": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "hydra.core.Term"}}}}},
                                         "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                     "body": {
                                       "let": {
@@ -2084,7 +2088,7 @@
                                                 "argument": {"variable": "vertexSpec"},
                                                 "function": {
                                                   "typeApplication": {
-                                                    "body": {"project": {"field": "properties", "typeName": "hydra.pg.model.Vertex"}},
+                                                    "body": {"project": {"fieldName": "properties", "typeName": "hydra.pg.model.Vertex"}},
                                                     "type": {"variable": "hydra.core.Term"}}}}},
                                             "typeScheme": {
                                               "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.Term"}}},
@@ -2287,7 +2291,9 @@
                                                             "argument": {
                                                               "application": {
                                                                 "argument": {
-                                                                  "application": {"argument": {"variable": "proj"}, "function": {"project": {"field": "typeName", "typeName": "hydra.core.Projection"}}}},
+                                                                  "application": {
+                                                                    "argument": {"variable": "proj"},
+                                                                    "function": {"project": {"fieldName": "typeName", "typeName": "hydra.core.Projection"}}}},
                                                                 "function": {"unwrap": "hydra.core.Name"}}},
                                                             "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.insert"}, "type": {"literal": {"string": {}}}}}}}}},
                                                     "domain": {"variable": "hydra.core.Projection"},
@@ -3290,7 +3296,9 @@
                           "application": {
                             "argument": {"variable": "edge"},
                             "function": {
-                              "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                              "typeApplication": {
+                                "body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.Edge"}},
+                                "type": {"variable": "hydra.core.Term"}}}}},
                         "typeScheme": {"body": {"variable": "hydra.pg.model.EdgeLabel"}, "variables": []}}],
                     "body": {
                       "let": {
@@ -3301,7 +3309,7 @@
                               "application": {
                                 "argument": {"variable": "edge"},
                                 "function": {
-                                  "typeApplication": {"body": {"project": {"field": "id", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                  "typeApplication": {"body": {"project": {"fieldName": "id", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
                             "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                         "body": {
                           "let": {
@@ -3312,7 +3320,7 @@
                                   "application": {
                                     "argument": {"variable": "edge"},
                                     "function": {
-                                      "typeApplication": {"body": {"project": {"field": "out", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                      "typeApplication": {"body": {"project": {"fieldName": "out", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
                                 "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                             "body": {
                               "let": {
@@ -3323,7 +3331,7 @@
                                       "application": {
                                         "argument": {"variable": "edge"},
                                         "function": {
-                                          "typeApplication": {"body": {"project": {"field": "in", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                          "typeApplication": {"body": {"project": {"fieldName": "in", "typeName": "hydra.pg.model.Edge"}}, "type": {"variable": "hydra.core.Term"}}}}},
                                     "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                                 "body": {
                                   "let": {
@@ -3335,7 +3343,7 @@
                                             "argument": {"variable": "edge"},
                                             "function": {
                                               "typeApplication": {
-                                                "body": {"project": {"field": "properties", "typeName": "hydra.pg.model.Edge"}},
+                                                "body": {"project": {"fieldName": "properties", "typeName": "hydra.pg.model.Edge"}},
                                                 "type": {"variable": "hydra.core.Term"}}}}},
                                         "typeScheme": {
                                           "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.Term"}}},
@@ -3462,7 +3470,9 @@
                           "application": {
                             "argument": {"variable": "vertex"},
                             "function": {
-                              "typeApplication": {"body": {"project": {"field": "label", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                              "typeApplication": {
+                                "body": {"project": {"fieldName": "label", "typeName": "hydra.pg.model.Vertex"}},
+                                "type": {"variable": "hydra.core.Term"}}}}},
                         "typeScheme": {"body": {"variable": "hydra.pg.model.VertexLabel"}, "variables": []}}],
                     "body": {
                       "let": {
@@ -3473,7 +3483,7 @@
                               "application": {
                                 "argument": {"variable": "vertex"},
                                 "function": {
-                                  "typeApplication": {"body": {"project": {"field": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "hydra.core.Term"}}}}},
+                                  "typeApplication": {"body": {"project": {"fieldName": "id", "typeName": "hydra.pg.model.Vertex"}}, "type": {"variable": "hydra.core.Term"}}}}},
                             "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}],
                         "body": {
                           "let": {
@@ -3485,7 +3495,7 @@
                                     "argument": {"variable": "vertex"},
                                     "function": {
                                       "typeApplication": {
-                                        "body": {"project": {"field": "properties", "typeName": "hydra.pg.model.Vertex"}},
+                                        "body": {"project": {"fieldName": "properties", "typeName": "hydra.pg.model.Vertex"}},
                                         "type": {"variable": "hydra.core.Term"}}}}},
                                 "typeScheme": {
                                   "body": {"map": {"keys": {"variable": "hydra.pg.model.PropertyKey"}, "values": {"variable": "hydra.core.Term"}}},
@@ -3615,7 +3625,7 @@
                                         "body": {
                                           "pair": {
                                             "first": {
-                                              "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "name", "typeName": "hydra.tabular.TableType"}}}},
+                                              "application": {"argument": {"variable": "t"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.tabular.TableType"}}}},
                                             "second": {"variable": "t"}}},
                                         "type": {"variable": "hydra.relational.RelationName"}}},
                                     "type": {"variable": "hydra.tabular.TableType"}}},
@@ -3658,7 +3668,7 @@
                                 "argument": {
                                   "application": {
                                     "argument": {"variable": "tableType"},
-                                    "function": {"project": {"field": "name", "typeName": "hydra.tabular.TableType"}}}},
+                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.tabular.TableType"}}}},
                                 "function": {"unwrap": "hydra.relational.RelationName"}}},
                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
@@ -3669,7 +3679,7 @@
                                 "term": {
                                   "application": {
                                     "argument": {"variable": "tableType"},
-                                    "function": {"project": {"field": "columns", "typeName": "hydra.tabular.TableType"}}}},
+                                    "function": {"project": {"fieldName": "columns", "typeName": "hydra.tabular.TableType"}}}},
                                 "typeScheme": {"body": {"list": {"variable": "hydra.tabular.ColumnType"}}, "variables": []}}],
                             "body": {
                               "let": {
@@ -3713,7 +3723,7 @@
                                                                               "argument": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "colType"},
-                                                                                  "function": {"project": {"field": "name", "typeName": "hydra.tabular.ColumnType"}}}},
+                                                                                  "function": {"project": {"fieldName": "name", "typeName": "hydra.tabular.ColumnType"}}}},
                                                                               "function": {"unwrap": "hydra.relational.ColumnName"}}},
                                                                           "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                                                       "body": {
@@ -4150,36 +4160,36 @@
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.reduction",
-    "hydra.rewriting",
-    "hydra.strip",
-    "hydra.extract.core",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants",
-    "hydra.pg.model",
-    "hydra.tabular",
-    "hydra.relational"],
+    {"module": "hydra.reduction"},
+    {"module": "hydra.rewriting"},
+    {"module": "hydra.strip"},
+    {"module": "hydra.extract.core"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"},
+    {"module": "hydra.pg.model"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.relational"}],
   "description": "Functions for transforming property graph mappings into property graph elements.",
-  "namespace": "hydra.demos.genpg.transform"}
+  "name": "hydra.demos.genpg.transform"}

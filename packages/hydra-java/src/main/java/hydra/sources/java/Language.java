@@ -1,6 +1,6 @@
 package hydra.sources.java;
-
 import hydra.core.Field;
+import static hydra.dsl.meta.Defs.unqualifiedDeps;
 import hydra.core.Name;
 import hydra.core.Type;
 import hydra.dsl.Core;
@@ -21,7 +21,8 @@ import hydra.dsl.meta.lib.Sets;
 import hydra.dsl.meta.lib.Strings;
 import hydra.packaging.Definition;
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
+import hydra.packaging.ModuleDependency;
 import hydra.phantoms.TTerm;
 import hydra.util.Maybe;
 
@@ -38,7 +39,7 @@ import static hydra.dsl.java.Helpers.termDef;
  * {@code packages/hydra-java/src/main/haskell/Hydra/Sources/Java/Language.hs}.</p>
  */
 public class Language {
-    public static final Namespace NS = new Namespace("hydra.java.language");
+    public static final ModuleName NS = new ModuleName("hydra.java.language");
 
     /** Build an injection of a unit-tagged variant. Mirrors the inlined form
      * that {@code hydra.dsl.variants.*} TTerm constants expand to in the
@@ -258,32 +259,32 @@ public class Language {
         reservedWords());
 
     // Haskell: moduleDependencies = [Lexical.ns] L.++ KernelTypes.kernelTypesNamespaces
-    private static final List<Namespace> DEPENDENCIES = Arrays.asList(
-        new Namespace("hydra.lexical"),
-        new Namespace("hydra.paths"),
-        new Namespace("hydra.ast"),
-        new Namespace("hydra.classes"),
-        new Namespace("hydra.coders"),
-        new Namespace("hydra.context"),
-        new Namespace("hydra.core"),
-        new Namespace("hydra.error.checking"),
-        new Namespace("hydra.error.core"),
-        new Namespace("hydra.error.packaging"),
-        new Namespace("hydra.errors"),
-        new Namespace("hydra.graph"),
-        new Namespace("hydra.json.model"),
-        new Namespace("hydra.packaging"),
-        new Namespace("hydra.parsing"),
-        new Namespace("hydra.phantoms"),
-        new Namespace("hydra.query"),
-        new Namespace("hydra.relational"),
-        new Namespace("hydra.tabular"),
-        new Namespace("hydra.testing"),
-        new Namespace("hydra.topology"),
-        new Namespace("hydra.typing"),
-        new Namespace("hydra.util"),
-        new Namespace("hydra.validation"),
-        new Namespace("hydra.variants"));
+    private static final List<ModuleDependency> DEPENDENCIES = unqualifiedDeps(
+        new ModuleName("hydra.lexical"),
+        new ModuleName("hydra.paths"),
+        new ModuleName("hydra.ast"),
+        new ModuleName("hydra.classes"),
+        new ModuleName("hydra.coders"),
+        new ModuleName("hydra.context"),
+        new ModuleName("hydra.core"),
+        new ModuleName("hydra.error.checking"),
+        new ModuleName("hydra.error.core"),
+        new ModuleName("hydra.error.packaging"),
+        new ModuleName("hydra.errors"),
+        new ModuleName("hydra.graph"),
+        new ModuleName("hydra.json.model"),
+        new ModuleName("hydra.packaging"),
+        new ModuleName("hydra.parsing"),
+        new ModuleName("hydra.phantoms"),
+        new ModuleName("hydra.query"),
+        new ModuleName("hydra.relational"),
+        new ModuleName("hydra.tabular"),
+        new ModuleName("hydra.testing"),
+        new ModuleName("hydra.topology"),
+        new ModuleName("hydra.typing"),
+        new ModuleName("hydra.util"),
+        new ModuleName("hydra.validation"),
+        new ModuleName("hydra.variants"));
 
     public static final Module module_ = new Module(
         Maybe.just("Language constraints and reserved words for Java"),

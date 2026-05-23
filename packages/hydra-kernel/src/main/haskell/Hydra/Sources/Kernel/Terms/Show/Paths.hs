@@ -54,14 +54,14 @@ import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 
 
-ns :: Namespace
-ns = Namespace "hydra.show.paths"
+ns :: ModuleName
+ns = ModuleName "hydra.show.paths"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Names.ns, Rewriting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Utilities for working with subterm steps and paths.")}
   where
    definitions = [
@@ -101,7 +101,7 @@ subtermStep = define "subtermStep" $
     _SubtermStep_injectionTerm>>: constant nothing,
     _SubtermStep_wrappedTerm>>: constant nothing]
 
-termToSubtermGraph :: TTermDefinition (M.Map Namespace String -> Term -> SubtermGraph)
+termToSubtermGraph :: TTermDefinition (M.Map ModuleName String -> Term -> SubtermGraph)
 termToSubtermGraph = define "termToSubtermGraph" $
   doc "Build a subterm graph from a term" $
   lambda "namespaces" $ lambda "term" $ lets [

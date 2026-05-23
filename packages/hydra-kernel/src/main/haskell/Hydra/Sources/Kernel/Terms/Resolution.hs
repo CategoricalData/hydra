@@ -80,17 +80,17 @@ import qualified Hydra.Sources.Kernel.Terms.Names        as Names
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 
 
-ns :: Namespace
-ns = Namespace "hydra.resolution"
+ns :: ModuleName
+ns = ModuleName "hydra.resolution"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Lexical.ns, Names.ns, Scoping.ns, ShowCore.ns, Strip.ns, Substitution.ns, Variables.ns, Namespace "hydra.decode.core"] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Names.ns, Scoping.ns, ShowCore.ns, Strip.ns, Substitution.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Type dereference, lookup, requirements, and instantiation")}
   where
     definitions = [

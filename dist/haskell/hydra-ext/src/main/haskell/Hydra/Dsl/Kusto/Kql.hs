@@ -34,7 +34,7 @@ betweenExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 betweenExpressionLowerBound :: Phantoms.TTerm Kql.BetweenExpression -> Phantoms.TTerm Kql.Expression
@@ -42,7 +42,7 @@ betweenExpressionLowerBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-        Core.projectionField = (Core.Name "lowerBound")})),
+        Core.projectionFieldName = (Core.Name "lowerBound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 betweenExpressionNot :: Phantoms.TTerm Kql.BetweenExpression -> Phantoms.TTerm Bool
@@ -50,7 +50,7 @@ betweenExpressionNot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-        Core.projectionField = (Core.Name "not")})),
+        Core.projectionFieldName = (Core.Name "not")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 betweenExpressionUpperBound :: Phantoms.TTerm Kql.BetweenExpression -> Phantoms.TTerm Kql.Expression
@@ -58,7 +58,7 @@ betweenExpressionUpperBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-        Core.projectionField = (Core.Name "upperBound")})),
+        Core.projectionFieldName = (Core.Name "upperBound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 betweenExpressionWithExpression :: Phantoms.TTerm Kql.BetweenExpression -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.BetweenExpression
@@ -71,7 +71,7 @@ betweenExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -81,14 +81,14 @@ betweenExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "lowerBound")})),
+              Core.projectionFieldName = (Core.Name "lowerBound")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "upperBound"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "upperBound")})),
+              Core.projectionFieldName = (Core.Name "upperBound")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 betweenExpressionWithLowerBound :: Phantoms.TTerm Kql.BetweenExpression -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.BetweenExpression
@@ -101,14 +101,14 @@ betweenExpressionWithLowerBound original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lowerBound"),
@@ -118,7 +118,7 @@ betweenExpressionWithLowerBound original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "upperBound")})),
+              Core.projectionFieldName = (Core.Name "upperBound")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 betweenExpressionWithNot :: Phantoms.TTerm Kql.BetweenExpression -> Phantoms.TTerm Bool -> Phantoms.TTerm Kql.BetweenExpression
@@ -134,21 +134,21 @@ betweenExpressionWithNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lowerBound"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "lowerBound")})),
+              Core.projectionFieldName = (Core.Name "lowerBound")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "upperBound"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "upperBound")})),
+              Core.projectionFieldName = (Core.Name "upperBound")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 betweenExpressionWithUpperBound :: Phantoms.TTerm Kql.BetweenExpression -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.BetweenExpression
@@ -161,21 +161,21 @@ betweenExpressionWithUpperBound original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "lowerBound"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BetweenExpression"),
-              Core.projectionField = (Core.Name "lowerBound")})),
+              Core.projectionFieldName = (Core.Name "lowerBound")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "upperBound"),
@@ -201,7 +201,7 @@ binaryExpressionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BinaryExpression"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryExpressionOperator :: Phantoms.TTerm Kql.BinaryExpression -> Phantoms.TTerm Kql.BinaryOperator
@@ -209,7 +209,7 @@ binaryExpressionOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BinaryExpression"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryExpressionRight :: Phantoms.TTerm Kql.BinaryExpression -> Phantoms.TTerm Kql.Expression
@@ -217,7 +217,7 @@ binaryExpressionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BinaryExpression"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryExpressionWithLeft :: Phantoms.TTerm Kql.BinaryExpression -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.BinaryExpression
@@ -233,14 +233,14 @@ binaryExpressionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BinaryExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BinaryExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binaryExpressionWithOperator :: Phantoms.TTerm Kql.BinaryExpression -> Phantoms.TTerm Kql.BinaryOperator -> Phantoms.TTerm Kql.BinaryExpression
@@ -253,7 +253,7 @@ binaryExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BinaryExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -263,7 +263,7 @@ binaryExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BinaryExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binaryExpressionWithRight :: Phantoms.TTerm Kql.BinaryExpression -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.BinaryExpression
@@ -276,14 +276,14 @@ binaryExpressionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BinaryExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.BinaryExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -554,7 +554,7 @@ columnAliasAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ColumnAlias"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnAliasColumn :: Phantoms.TTerm Kql.ColumnAlias -> Phantoms.TTerm Kql.ColumnName
@@ -562,7 +562,7 @@ columnAliasColumn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ColumnAlias"),
-        Core.projectionField = (Core.Name "column")})),
+        Core.projectionFieldName = (Core.Name "column")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnAliasWithAlias :: Phantoms.TTerm Kql.ColumnAlias -> Phantoms.TTerm Kql.ColumnName -> Phantoms.TTerm Kql.ColumnAlias
@@ -575,7 +575,7 @@ columnAliasWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ColumnAlias"),
-              Core.projectionField = (Core.Name "column")})),
+              Core.projectionFieldName = (Core.Name "column")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
@@ -594,7 +594,7 @@ columnAliasWithColumn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ColumnAlias"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 columnAssignment :: Phantoms.TTerm Kql.ColumnName -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.ColumnAssignment
@@ -614,7 +614,7 @@ columnAssignmentColumn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ColumnAssignment"),
-        Core.projectionField = (Core.Name "column")})),
+        Core.projectionFieldName = (Core.Name "column")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnAssignmentExpression :: Phantoms.TTerm Kql.ColumnAssignment -> Phantoms.TTerm Kql.Expression
@@ -622,7 +622,7 @@ columnAssignmentExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ColumnAssignment"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 columnAssignmentWithColumn :: Phantoms.TTerm Kql.ColumnAssignment -> Phantoms.TTerm Kql.ColumnName -> Phantoms.TTerm Kql.ColumnAssignment
@@ -638,7 +638,7 @@ columnAssignmentWithColumn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ColumnAssignment"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 columnAssignmentWithExpression :: Phantoms.TTerm Kql.ColumnAssignment -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.ColumnAssignment
@@ -651,7 +651,7 @@ columnAssignmentWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ColumnAssignment"),
-              Core.projectionField = (Core.Name "column")})),
+              Core.projectionFieldName = (Core.Name "column")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -862,7 +862,7 @@ durationUnit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Duration"),
-        Core.projectionField = (Core.Name "unit")})),
+        Core.projectionFieldName = (Core.Name "unit")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 durationUnitHour :: Phantoms.TTerm Kql.DurationUnit
@@ -894,7 +894,7 @@ durationValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Duration"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 durationWithUnit :: Phantoms.TTerm Kql.Duration -> Phantoms.TTerm Kql.DurationUnit -> Phantoms.TTerm Kql.Duration
@@ -907,7 +907,7 @@ durationWithUnit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Duration"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "unit"),
@@ -926,7 +926,7 @@ durationWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Duration"),
-              Core.projectionField = (Core.Name "unit")})),
+              Core.projectionFieldName = (Core.Name "unit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 expressionAnd :: Phantoms.TTerm [Kql.Expression] -> Phantoms.TTerm Kql.Expression
@@ -1074,7 +1074,7 @@ functionExpressionArguments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.FunctionExpression"),
-        Core.projectionField = (Core.Name "arguments")})),
+        Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 functionExpressionFunction :: Phantoms.TTerm Kql.FunctionExpression -> Phantoms.TTerm Kql.Function
@@ -1082,7 +1082,7 @@ functionExpressionFunction x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.FunctionExpression"),
-        Core.projectionField = (Core.Name "function")})),
+        Core.projectionFieldName = (Core.Name "function")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 functionExpressionWithArguments :: Phantoms.TTerm Kql.FunctionExpression -> Phantoms.TTerm [Kql.Expression] -> Phantoms.TTerm Kql.FunctionExpression
@@ -1095,7 +1095,7 @@ functionExpressionWithArguments original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.FunctionExpression"),
-              Core.projectionField = (Core.Name "function")})),
+              Core.projectionFieldName = (Core.Name "function")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
@@ -1114,7 +1114,7 @@ functionExpressionWithFunction original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.FunctionExpression"),
-              Core.projectionField = (Core.Name "arguments")})),
+              Core.projectionFieldName = (Core.Name "arguments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 functionName :: Phantoms.TTerm String -> Phantoms.TTerm Kql.FunctionName
@@ -1140,7 +1140,7 @@ indexExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.IndexExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 indexExpressionIndex :: Phantoms.TTerm Kql.IndexExpression -> Phantoms.TTerm String
@@ -1148,7 +1148,7 @@ indexExpressionIndex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.IndexExpression"),
-        Core.projectionField = (Core.Name "index")})),
+        Core.projectionFieldName = (Core.Name "index")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 indexExpressionWithExpression :: Phantoms.TTerm Kql.IndexExpression -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.IndexExpression
@@ -1164,7 +1164,7 @@ indexExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.IndexExpression"),
-              Core.projectionField = (Core.Name "index")})),
+              Core.projectionFieldName = (Core.Name "index")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 indexExpressionWithIndex :: Phantoms.TTerm Kql.IndexExpression -> Phantoms.TTerm String -> Phantoms.TTerm Kql.IndexExpression
@@ -1177,7 +1177,7 @@ indexExpressionWithIndex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.IndexExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "index"),
@@ -1203,7 +1203,7 @@ joinCommandExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.JoinCommand"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 joinCommandKind :: Phantoms.TTerm Kql.JoinCommand -> Phantoms.TTerm Kql.JoinKind
@@ -1211,7 +1211,7 @@ joinCommandKind x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.JoinCommand"),
-        Core.projectionField = (Core.Name "kind")})),
+        Core.projectionFieldName = (Core.Name "kind")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 joinCommandOn :: Phantoms.TTerm Kql.JoinCommand -> Phantoms.TTerm Kql.Expression
@@ -1219,7 +1219,7 @@ joinCommandOn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.JoinCommand"),
-        Core.projectionField = (Core.Name "on")})),
+        Core.projectionFieldName = (Core.Name "on")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 joinCommandWithExpression :: Phantoms.TTerm Kql.JoinCommand -> Phantoms.TTerm Kql.TableName -> Phantoms.TTerm Kql.JoinCommand
@@ -1232,7 +1232,7 @@ joinCommandWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.JoinCommand"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -1242,7 +1242,7 @@ joinCommandWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.JoinCommand"),
-              Core.projectionField = (Core.Name "on")})),
+              Core.projectionFieldName = (Core.Name "on")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 joinCommandWithKind :: Phantoms.TTerm Kql.JoinCommand -> Phantoms.TTerm Kql.JoinKind -> Phantoms.TTerm Kql.JoinCommand
@@ -1258,14 +1258,14 @@ joinCommandWithKind original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.JoinCommand"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "on"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.JoinCommand"),
-              Core.projectionField = (Core.Name "on")})),
+              Core.projectionFieldName = (Core.Name "on")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 joinCommandWithOn :: Phantoms.TTerm Kql.JoinCommand -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.JoinCommand
@@ -1278,14 +1278,14 @@ joinCommandWithOn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.JoinCommand"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.JoinCommand"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "on"),
@@ -1380,7 +1380,7 @@ keyValuePairKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.KeyValuePair"),
-        Core.projectionField = (Core.Name "key")})),
+        Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 keyValuePairValue :: Phantoms.TTerm Kql.KeyValuePair -> Phantoms.TTerm Kql.Expression
@@ -1388,7 +1388,7 @@ keyValuePairValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.KeyValuePair"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 keyValuePairWithKey :: Phantoms.TTerm Kql.KeyValuePair -> Phantoms.TTerm String -> Phantoms.TTerm Kql.KeyValuePair
@@ -1404,7 +1404,7 @@ keyValuePairWithKey original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.KeyValuePair"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 keyValuePairWithValue :: Phantoms.TTerm Kql.KeyValuePair -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.KeyValuePair
@@ -1417,7 +1417,7 @@ keyValuePairWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.KeyValuePair"),
-              Core.projectionField = (Core.Name "key")})),
+              Core.projectionFieldName = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1440,7 +1440,7 @@ letBindingExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.LetBinding"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letBindingName :: Phantoms.TTerm Kql.LetBinding -> Phantoms.TTerm Kql.ColumnName
@@ -1448,7 +1448,7 @@ letBindingName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.LetBinding"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letBindingWithExpression :: Phantoms.TTerm Kql.LetBinding -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.LetBinding
@@ -1461,7 +1461,7 @@ letBindingWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.LetBinding"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -1480,7 +1480,7 @@ letBindingWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.LetBinding"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letExpression :: Phantoms.TTerm [Kql.LetBinding] -> Phantoms.TTerm Kql.TabularExpression -> Phantoms.TTerm Kql.LetExpression
@@ -1500,7 +1500,7 @@ letExpressionBindings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.LetExpression"),
-        Core.projectionField = (Core.Name "bindings")})),
+        Core.projectionFieldName = (Core.Name "bindings")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letExpressionExpression :: Phantoms.TTerm Kql.LetExpression -> Phantoms.TTerm Kql.TabularExpression
@@ -1508,7 +1508,7 @@ letExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.LetExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letExpressionWithBindings :: Phantoms.TTerm Kql.LetExpression -> Phantoms.TTerm [Kql.LetBinding] -> Phantoms.TTerm Kql.LetExpression
@@ -1524,7 +1524,7 @@ letExpressionWithBindings original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.LetExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letExpressionWithExpression :: Phantoms.TTerm Kql.LetExpression -> Phantoms.TTerm Kql.TabularExpression -> Phantoms.TTerm Kql.LetExpression
@@ -1537,7 +1537,7 @@ letExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.LetExpression"),
-              Core.projectionField = (Core.Name "bindings")})),
+              Core.projectionFieldName = (Core.Name "bindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -1632,7 +1632,7 @@ parameterKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Parameter"),
-        Core.projectionField = (Core.Name "key")})),
+        Core.projectionFieldName = (Core.Name "key")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parameterValue :: Phantoms.TTerm Kql.Parameter -> Phantoms.TTerm Kql.Literal
@@ -1640,7 +1640,7 @@ parameterValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Parameter"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parameterWithKey :: Phantoms.TTerm Kql.Parameter -> Phantoms.TTerm String -> Phantoms.TTerm Kql.Parameter
@@ -1656,7 +1656,7 @@ parameterWithKey original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Parameter"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parameterWithValue :: Phantoms.TTerm Kql.Parameter -> Phantoms.TTerm Kql.Literal -> Phantoms.TTerm Kql.Parameter
@@ -1669,7 +1669,7 @@ parameterWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Parameter"),
-              Core.projectionField = (Core.Name "key")})),
+              Core.projectionFieldName = (Core.Name "key")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1692,7 +1692,7 @@ parseCommandColumn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ParseCommand"),
-        Core.projectionField = (Core.Name "column")})),
+        Core.projectionFieldName = (Core.Name "column")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parseCommandPairs :: Phantoms.TTerm Kql.ParseCommand -> Phantoms.TTerm [Kql.KeyValuePair]
@@ -1700,7 +1700,7 @@ parseCommandPairs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ParseCommand"),
-        Core.projectionField = (Core.Name "pairs")})),
+        Core.projectionFieldName = (Core.Name "pairs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parseCommandWithColumn :: Phantoms.TTerm Kql.ParseCommand -> Phantoms.TTerm Kql.ColumnName -> Phantoms.TTerm Kql.ParseCommand
@@ -1716,7 +1716,7 @@ parseCommandWithColumn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ParseCommand"),
-              Core.projectionField = (Core.Name "pairs")})),
+              Core.projectionFieldName = (Core.Name "pairs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parseCommandWithPairs :: Phantoms.TTerm Kql.ParseCommand -> Phantoms.TTerm [Kql.KeyValuePair] -> Phantoms.TTerm Kql.ParseCommand
@@ -1729,7 +1729,7 @@ parseCommandWithPairs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.ParseCommand"),
-              Core.projectionField = (Core.Name "column")})),
+              Core.projectionFieldName = (Core.Name "column")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pairs"),
@@ -1758,7 +1758,7 @@ printCommandColumn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.PrintCommand"),
-        Core.projectionField = (Core.Name "column")})),
+        Core.projectionFieldName = (Core.Name "column")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 printCommandExpression :: Phantoms.TTerm Kql.PrintCommand -> Phantoms.TTerm Kql.Expression
@@ -1766,7 +1766,7 @@ printCommandExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.PrintCommand"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 printCommandWithColumn :: Phantoms.TTerm Kql.PrintCommand -> Phantoms.TTerm (Maybe Kql.ColumnName) -> Phantoms.TTerm Kql.PrintCommand
@@ -1782,7 +1782,7 @@ printCommandWithColumn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.PrintCommand"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 printCommandWithExpression :: Phantoms.TTerm Kql.PrintCommand -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.PrintCommand
@@ -1795,7 +1795,7 @@ printCommandWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.PrintCommand"),
-              Core.projectionField = (Core.Name "column")})),
+              Core.projectionFieldName = (Core.Name "column")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -1818,7 +1818,7 @@ projectionAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Projection"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionExpression :: Phantoms.TTerm Kql.Projection -> Phantoms.TTerm Kql.Expression
@@ -1826,7 +1826,7 @@ projectionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Projection"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 projectionWithAlias :: Phantoms.TTerm Kql.Projection -> Phantoms.TTerm (Maybe Kql.ColumnName) -> Phantoms.TTerm Kql.Projection
@@ -1839,7 +1839,7 @@ projectionWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Projection"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
@@ -1858,7 +1858,7 @@ projectionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.Projection"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyExpression :: Phantoms.TTerm Kql.Expression -> Phantoms.TTerm String -> Phantoms.TTerm Kql.PropertyExpression
@@ -1878,7 +1878,7 @@ propertyExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.PropertyExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyExpressionProperty :: Phantoms.TTerm Kql.PropertyExpression -> Phantoms.TTerm String
@@ -1886,7 +1886,7 @@ propertyExpressionProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.PropertyExpression"),
-        Core.projectionField = (Core.Name "property")})),
+        Core.projectionFieldName = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyExpressionWithExpression :: Phantoms.TTerm Kql.PropertyExpression -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.PropertyExpression
@@ -1902,7 +1902,7 @@ propertyExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.PropertyExpression"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyExpressionWithProperty :: Phantoms.TTerm Kql.PropertyExpression -> Phantoms.TTerm String -> Phantoms.TTerm Kql.PropertyExpression
@@ -1915,7 +1915,7 @@ propertyExpressionWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.PropertyExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
@@ -1944,7 +1944,7 @@ searchCommandDatasets x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SearchCommand"),
-        Core.projectionField = (Core.Name "datasets")})),
+        Core.projectionFieldName = (Core.Name "datasets")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 searchCommandPattern :: Phantoms.TTerm Kql.SearchCommand -> Phantoms.TTerm Kql.Expression
@@ -1952,7 +1952,7 @@ searchCommandPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SearchCommand"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 searchCommandWithDatasets :: Phantoms.TTerm Kql.SearchCommand -> Phantoms.TTerm [Kql.TableName] -> Phantoms.TTerm Kql.SearchCommand
@@ -1968,7 +1968,7 @@ searchCommandWithDatasets original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SearchCommand"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 searchCommandWithPattern :: Phantoms.TTerm Kql.SearchCommand -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.SearchCommand
@@ -1981,7 +1981,7 @@ searchCommandWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SearchCommand"),
-              Core.projectionField = (Core.Name "datasets")})),
+              Core.projectionFieldName = (Core.Name "datasets")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
@@ -2004,7 +2004,7 @@ sortByColumn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SortBy"),
-        Core.projectionField = (Core.Name "column")})),
+        Core.projectionFieldName = (Core.Name "column")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sortByOrder :: Phantoms.TTerm Kql.SortBy -> Phantoms.TTerm (Maybe Kql.Order)
@@ -2012,7 +2012,7 @@ sortByOrder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SortBy"),
-        Core.projectionField = (Core.Name "order")})),
+        Core.projectionFieldName = (Core.Name "order")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sortByWithColumn :: Phantoms.TTerm Kql.SortBy -> Phantoms.TTerm Kql.ColumnName -> Phantoms.TTerm Kql.SortBy
@@ -2028,7 +2028,7 @@ sortByWithColumn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SortBy"),
-              Core.projectionField = (Core.Name "order")})),
+              Core.projectionFieldName = (Core.Name "order")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sortByWithOrder :: Phantoms.TTerm Kql.SortBy -> Phantoms.TTerm (Maybe Kql.Order) -> Phantoms.TTerm Kql.SortBy
@@ -2041,7 +2041,7 @@ sortByWithOrder original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SortBy"),
-              Core.projectionField = (Core.Name "column")})),
+              Core.projectionFieldName = (Core.Name "column")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "order"),
@@ -2064,7 +2064,7 @@ summarizeCommandBy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SummarizeCommand"),
-        Core.projectionField = (Core.Name "by")})),
+        Core.projectionFieldName = (Core.Name "by")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 summarizeCommandColumns :: Phantoms.TTerm Kql.SummarizeCommand -> Phantoms.TTerm [Kql.ColumnAssignment]
@@ -2072,7 +2072,7 @@ summarizeCommandColumns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SummarizeCommand"),
-        Core.projectionField = (Core.Name "columns")})),
+        Core.projectionFieldName = (Core.Name "columns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 summarizeCommandWithBy :: Phantoms.TTerm Kql.SummarizeCommand -> Phantoms.TTerm [Kql.ColumnName] -> Phantoms.TTerm Kql.SummarizeCommand
@@ -2085,7 +2085,7 @@ summarizeCommandWithBy original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SummarizeCommand"),
-              Core.projectionField = (Core.Name "columns")})),
+              Core.projectionFieldName = (Core.Name "columns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "by"),
@@ -2104,7 +2104,7 @@ summarizeCommandWithColumns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.SummarizeCommand"),
-              Core.projectionField = (Core.Name "by")})),
+              Core.projectionFieldName = (Core.Name "by")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tableName :: Phantoms.TTerm String -> Phantoms.TTerm Kql.TableName
@@ -2162,7 +2162,7 @@ topCommandCount x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.TopCommand"),
-        Core.projectionField = (Core.Name "count")})),
+        Core.projectionFieldName = (Core.Name "count")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 topCommandSort :: Phantoms.TTerm Kql.TopCommand -> Phantoms.TTerm [Kql.SortBy]
@@ -2170,7 +2170,7 @@ topCommandSort x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.TopCommand"),
-        Core.projectionField = (Core.Name "sort")})),
+        Core.projectionFieldName = (Core.Name "sort")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 topCommandWithCount :: Phantoms.TTerm Kql.TopCommand -> Phantoms.TTerm Int -> Phantoms.TTerm Kql.TopCommand
@@ -2186,7 +2186,7 @@ topCommandWithCount original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.TopCommand"),
-              Core.projectionField = (Core.Name "sort")})),
+              Core.projectionFieldName = (Core.Name "sort")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 topCommandWithSort :: Phantoms.TTerm Kql.TopCommand -> Phantoms.TTerm [Kql.SortBy] -> Phantoms.TTerm Kql.TopCommand
@@ -2199,7 +2199,7 @@ topCommandWithSort original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.TopCommand"),
-              Core.projectionField = (Core.Name "count")})),
+              Core.projectionFieldName = (Core.Name "count")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
@@ -2258,7 +2258,7 @@ unaryExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnaryExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unaryExpressionOperator :: Phantoms.TTerm Kql.UnaryExpression -> Phantoms.TTerm Kql.UnaryOperator
@@ -2266,7 +2266,7 @@ unaryExpressionOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnaryExpression"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unaryExpressionWithExpression :: Phantoms.TTerm Kql.UnaryExpression -> Phantoms.TTerm Kql.Expression -> Phantoms.TTerm Kql.UnaryExpression
@@ -2279,7 +2279,7 @@ unaryExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnaryExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -2298,7 +2298,7 @@ unaryExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnaryExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unaryOperatorNot :: Phantoms.TTerm Kql.UnaryOperator
@@ -2335,7 +2335,7 @@ unionCommandIsFuzzy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-        Core.projectionField = (Core.Name "isFuzzy")})),
+        Core.projectionFieldName = (Core.Name "isFuzzy")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionCommandKind :: Phantoms.TTerm Kql.UnionCommand -> Phantoms.TTerm (Maybe Kql.UnionKind)
@@ -2343,7 +2343,7 @@ unionCommandKind x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-        Core.projectionField = (Core.Name "kind")})),
+        Core.projectionFieldName = (Core.Name "kind")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionCommandParameters :: Phantoms.TTerm Kql.UnionCommand -> Phantoms.TTerm [Kql.Parameter]
@@ -2351,7 +2351,7 @@ unionCommandParameters x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-        Core.projectionField = (Core.Name "parameters")})),
+        Core.projectionFieldName = (Core.Name "parameters")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionCommandTables :: Phantoms.TTerm Kql.UnionCommand -> Phantoms.TTerm [Kql.TableName]
@@ -2359,7 +2359,7 @@ unionCommandTables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-        Core.projectionField = (Core.Name "tables")})),
+        Core.projectionFieldName = (Core.Name "tables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionCommandWithIsFuzzy :: Phantoms.TTerm Kql.UnionCommand -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Kql.UnionCommand
@@ -2372,21 +2372,21 @@ unionCommandWithIsFuzzy original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "parameters")})),
+              Core.projectionFieldName = (Core.Name "parameters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withSource"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "withSource")})),
+              Core.projectionFieldName = (Core.Name "withSource")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isFuzzy"),
@@ -2396,7 +2396,7 @@ unionCommandWithIsFuzzy original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "tables")})),
+              Core.projectionFieldName = (Core.Name "tables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unionCommandWithKind :: Phantoms.TTerm Kql.UnionCommand -> Phantoms.TTerm (Maybe Kql.UnionKind) -> Phantoms.TTerm Kql.UnionCommand
@@ -2409,7 +2409,7 @@ unionCommandWithKind original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "parameters")})),
+              Core.projectionFieldName = (Core.Name "parameters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
@@ -2419,21 +2419,21 @@ unionCommandWithKind original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "withSource")})),
+              Core.projectionFieldName = (Core.Name "withSource")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isFuzzy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "isFuzzy")})),
+              Core.projectionFieldName = (Core.Name "isFuzzy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "tables")})),
+              Core.projectionFieldName = (Core.Name "tables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unionCommandWithParameters :: Phantoms.TTerm Kql.UnionCommand -> Phantoms.TTerm [Kql.Parameter] -> Phantoms.TTerm Kql.UnionCommand
@@ -2449,28 +2449,28 @@ unionCommandWithParameters original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withSource"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "withSource")})),
+              Core.projectionFieldName = (Core.Name "withSource")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isFuzzy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "isFuzzy")})),
+              Core.projectionFieldName = (Core.Name "isFuzzy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "tables")})),
+              Core.projectionFieldName = (Core.Name "tables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unionCommandWithSource :: Phantoms.TTerm Kql.UnionCommand -> Phantoms.TTerm (Maybe Kql.ColumnName)
@@ -2478,7 +2478,7 @@ unionCommandWithSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-        Core.projectionField = (Core.Name "withSource")})),
+        Core.projectionFieldName = (Core.Name "withSource")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unionCommandWithTables :: Phantoms.TTerm Kql.UnionCommand -> Phantoms.TTerm [Kql.TableName] -> Phantoms.TTerm Kql.UnionCommand
@@ -2491,28 +2491,28 @@ unionCommandWithTables original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "parameters")})),
+              Core.projectionFieldName = (Core.Name "parameters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withSource"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "withSource")})),
+              Core.projectionFieldName = (Core.Name "withSource")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isFuzzy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "isFuzzy")})),
+              Core.projectionFieldName = (Core.Name "isFuzzy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tables"),
@@ -2528,14 +2528,14 @@ unionCommandWithWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "parameters")})),
+              Core.projectionFieldName = (Core.Name "parameters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "kind"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "withSource"),
@@ -2545,14 +2545,14 @@ unionCommandWithWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "isFuzzy")})),
+              Core.projectionFieldName = (Core.Name "isFuzzy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tables"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.kusto.kql.UnionCommand"),
-              Core.projectionField = (Core.Name "tables")})),
+              Core.projectionFieldName = (Core.Name "tables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unionKindInner :: Phantoms.TTerm Kql.UnionKind

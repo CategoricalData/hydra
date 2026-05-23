@@ -86,17 +86,17 @@ import qualified Hydra.Sources.Json.Decode as JsonDecode
 import qualified Hydra.Sources.Yaml.Model as YamlModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.json.yaml.decode"
+ns :: ModuleName
+ns = ModuleName "hydra.json.yaml.decode"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [JsonDecode.ns, YamlModel.ns] L.++ (YamlModel.ns : KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([JsonDecode.ns, YamlModel.ns] L.++ (YamlModel.ns : KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "YAML-to-JSON decoding. Converts YAML Nodes to JSON Values (may fail for non-JSON YAML), and YAML Nodes to Hydra Terms via JSON."}
   where
     definitions = [

@@ -56,7 +56,7 @@ dedupByNamespace = go S.empty
     go seen (m:ms)
       | ns `S.member` seen = go seen ms
       | otherwise          = m : go (S.insert ns seen) ms
-      where ns = Kernel.moduleNamespace m
+      where ns = Kernel.moduleName m
 
 
 -- | Native hosts own the DSL→JSON path for hydra-java and hydra-python (#344).
@@ -71,7 +71,7 @@ dedupByNamespace = go S.empty
 -- dist/json/hydra-{java,python}/. To be deleted before 0.16.
 isNativeOwned :: Kernel.Module -> Bool
 isNativeOwned m =
-  let ns = Packaging.unNamespace (Kernel.moduleNamespace m)
+  let ns = Packaging.unModuleName (Kernel.moduleName m)
   in L.isPrefixOf "hydra.java." ns || L.isPrefixOf "hydra.python." ns
 
 
@@ -233,7 +233,7 @@ runSinglePackage pkg srcSet distRoot includeJavaPython = do
 
   let (mods, universe) = case srcSet of
         "main" ->
-          let owned = filter (\m -> namespaceToPackage (Kernel.moduleNamespace m) == pkg)
+          let owned = filter (\m -> namespaceToPackage (Kernel.moduleName m) == pkg)
                              fullMainUniverse
               -- #344: skip term-level JSON for hydra.java.*/hydra.python.* unless
               -- --include-java-python (cold-start bootstrap). The native generators

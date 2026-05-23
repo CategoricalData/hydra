@@ -131,17 +131,20 @@ The block has these sections:
 Not every module needs all of these — include only what you use.
 The `(++)` from `Phantoms` is for `TTerm String` concatenation; use `L.++` for regular list concatenation.
 
-### 4. Define namespace and module
+### 4. Define module name and module
 
 ```haskell
-ns :: Namespace
-ns = Namespace "hydra.pg.graphson.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.graphson.coder"
 
 module_ :: Module
-module_ = Module ns definitions
-    [Reduction.ns, Rewriting.ns]  -- term dependencies (other term modules you call)
-    (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, JsonModel.ns]) $  -- type dependencies
-    Just "Description of the module."
+module_ = Module {
+    moduleName = ns,
+    moduleDefinitions = definitions,
+    moduleDependencies = unqualifiedDep <$>
+      ([Reduction.ns, Rewriting.ns, GraphsonSyntax.ns, JsonModel.ns]
+       L.++ KernelTypes.kernelTypesModuleNames),
+    moduleDescription = Just "Description of the module."}
   where
     definitions = [
       toDefinition function1,
@@ -154,13 +157,19 @@ define = definitionInModule module_
 ```
 
 **Module dependencies:**
-- **Term dependencies**: Other source modules whose functions you call (e.g.,
-  `Reduction.ns` if you call `Reduction.reduceTerm`)
-- **Type dependencies**: Namespaces of types your functions use.
-  Always include `kernelTypesNamespaces` plus any domain-specific type modules.
+All dependencies — both modules whose terms you reference and modules
+defining types your terms use — go in the single `moduleDependencies`
+list, as `ModuleDependency` values. The helper `unqualifiedDep ::
+ModuleName -> ModuleDependency` builds a dependency with no package
+qualifier; `qualifiedDep :: PackageName -> ModuleName ->
+ModuleDependency` pins a specific package.
+
+Always include `KernelTypes.kernelTypesModuleNames` for the standard
+kernel type modules, plus any domain-specific type modules.
 
 If code generation fails with "No such schema type: hydra.foo.Bar",
-add the namespace containing that type to the type dependencies.
+add `ModuleName "hydra.foo"` to `moduleDependencies` (via
+`unqualifiedDep`).
 
 ### 5. Add to module registry
 
@@ -730,8 +739,8 @@ remove them and replace `var "callback" @@ args` with direct calls like `otherFu
     -- Construction: set all fields explicitly
     importAliasesForModule = def "importAliasesForModule" $
       lambda "mod" $ record _Aliases [
-        _Aliases_currentNamespace>>: Module.moduleNamespace (var "mod"),
-        _Aliases_packages>>: (Maps.empty :: TTerm (M.Map Namespace Java.PackageName)),
+        _Aliases_currentNamespace>>: Packaging.moduleName (var "mod"),
+        _Aliases_packages>>: (Maps.empty :: TTerm (M.Map ModuleName Java.PackageName)),
         _Aliases_branchVars>>: (Sets.empty :: TTerm (S.Set Name)),
         -- ... all other fields
         ]
@@ -1080,7 +1089,7 @@ Key differences from promoting terms:
 ## Promoting data and constants modules
 
 Not all promotions involve functions. Sometimes you need to promote a module of **pure data constants** — values like
-`Name` or `Namespace` literals that should be available across all target languages.
+`Name` or `ModuleName` literals that should be available across all target languages.
 
 ### Example: promoting `Names.hs`
 
@@ -1088,8 +1097,8 @@ The original `Hydra.Staging.Lib.Names` contained hand-written constants like:
 
 ```haskell
 -- Staging code (raw Haskell)
-_hydra_lib_lists :: Namespace
-_hydra_lib_lists = Namespace "hydra.lib.lists"
+_hydra_lib_lists :: ModuleName
+_hydra_lib_lists = ModuleName "hydra.lib.lists"
 
 _lists_map :: Name
 _lists_map = qname _hydra_lib_lists "map"
@@ -1098,12 +1107,12 @@ _lists_map = qname _hydra_lib_lists "map"
 The promoted DSL version in `Hydra.Sources.Kernel.Lib.Names`:
 
 ```haskell
--- Namespace constants
-defineNs :: String -> String -> TTermDefinition Namespace
+-- ModuleName constants
+defineNs :: String -> String -> TTermDefinition ModuleName
 defineNs name nsStr = define name $
-  wrap _Namespace $ string nsStr
+  wrap _ModuleName $ string nsStr
 
-lists :: TTermDefinition Namespace
+lists :: TTermDefinition ModuleName
 lists = defineNs "lists" "hydra.lib.lists"
 
 -- Name constants
@@ -1118,8 +1127,8 @@ This generates simple data constructors in all target languages:
 
 ```haskell
 -- Generated output (dist/haskell/hydra-kernel/src/main/haskell/)
-lists :: Packaging.Namespace
-lists = (Packaging.Namespace "hydra.lib.lists")
+lists :: Packaging.ModuleName
+lists = (Packaging.ModuleName "hydra.lib.lists")
 
 listsMap :: Core.Name
 listsMap = (Core.Name "hydra.lib.lists.map")

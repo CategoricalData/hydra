@@ -67,24 +67,24 @@ nodeStyleSimple = "simple"
 nodeStyleVariable :: String
 nodeStyleVariable = "variable"
 -- | Construct a map from namespace to prefix for all standard libraries
-standardNamespaces :: M.Map Packaging.Namespace String
+standardNamespaces :: M.Map Packaging.ModuleName String
 standardNamespaces =
     M.fromList [
-      (Packaging.Namespace "hydra.lib.chars", "chars"),
-      (Packaging.Namespace "hydra.lib.eithers", "eithers"),
-      (Packaging.Namespace "hydra.lib.equality", "equality"),
-      (Packaging.Namespace "hydra.lib.lists", "lists"),
-      (Packaging.Namespace "hydra.lib.literals", "literals"),
-      (Packaging.Namespace "hydra.lib.logic", "logic"),
-      (Packaging.Namespace "hydra.lib.maps", "maps"),
-      (Packaging.Namespace "hydra.lib.math", "math"),
-      (Packaging.Namespace "hydra.lib.maybes", "maybes"),
-      (Packaging.Namespace "hydra.lib.pairs", "pairs"),
-      (Packaging.Namespace "hydra.lib.regex", "regex"),
-      (Packaging.Namespace "hydra.lib.sets", "sets"),
-      (Packaging.Namespace "hydra.lib.strings", "strings")]
+      (Packaging.ModuleName "hydra.lib.chars", "chars"),
+      (Packaging.ModuleName "hydra.lib.eithers", "eithers"),
+      (Packaging.ModuleName "hydra.lib.equality", "equality"),
+      (Packaging.ModuleName "hydra.lib.lists", "lists"),
+      (Packaging.ModuleName "hydra.lib.literals", "literals"),
+      (Packaging.ModuleName "hydra.lib.logic", "logic"),
+      (Packaging.ModuleName "hydra.lib.maps", "maps"),
+      (Packaging.ModuleName "hydra.lib.math", "math"),
+      (Packaging.ModuleName "hydra.lib.maybes", "maybes"),
+      (Packaging.ModuleName "hydra.lib.pairs", "pairs"),
+      (Packaging.ModuleName "hydra.lib.regex", "regex"),
+      (Packaging.ModuleName "hydra.lib.sets", "sets"),
+      (Packaging.ModuleName "hydra.lib.strings", "strings")]
 -- | Compute a label and node style for a term
-termLabel :: Bool -> M.Map Packaging.Namespace String -> Core.Term -> (String, String)
+termLabel :: Bool -> M.Map Packaging.ModuleName String -> Core.Term -> (String, String)
 termLabel compact namespaces term =
 
       let simpleLabel = \lab -> (lab, nodeStyleSimple)
@@ -96,7 +96,7 @@ termLabel compact namespaces term =
           "{",
           (Names.compactName namespaces (Core.projectionTypeName v0)),
           "}.",
-          (Core.unName (Core.projectionField v0))])
+          (Core.unName (Core.projectionFieldName v0))])
         Core.TermCases v0 -> simpleLabel (Strings.cat [
           "cases_{",
           (Names.compactName namespaces (Core.caseStatementTypeName v0)),
@@ -148,7 +148,7 @@ termToDotGraph term =
       Dot.graphId = Nothing,
       Dot.graphStatements = (termToDotStmts standardNamespaces term)}
 -- | Convert a term to full DOT statements showing term structure
-termToDotStmts :: M.Map Packaging.Namespace String -> Core.Term -> [Dot.Stmt]
+termToDotStmts :: M.Map Packaging.ModuleName String -> Core.Term -> [Dot.Stmt]
 termToDotStmts namespaces term =
 
       let encode =
@@ -254,7 +254,7 @@ termToSubtermDotGraph term =
       Dot.graphId = Nothing,
       Dot.graphStatements = (termToSubtermDotStmts standardNamespaces term)}
 -- | Convert a term to subterm-style DOT statements
-termToSubtermDotStmts :: M.Map Packaging.Namespace String -> Core.Term -> [Dot.Stmt]
+termToSubtermDotStmts :: M.Map Packaging.ModuleName String -> Core.Term -> [Dot.Stmt]
 termToSubtermDotStmts namespaces term =
 
       let accessorGraph = ShowPaths.termToSubtermGraph namespaces term

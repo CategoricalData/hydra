@@ -57,14 +57,14 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Variants as ShowVariants
 
 
-ns :: Namespace
-ns = Namespace "hydra.show.error.core"
+ns :: ModuleName
+ns = ModuleName "hydra.show.error.core"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowCore.ns, ShowVariants.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowCore.ns, ShowVariants.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "String representations of hydra.error.core types"}
   where
    definitions = [

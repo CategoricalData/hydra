@@ -12,13 +12,17 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.util"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.util"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.util"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.packaging"),
-        (Packaging.Namespace "hydra.core"),
-        (Packaging.Namespace "hydra.packaging"),
-        (Packaging.Namespace "hydra.util")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.packaging"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.util"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
           Packaging.termDefinitionName = (Core.Name "hydra.encode.util.caseConvention"),
@@ -369,13 +373,13 @@ module_ =
                                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.pairs.bimap")),
-                                                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace"))})),
+                                                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}}))})),
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
-                                        Core.projectionField = (Core.Name "focus")})),
+                                        Core.projectionFieldName = (Core.Name "focus")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                             (Core.TermRecord (Core.Record {
                               Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -399,13 +403,13 @@ module_ =
                                             Core.applicationFunction = (Core.TermApplication (Core.Application {
                                               Core.applicationFunction = (Core.TermApplication (Core.Application {
                                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lib.maps.bimap")),
-                                                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace"))})),
+                                                Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName"))})),
                                               Core.applicationArgument = (Core.TermVariable (Core.Name "n"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "m"))}))}}))})),
                                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                                       Core.applicationFunction = (Core.TermProject (Core.Projection {
                                         Core.projectionTypeName = (Core.Name "hydra.util.Namespaces"),
-                                        Core.projectionField = (Core.Name "mapping")})),
+                                        Core.projectionFieldName = (Core.Name "mapping")})),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (Core.Name "description", (Core.TermLiteral (Core.LiteralString "Encoder for hydra.util.Namespaces")))])})),

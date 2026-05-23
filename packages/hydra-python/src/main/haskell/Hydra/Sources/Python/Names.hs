@@ -93,17 +93,17 @@ import qualified Hydra.Dsl.Python.Helpers as PyDsl
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.python.names"
+ns :: ModuleName
+ns = ModuleName "hydra.python.names"
 
-pyLanguageNs :: Namespace
-pyLanguageNs = Namespace "hydra.python.language"
+pyLanguageNs :: ModuleName
+pyLanguageNs = ModuleName "hydra.python.language"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Names.ns, Formatting.ns, PySerde.ns, pyLanguageNs] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Names.ns, Formatting.ns, PySerde.ns, pyLanguageNs] L.++ (PyEnvironmentSource.ns:PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Python naming utilities: encoding Hydra names as Python names"}
   where
     definitions = [
@@ -161,14 +161,14 @@ encodeName = def "encodeName" $
     "boundVars">: Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
     -- Qualify the name
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
     "local">: Packaging.qualifiedNameLocal $ var "qualName",
     -- Convert local name with case convention and sanitize
     "pyLocal">: sanitizePythonName @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ var "conv" @@ var "local"),
     -- Convert namespace to Python dotted path
     "pyNs">: lambda "nsVal" $ Strings.intercalate (string ".") $
       Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
-        (Strings.splitOn (string ".") (Packaging.unNamespace $ var "nsVal"))] $
+        (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal"))] $
     -- If qualified, check bound vars first, then namespace
     Logic.ifElse (var "isQualified")
       -- Check if name is a bound type variable
@@ -204,7 +204,7 @@ encodeNameQualified = def "encodeNameQualified" $
     "boundVars">: Pairs.second $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env",
     -- Qualify the name
     "qualName">: Names.qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
     "local">: Packaging.qualifiedNameLocal $ var "qualName"] $
     -- Check if name is a bound type variable
     Maybes.maybe
@@ -220,13 +220,13 @@ encodeNameQualified = def "encodeNameQualified" $
       (Maps.lookup (var "name") (var "boundVars"))
 
 -- | Encode a namespace as a Python dotted name.
-encodeNamespace :: TTermDefinition (Namespace -> Py.DottedName)
+encodeNamespace :: TTermDefinition (ModuleName -> Py.DottedName)
 encodeNamespace = def "encodeNamespace" $
   doc "Encode a namespace as a Python dotted name" $
   lambda "nsVal" $ wrap Py._DottedName $
     Lists.map
       (lambda "part" $ wrap Py._Name $ Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake @@ var "part")
-      (Strings.splitOn (string ".") (Packaging.unNamespace $ var "nsVal"))
+      (Strings.splitOn (string ".") (Packaging.unModuleName $ var "nsVal"))
 
 -- | Encode a type variable name (capitalized).
 encodeTypeVariable :: TTermDefinition (Name -> Py.Name)

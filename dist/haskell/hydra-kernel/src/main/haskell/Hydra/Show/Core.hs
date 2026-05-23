@@ -221,7 +221,7 @@ projection :: Core.Projection -> String
 projection proj =
 
       let tname = Core.unName (Core.projectionTypeName proj)
-          fname = Core.unName (Core.projectionField proj)
+          fname = Core.unName (Core.projectionFieldName proj)
       in (Strings.cat [
         "project(",
         tname,

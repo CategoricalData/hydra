@@ -99,7 +99,7 @@ absoluteDirectoryAndSchemaDirectoryPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AbsoluteDirectoryAndSchema"),
-        Core.projectionField = (Core.Name "directoryPath")})),
+        Core.projectionFieldName = (Core.Name "directoryPath")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 absoluteDirectoryAndSchemaSchemaName :: Phantoms.TTerm Grammar.AbsoluteDirectoryAndSchema -> Phantoms.TTerm Grammar.SchemaName
@@ -107,7 +107,7 @@ absoluteDirectoryAndSchemaSchemaName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AbsoluteDirectoryAndSchema"),
-        Core.projectionField = (Core.Name "schemaName")})),
+        Core.projectionFieldName = (Core.Name "schemaName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 absoluteDirectoryAndSchemaWithDirectoryPath :: Phantoms.TTerm Grammar.AbsoluteDirectoryAndSchema -> Phantoms.TTerm Grammar.AbsoluteDirectoryPath -> Phantoms.TTerm Grammar.AbsoluteDirectoryAndSchema
@@ -123,7 +123,7 @@ absoluteDirectoryAndSchemaWithDirectoryPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AbsoluteDirectoryAndSchema"),
-              Core.projectionField = (Core.Name "schemaName")})),
+              Core.projectionFieldName = (Core.Name "schemaName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 absoluteDirectoryAndSchemaWithSchemaName :: Phantoms.TTerm Grammar.AbsoluteDirectoryAndSchema -> Phantoms.TTerm Grammar.SchemaName -> Phantoms.TTerm Grammar.AbsoluteDirectoryAndSchema
@@ -136,7 +136,7 @@ absoluteDirectoryAndSchemaWithSchemaName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AbsoluteDirectoryAndSchema"),
-              Core.projectionField = (Core.Name "directoryPath")})),
+              Core.projectionFieldName = (Core.Name "directoryPath")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schemaName"),
@@ -162,7 +162,7 @@ addSubNumericValueExpressionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubNumericValueExpression"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 addSubNumericValueExpressionOperator :: Phantoms.TTerm Grammar.AddSubNumericValueExpression -> Phantoms.TTerm Grammar.AddSubtractOperator
@@ -170,7 +170,7 @@ addSubNumericValueExpressionOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubNumericValueExpression"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 addSubNumericValueExpressionRight :: Phantoms.TTerm Grammar.AddSubNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression
@@ -178,7 +178,7 @@ addSubNumericValueExpressionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubNumericValueExpression"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 addSubNumericValueExpressionWithLeft :: Phantoms.TTerm Grammar.AddSubNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression -> Phantoms.TTerm Grammar.AddSubNumericValueExpression
@@ -194,14 +194,14 @@ addSubNumericValueExpressionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubNumericValueExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubNumericValueExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 addSubNumericValueExpressionWithOperator :: Phantoms.TTerm Grammar.AddSubNumericValueExpression -> Phantoms.TTerm Grammar.AddSubtractOperator -> Phantoms.TTerm Grammar.AddSubNumericValueExpression
@@ -214,7 +214,7 @@ addSubNumericValueExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubNumericValueExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -224,7 +224,7 @@ addSubNumericValueExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubNumericValueExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 addSubNumericValueExpressionWithRight :: Phantoms.TTerm Grammar.AddSubNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression -> Phantoms.TTerm Grammar.AddSubNumericValueExpression
@@ -237,14 +237,14 @@ addSubNumericValueExpressionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubNumericValueExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubNumericValueExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -270,7 +270,7 @@ addSubtractExprLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubtractExpr"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 addSubtractExprOperator :: Phantoms.TTerm Grammar.AddSubtractExpr -> Phantoms.TTerm Grammar.AddSubtractOperator
@@ -278,7 +278,7 @@ addSubtractExprOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubtractExpr"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 addSubtractExprRight :: Phantoms.TTerm Grammar.AddSubtractExpr -> Phantoms.TTerm Grammar.ValueExpression
@@ -286,7 +286,7 @@ addSubtractExprRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubtractExpr"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 addSubtractExprWithLeft :: Phantoms.TTerm Grammar.AddSubtractExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.AddSubtractExpr
@@ -302,14 +302,14 @@ addSubtractExprWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubtractExpr"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubtractExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 addSubtractExprWithOperator :: Phantoms.TTerm Grammar.AddSubtractExpr -> Phantoms.TTerm Grammar.AddSubtractOperator -> Phantoms.TTerm Grammar.AddSubtractExpr
@@ -322,7 +322,7 @@ addSubtractExprWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubtractExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -332,7 +332,7 @@ addSubtractExprWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubtractExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 addSubtractExprWithRight :: Phantoms.TTerm Grammar.AddSubtractExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.AddSubtractExpr
@@ -345,14 +345,14 @@ addSubtractExprWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubtractExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AddSubtractExpr"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -412,7 +412,7 @@ allDifferentPredicateReferences x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AllDifferentPredicate"),
-        Core.projectionField = (Core.Name "references")})),
+        Core.projectionFieldName = (Core.Name "references")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 allDifferentPredicateWithReferences :: Phantoms.TTerm Grammar.AllDifferentPredicate -> Phantoms.TTerm [Grammar.ElementVariableReference] -> Phantoms.TTerm Grammar.AllDifferentPredicate
@@ -441,7 +441,7 @@ allParametersOrCharacteristicsAll x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AllParametersOrCharacteristics"),
-        Core.projectionField = (Core.Name "all")})),
+        Core.projectionFieldName = (Core.Name "all")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 allParametersOrCharacteristicsType :: Phantoms.TTerm Grammar.AllParametersOrCharacteristics -> Phantoms.TTerm Grammar.ParametersOrCharacteristics
@@ -449,7 +449,7 @@ allParametersOrCharacteristicsType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AllParametersOrCharacteristics"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 allParametersOrCharacteristicsWithAll :: Phantoms.TTerm Grammar.AllParametersOrCharacteristics -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.AllParametersOrCharacteristics
@@ -465,7 +465,7 @@ allParametersOrCharacteristicsWithAll original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AllParametersOrCharacteristics"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 allParametersOrCharacteristicsWithType :: Phantoms.TTerm Grammar.AllParametersOrCharacteristics -> Phantoms.TTerm Grammar.ParametersOrCharacteristics -> Phantoms.TTerm Grammar.AllParametersOrCharacteristics
@@ -478,7 +478,7 @@ allParametersOrCharacteristicsWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AllParametersOrCharacteristics"),
-              Core.projectionField = (Core.Name "all")})),
+              Core.projectionFieldName = (Core.Name "all")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -501,7 +501,7 @@ allPathSearchMode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AllPathSearch"),
-        Core.projectionField = (Core.Name "mode")})),
+        Core.projectionFieldName = (Core.Name "mode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 allPathSearchOrPaths :: Phantoms.TTerm Grammar.AllPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths)
@@ -509,7 +509,7 @@ allPathSearchOrPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AllPathSearch"),
-        Core.projectionField = (Core.Name "orPaths")})),
+        Core.projectionFieldName = (Core.Name "orPaths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 allPathSearchWithMode :: Phantoms.TTerm Grammar.AllPathSearch -> Phantoms.TTerm (Maybe Grammar.PathMode) -> Phantoms.TTerm Grammar.AllPathSearch
@@ -525,7 +525,7 @@ allPathSearchWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AllPathSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 allPathSearchWithOrPaths :: Phantoms.TTerm Grammar.AllPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths) -> Phantoms.TTerm Grammar.AllPathSearch
@@ -538,7 +538,7 @@ allPathSearchWithOrPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AllPathSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
@@ -561,7 +561,7 @@ allShortestPathSearchMode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AllShortestPathSearch"),
-        Core.projectionField = (Core.Name "mode")})),
+        Core.projectionFieldName = (Core.Name "mode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 allShortestPathSearchOrPaths :: Phantoms.TTerm Grammar.AllShortestPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths)
@@ -569,7 +569,7 @@ allShortestPathSearchOrPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AllShortestPathSearch"),
-        Core.projectionField = (Core.Name "orPaths")})),
+        Core.projectionFieldName = (Core.Name "orPaths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 allShortestPathSearchWithMode :: Phantoms.TTerm Grammar.AllShortestPathSearch -> Phantoms.TTerm (Maybe Grammar.PathMode) -> Phantoms.TTerm Grammar.AllShortestPathSearch
@@ -585,7 +585,7 @@ allShortestPathSearchWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AllShortestPathSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 allShortestPathSearchWithOrPaths :: Phantoms.TTerm Grammar.AllShortestPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths) -> Phantoms.TTerm Grammar.AllShortestPathSearch
@@ -598,7 +598,7 @@ allShortestPathSearchWithOrPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AllShortestPathSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
@@ -621,7 +621,7 @@ ambientLinearDataModifyingStatementBodyPrimitiveResult x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AmbientLinearDataModifyingStatementBody"),
-        Core.projectionField = (Core.Name "primitiveResult")})),
+        Core.projectionFieldName = (Core.Name "primitiveResult")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ambientLinearDataModifyingStatementBodySimpleAccess :: Phantoms.TTerm Grammar.AmbientLinearDataModifyingStatementBody -> Phantoms.TTerm Grammar.SimpleLinearDataAccessingStatement
@@ -629,7 +629,7 @@ ambientLinearDataModifyingStatementBodySimpleAccess x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AmbientLinearDataModifyingStatementBody"),
-        Core.projectionField = (Core.Name "simpleAccess")})),
+        Core.projectionFieldName = (Core.Name "simpleAccess")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ambientLinearDataModifyingStatementBodyWithPrimitiveResult :: Phantoms.TTerm Grammar.AmbientLinearDataModifyingStatementBody -> Phantoms.TTerm (Maybe Grammar.PrimitiveResultStatement) -> Phantoms.TTerm Grammar.AmbientLinearDataModifyingStatementBody
@@ -642,7 +642,7 @@ ambientLinearDataModifyingStatementBodyWithPrimitiveResult original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AmbientLinearDataModifyingStatementBody"),
-              Core.projectionField = (Core.Name "simpleAccess")})),
+              Core.projectionFieldName = (Core.Name "simpleAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primitiveResult"),
@@ -661,7 +661,7 @@ ambientLinearDataModifyingStatementBodyWithSimpleAccess original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AmbientLinearDataModifyingStatementBody"),
-              Core.projectionField = (Core.Name "primitiveResult")})),
+              Core.projectionFieldName = (Core.Name "primitiveResult")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 ambientLinearDataModifyingStatementNested :: Phantoms.TTerm Grammar.NestedDataModifyingProcedureSpecification -> Phantoms.TTerm Grammar.AmbientLinearDataModifyingStatement
@@ -713,7 +713,7 @@ ambientLinearQueryStatementSimpleAndPrimitiveResultPrimitiveResult x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AmbientLinearQueryStatementSimpleAndPrimitiveResult"),
-        Core.projectionField = (Core.Name "primitiveResult")})),
+        Core.projectionFieldName = (Core.Name "primitiveResult")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ambientLinearQueryStatementSimpleAndPrimitiveResultSimple :: Phantoms.TTerm Grammar.AmbientLinearQueryStatementSimpleAndPrimitiveResult -> Phantoms.TTerm (Maybe Grammar.SimpleLinearQueryStatement)
@@ -721,7 +721,7 @@ ambientLinearQueryStatementSimpleAndPrimitiveResultSimple x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AmbientLinearQueryStatementSimpleAndPrimitiveResult"),
-        Core.projectionField = (Core.Name "simple")})),
+        Core.projectionFieldName = (Core.Name "simple")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 ambientLinearQueryStatementSimpleAndPrimitiveResultWithPrimitiveResult :: Phantoms.TTerm Grammar.AmbientLinearQueryStatementSimpleAndPrimitiveResult -> Phantoms.TTerm Grammar.PrimitiveResultStatement -> Phantoms.TTerm Grammar.AmbientLinearQueryStatementSimpleAndPrimitiveResult
@@ -734,7 +734,7 @@ ambientLinearQueryStatementSimpleAndPrimitiveResultWithPrimitiveResult original 
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AmbientLinearQueryStatementSimpleAndPrimitiveResult"),
-              Core.projectionField = (Core.Name "simple")})),
+              Core.projectionFieldName = (Core.Name "simple")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primitiveResult"),
@@ -753,7 +753,7 @@ ambientLinearQueryStatementSimpleAndPrimitiveResultWithSimple original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AmbientLinearQueryStatementSimpleAndPrimitiveResult"),
-              Core.projectionField = (Core.Name "primitiveResult")})),
+              Core.projectionFieldName = (Core.Name "primitiveResult")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 anyPathSearch :: Phantoms.TTerm (Maybe Grammar.NumberOfPaths) -> Phantoms.TTerm (Maybe Grammar.PathMode) -> Phantoms.TTerm (Maybe Grammar.PathOrPaths) -> Phantoms.TTerm Grammar.AnyPathSearch
@@ -776,7 +776,7 @@ anyPathSearchMode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AnyPathSearch"),
-        Core.projectionField = (Core.Name "mode")})),
+        Core.projectionFieldName = (Core.Name "mode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyPathSearchNumberOfPaths :: Phantoms.TTerm Grammar.AnyPathSearch -> Phantoms.TTerm (Maybe Grammar.NumberOfPaths)
@@ -784,7 +784,7 @@ anyPathSearchNumberOfPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AnyPathSearch"),
-        Core.projectionField = (Core.Name "numberOfPaths")})),
+        Core.projectionFieldName = (Core.Name "numberOfPaths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyPathSearchOrPaths :: Phantoms.TTerm Grammar.AnyPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths)
@@ -792,7 +792,7 @@ anyPathSearchOrPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AnyPathSearch"),
-        Core.projectionField = (Core.Name "orPaths")})),
+        Core.projectionFieldName = (Core.Name "orPaths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyPathSearchWithMode :: Phantoms.TTerm Grammar.AnyPathSearch -> Phantoms.TTerm (Maybe Grammar.PathMode) -> Phantoms.TTerm Grammar.AnyPathSearch
@@ -805,7 +805,7 @@ anyPathSearchWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyPathSearch"),
-              Core.projectionField = (Core.Name "numberOfPaths")})),
+              Core.projectionFieldName = (Core.Name "numberOfPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mode"),
@@ -815,7 +815,7 @@ anyPathSearchWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyPathSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 anyPathSearchWithNumberOfPaths :: Phantoms.TTerm Grammar.AnyPathSearch -> Phantoms.TTerm (Maybe Grammar.NumberOfPaths) -> Phantoms.TTerm Grammar.AnyPathSearch
@@ -831,14 +831,14 @@ anyPathSearchWithNumberOfPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyPathSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyPathSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 anyPathSearchWithOrPaths :: Phantoms.TTerm Grammar.AnyPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths) -> Phantoms.TTerm Grammar.AnyPathSearch
@@ -851,14 +851,14 @@ anyPathSearchWithOrPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyPathSearch"),
-              Core.projectionField = (Core.Name "numberOfPaths")})),
+              Core.projectionFieldName = (Core.Name "numberOfPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyPathSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
@@ -881,7 +881,7 @@ anyRecordTypeAny x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AnyRecordType"),
-        Core.projectionField = (Core.Name "any")})),
+        Core.projectionFieldName = (Core.Name "any")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyRecordTypeNotNull :: Phantoms.TTerm Grammar.AnyRecordType -> Phantoms.TTerm Bool
@@ -889,7 +889,7 @@ anyRecordTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AnyRecordType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyRecordTypeWithAny :: Phantoms.TTerm Grammar.AnyRecordType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.AnyRecordType
@@ -905,7 +905,7 @@ anyRecordTypeWithAny original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyRecordType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 anyRecordTypeWithNotNull :: Phantoms.TTerm Grammar.AnyRecordType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.AnyRecordType
@@ -918,7 +918,7 @@ anyRecordTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyRecordType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -941,7 +941,7 @@ anyShortestPathSearchMode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AnyShortestPathSearch"),
-        Core.projectionField = (Core.Name "mode")})),
+        Core.projectionFieldName = (Core.Name "mode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyShortestPathSearchOrPaths :: Phantoms.TTerm Grammar.AnyShortestPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths)
@@ -949,7 +949,7 @@ anyShortestPathSearchOrPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.AnyShortestPathSearch"),
-        Core.projectionField = (Core.Name "orPaths")})),
+        Core.projectionFieldName = (Core.Name "orPaths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 anyShortestPathSearchWithMode :: Phantoms.TTerm Grammar.AnyShortestPathSearch -> Phantoms.TTerm (Maybe Grammar.PathMode) -> Phantoms.TTerm Grammar.AnyShortestPathSearch
@@ -965,7 +965,7 @@ anyShortestPathSearchWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyShortestPathSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 anyShortestPathSearchWithOrPaths :: Phantoms.TTerm Grammar.AnyShortestPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths) -> Phantoms.TTerm Grammar.AnyShortestPathSearch
@@ -978,7 +978,7 @@ anyShortestPathSearchWithOrPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.AnyShortestPathSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
@@ -1094,7 +1094,7 @@ bigIntTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BigIntType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bigIntTypeWithNotNull :: Phantoms.TTerm Grammar.BigIntType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.BigIntType
@@ -1120,7 +1120,7 @@ bigIntegerTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BigIntegerType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bigIntegerTypeWithNotNull :: Phantoms.TTerm Grammar.BigIntegerType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.BigIntegerType
@@ -1168,7 +1168,7 @@ binarySetFunctionDependentValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BinarySetFunction"),
-        Core.projectionField = (Core.Name "dependentValue")})),
+        Core.projectionFieldName = (Core.Name "dependentValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binarySetFunctionFunctionType :: Phantoms.TTerm Grammar.BinarySetFunction -> Phantoms.TTerm Grammar.BinarySetFunctionType
@@ -1176,7 +1176,7 @@ binarySetFunctionFunctionType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BinarySetFunction"),
-        Core.projectionField = (Core.Name "functionType")})),
+        Core.projectionFieldName = (Core.Name "functionType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binarySetFunctionIndependentValue :: Phantoms.TTerm Grammar.BinarySetFunction -> Phantoms.TTerm Grammar.IndependentValueExpression
@@ -1184,7 +1184,7 @@ binarySetFunctionIndependentValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BinarySetFunction"),
-        Core.projectionField = (Core.Name "independentValue")})),
+        Core.projectionFieldName = (Core.Name "independentValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binarySetFunctionTypePercentileCont :: Phantoms.TTerm Grammar.BinarySetFunctionType
@@ -1213,7 +1213,7 @@ binarySetFunctionWithDependentValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BinarySetFunction"),
-              Core.projectionField = (Core.Name "functionType")})),
+              Core.projectionFieldName = (Core.Name "functionType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependentValue"),
@@ -1223,7 +1223,7 @@ binarySetFunctionWithDependentValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BinarySetFunction"),
-              Core.projectionField = (Core.Name "independentValue")})),
+              Core.projectionFieldName = (Core.Name "independentValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binarySetFunctionWithFunctionType :: Phantoms.TTerm Grammar.BinarySetFunction -> Phantoms.TTerm Grammar.BinarySetFunctionType -> Phantoms.TTerm Grammar.BinarySetFunction
@@ -1239,14 +1239,14 @@ binarySetFunctionWithFunctionType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BinarySetFunction"),
-              Core.projectionField = (Core.Name "dependentValue")})),
+              Core.projectionFieldName = (Core.Name "dependentValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "independentValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BinarySetFunction"),
-              Core.projectionField = (Core.Name "independentValue")})),
+              Core.projectionFieldName = (Core.Name "independentValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binarySetFunctionWithIndependentValue :: Phantoms.TTerm Grammar.BinarySetFunction -> Phantoms.TTerm Grammar.IndependentValueExpression -> Phantoms.TTerm Grammar.BinarySetFunction
@@ -1259,14 +1259,14 @@ binarySetFunctionWithIndependentValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BinarySetFunction"),
-              Core.projectionField = (Core.Name "functionType")})),
+              Core.projectionFieldName = (Core.Name "functionType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "dependentValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BinarySetFunction"),
-              Core.projectionField = (Core.Name "dependentValue")})),
+              Core.projectionFieldName = (Core.Name "dependentValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "independentValue"),
@@ -1289,7 +1289,7 @@ binaryTypeFixedLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BinaryType"),
-        Core.projectionField = (Core.Name "fixedLength")})),
+        Core.projectionFieldName = (Core.Name "fixedLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryTypeNotNull :: Phantoms.TTerm Grammar.BinaryType -> Phantoms.TTerm Bool
@@ -1297,7 +1297,7 @@ binaryTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BinaryType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 binaryTypeWithFixedLength :: Phantoms.TTerm Grammar.BinaryType -> Phantoms.TTerm (Maybe Grammar.FixedLength) -> Phantoms.TTerm Grammar.BinaryType
@@ -1313,7 +1313,7 @@ binaryTypeWithFixedLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BinaryType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 binaryTypeWithNotNull :: Phantoms.TTerm Grammar.BinaryType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.BinaryType
@@ -1326,7 +1326,7 @@ binaryTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BinaryType"),
-              Core.projectionField = (Core.Name "fixedLength")})),
+              Core.projectionFieldName = (Core.Name "fixedLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -1349,7 +1349,7 @@ bindingEqualsValueBinding x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BindingEqualsValue"),
-        Core.projectionField = (Core.Name "binding")})),
+        Core.projectionFieldName = (Core.Name "binding")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingEqualsValueValue :: Phantoms.TTerm Grammar.BindingEqualsValue -> Phantoms.TTerm Grammar.ValueExpression
@@ -1357,7 +1357,7 @@ bindingEqualsValueValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BindingEqualsValue"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingEqualsValueWithBinding :: Phantoms.TTerm Grammar.BindingEqualsValue -> Phantoms.TTerm Grammar.BindingVariable -> Phantoms.TTerm Grammar.BindingEqualsValue
@@ -1373,7 +1373,7 @@ bindingEqualsValueWithBinding original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingEqualsValue"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bindingEqualsValueWithValue :: Phantoms.TTerm Grammar.BindingEqualsValue -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.BindingEqualsValue
@@ -1386,7 +1386,7 @@ bindingEqualsValueWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingEqualsValue"),
-              Core.projectionField = (Core.Name "binding")})),
+              Core.projectionFieldName = (Core.Name "binding")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -1481,7 +1481,7 @@ bindingTableReferenceValueTypeBindingTableType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableReferenceValueType"),
-        Core.projectionField = (Core.Name "bindingTableType")})),
+        Core.projectionFieldName = (Core.Name "bindingTableType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingTableReferenceValueTypeNotNull :: Phantoms.TTerm Grammar.BindingTableReferenceValueType -> Phantoms.TTerm Bool
@@ -1489,7 +1489,7 @@ bindingTableReferenceValueTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableReferenceValueType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingTableReferenceValueTypeWithBindingTableType :: Phantoms.TTerm Grammar.BindingTableReferenceValueType -> Phantoms.TTerm Grammar.BindingTableType -> Phantoms.TTerm Grammar.BindingTableReferenceValueType
@@ -1505,7 +1505,7 @@ bindingTableReferenceValueTypeWithBindingTableType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bindingTableReferenceValueTypeWithNotNull :: Phantoms.TTerm Grammar.BindingTableReferenceValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.BindingTableReferenceValueType
@@ -1518,7 +1518,7 @@ bindingTableReferenceValueTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableReferenceValueType"),
-              Core.projectionField = (Core.Name "bindingTableType")})),
+              Core.projectionFieldName = (Core.Name "bindingTableType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -1541,7 +1541,7 @@ bindingTableTypeBinding x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableType"),
-        Core.projectionField = (Core.Name "binding")})),
+        Core.projectionFieldName = (Core.Name "binding")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingTableTypeFieldTypes :: Phantoms.TTerm Grammar.BindingTableType -> Phantoms.TTerm Grammar.FieldTypesSpecification
@@ -1549,7 +1549,7 @@ bindingTableTypeFieldTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableType"),
-        Core.projectionField = (Core.Name "fieldTypes")})),
+        Core.projectionFieldName = (Core.Name "fieldTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingTableTypeWithBinding :: Phantoms.TTerm Grammar.BindingTableType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.BindingTableType
@@ -1565,7 +1565,7 @@ bindingTableTypeWithBinding original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableType"),
-              Core.projectionField = (Core.Name "fieldTypes")})),
+              Core.projectionFieldName = (Core.Name "fieldTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bindingTableTypeWithFieldTypes :: Phantoms.TTerm Grammar.BindingTableType -> Phantoms.TTerm Grammar.FieldTypesSpecification -> Phantoms.TTerm Grammar.BindingTableType
@@ -1578,7 +1578,7 @@ bindingTableTypeWithFieldTypes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableType"),
-              Core.projectionField = (Core.Name "binding")})),
+              Core.projectionFieldName = (Core.Name "binding")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fieldTypes"),
@@ -1604,7 +1604,7 @@ bindingTableVariableDefinitionBinding x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableVariableDefinition"),
-        Core.projectionField = (Core.Name "binding")})),
+        Core.projectionFieldName = (Core.Name "binding")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingTableVariableDefinitionInitializer :: Phantoms.TTerm Grammar.BindingTableVariableDefinition -> Phantoms.TTerm Grammar.OptTypedBindingTableInitializer
@@ -1612,7 +1612,7 @@ bindingTableVariableDefinitionInitializer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableVariableDefinition"),
-        Core.projectionField = (Core.Name "initializer")})),
+        Core.projectionFieldName = (Core.Name "initializer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingTableVariableDefinitionVariable :: Phantoms.TTerm Grammar.BindingTableVariableDefinition -> Phantoms.TTerm Grammar.BindingVariable
@@ -1620,7 +1620,7 @@ bindingTableVariableDefinitionVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableVariableDefinition"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bindingTableVariableDefinitionWithBinding :: Phantoms.TTerm Grammar.BindingTableVariableDefinition -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.BindingTableVariableDefinition
@@ -1636,14 +1636,14 @@ bindingTableVariableDefinitionWithBinding original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableVariableDefinition"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "initializer"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableVariableDefinition"),
-              Core.projectionField = (Core.Name "initializer")})),
+              Core.projectionFieldName = (Core.Name "initializer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bindingTableVariableDefinitionWithInitializer :: Phantoms.TTerm Grammar.BindingTableVariableDefinition -> Phantoms.TTerm Grammar.OptTypedBindingTableInitializer -> Phantoms.TTerm Grammar.BindingTableVariableDefinition
@@ -1656,14 +1656,14 @@ bindingTableVariableDefinitionWithInitializer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableVariableDefinition"),
-              Core.projectionField = (Core.Name "binding")})),
+              Core.projectionFieldName = (Core.Name "binding")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableVariableDefinition"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "initializer"),
@@ -1679,7 +1679,7 @@ bindingTableVariableDefinitionWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableVariableDefinition"),
-              Core.projectionField = (Core.Name "binding")})),
+              Core.projectionFieldName = (Core.Name "binding")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
@@ -1689,7 +1689,7 @@ bindingTableVariableDefinitionWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BindingTableVariableDefinition"),
-              Core.projectionField = (Core.Name "initializer")})),
+              Core.projectionFieldName = (Core.Name "initializer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bindingVariableDefinitionGraph :: Phantoms.TTerm Grammar.GraphVariableDefinition -> Phantoms.TTerm Grammar.BindingVariableDefinition
@@ -1754,7 +1754,7 @@ booleanTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BooleanType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 booleanTypeWithNotNull :: Phantoms.TTerm Grammar.BooleanType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.BooleanType
@@ -1810,7 +1810,7 @@ bytesTypeMaxLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BytesType"),
-        Core.projectionField = (Core.Name "maxLength")})),
+        Core.projectionFieldName = (Core.Name "maxLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bytesTypeMinLength :: Phantoms.TTerm Grammar.BytesType -> Phantoms.TTerm (Maybe Grammar.MinLength)
@@ -1818,7 +1818,7 @@ bytesTypeMinLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BytesType"),
-        Core.projectionField = (Core.Name "minLength")})),
+        Core.projectionFieldName = (Core.Name "minLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bytesTypeNotNull :: Phantoms.TTerm Grammar.BytesType -> Phantoms.TTerm Bool
@@ -1826,7 +1826,7 @@ bytesTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.BytesType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bytesTypeWithMaxLength :: Phantoms.TTerm Grammar.BytesType -> Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Grammar.BytesType
@@ -1839,7 +1839,7 @@ bytesTypeWithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BytesType"),
-              Core.projectionField = (Core.Name "minLength")})),
+              Core.projectionFieldName = (Core.Name "minLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
@@ -1849,7 +1849,7 @@ bytesTypeWithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BytesType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bytesTypeWithMinLength :: Phantoms.TTerm Grammar.BytesType -> Phantoms.TTerm (Maybe Grammar.MinLength) -> Phantoms.TTerm Grammar.BytesType
@@ -1865,14 +1865,14 @@ bytesTypeWithMinLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BytesType"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BytesType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bytesTypeWithNotNull :: Phantoms.TTerm Grammar.BytesType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.BytesType
@@ -1885,14 +1885,14 @@ bytesTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BytesType"),
-              Core.projectionField = (Core.Name "minLength")})),
+              Core.projectionFieldName = (Core.Name "minLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.BytesType"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -1915,7 +1915,7 @@ callProcedureStatementCall x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CallProcedureStatement"),
-        Core.projectionField = (Core.Name "call")})),
+        Core.projectionFieldName = (Core.Name "call")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 callProcedureStatementOptional :: Phantoms.TTerm Grammar.CallProcedureStatement -> Phantoms.TTerm Bool
@@ -1923,7 +1923,7 @@ callProcedureStatementOptional x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CallProcedureStatement"),
-        Core.projectionField = (Core.Name "optional")})),
+        Core.projectionFieldName = (Core.Name "optional")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 callProcedureStatementWithCall :: Phantoms.TTerm Grammar.CallProcedureStatement -> Phantoms.TTerm Grammar.ProcedureCall -> Phantoms.TTerm Grammar.CallProcedureStatement
@@ -1936,7 +1936,7 @@ callProcedureStatementWithCall original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CallProcedureStatement"),
-              Core.projectionField = (Core.Name "optional")})),
+              Core.projectionFieldName = (Core.Name "optional")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "call"),
@@ -1955,7 +1955,7 @@ callProcedureStatementWithOptional original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CallProcedureStatement"),
-              Core.projectionField = (Core.Name "call")})),
+              Core.projectionFieldName = (Core.Name "call")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 cardinalityExpressionCardinality :: Phantoms.TTerm Grammar.CardinalityArgumentExpression -> Phantoms.TTerm Grammar.CardinalityExpression
@@ -2087,7 +2087,7 @@ castSpecificationOperand x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CastSpecification"),
-        Core.projectionField = (Core.Name "operand")})),
+        Core.projectionFieldName = (Core.Name "operand")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 castSpecificationTarget :: Phantoms.TTerm Grammar.CastSpecification -> Phantoms.TTerm Grammar.CastTarget
@@ -2095,7 +2095,7 @@ castSpecificationTarget x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CastSpecification"),
-        Core.projectionField = (Core.Name "target")})),
+        Core.projectionFieldName = (Core.Name "target")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 castSpecificationWithOperand :: Phantoms.TTerm Grammar.CastSpecification -> Phantoms.TTerm Grammar.CastOperand -> Phantoms.TTerm Grammar.CastSpecification
@@ -2111,7 +2111,7 @@ castSpecificationWithOperand original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CastSpecification"),
-              Core.projectionField = (Core.Name "target")})),
+              Core.projectionFieldName = (Core.Name "target")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 castSpecificationWithTarget :: Phantoms.TTerm Grammar.CastSpecification -> Phantoms.TTerm Grammar.CastTarget -> Phantoms.TTerm Grammar.CastSpecification
@@ -2124,7 +2124,7 @@ castSpecificationWithTarget original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CastSpecification"),
-              Core.projectionField = (Core.Name "operand")})),
+              Core.projectionFieldName = (Core.Name "operand")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "target"),
@@ -2147,7 +2147,7 @@ catalogGraphParentAndNameGraphName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogGraphParentAndName"),
-        Core.projectionField = (Core.Name "graphName")})),
+        Core.projectionFieldName = (Core.Name "graphName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 catalogGraphParentAndNameParentReference :: Phantoms.TTerm Grammar.CatalogGraphParentAndName -> Phantoms.TTerm (Maybe Grammar.CatalogObjectParentReference)
@@ -2155,7 +2155,7 @@ catalogGraphParentAndNameParentReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogGraphParentAndName"),
-        Core.projectionField = (Core.Name "parentReference")})),
+        Core.projectionFieldName = (Core.Name "parentReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 catalogGraphParentAndNameWithGraphName :: Phantoms.TTerm Grammar.CatalogGraphParentAndName -> Phantoms.TTerm Grammar.GraphName -> Phantoms.TTerm Grammar.CatalogGraphParentAndName
@@ -2168,7 +2168,7 @@ catalogGraphParentAndNameWithGraphName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogGraphParentAndName"),
-              Core.projectionField = (Core.Name "parentReference")})),
+              Core.projectionFieldName = (Core.Name "parentReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graphName"),
@@ -2187,7 +2187,7 @@ catalogGraphParentAndNameWithParentReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogGraphParentAndName"),
-              Core.projectionField = (Core.Name "graphName")})),
+              Core.projectionFieldName = (Core.Name "graphName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 catalogGraphTypeParentAndName :: Phantoms.TTerm (Maybe Grammar.CatalogObjectParentReference) -> Phantoms.TTerm Grammar.GraphTypeName -> Phantoms.TTerm Grammar.CatalogGraphTypeParentAndName
@@ -2207,7 +2207,7 @@ catalogGraphTypeParentAndNameGraphTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogGraphTypeParentAndName"),
-        Core.projectionField = (Core.Name "graphTypeName")})),
+        Core.projectionFieldName = (Core.Name "graphTypeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 catalogGraphTypeParentAndNameParentReference :: Phantoms.TTerm Grammar.CatalogGraphTypeParentAndName -> Phantoms.TTerm (Maybe Grammar.CatalogObjectParentReference)
@@ -2215,7 +2215,7 @@ catalogGraphTypeParentAndNameParentReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogGraphTypeParentAndName"),
-        Core.projectionField = (Core.Name "parentReference")})),
+        Core.projectionFieldName = (Core.Name "parentReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 catalogGraphTypeParentAndNameWithGraphTypeName :: Phantoms.TTerm Grammar.CatalogGraphTypeParentAndName -> Phantoms.TTerm Grammar.GraphTypeName -> Phantoms.TTerm Grammar.CatalogGraphTypeParentAndName
@@ -2228,7 +2228,7 @@ catalogGraphTypeParentAndNameWithGraphTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogGraphTypeParentAndName"),
-              Core.projectionField = (Core.Name "parentReference")})),
+              Core.projectionFieldName = (Core.Name "parentReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graphTypeName"),
@@ -2247,7 +2247,7 @@ catalogGraphTypeParentAndNameWithParentReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogGraphTypeParentAndName"),
-              Core.projectionField = (Core.Name "graphTypeName")})),
+              Core.projectionFieldName = (Core.Name "graphTypeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 catalogObjectParentReferenceObjectsOnly :: Phantoms.TTerm [Grammar.ObjectName] -> Phantoms.TTerm Grammar.CatalogObjectParentReference
@@ -2283,7 +2283,7 @@ catalogProcedureParentAndNameParentReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogProcedureParentAndName"),
-        Core.projectionField = (Core.Name "parentReference")})),
+        Core.projectionFieldName = (Core.Name "parentReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 catalogProcedureParentAndNameProcedureName :: Phantoms.TTerm Grammar.CatalogProcedureParentAndName -> Phantoms.TTerm Grammar.ProcedureName
@@ -2291,7 +2291,7 @@ catalogProcedureParentAndNameProcedureName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogProcedureParentAndName"),
-        Core.projectionField = (Core.Name "procedureName")})),
+        Core.projectionFieldName = (Core.Name "procedureName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 catalogProcedureParentAndNameWithParentReference :: Phantoms.TTerm Grammar.CatalogProcedureParentAndName -> Phantoms.TTerm (Maybe Grammar.CatalogObjectParentReference) -> Phantoms.TTerm Grammar.CatalogProcedureParentAndName
@@ -2307,7 +2307,7 @@ catalogProcedureParentAndNameWithParentReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogProcedureParentAndName"),
-              Core.projectionField = (Core.Name "procedureName")})),
+              Core.projectionFieldName = (Core.Name "procedureName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 catalogProcedureParentAndNameWithProcedureName :: Phantoms.TTerm Grammar.CatalogProcedureParentAndName -> Phantoms.TTerm Grammar.ProcedureName -> Phantoms.TTerm Grammar.CatalogProcedureParentAndName
@@ -2320,7 +2320,7 @@ catalogProcedureParentAndNameWithProcedureName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CatalogProcedureParentAndName"),
-              Core.projectionField = (Core.Name "parentReference")})),
+              Core.projectionFieldName = (Core.Name "parentReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "procedureName"),
@@ -2343,7 +2343,7 @@ charTypeFixedLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CharType"),
-        Core.projectionField = (Core.Name "fixedLength")})),
+        Core.projectionFieldName = (Core.Name "fixedLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 charTypeNotNull :: Phantoms.TTerm Grammar.CharType -> Phantoms.TTerm Bool
@@ -2351,7 +2351,7 @@ charTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CharType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 charTypeWithFixedLength :: Phantoms.TTerm Grammar.CharType -> Phantoms.TTerm (Maybe Grammar.FixedLength) -> Phantoms.TTerm Grammar.CharType
@@ -2367,7 +2367,7 @@ charTypeWithFixedLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CharType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 charTypeWithNotNull :: Phantoms.TTerm Grammar.CharType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.CharType
@@ -2380,7 +2380,7 @@ charTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CharType"),
-              Core.projectionField = (Core.Name "fixedLength")})),
+              Core.projectionFieldName = (Core.Name "fixedLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -2467,7 +2467,7 @@ closedDynamicUnionTypeAlt1AnyValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedDynamicUnionTypeAlt1"),
-        Core.projectionField = (Core.Name "anyValue")})),
+        Core.projectionFieldName = (Core.Name "anyValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedDynamicUnionTypeAlt1ValueTypes :: Phantoms.TTerm Grammar.ClosedDynamicUnionTypeAlt1 -> Phantoms.TTerm [Grammar.ValueType]
@@ -2475,7 +2475,7 @@ closedDynamicUnionTypeAlt1ValueTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedDynamicUnionTypeAlt1"),
-        Core.projectionField = (Core.Name "valueTypes")})),
+        Core.projectionFieldName = (Core.Name "valueTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedDynamicUnionTypeAlt1WithAnyValue :: Phantoms.TTerm Grammar.ClosedDynamicUnionTypeAlt1 -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Grammar.ClosedDynamicUnionTypeAlt1
@@ -2491,7 +2491,7 @@ closedDynamicUnionTypeAlt1WithAnyValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedDynamicUnionTypeAlt1"),
-              Core.projectionField = (Core.Name "valueTypes")})),
+              Core.projectionFieldName = (Core.Name "valueTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 closedDynamicUnionTypeAlt1WithValueTypes :: Phantoms.TTerm Grammar.ClosedDynamicUnionTypeAlt1 -> Phantoms.TTerm [Grammar.ValueType] -> Phantoms.TTerm Grammar.ClosedDynamicUnionTypeAlt1
@@ -2504,7 +2504,7 @@ closedDynamicUnionTypeAlt1WithValueTypes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedDynamicUnionTypeAlt1"),
-              Core.projectionField = (Core.Name "anyValue")})),
+              Core.projectionFieldName = (Core.Name "anyValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueTypes"),
@@ -2524,7 +2524,7 @@ closedDynamicUnionTypeAlt2ValueTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedDynamicUnionTypeAlt2"),
-        Core.projectionField = (Core.Name "valueTypes")})),
+        Core.projectionFieldName = (Core.Name "valueTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedDynamicUnionTypeAlt2WithValueTypes :: Phantoms.TTerm Grammar.ClosedDynamicUnionTypeAlt2 -> Phantoms.TTerm [Grammar.ValueType] -> Phantoms.TTerm Grammar.ClosedDynamicUnionTypeAlt2
@@ -2553,7 +2553,7 @@ closedEdgeReferenceValueTypeEdgeTypeSpec x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedEdgeReferenceValueType"),
-        Core.projectionField = (Core.Name "edgeTypeSpec")})),
+        Core.projectionFieldName = (Core.Name "edgeTypeSpec")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedEdgeReferenceValueTypeNotNull :: Phantoms.TTerm Grammar.ClosedEdgeReferenceValueType -> Phantoms.TTerm Bool
@@ -2561,7 +2561,7 @@ closedEdgeReferenceValueTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedEdgeReferenceValueType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedEdgeReferenceValueTypeWithEdgeTypeSpec :: Phantoms.TTerm Grammar.ClosedEdgeReferenceValueType -> Phantoms.TTerm Grammar.EdgeTypeSpecification -> Phantoms.TTerm Grammar.ClosedEdgeReferenceValueType
@@ -2577,7 +2577,7 @@ closedEdgeReferenceValueTypeWithEdgeTypeSpec original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedEdgeReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 closedEdgeReferenceValueTypeWithNotNull :: Phantoms.TTerm Grammar.ClosedEdgeReferenceValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ClosedEdgeReferenceValueType
@@ -2590,7 +2590,7 @@ closedEdgeReferenceValueTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedEdgeReferenceValueType"),
-              Core.projectionField = (Core.Name "edgeTypeSpec")})),
+              Core.projectionFieldName = (Core.Name "edgeTypeSpec")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -2616,7 +2616,7 @@ closedGraphReferenceValueTypeNestedSpec x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedGraphReferenceValueType"),
-        Core.projectionField = (Core.Name "nestedSpec")})),
+        Core.projectionFieldName = (Core.Name "nestedSpec")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedGraphReferenceValueTypeNotNull :: Phantoms.TTerm Grammar.ClosedGraphReferenceValueType -> Phantoms.TTerm Bool
@@ -2624,7 +2624,7 @@ closedGraphReferenceValueTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedGraphReferenceValueType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedGraphReferenceValueTypeProperty :: Phantoms.TTerm Grammar.ClosedGraphReferenceValueType -> Phantoms.TTerm Bool
@@ -2632,7 +2632,7 @@ closedGraphReferenceValueTypeProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedGraphReferenceValueType"),
-        Core.projectionField = (Core.Name "property")})),
+        Core.projectionFieldName = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedGraphReferenceValueTypeWithNestedSpec :: Phantoms.TTerm Grammar.ClosedGraphReferenceValueType -> Phantoms.TTerm Grammar.NestedGraphTypeSpecification -> Phantoms.TTerm Grammar.ClosedGraphReferenceValueType
@@ -2645,7 +2645,7 @@ closedGraphReferenceValueTypeWithNestedSpec original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nestedSpec"),
@@ -2655,7 +2655,7 @@ closedGraphReferenceValueTypeWithNestedSpec original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 closedGraphReferenceValueTypeWithNotNull :: Phantoms.TTerm Grammar.ClosedGraphReferenceValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ClosedGraphReferenceValueType
@@ -2668,14 +2668,14 @@ closedGraphReferenceValueTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nestedSpec"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "nestedSpec")})),
+              Core.projectionFieldName = (Core.Name "nestedSpec")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -2694,14 +2694,14 @@ closedGraphReferenceValueTypeWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "nestedSpec")})),
+              Core.projectionFieldName = (Core.Name "nestedSpec")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 closedNodeReferenceValueType :: Phantoms.TTerm Grammar.NodeTypeSpecification -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ClosedNodeReferenceValueType
@@ -2721,7 +2721,7 @@ closedNodeReferenceValueTypeNodeTypeSpec x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedNodeReferenceValueType"),
-        Core.projectionField = (Core.Name "nodeTypeSpec")})),
+        Core.projectionFieldName = (Core.Name "nodeTypeSpec")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedNodeReferenceValueTypeNotNull :: Phantoms.TTerm Grammar.ClosedNodeReferenceValueType -> Phantoms.TTerm Bool
@@ -2729,7 +2729,7 @@ closedNodeReferenceValueTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedNodeReferenceValueType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 closedNodeReferenceValueTypeWithNodeTypeSpec :: Phantoms.TTerm Grammar.ClosedNodeReferenceValueType -> Phantoms.TTerm Grammar.NodeTypeSpecification -> Phantoms.TTerm Grammar.ClosedNodeReferenceValueType
@@ -2745,7 +2745,7 @@ closedNodeReferenceValueTypeWithNodeTypeSpec original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedNodeReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 closedNodeReferenceValueTypeWithNotNull :: Phantoms.TTerm Grammar.ClosedNodeReferenceValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ClosedNodeReferenceValueType
@@ -2758,7 +2758,7 @@ closedNodeReferenceValueTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ClosedNodeReferenceValueType"),
-              Core.projectionField = (Core.Name "nodeTypeSpec")})),
+              Core.projectionFieldName = (Core.Name "nodeTypeSpec")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -2829,7 +2829,7 @@ comparisonExprComparison x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ComparisonExpr"),
-        Core.projectionField = (Core.Name "comparison")})),
+        Core.projectionFieldName = (Core.Name "comparison")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 comparisonExprValueExpression :: Phantoms.TTerm Grammar.ComparisonExpr -> Phantoms.TTerm Grammar.ValueExpression
@@ -2837,7 +2837,7 @@ comparisonExprValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ComparisonExpr"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 comparisonExprWithComparison :: Phantoms.TTerm Grammar.ComparisonExpr -> Phantoms.TTerm Grammar.ComparisonPredicatePart2 -> Phantoms.TTerm Grammar.ComparisonExpr
@@ -2850,7 +2850,7 @@ comparisonExprWithComparison original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ComparisonExpr"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "comparison"),
@@ -2869,7 +2869,7 @@ comparisonExprWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ComparisonExpr"),
-              Core.projectionField = (Core.Name "comparison")})),
+              Core.projectionFieldName = (Core.Name "comparison")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 comparisonPredicatePart2 :: Phantoms.TTerm Grammar.CompOp -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.ComparisonPredicatePart2
@@ -2889,7 +2889,7 @@ comparisonPredicatePart2CompOp x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ComparisonPredicatePart2"),
-        Core.projectionField = (Core.Name "compOp")})),
+        Core.projectionFieldName = (Core.Name "compOp")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 comparisonPredicatePart2ValueExpression :: Phantoms.TTerm Grammar.ComparisonPredicatePart2 -> Phantoms.TTerm Grammar.ValueExpression
@@ -2897,7 +2897,7 @@ comparisonPredicatePart2ValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ComparisonPredicatePart2"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 comparisonPredicatePart2WithCompOp :: Phantoms.TTerm Grammar.ComparisonPredicatePart2 -> Phantoms.TTerm Grammar.CompOp -> Phantoms.TTerm Grammar.ComparisonPredicatePart2
@@ -2913,7 +2913,7 @@ comparisonPredicatePart2WithCompOp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ComparisonPredicatePart2"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 comparisonPredicatePart2WithValueExpression :: Phantoms.TTerm Grammar.ComparisonPredicatePart2 -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.ComparisonPredicatePart2
@@ -2926,7 +2926,7 @@ comparisonPredicatePart2WithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ComparisonPredicatePart2"),
-              Core.projectionField = (Core.Name "compOp")})),
+              Core.projectionFieldName = (Core.Name "compOp")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
@@ -2952,7 +2952,7 @@ compositeQueryExpressionConjunctionConjunction x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpressionConjunction"),
-        Core.projectionField = (Core.Name "conjunction")})),
+        Core.projectionFieldName = (Core.Name "conjunction")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 compositeQueryExpressionConjunctionLeft :: Phantoms.TTerm Grammar.CompositeQueryExpressionConjunction -> Phantoms.TTerm Grammar.CompositeQueryExpression
@@ -2960,7 +2960,7 @@ compositeQueryExpressionConjunctionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpressionConjunction"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 compositeQueryExpressionConjunctionRight :: Phantoms.TTerm Grammar.CompositeQueryExpressionConjunction -> Phantoms.TTerm Grammar.CompositeQueryPrimary
@@ -2968,7 +2968,7 @@ compositeQueryExpressionConjunctionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpressionConjunction"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 compositeQueryExpressionConjunctionWithConjunction :: Phantoms.TTerm Grammar.CompositeQueryExpressionConjunction -> Phantoms.TTerm Grammar.QueryConjunction -> Phantoms.TTerm Grammar.CompositeQueryExpressionConjunction
@@ -2981,7 +2981,7 @@ compositeQueryExpressionConjunctionWithConjunction original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpressionConjunction"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "conjunction"),
@@ -2991,7 +2991,7 @@ compositeQueryExpressionConjunctionWithConjunction original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpressionConjunction"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 compositeQueryExpressionConjunctionWithLeft :: Phantoms.TTerm Grammar.CompositeQueryExpressionConjunction -> Phantoms.TTerm Grammar.CompositeQueryExpression -> Phantoms.TTerm Grammar.CompositeQueryExpressionConjunction
@@ -3007,14 +3007,14 @@ compositeQueryExpressionConjunctionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpressionConjunction"),
-              Core.projectionField = (Core.Name "conjunction")})),
+              Core.projectionFieldName = (Core.Name "conjunction")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpressionConjunction"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 compositeQueryExpressionConjunctionWithRight :: Phantoms.TTerm Grammar.CompositeQueryExpressionConjunction -> Phantoms.TTerm Grammar.CompositeQueryPrimary -> Phantoms.TTerm Grammar.CompositeQueryExpressionConjunction
@@ -3027,14 +3027,14 @@ compositeQueryExpressionConjunctionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpressionConjunction"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "conjunction"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CompositeQueryExpressionConjunction"),
-              Core.projectionField = (Core.Name "conjunction")})),
+              Core.projectionFieldName = (Core.Name "conjunction")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -3073,7 +3073,7 @@ concatenationExprLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ConcatenationExpr"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 concatenationExprRight :: Phantoms.TTerm Grammar.ConcatenationExpr -> Phantoms.TTerm Grammar.ValueExpression
@@ -3081,7 +3081,7 @@ concatenationExprRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ConcatenationExpr"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 concatenationExprWithLeft :: Phantoms.TTerm Grammar.ConcatenationExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.ConcatenationExpr
@@ -3097,7 +3097,7 @@ concatenationExprWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ConcatenationExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 concatenationExprWithRight :: Phantoms.TTerm Grammar.ConcatenationExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.ConcatenationExpr
@@ -3110,7 +3110,7 @@ concatenationExprWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ConcatenationExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -3133,7 +3133,7 @@ conjunctionLabelExpressionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ConjunctionLabelExpression"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 conjunctionLabelExpressionRight :: Phantoms.TTerm Grammar.ConjunctionLabelExpression -> Phantoms.TTerm Grammar.LabelExpression
@@ -3141,7 +3141,7 @@ conjunctionLabelExpressionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ConjunctionLabelExpression"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 conjunctionLabelExpressionWithLeft :: Phantoms.TTerm Grammar.ConjunctionLabelExpression -> Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.ConjunctionLabelExpression
@@ -3157,7 +3157,7 @@ conjunctionLabelExpressionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ConjunctionLabelExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 conjunctionLabelExpressionWithRight :: Phantoms.TTerm Grammar.ConjunctionLabelExpression -> Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.ConjunctionLabelExpression
@@ -3170,7 +3170,7 @@ conjunctionLabelExpressionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ConjunctionLabelExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -3193,7 +3193,7 @@ conjunctiveExprLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ConjunctiveExpr"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 conjunctiveExprRight :: Phantoms.TTerm Grammar.ConjunctiveExpr -> Phantoms.TTerm Grammar.ValueExpression
@@ -3201,7 +3201,7 @@ conjunctiveExprRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ConjunctiveExpr"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 conjunctiveExprWithLeft :: Phantoms.TTerm Grammar.ConjunctiveExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.ConjunctiveExpr
@@ -3217,7 +3217,7 @@ conjunctiveExprWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ConjunctiveExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 conjunctiveExprWithRight :: Phantoms.TTerm Grammar.ConjunctiveExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.ConjunctiveExpr
@@ -3230,7 +3230,7 @@ conjunctiveExprWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ConjunctiveExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -3291,7 +3291,7 @@ countedShortestGroupSearchGroups x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-        Core.projectionField = (Core.Name "groups")})),
+        Core.projectionFieldName = (Core.Name "groups")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 countedShortestGroupSearchMode :: Phantoms.TTerm Grammar.CountedShortestGroupSearch -> Phantoms.TTerm (Maybe Grammar.PathMode)
@@ -3299,7 +3299,7 @@ countedShortestGroupSearchMode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-        Core.projectionField = (Core.Name "mode")})),
+        Core.projectionFieldName = (Core.Name "mode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 countedShortestGroupSearchNumberOfGroups :: Phantoms.TTerm Grammar.CountedShortestGroupSearch -> Phantoms.TTerm (Maybe Grammar.NumberOfGroups)
@@ -3307,7 +3307,7 @@ countedShortestGroupSearchNumberOfGroups x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-        Core.projectionField = (Core.Name "numberOfGroups")})),
+        Core.projectionFieldName = (Core.Name "numberOfGroups")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 countedShortestGroupSearchOrPaths :: Phantoms.TTerm Grammar.CountedShortestGroupSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths)
@@ -3315,7 +3315,7 @@ countedShortestGroupSearchOrPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-        Core.projectionField = (Core.Name "orPaths")})),
+        Core.projectionFieldName = (Core.Name "orPaths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 countedShortestGroupSearchWithGroups :: Phantoms.TTerm Grammar.CountedShortestGroupSearch -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.CountedShortestGroupSearch
@@ -3328,21 +3328,21 @@ countedShortestGroupSearchWithGroups original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "numberOfGroups")})),
+              Core.projectionFieldName = (Core.Name "numberOfGroups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groups"),
@@ -3358,7 +3358,7 @@ countedShortestGroupSearchWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "numberOfGroups")})),
+              Core.projectionFieldName = (Core.Name "numberOfGroups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mode"),
@@ -3368,14 +3368,14 @@ countedShortestGroupSearchWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groups"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "groups")})),
+              Core.projectionFieldName = (Core.Name "groups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 countedShortestGroupSearchWithNumberOfGroups :: Phantoms.TTerm Grammar.CountedShortestGroupSearch -> Phantoms.TTerm (Maybe Grammar.NumberOfGroups) -> Phantoms.TTerm Grammar.CountedShortestGroupSearch
@@ -3391,21 +3391,21 @@ countedShortestGroupSearchWithNumberOfGroups original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groups"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "groups")})),
+              Core.projectionFieldName = (Core.Name "groups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 countedShortestGroupSearchWithOrPaths :: Phantoms.TTerm Grammar.CountedShortestGroupSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths) -> Phantoms.TTerm Grammar.CountedShortestGroupSearch
@@ -3418,14 +3418,14 @@ countedShortestGroupSearchWithOrPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "numberOfGroups")})),
+              Core.projectionFieldName = (Core.Name "numberOfGroups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
@@ -3435,7 +3435,7 @@ countedShortestGroupSearchWithOrPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestGroupSearch"),
-              Core.projectionField = (Core.Name "groups")})),
+              Core.projectionFieldName = (Core.Name "groups")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 countedShortestPathSearch :: Phantoms.TTerm Grammar.NumberOfPaths -> Phantoms.TTerm (Maybe Grammar.PathMode) -> Phantoms.TTerm (Maybe Grammar.PathOrPaths) -> Phantoms.TTerm Grammar.CountedShortestPathSearch
@@ -3458,7 +3458,7 @@ countedShortestPathSearchMode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestPathSearch"),
-        Core.projectionField = (Core.Name "mode")})),
+        Core.projectionFieldName = (Core.Name "mode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 countedShortestPathSearchNumberOfPaths :: Phantoms.TTerm Grammar.CountedShortestPathSearch -> Phantoms.TTerm Grammar.NumberOfPaths
@@ -3466,7 +3466,7 @@ countedShortestPathSearchNumberOfPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestPathSearch"),
-        Core.projectionField = (Core.Name "numberOfPaths")})),
+        Core.projectionFieldName = (Core.Name "numberOfPaths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 countedShortestPathSearchOrPaths :: Phantoms.TTerm Grammar.CountedShortestPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths)
@@ -3474,7 +3474,7 @@ countedShortestPathSearchOrPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestPathSearch"),
-        Core.projectionField = (Core.Name "orPaths")})),
+        Core.projectionFieldName = (Core.Name "orPaths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 countedShortestPathSearchWithMode :: Phantoms.TTerm Grammar.CountedShortestPathSearch -> Phantoms.TTerm (Maybe Grammar.PathMode) -> Phantoms.TTerm Grammar.CountedShortestPathSearch
@@ -3487,7 +3487,7 @@ countedShortestPathSearchWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestPathSearch"),
-              Core.projectionField = (Core.Name "numberOfPaths")})),
+              Core.projectionFieldName = (Core.Name "numberOfPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mode"),
@@ -3497,7 +3497,7 @@ countedShortestPathSearchWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestPathSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 countedShortestPathSearchWithNumberOfPaths :: Phantoms.TTerm Grammar.CountedShortestPathSearch -> Phantoms.TTerm Grammar.NumberOfPaths -> Phantoms.TTerm Grammar.CountedShortestPathSearch
@@ -3513,14 +3513,14 @@ countedShortestPathSearchWithNumberOfPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestPathSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestPathSearch"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 countedShortestPathSearchWithOrPaths :: Phantoms.TTerm Grammar.CountedShortestPathSearch -> Phantoms.TTerm (Maybe Grammar.PathOrPaths) -> Phantoms.TTerm Grammar.CountedShortestPathSearch
@@ -3533,14 +3533,14 @@ countedShortestPathSearchWithOrPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestPathSearch"),
-              Core.projectionField = (Core.Name "numberOfPaths")})),
+              Core.projectionFieldName = (Core.Name "numberOfPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "mode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CountedShortestPathSearch"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
@@ -3585,7 +3585,7 @@ createGraphStatementCreateOption x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-        Core.projectionField = (Core.Name "createOption")})),
+        Core.projectionFieldName = (Core.Name "createOption")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 createGraphStatementParentAndName :: Phantoms.TTerm Grammar.CreateGraphStatement -> Phantoms.TTerm Grammar.CatalogGraphParentAndName
@@ -3593,7 +3593,7 @@ createGraphStatementParentAndName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-        Core.projectionField = (Core.Name "parentAndName")})),
+        Core.projectionFieldName = (Core.Name "parentAndName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 createGraphStatementSource :: Phantoms.TTerm Grammar.CreateGraphStatement -> Phantoms.TTerm (Maybe Grammar.GraphSource)
@@ -3601,7 +3601,7 @@ createGraphStatementSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 createGraphStatementType :: Phantoms.TTerm Grammar.CreateGraphStatement -> Phantoms.TTerm Grammar.GraphTypeOption
@@ -3609,7 +3609,7 @@ createGraphStatementType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 createGraphStatementWithCreateOption :: Phantoms.TTerm Grammar.CreateGraphStatement -> Phantoms.TTerm Grammar.CreateGraphOption -> Phantoms.TTerm Grammar.CreateGraphStatement
@@ -3625,21 +3625,21 @@ createGraphStatementWithCreateOption original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "parentAndName")})),
+              Core.projectionFieldName = (Core.Name "parentAndName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 createGraphStatementWithParentAndName :: Phantoms.TTerm Grammar.CreateGraphStatement -> Phantoms.TTerm Grammar.CatalogGraphParentAndName -> Phantoms.TTerm Grammar.CreateGraphStatement
@@ -3652,7 +3652,7 @@ createGraphStatementWithParentAndName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "createOption")})),
+              Core.projectionFieldName = (Core.Name "createOption")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parentAndName"),
@@ -3662,14 +3662,14 @@ createGraphStatementWithParentAndName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 createGraphStatementWithSource :: Phantoms.TTerm Grammar.CreateGraphStatement -> Phantoms.TTerm (Maybe Grammar.GraphSource) -> Phantoms.TTerm Grammar.CreateGraphStatement
@@ -3682,21 +3682,21 @@ createGraphStatementWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "createOption")})),
+              Core.projectionFieldName = (Core.Name "createOption")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parentAndName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "parentAndName")})),
+              Core.projectionFieldName = (Core.Name "parentAndName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
@@ -3712,14 +3712,14 @@ createGraphStatementWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "createOption")})),
+              Core.projectionFieldName = (Core.Name "createOption")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parentAndName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "parentAndName")})),
+              Core.projectionFieldName = (Core.Name "parentAndName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -3729,7 +3729,7 @@ createGraphStatementWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphStatement"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 createGraphTypeOptionOrReplace :: Phantoms.TTerm Grammar.CreateGraphTypeOption
@@ -3768,7 +3768,7 @@ createGraphTypeStatementCreateOption x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeStatement"),
-        Core.projectionField = (Core.Name "createOption")})),
+        Core.projectionFieldName = (Core.Name "createOption")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 createGraphTypeStatementParentAndName :: Phantoms.TTerm Grammar.CreateGraphTypeStatement -> Phantoms.TTerm Grammar.CatalogGraphTypeParentAndName
@@ -3776,7 +3776,7 @@ createGraphTypeStatementParentAndName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeStatement"),
-        Core.projectionField = (Core.Name "parentAndName")})),
+        Core.projectionFieldName = (Core.Name "parentAndName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 createGraphTypeStatementSource :: Phantoms.TTerm Grammar.CreateGraphTypeStatement -> Phantoms.TTerm Grammar.GraphTypeSource
@@ -3784,7 +3784,7 @@ createGraphTypeStatementSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeStatement"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 createGraphTypeStatementWithCreateOption :: Phantoms.TTerm Grammar.CreateGraphTypeStatement -> Phantoms.TTerm Grammar.CreateGraphTypeOption -> Phantoms.TTerm Grammar.CreateGraphTypeStatement
@@ -3800,14 +3800,14 @@ createGraphTypeStatementWithCreateOption original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeStatement"),
-              Core.projectionField = (Core.Name "parentAndName")})),
+              Core.projectionFieldName = (Core.Name "parentAndName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeStatement"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 createGraphTypeStatementWithParentAndName :: Phantoms.TTerm Grammar.CreateGraphTypeStatement -> Phantoms.TTerm Grammar.CatalogGraphTypeParentAndName -> Phantoms.TTerm Grammar.CreateGraphTypeStatement
@@ -3820,7 +3820,7 @@ createGraphTypeStatementWithParentAndName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeStatement"),
-              Core.projectionField = (Core.Name "createOption")})),
+              Core.projectionFieldName = (Core.Name "createOption")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parentAndName"),
@@ -3830,7 +3830,7 @@ createGraphTypeStatementWithParentAndName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeStatement"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 createGraphTypeStatementWithSource :: Phantoms.TTerm Grammar.CreateGraphTypeStatement -> Phantoms.TTerm Grammar.GraphTypeSource -> Phantoms.TTerm Grammar.CreateGraphTypeStatement
@@ -3843,14 +3843,14 @@ createGraphTypeStatementWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeStatement"),
-              Core.projectionField = (Core.Name "createOption")})),
+              Core.projectionFieldName = (Core.Name "createOption")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parentAndName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateGraphTypeStatement"),
-              Core.projectionField = (Core.Name "parentAndName")})),
+              Core.projectionFieldName = (Core.Name "parentAndName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
@@ -3873,7 +3873,7 @@ createSchemaStatementIfNotExists x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CreateSchemaStatement"),
-        Core.projectionField = (Core.Name "ifNotExists")})),
+        Core.projectionFieldName = (Core.Name "ifNotExists")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 createSchemaStatementParentAndName :: Phantoms.TTerm Grammar.CreateSchemaStatement -> Phantoms.TTerm Grammar.CatalogSchemaParentAndName
@@ -3881,7 +3881,7 @@ createSchemaStatementParentAndName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.CreateSchemaStatement"),
-        Core.projectionField = (Core.Name "parentAndName")})),
+        Core.projectionFieldName = (Core.Name "parentAndName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 createSchemaStatementWithIfNotExists :: Phantoms.TTerm Grammar.CreateSchemaStatement -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.CreateSchemaStatement
@@ -3897,7 +3897,7 @@ createSchemaStatementWithIfNotExists original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateSchemaStatement"),
-              Core.projectionField = (Core.Name "parentAndName")})),
+              Core.projectionFieldName = (Core.Name "parentAndName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 createSchemaStatementWithParentAndName :: Phantoms.TTerm Grammar.CreateSchemaStatement -> Phantoms.TTerm Grammar.CatalogSchemaParentAndName -> Phantoms.TTerm Grammar.CreateSchemaStatement
@@ -3910,7 +3910,7 @@ createSchemaStatementWithParentAndName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.CreateSchemaStatement"),
-              Core.projectionField = (Core.Name "ifNotExists")})),
+              Core.projectionFieldName = (Core.Name "ifNotExists")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parentAndName"),
@@ -3978,7 +3978,7 @@ dateTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DateType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dateTypeWithNotNull :: Phantoms.TTerm Grammar.DateType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.DateType
@@ -4039,7 +4039,7 @@ datetimeSubtractionParameters x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DatetimeSubtraction"),
-        Core.projectionField = (Core.Name "parameters")})),
+        Core.projectionFieldName = (Core.Name "parameters")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 datetimeSubtractionParametersExpression1 :: Phantoms.TTerm Grammar.DatetimeSubtractionParameters -> Phantoms.TTerm Grammar.DatetimeValueExpression1
@@ -4047,7 +4047,7 @@ datetimeSubtractionParametersExpression1 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DatetimeSubtractionParameters"),
-        Core.projectionField = (Core.Name "expression1")})),
+        Core.projectionFieldName = (Core.Name "expression1")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 datetimeSubtractionParametersExpression2 :: Phantoms.TTerm Grammar.DatetimeSubtractionParameters -> Phantoms.TTerm Grammar.DatetimeValueExpression2
@@ -4055,7 +4055,7 @@ datetimeSubtractionParametersExpression2 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DatetimeSubtractionParameters"),
-        Core.projectionField = (Core.Name "expression2")})),
+        Core.projectionFieldName = (Core.Name "expression2")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 datetimeSubtractionParametersWithExpression1 :: Phantoms.TTerm Grammar.DatetimeSubtractionParameters -> Phantoms.TTerm Grammar.DatetimeValueExpression1 -> Phantoms.TTerm Grammar.DatetimeSubtractionParameters
@@ -4071,7 +4071,7 @@ datetimeSubtractionParametersWithExpression1 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DatetimeSubtractionParameters"),
-              Core.projectionField = (Core.Name "expression2")})),
+              Core.projectionFieldName = (Core.Name "expression2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 datetimeSubtractionParametersWithExpression2 :: Phantoms.TTerm Grammar.DatetimeSubtractionParameters -> Phantoms.TTerm Grammar.DatetimeValueExpression2 -> Phantoms.TTerm Grammar.DatetimeSubtractionParameters
@@ -4084,7 +4084,7 @@ datetimeSubtractionParametersWithExpression2 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DatetimeSubtractionParameters"),
-              Core.projectionField = (Core.Name "expression1")})),
+              Core.projectionFieldName = (Core.Name "expression1")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression2"),
@@ -4107,7 +4107,7 @@ datetimeSubtractionTemporalDurationQualifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DatetimeSubtraction"),
-        Core.projectionField = (Core.Name "temporalDurationQualifier")})),
+        Core.projectionFieldName = (Core.Name "temporalDurationQualifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 datetimeSubtractionWithParameters :: Phantoms.TTerm Grammar.DatetimeSubtraction -> Phantoms.TTerm Grammar.DatetimeSubtractionParameters -> Phantoms.TTerm Grammar.DatetimeSubtraction
@@ -4123,7 +4123,7 @@ datetimeSubtractionWithParameters original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DatetimeSubtraction"),
-              Core.projectionField = (Core.Name "temporalDurationQualifier")})),
+              Core.projectionFieldName = (Core.Name "temporalDurationQualifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 datetimeSubtractionWithTemporalDurationQualifier :: Phantoms.TTerm Grammar.DatetimeSubtraction -> Phantoms.TTerm (Maybe Grammar.TemporalDurationQualifier) -> Phantoms.TTerm Grammar.DatetimeSubtraction
@@ -4136,7 +4136,7 @@ datetimeSubtractionWithTemporalDurationQualifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DatetimeSubtraction"),
-              Core.projectionField = (Core.Name "parameters")})),
+              Core.projectionFieldName = (Core.Name "parameters")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "temporalDurationQualifier"),
@@ -4215,7 +4215,7 @@ deleteStatementDetach x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DeleteStatement"),
-        Core.projectionField = (Core.Name "detach")})),
+        Core.projectionFieldName = (Core.Name "detach")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 deleteStatementItems :: Phantoms.TTerm Grammar.DeleteStatement -> Phantoms.TTerm Grammar.DeleteItemList
@@ -4223,7 +4223,7 @@ deleteStatementItems x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DeleteStatement"),
-        Core.projectionField = (Core.Name "items")})),
+        Core.projectionFieldName = (Core.Name "items")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 deleteStatementWithDetach :: Phantoms.TTerm Grammar.DeleteStatement -> Phantoms.TTerm (Maybe Grammar.DetachOption) -> Phantoms.TTerm Grammar.DeleteStatement
@@ -4239,7 +4239,7 @@ deleteStatementWithDetach original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DeleteStatement"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 deleteStatementWithItems :: Phantoms.TTerm Grammar.DeleteStatement -> Phantoms.TTerm Grammar.DeleteItemList -> Phantoms.TTerm Grammar.DeleteStatement
@@ -4252,7 +4252,7 @@ deleteStatementWithItems original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DeleteStatement"),
-              Core.projectionField = (Core.Name "detach")})),
+              Core.projectionFieldName = (Core.Name "detach")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
@@ -4275,7 +4275,7 @@ dependentValueExpressionNumericValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DependentValueExpression"),
-        Core.projectionField = (Core.Name "numericValue")})),
+        Core.projectionFieldName = (Core.Name "numericValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dependentValueExpressionSetQuantifier :: Phantoms.TTerm Grammar.DependentValueExpression -> Phantoms.TTerm (Maybe Grammar.SetQuantifier)
@@ -4283,7 +4283,7 @@ dependentValueExpressionSetQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DependentValueExpression"),
-        Core.projectionField = (Core.Name "setQuantifier")})),
+        Core.projectionFieldName = (Core.Name "setQuantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dependentValueExpressionWithNumericValue :: Phantoms.TTerm Grammar.DependentValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression -> Phantoms.TTerm Grammar.DependentValueExpression
@@ -4296,7 +4296,7 @@ dependentValueExpressionWithNumericValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DependentValueExpression"),
-              Core.projectionField = (Core.Name "setQuantifier")})),
+              Core.projectionFieldName = (Core.Name "setQuantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "numericValue"),
@@ -4315,7 +4315,7 @@ dependentValueExpressionWithSetQuantifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DependentValueExpression"),
-              Core.projectionField = (Core.Name "numericValue")})),
+              Core.projectionFieldName = (Core.Name "numericValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 destinationNodeTypeReferenceAlias :: Phantoms.TTerm Grammar.DestinationNodeTypeAlias -> Phantoms.TTerm Grammar.DestinationNodeTypeReference
@@ -4354,7 +4354,7 @@ destinationPredicateDestinationOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DestinationPredicate"),
-        Core.projectionField = (Core.Name "destinationOf")})),
+        Core.projectionFieldName = (Core.Name "destinationOf")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 destinationPredicateNodeReference :: Phantoms.TTerm Grammar.DestinationPredicate -> Phantoms.TTerm Grammar.NodeReference
@@ -4362,7 +4362,7 @@ destinationPredicateNodeReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DestinationPredicate"),
-        Core.projectionField = (Core.Name "nodeReference")})),
+        Core.projectionFieldName = (Core.Name "nodeReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 destinationPredicateNot :: Phantoms.TTerm Grammar.DestinationPredicate -> Phantoms.TTerm Bool
@@ -4370,7 +4370,7 @@ destinationPredicateNot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DestinationPredicate"),
-        Core.projectionField = (Core.Name "not")})),
+        Core.projectionFieldName = (Core.Name "not")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 destinationPredicateWithDestinationOf :: Phantoms.TTerm Grammar.DestinationPredicate -> Phantoms.TTerm Grammar.EdgeReference -> Phantoms.TTerm Grammar.DestinationPredicate
@@ -4383,14 +4383,14 @@ destinationPredicateWithDestinationOf original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DestinationPredicate"),
-              Core.projectionField = (Core.Name "nodeReference")})),
+              Core.projectionFieldName = (Core.Name "nodeReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "not"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DestinationPredicate"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destinationOf"),
@@ -4409,14 +4409,14 @@ destinationPredicateWithNodeReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DestinationPredicate"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destinationOf"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DestinationPredicate"),
-              Core.projectionField = (Core.Name "destinationOf")})),
+              Core.projectionFieldName = (Core.Name "destinationOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 destinationPredicateWithNot :: Phantoms.TTerm Grammar.DestinationPredicate -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.DestinationPredicate
@@ -4429,7 +4429,7 @@ destinationPredicateWithNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DestinationPredicate"),
-              Core.projectionField = (Core.Name "nodeReference")})),
+              Core.projectionFieldName = (Core.Name "nodeReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "not"),
@@ -4439,7 +4439,7 @@ destinationPredicateWithNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DestinationPredicate"),
-              Core.projectionField = (Core.Name "destinationOf")})),
+              Core.projectionFieldName = (Core.Name "destinationOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 detachOptionDetach :: Phantoms.TTerm Grammar.DetachOption
@@ -4475,7 +4475,7 @@ directedPredicateDirectedPart x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DirectedPredicate"),
-        Core.projectionField = (Core.Name "directedPart")})),
+        Core.projectionFieldName = (Core.Name "directedPart")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 directedPredicateElementVariableReference :: Phantoms.TTerm Grammar.DirectedPredicate -> Phantoms.TTerm Grammar.ElementVariableReference
@@ -4483,7 +4483,7 @@ directedPredicateElementVariableReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DirectedPredicate"),
-        Core.projectionField = (Core.Name "elementVariableReference")})),
+        Core.projectionFieldName = (Core.Name "elementVariableReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 directedPredicatePart2 :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.DirectedPredicatePart2
@@ -4500,7 +4500,7 @@ directedPredicatePart2Not x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DirectedPredicatePart2"),
-        Core.projectionField = (Core.Name "not")})),
+        Core.projectionFieldName = (Core.Name "not")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 directedPredicatePart2WithNot :: Phantoms.TTerm Grammar.DirectedPredicatePart2 -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.DirectedPredicatePart2
@@ -4522,7 +4522,7 @@ directedPredicateWithDirectedPart original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DirectedPredicate"),
-              Core.projectionField = (Core.Name "elementVariableReference")})),
+              Core.projectionFieldName = (Core.Name "elementVariableReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "directedPart"),
@@ -4541,7 +4541,7 @@ directedPredicateWithElementVariableReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DirectedPredicate"),
-              Core.projectionField = (Core.Name "directedPart")})),
+              Core.projectionFieldName = (Core.Name "directedPart")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 disjunctionLabelExpression :: Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.DisjunctionLabelExpression
@@ -4561,7 +4561,7 @@ disjunctionLabelExpressionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctionLabelExpression"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 disjunctionLabelExpressionRight :: Phantoms.TTerm Grammar.DisjunctionLabelExpression -> Phantoms.TTerm Grammar.LabelExpression
@@ -4569,7 +4569,7 @@ disjunctionLabelExpressionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctionLabelExpression"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 disjunctionLabelExpressionWithLeft :: Phantoms.TTerm Grammar.DisjunctionLabelExpression -> Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.DisjunctionLabelExpression
@@ -4585,7 +4585,7 @@ disjunctionLabelExpressionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctionLabelExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 disjunctionLabelExpressionWithRight :: Phantoms.TTerm Grammar.DisjunctionLabelExpression -> Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.DisjunctionLabelExpression
@@ -4598,7 +4598,7 @@ disjunctionLabelExpressionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctionLabelExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -4624,7 +4624,7 @@ disjunctiveExprLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctiveExpr"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 disjunctiveExprOperator :: Phantoms.TTerm Grammar.DisjunctiveExpr -> Phantoms.TTerm Grammar.DisjunctiveOperator
@@ -4632,7 +4632,7 @@ disjunctiveExprOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctiveExpr"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 disjunctiveExprRight :: Phantoms.TTerm Grammar.DisjunctiveExpr -> Phantoms.TTerm Grammar.ValueExpression
@@ -4640,7 +4640,7 @@ disjunctiveExprRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctiveExpr"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 disjunctiveExprWithLeft :: Phantoms.TTerm Grammar.DisjunctiveExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.DisjunctiveExpr
@@ -4656,14 +4656,14 @@ disjunctiveExprWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctiveExpr"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctiveExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 disjunctiveExprWithOperator :: Phantoms.TTerm Grammar.DisjunctiveExpr -> Phantoms.TTerm Grammar.DisjunctiveOperator -> Phantoms.TTerm Grammar.DisjunctiveExpr
@@ -4676,7 +4676,7 @@ disjunctiveExprWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctiveExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -4686,7 +4686,7 @@ disjunctiveExprWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctiveExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 disjunctiveExprWithRight :: Phantoms.TTerm Grammar.DisjunctiveExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.DisjunctiveExpr
@@ -4699,14 +4699,14 @@ disjunctiveExprWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctiveExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DisjunctiveExpr"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -4745,7 +4745,7 @@ doubleTypeWithPrecisionNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DoubleTypeWithPrecision"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 doubleTypeWithPrecisionPrecision :: Phantoms.TTerm Grammar.DoubleTypeWithPrecision -> Phantoms.TTerm Bool
@@ -4753,7 +4753,7 @@ doubleTypeWithPrecisionPrecision x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DoubleTypeWithPrecision"),
-        Core.projectionField = (Core.Name "precision")})),
+        Core.projectionFieldName = (Core.Name "precision")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 doubleTypeWithPrecisionWithNotNull :: Phantoms.TTerm Grammar.DoubleTypeWithPrecision -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.DoubleTypeWithPrecision
@@ -4766,7 +4766,7 @@ doubleTypeWithPrecisionWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DoubleTypeWithPrecision"),
-              Core.projectionField = (Core.Name "precision")})),
+              Core.projectionFieldName = (Core.Name "precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -4785,7 +4785,7 @@ doubleTypeWithPrecisionWithPrecision original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DoubleTypeWithPrecision"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dropGraphStatement :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.CatalogGraphParentAndName -> Phantoms.TTerm Grammar.DropGraphStatement
@@ -4805,7 +4805,7 @@ dropGraphStatementIfExists x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DropGraphStatement"),
-        Core.projectionField = (Core.Name "ifExists")})),
+        Core.projectionFieldName = (Core.Name "ifExists")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dropGraphStatementParentAndName :: Phantoms.TTerm Grammar.DropGraphStatement -> Phantoms.TTerm Grammar.CatalogGraphParentAndName
@@ -4813,7 +4813,7 @@ dropGraphStatementParentAndName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DropGraphStatement"),
-        Core.projectionField = (Core.Name "parentAndName")})),
+        Core.projectionFieldName = (Core.Name "parentAndName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dropGraphStatementWithIfExists :: Phantoms.TTerm Grammar.DropGraphStatement -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.DropGraphStatement
@@ -4829,7 +4829,7 @@ dropGraphStatementWithIfExists original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DropGraphStatement"),
-              Core.projectionField = (Core.Name "parentAndName")})),
+              Core.projectionFieldName = (Core.Name "parentAndName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dropGraphStatementWithParentAndName :: Phantoms.TTerm Grammar.DropGraphStatement -> Phantoms.TTerm Grammar.CatalogGraphParentAndName -> Phantoms.TTerm Grammar.DropGraphStatement
@@ -4842,7 +4842,7 @@ dropGraphStatementWithParentAndName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DropGraphStatement"),
-              Core.projectionField = (Core.Name "ifExists")})),
+              Core.projectionFieldName = (Core.Name "ifExists")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parentAndName"),
@@ -4865,7 +4865,7 @@ dropGraphTypeStatementIfExists x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DropGraphTypeStatement"),
-        Core.projectionField = (Core.Name "ifExists")})),
+        Core.projectionFieldName = (Core.Name "ifExists")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dropGraphTypeStatementParentAndName :: Phantoms.TTerm Grammar.DropGraphTypeStatement -> Phantoms.TTerm Grammar.CatalogGraphTypeParentAndName
@@ -4873,7 +4873,7 @@ dropGraphTypeStatementParentAndName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DropGraphTypeStatement"),
-        Core.projectionField = (Core.Name "parentAndName")})),
+        Core.projectionFieldName = (Core.Name "parentAndName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dropGraphTypeStatementWithIfExists :: Phantoms.TTerm Grammar.DropGraphTypeStatement -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.DropGraphTypeStatement
@@ -4889,7 +4889,7 @@ dropGraphTypeStatementWithIfExists original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DropGraphTypeStatement"),
-              Core.projectionField = (Core.Name "parentAndName")})),
+              Core.projectionFieldName = (Core.Name "parentAndName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dropGraphTypeStatementWithParentAndName :: Phantoms.TTerm Grammar.DropGraphTypeStatement -> Phantoms.TTerm Grammar.CatalogGraphTypeParentAndName -> Phantoms.TTerm Grammar.DropGraphTypeStatement
@@ -4902,7 +4902,7 @@ dropGraphTypeStatementWithParentAndName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DropGraphTypeStatement"),
-              Core.projectionField = (Core.Name "ifExists")})),
+              Core.projectionFieldName = (Core.Name "ifExists")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parentAndName"),
@@ -4925,7 +4925,7 @@ dropSchemaStatementIfExists x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DropSchemaStatement"),
-        Core.projectionField = (Core.Name "ifExists")})),
+        Core.projectionFieldName = (Core.Name "ifExists")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dropSchemaStatementParentAndName :: Phantoms.TTerm Grammar.DropSchemaStatement -> Phantoms.TTerm Grammar.CatalogSchemaParentAndName
@@ -4933,7 +4933,7 @@ dropSchemaStatementParentAndName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DropSchemaStatement"),
-        Core.projectionField = (Core.Name "parentAndName")})),
+        Core.projectionFieldName = (Core.Name "parentAndName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dropSchemaStatementWithIfExists :: Phantoms.TTerm Grammar.DropSchemaStatement -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.DropSchemaStatement
@@ -4949,7 +4949,7 @@ dropSchemaStatementWithIfExists original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DropSchemaStatement"),
-              Core.projectionField = (Core.Name "parentAndName")})),
+              Core.projectionFieldName = (Core.Name "parentAndName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dropSchemaStatementWithParentAndName :: Phantoms.TTerm Grammar.DropSchemaStatement -> Phantoms.TTerm Grammar.CatalogSchemaParentAndName -> Phantoms.TTerm Grammar.DropSchemaStatement
@@ -4962,7 +4962,7 @@ dropSchemaStatementWithParentAndName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DropSchemaStatement"),
-              Core.projectionField = (Core.Name "ifExists")})),
+              Core.projectionFieldName = (Core.Name "ifExists")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parentAndName"),
@@ -5023,7 +5023,7 @@ dynamicPropertyValueTypeAny x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-        Core.projectionField = (Core.Name "any")})),
+        Core.projectionFieldName = (Core.Name "any")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dynamicPropertyValueTypeNotNull :: Phantoms.TTerm Grammar.DynamicPropertyValueType -> Phantoms.TTerm Bool
@@ -5031,7 +5031,7 @@ dynamicPropertyValueTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dynamicPropertyValueTypeProperty :: Phantoms.TTerm Grammar.DynamicPropertyValueType -> Phantoms.TTerm ()
@@ -5039,7 +5039,7 @@ dynamicPropertyValueTypeProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-        Core.projectionField = (Core.Name "property")})),
+        Core.projectionFieldName = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dynamicPropertyValueTypeValue :: Phantoms.TTerm Grammar.DynamicPropertyValueType -> Phantoms.TTerm ()
@@ -5047,7 +5047,7 @@ dynamicPropertyValueTypeValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 dynamicPropertyValueTypeWithAny :: Phantoms.TTerm Grammar.DynamicPropertyValueType -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Grammar.DynamicPropertyValueType
@@ -5063,21 +5063,21 @@ dynamicPropertyValueTypeWithAny original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dynamicPropertyValueTypeWithNotNull :: Phantoms.TTerm Grammar.DynamicPropertyValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.DynamicPropertyValueType
@@ -5090,21 +5090,21 @@ dynamicPropertyValueTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -5120,7 +5120,7 @@ dynamicPropertyValueTypeWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
@@ -5130,14 +5130,14 @@ dynamicPropertyValueTypeWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 dynamicPropertyValueTypeWithValue :: Phantoms.TTerm Grammar.DynamicPropertyValueType -> Phantoms.TTerm () -> Phantoms.TTerm Grammar.DynamicPropertyValueType
@@ -5150,14 +5150,14 @@ dynamicPropertyValueTypeWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -5167,7 +5167,7 @@ dynamicPropertyValueTypeWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.DynamicPropertyValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeBindingsOrEdgesEdgeBindings :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.EdgeBindingsOrEdges
@@ -5203,7 +5203,7 @@ edgeKeyLabelSetWithContentImpliedContent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKeyLabelSetWithContent"),
-        Core.projectionField = (Core.Name "impliedContent")})),
+        Core.projectionFieldName = (Core.Name "impliedContent")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeKeyLabelSetWithContentKeyLabelSet :: Phantoms.TTerm Grammar.EdgeKeyLabelSetWithContent -> Phantoms.TTerm Grammar.EdgeTypeKeyLabelSet
@@ -5211,7 +5211,7 @@ edgeKeyLabelSetWithContentKeyLabelSet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKeyLabelSetWithContent"),
-        Core.projectionField = (Core.Name "keyLabelSet")})),
+        Core.projectionFieldName = (Core.Name "keyLabelSet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeKeyLabelSetWithContentWithImpliedContent :: Phantoms.TTerm Grammar.EdgeKeyLabelSetWithContent -> Phantoms.TTerm (Maybe Grammar.EdgeTypeImpliedContent) -> Phantoms.TTerm Grammar.EdgeKeyLabelSetWithContent
@@ -5224,7 +5224,7 @@ edgeKeyLabelSetWithContentWithImpliedContent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKeyLabelSetWithContent"),
-              Core.projectionField = (Core.Name "keyLabelSet")})),
+              Core.projectionFieldName = (Core.Name "keyLabelSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "impliedContent"),
@@ -5243,7 +5243,7 @@ edgeKeyLabelSetWithContentWithKeyLabelSet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKeyLabelSetWithContent"),
-              Core.projectionField = (Core.Name "impliedContent")})),
+              Core.projectionFieldName = (Core.Name "impliedContent")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeKindAndSynonym :: Phantoms.TTerm (Maybe Grammar.EdgeKind) -> Phantoms.TTerm Grammar.EdgeSynonym -> Phantoms.TTerm (Maybe Grammar.EdgeTypeName) -> Phantoms.TTerm Grammar.EdgeKindAndSynonym
@@ -5266,7 +5266,7 @@ edgeKindAndSynonymKind x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKindAndSynonym"),
-        Core.projectionField = (Core.Name "kind")})),
+        Core.projectionFieldName = (Core.Name "kind")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeKindAndSynonymSynonym :: Phantoms.TTerm Grammar.EdgeKindAndSynonym -> Phantoms.TTerm Grammar.EdgeSynonym
@@ -5274,7 +5274,7 @@ edgeKindAndSynonymSynonym x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKindAndSynonym"),
-        Core.projectionField = (Core.Name "synonym")})),
+        Core.projectionFieldName = (Core.Name "synonym")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeKindAndSynonymTypeName :: Phantoms.TTerm Grammar.EdgeKindAndSynonym -> Phantoms.TTerm (Maybe Grammar.EdgeTypeName)
@@ -5282,7 +5282,7 @@ edgeKindAndSynonymTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKindAndSynonym"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeKindAndSynonymWithKind :: Phantoms.TTerm Grammar.EdgeKindAndSynonym -> Phantoms.TTerm (Maybe Grammar.EdgeKind) -> Phantoms.TTerm Grammar.EdgeKindAndSynonym
@@ -5298,14 +5298,14 @@ edgeKindAndSynonymWithKind original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKindAndSynonym"),
-              Core.projectionField = (Core.Name "synonym")})),
+              Core.projectionFieldName = (Core.Name "synonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKindAndSynonym"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeKindAndSynonymWithSynonym :: Phantoms.TTerm Grammar.EdgeKindAndSynonym -> Phantoms.TTerm Grammar.EdgeSynonym -> Phantoms.TTerm Grammar.EdgeKindAndSynonym
@@ -5318,7 +5318,7 @@ edgeKindAndSynonymWithSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKindAndSynonym"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "synonym"),
@@ -5328,7 +5328,7 @@ edgeKindAndSynonymWithSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKindAndSynonym"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeKindAndSynonymWithTypeName :: Phantoms.TTerm Grammar.EdgeKindAndSynonym -> Phantoms.TTerm (Maybe Grammar.EdgeTypeName) -> Phantoms.TTerm Grammar.EdgeKindAndSynonym
@@ -5341,14 +5341,14 @@ edgeKindAndSynonymWithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKindAndSynonym"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "synonym"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeKindAndSynonym"),
-              Core.projectionField = (Core.Name "synonym")})),
+              Core.projectionFieldName = (Core.Name "synonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
@@ -5387,7 +5387,7 @@ edgeLabelSetWithPropertiesLabelSet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeLabelSetWithProperties"),
-        Core.projectionField = (Core.Name "labelSet")})),
+        Core.projectionFieldName = (Core.Name "labelSet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeLabelSetWithPropertiesPropertyTypes :: Phantoms.TTerm Grammar.EdgeLabelSetWithProperties -> Phantoms.TTerm Grammar.EdgeTypePropertyTypes
@@ -5395,7 +5395,7 @@ edgeLabelSetWithPropertiesPropertyTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeLabelSetWithProperties"),
-        Core.projectionField = (Core.Name "propertyTypes")})),
+        Core.projectionFieldName = (Core.Name "propertyTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeLabelSetWithPropertiesWithLabelSet :: Phantoms.TTerm Grammar.EdgeLabelSetWithProperties -> Phantoms.TTerm Grammar.EdgeTypeLabelSet -> Phantoms.TTerm Grammar.EdgeLabelSetWithProperties
@@ -5411,7 +5411,7 @@ edgeLabelSetWithPropertiesWithLabelSet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeLabelSetWithProperties"),
-              Core.projectionField = (Core.Name "propertyTypes")})),
+              Core.projectionFieldName = (Core.Name "propertyTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeLabelSetWithPropertiesWithPropertyTypes :: Phantoms.TTerm Grammar.EdgeLabelSetWithProperties -> Phantoms.TTerm Grammar.EdgeTypePropertyTypes -> Phantoms.TTerm Grammar.EdgeLabelSetWithProperties
@@ -5424,7 +5424,7 @@ edgeLabelSetWithPropertiesWithPropertyTypes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeLabelSetWithProperties"),
-              Core.projectionField = (Core.Name "labelSet")})),
+              Core.projectionFieldName = (Core.Name "labelSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyTypes"),
@@ -5535,7 +5535,7 @@ edgeTypeNameWithFillerFiller x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypeNameWithFiller"),
-        Core.projectionField = (Core.Name "filler")})),
+        Core.projectionFieldName = (Core.Name "filler")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypeNameWithFillerTypeName :: Phantoms.TTerm Grammar.EdgeTypeNameWithFiller -> Phantoms.TTerm Grammar.EdgeTypeName
@@ -5543,7 +5543,7 @@ edgeTypeNameWithFillerTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypeNameWithFiller"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypeNameWithFillerWithFiller :: Phantoms.TTerm Grammar.EdgeTypeNameWithFiller -> Phantoms.TTerm (Maybe Grammar.EdgeTypeFiller) -> Phantoms.TTerm Grammar.EdgeTypeNameWithFiller
@@ -5556,7 +5556,7 @@ edgeTypeNameWithFillerWithFiller original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypeNameWithFiller"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "filler"),
@@ -5575,7 +5575,7 @@ edgeTypeNameWithFillerWithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypeNameWithFiller"),
-              Core.projectionField = (Core.Name "filler")})),
+              Core.projectionFieldName = (Core.Name "filler")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePattern :: Phantoms.TTerm (Maybe Grammar.EdgeKindAndSynonym) -> Phantoms.TTerm Grammar.EdgeTypePatternType -> Phantoms.TTerm Grammar.EdgeTypePattern
@@ -5611,7 +5611,7 @@ edgeTypePatternKindAndSynonym x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePattern"),
-        Core.projectionField = (Core.Name "kindAndSynonym")})),
+        Core.projectionFieldName = (Core.Name "kindAndSynonym")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternPatternType :: Phantoms.TTerm Grammar.EdgeTypePattern -> Phantoms.TTerm Grammar.EdgeTypePatternType
@@ -5619,7 +5619,7 @@ edgeTypePatternPatternType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePattern"),
-        Core.projectionField = (Core.Name "patternType")})),
+        Core.projectionFieldName = (Core.Name "patternType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternPointingLeft :: Phantoms.TTerm Grammar.DestinationNodeTypeReference -> Phantoms.TTerm Grammar.ArcTypePointingLeft -> Phantoms.TTerm Grammar.SourceNodeTypeReference -> Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft
@@ -5642,7 +5642,7 @@ edgeTypePatternPointingLeftArc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingLeft"),
-        Core.projectionField = (Core.Name "arc")})),
+        Core.projectionFieldName = (Core.Name "arc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternPointingLeftDestination :: Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft -> Phantoms.TTerm Grammar.DestinationNodeTypeReference
@@ -5650,7 +5650,7 @@ edgeTypePatternPointingLeftDestination x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingLeft"),
-        Core.projectionField = (Core.Name "destination")})),
+        Core.projectionFieldName = (Core.Name "destination")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternPointingLeftSource :: Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft -> Phantoms.TTerm Grammar.SourceNodeTypeReference
@@ -5658,7 +5658,7 @@ edgeTypePatternPointingLeftSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingLeft"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternPointingLeftWithArc :: Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft -> Phantoms.TTerm Grammar.ArcTypePointingLeft -> Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft
@@ -5671,7 +5671,7 @@ edgeTypePatternPointingLeftWithArc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingLeft"),
-              Core.projectionField = (Core.Name "destination")})),
+              Core.projectionFieldName = (Core.Name "destination")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arc"),
@@ -5681,7 +5681,7 @@ edgeTypePatternPointingLeftWithArc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingLeft"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePatternPointingLeftWithDestination :: Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft -> Phantoms.TTerm Grammar.DestinationNodeTypeReference -> Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft
@@ -5697,14 +5697,14 @@ edgeTypePatternPointingLeftWithDestination original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingLeft"),
-              Core.projectionField = (Core.Name "arc")})),
+              Core.projectionFieldName = (Core.Name "arc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingLeft"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePatternPointingLeftWithSource :: Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft -> Phantoms.TTerm Grammar.SourceNodeTypeReference -> Phantoms.TTerm Grammar.EdgeTypePatternPointingLeft
@@ -5717,14 +5717,14 @@ edgeTypePatternPointingLeftWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingLeft"),
-              Core.projectionField = (Core.Name "destination")})),
+              Core.projectionFieldName = (Core.Name "destination")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingLeft"),
-              Core.projectionField = (Core.Name "arc")})),
+              Core.projectionFieldName = (Core.Name "arc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
@@ -5750,7 +5750,7 @@ edgeTypePatternPointingRightArc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingRight"),
-        Core.projectionField = (Core.Name "arc")})),
+        Core.projectionFieldName = (Core.Name "arc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternPointingRightDestination :: Phantoms.TTerm Grammar.EdgeTypePatternPointingRight -> Phantoms.TTerm Grammar.DestinationNodeTypeReference
@@ -5758,7 +5758,7 @@ edgeTypePatternPointingRightDestination x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingRight"),
-        Core.projectionField = (Core.Name "destination")})),
+        Core.projectionFieldName = (Core.Name "destination")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternPointingRightSource :: Phantoms.TTerm Grammar.EdgeTypePatternPointingRight -> Phantoms.TTerm Grammar.SourceNodeTypeReference
@@ -5766,7 +5766,7 @@ edgeTypePatternPointingRightSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingRight"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternPointingRightWithArc :: Phantoms.TTerm Grammar.EdgeTypePatternPointingRight -> Phantoms.TTerm Grammar.ArcTypePointingRight -> Phantoms.TTerm Grammar.EdgeTypePatternPointingRight
@@ -5779,7 +5779,7 @@ edgeTypePatternPointingRightWithArc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingRight"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arc"),
@@ -5789,7 +5789,7 @@ edgeTypePatternPointingRightWithArc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingRight"),
-              Core.projectionField = (Core.Name "destination")})),
+              Core.projectionFieldName = (Core.Name "destination")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePatternPointingRightWithDestination :: Phantoms.TTerm Grammar.EdgeTypePatternPointingRight -> Phantoms.TTerm Grammar.DestinationNodeTypeReference -> Phantoms.TTerm Grammar.EdgeTypePatternPointingRight
@@ -5802,14 +5802,14 @@ edgeTypePatternPointingRightWithDestination original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingRight"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingRight"),
-              Core.projectionField = (Core.Name "arc")})),
+              Core.projectionFieldName = (Core.Name "arc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destination"),
@@ -5828,14 +5828,14 @@ edgeTypePatternPointingRightWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingRight"),
-              Core.projectionField = (Core.Name "arc")})),
+              Core.projectionFieldName = (Core.Name "arc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destination"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternPointingRight"),
-              Core.projectionField = (Core.Name "destination")})),
+              Core.projectionFieldName = (Core.Name "destination")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePatternTypeDirected :: Phantoms.TTerm Grammar.EdgeTypePatternDirected -> Phantoms.TTerm Grammar.EdgeTypePatternType
@@ -5874,7 +5874,7 @@ edgeTypePatternUndirectedArc x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternUndirected"),
-        Core.projectionField = (Core.Name "arc")})),
+        Core.projectionFieldName = (Core.Name "arc")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternUndirectedDestination :: Phantoms.TTerm Grammar.EdgeTypePatternUndirected -> Phantoms.TTerm Grammar.DestinationNodeTypeReference
@@ -5882,7 +5882,7 @@ edgeTypePatternUndirectedDestination x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternUndirected"),
-        Core.projectionField = (Core.Name "destination")})),
+        Core.projectionFieldName = (Core.Name "destination")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternUndirectedSource :: Phantoms.TTerm Grammar.EdgeTypePatternUndirected -> Phantoms.TTerm Grammar.SourceNodeTypeReference
@@ -5890,7 +5890,7 @@ edgeTypePatternUndirectedSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternUndirected"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePatternUndirectedWithArc :: Phantoms.TTerm Grammar.EdgeTypePatternUndirected -> Phantoms.TTerm Grammar.ArcTypeUndirected -> Phantoms.TTerm Grammar.EdgeTypePatternUndirected
@@ -5903,7 +5903,7 @@ edgeTypePatternUndirectedWithArc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternUndirected"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arc"),
@@ -5913,7 +5913,7 @@ edgeTypePatternUndirectedWithArc original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternUndirected"),
-              Core.projectionField = (Core.Name "destination")})),
+              Core.projectionFieldName = (Core.Name "destination")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePatternUndirectedWithDestination :: Phantoms.TTerm Grammar.EdgeTypePatternUndirected -> Phantoms.TTerm Grammar.DestinationNodeTypeReference -> Phantoms.TTerm Grammar.EdgeTypePatternUndirected
@@ -5926,14 +5926,14 @@ edgeTypePatternUndirectedWithDestination original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternUndirected"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arc"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternUndirected"),
-              Core.projectionField = (Core.Name "arc")})),
+              Core.projectionFieldName = (Core.Name "arc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destination"),
@@ -5952,14 +5952,14 @@ edgeTypePatternUndirectedWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternUndirected"),
-              Core.projectionField = (Core.Name "arc")})),
+              Core.projectionFieldName = (Core.Name "arc")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destination"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePatternUndirected"),
-              Core.projectionField = (Core.Name "destination")})),
+              Core.projectionFieldName = (Core.Name "destination")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePatternWithKindAndSynonym :: Phantoms.TTerm Grammar.EdgeTypePattern -> Phantoms.TTerm (Maybe Grammar.EdgeKindAndSynonym) -> Phantoms.TTerm Grammar.EdgeTypePattern
@@ -5975,7 +5975,7 @@ edgeTypePatternWithKindAndSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePattern"),
-              Core.projectionField = (Core.Name "patternType")})),
+              Core.projectionFieldName = (Core.Name "patternType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePatternWithPatternType :: Phantoms.TTerm Grammar.EdgeTypePattern -> Phantoms.TTerm Grammar.EdgeTypePatternType -> Phantoms.TTerm Grammar.EdgeTypePattern
@@ -5988,7 +5988,7 @@ edgeTypePatternWithPatternType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePattern"),
-              Core.projectionField = (Core.Name "kindAndSynonym")})),
+              Core.projectionFieldName = (Core.Name "kindAndSynonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "patternType"),
@@ -6017,7 +6017,7 @@ edgeTypePhraseEndpointPair x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-        Core.projectionField = (Core.Name "endpointPair")})),
+        Core.projectionFieldName = (Core.Name "endpointPair")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePhraseFillerFillerOnly :: Phantoms.TTerm Grammar.EdgeTypeFiller -> Phantoms.TTerm Grammar.EdgeTypePhraseFiller
@@ -6041,7 +6041,7 @@ edgeTypePhraseKind x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-        Core.projectionField = (Core.Name "kind")})),
+        Core.projectionFieldName = (Core.Name "kind")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePhraseSynonym :: Phantoms.TTerm Grammar.EdgeTypePhrase -> Phantoms.TTerm Grammar.EdgeSynonym
@@ -6049,7 +6049,7 @@ edgeTypePhraseSynonym x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-        Core.projectionField = (Core.Name "synonym")})),
+        Core.projectionFieldName = (Core.Name "synonym")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePhraseTypeNameAndFiller :: Phantoms.TTerm Grammar.EdgeTypePhrase -> Phantoms.TTerm Grammar.EdgeTypePhraseFiller
@@ -6057,7 +6057,7 @@ edgeTypePhraseTypeNameAndFiller x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-        Core.projectionField = (Core.Name "typeNameAndFiller")})),
+        Core.projectionFieldName = (Core.Name "typeNameAndFiller")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 edgeTypePhraseWithEndpointPair :: Phantoms.TTerm Grammar.EdgeTypePhrase -> Phantoms.TTerm Grammar.EndpointPairPhrase -> Phantoms.TTerm Grammar.EdgeTypePhrase
@@ -6070,21 +6070,21 @@ edgeTypePhraseWithEndpointPair original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "synonym"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "synonym")})),
+              Core.projectionFieldName = (Core.Name "synonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeNameAndFiller"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "typeNameAndFiller")})),
+              Core.projectionFieldName = (Core.Name "typeNameAndFiller")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "endpointPair"),
@@ -6103,21 +6103,21 @@ edgeTypePhraseWithKind original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "synonym")})),
+              Core.projectionFieldName = (Core.Name "synonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeNameAndFiller"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "typeNameAndFiller")})),
+              Core.projectionFieldName = (Core.Name "typeNameAndFiller")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "endpointPair"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "endpointPair")})),
+              Core.projectionFieldName = (Core.Name "endpointPair")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePhraseWithSynonym :: Phantoms.TTerm Grammar.EdgeTypePhrase -> Phantoms.TTerm Grammar.EdgeSynonym -> Phantoms.TTerm Grammar.EdgeTypePhrase
@@ -6130,7 +6130,7 @@ edgeTypePhraseWithSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "synonym"),
@@ -6140,14 +6140,14 @@ edgeTypePhraseWithSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "typeNameAndFiller")})),
+              Core.projectionFieldName = (Core.Name "typeNameAndFiller")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "endpointPair"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "endpointPair")})),
+              Core.projectionFieldName = (Core.Name "endpointPair")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypePhraseWithTypeNameAndFiller :: Phantoms.TTerm Grammar.EdgeTypePhrase -> Phantoms.TTerm Grammar.EdgeTypePhraseFiller -> Phantoms.TTerm Grammar.EdgeTypePhrase
@@ -6160,14 +6160,14 @@ edgeTypePhraseWithTypeNameAndFiller original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "synonym"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "synonym")})),
+              Core.projectionFieldName = (Core.Name "synonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeNameAndFiller"),
@@ -6177,7 +6177,7 @@ edgeTypePhraseWithTypeNameAndFiller original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EdgeTypePhrase"),
-              Core.projectionField = (Core.Name "endpointPair")})),
+              Core.projectionFieldName = (Core.Name "endpointPair")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 edgeTypeSpecificationPattern :: Phantoms.TTerm Grammar.EdgeTypePattern -> Phantoms.TTerm Grammar.EdgeTypeSpecification
@@ -6256,7 +6256,7 @@ elementPatternFillerIsLabelExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ElementPatternFiller"),
-        Core.projectionField = (Core.Name "isLabelExpression")})),
+        Core.projectionFieldName = (Core.Name "isLabelExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementPatternFillerPredicate :: Phantoms.TTerm Grammar.ElementPatternFiller -> Phantoms.TTerm (Maybe Grammar.ElementPatternPredicate)
@@ -6264,7 +6264,7 @@ elementPatternFillerPredicate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ElementPatternFiller"),
-        Core.projectionField = (Core.Name "predicate")})),
+        Core.projectionFieldName = (Core.Name "predicate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementPatternFillerVariableDeclaration :: Phantoms.TTerm Grammar.ElementPatternFiller -> Phantoms.TTerm (Maybe Grammar.ElementVariableDeclaration)
@@ -6272,7 +6272,7 @@ elementPatternFillerVariableDeclaration x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ElementPatternFiller"),
-        Core.projectionField = (Core.Name "variableDeclaration")})),
+        Core.projectionFieldName = (Core.Name "variableDeclaration")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementPatternFillerWithIsLabelExpression :: Phantoms.TTerm Grammar.ElementPatternFiller -> Phantoms.TTerm (Maybe Grammar.IsLabelExpression) -> Phantoms.TTerm Grammar.ElementPatternFiller
@@ -6285,7 +6285,7 @@ elementPatternFillerWithIsLabelExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ElementPatternFiller"),
-              Core.projectionField = (Core.Name "variableDeclaration")})),
+              Core.projectionFieldName = (Core.Name "variableDeclaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isLabelExpression"),
@@ -6295,7 +6295,7 @@ elementPatternFillerWithIsLabelExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ElementPatternFiller"),
-              Core.projectionField = (Core.Name "predicate")})),
+              Core.projectionFieldName = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementPatternFillerWithPredicate :: Phantoms.TTerm Grammar.ElementPatternFiller -> Phantoms.TTerm (Maybe Grammar.ElementPatternPredicate) -> Phantoms.TTerm Grammar.ElementPatternFiller
@@ -6308,14 +6308,14 @@ elementPatternFillerWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ElementPatternFiller"),
-              Core.projectionField = (Core.Name "variableDeclaration")})),
+              Core.projectionFieldName = (Core.Name "variableDeclaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isLabelExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ElementPatternFiller"),
-              Core.projectionField = (Core.Name "isLabelExpression")})),
+              Core.projectionFieldName = (Core.Name "isLabelExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
@@ -6334,14 +6334,14 @@ elementPatternFillerWithVariableDeclaration original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ElementPatternFiller"),
-              Core.projectionField = (Core.Name "isLabelExpression")})),
+              Core.projectionFieldName = (Core.Name "isLabelExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ElementPatternFiller"),
-              Core.projectionField = (Core.Name "predicate")})),
+              Core.projectionFieldName = (Core.Name "predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementPatternNode :: Phantoms.TTerm Grammar.NodePattern -> Phantoms.TTerm Grammar.ElementPattern
@@ -6401,7 +6401,7 @@ elementVariableDeclarationTemp x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ElementVariableDeclaration"),
-        Core.projectionField = (Core.Name "temp")})),
+        Core.projectionFieldName = (Core.Name "temp")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementVariableDeclarationVariable :: Phantoms.TTerm Grammar.ElementVariableDeclaration -> Phantoms.TTerm Grammar.ElementVariable
@@ -6409,7 +6409,7 @@ elementVariableDeclarationVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ElementVariableDeclaration"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 elementVariableDeclarationWithTemp :: Phantoms.TTerm Grammar.ElementVariableDeclaration -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Grammar.ElementVariableDeclaration
@@ -6425,7 +6425,7 @@ elementVariableDeclarationWithTemp original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ElementVariableDeclaration"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 elementVariableDeclarationWithVariable :: Phantoms.TTerm Grammar.ElementVariableDeclaration -> Phantoms.TTerm Grammar.ElementVariable -> Phantoms.TTerm Grammar.ElementVariableDeclaration
@@ -6438,7 +6438,7 @@ elementVariableDeclarationWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ElementVariableDeclaration"),
-              Core.projectionField = (Core.Name "temp")})),
+              Core.projectionFieldName = (Core.Name "temp")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
@@ -6501,7 +6501,7 @@ endpointPairPointingLeftDestinationAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingLeft"),
-        Core.projectionField = (Core.Name "destinationAlias")})),
+        Core.projectionFieldName = (Core.Name "destinationAlias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 endpointPairPointingLeftSourceAlias :: Phantoms.TTerm Grammar.EndpointPairPointingLeft -> Phantoms.TTerm Grammar.SourceNodeTypeAlias
@@ -6509,7 +6509,7 @@ endpointPairPointingLeftSourceAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingLeft"),
-        Core.projectionField = (Core.Name "sourceAlias")})),
+        Core.projectionFieldName = (Core.Name "sourceAlias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 endpointPairPointingLeftWithDestinationAlias :: Phantoms.TTerm Grammar.EndpointPairPointingLeft -> Phantoms.TTerm Grammar.DestinationNodeTypeAlias -> Phantoms.TTerm Grammar.EndpointPairPointingLeft
@@ -6525,7 +6525,7 @@ endpointPairPointingLeftWithDestinationAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingLeft"),
-              Core.projectionField = (Core.Name "sourceAlias")})),
+              Core.projectionFieldName = (Core.Name "sourceAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 endpointPairPointingLeftWithSourceAlias :: Phantoms.TTerm Grammar.EndpointPairPointingLeft -> Phantoms.TTerm Grammar.SourceNodeTypeAlias -> Phantoms.TTerm Grammar.EndpointPairPointingLeft
@@ -6538,7 +6538,7 @@ endpointPairPointingLeftWithSourceAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingLeft"),
-              Core.projectionField = (Core.Name "destinationAlias")})),
+              Core.projectionFieldName = (Core.Name "destinationAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sourceAlias"),
@@ -6564,7 +6564,7 @@ endpointPairPointingRightConnector x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingRight"),
-        Core.projectionField = (Core.Name "connector")})),
+        Core.projectionFieldName = (Core.Name "connector")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 endpointPairPointingRightDestinationAlias :: Phantoms.TTerm Grammar.EndpointPairPointingRight -> Phantoms.TTerm Grammar.DestinationNodeTypeAlias
@@ -6572,7 +6572,7 @@ endpointPairPointingRightDestinationAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingRight"),
-        Core.projectionField = (Core.Name "destinationAlias")})),
+        Core.projectionFieldName = (Core.Name "destinationAlias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 endpointPairPointingRightSourceAlias :: Phantoms.TTerm Grammar.EndpointPairPointingRight -> Phantoms.TTerm Grammar.SourceNodeTypeAlias
@@ -6580,7 +6580,7 @@ endpointPairPointingRightSourceAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingRight"),
-        Core.projectionField = (Core.Name "sourceAlias")})),
+        Core.projectionFieldName = (Core.Name "sourceAlias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 endpointPairPointingRightWithConnector :: Phantoms.TTerm Grammar.EndpointPairPointingRight -> Phantoms.TTerm Grammar.ConnectorPointingRight -> Phantoms.TTerm Grammar.EndpointPairPointingRight
@@ -6593,7 +6593,7 @@ endpointPairPointingRightWithConnector original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingRight"),
-              Core.projectionField = (Core.Name "sourceAlias")})),
+              Core.projectionFieldName = (Core.Name "sourceAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "connector"),
@@ -6603,7 +6603,7 @@ endpointPairPointingRightWithConnector original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingRight"),
-              Core.projectionField = (Core.Name "destinationAlias")})),
+              Core.projectionFieldName = (Core.Name "destinationAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 endpointPairPointingRightWithDestinationAlias :: Phantoms.TTerm Grammar.EndpointPairPointingRight -> Phantoms.TTerm Grammar.DestinationNodeTypeAlias -> Phantoms.TTerm Grammar.EndpointPairPointingRight
@@ -6616,14 +6616,14 @@ endpointPairPointingRightWithDestinationAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingRight"),
-              Core.projectionField = (Core.Name "sourceAlias")})),
+              Core.projectionFieldName = (Core.Name "sourceAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "connector"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingRight"),
-              Core.projectionField = (Core.Name "connector")})),
+              Core.projectionFieldName = (Core.Name "connector")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destinationAlias"),
@@ -6642,14 +6642,14 @@ endpointPairPointingRightWithSourceAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingRight"),
-              Core.projectionField = (Core.Name "connector")})),
+              Core.projectionFieldName = (Core.Name "connector")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destinationAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairPointingRight"),
-              Core.projectionField = (Core.Name "destinationAlias")})),
+              Core.projectionFieldName = (Core.Name "destinationAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 endpointPairUndirected :: Phantoms.TTerm Grammar.SourceNodeTypeAlias -> Phantoms.TTerm Grammar.ConnectorUndirected -> Phantoms.TTerm Grammar.DestinationNodeTypeAlias -> Phantoms.TTerm Grammar.EndpointPairUndirected
@@ -6672,7 +6672,7 @@ endpointPairUndirectedConnector x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairUndirected"),
-        Core.projectionField = (Core.Name "connector")})),
+        Core.projectionFieldName = (Core.Name "connector")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 endpointPairUndirectedDestinationAlias :: Phantoms.TTerm Grammar.EndpointPairUndirected -> Phantoms.TTerm Grammar.DestinationNodeTypeAlias
@@ -6680,7 +6680,7 @@ endpointPairUndirectedDestinationAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairUndirected"),
-        Core.projectionField = (Core.Name "destinationAlias")})),
+        Core.projectionFieldName = (Core.Name "destinationAlias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 endpointPairUndirectedPair :: Phantoms.TTerm Grammar.EndpointPairUndirected -> Phantoms.TTerm Grammar.EndpointPair
@@ -6696,7 +6696,7 @@ endpointPairUndirectedSourceAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairUndirected"),
-        Core.projectionField = (Core.Name "sourceAlias")})),
+        Core.projectionFieldName = (Core.Name "sourceAlias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 endpointPairUndirectedWithConnector :: Phantoms.TTerm Grammar.EndpointPairUndirected -> Phantoms.TTerm Grammar.ConnectorUndirected -> Phantoms.TTerm Grammar.EndpointPairUndirected
@@ -6709,7 +6709,7 @@ endpointPairUndirectedWithConnector original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairUndirected"),
-              Core.projectionField = (Core.Name "sourceAlias")})),
+              Core.projectionFieldName = (Core.Name "sourceAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "connector"),
@@ -6719,7 +6719,7 @@ endpointPairUndirectedWithConnector original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairUndirected"),
-              Core.projectionField = (Core.Name "destinationAlias")})),
+              Core.projectionFieldName = (Core.Name "destinationAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 endpointPairUndirectedWithDestinationAlias :: Phantoms.TTerm Grammar.EndpointPairUndirected -> Phantoms.TTerm Grammar.DestinationNodeTypeAlias -> Phantoms.TTerm Grammar.EndpointPairUndirected
@@ -6732,14 +6732,14 @@ endpointPairUndirectedWithDestinationAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairUndirected"),
-              Core.projectionField = (Core.Name "sourceAlias")})),
+              Core.projectionFieldName = (Core.Name "sourceAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "connector"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairUndirected"),
-              Core.projectionField = (Core.Name "connector")})),
+              Core.projectionFieldName = (Core.Name "connector")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destinationAlias"),
@@ -6758,14 +6758,14 @@ endpointPairUndirectedWithSourceAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairUndirected"),
-              Core.projectionField = (Core.Name "connector")})),
+              Core.projectionFieldName = (Core.Name "connector")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "destinationAlias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.EndpointPairUndirected"),
-              Core.projectionField = (Core.Name "destinationAlias")})),
+              Core.projectionFieldName = (Core.Name "destinationAlias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 exactNumericLiteralCommonWithSuffix :: Phantoms.TTerm String -> Phantoms.TTerm Grammar.ExactNumericLiteral
@@ -6881,7 +6881,7 @@ fieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Field"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldType :: Phantoms.TTerm Grammar.FieldName -> Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Grammar.ValueType -> Phantoms.TTerm Grammar.FieldType
@@ -6904,7 +6904,7 @@ fieldTypeFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FieldType"),
-        Core.projectionField = (Core.Name "fieldName")})),
+        Core.projectionFieldName = (Core.Name "fieldName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldTypeTyped :: Phantoms.TTerm Grammar.FieldType -> Phantoms.TTerm (Maybe Grammar.Typed)
@@ -6912,7 +6912,7 @@ fieldTypeTyped x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FieldType"),
-        Core.projectionField = (Core.Name "typed")})),
+        Core.projectionFieldName = (Core.Name "typed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldTypeValueType :: Phantoms.TTerm Grammar.FieldType -> Phantoms.TTerm Grammar.ValueType
@@ -6920,7 +6920,7 @@ fieldTypeValueType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FieldType"),
-        Core.projectionField = (Core.Name "valueType")})),
+        Core.projectionFieldName = (Core.Name "valueType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldTypeWithFieldName :: Phantoms.TTerm Grammar.FieldType -> Phantoms.TTerm Grammar.FieldName -> Phantoms.TTerm Grammar.FieldType
@@ -6936,14 +6936,14 @@ fieldTypeWithFieldName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FieldType"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FieldType"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldTypeWithTyped :: Phantoms.TTerm Grammar.FieldType -> Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Grammar.FieldType
@@ -6956,7 +6956,7 @@ fieldTypeWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FieldType"),
-              Core.projectionField = (Core.Name "fieldName")})),
+              Core.projectionFieldName = (Core.Name "fieldName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typed"),
@@ -6966,7 +6966,7 @@ fieldTypeWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FieldType"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldTypeWithValueType :: Phantoms.TTerm Grammar.FieldType -> Phantoms.TTerm Grammar.ValueType -> Phantoms.TTerm Grammar.FieldType
@@ -6979,14 +6979,14 @@ fieldTypeWithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FieldType"),
-              Core.projectionField = (Core.Name "fieldName")})),
+              Core.projectionFieldName = (Core.Name "fieldName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typed"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FieldType"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
@@ -6997,7 +6997,7 @@ fieldValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Field"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 fieldWithName :: Phantoms.TTerm Grammar.Field -> Phantoms.TTerm Grammar.FieldName -> Phantoms.TTerm Grammar.Field
@@ -7013,7 +7013,7 @@ fieldWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.Field"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 fieldWithValue :: Phantoms.TTerm Grammar.Field -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.Field
@@ -7026,7 +7026,7 @@ fieldWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.Field"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -7062,7 +7062,7 @@ float128TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Float128Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 float128TypeWithNotNull :: Phantoms.TTerm Grammar.Float128Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Float128Type
@@ -7088,7 +7088,7 @@ float16TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Float16Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 float16TypeWithNotNull :: Phantoms.TTerm Grammar.Float16Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Float16Type
@@ -7114,7 +7114,7 @@ float256TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Float256Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 float256TypeWithNotNull :: Phantoms.TTerm Grammar.Float256Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Float256Type
@@ -7140,7 +7140,7 @@ float32TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Float32Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 float32TypeWithNotNull :: Phantoms.TTerm Grammar.Float32Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Float32Type
@@ -7166,7 +7166,7 @@ float64TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Float64Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 float64TypeWithNotNull :: Phantoms.TTerm Grammar.Float64Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Float64Type
@@ -7195,7 +7195,7 @@ floatTypeWithPrecisionNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FloatTypeWithPrecision"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 floatTypeWithPrecisionPrecisionAndScale :: Phantoms.TTerm Grammar.FloatTypeWithPrecision -> Phantoms.TTerm (Maybe Grammar.PrecisionAndScale)
@@ -7203,7 +7203,7 @@ floatTypeWithPrecisionPrecisionAndScale x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FloatTypeWithPrecision"),
-        Core.projectionField = (Core.Name "precisionAndScale")})),
+        Core.projectionFieldName = (Core.Name "precisionAndScale")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 floatTypeWithPrecisionWithNotNull :: Phantoms.TTerm Grammar.FloatTypeWithPrecision -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.FloatTypeWithPrecision
@@ -7216,7 +7216,7 @@ floatTypeWithPrecisionWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FloatTypeWithPrecision"),
-              Core.projectionField = (Core.Name "precisionAndScale")})),
+              Core.projectionFieldName = (Core.Name "precisionAndScale")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -7235,7 +7235,7 @@ floatTypeWithPrecisionWithPrecisionAndScale original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FloatTypeWithPrecision"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 focusedLinearDataModifyingStatementBody :: Phantoms.TTerm Grammar.UseGraphClause -> Phantoms.TTerm Grammar.SimpleLinearDataAccessingStatement -> Phantoms.TTerm (Maybe Grammar.PrimitiveResultStatement) -> Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatementBody
@@ -7258,7 +7258,7 @@ focusedLinearDataModifyingStatementBodyPrimitiveResult x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatementBody"),
-        Core.projectionField = (Core.Name "primitiveResult")})),
+        Core.projectionFieldName = (Core.Name "primitiveResult")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearDataModifyingStatementBodySimpleAccess :: Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatementBody -> Phantoms.TTerm Grammar.SimpleLinearDataAccessingStatement
@@ -7266,7 +7266,7 @@ focusedLinearDataModifyingStatementBodySimpleAccess x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatementBody"),
-        Core.projectionField = (Core.Name "simpleAccess")})),
+        Core.projectionFieldName = (Core.Name "simpleAccess")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearDataModifyingStatementBodyUseGraph :: Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatementBody -> Phantoms.TTerm Grammar.UseGraphClause
@@ -7274,7 +7274,7 @@ focusedLinearDataModifyingStatementBodyUseGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatementBody"),
-        Core.projectionField = (Core.Name "useGraph")})),
+        Core.projectionFieldName = (Core.Name "useGraph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearDataModifyingStatementBodyWithPrimitiveResult :: Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatementBody -> Phantoms.TTerm (Maybe Grammar.PrimitiveResultStatement) -> Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatementBody
@@ -7287,14 +7287,14 @@ focusedLinearDataModifyingStatementBodyWithPrimitiveResult original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatementBody"),
-              Core.projectionField = (Core.Name "useGraph")})),
+              Core.projectionFieldName = (Core.Name "useGraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "simpleAccess"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatementBody"),
-              Core.projectionField = (Core.Name "simpleAccess")})),
+              Core.projectionFieldName = (Core.Name "simpleAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primitiveResult"),
@@ -7310,7 +7310,7 @@ focusedLinearDataModifyingStatementBodyWithSimpleAccess original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatementBody"),
-              Core.projectionField = (Core.Name "useGraph")})),
+              Core.projectionFieldName = (Core.Name "useGraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "simpleAccess"),
@@ -7320,7 +7320,7 @@ focusedLinearDataModifyingStatementBodyWithSimpleAccess original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatementBody"),
-              Core.projectionField = (Core.Name "primitiveResult")})),
+              Core.projectionFieldName = (Core.Name "primitiveResult")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 focusedLinearDataModifyingStatementBodyWithUseGraph :: Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatementBody -> Phantoms.TTerm Grammar.UseGraphClause -> Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatementBody
@@ -7336,14 +7336,14 @@ focusedLinearDataModifyingStatementBodyWithUseGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatementBody"),
-              Core.projectionField = (Core.Name "simpleAccess")})),
+              Core.projectionFieldName = (Core.Name "simpleAccess")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primitiveResult"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearDataModifyingStatementBody"),
-              Core.projectionField = (Core.Name "primitiveResult")})),
+              Core.projectionFieldName = (Core.Name "primitiveResult")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 focusedLinearDataModifyingStatementNested :: Phantoms.TTerm Grammar.FocusedNestedDataModifyingProcedureSpecification -> Phantoms.TTerm Grammar.FocusedLinearDataModifyingStatement
@@ -7382,7 +7382,7 @@ focusedLinearQueryAndPrimitiveResultStatementPartPrimitiveResult x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryAndPrimitiveResultStatementPart"),
-        Core.projectionField = (Core.Name "primitiveResult")})),
+        Core.projectionFieldName = (Core.Name "primitiveResult")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearQueryAndPrimitiveResultStatementPartSimple :: Phantoms.TTerm Grammar.FocusedLinearQueryAndPrimitiveResultStatementPart -> Phantoms.TTerm Grammar.SimpleLinearQueryStatement
@@ -7390,7 +7390,7 @@ focusedLinearQueryAndPrimitiveResultStatementPartSimple x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryAndPrimitiveResultStatementPart"),
-        Core.projectionField = (Core.Name "simple")})),
+        Core.projectionFieldName = (Core.Name "simple")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearQueryAndPrimitiveResultStatementPartUseGraph :: Phantoms.TTerm Grammar.FocusedLinearQueryAndPrimitiveResultStatementPart -> Phantoms.TTerm Grammar.UseGraphClause
@@ -7398,7 +7398,7 @@ focusedLinearQueryAndPrimitiveResultStatementPartUseGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryAndPrimitiveResultStatementPart"),
-        Core.projectionField = (Core.Name "useGraph")})),
+        Core.projectionFieldName = (Core.Name "useGraph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearQueryAndPrimitiveResultStatementPartWithPrimitiveResult :: Phantoms.TTerm Grammar.FocusedLinearQueryAndPrimitiveResultStatementPart -> Phantoms.TTerm Grammar.PrimitiveResultStatement -> Phantoms.TTerm Grammar.FocusedLinearQueryAndPrimitiveResultStatementPart
@@ -7411,14 +7411,14 @@ focusedLinearQueryAndPrimitiveResultStatementPartWithPrimitiveResult original ne
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryAndPrimitiveResultStatementPart"),
-              Core.projectionField = (Core.Name "useGraph")})),
+              Core.projectionFieldName = (Core.Name "useGraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "simple"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryAndPrimitiveResultStatementPart"),
-              Core.projectionField = (Core.Name "simple")})),
+              Core.projectionFieldName = (Core.Name "simple")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primitiveResult"),
@@ -7434,7 +7434,7 @@ focusedLinearQueryAndPrimitiveResultStatementPartWithSimple original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryAndPrimitiveResultStatementPart"),
-              Core.projectionField = (Core.Name "useGraph")})),
+              Core.projectionFieldName = (Core.Name "useGraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "simple"),
@@ -7444,7 +7444,7 @@ focusedLinearQueryAndPrimitiveResultStatementPartWithSimple original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryAndPrimitiveResultStatementPart"),
-              Core.projectionField = (Core.Name "primitiveResult")})),
+              Core.projectionFieldName = (Core.Name "primitiveResult")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 focusedLinearQueryAndPrimitiveResultStatementPartWithUseGraph :: Phantoms.TTerm Grammar.FocusedLinearQueryAndPrimitiveResultStatementPart -> Phantoms.TTerm Grammar.UseGraphClause -> Phantoms.TTerm Grammar.FocusedLinearQueryAndPrimitiveResultStatementPart
@@ -7460,14 +7460,14 @@ focusedLinearQueryAndPrimitiveResultStatementPartWithUseGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryAndPrimitiveResultStatementPart"),
-              Core.projectionField = (Core.Name "simple")})),
+              Core.projectionFieldName = (Core.Name "simple")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primitiveResult"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryAndPrimitiveResultStatementPart"),
-              Core.projectionField = (Core.Name "primitiveResult")})),
+              Core.projectionFieldName = (Core.Name "primitiveResult")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 focusedLinearQueryStatementNested :: Phantoms.TTerm Grammar.FocusedNestedQuerySpecification -> Phantoms.TTerm Grammar.FocusedLinearQueryStatement
@@ -7495,7 +7495,7 @@ focusedLinearQueryStatementPartSimple x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatementPart"),
-        Core.projectionField = (Core.Name "simple")})),
+        Core.projectionFieldName = (Core.Name "simple")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearQueryStatementPartUseGraph :: Phantoms.TTerm Grammar.FocusedLinearQueryStatementPart -> Phantoms.TTerm Grammar.UseGraphClause
@@ -7503,7 +7503,7 @@ focusedLinearQueryStatementPartUseGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatementPart"),
-        Core.projectionField = (Core.Name "useGraph")})),
+        Core.projectionFieldName = (Core.Name "useGraph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearQueryStatementPartWithSimple :: Phantoms.TTerm Grammar.FocusedLinearQueryStatementPart -> Phantoms.TTerm Grammar.SimpleLinearQueryStatement -> Phantoms.TTerm Grammar.FocusedLinearQueryStatementPart
@@ -7516,7 +7516,7 @@ focusedLinearQueryStatementPartWithSimple original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatementPart"),
-              Core.projectionField = (Core.Name "useGraph")})),
+              Core.projectionFieldName = (Core.Name "useGraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "simple"),
@@ -7535,7 +7535,7 @@ focusedLinearQueryStatementPartWithUseGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatementPart"),
-              Core.projectionField = (Core.Name "simple")})),
+              Core.projectionFieldName = (Core.Name "simple")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 focusedLinearQueryStatementParts :: Phantoms.TTerm Grammar.FocusedLinearQueryStatementPartsAndResult -> Phantoms.TTerm Grammar.FocusedLinearQueryStatement
@@ -7563,7 +7563,7 @@ focusedLinearQueryStatementPartsAndResultParts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatementPartsAndResult"),
-        Core.projectionField = (Core.Name "parts")})),
+        Core.projectionFieldName = (Core.Name "parts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearQueryStatementPartsAndResultResult :: Phantoms.TTerm Grammar.FocusedLinearQueryStatementPartsAndResult -> Phantoms.TTerm Grammar.FocusedLinearQueryAndPrimitiveResultStatementPart
@@ -7571,7 +7571,7 @@ focusedLinearQueryStatementPartsAndResultResult x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatementPartsAndResult"),
-        Core.projectionField = (Core.Name "result")})),
+        Core.projectionFieldName = (Core.Name "result")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedLinearQueryStatementPartsAndResultWithParts :: Phantoms.TTerm Grammar.FocusedLinearQueryStatementPartsAndResult -> Phantoms.TTerm [Grammar.FocusedLinearQueryStatementPart] -> Phantoms.TTerm Grammar.FocusedLinearQueryStatementPartsAndResult
@@ -7587,7 +7587,7 @@ focusedLinearQueryStatementPartsAndResultWithParts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatementPartsAndResult"),
-              Core.projectionField = (Core.Name "result")})),
+              Core.projectionFieldName = (Core.Name "result")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 focusedLinearQueryStatementPartsAndResultWithResult :: Phantoms.TTerm Grammar.FocusedLinearQueryStatementPartsAndResult -> Phantoms.TTerm Grammar.FocusedLinearQueryAndPrimitiveResultStatementPart -> Phantoms.TTerm Grammar.FocusedLinearQueryStatementPartsAndResult
@@ -7600,7 +7600,7 @@ focusedLinearQueryStatementPartsAndResultWithResult original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedLinearQueryStatementPartsAndResult"),
-              Core.projectionField = (Core.Name "parts")})),
+              Core.projectionFieldName = (Core.Name "parts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "result"),
@@ -7639,7 +7639,7 @@ focusedNestedDataModifyingProcedureSpecificationNestedSpec x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedNestedDataModifyingProcedureSpecification"),
-        Core.projectionField = (Core.Name "nestedSpec")})),
+        Core.projectionFieldName = (Core.Name "nestedSpec")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedNestedDataModifyingProcedureSpecificationUseGraph :: Phantoms.TTerm Grammar.FocusedNestedDataModifyingProcedureSpecification -> Phantoms.TTerm Grammar.UseGraphClause
@@ -7647,7 +7647,7 @@ focusedNestedDataModifyingProcedureSpecificationUseGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedNestedDataModifyingProcedureSpecification"),
-        Core.projectionField = (Core.Name "useGraph")})),
+        Core.projectionFieldName = (Core.Name "useGraph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedNestedDataModifyingProcedureSpecificationWithNestedSpec :: Phantoms.TTerm Grammar.FocusedNestedDataModifyingProcedureSpecification -> Phantoms.TTerm Grammar.NestedDataModifyingProcedureSpecification -> Phantoms.TTerm Grammar.FocusedNestedDataModifyingProcedureSpecification
@@ -7660,7 +7660,7 @@ focusedNestedDataModifyingProcedureSpecificationWithNestedSpec original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedNestedDataModifyingProcedureSpecification"),
-              Core.projectionField = (Core.Name "useGraph")})),
+              Core.projectionFieldName = (Core.Name "useGraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nestedSpec"),
@@ -7679,7 +7679,7 @@ focusedNestedDataModifyingProcedureSpecificationWithUseGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedNestedDataModifyingProcedureSpecification"),
-              Core.projectionField = (Core.Name "nestedSpec")})),
+              Core.projectionFieldName = (Core.Name "nestedSpec")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 focusedNestedQuerySpecification :: Phantoms.TTerm Grammar.UseGraphClause -> Phantoms.TTerm Grammar.NestedQuerySpecification -> Phantoms.TTerm Grammar.FocusedNestedQuerySpecification
@@ -7699,7 +7699,7 @@ focusedNestedQuerySpecificationNested x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedNestedQuerySpecification"),
-        Core.projectionField = (Core.Name "nested")})),
+        Core.projectionFieldName = (Core.Name "nested")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedNestedQuerySpecificationUseGraph :: Phantoms.TTerm Grammar.FocusedNestedQuerySpecification -> Phantoms.TTerm Grammar.UseGraphClause
@@ -7707,7 +7707,7 @@ focusedNestedQuerySpecificationUseGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedNestedQuerySpecification"),
-        Core.projectionField = (Core.Name "useGraph")})),
+        Core.projectionFieldName = (Core.Name "useGraph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedNestedQuerySpecificationWithNested :: Phantoms.TTerm Grammar.FocusedNestedQuerySpecification -> Phantoms.TTerm Grammar.NestedQuerySpecification -> Phantoms.TTerm Grammar.FocusedNestedQuerySpecification
@@ -7720,7 +7720,7 @@ focusedNestedQuerySpecificationWithNested original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedNestedQuerySpecification"),
-              Core.projectionField = (Core.Name "useGraph")})),
+              Core.projectionFieldName = (Core.Name "useGraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nested"),
@@ -7739,7 +7739,7 @@ focusedNestedQuerySpecificationWithUseGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedNestedQuerySpecification"),
-              Core.projectionField = (Core.Name "nested")})),
+              Core.projectionFieldName = (Core.Name "nested")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 focusedPrimitiveResultStatement :: Phantoms.TTerm Grammar.UseGraphClause -> Phantoms.TTerm Grammar.PrimitiveResultStatement -> Phantoms.TTerm Grammar.FocusedPrimitiveResultStatement
@@ -7759,7 +7759,7 @@ focusedPrimitiveResultStatementPrimitiveResult x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedPrimitiveResultStatement"),
-        Core.projectionField = (Core.Name "primitiveResult")})),
+        Core.projectionFieldName = (Core.Name "primitiveResult")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedPrimitiveResultStatementUseGraph :: Phantoms.TTerm Grammar.FocusedPrimitiveResultStatement -> Phantoms.TTerm Grammar.UseGraphClause
@@ -7767,7 +7767,7 @@ focusedPrimitiveResultStatementUseGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedPrimitiveResultStatement"),
-        Core.projectionField = (Core.Name "useGraph")})),
+        Core.projectionFieldName = (Core.Name "useGraph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 focusedPrimitiveResultStatementWithPrimitiveResult :: Phantoms.TTerm Grammar.FocusedPrimitiveResultStatement -> Phantoms.TTerm Grammar.PrimitiveResultStatement -> Phantoms.TTerm Grammar.FocusedPrimitiveResultStatement
@@ -7780,7 +7780,7 @@ focusedPrimitiveResultStatementWithPrimitiveResult original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedPrimitiveResultStatement"),
-              Core.projectionField = (Core.Name "useGraph")})),
+              Core.projectionFieldName = (Core.Name "useGraph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "primitiveResult"),
@@ -7799,7 +7799,7 @@ focusedPrimitiveResultStatementWithUseGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FocusedPrimitiveResultStatement"),
-              Core.projectionField = (Core.Name "primitiveResult")})),
+              Core.projectionFieldName = (Core.Name "primitiveResult")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 foldCharacterString :: Phantoms.TTerm Grammar.Case -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.FoldCharacterString
@@ -7819,7 +7819,7 @@ foldCharacterStringCase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FoldCharacterString"),
-        Core.projectionField = (Core.Name "case")})),
+        Core.projectionFieldName = (Core.Name "case")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 foldCharacterStringValueExpression :: Phantoms.TTerm Grammar.FoldCharacterString -> Phantoms.TTerm Grammar.ValueExpression
@@ -7827,7 +7827,7 @@ foldCharacterStringValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.FoldCharacterString"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 foldCharacterStringWithCase :: Phantoms.TTerm Grammar.FoldCharacterString -> Phantoms.TTerm Grammar.Case -> Phantoms.TTerm Grammar.FoldCharacterString
@@ -7843,7 +7843,7 @@ foldCharacterStringWithCase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FoldCharacterString"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 foldCharacterStringWithValueExpression :: Phantoms.TTerm Grammar.FoldCharacterString -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.FoldCharacterString
@@ -7856,7 +7856,7 @@ foldCharacterStringWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.FoldCharacterString"),
-              Core.projectionField = (Core.Name "case")})),
+              Core.projectionFieldName = (Core.Name "case")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
@@ -7879,7 +7879,7 @@ forItemAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ForItem"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forItemSource :: Phantoms.TTerm Grammar.ForItem -> Phantoms.TTerm Grammar.ForItemSource
@@ -7887,7 +7887,7 @@ forItemSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ForItem"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forItemWithAlias :: Phantoms.TTerm Grammar.ForItem -> Phantoms.TTerm Grammar.ForItemAlias -> Phantoms.TTerm Grammar.ForItem
@@ -7903,7 +7903,7 @@ forItemWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ForItem"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 forItemWithSource :: Phantoms.TTerm Grammar.ForItem -> Phantoms.TTerm Grammar.ForItemSource -> Phantoms.TTerm Grammar.ForItem
@@ -7916,7 +7916,7 @@ forItemWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ForItem"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
@@ -7939,7 +7939,7 @@ forOrdinalityOrOffsetType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ForOrdinalityOrOffset"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forOrdinalityOrOffsetVariable :: Phantoms.TTerm Grammar.ForOrdinalityOrOffset -> Phantoms.TTerm Grammar.BindingVariable
@@ -7947,7 +7947,7 @@ forOrdinalityOrOffsetVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ForOrdinalityOrOffset"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forOrdinalityOrOffsetWithType :: Phantoms.TTerm Grammar.ForOrdinalityOrOffset -> Phantoms.TTerm Grammar.OrdinalityOrOffsetType -> Phantoms.TTerm Grammar.ForOrdinalityOrOffset
@@ -7963,7 +7963,7 @@ forOrdinalityOrOffsetWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ForOrdinalityOrOffset"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 forOrdinalityOrOffsetWithVariable :: Phantoms.TTerm Grammar.ForOrdinalityOrOffset -> Phantoms.TTerm Grammar.BindingVariable -> Phantoms.TTerm Grammar.ForOrdinalityOrOffset
@@ -7976,7 +7976,7 @@ forOrdinalityOrOffsetWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ForOrdinalityOrOffset"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variable"),
@@ -7999,7 +7999,7 @@ forStatementItem x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ForStatement"),
-        Core.projectionField = (Core.Name "item")})),
+        Core.projectionFieldName = (Core.Name "item")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forStatementOrdinalityOrOffset :: Phantoms.TTerm Grammar.ForStatement -> Phantoms.TTerm (Maybe Grammar.ForOrdinalityOrOffset)
@@ -8007,7 +8007,7 @@ forStatementOrdinalityOrOffset x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ForStatement"),
-        Core.projectionField = (Core.Name "ordinalityOrOffset")})),
+        Core.projectionFieldName = (Core.Name "ordinalityOrOffset")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 forStatementWithItem :: Phantoms.TTerm Grammar.ForStatement -> Phantoms.TTerm Grammar.ForItem -> Phantoms.TTerm Grammar.ForStatement
@@ -8023,7 +8023,7 @@ forStatementWithItem original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ForStatement"),
-              Core.projectionField = (Core.Name "ordinalityOrOffset")})),
+              Core.projectionFieldName = (Core.Name "ordinalityOrOffset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 forStatementWithOrdinalityOrOffset :: Phantoms.TTerm Grammar.ForStatement -> Phantoms.TTerm (Maybe Grammar.ForOrdinalityOrOffset) -> Phantoms.TTerm Grammar.ForStatement
@@ -8036,7 +8036,7 @@ forStatementWithOrdinalityOrOffset original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ForStatement"),
-              Core.projectionField = (Core.Name "item")})),
+              Core.projectionFieldName = (Core.Name "item")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ordinalityOrOffset"),
@@ -8179,7 +8179,7 @@ generalLogarithmFunctionArgument x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralLogarithmFunction"),
-        Core.projectionField = (Core.Name "argument")})),
+        Core.projectionFieldName = (Core.Name "argument")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 generalLogarithmFunctionBase :: Phantoms.TTerm Grammar.GeneralLogarithmFunction -> Phantoms.TTerm Grammar.GeneralLogarithmBase
@@ -8187,7 +8187,7 @@ generalLogarithmFunctionBase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralLogarithmFunction"),
-        Core.projectionField = (Core.Name "base")})),
+        Core.projectionFieldName = (Core.Name "base")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 generalLogarithmFunctionWithArgument :: Phantoms.TTerm Grammar.GeneralLogarithmFunction -> Phantoms.TTerm Grammar.GeneralLogarithmArgument -> Phantoms.TTerm Grammar.GeneralLogarithmFunction
@@ -8200,7 +8200,7 @@ generalLogarithmFunctionWithArgument original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralLogarithmFunction"),
-              Core.projectionField = (Core.Name "base")})),
+              Core.projectionFieldName = (Core.Name "base")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "argument"),
@@ -8219,7 +8219,7 @@ generalLogarithmFunctionWithBase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralLogarithmFunction"),
-              Core.projectionField = (Core.Name "argument")})),
+              Core.projectionFieldName = (Core.Name "argument")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 generalQuantifier :: Phantoms.TTerm (Maybe Grammar.LowerBound) -> Phantoms.TTerm (Maybe Grammar.UpperBound) -> Phantoms.TTerm Grammar.GeneralQuantifier
@@ -8239,7 +8239,7 @@ generalQuantifierLowerBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralQuantifier"),
-        Core.projectionField = (Core.Name "lowerBound")})),
+        Core.projectionFieldName = (Core.Name "lowerBound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 generalQuantifierUpperBound :: Phantoms.TTerm Grammar.GeneralQuantifier -> Phantoms.TTerm (Maybe Grammar.UpperBound)
@@ -8247,7 +8247,7 @@ generalQuantifierUpperBound x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralQuantifier"),
-        Core.projectionField = (Core.Name "upperBound")})),
+        Core.projectionFieldName = (Core.Name "upperBound")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 generalQuantifierWithLowerBound :: Phantoms.TTerm Grammar.GeneralQuantifier -> Phantoms.TTerm (Maybe Grammar.LowerBound) -> Phantoms.TTerm Grammar.GeneralQuantifier
@@ -8263,7 +8263,7 @@ generalQuantifierWithLowerBound original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralQuantifier"),
-              Core.projectionField = (Core.Name "upperBound")})),
+              Core.projectionFieldName = (Core.Name "upperBound")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 generalQuantifierWithUpperBound :: Phantoms.TTerm Grammar.GeneralQuantifier -> Phantoms.TTerm (Maybe Grammar.UpperBound) -> Phantoms.TTerm Grammar.GeneralQuantifier
@@ -8276,7 +8276,7 @@ generalQuantifierWithUpperBound original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralQuantifier"),
-              Core.projectionField = (Core.Name "lowerBound")})),
+              Core.projectionFieldName = (Core.Name "lowerBound")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "upperBound"),
@@ -8302,7 +8302,7 @@ generalSetFunctionFunctionType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunction"),
-        Core.projectionField = (Core.Name "functionType")})),
+        Core.projectionFieldName = (Core.Name "functionType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 generalSetFunctionSetQuantifier :: Phantoms.TTerm Grammar.GeneralSetFunction -> Phantoms.TTerm (Maybe Grammar.SetQuantifier)
@@ -8310,7 +8310,7 @@ generalSetFunctionSetQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunction"),
-        Core.projectionField = (Core.Name "setQuantifier")})),
+        Core.projectionFieldName = (Core.Name "setQuantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 generalSetFunctionTypeAvg :: Phantoms.TTerm Grammar.GeneralSetFunctionType
@@ -8382,7 +8382,7 @@ generalSetFunctionValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunction"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 generalSetFunctionWithFunctionType :: Phantoms.TTerm Grammar.GeneralSetFunction -> Phantoms.TTerm Grammar.GeneralSetFunctionType -> Phantoms.TTerm Grammar.GeneralSetFunction
@@ -8398,14 +8398,14 @@ generalSetFunctionWithFunctionType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunction"),
-              Core.projectionField = (Core.Name "setQuantifier")})),
+              Core.projectionFieldName = (Core.Name "setQuantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunction"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 generalSetFunctionWithSetQuantifier :: Phantoms.TTerm Grammar.GeneralSetFunction -> Phantoms.TTerm (Maybe Grammar.SetQuantifier) -> Phantoms.TTerm Grammar.GeneralSetFunction
@@ -8418,7 +8418,7 @@ generalSetFunctionWithSetQuantifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunction"),
-              Core.projectionField = (Core.Name "functionType")})),
+              Core.projectionFieldName = (Core.Name "functionType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "setQuantifier"),
@@ -8428,7 +8428,7 @@ generalSetFunctionWithSetQuantifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunction"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 generalSetFunctionWithValueExpression :: Phantoms.TTerm Grammar.GeneralSetFunction -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.GeneralSetFunction
@@ -8441,14 +8441,14 @@ generalSetFunctionWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunction"),
-              Core.projectionField = (Core.Name "functionType")})),
+              Core.projectionFieldName = (Core.Name "functionType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "setQuantifier"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GeneralSetFunction"),
-              Core.projectionField = (Core.Name "setQuantifier")})),
+              Core.projectionFieldName = (Core.Name "setQuantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
@@ -8487,7 +8487,7 @@ gqlProgramActivity x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GqlProgram"),
-        Core.projectionField = (Core.Name "activity")})),
+        Core.projectionFieldName = (Core.Name "activity")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 gqlProgramClose :: Phantoms.TTerm Grammar.GqlProgram -> Phantoms.TTerm (Maybe Grammar.SessionCloseCommand)
@@ -8495,7 +8495,7 @@ gqlProgramClose x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GqlProgram"),
-        Core.projectionField = (Core.Name "close")})),
+        Core.projectionFieldName = (Core.Name "close")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 gqlProgramWithActivity :: Phantoms.TTerm Grammar.GqlProgram -> Phantoms.TTerm (Maybe Grammar.ProgramActivity) -> Phantoms.TTerm Grammar.GqlProgram
@@ -8511,7 +8511,7 @@ gqlProgramWithActivity original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GqlProgram"),
-              Core.projectionField = (Core.Name "close")})),
+              Core.projectionFieldName = (Core.Name "close")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 gqlProgramWithClose :: Phantoms.TTerm Grammar.GqlProgram -> Phantoms.TTerm (Maybe Grammar.SessionCloseCommand) -> Phantoms.TTerm Grammar.GqlProgram
@@ -8524,7 +8524,7 @@ gqlProgramWithClose original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GqlProgram"),
-              Core.projectionField = (Core.Name "activity")})),
+              Core.projectionFieldName = (Core.Name "activity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "close"),
@@ -8547,7 +8547,7 @@ graphAndNestedQuerySpecificationGraphExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphAndNestedQuerySpecification"),
-        Core.projectionField = (Core.Name "graphExpression")})),
+        Core.projectionFieldName = (Core.Name "graphExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphAndNestedQuerySpecificationNested :: Phantoms.TTerm Grammar.GraphAndNestedQuerySpecification -> Phantoms.TTerm Grammar.NestedQuerySpecification
@@ -8555,7 +8555,7 @@ graphAndNestedQuerySpecificationNested x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphAndNestedQuerySpecification"),
-        Core.projectionField = (Core.Name "nested")})),
+        Core.projectionFieldName = (Core.Name "nested")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphAndNestedQuerySpecificationWithGraphExpression :: Phantoms.TTerm Grammar.GraphAndNestedQuerySpecification -> Phantoms.TTerm Grammar.GraphExpression -> Phantoms.TTerm Grammar.GraphAndNestedQuerySpecification
@@ -8571,7 +8571,7 @@ graphAndNestedQuerySpecificationWithGraphExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphAndNestedQuerySpecification"),
-              Core.projectionField = (Core.Name "nested")})),
+              Core.projectionFieldName = (Core.Name "nested")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphAndNestedQuerySpecificationWithNested :: Phantoms.TTerm Grammar.GraphAndNestedQuerySpecification -> Phantoms.TTerm Grammar.NestedQuerySpecification -> Phantoms.TTerm Grammar.GraphAndNestedQuerySpecification
@@ -8584,7 +8584,7 @@ graphAndNestedQuerySpecificationWithNested original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphAndNestedQuerySpecification"),
-              Core.projectionField = (Core.Name "graphExpression")})),
+              Core.projectionFieldName = (Core.Name "graphExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nested"),
@@ -8657,7 +8657,7 @@ graphPatternBindingTablePattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPatternBindingTable"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphPatternBindingTableWithPattern :: Phantoms.TTerm Grammar.GraphPatternBindingTable -> Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm Grammar.GraphPatternBindingTable
@@ -8673,7 +8673,7 @@ graphPatternBindingTableWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPatternBindingTable"),
-              Core.projectionField = (Core.Name "yieldClause")})),
+              Core.projectionFieldName = (Core.Name "yieldClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphPatternBindingTableWithYieldClause :: Phantoms.TTerm Grammar.GraphPatternBindingTable -> Phantoms.TTerm (Maybe Grammar.GraphPatternYieldClause) -> Phantoms.TTerm Grammar.GraphPatternBindingTable
@@ -8686,7 +8686,7 @@ graphPatternBindingTableWithYieldClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPatternBindingTable"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "yieldClause"),
@@ -8697,7 +8697,7 @@ graphPatternBindingTableYieldClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPatternBindingTable"),
-        Core.projectionField = (Core.Name "yieldClause")})),
+        Core.projectionFieldName = (Core.Name "yieldClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphPatternKeepClause :: Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm (Maybe Grammar.KeepClause)
@@ -8705,7 +8705,7 @@ graphPatternKeepClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-        Core.projectionField = (Core.Name "keepClause")})),
+        Core.projectionFieldName = (Core.Name "keepClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphPatternMatchMode :: Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm (Maybe Grammar.MatchMode)
@@ -8713,7 +8713,7 @@ graphPatternMatchMode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-        Core.projectionField = (Core.Name "matchMode")})),
+        Core.projectionFieldName = (Core.Name "matchMode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphPatternPathPatterns :: Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm Grammar.PathPatternList
@@ -8721,7 +8721,7 @@ graphPatternPathPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-        Core.projectionField = (Core.Name "pathPatterns")})),
+        Core.projectionFieldName = (Core.Name "pathPatterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphPatternQuantifierAsterisk :: Phantoms.TTerm Grammar.GraphPatternQuantifier
@@ -8761,7 +8761,7 @@ graphPatternWhereClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-        Core.projectionField = (Core.Name "whereClause")})),
+        Core.projectionFieldName = (Core.Name "whereClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphPatternWithKeepClause :: Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm (Maybe Grammar.KeepClause) -> Phantoms.TTerm Grammar.GraphPattern
@@ -8774,14 +8774,14 @@ graphPatternWithKeepClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "matchMode")})),
+              Core.projectionFieldName = (Core.Name "matchMode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pathPatterns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "pathPatterns")})),
+              Core.projectionFieldName = (Core.Name "pathPatterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "keepClause"),
@@ -8791,7 +8791,7 @@ graphPatternWithKeepClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphPatternWithMatchMode :: Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm (Maybe Grammar.MatchMode) -> Phantoms.TTerm Grammar.GraphPattern
@@ -8807,21 +8807,21 @@ graphPatternWithMatchMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "pathPatterns")})),
+              Core.projectionFieldName = (Core.Name "pathPatterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "keepClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "keepClause")})),
+              Core.projectionFieldName = (Core.Name "keepClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphPatternWithPathPatterns :: Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm Grammar.PathPatternList -> Phantoms.TTerm Grammar.GraphPattern
@@ -8834,7 +8834,7 @@ graphPatternWithPathPatterns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "matchMode")})),
+              Core.projectionFieldName = (Core.Name "matchMode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pathPatterns"),
@@ -8844,14 +8844,14 @@ graphPatternWithPathPatterns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "keepClause")})),
+              Core.projectionFieldName = (Core.Name "keepClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 graphPatternWithWhereClause :: Phantoms.TTerm Grammar.GraphPattern -> Phantoms.TTerm (Maybe Grammar.GraphPatternWhereClause) -> Phantoms.TTerm Grammar.GraphPattern
@@ -8864,21 +8864,21 @@ graphPatternWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "matchMode")})),
+              Core.projectionFieldName = (Core.Name "matchMode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pathPatterns"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "pathPatterns")})),
+              Core.projectionFieldName = (Core.Name "pathPatterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "keepClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphPattern"),
-              Core.projectionField = (Core.Name "keepClause")})),
+              Core.projectionFieldName = (Core.Name "keepClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
@@ -9021,7 +9021,7 @@ graphVariableDefinitionInitializer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphVariableDefinition"),
-        Core.projectionField = (Core.Name "initializer")})),
+        Core.projectionFieldName = (Core.Name "initializer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphVariableDefinitionVariable :: Phantoms.TTerm Grammar.GraphVariableDefinition -> Phantoms.TTerm Grammar.BindingVariable
@@ -9029,7 +9029,7 @@ graphVariableDefinitionVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.GraphVariableDefinition"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 graphVariableDefinitionWithInitializer :: Phantoms.TTerm Grammar.GraphVariableDefinition -> Phantoms.TTerm Grammar.OptTypedGraphInitializer -> Phantoms.TTerm Grammar.GraphVariableDefinition
@@ -9042,7 +9042,7 @@ graphVariableDefinitionWithInitializer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphVariableDefinition"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "initializer"),
@@ -9061,7 +9061,7 @@ graphVariableDefinitionWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.GraphVariableDefinition"),
-              Core.projectionField = (Core.Name "initializer")})),
+              Core.projectionFieldName = (Core.Name "initializer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 groupingElementListElements :: Phantoms.TTerm [Grammar.GroupingElement] -> Phantoms.TTerm Grammar.GroupingElementList
@@ -9145,7 +9145,7 @@ inlineProcedureCallNested x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.InlineProcedureCall"),
-        Core.projectionField = (Core.Name "nested")})),
+        Core.projectionFieldName = (Core.Name "nested")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineProcedureCallScope :: Phantoms.TTerm Grammar.InlineProcedureCall -> Phantoms.TTerm (Maybe Grammar.VariableScopeClause)
@@ -9153,7 +9153,7 @@ inlineProcedureCallScope x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.InlineProcedureCall"),
-        Core.projectionField = (Core.Name "scope")})),
+        Core.projectionFieldName = (Core.Name "scope")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineProcedureCallWithNested :: Phantoms.TTerm Grammar.InlineProcedureCall -> Phantoms.TTerm Grammar.NestedProcedureSpecification -> Phantoms.TTerm Grammar.InlineProcedureCall
@@ -9166,7 +9166,7 @@ inlineProcedureCallWithNested original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.InlineProcedureCall"),
-              Core.projectionField = (Core.Name "scope")})),
+              Core.projectionFieldName = (Core.Name "scope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nested"),
@@ -9185,7 +9185,7 @@ inlineProcedureCallWithScope original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.InlineProcedureCall"),
-              Core.projectionField = (Core.Name "nested")})),
+              Core.projectionFieldName = (Core.Name "nested")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 insertEdgeAndNode :: Phantoms.TTerm Grammar.InsertEdgePattern -> Phantoms.TTerm Grammar.InsertNodePattern -> Phantoms.TTerm Grammar.InsertEdgeAndNode
@@ -9205,7 +9205,7 @@ insertEdgeAndNodeEdge x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.InsertEdgeAndNode"),
-        Core.projectionField = (Core.Name "edge")})),
+        Core.projectionFieldName = (Core.Name "edge")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 insertEdgeAndNodeNode :: Phantoms.TTerm Grammar.InsertEdgeAndNode -> Phantoms.TTerm Grammar.InsertNodePattern
@@ -9213,7 +9213,7 @@ insertEdgeAndNodeNode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.InsertEdgeAndNode"),
-        Core.projectionField = (Core.Name "node")})),
+        Core.projectionFieldName = (Core.Name "node")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 insertEdgeAndNodeWithEdge :: Phantoms.TTerm Grammar.InsertEdgeAndNode -> Phantoms.TTerm Grammar.InsertEdgePattern -> Phantoms.TTerm Grammar.InsertEdgeAndNode
@@ -9229,7 +9229,7 @@ insertEdgeAndNodeWithEdge original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.InsertEdgeAndNode"),
-              Core.projectionField = (Core.Name "node")})),
+              Core.projectionFieldName = (Core.Name "node")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 insertEdgeAndNodeWithNode :: Phantoms.TTerm Grammar.InsertEdgeAndNode -> Phantoms.TTerm Grammar.InsertNodePattern -> Phantoms.TTerm Grammar.InsertEdgeAndNode
@@ -9242,7 +9242,7 @@ insertEdgeAndNodeWithNode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.InsertEdgeAndNode"),
-              Core.projectionField = (Core.Name "edge")})),
+              Core.projectionFieldName = (Core.Name "edge")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "node"),
@@ -9289,7 +9289,7 @@ insertElementPatternFillerLabelAndProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.InsertElementPatternFiller"),
-        Core.projectionField = (Core.Name "labelAndProperties")})),
+        Core.projectionFieldName = (Core.Name "labelAndProperties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 insertElementPatternFillerVariableDeclaration :: Phantoms.TTerm Grammar.InsertElementPatternFiller -> Phantoms.TTerm (Maybe Grammar.ElementVariableDeclaration)
@@ -9297,7 +9297,7 @@ insertElementPatternFillerVariableDeclaration x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.InsertElementPatternFiller"),
-        Core.projectionField = (Core.Name "variableDeclaration")})),
+        Core.projectionFieldName = (Core.Name "variableDeclaration")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 insertElementPatternFillerWithLabelAndProperties :: Phantoms.TTerm Grammar.InsertElementPatternFiller -> Phantoms.TTerm (Maybe Grammar.LabelAndPropertySetSpecification) -> Phantoms.TTerm Grammar.InsertElementPatternFiller
@@ -9310,7 +9310,7 @@ insertElementPatternFillerWithLabelAndProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.InsertElementPatternFiller"),
-              Core.projectionField = (Core.Name "variableDeclaration")})),
+              Core.projectionFieldName = (Core.Name "variableDeclaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labelAndProperties"),
@@ -9329,7 +9329,7 @@ insertElementPatternFillerWithVariableDeclaration original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.InsertElementPatternFiller"),
-              Core.projectionField = (Core.Name "labelAndProperties")})),
+              Core.projectionFieldName = (Core.Name "labelAndProperties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 insertPathPattern :: Phantoms.TTerm Grammar.InsertNodePattern -> Phantoms.TTerm [Grammar.InsertEdgeAndNode] -> Phantoms.TTerm Grammar.InsertPathPattern
@@ -9349,7 +9349,7 @@ insertPathPatternEdgesAndNodes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.InsertPathPattern"),
-        Core.projectionField = (Core.Name "edgesAndNodes")})),
+        Core.projectionFieldName = (Core.Name "edgesAndNodes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 insertPathPatternStartNode :: Phantoms.TTerm Grammar.InsertPathPattern -> Phantoms.TTerm Grammar.InsertNodePattern
@@ -9357,7 +9357,7 @@ insertPathPatternStartNode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.InsertPathPattern"),
-        Core.projectionField = (Core.Name "startNode")})),
+        Core.projectionFieldName = (Core.Name "startNode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 insertPathPatternWithEdgesAndNodes :: Phantoms.TTerm Grammar.InsertPathPattern -> Phantoms.TTerm [Grammar.InsertEdgeAndNode] -> Phantoms.TTerm Grammar.InsertPathPattern
@@ -9370,7 +9370,7 @@ insertPathPatternWithEdgesAndNodes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.InsertPathPattern"),
-              Core.projectionField = (Core.Name "startNode")})),
+              Core.projectionFieldName = (Core.Name "startNode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edgesAndNodes"),
@@ -9389,7 +9389,7 @@ insertPathPatternWithStartNode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.InsertPathPattern"),
-              Core.projectionField = (Core.Name "edgesAndNodes")})),
+              Core.projectionFieldName = (Core.Name "edgesAndNodes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 int128Type :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Int128Type
@@ -9406,7 +9406,7 @@ int128TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Int128Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 int128TypeWithNotNull :: Phantoms.TTerm Grammar.Int128Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Int128Type
@@ -9432,7 +9432,7 @@ int16TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Int16Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 int16TypeWithNotNull :: Phantoms.TTerm Grammar.Int16Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Int16Type
@@ -9458,7 +9458,7 @@ int256TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Int256Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 int256TypeWithNotNull :: Phantoms.TTerm Grammar.Int256Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Int256Type
@@ -9484,7 +9484,7 @@ int32TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Int32Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 int32TypeWithNotNull :: Phantoms.TTerm Grammar.Int32Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Int32Type
@@ -9510,7 +9510,7 @@ int64TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Int64Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 int64TypeWithNotNull :: Phantoms.TTerm Grammar.Int64Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Int64Type
@@ -9536,7 +9536,7 @@ int8TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Int8Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 int8TypeWithNotNull :: Phantoms.TTerm Grammar.Int8Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Int8Type
@@ -9565,7 +9565,7 @@ intWithPrecisionNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IntWithPrecision"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 intWithPrecisionPrecision :: Phantoms.TTerm Grammar.IntWithPrecision -> Phantoms.TTerm (Maybe Grammar.Precision)
@@ -9573,7 +9573,7 @@ intWithPrecisionPrecision x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IntWithPrecision"),
-        Core.projectionField = (Core.Name "precision")})),
+        Core.projectionFieldName = (Core.Name "precision")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 intWithPrecisionWithNotNull :: Phantoms.TTerm Grammar.IntWithPrecision -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.IntWithPrecision
@@ -9586,7 +9586,7 @@ intWithPrecisionWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IntWithPrecision"),
-              Core.projectionField = (Core.Name "precision")})),
+              Core.projectionFieldName = (Core.Name "precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -9605,7 +9605,7 @@ intWithPrecisionWithPrecision original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IntWithPrecision"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 integer128Type :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Integer128Type
@@ -9622,7 +9622,7 @@ integer128TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Integer128Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integer128TypeWithNotNull :: Phantoms.TTerm Grammar.Integer128Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Integer128Type
@@ -9648,7 +9648,7 @@ integer16TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Integer16Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integer16TypeWithNotNull :: Phantoms.TTerm Grammar.Integer16Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Integer16Type
@@ -9674,7 +9674,7 @@ integer256TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Integer256Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integer256TypeWithNotNull :: Phantoms.TTerm Grammar.Integer256Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Integer256Type
@@ -9700,7 +9700,7 @@ integer32TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Integer32Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integer32TypeWithNotNull :: Phantoms.TTerm Grammar.Integer32Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Integer32Type
@@ -9726,7 +9726,7 @@ integer64TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Integer64Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integer64TypeWithNotNull :: Phantoms.TTerm Grammar.Integer64Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Integer64Type
@@ -9752,7 +9752,7 @@ integer8TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Integer8Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integer8TypeWithNotNull :: Phantoms.TTerm Grammar.Integer8Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Integer8Type
@@ -9781,7 +9781,7 @@ integerWithPrecisionNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IntegerWithPrecision"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integerWithPrecisionPrecision :: Phantoms.TTerm Grammar.IntegerWithPrecision -> Phantoms.TTerm (Maybe Grammar.Precision)
@@ -9789,7 +9789,7 @@ integerWithPrecisionPrecision x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IntegerWithPrecision"),
-        Core.projectionField = (Core.Name "precision")})),
+        Core.projectionFieldName = (Core.Name "precision")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 integerWithPrecisionWithNotNull :: Phantoms.TTerm Grammar.IntegerWithPrecision -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.IntegerWithPrecision
@@ -9802,7 +9802,7 @@ integerWithPrecisionWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IntegerWithPrecision"),
-              Core.projectionField = (Core.Name "precision")})),
+              Core.projectionFieldName = (Core.Name "precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -9821,7 +9821,7 @@ integerWithPrecisionWithPrecision original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IntegerWithPrecision"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 isLabelExpression :: Phantoms.TTerm Grammar.IsOrColon -> Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.IsLabelExpression
@@ -9841,7 +9841,7 @@ isLabelExpressionIsOrColon x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IsLabelExpression"),
-        Core.projectionField = (Core.Name "isOrColon")})),
+        Core.projectionFieldName = (Core.Name "isOrColon")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 isLabelExpressionLabel :: Phantoms.TTerm Grammar.IsLabelExpression -> Phantoms.TTerm Grammar.LabelExpression
@@ -9849,7 +9849,7 @@ isLabelExpressionLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IsLabelExpression"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 isLabelExpressionWithIsOrColon :: Phantoms.TTerm Grammar.IsLabelExpression -> Phantoms.TTerm Grammar.IsOrColon -> Phantoms.TTerm Grammar.IsLabelExpression
@@ -9865,7 +9865,7 @@ isLabelExpressionWithIsOrColon original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsLabelExpression"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 isLabelExpressionWithLabel :: Phantoms.TTerm Grammar.IsLabelExpression -> Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.IsLabelExpression
@@ -9878,7 +9878,7 @@ isLabelExpressionWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsLabelExpression"),
-              Core.projectionField = (Core.Name "isOrColon")})),
+              Core.projectionFieldName = (Core.Name "isOrColon")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
@@ -9920,7 +9920,7 @@ isNotExprNot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IsNotExpr"),
-        Core.projectionField = (Core.Name "not")})),
+        Core.projectionFieldName = (Core.Name "not")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 isNotExprTruthValue :: Phantoms.TTerm Grammar.IsNotExpr -> Phantoms.TTerm Grammar.TruthValue
@@ -9928,7 +9928,7 @@ isNotExprTruthValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IsNotExpr"),
-        Core.projectionField = (Core.Name "truthValue")})),
+        Core.projectionFieldName = (Core.Name "truthValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 isNotExprValueExpression :: Phantoms.TTerm Grammar.IsNotExpr -> Phantoms.TTerm Grammar.ValueExpression
@@ -9936,7 +9936,7 @@ isNotExprValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IsNotExpr"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 isNotExprWithNot :: Phantoms.TTerm Grammar.IsNotExpr -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.IsNotExpr
@@ -9949,7 +9949,7 @@ isNotExprWithNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsNotExpr"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "not"),
@@ -9959,7 +9959,7 @@ isNotExprWithNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsNotExpr"),
-              Core.projectionField = (Core.Name "truthValue")})),
+              Core.projectionFieldName = (Core.Name "truthValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 isNotExprWithTruthValue :: Phantoms.TTerm Grammar.IsNotExpr -> Phantoms.TTerm Grammar.TruthValue -> Phantoms.TTerm Grammar.IsNotExpr
@@ -9972,14 +9972,14 @@ isNotExprWithTruthValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsNotExpr"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "not"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsNotExpr"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "truthValue"),
@@ -9998,14 +9998,14 @@ isNotExprWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsNotExpr"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "truthValue"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsNotExpr"),
-              Core.projectionField = (Core.Name "truthValue")})),
+              Core.projectionFieldName = (Core.Name "truthValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 isOrColonColon :: Phantoms.TTerm Grammar.IsOrColon
@@ -10041,7 +10041,7 @@ isOrColonWithLabelsIsOrColon x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IsOrColonWithLabels"),
-        Core.projectionField = (Core.Name "isOrColon")})),
+        Core.projectionFieldName = (Core.Name "isOrColon")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 isOrColonWithLabelsLabels :: Phantoms.TTerm Grammar.IsOrColonWithLabels -> Phantoms.TTerm Grammar.LabelSetSpecification
@@ -10049,7 +10049,7 @@ isOrColonWithLabelsLabels x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.IsOrColonWithLabels"),
-        Core.projectionField = (Core.Name "labels")})),
+        Core.projectionFieldName = (Core.Name "labels")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 isOrColonWithLabelsWithIsOrColon :: Phantoms.TTerm Grammar.IsOrColonWithLabels -> Phantoms.TTerm Grammar.IsOrColon -> Phantoms.TTerm Grammar.IsOrColonWithLabels
@@ -10065,7 +10065,7 @@ isOrColonWithLabelsWithIsOrColon original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsOrColonWithLabels"),
-              Core.projectionField = (Core.Name "labels")})),
+              Core.projectionFieldName = (Core.Name "labels")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 isOrColonWithLabelsWithLabels :: Phantoms.TTerm Grammar.IsOrColonWithLabels -> Phantoms.TTerm Grammar.LabelSetSpecification -> Phantoms.TTerm Grammar.IsOrColonWithLabels
@@ -10078,7 +10078,7 @@ isOrColonWithLabelsWithLabels original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.IsOrColonWithLabels"),
-              Core.projectionField = (Core.Name "isOrColon")})),
+              Core.projectionFieldName = (Core.Name "isOrColon")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labels"),
@@ -10104,7 +10104,7 @@ labelAndPropertySetSpecificationIsOrColon x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LabelAndPropertySetSpecification"),
-        Core.projectionField = (Core.Name "isOrColon")})),
+        Core.projectionFieldName = (Core.Name "isOrColon")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 labelAndPropertySetSpecificationLabelSet :: Phantoms.TTerm Grammar.LabelAndPropertySetSpecification -> Phantoms.TTerm (Maybe Grammar.LabelSetSpecification)
@@ -10112,7 +10112,7 @@ labelAndPropertySetSpecificationLabelSet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LabelAndPropertySetSpecification"),
-        Core.projectionField = (Core.Name "labelSet")})),
+        Core.projectionFieldName = (Core.Name "labelSet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 labelAndPropertySetSpecificationPropertySpecification :: Phantoms.TTerm Grammar.LabelAndPropertySetSpecification -> Phantoms.TTerm (Maybe Grammar.ElementPropertySpecification)
@@ -10120,7 +10120,7 @@ labelAndPropertySetSpecificationPropertySpecification x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LabelAndPropertySetSpecification"),
-        Core.projectionField = (Core.Name "propertySpecification")})),
+        Core.projectionFieldName = (Core.Name "propertySpecification")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 labelAndPropertySetSpecificationWithIsOrColon :: Phantoms.TTerm Grammar.LabelAndPropertySetSpecification -> Phantoms.TTerm (Maybe Grammar.IsOrColon) -> Phantoms.TTerm Grammar.LabelAndPropertySetSpecification
@@ -10136,14 +10136,14 @@ labelAndPropertySetSpecificationWithIsOrColon original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabelAndPropertySetSpecification"),
-              Core.projectionField = (Core.Name "labelSet")})),
+              Core.projectionFieldName = (Core.Name "labelSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertySpecification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabelAndPropertySetSpecification"),
-              Core.projectionField = (Core.Name "propertySpecification")})),
+              Core.projectionFieldName = (Core.Name "propertySpecification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 labelAndPropertySetSpecificationWithLabelSet :: Phantoms.TTerm Grammar.LabelAndPropertySetSpecification -> Phantoms.TTerm (Maybe Grammar.LabelSetSpecification) -> Phantoms.TTerm Grammar.LabelAndPropertySetSpecification
@@ -10156,7 +10156,7 @@ labelAndPropertySetSpecificationWithLabelSet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabelAndPropertySetSpecification"),
-              Core.projectionField = (Core.Name "isOrColon")})),
+              Core.projectionFieldName = (Core.Name "isOrColon")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labelSet"),
@@ -10166,7 +10166,7 @@ labelAndPropertySetSpecificationWithLabelSet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabelAndPropertySetSpecification"),
-              Core.projectionField = (Core.Name "propertySpecification")})),
+              Core.projectionFieldName = (Core.Name "propertySpecification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 labelAndPropertySetSpecificationWithPropertySpecification :: Phantoms.TTerm Grammar.LabelAndPropertySetSpecification -> Phantoms.TTerm (Maybe Grammar.ElementPropertySpecification) -> Phantoms.TTerm Grammar.LabelAndPropertySetSpecification
@@ -10179,14 +10179,14 @@ labelAndPropertySetSpecificationWithPropertySpecification original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabelAndPropertySetSpecification"),
-              Core.projectionField = (Core.Name "isOrColon")})),
+              Core.projectionFieldName = (Core.Name "isOrColon")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labelSet"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabelAndPropertySetSpecification"),
-              Core.projectionField = (Core.Name "labelSet")})),
+              Core.projectionFieldName = (Core.Name "labelSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertySpecification"),
@@ -10281,7 +10281,7 @@ labeledPredicateElementVariableReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LabeledPredicate"),
-        Core.projectionField = (Core.Name "elementVariableReference")})),
+        Core.projectionFieldName = (Core.Name "elementVariableReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 labeledPredicateLabeledPart :: Phantoms.TTerm Grammar.LabeledPredicate -> Phantoms.TTerm Grammar.LabeledPredicatePart2
@@ -10289,7 +10289,7 @@ labeledPredicateLabeledPart x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LabeledPredicate"),
-        Core.projectionField = (Core.Name "labeledPart")})),
+        Core.projectionFieldName = (Core.Name "labeledPart")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 labeledPredicatePart2 :: Phantoms.TTerm Grammar.IsLabeledOrColon -> Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.LabeledPredicatePart2
@@ -10309,7 +10309,7 @@ labeledPredicatePart2IsLabeledOrColon x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LabeledPredicatePart2"),
-        Core.projectionField = (Core.Name "isLabeledOrColon")})),
+        Core.projectionFieldName = (Core.Name "isLabeledOrColon")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 labeledPredicatePart2LabelExpression :: Phantoms.TTerm Grammar.LabeledPredicatePart2 -> Phantoms.TTerm Grammar.LabelExpression
@@ -10317,7 +10317,7 @@ labeledPredicatePart2LabelExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LabeledPredicatePart2"),
-        Core.projectionField = (Core.Name "labelExpression")})),
+        Core.projectionFieldName = (Core.Name "labelExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 labeledPredicatePart2WithIsLabeledOrColon :: Phantoms.TTerm Grammar.LabeledPredicatePart2 -> Phantoms.TTerm Grammar.IsLabeledOrColon -> Phantoms.TTerm Grammar.LabeledPredicatePart2
@@ -10333,7 +10333,7 @@ labeledPredicatePart2WithIsLabeledOrColon original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabeledPredicatePart2"),
-              Core.projectionField = (Core.Name "labelExpression")})),
+              Core.projectionFieldName = (Core.Name "labelExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 labeledPredicatePart2WithLabelExpression :: Phantoms.TTerm Grammar.LabeledPredicatePart2 -> Phantoms.TTerm Grammar.LabelExpression -> Phantoms.TTerm Grammar.LabeledPredicatePart2
@@ -10346,7 +10346,7 @@ labeledPredicatePart2WithLabelExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabeledPredicatePart2"),
-              Core.projectionField = (Core.Name "isLabeledOrColon")})),
+              Core.projectionFieldName = (Core.Name "isLabeledOrColon")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labelExpression"),
@@ -10365,7 +10365,7 @@ labeledPredicateWithElementVariableReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabeledPredicate"),
-              Core.projectionField = (Core.Name "labeledPart")})),
+              Core.projectionFieldName = (Core.Name "labeledPart")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 labeledPredicateWithLabeledPart :: Phantoms.TTerm Grammar.LabeledPredicate -> Phantoms.TTerm Grammar.LabeledPredicatePart2 -> Phantoms.TTerm Grammar.LabeledPredicate
@@ -10378,7 +10378,7 @@ labeledPredicateWithLabeledPart original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LabeledPredicate"),
-              Core.projectionField = (Core.Name "elementVariableReference")})),
+              Core.projectionFieldName = (Core.Name "elementVariableReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "labeledPart"),
@@ -10425,7 +10425,7 @@ letValueExpressionLetVariables x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LetValueExpression"),
-        Core.projectionField = (Core.Name "letVariables")})),
+        Core.projectionFieldName = (Core.Name "letVariables")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letValueExpressionValueExpression :: Phantoms.TTerm Grammar.LetValueExpression -> Phantoms.TTerm Grammar.ValueExpression
@@ -10433,7 +10433,7 @@ letValueExpressionValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LetValueExpression"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 letValueExpressionWithLetVariables :: Phantoms.TTerm Grammar.LetValueExpression -> Phantoms.TTerm Grammar.LetVariableDefinitionList -> Phantoms.TTerm Grammar.LetValueExpression
@@ -10449,7 +10449,7 @@ letValueExpressionWithLetVariables original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LetValueExpression"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 letValueExpressionWithValueExpression :: Phantoms.TTerm Grammar.LetValueExpression -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.LetValueExpression
@@ -10462,7 +10462,7 @@ letValueExpressionWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.LetValueExpression"),
-              Core.projectionField = (Core.Name "letVariables")})),
+              Core.projectionFieldName = (Core.Name "letVariables")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
@@ -10533,7 +10533,7 @@ listValueConstructorByEnumerationElements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueConstructorByEnumeration"),
-        Core.projectionField = (Core.Name "elements")})),
+        Core.projectionFieldName = (Core.Name "elements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueConstructorByEnumerationListValueTypeName :: Phantoms.TTerm Grammar.ListValueConstructorByEnumeration -> Phantoms.TTerm (Maybe Grammar.ListValueTypeName)
@@ -10541,7 +10541,7 @@ listValueConstructorByEnumerationListValueTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueConstructorByEnumeration"),
-        Core.projectionField = (Core.Name "listValueTypeName")})),
+        Core.projectionFieldName = (Core.Name "listValueTypeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueConstructorByEnumerationWithElements :: Phantoms.TTerm Grammar.ListValueConstructorByEnumeration -> Phantoms.TTerm (Maybe Grammar.ListElementList) -> Phantoms.TTerm Grammar.ListValueConstructorByEnumeration
@@ -10554,7 +10554,7 @@ listValueConstructorByEnumerationWithElements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueConstructorByEnumeration"),
-              Core.projectionField = (Core.Name "listValueTypeName")})),
+              Core.projectionFieldName = (Core.Name "listValueTypeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elements"),
@@ -10573,7 +10573,7 @@ listValueConstructorByEnumerationWithListValueTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueConstructorByEnumeration"),
-              Core.projectionField = (Core.Name "elements")})),
+              Core.projectionFieldName = (Core.Name "elements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueFunctionElements :: Phantoms.TTerm Grammar.ElementsFunction -> Phantoms.TTerm Grammar.ListValueFunction
@@ -10615,7 +10615,7 @@ listValueTypeAlt1MaxLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-        Core.projectionField = (Core.Name "maxLength")})),
+        Core.projectionFieldName = (Core.Name "maxLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt1NotNull :: Phantoms.TTerm Grammar.ListValueTypeAlt1 -> Phantoms.TTerm Bool
@@ -10623,7 +10623,7 @@ listValueTypeAlt1NotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt1TypeName :: Phantoms.TTerm Grammar.ListValueTypeAlt1 -> Phantoms.TTerm Grammar.ListValueTypeName
@@ -10631,7 +10631,7 @@ listValueTypeAlt1TypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt1ValueType :: Phantoms.TTerm Grammar.ListValueTypeAlt1 -> Phantoms.TTerm Grammar.ValueType
@@ -10639,7 +10639,7 @@ listValueTypeAlt1ValueType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-        Core.projectionField = (Core.Name "valueType")})),
+        Core.projectionFieldName = (Core.Name "valueType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt1WithMaxLength :: Phantoms.TTerm Grammar.ListValueTypeAlt1 -> Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Grammar.ListValueTypeAlt1
@@ -10652,14 +10652,14 @@ listValueTypeAlt1WithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
@@ -10669,7 +10669,7 @@ listValueTypeAlt1WithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueTypeAlt1WithNotNull :: Phantoms.TTerm Grammar.ListValueTypeAlt1 -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ListValueTypeAlt1
@@ -10682,21 +10682,21 @@ listValueTypeAlt1WithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -10715,21 +10715,21 @@ listValueTypeAlt1WithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueTypeAlt1WithValueType :: Phantoms.TTerm Grammar.ListValueTypeAlt1 -> Phantoms.TTerm Grammar.ValueType -> Phantoms.TTerm Grammar.ListValueTypeAlt1
@@ -10742,7 +10742,7 @@ listValueTypeAlt1WithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
@@ -10752,14 +10752,14 @@ listValueTypeAlt1WithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt1"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueTypeAlt2 :: Phantoms.TTerm Grammar.ValueType -> Phantoms.TTerm Grammar.ListValueTypeName -> Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ListValueTypeAlt2
@@ -10785,7 +10785,7 @@ listValueTypeAlt2MaxLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-        Core.projectionField = (Core.Name "maxLength")})),
+        Core.projectionFieldName = (Core.Name "maxLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt2NotNull :: Phantoms.TTerm Grammar.ListValueTypeAlt2 -> Phantoms.TTerm Bool
@@ -10793,7 +10793,7 @@ listValueTypeAlt2NotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt2TypeName :: Phantoms.TTerm Grammar.ListValueTypeAlt2 -> Phantoms.TTerm Grammar.ListValueTypeName
@@ -10801,7 +10801,7 @@ listValueTypeAlt2TypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt2ValueType :: Phantoms.TTerm Grammar.ListValueTypeAlt2 -> Phantoms.TTerm Grammar.ValueType
@@ -10809,7 +10809,7 @@ listValueTypeAlt2ValueType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-        Core.projectionField = (Core.Name "valueType")})),
+        Core.projectionFieldName = (Core.Name "valueType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt2WithMaxLength :: Phantoms.TTerm Grammar.ListValueTypeAlt2 -> Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Grammar.ListValueTypeAlt2
@@ -10822,14 +10822,14 @@ listValueTypeAlt2WithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
@@ -10839,7 +10839,7 @@ listValueTypeAlt2WithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueTypeAlt2WithNotNull :: Phantoms.TTerm Grammar.ListValueTypeAlt2 -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ListValueTypeAlt2
@@ -10852,21 +10852,21 @@ listValueTypeAlt2WithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -10882,7 +10882,7 @@ listValueTypeAlt2WithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
@@ -10892,14 +10892,14 @@ listValueTypeAlt2WithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueTypeAlt2WithValueType :: Phantoms.TTerm Grammar.ListValueTypeAlt2 -> Phantoms.TTerm Grammar.ValueType -> Phantoms.TTerm Grammar.ListValueTypeAlt2
@@ -10915,21 +10915,21 @@ listValueTypeAlt2WithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt2"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueTypeAlt3 :: Phantoms.TTerm Grammar.ListValueTypeName -> Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ListValueTypeAlt3
@@ -10952,7 +10952,7 @@ listValueTypeAlt3MaxLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt3"),
-        Core.projectionField = (Core.Name "maxLength")})),
+        Core.projectionFieldName = (Core.Name "maxLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt3NotNull :: Phantoms.TTerm Grammar.ListValueTypeAlt3 -> Phantoms.TTerm Bool
@@ -10960,7 +10960,7 @@ listValueTypeAlt3NotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt3"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt3TypeName :: Phantoms.TTerm Grammar.ListValueTypeAlt3 -> Phantoms.TTerm Grammar.ListValueTypeName
@@ -10968,7 +10968,7 @@ listValueTypeAlt3TypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt3"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeAlt3WithMaxLength :: Phantoms.TTerm Grammar.ListValueTypeAlt3 -> Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Grammar.ListValueTypeAlt3
@@ -10981,7 +10981,7 @@ listValueTypeAlt3WithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt3"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
@@ -10991,7 +10991,7 @@ listValueTypeAlt3WithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt3"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueTypeAlt3WithNotNull :: Phantoms.TTerm Grammar.ListValueTypeAlt3 -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ListValueTypeAlt3
@@ -11004,14 +11004,14 @@ listValueTypeAlt3WithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt3"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt3"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -11030,14 +11030,14 @@ listValueTypeAlt3WithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt3"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeAlt3"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueTypeName :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ListValueTypeNameSynonym -> Phantoms.TTerm Grammar.ListValueTypeName
@@ -11057,7 +11057,7 @@ listValueTypeNameGroup x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeName"),
-        Core.projectionField = (Core.Name "group")})),
+        Core.projectionFieldName = (Core.Name "group")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeNameSynonym :: Phantoms.TTerm Grammar.ListValueTypeName -> Phantoms.TTerm Grammar.ListValueTypeNameSynonym
@@ -11065,7 +11065,7 @@ listValueTypeNameSynonym x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeName"),
-        Core.projectionField = (Core.Name "synonym")})),
+        Core.projectionFieldName = (Core.Name "synonym")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 listValueTypeNameSynonymArray :: Phantoms.TTerm Grammar.ListValueTypeNameSynonym
@@ -11097,7 +11097,7 @@ listValueTypeNameWithGroup original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeName"),
-              Core.projectionField = (Core.Name "synonym")})),
+              Core.projectionFieldName = (Core.Name "synonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 listValueTypeNameWithSynonym :: Phantoms.TTerm Grammar.ListValueTypeName -> Phantoms.TTerm Grammar.ListValueTypeNameSynonym -> Phantoms.TTerm Grammar.ListValueTypeName
@@ -11110,7 +11110,7 @@ listValueTypeNameWithSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ListValueTypeName"),
-              Core.projectionField = (Core.Name "group")})),
+              Core.projectionFieldName = (Core.Name "group")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "synonym"),
@@ -11146,7 +11146,7 @@ localDatetimeTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LocalDatetimeType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 localDatetimeTypeWithNotNull :: Phantoms.TTerm Grammar.LocalDatetimeType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.LocalDatetimeType
@@ -11188,7 +11188,7 @@ localTimeTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.LocalTimeType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 localTimeTypeWithNotNull :: Phantoms.TTerm Grammar.LocalTimeType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.LocalTimeType
@@ -11265,7 +11265,7 @@ modulusExpressionDividend x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ModulusExpression"),
-        Core.projectionField = (Core.Name "dividend")})),
+        Core.projectionFieldName = (Core.Name "dividend")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 modulusExpressionDivisor :: Phantoms.TTerm Grammar.ModulusExpression -> Phantoms.TTerm Grammar.NumericValueExpressionDivisor
@@ -11273,7 +11273,7 @@ modulusExpressionDivisor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ModulusExpression"),
-        Core.projectionField = (Core.Name "divisor")})),
+        Core.projectionFieldName = (Core.Name "divisor")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 modulusExpressionWithDividend :: Phantoms.TTerm Grammar.ModulusExpression -> Phantoms.TTerm Grammar.NumericValueExpressionDividend -> Phantoms.TTerm Grammar.ModulusExpression
@@ -11289,7 +11289,7 @@ modulusExpressionWithDividend original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ModulusExpression"),
-              Core.projectionField = (Core.Name "divisor")})),
+              Core.projectionFieldName = (Core.Name "divisor")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 modulusExpressionWithDivisor :: Phantoms.TTerm Grammar.ModulusExpression -> Phantoms.TTerm Grammar.NumericValueExpressionDivisor -> Phantoms.TTerm Grammar.ModulusExpression
@@ -11302,7 +11302,7 @@ modulusExpressionWithDivisor original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ModulusExpression"),
-              Core.projectionField = (Core.Name "dividend")})),
+              Core.projectionFieldName = (Core.Name "dividend")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "divisor"),
@@ -11328,7 +11328,7 @@ mulDivNumericValueExpressionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.MulDivNumericValueExpression"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mulDivNumericValueExpressionOperator :: Phantoms.TTerm Grammar.MulDivNumericValueExpression -> Phantoms.TTerm Grammar.MultDivOperator
@@ -11336,7 +11336,7 @@ mulDivNumericValueExpressionOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.MulDivNumericValueExpression"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mulDivNumericValueExpressionRight :: Phantoms.TTerm Grammar.MulDivNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression
@@ -11344,7 +11344,7 @@ mulDivNumericValueExpressionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.MulDivNumericValueExpression"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 mulDivNumericValueExpressionWithLeft :: Phantoms.TTerm Grammar.MulDivNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression -> Phantoms.TTerm Grammar.MulDivNumericValueExpression
@@ -11360,14 +11360,14 @@ mulDivNumericValueExpressionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MulDivNumericValueExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MulDivNumericValueExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 mulDivNumericValueExpressionWithOperator :: Phantoms.TTerm Grammar.MulDivNumericValueExpression -> Phantoms.TTerm Grammar.MultDivOperator -> Phantoms.TTerm Grammar.MulDivNumericValueExpression
@@ -11380,7 +11380,7 @@ mulDivNumericValueExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MulDivNumericValueExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -11390,7 +11390,7 @@ mulDivNumericValueExpressionWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MulDivNumericValueExpression"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 mulDivNumericValueExpressionWithRight :: Phantoms.TTerm Grammar.MulDivNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression -> Phantoms.TTerm Grammar.MulDivNumericValueExpression
@@ -11403,14 +11403,14 @@ mulDivNumericValueExpressionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MulDivNumericValueExpression"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MulDivNumericValueExpression"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -11436,7 +11436,7 @@ multDivExprLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.MultDivExpr"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multDivExprOperator :: Phantoms.TTerm Grammar.MultDivExpr -> Phantoms.TTerm Grammar.MultDivOperator
@@ -11444,7 +11444,7 @@ multDivExprOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.MultDivExpr"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multDivExprRight :: Phantoms.TTerm Grammar.MultDivExpr -> Phantoms.TTerm Grammar.ValueExpression
@@ -11452,7 +11452,7 @@ multDivExprRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.MultDivExpr"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multDivExprWithLeft :: Phantoms.TTerm Grammar.MultDivExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.MultDivExpr
@@ -11468,14 +11468,14 @@ multDivExprWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MultDivExpr"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MultDivExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 multDivExprWithOperator :: Phantoms.TTerm Grammar.MultDivExpr -> Phantoms.TTerm Grammar.MultDivOperator -> Phantoms.TTerm Grammar.MultDivExpr
@@ -11488,7 +11488,7 @@ multDivExprWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MultDivExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -11498,7 +11498,7 @@ multDivExprWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MultDivExpr"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 multDivExprWithRight :: Phantoms.TTerm Grammar.MultDivExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.MultDivExpr
@@ -11511,14 +11511,14 @@ multDivExprWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MultDivExpr"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.MultDivExpr"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -11560,7 +11560,7 @@ namedProcedureCallArguments x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NamedProcedureCall"),
-        Core.projectionField = (Core.Name "arguments")})),
+        Core.projectionFieldName = (Core.Name "arguments")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 namedProcedureCallReference :: Phantoms.TTerm Grammar.NamedProcedureCall -> Phantoms.TTerm Grammar.ProcedureReference
@@ -11568,7 +11568,7 @@ namedProcedureCallReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NamedProcedureCall"),
-        Core.projectionField = (Core.Name "reference")})),
+        Core.projectionFieldName = (Core.Name "reference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 namedProcedureCallWithArguments :: Phantoms.TTerm Grammar.NamedProcedureCall -> Phantoms.TTerm (Maybe Grammar.ProcedureArgumentList) -> Phantoms.TTerm Grammar.NamedProcedureCall
@@ -11581,7 +11581,7 @@ namedProcedureCallWithArguments original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NamedProcedureCall"),
-              Core.projectionField = (Core.Name "reference")})),
+              Core.projectionFieldName = (Core.Name "reference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
@@ -11591,7 +11591,7 @@ namedProcedureCallWithArguments original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NamedProcedureCall"),
-              Core.projectionField = (Core.Name "yield")})),
+              Core.projectionFieldName = (Core.Name "yield")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 namedProcedureCallWithReference :: Phantoms.TTerm Grammar.NamedProcedureCall -> Phantoms.TTerm Grammar.ProcedureReference -> Phantoms.TTerm Grammar.NamedProcedureCall
@@ -11607,14 +11607,14 @@ namedProcedureCallWithReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NamedProcedureCall"),
-              Core.projectionField = (Core.Name "arguments")})),
+              Core.projectionFieldName = (Core.Name "arguments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "yield"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NamedProcedureCall"),
-              Core.projectionField = (Core.Name "yield")})),
+              Core.projectionFieldName = (Core.Name "yield")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 namedProcedureCallWithYield :: Phantoms.TTerm Grammar.NamedProcedureCall -> Phantoms.TTerm (Maybe Grammar.YieldClause) -> Phantoms.TTerm Grammar.NamedProcedureCall
@@ -11627,14 +11627,14 @@ namedProcedureCallWithYield original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NamedProcedureCall"),
-              Core.projectionField = (Core.Name "reference")})),
+              Core.projectionFieldName = (Core.Name "reference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "arguments"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NamedProcedureCall"),
-              Core.projectionField = (Core.Name "arguments")})),
+              Core.projectionFieldName = (Core.Name "arguments")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "yield"),
@@ -11645,7 +11645,7 @@ namedProcedureCallYield x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NamedProcedureCall"),
-        Core.projectionField = (Core.Name "yield")})),
+        Core.projectionFieldName = (Core.Name "yield")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nextStatement :: Phantoms.TTerm (Maybe Grammar.YieldClause) -> Phantoms.TTerm Grammar.Statement -> Phantoms.TTerm Grammar.NextStatement
@@ -11665,7 +11665,7 @@ nextStatementStatement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NextStatement"),
-        Core.projectionField = (Core.Name "statement")})),
+        Core.projectionFieldName = (Core.Name "statement")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nextStatementWithStatement :: Phantoms.TTerm Grammar.NextStatement -> Phantoms.TTerm Grammar.Statement -> Phantoms.TTerm Grammar.NextStatement
@@ -11678,7 +11678,7 @@ nextStatementWithStatement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NextStatement"),
-              Core.projectionField = (Core.Name "yieldClause")})),
+              Core.projectionFieldName = (Core.Name "yieldClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statement"),
@@ -11697,7 +11697,7 @@ nextStatementWithYieldClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NextStatement"),
-              Core.projectionField = (Core.Name "statement")})),
+              Core.projectionFieldName = (Core.Name "statement")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nextStatementYieldClause :: Phantoms.TTerm Grammar.NextStatement -> Phantoms.TTerm (Maybe Grammar.YieldClause)
@@ -11705,7 +11705,7 @@ nextStatementYieldClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NextStatement"),
-        Core.projectionField = (Core.Name "yieldClause")})),
+        Core.projectionFieldName = (Core.Name "yieldClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeKeyLabelSetWithContent :: Phantoms.TTerm Grammar.NodeTypeKeyLabelSet -> Phantoms.TTerm (Maybe Grammar.NodeTypeImpliedContent) -> Phantoms.TTerm Grammar.NodeKeyLabelSetWithContent
@@ -11725,7 +11725,7 @@ nodeKeyLabelSetWithContentImpliedContent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeKeyLabelSetWithContent"),
-        Core.projectionField = (Core.Name "impliedContent")})),
+        Core.projectionFieldName = (Core.Name "impliedContent")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeKeyLabelSetWithContentKeyLabelSet :: Phantoms.TTerm Grammar.NodeKeyLabelSetWithContent -> Phantoms.TTerm Grammar.NodeTypeKeyLabelSet
@@ -11733,7 +11733,7 @@ nodeKeyLabelSetWithContentKeyLabelSet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeKeyLabelSetWithContent"),
-        Core.projectionField = (Core.Name "keyLabelSet")})),
+        Core.projectionFieldName = (Core.Name "keyLabelSet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeKeyLabelSetWithContentWithImpliedContent :: Phantoms.TTerm Grammar.NodeKeyLabelSetWithContent -> Phantoms.TTerm (Maybe Grammar.NodeTypeImpliedContent) -> Phantoms.TTerm Grammar.NodeKeyLabelSetWithContent
@@ -11746,7 +11746,7 @@ nodeKeyLabelSetWithContentWithImpliedContent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeKeyLabelSetWithContent"),
-              Core.projectionField = (Core.Name "keyLabelSet")})),
+              Core.projectionFieldName = (Core.Name "keyLabelSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "impliedContent"),
@@ -11765,7 +11765,7 @@ nodeKeyLabelSetWithContentWithKeyLabelSet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeKeyLabelSetWithContent"),
-              Core.projectionField = (Core.Name "impliedContent")})),
+              Core.projectionFieldName = (Core.Name "impliedContent")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeLabelSetWithProperties :: Phantoms.TTerm Grammar.NodeTypeLabelSet -> Phantoms.TTerm Grammar.NodeTypePropertyTypes -> Phantoms.TTerm Grammar.NodeLabelSetWithProperties
@@ -11785,7 +11785,7 @@ nodeLabelSetWithPropertiesLabelSet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeLabelSetWithProperties"),
-        Core.projectionField = (Core.Name "labelSet")})),
+        Core.projectionFieldName = (Core.Name "labelSet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeLabelSetWithPropertiesPropertyTypes :: Phantoms.TTerm Grammar.NodeLabelSetWithProperties -> Phantoms.TTerm Grammar.NodeTypePropertyTypes
@@ -11793,7 +11793,7 @@ nodeLabelSetWithPropertiesPropertyTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeLabelSetWithProperties"),
-        Core.projectionField = (Core.Name "propertyTypes")})),
+        Core.projectionFieldName = (Core.Name "propertyTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeLabelSetWithPropertiesWithLabelSet :: Phantoms.TTerm Grammar.NodeLabelSetWithProperties -> Phantoms.TTerm Grammar.NodeTypeLabelSet -> Phantoms.TTerm Grammar.NodeLabelSetWithProperties
@@ -11809,7 +11809,7 @@ nodeLabelSetWithPropertiesWithLabelSet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeLabelSetWithProperties"),
-              Core.projectionField = (Core.Name "propertyTypes")})),
+              Core.projectionFieldName = (Core.Name "propertyTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeLabelSetWithPropertiesWithPropertyTypes :: Phantoms.TTerm Grammar.NodeLabelSetWithProperties -> Phantoms.TTerm Grammar.NodeTypePropertyTypes -> Phantoms.TTerm Grammar.NodeLabelSetWithProperties
@@ -11822,7 +11822,7 @@ nodeLabelSetWithPropertiesWithPropertyTypes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeLabelSetWithProperties"),
-              Core.projectionField = (Core.Name "labelSet")})),
+              Core.projectionFieldName = (Core.Name "labelSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyTypes"),
@@ -11861,7 +11861,7 @@ nodeSynonymAndTypeNameNodeSynonym x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeSynonymAndTypeName"),
-        Core.projectionField = (Core.Name "nodeSynonym")})),
+        Core.projectionFieldName = (Core.Name "nodeSynonym")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeSynonymAndTypeNameTypeName :: Phantoms.TTerm Grammar.NodeSynonymAndTypeName -> Phantoms.TTerm (Maybe Grammar.NodeTypeName)
@@ -11869,7 +11869,7 @@ nodeSynonymAndTypeNameTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeSynonymAndTypeName"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeSynonymAndTypeNameWithNodeSynonym :: Phantoms.TTerm Grammar.NodeSynonymAndTypeName -> Phantoms.TTerm Grammar.NodeSynonym -> Phantoms.TTerm Grammar.NodeSynonymAndTypeName
@@ -11885,7 +11885,7 @@ nodeSynonymAndTypeNameWithNodeSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeSynonymAndTypeName"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeSynonymAndTypeNameWithTypeName :: Phantoms.TTerm Grammar.NodeSynonymAndTypeName -> Phantoms.TTerm (Maybe Grammar.NodeTypeName) -> Phantoms.TTerm Grammar.NodeSynonymAndTypeName
@@ -11898,7 +11898,7 @@ nodeSynonymAndTypeNameWithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeSynonymAndTypeName"),
-              Core.projectionField = (Core.Name "nodeSynonym")})),
+              Core.projectionFieldName = (Core.Name "nodeSynonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
@@ -11977,7 +11977,7 @@ nodeTypeNameWithFillerFiller x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypeNameWithFiller"),
-        Core.projectionField = (Core.Name "filler")})),
+        Core.projectionFieldName = (Core.Name "filler")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeTypeNameWithFillerTypeName :: Phantoms.TTerm Grammar.NodeTypeNameWithFiller -> Phantoms.TTerm Grammar.NodeTypeName
@@ -11985,7 +11985,7 @@ nodeTypeNameWithFillerTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypeNameWithFiller"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeTypeNameWithFillerWithFiller :: Phantoms.TTerm Grammar.NodeTypeNameWithFiller -> Phantoms.TTerm (Maybe Grammar.NodeTypeFiller) -> Phantoms.TTerm Grammar.NodeTypeNameWithFiller
@@ -11998,7 +11998,7 @@ nodeTypeNameWithFillerWithFiller original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypeNameWithFiller"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "filler"),
@@ -12017,7 +12017,7 @@ nodeTypeNameWithFillerWithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypeNameWithFiller"),
-              Core.projectionField = (Core.Name "filler")})),
+              Core.projectionFieldName = (Core.Name "filler")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeTypePattern :: Phantoms.TTerm (Maybe Grammar.NodeSynonymAndTypeName) -> Phantoms.TTerm (Maybe Grammar.LocalNodeTypeAlias) -> Phantoms.TTerm (Maybe Grammar.NodeTypeFiller) -> Phantoms.TTerm Grammar.NodeTypePattern
@@ -12040,7 +12040,7 @@ nodeTypePatternAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePattern"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeTypePatternFiller :: Phantoms.TTerm Grammar.NodeTypePattern -> Phantoms.TTerm (Maybe Grammar.NodeTypeFiller)
@@ -12048,7 +12048,7 @@ nodeTypePatternFiller x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePattern"),
-        Core.projectionField = (Core.Name "filler")})),
+        Core.projectionFieldName = (Core.Name "filler")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeTypePatternSynonymAndTypeName :: Phantoms.TTerm Grammar.NodeTypePattern -> Phantoms.TTerm (Maybe Grammar.NodeSynonymAndTypeName)
@@ -12056,7 +12056,7 @@ nodeTypePatternSynonymAndTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePattern"),
-        Core.projectionField = (Core.Name "synonymAndTypeName")})),
+        Core.projectionFieldName = (Core.Name "synonymAndTypeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeTypePatternWithAlias :: Phantoms.TTerm Grammar.NodeTypePattern -> Phantoms.TTerm (Maybe Grammar.LocalNodeTypeAlias) -> Phantoms.TTerm Grammar.NodeTypePattern
@@ -12069,7 +12069,7 @@ nodeTypePatternWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePattern"),
-              Core.projectionField = (Core.Name "synonymAndTypeName")})),
+              Core.projectionFieldName = (Core.Name "synonymAndTypeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
@@ -12079,7 +12079,7 @@ nodeTypePatternWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePattern"),
-              Core.projectionField = (Core.Name "filler")})),
+              Core.projectionFieldName = (Core.Name "filler")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeTypePatternWithFiller :: Phantoms.TTerm Grammar.NodeTypePattern -> Phantoms.TTerm (Maybe Grammar.NodeTypeFiller) -> Phantoms.TTerm Grammar.NodeTypePattern
@@ -12092,14 +12092,14 @@ nodeTypePatternWithFiller original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePattern"),
-              Core.projectionField = (Core.Name "synonymAndTypeName")})),
+              Core.projectionFieldName = (Core.Name "synonymAndTypeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePattern"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "filler"),
@@ -12118,14 +12118,14 @@ nodeTypePatternWithSynonymAndTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePattern"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "filler"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePattern"),
-              Core.projectionField = (Core.Name "filler")})),
+              Core.projectionFieldName = (Core.Name "filler")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeTypePhrase :: Phantoms.TTerm Grammar.NodeSynonym -> Phantoms.TTerm Grammar.NodeTypePhraseFiller -> Phantoms.TTerm (Maybe Grammar.LocalNodeTypeAlias) -> Phantoms.TTerm Grammar.NodeTypePhrase
@@ -12148,7 +12148,7 @@ nodeTypePhraseAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePhrase"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeTypePhraseFillerFillerOnly :: Phantoms.TTerm Grammar.NodeTypeFiller -> Phantoms.TTerm Grammar.NodeTypePhraseFiller
@@ -12172,7 +12172,7 @@ nodeTypePhraseSynonym x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePhrase"),
-        Core.projectionField = (Core.Name "synonym")})),
+        Core.projectionFieldName = (Core.Name "synonym")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeTypePhraseTypePhraseFiller :: Phantoms.TTerm Grammar.NodeTypePhrase -> Phantoms.TTerm Grammar.NodeTypePhraseFiller
@@ -12180,7 +12180,7 @@ nodeTypePhraseTypePhraseFiller x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePhrase"),
-        Core.projectionField = (Core.Name "typePhraseFiller")})),
+        Core.projectionFieldName = (Core.Name "typePhraseFiller")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeTypePhraseWithAlias :: Phantoms.TTerm Grammar.NodeTypePhrase -> Phantoms.TTerm (Maybe Grammar.LocalNodeTypeAlias) -> Phantoms.TTerm Grammar.NodeTypePhrase
@@ -12193,14 +12193,14 @@ nodeTypePhraseWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePhrase"),
-              Core.projectionField = (Core.Name "synonym")})),
+              Core.projectionFieldName = (Core.Name "synonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typePhraseFiller"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePhrase"),
-              Core.projectionField = (Core.Name "typePhraseFiller")})),
+              Core.projectionFieldName = (Core.Name "typePhraseFiller")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
@@ -12219,14 +12219,14 @@ nodeTypePhraseWithSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePhrase"),
-              Core.projectionField = (Core.Name "typePhraseFiller")})),
+              Core.projectionFieldName = (Core.Name "typePhraseFiller")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePhrase"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeTypePhraseWithTypePhraseFiller :: Phantoms.TTerm Grammar.NodeTypePhrase -> Phantoms.TTerm Grammar.NodeTypePhraseFiller -> Phantoms.TTerm Grammar.NodeTypePhrase
@@ -12239,7 +12239,7 @@ nodeTypePhraseWithTypePhraseFiller original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePhrase"),
-              Core.projectionField = (Core.Name "synonym")})),
+              Core.projectionFieldName = (Core.Name "synonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typePhraseFiller"),
@@ -12249,7 +12249,7 @@ nodeTypePhraseWithTypePhraseFiller original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NodeTypePhrase"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeTypeSpecificationPattern :: Phantoms.TTerm Grammar.NodeTypePattern -> Phantoms.TTerm Grammar.NodeTypeSpecification
@@ -12421,7 +12421,7 @@ normalizeCharacterStringNormalForm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizeCharacterString"),
-        Core.projectionField = (Core.Name "normalForm")})),
+        Core.projectionFieldName = (Core.Name "normalForm")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 normalizeCharacterStringValueExpression :: Phantoms.TTerm Grammar.NormalizeCharacterString -> Phantoms.TTerm Grammar.ValueExpression
@@ -12429,7 +12429,7 @@ normalizeCharacterStringValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizeCharacterString"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 normalizeCharacterStringWithNormalForm :: Phantoms.TTerm Grammar.NormalizeCharacterString -> Phantoms.TTerm (Maybe Grammar.NormalForm) -> Phantoms.TTerm Grammar.NormalizeCharacterString
@@ -12442,7 +12442,7 @@ normalizeCharacterStringWithNormalForm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizeCharacterString"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "normalForm"),
@@ -12461,7 +12461,7 @@ normalizeCharacterStringWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizeCharacterString"),
-              Core.projectionField = (Core.Name "normalForm")})),
+              Core.projectionFieldName = (Core.Name "normalForm")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 normalizedPredicateExpr :: Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.NormalizedPredicatePart2 -> Phantoms.TTerm Grammar.NormalizedPredicateExpr
@@ -12481,7 +12481,7 @@ normalizedPredicateExprNormalizedPredicate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizedPredicateExpr"),
-        Core.projectionField = (Core.Name "normalizedPredicate")})),
+        Core.projectionFieldName = (Core.Name "normalizedPredicate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 normalizedPredicateExprValueExpression :: Phantoms.TTerm Grammar.NormalizedPredicateExpr -> Phantoms.TTerm Grammar.ValueExpression
@@ -12489,7 +12489,7 @@ normalizedPredicateExprValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizedPredicateExpr"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 normalizedPredicateExprWithNormalizedPredicate :: Phantoms.TTerm Grammar.NormalizedPredicateExpr -> Phantoms.TTerm Grammar.NormalizedPredicatePart2 -> Phantoms.TTerm Grammar.NormalizedPredicateExpr
@@ -12502,7 +12502,7 @@ normalizedPredicateExprWithNormalizedPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizedPredicateExpr"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "normalizedPredicate"),
@@ -12521,7 +12521,7 @@ normalizedPredicateExprWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizedPredicateExpr"),
-              Core.projectionField = (Core.Name "normalizedPredicate")})),
+              Core.projectionFieldName = (Core.Name "normalizedPredicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 normalizedPredicatePart2 :: Phantoms.TTerm Bool -> Phantoms.TTerm (Maybe Grammar.NormalForm) -> Phantoms.TTerm Grammar.NormalizedPredicatePart2
@@ -12541,7 +12541,7 @@ normalizedPredicatePart2NormalForm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizedPredicatePart2"),
-        Core.projectionField = (Core.Name "normalForm")})),
+        Core.projectionFieldName = (Core.Name "normalForm")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 normalizedPredicatePart2Not :: Phantoms.TTerm Grammar.NormalizedPredicatePart2 -> Phantoms.TTerm Bool
@@ -12549,7 +12549,7 @@ normalizedPredicatePart2Not x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizedPredicatePart2"),
-        Core.projectionField = (Core.Name "not")})),
+        Core.projectionFieldName = (Core.Name "not")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 normalizedPredicatePart2WithNormalForm :: Phantoms.TTerm Grammar.NormalizedPredicatePart2 -> Phantoms.TTerm (Maybe Grammar.NormalForm) -> Phantoms.TTerm Grammar.NormalizedPredicatePart2
@@ -12562,7 +12562,7 @@ normalizedPredicatePart2WithNormalForm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizedPredicatePart2"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "normalForm"),
@@ -12581,7 +12581,7 @@ normalizedPredicatePart2WithNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NormalizedPredicatePart2"),
-              Core.projectionField = (Core.Name "normalForm")})),
+              Core.projectionFieldName = (Core.Name "normalForm")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nullIfAbbreviation :: Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.NullIfAbbreviation
@@ -12601,7 +12601,7 @@ nullIfAbbreviationFirst x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NullIfAbbreviation"),
-        Core.projectionField = (Core.Name "first")})),
+        Core.projectionFieldName = (Core.Name "first")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nullIfAbbreviationSecond :: Phantoms.TTerm Grammar.NullIfAbbreviation -> Phantoms.TTerm Grammar.ValueExpression
@@ -12609,7 +12609,7 @@ nullIfAbbreviationSecond x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NullIfAbbreviation"),
-        Core.projectionField = (Core.Name "second")})),
+        Core.projectionFieldName = (Core.Name "second")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nullIfAbbreviationWithFirst :: Phantoms.TTerm Grammar.NullIfAbbreviation -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.NullIfAbbreviation
@@ -12625,7 +12625,7 @@ nullIfAbbreviationWithFirst original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NullIfAbbreviation"),
-              Core.projectionField = (Core.Name "second")})),
+              Core.projectionFieldName = (Core.Name "second")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nullIfAbbreviationWithSecond :: Phantoms.TTerm Grammar.NullIfAbbreviation -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.NullIfAbbreviation
@@ -12638,7 +12638,7 @@ nullIfAbbreviationWithSecond original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NullIfAbbreviation"),
-              Core.projectionField = (Core.Name "first")})),
+              Core.projectionFieldName = (Core.Name "first")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "second"),
@@ -12677,7 +12677,7 @@ nullPredicateNullPart x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NullPredicate"),
-        Core.projectionField = (Core.Name "nullPart")})),
+        Core.projectionFieldName = (Core.Name "nullPart")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nullPredicatePart2 :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.NullPredicatePart2
@@ -12694,7 +12694,7 @@ nullPredicatePart2Not x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NullPredicatePart2"),
-        Core.projectionField = (Core.Name "not")})),
+        Core.projectionFieldName = (Core.Name "not")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nullPredicatePart2WithNot :: Phantoms.TTerm Grammar.NullPredicatePart2 -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.NullPredicatePart2
@@ -12711,7 +12711,7 @@ nullPredicateValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.NullPredicate"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nullPredicateWithNullPart :: Phantoms.TTerm Grammar.NullPredicate -> Phantoms.TTerm Grammar.NullPredicatePart2 -> Phantoms.TTerm Grammar.NullPredicate
@@ -12724,7 +12724,7 @@ nullPredicateWithNullPart original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NullPredicate"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullPart"),
@@ -12743,7 +12743,7 @@ nullPredicateWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.NullPredicate"),
-              Core.projectionField = (Core.Name "nullPart")})),
+              Core.projectionFieldName = (Core.Name "nullPart")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 numericTypeApproximate :: Phantoms.TTerm Grammar.ApproximateNumericType -> Phantoms.TTerm Grammar.NumericType
@@ -12971,7 +12971,7 @@ offsetAndOptionalLimitLimit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OffsetAndOptionalLimit"),
-        Core.projectionField = (Core.Name "limit")})),
+        Core.projectionFieldName = (Core.Name "limit")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 offsetAndOptionalLimitOffset :: Phantoms.TTerm Grammar.OffsetAndOptionalLimit -> Phantoms.TTerm Grammar.OffsetClause
@@ -12979,7 +12979,7 @@ offsetAndOptionalLimitOffset x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OffsetAndOptionalLimit"),
-        Core.projectionField = (Core.Name "offset")})),
+        Core.projectionFieldName = (Core.Name "offset")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 offsetAndOptionalLimitWithLimit :: Phantoms.TTerm Grammar.OffsetAndOptionalLimit -> Phantoms.TTerm (Maybe Grammar.LimitClause) -> Phantoms.TTerm Grammar.OffsetAndOptionalLimit
@@ -12992,7 +12992,7 @@ offsetAndOptionalLimitWithLimit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OffsetAndOptionalLimit"),
-              Core.projectionField = (Core.Name "offset")})),
+              Core.projectionFieldName = (Core.Name "offset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
@@ -13011,7 +13011,7 @@ offsetAndOptionalLimitWithOffset original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OffsetAndOptionalLimit"),
-              Core.projectionField = (Core.Name "limit")})),
+              Core.projectionFieldName = (Core.Name "limit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 offsetClause :: Phantoms.TTerm Grammar.OffsetSynonym -> Phantoms.TTerm Grammar.NonNegativeIntegerSpecification -> Phantoms.TTerm Grammar.OffsetClause
@@ -13031,7 +13031,7 @@ offsetClauseSynonym x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OffsetClause"),
-        Core.projectionField = (Core.Name "synonym")})),
+        Core.projectionFieldName = (Core.Name "synonym")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 offsetClauseValue :: Phantoms.TTerm Grammar.OffsetClause -> Phantoms.TTerm Grammar.NonNegativeIntegerSpecification
@@ -13039,7 +13039,7 @@ offsetClauseValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OffsetClause"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 offsetClauseWithSynonym :: Phantoms.TTerm Grammar.OffsetClause -> Phantoms.TTerm Grammar.OffsetSynonym -> Phantoms.TTerm Grammar.OffsetClause
@@ -13055,7 +13055,7 @@ offsetClauseWithSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OffsetClause"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 offsetClauseWithValue :: Phantoms.TTerm Grammar.OffsetClause -> Phantoms.TTerm Grammar.NonNegativeIntegerSpecification -> Phantoms.TTerm Grammar.OffsetClause
@@ -13068,7 +13068,7 @@ offsetClauseWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OffsetClause"),
-              Core.projectionField = (Core.Name "synonym")})),
+              Core.projectionFieldName = (Core.Name "synonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -13107,7 +13107,7 @@ openDynamicUnionTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenDynamicUnionType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openDynamicUnionTypeValue :: Phantoms.TTerm Grammar.OpenDynamicUnionType -> Phantoms.TTerm Bool
@@ -13115,7 +13115,7 @@ openDynamicUnionTypeValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenDynamicUnionType"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openDynamicUnionTypeWithNotNull :: Phantoms.TTerm Grammar.OpenDynamicUnionType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenDynamicUnionType
@@ -13128,7 +13128,7 @@ openDynamicUnionTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenDynamicUnionType"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -13147,7 +13147,7 @@ openDynamicUnionTypeWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenDynamicUnionType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 openEdgeReferenceValueType :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.EdgeSynonym -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenEdgeReferenceValueType
@@ -13170,7 +13170,7 @@ openEdgeReferenceValueTypeAny x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenEdgeReferenceValueType"),
-        Core.projectionField = (Core.Name "any")})),
+        Core.projectionFieldName = (Core.Name "any")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openEdgeReferenceValueTypeEdgeSynonym :: Phantoms.TTerm Grammar.OpenEdgeReferenceValueType -> Phantoms.TTerm Grammar.EdgeSynonym
@@ -13178,7 +13178,7 @@ openEdgeReferenceValueTypeEdgeSynonym x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenEdgeReferenceValueType"),
-        Core.projectionField = (Core.Name "edgeSynonym")})),
+        Core.projectionFieldName = (Core.Name "edgeSynonym")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openEdgeReferenceValueTypeNotNull :: Phantoms.TTerm Grammar.OpenEdgeReferenceValueType -> Phantoms.TTerm Bool
@@ -13186,7 +13186,7 @@ openEdgeReferenceValueTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenEdgeReferenceValueType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openEdgeReferenceValueTypeWithAny :: Phantoms.TTerm Grammar.OpenEdgeReferenceValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenEdgeReferenceValueType
@@ -13202,14 +13202,14 @@ openEdgeReferenceValueTypeWithAny original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenEdgeReferenceValueType"),
-              Core.projectionField = (Core.Name "edgeSynonym")})),
+              Core.projectionFieldName = (Core.Name "edgeSynonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenEdgeReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 openEdgeReferenceValueTypeWithEdgeSynonym :: Phantoms.TTerm Grammar.OpenEdgeReferenceValueType -> Phantoms.TTerm Grammar.EdgeSynonym -> Phantoms.TTerm Grammar.OpenEdgeReferenceValueType
@@ -13222,7 +13222,7 @@ openEdgeReferenceValueTypeWithEdgeSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenEdgeReferenceValueType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edgeSynonym"),
@@ -13232,7 +13232,7 @@ openEdgeReferenceValueTypeWithEdgeSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenEdgeReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 openEdgeReferenceValueTypeWithNotNull :: Phantoms.TTerm Grammar.OpenEdgeReferenceValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenEdgeReferenceValueType
@@ -13245,14 +13245,14 @@ openEdgeReferenceValueTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenEdgeReferenceValueType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "edgeSynonym"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenEdgeReferenceValueType"),
-              Core.projectionField = (Core.Name "edgeSynonym")})),
+              Core.projectionFieldName = (Core.Name "edgeSynonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -13278,7 +13278,7 @@ openGraphReferenceValueTypeAny x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphReferenceValueType"),
-        Core.projectionField = (Core.Name "any")})),
+        Core.projectionFieldName = (Core.Name "any")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openGraphReferenceValueTypeNotNull :: Phantoms.TTerm Grammar.OpenGraphReferenceValueType -> Phantoms.TTerm Bool
@@ -13286,7 +13286,7 @@ openGraphReferenceValueTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphReferenceValueType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openGraphReferenceValueTypeProperty :: Phantoms.TTerm Grammar.OpenGraphReferenceValueType -> Phantoms.TTerm Bool
@@ -13294,7 +13294,7 @@ openGraphReferenceValueTypeProperty x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphReferenceValueType"),
-        Core.projectionField = (Core.Name "property")})),
+        Core.projectionFieldName = (Core.Name "property")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openGraphReferenceValueTypeWithAny :: Phantoms.TTerm Grammar.OpenGraphReferenceValueType -> Phantoms.TTerm (Maybe Bool) -> Phantoms.TTerm Grammar.OpenGraphReferenceValueType
@@ -13310,14 +13310,14 @@ openGraphReferenceValueTypeWithAny original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 openGraphReferenceValueTypeWithNotNull :: Phantoms.TTerm Grammar.OpenGraphReferenceValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenGraphReferenceValueType
@@ -13330,14 +13330,14 @@ openGraphReferenceValueTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "property")})),
+              Core.projectionFieldName = (Core.Name "property")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -13353,7 +13353,7 @@ openGraphReferenceValueTypeWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "property"),
@@ -13363,7 +13363,7 @@ openGraphReferenceValueTypeWithProperty original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 openGraphType :: Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenGraphType
@@ -13383,7 +13383,7 @@ openGraphTypeGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphType"),
-        Core.projectionField = (Core.Name "graph")})),
+        Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openGraphTypeTyped :: Phantoms.TTerm Grammar.OpenGraphType -> Phantoms.TTerm (Maybe Grammar.Typed)
@@ -13391,7 +13391,7 @@ openGraphTypeTyped x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphType"),
-        Core.projectionField = (Core.Name "typed")})),
+        Core.projectionFieldName = (Core.Name "typed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openGraphTypeWithGraph :: Phantoms.TTerm Grammar.OpenGraphType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenGraphType
@@ -13404,7 +13404,7 @@ openGraphTypeWithGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphType"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
@@ -13423,7 +13423,7 @@ openGraphTypeWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenGraphType"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 openNodeReferenceValueType :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.NodeSynonym -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenNodeReferenceValueType
@@ -13446,7 +13446,7 @@ openNodeReferenceValueTypeAny x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenNodeReferenceValueType"),
-        Core.projectionField = (Core.Name "any")})),
+        Core.projectionFieldName = (Core.Name "any")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openNodeReferenceValueTypeNodeSynonym :: Phantoms.TTerm Grammar.OpenNodeReferenceValueType -> Phantoms.TTerm Grammar.NodeSynonym
@@ -13454,7 +13454,7 @@ openNodeReferenceValueTypeNodeSynonym x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenNodeReferenceValueType"),
-        Core.projectionField = (Core.Name "nodeSynonym")})),
+        Core.projectionFieldName = (Core.Name "nodeSynonym")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openNodeReferenceValueTypeNotNull :: Phantoms.TTerm Grammar.OpenNodeReferenceValueType -> Phantoms.TTerm Bool
@@ -13462,7 +13462,7 @@ openNodeReferenceValueTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OpenNodeReferenceValueType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 openNodeReferenceValueTypeWithAny :: Phantoms.TTerm Grammar.OpenNodeReferenceValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenNodeReferenceValueType
@@ -13478,14 +13478,14 @@ openNodeReferenceValueTypeWithAny original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenNodeReferenceValueType"),
-              Core.projectionField = (Core.Name "nodeSynonym")})),
+              Core.projectionFieldName = (Core.Name "nodeSynonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenNodeReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 openNodeReferenceValueTypeWithNodeSynonym :: Phantoms.TTerm Grammar.OpenNodeReferenceValueType -> Phantoms.TTerm Grammar.NodeSynonym -> Phantoms.TTerm Grammar.OpenNodeReferenceValueType
@@ -13498,7 +13498,7 @@ openNodeReferenceValueTypeWithNodeSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenNodeReferenceValueType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nodeSynonym"),
@@ -13508,7 +13508,7 @@ openNodeReferenceValueTypeWithNodeSynonym original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenNodeReferenceValueType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 openNodeReferenceValueTypeWithNotNull :: Phantoms.TTerm Grammar.OpenNodeReferenceValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.OpenNodeReferenceValueType
@@ -13521,14 +13521,14 @@ openNodeReferenceValueTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenNodeReferenceValueType"),
-              Core.projectionField = (Core.Name "any")})),
+              Core.projectionFieldName = (Core.Name "any")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nodeSynonym"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OpenNodeReferenceValueType"),
-              Core.projectionField = (Core.Name "nodeSynonym")})),
+              Core.projectionFieldName = (Core.Name "nodeSynonym")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -13551,7 +13551,7 @@ optTypedBindingTableInitializerInitializer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedBindingTableInitializer"),
-        Core.projectionField = (Core.Name "initializer")})),
+        Core.projectionFieldName = (Core.Name "initializer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 optTypedBindingTableInitializerType :: Phantoms.TTerm Grammar.OptTypedBindingTableInitializer -> Phantoms.TTerm (Maybe Grammar.TypedBindingTableReferenceValueType)
@@ -13559,7 +13559,7 @@ optTypedBindingTableInitializerType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedBindingTableInitializer"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 optTypedBindingTableInitializerWithInitializer :: Phantoms.TTerm Grammar.OptTypedBindingTableInitializer -> Phantoms.TTerm Grammar.BindingTableInitializer -> Phantoms.TTerm Grammar.OptTypedBindingTableInitializer
@@ -13572,7 +13572,7 @@ optTypedBindingTableInitializerWithInitializer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedBindingTableInitializer"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "initializer"),
@@ -13591,7 +13591,7 @@ optTypedBindingTableInitializerWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedBindingTableInitializer"),
-              Core.projectionField = (Core.Name "initializer")})),
+              Core.projectionFieldName = (Core.Name "initializer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 optTypedGraphInitializer :: Phantoms.TTerm (Maybe Grammar.TypedGraphReferenceValueType) -> Phantoms.TTerm Grammar.GraphInitializer -> Phantoms.TTerm Grammar.OptTypedGraphInitializer
@@ -13611,7 +13611,7 @@ optTypedGraphInitializerInitializer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedGraphInitializer"),
-        Core.projectionField = (Core.Name "initializer")})),
+        Core.projectionFieldName = (Core.Name "initializer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 optTypedGraphInitializerType :: Phantoms.TTerm Grammar.OptTypedGraphInitializer -> Phantoms.TTerm (Maybe Grammar.TypedGraphReferenceValueType)
@@ -13619,7 +13619,7 @@ optTypedGraphInitializerType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedGraphInitializer"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 optTypedGraphInitializerWithInitializer :: Phantoms.TTerm Grammar.OptTypedGraphInitializer -> Phantoms.TTerm Grammar.GraphInitializer -> Phantoms.TTerm Grammar.OptTypedGraphInitializer
@@ -13632,7 +13632,7 @@ optTypedGraphInitializerWithInitializer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedGraphInitializer"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "initializer"),
@@ -13651,7 +13651,7 @@ optTypedGraphInitializerWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedGraphInitializer"),
-              Core.projectionField = (Core.Name "initializer")})),
+              Core.projectionFieldName = (Core.Name "initializer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 optTypedValueInitializer :: Phantoms.TTerm (Maybe Grammar.TypedValueType) -> Phantoms.TTerm Grammar.ValueInitializer -> Phantoms.TTerm Grammar.OptTypedValueInitializer
@@ -13671,7 +13671,7 @@ optTypedValueInitializerInitializer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedValueInitializer"),
-        Core.projectionField = (Core.Name "initializer")})),
+        Core.projectionFieldName = (Core.Name "initializer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 optTypedValueInitializerType :: Phantoms.TTerm Grammar.OptTypedValueInitializer -> Phantoms.TTerm (Maybe Grammar.TypedValueType)
@@ -13679,7 +13679,7 @@ optTypedValueInitializerType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedValueInitializer"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 optTypedValueInitializerWithInitializer :: Phantoms.TTerm Grammar.OptTypedValueInitializer -> Phantoms.TTerm Grammar.ValueInitializer -> Phantoms.TTerm Grammar.OptTypedValueInitializer
@@ -13692,7 +13692,7 @@ optTypedValueInitializerWithInitializer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedValueInitializer"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "initializer"),
@@ -13711,7 +13711,7 @@ optTypedValueInitializerWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OptTypedValueInitializer"),
-              Core.projectionField = (Core.Name "initializer")})),
+              Core.projectionFieldName = (Core.Name "initializer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 optionalOperandBraceBlock :: Phantoms.TTerm Grammar.MatchStatementBlock -> Phantoms.TTerm Grammar.OptionalOperand
@@ -13758,7 +13758,7 @@ orderByAndOptionalOffsetAndLimitLimit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OrderByAndOptionalOffsetAndLimit"),
-        Core.projectionField = (Core.Name "limit")})),
+        Core.projectionFieldName = (Core.Name "limit")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 orderByAndOptionalOffsetAndLimitOffset :: Phantoms.TTerm Grammar.OrderByAndOptionalOffsetAndLimit -> Phantoms.TTerm (Maybe Grammar.OffsetClause)
@@ -13766,7 +13766,7 @@ orderByAndOptionalOffsetAndLimitOffset x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OrderByAndOptionalOffsetAndLimit"),
-        Core.projectionField = (Core.Name "offset")})),
+        Core.projectionFieldName = (Core.Name "offset")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 orderByAndOptionalOffsetAndLimitOrderBy :: Phantoms.TTerm Grammar.OrderByAndOptionalOffsetAndLimit -> Phantoms.TTerm Grammar.OrderByClause
@@ -13774,7 +13774,7 @@ orderByAndOptionalOffsetAndLimitOrderBy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.OrderByAndOptionalOffsetAndLimit"),
-        Core.projectionField = (Core.Name "orderBy")})),
+        Core.projectionFieldName = (Core.Name "orderBy")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 orderByAndOptionalOffsetAndLimitWithLimit :: Phantoms.TTerm Grammar.OrderByAndOptionalOffsetAndLimit -> Phantoms.TTerm (Maybe Grammar.LimitClause) -> Phantoms.TTerm Grammar.OrderByAndOptionalOffsetAndLimit
@@ -13787,14 +13787,14 @@ orderByAndOptionalOffsetAndLimitWithLimit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OrderByAndOptionalOffsetAndLimit"),
-              Core.projectionField = (Core.Name "orderBy")})),
+              Core.projectionFieldName = (Core.Name "orderBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "offset"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OrderByAndOptionalOffsetAndLimit"),
-              Core.projectionField = (Core.Name "offset")})),
+              Core.projectionFieldName = (Core.Name "offset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
@@ -13810,7 +13810,7 @@ orderByAndOptionalOffsetAndLimitWithOffset original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OrderByAndOptionalOffsetAndLimit"),
-              Core.projectionField = (Core.Name "orderBy")})),
+              Core.projectionFieldName = (Core.Name "orderBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "offset"),
@@ -13820,7 +13820,7 @@ orderByAndOptionalOffsetAndLimitWithOffset original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OrderByAndOptionalOffsetAndLimit"),
-              Core.projectionField = (Core.Name "limit")})),
+              Core.projectionFieldName = (Core.Name "limit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 orderByAndOptionalOffsetAndLimitWithOrderBy :: Phantoms.TTerm Grammar.OrderByAndOptionalOffsetAndLimit -> Phantoms.TTerm Grammar.OrderByClause -> Phantoms.TTerm Grammar.OrderByAndOptionalOffsetAndLimit
@@ -13836,14 +13836,14 @@ orderByAndOptionalOffsetAndLimitWithOrderBy original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OrderByAndOptionalOffsetAndLimit"),
-              Core.projectionField = (Core.Name "offset")})),
+              Core.projectionFieldName = (Core.Name "offset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.OrderByAndOptionalOffsetAndLimit"),
-              Core.projectionField = (Core.Name "limit")})),
+              Core.projectionFieldName = (Core.Name "limit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 orderByAndPageStatementLimitOnly :: Phantoms.TTerm Grammar.LimitClause -> Phantoms.TTerm Grammar.OrderByAndPageStatement
@@ -13919,7 +13919,7 @@ parameterSessionSpecificationParameter x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParameterSessionSpecification"),
-        Core.projectionField = (Core.Name "parameter")})),
+        Core.projectionFieldName = (Core.Name "parameter")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parameterSessionSpecificationSessionParameterSpecification :: Phantoms.TTerm Grammar.ParameterSessionSpecification -> Phantoms.TTerm Grammar.SessionParameterSpecification
@@ -13927,7 +13927,7 @@ parameterSessionSpecificationSessionParameterSpecification x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParameterSessionSpecification"),
-        Core.projectionField = (Core.Name "sessionParameterSpecification")})),
+        Core.projectionFieldName = (Core.Name "sessionParameterSpecification")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parameterSessionSpecificationWithParameter :: Phantoms.TTerm Grammar.ParameterSessionSpecification -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ParameterSessionSpecification
@@ -13943,7 +13943,7 @@ parameterSessionSpecificationWithParameter original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParameterSessionSpecification"),
-              Core.projectionField = (Core.Name "sessionParameterSpecification")})),
+              Core.projectionFieldName = (Core.Name "sessionParameterSpecification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parameterSessionSpecificationWithSessionParameterSpecification :: Phantoms.TTerm Grammar.ParameterSessionSpecification -> Phantoms.TTerm Grammar.SessionParameterSpecification -> Phantoms.TTerm Grammar.ParameterSessionSpecification
@@ -13956,7 +13956,7 @@ parameterSessionSpecificationWithSessionParameterSpecification original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParameterSessionSpecification"),
-              Core.projectionField = (Core.Name "parameter")})),
+              Core.projectionFieldName = (Core.Name "parameter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sessionParameterSpecification"),
@@ -13995,7 +13995,7 @@ parentAndGraphNameGraphName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParentAndGraphName"),
-        Core.projectionField = (Core.Name "graphName")})),
+        Core.projectionFieldName = (Core.Name "graphName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parentAndGraphNameParentReference :: Phantoms.TTerm Grammar.ParentAndGraphName -> Phantoms.TTerm Grammar.CatalogObjectParentReference
@@ -14003,7 +14003,7 @@ parentAndGraphNameParentReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParentAndGraphName"),
-        Core.projectionField = (Core.Name "parentReference")})),
+        Core.projectionFieldName = (Core.Name "parentReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parentAndGraphNameWithGraphName :: Phantoms.TTerm Grammar.ParentAndGraphName -> Phantoms.TTerm Grammar.GraphName -> Phantoms.TTerm Grammar.ParentAndGraphName
@@ -14016,7 +14016,7 @@ parentAndGraphNameWithGraphName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParentAndGraphName"),
-              Core.projectionField = (Core.Name "parentReference")})),
+              Core.projectionFieldName = (Core.Name "parentReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graphName"),
@@ -14035,7 +14035,7 @@ parentAndGraphNameWithParentReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParentAndGraphName"),
-              Core.projectionField = (Core.Name "graphName")})),
+              Core.projectionFieldName = (Core.Name "graphName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parentAndTableName :: Phantoms.TTerm Grammar.CatalogObjectParentReference -> Phantoms.TTerm Grammar.BindingTableName -> Phantoms.TTerm Grammar.ParentAndTableName
@@ -14055,7 +14055,7 @@ parentAndTableNameParentReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParentAndTableName"),
-        Core.projectionField = (Core.Name "parentReference")})),
+        Core.projectionFieldName = (Core.Name "parentReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parentAndTableNameTableName :: Phantoms.TTerm Grammar.ParentAndTableName -> Phantoms.TTerm Grammar.BindingTableName
@@ -14063,7 +14063,7 @@ parentAndTableNameTableName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParentAndTableName"),
-        Core.projectionField = (Core.Name "tableName")})),
+        Core.projectionFieldName = (Core.Name "tableName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parentAndTableNameWithParentReference :: Phantoms.TTerm Grammar.ParentAndTableName -> Phantoms.TTerm Grammar.CatalogObjectParentReference -> Phantoms.TTerm Grammar.ParentAndTableName
@@ -14079,7 +14079,7 @@ parentAndTableNameWithParentReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParentAndTableName"),
-              Core.projectionField = (Core.Name "tableName")})),
+              Core.projectionFieldName = (Core.Name "tableName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parentAndTableNameWithTableName :: Phantoms.TTerm Grammar.ParentAndTableName -> Phantoms.TTerm Grammar.BindingTableName -> Phantoms.TTerm Grammar.ParentAndTableName
@@ -14092,7 +14092,7 @@ parentAndTableNameWithTableName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParentAndTableName"),
-              Core.projectionField = (Core.Name "parentReference")})),
+              Core.projectionFieldName = (Core.Name "parentReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "tableName"),
@@ -14121,7 +14121,7 @@ parenthesizedPathPatternExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parenthesizedPathPatternExpressionPathMode :: Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression -> Phantoms.TTerm (Maybe Grammar.PathModePrefix)
@@ -14129,7 +14129,7 @@ parenthesizedPathPatternExpressionPathMode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-        Core.projectionField = (Core.Name "pathMode")})),
+        Core.projectionFieldName = (Core.Name "pathMode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parenthesizedPathPatternExpressionSubpathDeclaration :: Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression -> Phantoms.TTerm (Maybe Grammar.SubpathVariableDeclaration)
@@ -14137,7 +14137,7 @@ parenthesizedPathPatternExpressionSubpathDeclaration x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-        Core.projectionField = (Core.Name "subpathDeclaration")})),
+        Core.projectionFieldName = (Core.Name "subpathDeclaration")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parenthesizedPathPatternExpressionWhereClause :: Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression -> Phantoms.TTerm (Maybe Grammar.ParenthesizedPathPatternWhereClause)
@@ -14145,7 +14145,7 @@ parenthesizedPathPatternExpressionWhereClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-        Core.projectionField = (Core.Name "whereClause")})),
+        Core.projectionFieldName = (Core.Name "whereClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 parenthesizedPathPatternExpressionWithExpression :: Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression -> Phantoms.TTerm Grammar.PathPatternExpression -> Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression
@@ -14158,14 +14158,14 @@ parenthesizedPathPatternExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "subpathDeclaration")})),
+              Core.projectionFieldName = (Core.Name "subpathDeclaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pathMode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "pathMode")})),
+              Core.projectionFieldName = (Core.Name "pathMode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -14175,7 +14175,7 @@ parenthesizedPathPatternExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parenthesizedPathPatternExpressionWithPathMode :: Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression -> Phantoms.TTerm (Maybe Grammar.PathModePrefix) -> Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression
@@ -14188,7 +14188,7 @@ parenthesizedPathPatternExpressionWithPathMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "subpathDeclaration")})),
+              Core.projectionFieldName = (Core.Name "subpathDeclaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pathMode"),
@@ -14198,14 +14198,14 @@ parenthesizedPathPatternExpressionWithPathMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parenthesizedPathPatternExpressionWithSubpathDeclaration :: Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression -> Phantoms.TTerm (Maybe Grammar.SubpathVariableDeclaration) -> Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression
@@ -14221,21 +14221,21 @@ parenthesizedPathPatternExpressionWithSubpathDeclaration original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "pathMode")})),
+              Core.projectionFieldName = (Core.Name "pathMode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "whereClause")})),
+              Core.projectionFieldName = (Core.Name "whereClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 parenthesizedPathPatternExpressionWithWhereClause :: Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression -> Phantoms.TTerm (Maybe Grammar.ParenthesizedPathPatternWhereClause) -> Phantoms.TTerm Grammar.ParenthesizedPathPatternExpression
@@ -14248,21 +14248,21 @@ parenthesizedPathPatternExpressionWithWhereClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "subpathDeclaration")})),
+              Core.projectionFieldName = (Core.Name "subpathDeclaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pathMode"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "pathMode")})),
+              Core.projectionFieldName = (Core.Name "pathMode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ParenthesizedPathPatternExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whereClause"),
@@ -14285,7 +14285,7 @@ pathElementListStart x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathElementList"),
-        Core.projectionField = (Core.Name "start")})),
+        Core.projectionFieldName = (Core.Name "start")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathElementListStep :: Phantoms.TTerm Grammar.EdgeReferenceValueExpression -> Phantoms.TTerm Grammar.NodeReferenceValueExpression -> Phantoms.TTerm Grammar.PathElementListStep
@@ -14305,7 +14305,7 @@ pathElementListStepEdgeReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathElementListStep"),
-        Core.projectionField = (Core.Name "edgeReference")})),
+        Core.projectionFieldName = (Core.Name "edgeReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathElementListStepNodeReference :: Phantoms.TTerm Grammar.PathElementListStep -> Phantoms.TTerm Grammar.NodeReferenceValueExpression
@@ -14313,7 +14313,7 @@ pathElementListStepNodeReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathElementListStep"),
-        Core.projectionField = (Core.Name "nodeReference")})),
+        Core.projectionFieldName = (Core.Name "nodeReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathElementListStepWithEdgeReference :: Phantoms.TTerm Grammar.PathElementListStep -> Phantoms.TTerm Grammar.EdgeReferenceValueExpression -> Phantoms.TTerm Grammar.PathElementListStep
@@ -14329,7 +14329,7 @@ pathElementListStepWithEdgeReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathElementListStep"),
-              Core.projectionField = (Core.Name "nodeReference")})),
+              Core.projectionFieldName = (Core.Name "nodeReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pathElementListStepWithNodeReference :: Phantoms.TTerm Grammar.PathElementListStep -> Phantoms.TTerm Grammar.NodeReferenceValueExpression -> Phantoms.TTerm Grammar.PathElementListStep
@@ -14342,7 +14342,7 @@ pathElementListStepWithNodeReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathElementListStep"),
-              Core.projectionField = (Core.Name "edgeReference")})),
+              Core.projectionFieldName = (Core.Name "edgeReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nodeReference"),
@@ -14353,7 +14353,7 @@ pathElementListSteps x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathElementList"),
-        Core.projectionField = (Core.Name "steps")})),
+        Core.projectionFieldName = (Core.Name "steps")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathElementListWithStart :: Phantoms.TTerm Grammar.PathElementList -> Phantoms.TTerm Grammar.PathElementListStart -> Phantoms.TTerm Grammar.PathElementList
@@ -14369,7 +14369,7 @@ pathElementListWithStart original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathElementList"),
-              Core.projectionField = (Core.Name "steps")})),
+              Core.projectionFieldName = (Core.Name "steps")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pathElementListWithSteps :: Phantoms.TTerm Grammar.PathElementList -> Phantoms.TTerm [Grammar.PathElementListStep] -> Phantoms.TTerm Grammar.PathElementList
@@ -14382,7 +14382,7 @@ pathElementListWithSteps original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathElementList"),
-              Core.projectionField = (Core.Name "start")})),
+              Core.projectionFieldName = (Core.Name "start")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "steps"),
@@ -14437,7 +14437,7 @@ pathModePrefixMode x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathModePrefix"),
-        Core.projectionField = (Core.Name "mode")})),
+        Core.projectionFieldName = (Core.Name "mode")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathModePrefixOrPaths :: Phantoms.TTerm Grammar.PathModePrefix -> Phantoms.TTerm (Maybe Grammar.PathOrPaths)
@@ -14445,7 +14445,7 @@ pathModePrefixOrPaths x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathModePrefix"),
-        Core.projectionField = (Core.Name "orPaths")})),
+        Core.projectionFieldName = (Core.Name "orPaths")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathModePrefixWithMode :: Phantoms.TTerm Grammar.PathModePrefix -> Phantoms.TTerm Grammar.PathMode -> Phantoms.TTerm Grammar.PathModePrefix
@@ -14461,7 +14461,7 @@ pathModePrefixWithMode original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathModePrefix"),
-              Core.projectionField = (Core.Name "orPaths")})),
+              Core.projectionFieldName = (Core.Name "orPaths")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pathModePrefixWithOrPaths :: Phantoms.TTerm Grammar.PathModePrefix -> Phantoms.TTerm (Maybe Grammar.PathOrPaths) -> Phantoms.TTerm Grammar.PathModePrefix
@@ -14474,7 +14474,7 @@ pathModePrefixWithOrPaths original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathModePrefix"),
-              Core.projectionField = (Core.Name "mode")})),
+              Core.projectionFieldName = (Core.Name "mode")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orPaths"),
@@ -14540,7 +14540,7 @@ pathPatternExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathPattern"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathPatternExpressionMultisetAlternation :: Phantoms.TTerm [Grammar.PathTerm] -> Phantoms.TTerm Grammar.PathPatternExpression
@@ -14572,7 +14572,7 @@ pathPatternPrefix x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathPattern"),
-        Core.projectionField = (Core.Name "prefix")})),
+        Core.projectionFieldName = (Core.Name "prefix")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathPatternPrefixModePrefix :: Phantoms.TTerm Grammar.PathModePrefix -> Phantoms.TTerm Grammar.PathPatternPrefix
@@ -14596,7 +14596,7 @@ pathPatternVariableDeclaration x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathPattern"),
-        Core.projectionField = (Core.Name "variableDeclaration")})),
+        Core.projectionFieldName = (Core.Name "variableDeclaration")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathPatternWithExpression :: Phantoms.TTerm Grammar.PathPattern -> Phantoms.TTerm Grammar.PathPatternExpression -> Phantoms.TTerm Grammar.PathPattern
@@ -14609,14 +14609,14 @@ pathPatternWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathPattern"),
-              Core.projectionField = (Core.Name "variableDeclaration")})),
+              Core.projectionFieldName = (Core.Name "variableDeclaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "prefix"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathPattern"),
-              Core.projectionField = (Core.Name "prefix")})),
+              Core.projectionFieldName = (Core.Name "prefix")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -14632,7 +14632,7 @@ pathPatternWithPrefix original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathPattern"),
-              Core.projectionField = (Core.Name "variableDeclaration")})),
+              Core.projectionFieldName = (Core.Name "variableDeclaration")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "prefix"),
@@ -14642,7 +14642,7 @@ pathPatternWithPrefix original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathPattern"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pathPatternWithVariableDeclaration :: Phantoms.TTerm Grammar.PathPattern -> Phantoms.TTerm (Maybe Grammar.PathVariableDeclaration) -> Phantoms.TTerm Grammar.PathPattern
@@ -14658,14 +14658,14 @@ pathPatternWithVariableDeclaration original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathPattern"),
-              Core.projectionField = (Core.Name "prefix")})),
+              Core.projectionFieldName = (Core.Name "prefix")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PathPattern"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pathPrimaryElementPattern :: Phantoms.TTerm Grammar.ElementPattern -> Phantoms.TTerm Grammar.PathPrimary
@@ -14730,7 +14730,7 @@ pathValueTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PathValueType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pathValueTypeWithNotNull :: Phantoms.TTerm Grammar.PathValueType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.PathValueType
@@ -14759,7 +14759,7 @@ powerFunctionBase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PowerFunction"),
-        Core.projectionField = (Core.Name "base")})),
+        Core.projectionFieldName = (Core.Name "base")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 powerFunctionExponent :: Phantoms.TTerm Grammar.PowerFunction -> Phantoms.TTerm Grammar.NumericValueExpressionExponent
@@ -14767,7 +14767,7 @@ powerFunctionExponent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PowerFunction"),
-        Core.projectionField = (Core.Name "exponent")})),
+        Core.projectionFieldName = (Core.Name "exponent")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 powerFunctionWithBase :: Phantoms.TTerm Grammar.PowerFunction -> Phantoms.TTerm Grammar.NumericValueExpressionBase -> Phantoms.TTerm Grammar.PowerFunction
@@ -14783,7 +14783,7 @@ powerFunctionWithBase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PowerFunction"),
-              Core.projectionField = (Core.Name "exponent")})),
+              Core.projectionFieldName = (Core.Name "exponent")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 powerFunctionWithExponent :: Phantoms.TTerm Grammar.PowerFunction -> Phantoms.TTerm Grammar.NumericValueExpressionExponent -> Phantoms.TTerm Grammar.PowerFunction
@@ -14796,7 +14796,7 @@ powerFunctionWithExponent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PowerFunction"),
-              Core.projectionField = (Core.Name "base")})),
+              Core.projectionFieldName = (Core.Name "base")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "exponent"),
@@ -14822,7 +14822,7 @@ precisionAndScaleNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PrecisionAndScale"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 precisionAndScalePrecision :: Phantoms.TTerm Grammar.PrecisionAndScale -> Phantoms.TTerm Grammar.Precision
@@ -14830,7 +14830,7 @@ precisionAndScalePrecision x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PrecisionAndScale"),
-        Core.projectionField = (Core.Name "precision")})),
+        Core.projectionFieldName = (Core.Name "precision")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 precisionAndScaleScale :: Phantoms.TTerm Grammar.PrecisionAndScale -> Phantoms.TTerm (Maybe Grammar.Scale)
@@ -14838,7 +14838,7 @@ precisionAndScaleScale x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PrecisionAndScale"),
-        Core.projectionField = (Core.Name "scale")})),
+        Core.projectionFieldName = (Core.Name "scale")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 precisionAndScaleWithNotNull :: Phantoms.TTerm Grammar.PrecisionAndScale -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.PrecisionAndScale
@@ -14851,14 +14851,14 @@ precisionAndScaleWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PrecisionAndScale"),
-              Core.projectionField = (Core.Name "precision")})),
+              Core.projectionFieldName = (Core.Name "precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "scale"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PrecisionAndScale"),
-              Core.projectionField = (Core.Name "scale")})),
+              Core.projectionFieldName = (Core.Name "scale")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -14877,14 +14877,14 @@ precisionAndScaleWithPrecision original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PrecisionAndScale"),
-              Core.projectionField = (Core.Name "scale")})),
+              Core.projectionFieldName = (Core.Name "scale")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PrecisionAndScale"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 precisionAndScaleWithScale :: Phantoms.TTerm Grammar.PrecisionAndScale -> Phantoms.TTerm (Maybe Grammar.Scale) -> Phantoms.TTerm Grammar.PrecisionAndScale
@@ -14897,7 +14897,7 @@ precisionAndScaleWithScale original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PrecisionAndScale"),
-              Core.projectionField = (Core.Name "precision")})),
+              Core.projectionFieldName = (Core.Name "precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "scale"),
@@ -14907,7 +14907,7 @@ precisionAndScaleWithScale original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PrecisionAndScale"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 predefinedSchemaReferenceCurrentSchema :: Phantoms.TTerm Grammar.PredefinedSchemaReference
@@ -15303,7 +15303,7 @@ procedureAndMaybeEndEnd x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureAndMaybeEnd"),
-        Core.projectionField = (Core.Name "end")})),
+        Core.projectionFieldName = (Core.Name "end")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 procedureAndMaybeEndProcedure :: Phantoms.TTerm Grammar.ProcedureAndMaybeEnd -> Phantoms.TTerm Grammar.ProcedureSpecification
@@ -15311,7 +15311,7 @@ procedureAndMaybeEndProcedure x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureAndMaybeEnd"),
-        Core.projectionField = (Core.Name "procedure")})),
+        Core.projectionFieldName = (Core.Name "procedure")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 procedureAndMaybeEndWithEnd :: Phantoms.TTerm Grammar.ProcedureAndMaybeEnd -> Phantoms.TTerm (Maybe Grammar.EndTransactionCommand) -> Phantoms.TTerm Grammar.ProcedureAndMaybeEnd
@@ -15324,7 +15324,7 @@ procedureAndMaybeEndWithEnd original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureAndMaybeEnd"),
-              Core.projectionField = (Core.Name "procedure")})),
+              Core.projectionFieldName = (Core.Name "procedure")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "end"),
@@ -15343,7 +15343,7 @@ procedureAndMaybeEndWithProcedure original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureAndMaybeEnd"),
-              Core.projectionField = (Core.Name "end")})),
+              Core.projectionFieldName = (Core.Name "end")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 procedureBody :: Phantoms.TTerm (Maybe Grammar.AtSchemaClause) -> Phantoms.TTerm (Maybe Grammar.BindingVariableDefinitionBlock) -> Phantoms.TTerm Grammar.StatementBlock -> Phantoms.TTerm Grammar.ProcedureBody
@@ -15366,7 +15366,7 @@ procedureBodyAtSchema x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureBody"),
-        Core.projectionField = (Core.Name "atSchema")})),
+        Core.projectionFieldName = (Core.Name "atSchema")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 procedureBodyBindings :: Phantoms.TTerm Grammar.ProcedureBody -> Phantoms.TTerm (Maybe Grammar.BindingVariableDefinitionBlock)
@@ -15374,7 +15374,7 @@ procedureBodyBindings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureBody"),
-        Core.projectionField = (Core.Name "bindings")})),
+        Core.projectionFieldName = (Core.Name "bindings")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 procedureBodyStatements :: Phantoms.TTerm Grammar.ProcedureBody -> Phantoms.TTerm Grammar.StatementBlock
@@ -15382,7 +15382,7 @@ procedureBodyStatements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureBody"),
-        Core.projectionField = (Core.Name "statements")})),
+        Core.projectionFieldName = (Core.Name "statements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 procedureBodyWithAtSchema :: Phantoms.TTerm Grammar.ProcedureBody -> Phantoms.TTerm (Maybe Grammar.AtSchemaClause) -> Phantoms.TTerm Grammar.ProcedureBody
@@ -15398,14 +15398,14 @@ procedureBodyWithAtSchema original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureBody"),
-              Core.projectionField = (Core.Name "bindings")})),
+              Core.projectionFieldName = (Core.Name "bindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureBody"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 procedureBodyWithBindings :: Phantoms.TTerm Grammar.ProcedureBody -> Phantoms.TTerm (Maybe Grammar.BindingVariableDefinitionBlock) -> Phantoms.TTerm Grammar.ProcedureBody
@@ -15418,7 +15418,7 @@ procedureBodyWithBindings original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureBody"),
-              Core.projectionField = (Core.Name "atSchema")})),
+              Core.projectionFieldName = (Core.Name "atSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bindings"),
@@ -15428,7 +15428,7 @@ procedureBodyWithBindings original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureBody"),
-              Core.projectionField = (Core.Name "statements")})),
+              Core.projectionFieldName = (Core.Name "statements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 procedureBodyWithStatements :: Phantoms.TTerm Grammar.ProcedureBody -> Phantoms.TTerm Grammar.StatementBlock -> Phantoms.TTerm Grammar.ProcedureBody
@@ -15441,14 +15441,14 @@ procedureBodyWithStatements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureBody"),
-              Core.projectionField = (Core.Name "atSchema")})),
+              Core.projectionFieldName = (Core.Name "atSchema")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bindings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ProcedureBody"),
-              Core.projectionField = (Core.Name "bindings")})),
+              Core.projectionFieldName = (Core.Name "bindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "statements"),
@@ -15519,7 +15519,7 @@ propertyExistsPredicateElementVariableReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyExistsPredicate"),
-        Core.projectionField = (Core.Name "elementVariableReference")})),
+        Core.projectionFieldName = (Core.Name "elementVariableReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyExistsPredicatePropertyName :: Phantoms.TTerm Grammar.PropertyExistsPredicate -> Phantoms.TTerm Grammar.PropertyName
@@ -15527,7 +15527,7 @@ propertyExistsPredicatePropertyName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyExistsPredicate"),
-        Core.projectionField = (Core.Name "propertyName")})),
+        Core.projectionFieldName = (Core.Name "propertyName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyExistsPredicateWithElementVariableReference :: Phantoms.TTerm Grammar.PropertyExistsPredicate -> Phantoms.TTerm Grammar.ElementVariableReference -> Phantoms.TTerm Grammar.PropertyExistsPredicate
@@ -15543,7 +15543,7 @@ propertyExistsPredicateWithElementVariableReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyExistsPredicate"),
-              Core.projectionField = (Core.Name "propertyName")})),
+              Core.projectionFieldName = (Core.Name "propertyName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyExistsPredicateWithPropertyName :: Phantoms.TTerm Grammar.PropertyExistsPredicate -> Phantoms.TTerm Grammar.PropertyName -> Phantoms.TTerm Grammar.PropertyExistsPredicate
@@ -15556,7 +15556,7 @@ propertyExistsPredicateWithPropertyName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyExistsPredicate"),
-              Core.projectionField = (Core.Name "elementVariableReference")})),
+              Core.projectionFieldName = (Core.Name "elementVariableReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyName"),
@@ -15579,7 +15579,7 @@ propertyKeyValuePairName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyKeyValuePair"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyKeyValuePairValue :: Phantoms.TTerm Grammar.PropertyKeyValuePair -> Phantoms.TTerm Grammar.ValueExpression
@@ -15587,7 +15587,7 @@ propertyKeyValuePairValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyKeyValuePair"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyKeyValuePairWithName :: Phantoms.TTerm Grammar.PropertyKeyValuePair -> Phantoms.TTerm Grammar.PropertyName -> Phantoms.TTerm Grammar.PropertyKeyValuePair
@@ -15603,7 +15603,7 @@ propertyKeyValuePairWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyKeyValuePair"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyKeyValuePairWithValue :: Phantoms.TTerm Grammar.PropertyKeyValuePair -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.PropertyKeyValuePair
@@ -15616,7 +15616,7 @@ propertyKeyValuePairWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyKeyValuePair"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -15639,7 +15639,7 @@ propertyReferencePropertyName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyReference"),
-        Core.projectionField = (Core.Name "propertyName")})),
+        Core.projectionFieldName = (Core.Name "propertyName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyReferenceValueExpression :: Phantoms.TTerm Grammar.PropertyReference -> Phantoms.TTerm Grammar.PrimaryValueExpression
@@ -15647,7 +15647,7 @@ propertyReferenceValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyReference"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyReferenceWithPropertyName :: Phantoms.TTerm Grammar.PropertyReference -> Phantoms.TTerm Grammar.PropertyName -> Phantoms.TTerm Grammar.PropertyReference
@@ -15660,7 +15660,7 @@ propertyReferenceWithPropertyName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyReference"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyName"),
@@ -15679,7 +15679,7 @@ propertyReferenceWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyReference"),
-              Core.projectionField = (Core.Name "propertyName")})),
+              Core.projectionFieldName = (Core.Name "propertyName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyType :: Phantoms.TTerm Grammar.PropertyName -> Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Grammar.PropertyValueType -> Phantoms.TTerm Grammar.PropertyType
@@ -15702,7 +15702,7 @@ propertyTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyType"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyTypeTyped :: Phantoms.TTerm Grammar.PropertyType -> Phantoms.TTerm (Maybe Grammar.Typed)
@@ -15710,7 +15710,7 @@ propertyTypeTyped x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyType"),
-        Core.projectionField = (Core.Name "typed")})),
+        Core.projectionFieldName = (Core.Name "typed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyTypeValueType :: Phantoms.TTerm Grammar.PropertyType -> Phantoms.TTerm Grammar.PropertyValueType
@@ -15718,7 +15718,7 @@ propertyTypeValueType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyType"),
-        Core.projectionField = (Core.Name "valueType")})),
+        Core.projectionFieldName = (Core.Name "valueType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 propertyTypeWithName :: Phantoms.TTerm Grammar.PropertyType -> Phantoms.TTerm Grammar.PropertyName -> Phantoms.TTerm Grammar.PropertyType
@@ -15734,14 +15734,14 @@ propertyTypeWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyType"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyType"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyTypeWithTyped :: Phantoms.TTerm Grammar.PropertyType -> Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Grammar.PropertyType
@@ -15754,7 +15754,7 @@ propertyTypeWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyType"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typed"),
@@ -15764,7 +15764,7 @@ propertyTypeWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyType"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 propertyTypeWithValueType :: Phantoms.TTerm Grammar.PropertyType -> Phantoms.TTerm Grammar.PropertyValueType -> Phantoms.TTerm Grammar.PropertyType
@@ -15777,14 +15777,14 @@ propertyTypeWithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyType"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typed"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.PropertyType"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
@@ -15807,7 +15807,7 @@ quantifiedPathPrimaryPrimary x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.QuantifiedPathPrimary"),
-        Core.projectionField = (Core.Name "primary")})),
+        Core.projectionFieldName = (Core.Name "primary")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 quantifiedPathPrimaryQuantifier :: Phantoms.TTerm Grammar.QuantifiedPathPrimary -> Phantoms.TTerm Grammar.GraphPatternQuantifier
@@ -15815,7 +15815,7 @@ quantifiedPathPrimaryQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.QuantifiedPathPrimary"),
-        Core.projectionField = (Core.Name "quantifier")})),
+        Core.projectionFieldName = (Core.Name "quantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 quantifiedPathPrimaryWithPrimary :: Phantoms.TTerm Grammar.QuantifiedPathPrimary -> Phantoms.TTerm Grammar.PathPrimary -> Phantoms.TTerm Grammar.QuantifiedPathPrimary
@@ -15831,7 +15831,7 @@ quantifiedPathPrimaryWithPrimary original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.QuantifiedPathPrimary"),
-              Core.projectionField = (Core.Name "quantifier")})),
+              Core.projectionFieldName = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 quantifiedPathPrimaryWithQuantifier :: Phantoms.TTerm Grammar.QuantifiedPathPrimary -> Phantoms.TTerm Grammar.GraphPatternQuantifier -> Phantoms.TTerm Grammar.QuantifiedPathPrimary
@@ -15844,7 +15844,7 @@ quantifiedPathPrimaryWithQuantifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.QuantifiedPathPrimary"),
-              Core.projectionField = (Core.Name "primary")})),
+              Core.projectionFieldName = (Core.Name "primary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
@@ -15880,7 +15880,7 @@ realTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RealType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 realTypeWithNotNull :: Phantoms.TTerm Grammar.RealType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.RealType
@@ -15973,7 +15973,7 @@ relativeDirectoryAndSchemaDirectoryPath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RelativeDirectoryAndSchema"),
-        Core.projectionField = (Core.Name "directoryPath")})),
+        Core.projectionFieldName = (Core.Name "directoryPath")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 relativeDirectoryAndSchemaSchemaName :: Phantoms.TTerm Grammar.RelativeDirectoryAndSchema -> Phantoms.TTerm Grammar.SchemaName
@@ -15981,7 +15981,7 @@ relativeDirectoryAndSchemaSchemaName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RelativeDirectoryAndSchema"),
-        Core.projectionField = (Core.Name "schemaName")})),
+        Core.projectionFieldName = (Core.Name "schemaName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 relativeDirectoryAndSchemaWithDirectoryPath :: Phantoms.TTerm Grammar.RelativeDirectoryAndSchema -> Phantoms.TTerm Grammar.RelativeDirectoryPath -> Phantoms.TTerm Grammar.RelativeDirectoryAndSchema
@@ -15997,7 +15997,7 @@ relativeDirectoryAndSchemaWithDirectoryPath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RelativeDirectoryAndSchema"),
-              Core.projectionField = (Core.Name "schemaName")})),
+              Core.projectionFieldName = (Core.Name "schemaName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 relativeDirectoryAndSchemaWithSchemaName :: Phantoms.TTerm Grammar.RelativeDirectoryAndSchema -> Phantoms.TTerm Grammar.SchemaName -> Phantoms.TTerm Grammar.RelativeDirectoryAndSchema
@@ -16010,7 +16010,7 @@ relativeDirectoryAndSchemaWithSchemaName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RelativeDirectoryAndSchema"),
-              Core.projectionField = (Core.Name "directoryPath")})),
+              Core.projectionFieldName = (Core.Name "directoryPath")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "schemaName"),
@@ -16033,7 +16033,7 @@ relativeDirectoryPathParentDirectories x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RelativeDirectoryPath"),
-        Core.projectionField = (Core.Name "parentDirectories")})),
+        Core.projectionFieldName = (Core.Name "parentDirectories")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 relativeDirectoryPathSimplePath :: Phantoms.TTerm Grammar.RelativeDirectoryPath -> Phantoms.TTerm (Maybe Grammar.SimpleDirectoryPath)
@@ -16041,7 +16041,7 @@ relativeDirectoryPathSimplePath x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RelativeDirectoryPath"),
-        Core.projectionField = (Core.Name "simplePath")})),
+        Core.projectionFieldName = (Core.Name "simplePath")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 relativeDirectoryPathWithParentDirectories :: Phantoms.TTerm Grammar.RelativeDirectoryPath -> Phantoms.TTerm Int -> Phantoms.TTerm Grammar.RelativeDirectoryPath
@@ -16057,7 +16057,7 @@ relativeDirectoryPathWithParentDirectories original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RelativeDirectoryPath"),
-              Core.projectionField = (Core.Name "simplePath")})),
+              Core.projectionFieldName = (Core.Name "simplePath")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 relativeDirectoryPathWithSimplePath :: Phantoms.TTerm Grammar.RelativeDirectoryPath -> Phantoms.TTerm (Maybe Grammar.SimpleDirectoryPath) -> Phantoms.TTerm Grammar.RelativeDirectoryPath
@@ -16070,7 +16070,7 @@ relativeDirectoryPathWithSimplePath original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RelativeDirectoryPath"),
-              Core.projectionField = (Core.Name "parentDirectories")})),
+              Core.projectionFieldName = (Core.Name "parentDirectories")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "simplePath"),
@@ -16112,7 +16112,7 @@ removeLabelItemIsOrColon x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RemoveLabelItem"),
-        Core.projectionField = (Core.Name "isOrColon")})),
+        Core.projectionFieldName = (Core.Name "isOrColon")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 removeLabelItemLabel :: Phantoms.TTerm Grammar.RemoveLabelItem -> Phantoms.TTerm Grammar.LabelName
@@ -16120,7 +16120,7 @@ removeLabelItemLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RemoveLabelItem"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 removeLabelItemVariable :: Phantoms.TTerm Grammar.RemoveLabelItem -> Phantoms.TTerm Grammar.BindingVariableReference
@@ -16128,7 +16128,7 @@ removeLabelItemVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RemoveLabelItem"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 removeLabelItemWithIsOrColon :: Phantoms.TTerm Grammar.RemoveLabelItem -> Phantoms.TTerm Grammar.IsOrColon -> Phantoms.TTerm Grammar.RemoveLabelItem
@@ -16141,7 +16141,7 @@ removeLabelItemWithIsOrColon original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RemoveLabelItem"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOrColon"),
@@ -16151,7 +16151,7 @@ removeLabelItemWithIsOrColon original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RemoveLabelItem"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 removeLabelItemWithLabel :: Phantoms.TTerm Grammar.RemoveLabelItem -> Phantoms.TTerm Grammar.LabelName -> Phantoms.TTerm Grammar.RemoveLabelItem
@@ -16164,14 +16164,14 @@ removeLabelItemWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RemoveLabelItem"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOrColon"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RemoveLabelItem"),
-              Core.projectionField = (Core.Name "isOrColon")})),
+              Core.projectionFieldName = (Core.Name "isOrColon")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
@@ -16190,14 +16190,14 @@ removeLabelItemWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RemoveLabelItem"),
-              Core.projectionField = (Core.Name "isOrColon")})),
+              Core.projectionFieldName = (Core.Name "isOrColon")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RemoveLabelItem"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 removePropertyItem :: Phantoms.TTerm Grammar.BindingVariableReference -> Phantoms.TTerm Grammar.PropertyName -> Phantoms.TTerm Grammar.RemovePropertyItem
@@ -16217,7 +16217,7 @@ removePropertyItemPropertyName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RemovePropertyItem"),
-        Core.projectionField = (Core.Name "propertyName")})),
+        Core.projectionFieldName = (Core.Name "propertyName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 removePropertyItemVariable :: Phantoms.TTerm Grammar.RemovePropertyItem -> Phantoms.TTerm Grammar.BindingVariableReference
@@ -16225,7 +16225,7 @@ removePropertyItemVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.RemovePropertyItem"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 removePropertyItemWithPropertyName :: Phantoms.TTerm Grammar.RemovePropertyItem -> Phantoms.TTerm Grammar.PropertyName -> Phantoms.TTerm Grammar.RemovePropertyItem
@@ -16238,7 +16238,7 @@ removePropertyItemWithPropertyName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RemovePropertyItem"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyName"),
@@ -16257,7 +16257,7 @@ removePropertyItemWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.RemovePropertyItem"),
-              Core.projectionField = (Core.Name "propertyName")})),
+              Core.projectionFieldName = (Core.Name "propertyName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 resultNullLiteral :: Phantoms.TTerm Grammar.Result
@@ -16293,7 +16293,7 @@ returnAndOptionalOrderByAndPageOrderByAndPage x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnAndOptionalOrderByAndPage"),
-        Core.projectionField = (Core.Name "orderByAndPage")})),
+        Core.projectionFieldName = (Core.Name "orderByAndPage")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 returnAndOptionalOrderByAndPageReturn :: Phantoms.TTerm Grammar.ReturnAndOptionalOrderByAndPage -> Phantoms.TTerm Grammar.ReturnStatement
@@ -16301,7 +16301,7 @@ returnAndOptionalOrderByAndPageReturn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnAndOptionalOrderByAndPage"),
-        Core.projectionField = (Core.Name "return")})),
+        Core.projectionFieldName = (Core.Name "return")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 returnAndOptionalOrderByAndPageWithOrderByAndPage :: Phantoms.TTerm Grammar.ReturnAndOptionalOrderByAndPage -> Phantoms.TTerm (Maybe Grammar.OrderByAndPageStatement) -> Phantoms.TTerm Grammar.ReturnAndOptionalOrderByAndPage
@@ -16314,7 +16314,7 @@ returnAndOptionalOrderByAndPageWithOrderByAndPage original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnAndOptionalOrderByAndPage"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orderByAndPage"),
@@ -16333,7 +16333,7 @@ returnAndOptionalOrderByAndPageWithReturn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnAndOptionalOrderByAndPage"),
-              Core.projectionField = (Core.Name "orderByAndPage")})),
+              Core.projectionFieldName = (Core.Name "orderByAndPage")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 returnItem :: Phantoms.TTerm Grammar.AggregatingValueExpression -> Phantoms.TTerm (Maybe Grammar.ReturnItemAlias) -> Phantoms.TTerm Grammar.ReturnItem
@@ -16353,7 +16353,7 @@ returnItemAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItem"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 returnItemExpression :: Phantoms.TTerm Grammar.ReturnItem -> Phantoms.TTerm Grammar.AggregatingValueExpression
@@ -16361,7 +16361,7 @@ returnItemExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItem"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 returnItemWithAlias :: Phantoms.TTerm Grammar.ReturnItem -> Phantoms.TTerm (Maybe Grammar.ReturnItemAlias) -> Phantoms.TTerm Grammar.ReturnItem
@@ -16374,7 +16374,7 @@ returnItemWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItem"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
@@ -16393,7 +16393,7 @@ returnItemWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItem"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 returnItemsAndGroupBy :: Phantoms.TTerm (Maybe Grammar.SetQuantifier) -> Phantoms.TTerm Grammar.ReturnItems -> Phantoms.TTerm (Maybe Grammar.GroupByClause) -> Phantoms.TTerm Grammar.ReturnItemsAndGroupBy
@@ -16416,7 +16416,7 @@ returnItemsAndGroupByGroupBy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItemsAndGroupBy"),
-        Core.projectionField = (Core.Name "groupBy")})),
+        Core.projectionFieldName = (Core.Name "groupBy")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 returnItemsAndGroupByItems :: Phantoms.TTerm Grammar.ReturnItemsAndGroupBy -> Phantoms.TTerm Grammar.ReturnItems
@@ -16424,7 +16424,7 @@ returnItemsAndGroupByItems x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItemsAndGroupBy"),
-        Core.projectionField = (Core.Name "items")})),
+        Core.projectionFieldName = (Core.Name "items")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 returnItemsAndGroupByQuantifier :: Phantoms.TTerm Grammar.ReturnItemsAndGroupBy -> Phantoms.TTerm (Maybe Grammar.SetQuantifier)
@@ -16432,7 +16432,7 @@ returnItemsAndGroupByQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItemsAndGroupBy"),
-        Core.projectionField = (Core.Name "quantifier")})),
+        Core.projectionFieldName = (Core.Name "quantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 returnItemsAndGroupByWithGroupBy :: Phantoms.TTerm Grammar.ReturnItemsAndGroupBy -> Phantoms.TTerm (Maybe Grammar.GroupByClause) -> Phantoms.TTerm Grammar.ReturnItemsAndGroupBy
@@ -16445,14 +16445,14 @@ returnItemsAndGroupByWithGroupBy original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItemsAndGroupBy"),
-              Core.projectionField = (Core.Name "quantifier")})),
+              Core.projectionFieldName = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItemsAndGroupBy"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groupBy"),
@@ -16468,7 +16468,7 @@ returnItemsAndGroupByWithItems original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItemsAndGroupBy"),
-              Core.projectionField = (Core.Name "quantifier")})),
+              Core.projectionFieldName = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
@@ -16478,7 +16478,7 @@ returnItemsAndGroupByWithItems original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItemsAndGroupBy"),
-              Core.projectionField = (Core.Name "groupBy")})),
+              Core.projectionFieldName = (Core.Name "groupBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 returnItemsAndGroupByWithQuantifier :: Phantoms.TTerm Grammar.ReturnItemsAndGroupBy -> Phantoms.TTerm (Maybe Grammar.SetQuantifier) -> Phantoms.TTerm Grammar.ReturnItemsAndGroupBy
@@ -16494,14 +16494,14 @@ returnItemsAndGroupByWithQuantifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItemsAndGroupBy"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groupBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ReturnItemsAndGroupBy"),
-              Core.projectionField = (Core.Name "groupBy")})),
+              Core.projectionFieldName = (Core.Name "groupBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 returnItemsAsterisk :: Phantoms.TTerm Grammar.ReturnItems
@@ -16550,7 +16550,7 @@ samePredicateReferences x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SamePredicate"),
-        Core.projectionField = (Core.Name "references")})),
+        Core.projectionFieldName = (Core.Name "references")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 samePredicateWithReferences :: Phantoms.TTerm Grammar.SamePredicate -> Phantoms.TTerm [Grammar.ElementVariableReference] -> Phantoms.TTerm Grammar.SamePredicate
@@ -16579,7 +16579,7 @@ schemaAndObjectsObjects x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SchemaAndObjects"),
-        Core.projectionField = (Core.Name "objects")})),
+        Core.projectionFieldName = (Core.Name "objects")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schemaAndObjectsSchemaReference :: Phantoms.TTerm Grammar.SchemaAndObjects -> Phantoms.TTerm Grammar.SchemaReference
@@ -16587,7 +16587,7 @@ schemaAndObjectsSchemaReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SchemaAndObjects"),
-        Core.projectionField = (Core.Name "schemaReference")})),
+        Core.projectionFieldName = (Core.Name "schemaReference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 schemaAndObjectsWithObjects :: Phantoms.TTerm Grammar.SchemaAndObjects -> Phantoms.TTerm [Grammar.ObjectName] -> Phantoms.TTerm Grammar.SchemaAndObjects
@@ -16600,7 +16600,7 @@ schemaAndObjectsWithObjects original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SchemaAndObjects"),
-              Core.projectionField = (Core.Name "schemaReference")})),
+              Core.projectionFieldName = (Core.Name "schemaReference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "objects"),
@@ -16619,7 +16619,7 @@ schemaAndObjectsWithSchemaReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SchemaAndObjects"),
-              Core.projectionField = (Core.Name "objects")})),
+              Core.projectionFieldName = (Core.Name "objects")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 schemaReferenceAbsoluteReference :: Phantoms.TTerm Grammar.AbsoluteCatalogSchemaReference -> Phantoms.TTerm Grammar.SchemaReference
@@ -16663,7 +16663,7 @@ searchedCaseElseClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SearchedCase"),
-        Core.projectionField = (Core.Name "elseClause")})),
+        Core.projectionFieldName = (Core.Name "elseClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 searchedCaseWhenClauses :: Phantoms.TTerm Grammar.SearchedCase -> Phantoms.TTerm [Grammar.SearchedWhenClause]
@@ -16671,7 +16671,7 @@ searchedCaseWhenClauses x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SearchedCase"),
-        Core.projectionField = (Core.Name "whenClauses")})),
+        Core.projectionFieldName = (Core.Name "whenClauses")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 searchedCaseWithElseClause :: Phantoms.TTerm Grammar.SearchedCase -> Phantoms.TTerm (Maybe Grammar.ElseClause) -> Phantoms.TTerm Grammar.SearchedCase
@@ -16684,7 +16684,7 @@ searchedCaseWithElseClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SearchedCase"),
-              Core.projectionField = (Core.Name "whenClauses")})),
+              Core.projectionFieldName = (Core.Name "whenClauses")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elseClause"),
@@ -16703,7 +16703,7 @@ searchedCaseWithWhenClauses original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SearchedCase"),
-              Core.projectionField = (Core.Name "elseClause")})),
+              Core.projectionFieldName = (Core.Name "elseClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 searchedWhenClause :: Phantoms.TTerm Grammar.SearchCondition -> Phantoms.TTerm Grammar.Result -> Phantoms.TTerm Grammar.SearchedWhenClause
@@ -16723,7 +16723,7 @@ searchedWhenClauseResult x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SearchedWhenClause"),
-        Core.projectionField = (Core.Name "result")})),
+        Core.projectionFieldName = (Core.Name "result")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 searchedWhenClauseSearchCondition :: Phantoms.TTerm Grammar.SearchedWhenClause -> Phantoms.TTerm Grammar.SearchCondition
@@ -16731,7 +16731,7 @@ searchedWhenClauseSearchCondition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SearchedWhenClause"),
-        Core.projectionField = (Core.Name "searchCondition")})),
+        Core.projectionFieldName = (Core.Name "searchCondition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 searchedWhenClauseWithResult :: Phantoms.TTerm Grammar.SearchedWhenClause -> Phantoms.TTerm Grammar.Result -> Phantoms.TTerm Grammar.SearchedWhenClause
@@ -16744,7 +16744,7 @@ searchedWhenClauseWithResult original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SearchedWhenClause"),
-              Core.projectionField = (Core.Name "searchCondition")})),
+              Core.projectionFieldName = (Core.Name "searchCondition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "result"),
@@ -16763,7 +16763,7 @@ searchedWhenClauseWithSearchCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SearchedWhenClause"),
-              Core.projectionField = (Core.Name "result")})),
+              Core.projectionFieldName = (Core.Name "result")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectGraphMatch :: Phantoms.TTerm Grammar.GraphExpression -> Phantoms.TTerm Grammar.MatchStatement -> Phantoms.TTerm Grammar.SelectGraphMatch
@@ -16783,7 +16783,7 @@ selectGraphMatchGraphExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectGraphMatch"),
-        Core.projectionField = (Core.Name "graphExpression")})),
+        Core.projectionFieldName = (Core.Name "graphExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectGraphMatchMatchStatement :: Phantoms.TTerm Grammar.SelectGraphMatch -> Phantoms.TTerm Grammar.MatchStatement
@@ -16791,7 +16791,7 @@ selectGraphMatchMatchStatement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectGraphMatch"),
-        Core.projectionField = (Core.Name "matchStatement")})),
+        Core.projectionFieldName = (Core.Name "matchStatement")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectGraphMatchWithGraphExpression :: Phantoms.TTerm Grammar.SelectGraphMatch -> Phantoms.TTerm Grammar.GraphExpression -> Phantoms.TTerm Grammar.SelectGraphMatch
@@ -16807,7 +16807,7 @@ selectGraphMatchWithGraphExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectGraphMatch"),
-              Core.projectionField = (Core.Name "matchStatement")})),
+              Core.projectionFieldName = (Core.Name "matchStatement")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectGraphMatchWithMatchStatement :: Phantoms.TTerm Grammar.SelectGraphMatch -> Phantoms.TTerm Grammar.MatchStatement -> Phantoms.TTerm Grammar.SelectGraphMatch
@@ -16820,7 +16820,7 @@ selectGraphMatchWithMatchStatement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectGraphMatch"),
-              Core.projectionField = (Core.Name "graphExpression")})),
+              Core.projectionFieldName = (Core.Name "graphExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "matchStatement"),
@@ -16843,7 +16843,7 @@ selectItemAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectItem"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectItemExpression :: Phantoms.TTerm Grammar.SelectItem -> Phantoms.TTerm Grammar.AggregatingValueExpression
@@ -16851,7 +16851,7 @@ selectItemExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectItem"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectItemWithAlias :: Phantoms.TTerm Grammar.SelectItem -> Phantoms.TTerm (Maybe Grammar.SelectItemAlias) -> Phantoms.TTerm Grammar.SelectItem
@@ -16864,7 +16864,7 @@ selectItemWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectItem"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
@@ -16883,7 +16883,7 @@ selectItemWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectItem"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectItemsAsterisk :: Phantoms.TTerm Grammar.SelectItems
@@ -16938,7 +16938,7 @@ selectStatementBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatement"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementBodyAndClauses :: Phantoms.TTerm Grammar.SelectStatementBody -> Phantoms.TTerm (Maybe Grammar.WhereClause) -> Phantoms.TTerm (Maybe Grammar.GroupByClause) -> Phantoms.TTerm (Maybe Grammar.HavingClause) -> Phantoms.TTerm (Maybe Grammar.OrderByClause) -> Phantoms.TTerm (Maybe Grammar.OffsetClause) -> Phantoms.TTerm (Maybe Grammar.LimitClause) -> Phantoms.TTerm Grammar.SelectStatementBodyAndClauses
@@ -16973,7 +16973,7 @@ selectStatementBodyAndClausesBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementBodyAndClausesGroupBy :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.GroupByClause)
@@ -16981,7 +16981,7 @@ selectStatementBodyAndClausesGroupBy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-        Core.projectionField = (Core.Name "groupBy")})),
+        Core.projectionFieldName = (Core.Name "groupBy")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementBodyAndClausesHaving :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.HavingClause)
@@ -16989,7 +16989,7 @@ selectStatementBodyAndClausesHaving x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-        Core.projectionField = (Core.Name "having")})),
+        Core.projectionFieldName = (Core.Name "having")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementBodyAndClausesLimit :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.LimitClause)
@@ -16997,7 +16997,7 @@ selectStatementBodyAndClausesLimit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-        Core.projectionField = (Core.Name "limit")})),
+        Core.projectionFieldName = (Core.Name "limit")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementBodyAndClausesOffset :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.OffsetClause)
@@ -17005,7 +17005,7 @@ selectStatementBodyAndClausesOffset x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-        Core.projectionField = (Core.Name "offset")})),
+        Core.projectionFieldName = (Core.Name "offset")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementBodyAndClausesOrderBy :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.OrderByClause)
@@ -17013,7 +17013,7 @@ selectStatementBodyAndClausesOrderBy x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-        Core.projectionField = (Core.Name "orderBy")})),
+        Core.projectionFieldName = (Core.Name "orderBy")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementBodyAndClausesWhere :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.WhereClause)
@@ -17021,7 +17021,7 @@ selectStatementBodyAndClausesWhere x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-        Core.projectionField = (Core.Name "where")})),
+        Core.projectionFieldName = (Core.Name "where")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementBodyAndClausesWithBody :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm Grammar.SelectStatementBody -> Phantoms.TTerm Grammar.SelectStatementBodyAndClauses
@@ -17037,42 +17037,42 @@ selectStatementBodyAndClausesWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "where")})),
+              Core.projectionFieldName = (Core.Name "where")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groupBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "groupBy")})),
+              Core.projectionFieldName = (Core.Name "groupBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "having"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "having")})),
+              Core.projectionFieldName = (Core.Name "having")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orderBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "orderBy")})),
+              Core.projectionFieldName = (Core.Name "orderBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "offset"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "offset")})),
+              Core.projectionFieldName = (Core.Name "offset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "limit")})),
+              Core.projectionFieldName = (Core.Name "limit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectStatementBodyAndClausesWithGroupBy :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.GroupByClause) -> Phantoms.TTerm Grammar.SelectStatementBodyAndClauses
@@ -17085,14 +17085,14 @@ selectStatementBodyAndClausesWithGroupBy original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "where")})),
+              Core.projectionFieldName = (Core.Name "where")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groupBy"),
@@ -17102,28 +17102,28 @@ selectStatementBodyAndClausesWithGroupBy original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "having")})),
+              Core.projectionFieldName = (Core.Name "having")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orderBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "orderBy")})),
+              Core.projectionFieldName = (Core.Name "orderBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "offset"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "offset")})),
+              Core.projectionFieldName = (Core.Name "offset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "limit")})),
+              Core.projectionFieldName = (Core.Name "limit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectStatementBodyAndClausesWithHaving :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.HavingClause) -> Phantoms.TTerm Grammar.SelectStatementBodyAndClauses
@@ -17136,21 +17136,21 @@ selectStatementBodyAndClausesWithHaving original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "where")})),
+              Core.projectionFieldName = (Core.Name "where")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groupBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "groupBy")})),
+              Core.projectionFieldName = (Core.Name "groupBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "having"),
@@ -17160,21 +17160,21 @@ selectStatementBodyAndClausesWithHaving original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "orderBy")})),
+              Core.projectionFieldName = (Core.Name "orderBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "offset"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "offset")})),
+              Core.projectionFieldName = (Core.Name "offset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "limit")})),
+              Core.projectionFieldName = (Core.Name "limit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectStatementBodyAndClausesWithLimit :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.LimitClause) -> Phantoms.TTerm Grammar.SelectStatementBodyAndClauses
@@ -17187,42 +17187,42 @@ selectStatementBodyAndClausesWithLimit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "where")})),
+              Core.projectionFieldName = (Core.Name "where")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groupBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "groupBy")})),
+              Core.projectionFieldName = (Core.Name "groupBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "having"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "having")})),
+              Core.projectionFieldName = (Core.Name "having")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orderBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "orderBy")})),
+              Core.projectionFieldName = (Core.Name "orderBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "offset"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "offset")})),
+              Core.projectionFieldName = (Core.Name "offset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
@@ -17238,35 +17238,35 @@ selectStatementBodyAndClausesWithOffset original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "where")})),
+              Core.projectionFieldName = (Core.Name "where")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groupBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "groupBy")})),
+              Core.projectionFieldName = (Core.Name "groupBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "having"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "having")})),
+              Core.projectionFieldName = (Core.Name "having")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orderBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "orderBy")})),
+              Core.projectionFieldName = (Core.Name "orderBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "offset"),
@@ -17276,7 +17276,7 @@ selectStatementBodyAndClausesWithOffset original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "limit")})),
+              Core.projectionFieldName = (Core.Name "limit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectStatementBodyAndClausesWithOrderBy :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.OrderByClause) -> Phantoms.TTerm Grammar.SelectStatementBodyAndClauses
@@ -17289,28 +17289,28 @@ selectStatementBodyAndClausesWithOrderBy original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "where")})),
+              Core.projectionFieldName = (Core.Name "where")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "groupBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "groupBy")})),
+              Core.projectionFieldName = (Core.Name "groupBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "having"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "having")})),
+              Core.projectionFieldName = (Core.Name "having")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orderBy"),
@@ -17320,14 +17320,14 @@ selectStatementBodyAndClausesWithOrderBy original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "offset")})),
+              Core.projectionFieldName = (Core.Name "offset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "limit")})),
+              Core.projectionFieldName = (Core.Name "limit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectStatementBodyAndClausesWithWhere :: Phantoms.TTerm Grammar.SelectStatementBodyAndClauses -> Phantoms.TTerm (Maybe Grammar.WhereClause) -> Phantoms.TTerm Grammar.SelectStatementBodyAndClauses
@@ -17340,7 +17340,7 @@ selectStatementBodyAndClausesWithWhere original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "where"),
@@ -17350,35 +17350,35 @@ selectStatementBodyAndClausesWithWhere original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "groupBy")})),
+              Core.projectionFieldName = (Core.Name "groupBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "having"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "having")})),
+              Core.projectionFieldName = (Core.Name "having")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "orderBy"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "orderBy")})),
+              Core.projectionFieldName = (Core.Name "orderBy")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "offset"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "offset")})),
+              Core.projectionFieldName = (Core.Name "offset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "limit"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatementBodyAndClauses"),
-              Core.projectionField = (Core.Name "limit")})),
+              Core.projectionFieldName = (Core.Name "limit")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectStatementBodyGraphMatchList :: Phantoms.TTerm Grammar.SelectGraphMatchList -> Phantoms.TTerm Grammar.SelectStatementBody
@@ -17402,7 +17402,7 @@ selectStatementItems x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatement"),
-        Core.projectionField = (Core.Name "items")})),
+        Core.projectionFieldName = (Core.Name "items")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementQuantifier :: Phantoms.TTerm Grammar.SelectStatement -> Phantoms.TTerm (Maybe Grammar.SetQuantifier)
@@ -17410,7 +17410,7 @@ selectStatementQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatement"),
-        Core.projectionField = (Core.Name "quantifier")})),
+        Core.projectionFieldName = (Core.Name "quantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 selectStatementWithBody :: Phantoms.TTerm Grammar.SelectStatement -> Phantoms.TTerm (Maybe Grammar.SelectStatementBodyAndClauses) -> Phantoms.TTerm Grammar.SelectStatement
@@ -17423,14 +17423,14 @@ selectStatementWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatement"),
-              Core.projectionField = (Core.Name "quantifier")})),
+              Core.projectionFieldName = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatement"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -17446,7 +17446,7 @@ selectStatementWithItems original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatement"),
-              Core.projectionField = (Core.Name "quantifier")})),
+              Core.projectionFieldName = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "items"),
@@ -17456,7 +17456,7 @@ selectStatementWithItems original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatement"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 selectStatementWithQuantifier :: Phantoms.TTerm Grammar.SelectStatement -> Phantoms.TTerm (Maybe Grammar.SetQuantifier) -> Phantoms.TTerm Grammar.SelectStatement
@@ -17472,14 +17472,14 @@ selectStatementWithQuantifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatement"),
-              Core.projectionField = (Core.Name "items")})),
+              Core.projectionFieldName = (Core.Name "items")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SelectStatement"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sessionActivityReset :: Phantoms.TTerm [Grammar.SessionResetCommand] -> Phantoms.TTerm Grammar.SessionActivity
@@ -17555,7 +17555,7 @@ sessionSetAndResetCommandsReset x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetAndResetCommands"),
-        Core.projectionField = (Core.Name "reset")})),
+        Core.projectionFieldName = (Core.Name "reset")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetAndResetCommandsSet :: Phantoms.TTerm Grammar.SessionSetAndResetCommands -> Phantoms.TTerm [Grammar.SessionSetCommand]
@@ -17563,7 +17563,7 @@ sessionSetAndResetCommandsSet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetAndResetCommands"),
-        Core.projectionField = (Core.Name "set")})),
+        Core.projectionFieldName = (Core.Name "set")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetAndResetCommandsWithReset :: Phantoms.TTerm Grammar.SessionSetAndResetCommands -> Phantoms.TTerm [Grammar.SessionResetCommand] -> Phantoms.TTerm Grammar.SessionSetAndResetCommands
@@ -17576,7 +17576,7 @@ sessionSetAndResetCommandsWithReset original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetAndResetCommands"),
-              Core.projectionField = (Core.Name "set")})),
+              Core.projectionFieldName = (Core.Name "set")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "reset"),
@@ -17595,7 +17595,7 @@ sessionSetAndResetCommandsWithSet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetAndResetCommands"),
-              Core.projectionField = (Core.Name "reset")})),
+              Core.projectionFieldName = (Core.Name "reset")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sessionSetBindingTableParameterClause :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.SessionSetParameterName -> Phantoms.TTerm Grammar.OptTypedBindingTableInitializer -> Phantoms.TTerm Grammar.SessionSetBindingTableParameterClause
@@ -17618,7 +17618,7 @@ sessionSetBindingTableParameterClauseBinding x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetBindingTableParameterClause"),
-        Core.projectionField = (Core.Name "binding")})),
+        Core.projectionFieldName = (Core.Name "binding")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetBindingTableParameterClauseInit :: Phantoms.TTerm Grammar.SessionSetBindingTableParameterClause -> Phantoms.TTerm Grammar.OptTypedBindingTableInitializer
@@ -17626,7 +17626,7 @@ sessionSetBindingTableParameterClauseInit x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetBindingTableParameterClause"),
-        Core.projectionField = (Core.Name "init")})),
+        Core.projectionFieldName = (Core.Name "init")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetBindingTableParameterClauseParam :: Phantoms.TTerm Grammar.SessionSetBindingTableParameterClause -> Phantoms.TTerm Grammar.SessionSetParameterName
@@ -17634,7 +17634,7 @@ sessionSetBindingTableParameterClauseParam x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetBindingTableParameterClause"),
-        Core.projectionField = (Core.Name "param")})),
+        Core.projectionFieldName = (Core.Name "param")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetBindingTableParameterClauseWithBinding :: Phantoms.TTerm Grammar.SessionSetBindingTableParameterClause -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.SessionSetBindingTableParameterClause
@@ -17650,14 +17650,14 @@ sessionSetBindingTableParameterClauseWithBinding original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetBindingTableParameterClause"),
-              Core.projectionField = (Core.Name "param")})),
+              Core.projectionFieldName = (Core.Name "param")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "init"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetBindingTableParameterClause"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sessionSetBindingTableParameterClauseWithInit :: Phantoms.TTerm Grammar.SessionSetBindingTableParameterClause -> Phantoms.TTerm Grammar.OptTypedBindingTableInitializer -> Phantoms.TTerm Grammar.SessionSetBindingTableParameterClause
@@ -17670,14 +17670,14 @@ sessionSetBindingTableParameterClauseWithInit original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetBindingTableParameterClause"),
-              Core.projectionField = (Core.Name "binding")})),
+              Core.projectionFieldName = (Core.Name "binding")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "param"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetBindingTableParameterClause"),
-              Core.projectionField = (Core.Name "param")})),
+              Core.projectionFieldName = (Core.Name "param")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "init"),
@@ -17693,7 +17693,7 @@ sessionSetBindingTableParameterClauseWithParam original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetBindingTableParameterClause"),
-              Core.projectionField = (Core.Name "binding")})),
+              Core.projectionFieldName = (Core.Name "binding")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "param"),
@@ -17703,7 +17703,7 @@ sessionSetBindingTableParameterClauseWithParam original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetBindingTableParameterClause"),
-              Core.projectionField = (Core.Name "init")})),
+              Core.projectionFieldName = (Core.Name "init")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sessionSetCommandGraph :: Phantoms.TTerm Grammar.SessionSetGraphClause -> Phantoms.TTerm Grammar.SessionSetCommand
@@ -17755,7 +17755,7 @@ sessionSetGraphParameterClauseGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetGraphParameterClause"),
-        Core.projectionField = (Core.Name "graph")})),
+        Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetGraphParameterClauseInitializer :: Phantoms.TTerm Grammar.SessionSetGraphParameterClause -> Phantoms.TTerm Grammar.OptTypedGraphInitializer
@@ -17763,7 +17763,7 @@ sessionSetGraphParameterClauseInitializer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetGraphParameterClause"),
-        Core.projectionField = (Core.Name "initializer")})),
+        Core.projectionFieldName = (Core.Name "initializer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetGraphParameterClauseWithGraph :: Phantoms.TTerm Grammar.SessionSetGraphParameterClause -> Phantoms.TTerm Grammar.SessionSetParameterName -> Phantoms.TTerm Grammar.SessionSetGraphParameterClause
@@ -17779,7 +17779,7 @@ sessionSetGraphParameterClauseWithGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetGraphParameterClause"),
-              Core.projectionField = (Core.Name "initializer")})),
+              Core.projectionFieldName = (Core.Name "initializer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sessionSetGraphParameterClauseWithInitializer :: Phantoms.TTerm Grammar.SessionSetGraphParameterClause -> Phantoms.TTerm Grammar.OptTypedGraphInitializer -> Phantoms.TTerm Grammar.SessionSetGraphParameterClause
@@ -17792,7 +17792,7 @@ sessionSetGraphParameterClauseWithInitializer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetGraphParameterClause"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "initializer"),
@@ -17839,7 +17839,7 @@ sessionSetParameterNameIfNotExists x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetParameterName"),
-        Core.projectionField = (Core.Name "ifNotExists")})),
+        Core.projectionFieldName = (Core.Name "ifNotExists")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetParameterNameParameter :: Phantoms.TTerm Grammar.SessionSetParameterName -> Phantoms.TTerm Grammar.SessionParameterSpecification
@@ -17847,7 +17847,7 @@ sessionSetParameterNameParameter x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetParameterName"),
-        Core.projectionField = (Core.Name "parameter")})),
+        Core.projectionFieldName = (Core.Name "parameter")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetParameterNameWithIfNotExists :: Phantoms.TTerm Grammar.SessionSetParameterName -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.SessionSetParameterName
@@ -17863,7 +17863,7 @@ sessionSetParameterNameWithIfNotExists original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetParameterName"),
-              Core.projectionField = (Core.Name "parameter")})),
+              Core.projectionFieldName = (Core.Name "parameter")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sessionSetParameterNameWithParameter :: Phantoms.TTerm Grammar.SessionSetParameterName -> Phantoms.TTerm Grammar.SessionParameterSpecification -> Phantoms.TTerm Grammar.SessionSetParameterName
@@ -17876,7 +17876,7 @@ sessionSetParameterNameWithParameter original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetParameterName"),
-              Core.projectionField = (Core.Name "ifNotExists")})),
+              Core.projectionFieldName = (Core.Name "ifNotExists")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "parameter"),
@@ -17899,7 +17899,7 @@ sessionSetValueParameterClauseInitializer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetValueParameterClause"),
-        Core.projectionField = (Core.Name "initializer")})),
+        Core.projectionFieldName = (Core.Name "initializer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetValueParameterClauseValue :: Phantoms.TTerm Grammar.SessionSetValueParameterClause -> Phantoms.TTerm Grammar.SessionSetParameterName
@@ -17907,7 +17907,7 @@ sessionSetValueParameterClauseValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetValueParameterClause"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sessionSetValueParameterClauseWithInitializer :: Phantoms.TTerm Grammar.SessionSetValueParameterClause -> Phantoms.TTerm Grammar.OptTypedValueInitializer -> Phantoms.TTerm Grammar.SessionSetValueParameterClause
@@ -17920,7 +17920,7 @@ sessionSetValueParameterClauseWithInitializer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetValueParameterClause"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "initializer"),
@@ -17939,7 +17939,7 @@ sessionSetValueParameterClauseWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SessionSetValueParameterClause"),
-              Core.projectionField = (Core.Name "initializer")})),
+              Core.projectionFieldName = (Core.Name "initializer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 setAllPropertiesItem :: Phantoms.TTerm Grammar.BindingVariableReference -> Phantoms.TTerm (Maybe Grammar.PropertyKeyValuePairList) -> Phantoms.TTerm Grammar.SetAllPropertiesItem
@@ -17959,7 +17959,7 @@ setAllPropertiesItemProperties x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetAllPropertiesItem"),
-        Core.projectionField = (Core.Name "properties")})),
+        Core.projectionFieldName = (Core.Name "properties")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setAllPropertiesItemVariable :: Phantoms.TTerm Grammar.SetAllPropertiesItem -> Phantoms.TTerm Grammar.BindingVariableReference
@@ -17967,7 +17967,7 @@ setAllPropertiesItemVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetAllPropertiesItem"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setAllPropertiesItemWithProperties :: Phantoms.TTerm Grammar.SetAllPropertiesItem -> Phantoms.TTerm (Maybe Grammar.PropertyKeyValuePairList) -> Phantoms.TTerm Grammar.SetAllPropertiesItem
@@ -17980,7 +17980,7 @@ setAllPropertiesItemWithProperties original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetAllPropertiesItem"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "properties"),
@@ -17999,7 +17999,7 @@ setAllPropertiesItemWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetAllPropertiesItem"),
-              Core.projectionField = (Core.Name "properties")})),
+              Core.projectionFieldName = (Core.Name "properties")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 setItemAllProperties :: Phantoms.TTerm Grammar.SetAllPropertiesItem -> Phantoms.TTerm Grammar.SetItem
@@ -18046,7 +18046,7 @@ setLabelItemIsOrColon x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetLabelItem"),
-        Core.projectionField = (Core.Name "isOrColon")})),
+        Core.projectionFieldName = (Core.Name "isOrColon")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setLabelItemLabel :: Phantoms.TTerm Grammar.SetLabelItem -> Phantoms.TTerm Grammar.LabelName
@@ -18054,7 +18054,7 @@ setLabelItemLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetLabelItem"),
-        Core.projectionField = (Core.Name "label")})),
+        Core.projectionFieldName = (Core.Name "label")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setLabelItemVariable :: Phantoms.TTerm Grammar.SetLabelItem -> Phantoms.TTerm Grammar.BindingVariableReference
@@ -18062,7 +18062,7 @@ setLabelItemVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetLabelItem"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setLabelItemWithIsOrColon :: Phantoms.TTerm Grammar.SetLabelItem -> Phantoms.TTerm Grammar.IsOrColon -> Phantoms.TTerm Grammar.SetLabelItem
@@ -18075,7 +18075,7 @@ setLabelItemWithIsOrColon original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetLabelItem"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOrColon"),
@@ -18085,7 +18085,7 @@ setLabelItemWithIsOrColon original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetLabelItem"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 setLabelItemWithLabel :: Phantoms.TTerm Grammar.SetLabelItem -> Phantoms.TTerm Grammar.LabelName -> Phantoms.TTerm Grammar.SetLabelItem
@@ -18098,14 +18098,14 @@ setLabelItemWithLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetLabelItem"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "isOrColon"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetLabelItem"),
-              Core.projectionField = (Core.Name "isOrColon")})),
+              Core.projectionFieldName = (Core.Name "isOrColon")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
@@ -18124,14 +18124,14 @@ setLabelItemWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetLabelItem"),
-              Core.projectionField = (Core.Name "isOrColon")})),
+              Core.projectionFieldName = (Core.Name "isOrColon")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "label"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetLabelItem"),
-              Core.projectionField = (Core.Name "label")})),
+              Core.projectionFieldName = (Core.Name "label")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 setOperator :: Phantoms.TTerm Grammar.SetOperatorType -> Phantoms.TTerm (Maybe Grammar.SetQuantifier) -> Phantoms.TTerm Grammar.SetOperator
@@ -18151,7 +18151,7 @@ setOperatorOperatorType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetOperator"),
-        Core.projectionField = (Core.Name "operatorType")})),
+        Core.projectionFieldName = (Core.Name "operatorType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setOperatorQuantifier :: Phantoms.TTerm Grammar.SetOperator -> Phantoms.TTerm (Maybe Grammar.SetQuantifier)
@@ -18159,7 +18159,7 @@ setOperatorQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetOperator"),
-        Core.projectionField = (Core.Name "quantifier")})),
+        Core.projectionFieldName = (Core.Name "quantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setOperatorTypeExcept :: Phantoms.TTerm Grammar.SetOperatorType
@@ -18199,7 +18199,7 @@ setOperatorWithOperatorType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetOperator"),
-              Core.projectionField = (Core.Name "quantifier")})),
+              Core.projectionFieldName = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 setOperatorWithQuantifier :: Phantoms.TTerm Grammar.SetOperator -> Phantoms.TTerm (Maybe Grammar.SetQuantifier) -> Phantoms.TTerm Grammar.SetOperator
@@ -18212,7 +18212,7 @@ setOperatorWithQuantifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetOperator"),
-              Core.projectionField = (Core.Name "operatorType")})),
+              Core.projectionFieldName = (Core.Name "operatorType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
@@ -18238,7 +18238,7 @@ setPropertyItemPropertyName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetPropertyItem"),
-        Core.projectionField = (Core.Name "propertyName")})),
+        Core.projectionFieldName = (Core.Name "propertyName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setPropertyItemValue :: Phantoms.TTerm Grammar.SetPropertyItem -> Phantoms.TTerm Grammar.ValueExpression
@@ -18246,7 +18246,7 @@ setPropertyItemValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetPropertyItem"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setPropertyItemVariable :: Phantoms.TTerm Grammar.SetPropertyItem -> Phantoms.TTerm Grammar.BindingVariableReference
@@ -18254,7 +18254,7 @@ setPropertyItemVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SetPropertyItem"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 setPropertyItemWithPropertyName :: Phantoms.TTerm Grammar.SetPropertyItem -> Phantoms.TTerm Grammar.PropertyName -> Phantoms.TTerm Grammar.SetPropertyItem
@@ -18267,7 +18267,7 @@ setPropertyItemWithPropertyName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetPropertyItem"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyName"),
@@ -18277,7 +18277,7 @@ setPropertyItemWithPropertyName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetPropertyItem"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 setPropertyItemWithValue :: Phantoms.TTerm Grammar.SetPropertyItem -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.SetPropertyItem
@@ -18290,14 +18290,14 @@ setPropertyItemWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetPropertyItem"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "propertyName"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetPropertyItem"),
-              Core.projectionField = (Core.Name "propertyName")})),
+              Core.projectionFieldName = (Core.Name "propertyName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -18316,14 +18316,14 @@ setPropertyItemWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetPropertyItem"),
-              Core.projectionField = (Core.Name "propertyName")})),
+              Core.projectionFieldName = (Core.Name "propertyName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SetPropertyItem"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 setQuantifierAll :: Phantoms.TTerm Grammar.SetQuantifier
@@ -18503,7 +18503,7 @@ signedExprSign x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SignedExpr"),
-        Core.projectionField = (Core.Name "sign")})),
+        Core.projectionFieldName = (Core.Name "sign")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 signedExprValueExpression :: Phantoms.TTerm Grammar.SignedExpr -> Phantoms.TTerm Grammar.ValueExpression
@@ -18511,7 +18511,7 @@ signedExprValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SignedExpr"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 signedExprWithSign :: Phantoms.TTerm Grammar.SignedExpr -> Phantoms.TTerm Grammar.Sign -> Phantoms.TTerm Grammar.SignedExpr
@@ -18527,7 +18527,7 @@ signedExprWithSign original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SignedExpr"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 signedExprWithValueExpression :: Phantoms.TTerm Grammar.SignedExpr -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.SignedExpr
@@ -18540,7 +18540,7 @@ signedExprWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SignedExpr"),
-              Core.projectionField = (Core.Name "sign")})),
+              Core.projectionFieldName = (Core.Name "sign")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
@@ -18563,7 +18563,7 @@ signedNumericValueExpressionExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SignedNumericValueExpression"),
-        Core.projectionField = (Core.Name "expression")})),
+        Core.projectionFieldName = (Core.Name "expression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 signedNumericValueExpressionSign :: Phantoms.TTerm Grammar.SignedNumericValueExpression -> Phantoms.TTerm Grammar.Sign
@@ -18571,7 +18571,7 @@ signedNumericValueExpressionSign x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SignedNumericValueExpression"),
-        Core.projectionField = (Core.Name "sign")})),
+        Core.projectionFieldName = (Core.Name "sign")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 signedNumericValueExpressionWithExpression :: Phantoms.TTerm Grammar.SignedNumericValueExpression -> Phantoms.TTerm Grammar.NumericValueExpression -> Phantoms.TTerm Grammar.SignedNumericValueExpression
@@ -18584,7 +18584,7 @@ signedNumericValueExpressionWithExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SignedNumericValueExpression"),
-              Core.projectionField = (Core.Name "sign")})),
+              Core.projectionFieldName = (Core.Name "sign")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "expression"),
@@ -18603,7 +18603,7 @@ signedNumericValueExpressionWithSign original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SignedNumericValueExpression"),
-              Core.projectionField = (Core.Name "expression")})),
+              Core.projectionFieldName = (Core.Name "expression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 signedVerboseBinaryExactNumericType :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType -> Phantoms.TTerm Grammar.SignedVerboseBinaryExactNumericType
@@ -18623,7 +18623,7 @@ signedVerboseBinaryExactNumericTypeSigned x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SignedVerboseBinaryExactNumericType"),
-        Core.projectionField = (Core.Name "signed")})),
+        Core.projectionFieldName = (Core.Name "signed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 signedVerboseBinaryExactNumericTypeVerboseType :: Phantoms.TTerm Grammar.SignedVerboseBinaryExactNumericType -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType
@@ -18631,7 +18631,7 @@ signedVerboseBinaryExactNumericTypeVerboseType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SignedVerboseBinaryExactNumericType"),
-        Core.projectionField = (Core.Name "verboseType")})),
+        Core.projectionFieldName = (Core.Name "verboseType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 signedVerboseBinaryExactNumericTypeWithSigned :: Phantoms.TTerm Grammar.SignedVerboseBinaryExactNumericType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.SignedVerboseBinaryExactNumericType
@@ -18647,7 +18647,7 @@ signedVerboseBinaryExactNumericTypeWithSigned original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SignedVerboseBinaryExactNumericType"),
-              Core.projectionField = (Core.Name "verboseType")})),
+              Core.projectionFieldName = (Core.Name "verboseType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 signedVerboseBinaryExactNumericTypeWithVerboseType :: Phantoms.TTerm Grammar.SignedVerboseBinaryExactNumericType -> Phantoms.TTerm Grammar.VerboseBinaryExactNumericType -> Phantoms.TTerm Grammar.SignedVerboseBinaryExactNumericType
@@ -18660,7 +18660,7 @@ signedVerboseBinaryExactNumericTypeWithVerboseType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SignedVerboseBinaryExactNumericType"),
-              Core.projectionField = (Core.Name "signed")})),
+              Core.projectionFieldName = (Core.Name "signed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "verboseType"),
@@ -18686,7 +18686,7 @@ simpleCaseCaseOperand x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleCase"),
-        Core.projectionField = (Core.Name "caseOperand")})),
+        Core.projectionFieldName = (Core.Name "caseOperand")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simpleCaseElseClause :: Phantoms.TTerm Grammar.SimpleCase -> Phantoms.TTerm (Maybe Grammar.ElseClause)
@@ -18694,7 +18694,7 @@ simpleCaseElseClause x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleCase"),
-        Core.projectionField = (Core.Name "elseClause")})),
+        Core.projectionFieldName = (Core.Name "elseClause")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simpleCaseWhenClauses :: Phantoms.TTerm Grammar.SimpleCase -> Phantoms.TTerm [Grammar.SimpleWhenClause]
@@ -18702,7 +18702,7 @@ simpleCaseWhenClauses x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleCase"),
-        Core.projectionField = (Core.Name "whenClauses")})),
+        Core.projectionFieldName = (Core.Name "whenClauses")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simpleCaseWithCaseOperand :: Phantoms.TTerm Grammar.SimpleCase -> Phantoms.TTerm Grammar.CaseOperand -> Phantoms.TTerm Grammar.SimpleCase
@@ -18718,14 +18718,14 @@ simpleCaseWithCaseOperand original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleCase"),
-              Core.projectionField = (Core.Name "whenClauses")})),
+              Core.projectionFieldName = (Core.Name "whenClauses")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elseClause"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleCase"),
-              Core.projectionField = (Core.Name "elseClause")})),
+              Core.projectionFieldName = (Core.Name "elseClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 simpleCaseWithElseClause :: Phantoms.TTerm Grammar.SimpleCase -> Phantoms.TTerm (Maybe Grammar.ElseClause) -> Phantoms.TTerm Grammar.SimpleCase
@@ -18738,14 +18738,14 @@ simpleCaseWithElseClause original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleCase"),
-              Core.projectionField = (Core.Name "caseOperand")})),
+              Core.projectionFieldName = (Core.Name "caseOperand")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whenClauses"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleCase"),
-              Core.projectionField = (Core.Name "whenClauses")})),
+              Core.projectionFieldName = (Core.Name "whenClauses")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elseClause"),
@@ -18761,7 +18761,7 @@ simpleCaseWithWhenClauses original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleCase"),
-              Core.projectionField = (Core.Name "caseOperand")})),
+              Core.projectionFieldName = (Core.Name "caseOperand")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "whenClauses"),
@@ -18771,7 +18771,7 @@ simpleCaseWithWhenClauses original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleCase"),
-              Core.projectionField = (Core.Name "elseClause")})),
+              Core.projectionFieldName = (Core.Name "elseClause")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 simpleCatalogModifyingStatementCallProcedure :: Phantoms.TTerm Grammar.CallCatalogModifyingProcedureStatement -> Phantoms.TTerm Grammar.SimpleCatalogModifyingStatement
@@ -18855,7 +18855,7 @@ simpleWhenClauseResult x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleWhenClause"),
-        Core.projectionField = (Core.Name "result")})),
+        Core.projectionFieldName = (Core.Name "result")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simpleWhenClauseWhenOperands :: Phantoms.TTerm Grammar.SimpleWhenClause -> Phantoms.TTerm Grammar.WhenOperandList
@@ -18863,7 +18863,7 @@ simpleWhenClauseWhenOperands x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleWhenClause"),
-        Core.projectionField = (Core.Name "whenOperands")})),
+        Core.projectionFieldName = (Core.Name "whenOperands")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simpleWhenClauseWithResult :: Phantoms.TTerm Grammar.SimpleWhenClause -> Phantoms.TTerm Grammar.Result -> Phantoms.TTerm Grammar.SimpleWhenClause
@@ -18876,7 +18876,7 @@ simpleWhenClauseWithResult original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleWhenClause"),
-              Core.projectionField = (Core.Name "whenOperands")})),
+              Core.projectionFieldName = (Core.Name "whenOperands")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "result"),
@@ -18895,7 +18895,7 @@ simpleWhenClauseWithWhenOperands original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimpleWhenClause"),
-              Core.projectionField = (Core.Name "result")})),
+              Core.projectionFieldName = (Core.Name "result")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 simplifiedConcatenation :: Phantoms.TTerm Grammar.SimplifiedTerm -> Phantoms.TTerm Grammar.SimplifiedFactorLow -> Phantoms.TTerm Grammar.SimplifiedConcatenation
@@ -18915,7 +18915,7 @@ simplifiedConcatenationInitialTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedConcatenation"),
-        Core.projectionField = (Core.Name "initialTerm")})),
+        Core.projectionFieldName = (Core.Name "initialTerm")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simplifiedConcatenationNextFactor :: Phantoms.TTerm Grammar.SimplifiedConcatenation -> Phantoms.TTerm Grammar.SimplifiedFactorLow
@@ -18923,7 +18923,7 @@ simplifiedConcatenationNextFactor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedConcatenation"),
-        Core.projectionField = (Core.Name "nextFactor")})),
+        Core.projectionFieldName = (Core.Name "nextFactor")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simplifiedConcatenationWithInitialTerm :: Phantoms.TTerm Grammar.SimplifiedConcatenation -> Phantoms.TTerm Grammar.SimplifiedTerm -> Phantoms.TTerm Grammar.SimplifiedConcatenation
@@ -18939,7 +18939,7 @@ simplifiedConcatenationWithInitialTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedConcatenation"),
-              Core.projectionField = (Core.Name "nextFactor")})),
+              Core.projectionFieldName = (Core.Name "nextFactor")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 simplifiedConcatenationWithNextFactor :: Phantoms.TTerm Grammar.SimplifiedConcatenation -> Phantoms.TTerm Grammar.SimplifiedFactorLow -> Phantoms.TTerm Grammar.SimplifiedConcatenation
@@ -18952,7 +18952,7 @@ simplifiedConcatenationWithNextFactor original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedConcatenation"),
-              Core.projectionField = (Core.Name "initialTerm")})),
+              Core.projectionFieldName = (Core.Name "initialTerm")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nextFactor"),
@@ -18975,7 +18975,7 @@ simplifiedConjunctionLeft x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedConjunction"),
-        Core.projectionField = (Core.Name "left")})),
+        Core.projectionFieldName = (Core.Name "left")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simplifiedConjunctionRight :: Phantoms.TTerm Grammar.SimplifiedConjunction -> Phantoms.TTerm Grammar.SimplifiedFactorHigh
@@ -18983,7 +18983,7 @@ simplifiedConjunctionRight x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedConjunction"),
-        Core.projectionField = (Core.Name "right")})),
+        Core.projectionFieldName = (Core.Name "right")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simplifiedConjunctionWithLeft :: Phantoms.TTerm Grammar.SimplifiedConjunction -> Phantoms.TTerm Grammar.SimplifiedFactorLow -> Phantoms.TTerm Grammar.SimplifiedConjunction
@@ -18999,7 +18999,7 @@ simplifiedConjunctionWithLeft original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedConjunction"),
-              Core.projectionField = (Core.Name "right")})),
+              Core.projectionFieldName = (Core.Name "right")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 simplifiedConjunctionWithRight :: Phantoms.TTerm Grammar.SimplifiedConjunction -> Phantoms.TTerm Grammar.SimplifiedFactorHigh -> Phantoms.TTerm Grammar.SimplifiedConjunction
@@ -19012,7 +19012,7 @@ simplifiedConjunctionWithRight original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedConjunction"),
-              Core.projectionField = (Core.Name "left")})),
+              Core.projectionFieldName = (Core.Name "left")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "right"),
@@ -19227,7 +19227,7 @@ simplifiedQuantifiedQuantifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedQuantified"),
-        Core.projectionField = (Core.Name "quantifier")})),
+        Core.projectionFieldName = (Core.Name "quantifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simplifiedQuantifiedTertiary :: Phantoms.TTerm Grammar.SimplifiedQuantified -> Phantoms.TTerm Grammar.SimplifiedTertiary
@@ -19235,7 +19235,7 @@ simplifiedQuantifiedTertiary x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedQuantified"),
-        Core.projectionField = (Core.Name "tertiary")})),
+        Core.projectionFieldName = (Core.Name "tertiary")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 simplifiedQuantifiedWithQuantifier :: Phantoms.TTerm Grammar.SimplifiedQuantified -> Phantoms.TTerm Grammar.GraphPatternQuantifier -> Phantoms.TTerm Grammar.SimplifiedQuantified
@@ -19248,7 +19248,7 @@ simplifiedQuantifiedWithQuantifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedQuantified"),
-              Core.projectionField = (Core.Name "tertiary")})),
+              Core.projectionFieldName = (Core.Name "tertiary")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "quantifier"),
@@ -19267,7 +19267,7 @@ simplifiedQuantifiedWithTertiary original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SimplifiedQuantified"),
-              Core.projectionField = (Core.Name "quantifier")})),
+              Core.projectionFieldName = (Core.Name "quantifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 simplifiedSecondaryNegation :: Phantoms.TTerm Grammar.SimplifiedNegation -> Phantoms.TTerm Grammar.SimplifiedSecondary
@@ -19332,7 +19332,7 @@ smallIntTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SmallIntType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 smallIntTypeWithNotNull :: Phantoms.TTerm Grammar.SmallIntType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.SmallIntType
@@ -19358,7 +19358,7 @@ smallIntegerTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SmallIntegerType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 smallIntegerTypeWithNotNull :: Phantoms.TTerm Grammar.SmallIntegerType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.SmallIntegerType
@@ -19390,7 +19390,7 @@ sortSpecificationNullOrdering x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SortSpecification"),
-        Core.projectionField = (Core.Name "nullOrdering")})),
+        Core.projectionFieldName = (Core.Name "nullOrdering")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sortSpecificationOrdering :: Phantoms.TTerm Grammar.SortSpecification -> Phantoms.TTerm (Maybe Grammar.OrderingSpecification)
@@ -19398,7 +19398,7 @@ sortSpecificationOrdering x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SortSpecification"),
-        Core.projectionField = (Core.Name "ordering")})),
+        Core.projectionFieldName = (Core.Name "ordering")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sortSpecificationSortKey :: Phantoms.TTerm Grammar.SortSpecification -> Phantoms.TTerm Grammar.SortKey
@@ -19406,7 +19406,7 @@ sortSpecificationSortKey x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SortSpecification"),
-        Core.projectionField = (Core.Name "sortKey")})),
+        Core.projectionFieldName = (Core.Name "sortKey")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sortSpecificationWithNullOrdering :: Phantoms.TTerm Grammar.SortSpecification -> Phantoms.TTerm (Maybe Grammar.NullOrdering) -> Phantoms.TTerm Grammar.SortSpecification
@@ -19419,14 +19419,14 @@ sortSpecificationWithNullOrdering original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SortSpecification"),
-              Core.projectionField = (Core.Name "sortKey")})),
+              Core.projectionFieldName = (Core.Name "sortKey")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ordering"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SortSpecification"),
-              Core.projectionField = (Core.Name "ordering")})),
+              Core.projectionFieldName = (Core.Name "ordering")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullOrdering"),
@@ -19442,7 +19442,7 @@ sortSpecificationWithOrdering original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SortSpecification"),
-              Core.projectionField = (Core.Name "sortKey")})),
+              Core.projectionFieldName = (Core.Name "sortKey")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ordering"),
@@ -19452,7 +19452,7 @@ sortSpecificationWithOrdering original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SortSpecification"),
-              Core.projectionField = (Core.Name "nullOrdering")})),
+              Core.projectionFieldName = (Core.Name "nullOrdering")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sortSpecificationWithSortKey :: Phantoms.TTerm Grammar.SortSpecification -> Phantoms.TTerm Grammar.SortKey -> Phantoms.TTerm Grammar.SortSpecification
@@ -19468,14 +19468,14 @@ sortSpecificationWithSortKey original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SortSpecification"),
-              Core.projectionField = (Core.Name "ordering")})),
+              Core.projectionFieldName = (Core.Name "ordering")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nullOrdering"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SortSpecification"),
-              Core.projectionField = (Core.Name "nullOrdering")})),
+              Core.projectionFieldName = (Core.Name "nullOrdering")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sourceDestinationPredicateDestinationPredicate :: Phantoms.TTerm Grammar.DestinationPredicate -> Phantoms.TTerm Grammar.SourceDestinationPredicate
@@ -19527,7 +19527,7 @@ sourcePredicateNot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SourcePredicate"),
-        Core.projectionField = (Core.Name "not")})),
+        Core.projectionFieldName = (Core.Name "not")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sourcePredicateSourceOf :: Phantoms.TTerm Grammar.SourcePredicate -> Phantoms.TTerm Grammar.EdgeReference
@@ -19535,7 +19535,7 @@ sourcePredicateSourceOf x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SourcePredicate"),
-        Core.projectionField = (Core.Name "sourceOf")})),
+        Core.projectionFieldName = (Core.Name "sourceOf")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 sourcePredicateWithNot :: Phantoms.TTerm Grammar.SourcePredicate -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.SourcePredicate
@@ -19551,7 +19551,7 @@ sourcePredicateWithNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SourcePredicate"),
-              Core.projectionField = (Core.Name "sourceOf")})),
+              Core.projectionFieldName = (Core.Name "sourceOf")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 sourcePredicateWithSourceOf :: Phantoms.TTerm Grammar.SourcePredicate -> Phantoms.TTerm Grammar.EdgeReference -> Phantoms.TTerm Grammar.SourcePredicate
@@ -19564,7 +19564,7 @@ sourcePredicateWithSourceOf original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SourcePredicate"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sourceOf"),
@@ -19590,7 +19590,7 @@ specifiedRecordTypeFieldTypes x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SpecifiedRecordType"),
-        Core.projectionField = (Core.Name "fieldTypes")})),
+        Core.projectionFieldName = (Core.Name "fieldTypes")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 specifiedRecordTypeNotNull :: Phantoms.TTerm Grammar.SpecifiedRecordType -> Phantoms.TTerm Bool
@@ -19598,7 +19598,7 @@ specifiedRecordTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SpecifiedRecordType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 specifiedRecordTypeRecord :: Phantoms.TTerm Grammar.SpecifiedRecordType -> Phantoms.TTerm Bool
@@ -19606,7 +19606,7 @@ specifiedRecordTypeRecord x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SpecifiedRecordType"),
-        Core.projectionField = (Core.Name "record")})),
+        Core.projectionFieldName = (Core.Name "record")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 specifiedRecordTypeWithFieldTypes :: Phantoms.TTerm Grammar.SpecifiedRecordType -> Phantoms.TTerm Grammar.FieldTypesSpecification -> Phantoms.TTerm Grammar.SpecifiedRecordType
@@ -19619,7 +19619,7 @@ specifiedRecordTypeWithFieldTypes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SpecifiedRecordType"),
-              Core.projectionField = (Core.Name "record")})),
+              Core.projectionFieldName = (Core.Name "record")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fieldTypes"),
@@ -19629,7 +19629,7 @@ specifiedRecordTypeWithFieldTypes original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SpecifiedRecordType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 specifiedRecordTypeWithNotNull :: Phantoms.TTerm Grammar.SpecifiedRecordType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.SpecifiedRecordType
@@ -19642,14 +19642,14 @@ specifiedRecordTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SpecifiedRecordType"),
-              Core.projectionField = (Core.Name "record")})),
+              Core.projectionFieldName = (Core.Name "record")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fieldTypes"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SpecifiedRecordType"),
-              Core.projectionField = (Core.Name "fieldTypes")})),
+              Core.projectionFieldName = (Core.Name "fieldTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -19668,14 +19668,14 @@ specifiedRecordTypeWithRecord original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SpecifiedRecordType"),
-              Core.projectionField = (Core.Name "fieldTypes")})),
+              Core.projectionFieldName = (Core.Name "fieldTypes")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SpecifiedRecordType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 startAndMaybeProcedureAndMaybeEnd :: Phantoms.TTerm Grammar.StartTransactionCommand -> Phantoms.TTerm (Maybe Grammar.ProcedureAndMaybeEnd) -> Phantoms.TTerm Grammar.StartAndMaybeProcedureAndMaybeEnd
@@ -19695,7 +19695,7 @@ startAndMaybeProcedureAndMaybeEndProcedureAndEnd x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.StartAndMaybeProcedureAndMaybeEnd"),
-        Core.projectionField = (Core.Name "procedureAndEnd")})),
+        Core.projectionFieldName = (Core.Name "procedureAndEnd")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 startAndMaybeProcedureAndMaybeEndStart :: Phantoms.TTerm Grammar.StartAndMaybeProcedureAndMaybeEnd -> Phantoms.TTerm Grammar.StartTransactionCommand
@@ -19703,7 +19703,7 @@ startAndMaybeProcedureAndMaybeEndStart x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.StartAndMaybeProcedureAndMaybeEnd"),
-        Core.projectionField = (Core.Name "start")})),
+        Core.projectionFieldName = (Core.Name "start")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 startAndMaybeProcedureAndMaybeEndWithProcedureAndEnd :: Phantoms.TTerm Grammar.StartAndMaybeProcedureAndMaybeEnd -> Phantoms.TTerm (Maybe Grammar.ProcedureAndMaybeEnd) -> Phantoms.TTerm Grammar.StartAndMaybeProcedureAndMaybeEnd
@@ -19716,7 +19716,7 @@ startAndMaybeProcedureAndMaybeEndWithProcedureAndEnd original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StartAndMaybeProcedureAndMaybeEnd"),
-              Core.projectionField = (Core.Name "start")})),
+              Core.projectionFieldName = (Core.Name "start")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "procedureAndEnd"),
@@ -19735,7 +19735,7 @@ startAndMaybeProcedureAndMaybeEndWithStart original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StartAndMaybeProcedureAndMaybeEnd"),
-              Core.projectionField = (Core.Name "procedureAndEnd")})),
+              Core.projectionFieldName = (Core.Name "procedureAndEnd")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 statementBlock :: Phantoms.TTerm Grammar.Statement -> Phantoms.TTerm [Grammar.NextStatement] -> Phantoms.TTerm Grammar.StatementBlock
@@ -19755,7 +19755,7 @@ statementBlockNextStatements x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.StatementBlock"),
-        Core.projectionField = (Core.Name "nextStatements")})),
+        Core.projectionFieldName = (Core.Name "nextStatements")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 statementBlockStatement :: Phantoms.TTerm Grammar.StatementBlock -> Phantoms.TTerm Grammar.Statement
@@ -19763,7 +19763,7 @@ statementBlockStatement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.StatementBlock"),
-        Core.projectionField = (Core.Name "statement")})),
+        Core.projectionFieldName = (Core.Name "statement")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 statementBlockWithNextStatements :: Phantoms.TTerm Grammar.StatementBlock -> Phantoms.TTerm [Grammar.NextStatement] -> Phantoms.TTerm Grammar.StatementBlock
@@ -19776,7 +19776,7 @@ statementBlockWithNextStatements original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StatementBlock"),
-              Core.projectionField = (Core.Name "statement")})),
+              Core.projectionFieldName = (Core.Name "statement")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "nextStatements"),
@@ -19795,7 +19795,7 @@ statementBlockWithStatement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StatementBlock"),
-              Core.projectionField = (Core.Name "nextStatements")})),
+              Core.projectionFieldName = (Core.Name "nextStatements")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 statementCompositeQuery :: Phantoms.TTerm Grammar.CompositeQueryStatement -> Phantoms.TTerm Grammar.Statement
@@ -19842,7 +19842,7 @@ stringTypeMaxLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.StringType"),
-        Core.projectionField = (Core.Name "maxLength")})),
+        Core.projectionFieldName = (Core.Name "maxLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 stringTypeMinLength :: Phantoms.TTerm Grammar.StringType -> Phantoms.TTerm (Maybe Grammar.MinLength)
@@ -19850,7 +19850,7 @@ stringTypeMinLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.StringType"),
-        Core.projectionField = (Core.Name "minLength")})),
+        Core.projectionFieldName = (Core.Name "minLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 stringTypeNotNull :: Phantoms.TTerm Grammar.StringType -> Phantoms.TTerm Bool
@@ -19858,7 +19858,7 @@ stringTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.StringType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 stringTypeWithMaxLength :: Phantoms.TTerm Grammar.StringType -> Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Grammar.StringType
@@ -19871,7 +19871,7 @@ stringTypeWithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StringType"),
-              Core.projectionField = (Core.Name "minLength")})),
+              Core.projectionFieldName = (Core.Name "minLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
@@ -19881,7 +19881,7 @@ stringTypeWithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StringType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 stringTypeWithMinLength :: Phantoms.TTerm Grammar.StringType -> Phantoms.TTerm (Maybe Grammar.MinLength) -> Phantoms.TTerm Grammar.StringType
@@ -19897,14 +19897,14 @@ stringTypeWithMinLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StringType"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StringType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 stringTypeWithNotNull :: Phantoms.TTerm Grammar.StringType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.StringType
@@ -19917,14 +19917,14 @@ stringTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StringType"),
-              Core.projectionField = (Core.Name "minLength")})),
+              Core.projectionFieldName = (Core.Name "minLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxLength"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.StringType"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -19950,7 +19950,7 @@ subCharacterOrByteStringSide x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SubCharacterOrByteString"),
-        Core.projectionField = (Core.Name "side")})),
+        Core.projectionFieldName = (Core.Name "side")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subCharacterOrByteStringStringLength :: Phantoms.TTerm Grammar.SubCharacterOrByteString -> Phantoms.TTerm Grammar.StringLength
@@ -19958,7 +19958,7 @@ subCharacterOrByteStringStringLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SubCharacterOrByteString"),
-        Core.projectionField = (Core.Name "stringLength")})),
+        Core.projectionFieldName = (Core.Name "stringLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subCharacterOrByteStringValueExpression :: Phantoms.TTerm Grammar.SubCharacterOrByteString -> Phantoms.TTerm Grammar.ValueExpression
@@ -19966,7 +19966,7 @@ subCharacterOrByteStringValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.SubCharacterOrByteString"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 subCharacterOrByteStringWithSide :: Phantoms.TTerm Grammar.SubCharacterOrByteString -> Phantoms.TTerm Grammar.Side -> Phantoms.TTerm Grammar.SubCharacterOrByteString
@@ -19982,14 +19982,14 @@ subCharacterOrByteStringWithSide original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SubCharacterOrByteString"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stringLength"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SubCharacterOrByteString"),
-              Core.projectionField = (Core.Name "stringLength")})),
+              Core.projectionFieldName = (Core.Name "stringLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 subCharacterOrByteStringWithStringLength :: Phantoms.TTerm Grammar.SubCharacterOrByteString -> Phantoms.TTerm Grammar.StringLength -> Phantoms.TTerm Grammar.SubCharacterOrByteString
@@ -20002,14 +20002,14 @@ subCharacterOrByteStringWithStringLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SubCharacterOrByteString"),
-              Core.projectionField = (Core.Name "side")})),
+              Core.projectionFieldName = (Core.Name "side")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SubCharacterOrByteString"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "stringLength"),
@@ -20025,7 +20025,7 @@ subCharacterOrByteStringWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SubCharacterOrByteString"),
-              Core.projectionField = (Core.Name "side")})),
+              Core.projectionFieldName = (Core.Name "side")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
@@ -20035,7 +20035,7 @@ subCharacterOrByteStringWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.SubCharacterOrByteString"),
-              Core.projectionField = (Core.Name "stringLength")})),
+              Core.projectionFieldName = (Core.Name "stringLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 temporalDurationQualifierDayToSecond :: Phantoms.TTerm Grammar.TemporalDurationQualifier
@@ -20071,7 +20071,7 @@ temporalDurationTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TemporalDurationType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 temporalDurationTypeQualifier :: Phantoms.TTerm Grammar.TemporalDurationType -> Phantoms.TTerm Grammar.TemporalDurationQualifier
@@ -20079,7 +20079,7 @@ temporalDurationTypeQualifier x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TemporalDurationType"),
-        Core.projectionField = (Core.Name "qualifier")})),
+        Core.projectionFieldName = (Core.Name "qualifier")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 temporalDurationTypeWithNotNull :: Phantoms.TTerm Grammar.TemporalDurationType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.TemporalDurationType
@@ -20092,7 +20092,7 @@ temporalDurationTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TemporalDurationType"),
-              Core.projectionField = (Core.Name "qualifier")})),
+              Core.projectionFieldName = (Core.Name "qualifier")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -20111,7 +20111,7 @@ temporalDurationTypeWithQualifier original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TemporalDurationType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 temporalInstantTypeDateType :: Phantoms.TTerm Grammar.DateType -> Phantoms.TTerm Grammar.TemporalInstantType
@@ -20256,7 +20256,7 @@ timeWithTimeZoneTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TimeWithTimeZoneType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 timeWithTimeZoneTypeWithNotNull :: Phantoms.TTerm Grammar.TimeWithTimeZoneType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.TimeWithTimeZoneType
@@ -20282,7 +20282,7 @@ timeWithoutTimeZoneTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TimeWithoutTimeZoneType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 timeWithoutTimeZoneTypeWithNotNull :: Phantoms.TTerm Grammar.TimeWithoutTimeZoneType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.TimeWithoutTimeZoneType
@@ -20308,7 +20308,7 @@ timestampWithTimeZoneTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TimestampWithTimeZoneType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 timestampWithTimeZoneTypeWithNotNull :: Phantoms.TTerm Grammar.TimestampWithTimeZoneType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.TimestampWithTimeZoneType
@@ -20334,7 +20334,7 @@ timestampWithoutTimeZoneTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TimestampWithoutTimeZoneType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 timestampWithoutTimeZoneTypeWithNotNull :: Phantoms.TTerm Grammar.TimestampWithoutTimeZoneType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.TimestampWithoutTimeZoneType
@@ -20403,7 +20403,7 @@ trigonometricFunctionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunction"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trigonometricFunctionNameAcos :: Phantoms.TTerm Grammar.TrigonometricFunctionName
@@ -20507,7 +20507,7 @@ trigonometricFunctionValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunction"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trigonometricFunctionWithName :: Phantoms.TTerm Grammar.TrigonometricFunction -> Phantoms.TTerm Grammar.TrigonometricFunctionName -> Phantoms.TTerm Grammar.TrigonometricFunction
@@ -20523,7 +20523,7 @@ trigonometricFunctionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunction"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 trigonometricFunctionWithValue :: Phantoms.TTerm Grammar.TrigonometricFunction -> Phantoms.TTerm Grammar.NumericValueExpression -> Phantoms.TTerm Grammar.TrigonometricFunction
@@ -20536,7 +20536,7 @@ trigonometricFunctionWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrigonometricFunction"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -20559,7 +20559,7 @@ trimListFunctionListValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrimListFunction"),
-        Core.projectionField = (Core.Name "listValue")})),
+        Core.projectionFieldName = (Core.Name "listValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trimListFunctionNumericValue :: Phantoms.TTerm Grammar.TrimListFunction -> Phantoms.TTerm Grammar.NumericValueExpression
@@ -20567,7 +20567,7 @@ trimListFunctionNumericValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrimListFunction"),
-        Core.projectionField = (Core.Name "numericValue")})),
+        Core.projectionFieldName = (Core.Name "numericValue")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trimListFunctionWithListValue :: Phantoms.TTerm Grammar.TrimListFunction -> Phantoms.TTerm Grammar.ListValueExpression -> Phantoms.TTerm Grammar.TrimListFunction
@@ -20583,7 +20583,7 @@ trimListFunctionWithListValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimListFunction"),
-              Core.projectionField = (Core.Name "numericValue")})),
+              Core.projectionFieldName = (Core.Name "numericValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 trimListFunctionWithNumericValue :: Phantoms.TTerm Grammar.TrimListFunction -> Phantoms.TTerm Grammar.NumericValueExpression -> Phantoms.TTerm Grammar.TrimListFunction
@@ -20596,7 +20596,7 @@ trimListFunctionWithNumericValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimListFunction"),
-              Core.projectionField = (Core.Name "listValue")})),
+              Core.projectionFieldName = (Core.Name "listValue")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "numericValue"),
@@ -20622,7 +20622,7 @@ trimMultiCharacterCharacterStringOptionalValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrimMultiCharacterCharacterString"),
-        Core.projectionField = (Core.Name "optionalValueExpression")})),
+        Core.projectionFieldName = (Core.Name "optionalValueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trimMultiCharacterCharacterStringTrimType :: Phantoms.TTerm Grammar.TrimMultiCharacterCharacterString -> Phantoms.TTerm Grammar.TrimType
@@ -20630,7 +20630,7 @@ trimMultiCharacterCharacterStringTrimType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrimMultiCharacterCharacterString"),
-        Core.projectionField = (Core.Name "trimType")})),
+        Core.projectionFieldName = (Core.Name "trimType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trimMultiCharacterCharacterStringValueExpression :: Phantoms.TTerm Grammar.TrimMultiCharacterCharacterString -> Phantoms.TTerm Grammar.ValueExpression
@@ -20638,7 +20638,7 @@ trimMultiCharacterCharacterStringValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrimMultiCharacterCharacterString"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trimMultiCharacterCharacterStringWithOptionalValueExpression :: Phantoms.TTerm Grammar.TrimMultiCharacterCharacterString -> Phantoms.TTerm (Maybe Grammar.ValueExpression) -> Phantoms.TTerm Grammar.TrimMultiCharacterCharacterString
@@ -20651,14 +20651,14 @@ trimMultiCharacterCharacterStringWithOptionalValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimMultiCharacterCharacterString"),
-              Core.projectionField = (Core.Name "trimType")})),
+              Core.projectionFieldName = (Core.Name "trimType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimMultiCharacterCharacterString"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "optionalValueExpression"),
@@ -20677,14 +20677,14 @@ trimMultiCharacterCharacterStringWithTrimType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimMultiCharacterCharacterString"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "optionalValueExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimMultiCharacterCharacterString"),
-              Core.projectionField = (Core.Name "optionalValueExpression")})),
+              Core.projectionFieldName = (Core.Name "optionalValueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 trimMultiCharacterCharacterStringWithValueExpression :: Phantoms.TTerm Grammar.TrimMultiCharacterCharacterString -> Phantoms.TTerm Grammar.ValueExpression -> Phantoms.TTerm Grammar.TrimMultiCharacterCharacterString
@@ -20697,7 +20697,7 @@ trimMultiCharacterCharacterStringWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimMultiCharacterCharacterString"),
-              Core.projectionField = (Core.Name "trimType")})),
+              Core.projectionFieldName = (Core.Name "trimType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueExpression"),
@@ -20707,7 +20707,7 @@ trimMultiCharacterCharacterStringWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimMultiCharacterCharacterString"),
-              Core.projectionField = (Core.Name "optionalValueExpression")})),
+              Core.projectionFieldName = (Core.Name "optionalValueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 trimOperands :: Phantoms.TTerm (Maybe Grammar.TrimSpecification) -> Phantoms.TTerm (Maybe Grammar.TrimCharacterOrByteString) -> Phantoms.TTerm Grammar.TrimCharacterOrByteStringSource -> Phantoms.TTerm Grammar.TrimOperands
@@ -20730,7 +20730,7 @@ trimOperandsCharacterOrByteString x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrimOperands"),
-        Core.projectionField = (Core.Name "characterOrByteString")})),
+        Core.projectionFieldName = (Core.Name "characterOrByteString")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trimOperandsSource :: Phantoms.TTerm Grammar.TrimOperands -> Phantoms.TTerm Grammar.TrimCharacterOrByteStringSource
@@ -20738,7 +20738,7 @@ trimOperandsSource x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrimOperands"),
-        Core.projectionField = (Core.Name "source")})),
+        Core.projectionFieldName = (Core.Name "source")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trimOperandsSpecification :: Phantoms.TTerm Grammar.TrimOperands -> Phantoms.TTerm (Maybe Grammar.TrimSpecification)
@@ -20746,7 +20746,7 @@ trimOperandsSpecification x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TrimOperands"),
-        Core.projectionField = (Core.Name "specification")})),
+        Core.projectionFieldName = (Core.Name "specification")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 trimOperandsWithCharacterOrByteString :: Phantoms.TTerm Grammar.TrimOperands -> Phantoms.TTerm (Maybe Grammar.TrimCharacterOrByteString) -> Phantoms.TTerm Grammar.TrimOperands
@@ -20759,7 +20759,7 @@ trimOperandsWithCharacterOrByteString original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimOperands"),
-              Core.projectionField = (Core.Name "specification")})),
+              Core.projectionFieldName = (Core.Name "specification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "characterOrByteString"),
@@ -20769,7 +20769,7 @@ trimOperandsWithCharacterOrByteString original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimOperands"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 trimOperandsWithSource :: Phantoms.TTerm Grammar.TrimOperands -> Phantoms.TTerm Grammar.TrimCharacterOrByteStringSource -> Phantoms.TTerm Grammar.TrimOperands
@@ -20782,14 +20782,14 @@ trimOperandsWithSource original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimOperands"),
-              Core.projectionField = (Core.Name "specification")})),
+              Core.projectionFieldName = (Core.Name "specification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "characterOrByteString"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimOperands"),
-              Core.projectionField = (Core.Name "characterOrByteString")})),
+              Core.projectionFieldName = (Core.Name "characterOrByteString")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
@@ -20808,14 +20808,14 @@ trimOperandsWithSpecification original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimOperands"),
-              Core.projectionField = (Core.Name "characterOrByteString")})),
+              Core.projectionFieldName = (Core.Name "characterOrByteString")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "source"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TrimOperands"),
-              Core.projectionField = (Core.Name "source")})),
+              Core.projectionFieldName = (Core.Name "source")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 trimSpecificationBoth :: Phantoms.TTerm Grammar.TrimSpecification
@@ -20883,7 +20883,7 @@ typedBindingTableReferenceValueTypeTyped x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedBindingTableReferenceValueType"),
-        Core.projectionField = (Core.Name "typed")})),
+        Core.projectionFieldName = (Core.Name "typed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedBindingTableReferenceValueTypeValueType :: Phantoms.TTerm Grammar.TypedBindingTableReferenceValueType -> Phantoms.TTerm Grammar.BindingTableReferenceValueType
@@ -20891,7 +20891,7 @@ typedBindingTableReferenceValueTypeValueType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedBindingTableReferenceValueType"),
-        Core.projectionField = (Core.Name "valueType")})),
+        Core.projectionFieldName = (Core.Name "valueType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedBindingTableReferenceValueTypeWithTyped :: Phantoms.TTerm Grammar.TypedBindingTableReferenceValueType -> Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Grammar.TypedBindingTableReferenceValueType
@@ -20907,7 +20907,7 @@ typedBindingTableReferenceValueTypeWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedBindingTableReferenceValueType"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typedBindingTableReferenceValueTypeWithValueType :: Phantoms.TTerm Grammar.TypedBindingTableReferenceValueType -> Phantoms.TTerm Grammar.BindingTableReferenceValueType -> Phantoms.TTerm Grammar.TypedBindingTableReferenceValueType
@@ -20920,7 +20920,7 @@ typedBindingTableReferenceValueTypeWithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedBindingTableReferenceValueType"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
@@ -20943,7 +20943,7 @@ typedGraphReferenceValueTypeTyped x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedGraphReferenceValueType"),
-        Core.projectionField = (Core.Name "typed")})),
+        Core.projectionFieldName = (Core.Name "typed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedGraphReferenceValueTypeValueType :: Phantoms.TTerm Grammar.TypedGraphReferenceValueType -> Phantoms.TTerm Grammar.GraphReferenceValueType
@@ -20951,7 +20951,7 @@ typedGraphReferenceValueTypeValueType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedGraphReferenceValueType"),
-        Core.projectionField = (Core.Name "valueType")})),
+        Core.projectionFieldName = (Core.Name "valueType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedGraphReferenceValueTypeWithTyped :: Phantoms.TTerm Grammar.TypedGraphReferenceValueType -> Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Grammar.TypedGraphReferenceValueType
@@ -20967,7 +20967,7 @@ typedGraphReferenceValueTypeWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typedGraphReferenceValueTypeWithValueType :: Phantoms.TTerm Grammar.TypedGraphReferenceValueType -> Phantoms.TTerm Grammar.GraphReferenceValueType -> Phantoms.TTerm Grammar.TypedGraphReferenceValueType
@@ -20980,7 +20980,7 @@ typedGraphReferenceValueTypeWithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedGraphReferenceValueType"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
@@ -21003,7 +21003,7 @@ typedGraphTypeReferenceReference x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedGraphTypeReference"),
-        Core.projectionField = (Core.Name "reference")})),
+        Core.projectionFieldName = (Core.Name "reference")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedGraphTypeReferenceTyped :: Phantoms.TTerm Grammar.TypedGraphTypeReference -> Phantoms.TTerm (Maybe Grammar.Typed)
@@ -21011,7 +21011,7 @@ typedGraphTypeReferenceTyped x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedGraphTypeReference"),
-        Core.projectionField = (Core.Name "typed")})),
+        Core.projectionFieldName = (Core.Name "typed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedGraphTypeReferenceWithReference :: Phantoms.TTerm Grammar.TypedGraphTypeReference -> Phantoms.TTerm Grammar.GraphTypeReference -> Phantoms.TTerm Grammar.TypedGraphTypeReference
@@ -21024,7 +21024,7 @@ typedGraphTypeReferenceWithReference original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedGraphTypeReference"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "reference"),
@@ -21043,7 +21043,7 @@ typedGraphTypeReferenceWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedGraphTypeReference"),
-              Core.projectionField = (Core.Name "reference")})),
+              Core.projectionFieldName = (Core.Name "reference")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typedNestedGraphTypeSpecification :: Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.NestedGraphTypeSpecification -> Phantoms.TTerm Grammar.TypedNestedGraphTypeSpecification
@@ -21066,7 +21066,7 @@ typedNestedGraphTypeSpecificationGraph x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedNestedGraphTypeSpecification"),
-        Core.projectionField = (Core.Name "graph")})),
+        Core.projectionFieldName = (Core.Name "graph")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedNestedGraphTypeSpecificationSpecification :: Phantoms.TTerm Grammar.TypedNestedGraphTypeSpecification -> Phantoms.TTerm Grammar.NestedGraphTypeSpecification
@@ -21074,7 +21074,7 @@ typedNestedGraphTypeSpecificationSpecification x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedNestedGraphTypeSpecification"),
-        Core.projectionField = (Core.Name "specification")})),
+        Core.projectionFieldName = (Core.Name "specification")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedNestedGraphTypeSpecificationTyped :: Phantoms.TTerm Grammar.TypedNestedGraphTypeSpecification -> Phantoms.TTerm (Maybe Grammar.Typed)
@@ -21082,7 +21082,7 @@ typedNestedGraphTypeSpecificationTyped x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedNestedGraphTypeSpecification"),
-        Core.projectionField = (Core.Name "typed")})),
+        Core.projectionFieldName = (Core.Name "typed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedNestedGraphTypeSpecificationWithGraph :: Phantoms.TTerm Grammar.TypedNestedGraphTypeSpecification -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.TypedNestedGraphTypeSpecification
@@ -21095,7 +21095,7 @@ typedNestedGraphTypeSpecificationWithGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedNestedGraphTypeSpecification"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
@@ -21105,7 +21105,7 @@ typedNestedGraphTypeSpecificationWithGraph original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedNestedGraphTypeSpecification"),
-              Core.projectionField = (Core.Name "specification")})),
+              Core.projectionFieldName = (Core.Name "specification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typedNestedGraphTypeSpecificationWithSpecification :: Phantoms.TTerm Grammar.TypedNestedGraphTypeSpecification -> Phantoms.TTerm Grammar.NestedGraphTypeSpecification -> Phantoms.TTerm Grammar.TypedNestedGraphTypeSpecification
@@ -21118,14 +21118,14 @@ typedNestedGraphTypeSpecificationWithSpecification original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedNestedGraphTypeSpecification"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "graph"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedNestedGraphTypeSpecification"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "specification"),
@@ -21144,14 +21144,14 @@ typedNestedGraphTypeSpecificationWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedNestedGraphTypeSpecification"),
-              Core.projectionField = (Core.Name "graph")})),
+              Core.projectionFieldName = (Core.Name "graph")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "specification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedNestedGraphTypeSpecification"),
-              Core.projectionField = (Core.Name "specification")})),
+              Core.projectionFieldName = (Core.Name "specification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typedValueType :: Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Grammar.ValueType -> Phantoms.TTerm Grammar.TypedValueType
@@ -21171,7 +21171,7 @@ typedValueTypeTyped x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedValueType"),
-        Core.projectionField = (Core.Name "typed")})),
+        Core.projectionFieldName = (Core.Name "typed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedValueTypeValueType :: Phantoms.TTerm Grammar.TypedValueType -> Phantoms.TTerm Grammar.ValueType
@@ -21179,7 +21179,7 @@ typedValueTypeValueType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.TypedValueType"),
-        Core.projectionField = (Core.Name "valueType")})),
+        Core.projectionFieldName = (Core.Name "valueType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 typedValueTypeWithTyped :: Phantoms.TTerm Grammar.TypedValueType -> Phantoms.TTerm (Maybe Grammar.Typed) -> Phantoms.TTerm Grammar.TypedValueType
@@ -21195,7 +21195,7 @@ typedValueTypeWithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedValueType"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 typedValueTypeWithValueType :: Phantoms.TTerm Grammar.TypedValueType -> Phantoms.TTerm Grammar.ValueType -> Phantoms.TTerm Grammar.TypedValueType
@@ -21208,7 +21208,7 @@ typedValueTypeWithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.TypedValueType"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
@@ -21228,7 +21228,7 @@ uBigIntTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.UBigIntType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uBigIntTypeWithNotNull :: Phantoms.TTerm Grammar.UBigIntType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.UBigIntType
@@ -21254,7 +21254,7 @@ uSmallIntTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.USmallIntType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uSmallIntTypeWithNotNull :: Phantoms.TTerm Grammar.USmallIntType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.USmallIntType
@@ -21280,7 +21280,7 @@ uint128TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Uint128Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uint128TypeWithNotNull :: Phantoms.TTerm Grammar.Uint128Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Uint128Type
@@ -21306,7 +21306,7 @@ uint16TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Uint16Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uint16TypeWithNotNull :: Phantoms.TTerm Grammar.Uint16Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Uint16Type
@@ -21332,7 +21332,7 @@ uint256TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Uint256Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uint256TypeWithNotNull :: Phantoms.TTerm Grammar.Uint256Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Uint256Type
@@ -21358,7 +21358,7 @@ uint32TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Uint32Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uint32TypeWithNotNull :: Phantoms.TTerm Grammar.Uint32Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Uint32Type
@@ -21384,7 +21384,7 @@ uint64TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Uint64Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uint64TypeWithNotNull :: Phantoms.TTerm Grammar.Uint64Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Uint64Type
@@ -21410,7 +21410,7 @@ uint8TypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.Uint8Type"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uint8TypeWithNotNull :: Phantoms.TTerm Grammar.Uint8Type -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.Uint8Type
@@ -21439,7 +21439,7 @@ uintWithPrecisionNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.UintWithPrecision"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uintWithPrecisionPrecision :: Phantoms.TTerm Grammar.UintWithPrecision -> Phantoms.TTerm (Maybe Grammar.Precision)
@@ -21447,7 +21447,7 @@ uintWithPrecisionPrecision x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.UintWithPrecision"),
-        Core.projectionField = (Core.Name "precision")})),
+        Core.projectionFieldName = (Core.Name "precision")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uintWithPrecisionWithNotNull :: Phantoms.TTerm Grammar.UintWithPrecision -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.UintWithPrecision
@@ -21460,7 +21460,7 @@ uintWithPrecisionWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.UintWithPrecision"),
-              Core.projectionField = (Core.Name "precision")})),
+              Core.projectionFieldName = (Core.Name "precision")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -21479,7 +21479,7 @@ uintWithPrecisionWithPrecision original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.UintWithPrecision"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unsignedBinaryExactNumericTypeUBigInt :: Phantoms.TTerm Grammar.UBigIntType -> Phantoms.TTerm Grammar.UnsignedBinaryExactNumericType
@@ -21914,7 +21914,7 @@ valueTypePredicatePart2Not x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicatePart2"),
-        Core.projectionField = (Core.Name "not")})),
+        Core.projectionFieldName = (Core.Name "not")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 valueTypePredicatePart2Typed :: Phantoms.TTerm Grammar.ValueTypePredicatePart2 -> Phantoms.TTerm Grammar.Typed
@@ -21922,7 +21922,7 @@ valueTypePredicatePart2Typed x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicatePart2"),
-        Core.projectionField = (Core.Name "typed")})),
+        Core.projectionFieldName = (Core.Name "typed")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 valueTypePredicatePart2ValueType :: Phantoms.TTerm Grammar.ValueTypePredicatePart2 -> Phantoms.TTerm Grammar.ValueType
@@ -21930,7 +21930,7 @@ valueTypePredicatePart2ValueType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicatePart2"),
-        Core.projectionField = (Core.Name "valueType")})),
+        Core.projectionFieldName = (Core.Name "valueType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 valueTypePredicatePart2WithNot :: Phantoms.TTerm Grammar.ValueTypePredicatePart2 -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ValueTypePredicatePart2
@@ -21946,14 +21946,14 @@ valueTypePredicatePart2WithNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicatePart2"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicatePart2"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 valueTypePredicatePart2WithTyped :: Phantoms.TTerm Grammar.ValueTypePredicatePart2 -> Phantoms.TTerm Grammar.Typed -> Phantoms.TTerm Grammar.ValueTypePredicatePart2
@@ -21966,7 +21966,7 @@ valueTypePredicatePart2WithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicatePart2"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typed"),
@@ -21976,7 +21976,7 @@ valueTypePredicatePart2WithTyped original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicatePart2"),
-              Core.projectionField = (Core.Name "valueType")})),
+              Core.projectionFieldName = (Core.Name "valueType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 valueTypePredicatePart2WithValueType :: Phantoms.TTerm Grammar.ValueTypePredicatePart2 -> Phantoms.TTerm Grammar.ValueType -> Phantoms.TTerm Grammar.ValueTypePredicatePart2
@@ -21989,14 +21989,14 @@ valueTypePredicatePart2WithValueType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicatePart2"),
-              Core.projectionField = (Core.Name "not")})),
+              Core.projectionFieldName = (Core.Name "not")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typed"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicatePart2"),
-              Core.projectionField = (Core.Name "typed")})),
+              Core.projectionFieldName = (Core.Name "typed")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueType"),
@@ -22007,7 +22007,7 @@ valueTypePredicateValueExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicate"),
-        Core.projectionField = (Core.Name "valueExpression")})),
+        Core.projectionFieldName = (Core.Name "valueExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 valueTypePredicateValueTypePart :: Phantoms.TTerm Grammar.ValueTypePredicate -> Phantoms.TTerm Grammar.ValueTypePredicatePart2
@@ -22015,7 +22015,7 @@ valueTypePredicateValueTypePart x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicate"),
-        Core.projectionField = (Core.Name "valueTypePart")})),
+        Core.projectionFieldName = (Core.Name "valueTypePart")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 valueTypePredicateWithValueExpression :: Phantoms.TTerm Grammar.ValueTypePredicate -> Phantoms.TTerm Grammar.PrimaryValueExpression -> Phantoms.TTerm Grammar.ValueTypePredicate
@@ -22031,7 +22031,7 @@ valueTypePredicateWithValueExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicate"),
-              Core.projectionField = (Core.Name "valueTypePart")})),
+              Core.projectionFieldName = (Core.Name "valueTypePart")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 valueTypePredicateWithValueTypePart :: Phantoms.TTerm Grammar.ValueTypePredicate -> Phantoms.TTerm Grammar.ValueTypePredicatePart2 -> Phantoms.TTerm Grammar.ValueTypePredicate
@@ -22044,7 +22044,7 @@ valueTypePredicateWithValueTypePart original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueTypePredicate"),
-              Core.projectionField = (Core.Name "valueExpression")})),
+              Core.projectionFieldName = (Core.Name "valueExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "valueTypePart"),
@@ -22075,7 +22075,7 @@ valueVariableDefinitionInitializer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ValueVariableDefinition"),
-        Core.projectionField = (Core.Name "initializer")})),
+        Core.projectionFieldName = (Core.Name "initializer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 valueVariableDefinitionVariable :: Phantoms.TTerm Grammar.ValueVariableDefinition -> Phantoms.TTerm Grammar.BindingVariable
@@ -22083,7 +22083,7 @@ valueVariableDefinitionVariable x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ValueVariableDefinition"),
-        Core.projectionField = (Core.Name "variable")})),
+        Core.projectionFieldName = (Core.Name "variable")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 valueVariableDefinitionWithInitializer :: Phantoms.TTerm Grammar.ValueVariableDefinition -> Phantoms.TTerm Grammar.OptTypedValueInitializer -> Phantoms.TTerm Grammar.ValueVariableDefinition
@@ -22096,7 +22096,7 @@ valueVariableDefinitionWithInitializer original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueVariableDefinition"),
-              Core.projectionField = (Core.Name "variable")})),
+              Core.projectionFieldName = (Core.Name "variable")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "initializer"),
@@ -22115,7 +22115,7 @@ valueVariableDefinitionWithVariable original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.ValueVariableDefinition"),
-              Core.projectionField = (Core.Name "initializer")})),
+              Core.projectionFieldName = (Core.Name "initializer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 varbinaryType :: Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.VarbinaryType
@@ -22135,7 +22135,7 @@ varbinaryTypeMaxLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.VarbinaryType"),
-        Core.projectionField = (Core.Name "maxLength")})),
+        Core.projectionFieldName = (Core.Name "maxLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 varbinaryTypeNotNull :: Phantoms.TTerm Grammar.VarbinaryType -> Phantoms.TTerm Bool
@@ -22143,7 +22143,7 @@ varbinaryTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.VarbinaryType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 varbinaryTypeWithMaxLength :: Phantoms.TTerm Grammar.VarbinaryType -> Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Grammar.VarbinaryType
@@ -22159,7 +22159,7 @@ varbinaryTypeWithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.VarbinaryType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 varbinaryTypeWithNotNull :: Phantoms.TTerm Grammar.VarbinaryType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.VarbinaryType
@@ -22172,7 +22172,7 @@ varbinaryTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.VarbinaryType"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -22195,7 +22195,7 @@ varcharTypeMaxLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.VarcharType"),
-        Core.projectionField = (Core.Name "maxLength")})),
+        Core.projectionFieldName = (Core.Name "maxLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 varcharTypeNotNull :: Phantoms.TTerm Grammar.VarcharType -> Phantoms.TTerm Bool
@@ -22203,7 +22203,7 @@ varcharTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.VarcharType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 varcharTypeWithMaxLength :: Phantoms.TTerm Grammar.VarcharType -> Phantoms.TTerm (Maybe Grammar.MaxLength) -> Phantoms.TTerm Grammar.VarcharType
@@ -22219,7 +22219,7 @@ varcharTypeWithMaxLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.VarcharType"),
-              Core.projectionField = (Core.Name "notNull")})),
+              Core.projectionFieldName = (Core.Name "notNull")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 varcharTypeWithNotNull :: Phantoms.TTerm Grammar.VarcharType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.VarcharType
@@ -22232,7 +22232,7 @@ varcharTypeWithNotNull original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.VarcharType"),
-              Core.projectionField = (Core.Name "maxLength")})),
+              Core.projectionFieldName = (Core.Name "maxLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "notNull"),
@@ -22399,7 +22399,7 @@ yieldItemAlias x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.YieldItem"),
-        Core.projectionField = (Core.Name "alias")})),
+        Core.projectionFieldName = (Core.Name "alias")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 yieldItemName :: Phantoms.TTerm Grammar.YieldItem -> Phantoms.TTerm Grammar.YieldItemName
@@ -22407,7 +22407,7 @@ yieldItemName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.YieldItem"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 yieldItemWithAlias :: Phantoms.TTerm Grammar.YieldItem -> Phantoms.TTerm (Maybe Grammar.YieldItemAlias) -> Phantoms.TTerm Grammar.YieldItem
@@ -22420,7 +22420,7 @@ yieldItemWithAlias original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.YieldItem"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alias"),
@@ -22439,7 +22439,7 @@ yieldItemWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "openGql.grammar.YieldItem"),
-              Core.projectionField = (Core.Name "alias")})),
+              Core.projectionFieldName = (Core.Name "alias")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 zonedDatetimeType :: Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ZonedDatetimeType
@@ -22456,7 +22456,7 @@ zonedDatetimeTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ZonedDatetimeType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 zonedDatetimeTypeWithNotNull :: Phantoms.TTerm Grammar.ZonedDatetimeType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ZonedDatetimeType
@@ -22482,7 +22482,7 @@ zonedTimeTypeNotNull x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "openGql.grammar.ZonedTimeType"),
-        Core.projectionField = (Core.Name "notNull")})),
+        Core.projectionFieldName = (Core.Name "notNull")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 zonedTimeTypeWithNotNull :: Phantoms.TTerm Grammar.ZonedTimeType -> Phantoms.TTerm Bool -> Phantoms.TTerm Grammar.ZonedTimeType

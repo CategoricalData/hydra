@@ -9,8 +9,8 @@ import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Pg.Model      as PgModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.error.pg"
+ns :: ModuleName
+ns = ModuleName "hydra.error.pg"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -20,9 +20,9 @@ pg = typeref PgModel.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [PgModel.ns],
+            moduleDependencies = unqualifiedDep <$> [PgModel.ns],
             moduleDescription = Just "Error types for property graph validation"}
   where
     definitions = [

@@ -46,4 +46,4 @@
           "variables": []}}}],
   "dependencies": [],
   "description": "Environment types for Haskell code generation",
-  "namespace": "hydra.haskell.environment"}
+  "name": "hydra.haskell.environment"}

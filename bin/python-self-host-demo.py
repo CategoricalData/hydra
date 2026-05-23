@@ -118,7 +118,7 @@ def main():
     print(f"  imported {len(py_sources)} python source modules ({t_import:.1f}s)", flush=True)
     for m in py_sources:
         ndefs = len(m.definitions) if m.definitions else 0
-        print(f"    {m.namespace.value}: {ndefs} definitions", flush=True)
+        print(f"    {m.name.value}: {ndefs} definitions", flush=True)
 
     # Stage 1: inference over universe + python sources.
     universe_all = tuple(universe) + tuple(py_sources)
@@ -163,7 +163,7 @@ def main():
         result = codegen.module_to_json(schema_map, m)
         match result:
             case Right(value=json_str):
-                file_path = out_root / (_namespace_to_path(m.namespace.value) + ".json")
+                file_path = out_root / (_namespace_to_path(m.name.value) + ".json")
                 file_path.parent.mkdir(parents=True, exist_ok=True)
                 new_content = json_str + "\n"
                 # Skip the write if byte-identical (matches Haskell behavior).
@@ -176,7 +176,7 @@ def main():
                 n_written += 1
                 print(f"  wrote: {file_path}", flush=True)
             case Left(value=err):
-                print(f"  ENCODE FAILED for {m.namespace.value}: {err}", flush=True)
+                print(f"  ENCODE FAILED for {m.name.value}: {err}", flush=True)
                 return 2
     t_write = time.perf_counter() - t0
     print(f"  wrote {n_written} files ({t_write:.1f}s)", flush=True)

@@ -13,17 +13,17 @@ import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
-ns :: Namespace
-ns = Namespace "hydra.coders"
+ns :: ModuleName
+ns = ModuleName "hydra.coders"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Context.ns, Error.ns, Graph.ns, Variants.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Context.ns, Error.ns, Graph.ns, Variants.ns, Core.ns],
             moduleDescription = Just "Abstractions for paired transformations between languages"}
   where
     definitions = [

@@ -1,7 +1,7 @@
 package hydra;
 
 import hydra.packaging.Module;
-import hydra.packaging.Namespace;
+import hydra.packaging.ModuleName;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -135,7 +135,7 @@ public class Bootstrap {
         // hydra-haskell provides the runtime AST modules that the generated DSL
         // source modules import, so it must pass --kernel-only filtering.
         Set<String> kernelNsSet = new HashSet<>();
-        for (Module m : baselineMods) kernelNsSet.add(m.namespace.value);
+        for (Module m : baselineMods) kernelNsSet.add(m.name.value);
 
         // Step 2: Optionally load coder packages.
         List<Module> coderMods = new ArrayList<>();
@@ -163,12 +163,12 @@ public class Bootstrap {
             int before = modsToGenerate.size();
             List<Module> filteredGen = new ArrayList<>();
             for (Module m : modsToGenerate) {
-                if (kernelNsSet.contains(m.namespace.value)) filteredGen.add(m);
+                if (kernelNsSet.contains(m.name.value)) filteredGen.add(m);
             }
             modsToGenerate = filteredGen;
             List<Module> filteredAll = new ArrayList<>();
             for (Module m : allMainMods) {
-                if (kernelNsSet.contains(m.namespace.value)) filteredAll.add(m);
+                if (kernelNsSet.contains(m.name.value)) filteredAll.add(m);
             }
             allMainMods = filteredAll;
             System.out.println("Filtering to kernel modules...");
@@ -257,7 +257,7 @@ public class Bootstrap {
             System.out.println("  Source: " + testJsonDir);
 
             stepStart = System.currentTimeMillis();
-            List<Namespace> testNamespaces = Generation.readManifestField(kernelMainDir, "testModules");
+            List<ModuleName> testNamespaces = Generation.readManifestField(kernelMainDir, "testModules");
             List<Module> testMods = Generation.loadModulesFromJson(testJsonDir,
                     schemaMap, testNamespaces);
             stepTime = System.currentTimeMillis() - stepStart;
@@ -280,7 +280,7 @@ public class Bootstrap {
             testSkipEmit.add("hydra.test.testEnv");
             List<Module> testModsFiltered = new ArrayList<>();
             for (Module m : testMods) {
-                if (!testSkipEmit.contains(m.namespace.value)) {
+                if (!testSkipEmit.contains(m.name.value)) {
                     testModsFiltered.add(m);
                 }
             }
@@ -356,7 +356,7 @@ public class Bootstrap {
     }
 
     /** Read a manifest field, returning empty if the manifest or field is missing. */
-    private static List<Namespace> readManifestFieldOrEmpty(String pkgDir, String fieldName)
+    private static List<ModuleName> readManifestFieldOrEmpty(String pkgDir, String fieldName)
             throws Exception {
         File manifestFile = new File(pkgDir + File.separator + "manifest.json");
         if (!manifestFile.exists()) return new ArrayList<>();
@@ -371,9 +371,9 @@ public class Bootstrap {
     private static List<Module> loadPackageMain(String root, String pkg,
             Map<hydra.core.Name, hydra.core.Type> schemaMap) throws Exception {
         String pkgDir = packageMainDir(root, pkg);
-        List<Namespace> mainNs = readManifestFieldOrEmpty(pkgDir, "mainModules");
-        List<Namespace> defaultNs = readManifestFieldOrEmpty(pkgDir, "defaultLibModules");
-        List<Namespace> allNs = new ArrayList<>(mainNs);
+        List<ModuleName> mainNs = readManifestFieldOrEmpty(pkgDir, "mainModules");
+        List<ModuleName> defaultNs = readManifestFieldOrEmpty(pkgDir, "defaultLibModules");
+        List<ModuleName> allNs = new ArrayList<>(mainNs);
         allNs.addAll(defaultNs);
         if (allNs.isEmpty()) return new ArrayList<>();
         System.out.println("  " + pkg + ": " + allNs.size() + " modules from " + pkgDir);

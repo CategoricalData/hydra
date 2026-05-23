@@ -27,7 +27,7 @@ constantConditionErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.ConstantConditionError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the value field of hydra.error.core.ConstantConditionError
 constantConditionErrorValue :: Phantoms.TTerm ErrorCore.ConstantConditionError -> Phantoms.TTerm Bool
@@ -35,7 +35,7 @@ constantConditionErrorValue x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.ConstantConditionError"),
-        Core.projectionField = (Core.Name "value")})),
+        Core.projectionFieldName = (Core.Name "value")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.ConstantConditionError
 constantConditionErrorWithLocation :: Phantoms.TTerm ErrorCore.ConstantConditionError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.ConstantConditionError
@@ -51,7 +51,7 @@ constantConditionErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.ConstantConditionError"),
-              Core.projectionField = (Core.Name "value")})),
+              Core.projectionFieldName = (Core.Name "value")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the value field of hydra.error.core.ConstantConditionError
 constantConditionErrorWithValue :: Phantoms.TTerm ErrorCore.ConstantConditionError -> Phantoms.TTerm Bool -> Phantoms.TTerm ErrorCore.ConstantConditionError
@@ -64,7 +64,7 @@ constantConditionErrorWithValue original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.ConstantConditionError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "value"),
@@ -87,7 +87,7 @@ duplicateBindingErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateBindingError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.DuplicateBindingError
 duplicateBindingErrorName :: Phantoms.TTerm ErrorCore.DuplicateBindingError -> Phantoms.TTerm Core.Name
@@ -95,7 +95,7 @@ duplicateBindingErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateBindingError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.DuplicateBindingError
 duplicateBindingErrorWithLocation :: Phantoms.TTerm ErrorCore.DuplicateBindingError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.DuplicateBindingError
@@ -111,7 +111,7 @@ duplicateBindingErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateBindingError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.DuplicateBindingError
 duplicateBindingErrorWithName :: Phantoms.TTerm ErrorCore.DuplicateBindingError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.DuplicateBindingError
@@ -124,7 +124,7 @@ duplicateBindingErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateBindingError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -147,7 +147,7 @@ duplicateFieldErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateFieldError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.DuplicateFieldError
 duplicateFieldErrorName :: Phantoms.TTerm ErrorCore.DuplicateFieldError -> Phantoms.TTerm Core.Name
@@ -155,7 +155,7 @@ duplicateFieldErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateFieldError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.DuplicateFieldError
 duplicateFieldErrorWithLocation :: Phantoms.TTerm ErrorCore.DuplicateFieldError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.DuplicateFieldError
@@ -171,7 +171,7 @@ duplicateFieldErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateFieldError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.DuplicateFieldError
 duplicateFieldErrorWithName :: Phantoms.TTerm ErrorCore.DuplicateFieldError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.DuplicateFieldError
@@ -184,7 +184,7 @@ duplicateFieldErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateFieldError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -207,7 +207,7 @@ duplicateRecordTypeFieldNamesErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.DuplicateRecordTypeFieldNamesError
 duplicateRecordTypeFieldNamesErrorName :: Phantoms.TTerm ErrorCore.DuplicateRecordTypeFieldNamesError -> Phantoms.TTerm Core.Name
@@ -215,7 +215,7 @@ duplicateRecordTypeFieldNamesErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.DuplicateRecordTypeFieldNamesError
 duplicateRecordTypeFieldNamesErrorWithLocation :: Phantoms.TTerm ErrorCore.DuplicateRecordTypeFieldNamesError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.DuplicateRecordTypeFieldNamesError
@@ -231,7 +231,7 @@ duplicateRecordTypeFieldNamesErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.DuplicateRecordTypeFieldNamesError
 duplicateRecordTypeFieldNamesErrorWithName :: Phantoms.TTerm ErrorCore.DuplicateRecordTypeFieldNamesError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.DuplicateRecordTypeFieldNamesError
@@ -244,7 +244,7 @@ duplicateRecordTypeFieldNamesErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateRecordTypeFieldNamesError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -267,7 +267,7 @@ duplicateUnionTypeFieldNamesErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.DuplicateUnionTypeFieldNamesError
 duplicateUnionTypeFieldNamesErrorName :: Phantoms.TTerm ErrorCore.DuplicateUnionTypeFieldNamesError -> Phantoms.TTerm Core.Name
@@ -275,7 +275,7 @@ duplicateUnionTypeFieldNamesErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.DuplicateUnionTypeFieldNamesError
 duplicateUnionTypeFieldNamesErrorWithLocation :: Phantoms.TTerm ErrorCore.DuplicateUnionTypeFieldNamesError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.DuplicateUnionTypeFieldNamesError
@@ -291,7 +291,7 @@ duplicateUnionTypeFieldNamesErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.DuplicateUnionTypeFieldNamesError
 duplicateUnionTypeFieldNamesErrorWithName :: Phantoms.TTerm ErrorCore.DuplicateUnionTypeFieldNamesError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.DuplicateUnionTypeFieldNamesError
@@ -304,7 +304,7 @@ duplicateUnionTypeFieldNamesErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.DuplicateUnionTypeFieldNamesError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -327,7 +327,7 @@ emptyCaseStatementErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyCaseStatementError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeName field of hydra.error.core.EmptyCaseStatementError
 emptyCaseStatementErrorTypeName :: Phantoms.TTerm ErrorCore.EmptyCaseStatementError -> Phantoms.TTerm Core.Name
@@ -335,7 +335,7 @@ emptyCaseStatementErrorTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyCaseStatementError"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.EmptyCaseStatementError
 emptyCaseStatementErrorWithLocation :: Phantoms.TTerm ErrorCore.EmptyCaseStatementError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.EmptyCaseStatementError
@@ -351,7 +351,7 @@ emptyCaseStatementErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyCaseStatementError"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeName field of hydra.error.core.EmptyCaseStatementError
 emptyCaseStatementErrorWithTypeName :: Phantoms.TTerm ErrorCore.EmptyCaseStatementError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.EmptyCaseStatementError
@@ -364,7 +364,7 @@ emptyCaseStatementErrorWithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyCaseStatementError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
@@ -384,7 +384,7 @@ emptyLetBindingsErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyLetBindingsError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.EmptyLetBindingsError
 emptyLetBindingsErrorWithLocation :: Phantoms.TTerm ErrorCore.EmptyLetBindingsError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.EmptyLetBindingsError
@@ -410,7 +410,7 @@ emptyRecordTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyRecordTypeError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.EmptyRecordTypeError
 emptyRecordTypeErrorWithLocation :: Phantoms.TTerm ErrorCore.EmptyRecordTypeError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.EmptyRecordTypeError
@@ -436,7 +436,7 @@ emptyTermAnnotationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyTermAnnotationError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.EmptyTermAnnotationError
 emptyTermAnnotationErrorWithLocation :: Phantoms.TTerm ErrorCore.EmptyTermAnnotationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.EmptyTermAnnotationError
@@ -462,7 +462,7 @@ emptyTypeAnnotationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyTypeAnnotationError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.EmptyTypeAnnotationError
 emptyTypeAnnotationErrorWithLocation :: Phantoms.TTerm ErrorCore.EmptyTypeAnnotationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.EmptyTypeAnnotationError
@@ -488,7 +488,7 @@ emptyTypeNameInTermErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyTypeNameInTermError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.EmptyTypeNameInTermError
 emptyTypeNameInTermErrorWithLocation :: Phantoms.TTerm ErrorCore.EmptyTypeNameInTermError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.EmptyTypeNameInTermError
@@ -514,7 +514,7 @@ emptyUnionTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.EmptyUnionTypeError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.EmptyUnionTypeError
 emptyUnionTypeErrorWithLocation :: Phantoms.TTerm ErrorCore.EmptyUnionTypeError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.EmptyUnionTypeError
@@ -543,7 +543,7 @@ invalidForallParameterNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidForallParameterNameError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.InvalidForallParameterNameError
 invalidForallParameterNameErrorName :: Phantoms.TTerm ErrorCore.InvalidForallParameterNameError -> Phantoms.TTerm Core.Name
@@ -551,7 +551,7 @@ invalidForallParameterNameErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidForallParameterNameError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.InvalidForallParameterNameError
 invalidForallParameterNameErrorWithLocation :: Phantoms.TTerm ErrorCore.InvalidForallParameterNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.InvalidForallParameterNameError
@@ -567,7 +567,7 @@ invalidForallParameterNameErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidForallParameterNameError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.InvalidForallParameterNameError
 invalidForallParameterNameErrorWithName :: Phantoms.TTerm ErrorCore.InvalidForallParameterNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.InvalidForallParameterNameError
@@ -580,7 +580,7 @@ invalidForallParameterNameErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidForallParameterNameError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -603,7 +603,7 @@ invalidLambdaParameterNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLambdaParameterNameError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.InvalidLambdaParameterNameError
 invalidLambdaParameterNameErrorName :: Phantoms.TTerm ErrorCore.InvalidLambdaParameterNameError -> Phantoms.TTerm Core.Name
@@ -611,7 +611,7 @@ invalidLambdaParameterNameErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLambdaParameterNameError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.InvalidLambdaParameterNameError
 invalidLambdaParameterNameErrorWithLocation :: Phantoms.TTerm ErrorCore.InvalidLambdaParameterNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.InvalidLambdaParameterNameError
@@ -627,7 +627,7 @@ invalidLambdaParameterNameErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLambdaParameterNameError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.InvalidLambdaParameterNameError
 invalidLambdaParameterNameErrorWithName :: Phantoms.TTerm ErrorCore.InvalidLambdaParameterNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.InvalidLambdaParameterNameError
@@ -640,7 +640,7 @@ invalidLambdaParameterNameErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLambdaParameterNameError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -663,7 +663,7 @@ invalidLetBindingNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLetBindingNameError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.InvalidLetBindingNameError
 invalidLetBindingNameErrorName :: Phantoms.TTerm ErrorCore.InvalidLetBindingNameError -> Phantoms.TTerm Core.Name
@@ -671,7 +671,7 @@ invalidLetBindingNameErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLetBindingNameError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.InvalidLetBindingNameError
 invalidLetBindingNameErrorWithLocation :: Phantoms.TTerm ErrorCore.InvalidLetBindingNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.InvalidLetBindingNameError
@@ -687,7 +687,7 @@ invalidLetBindingNameErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLetBindingNameError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.InvalidLetBindingNameError
 invalidLetBindingNameErrorWithName :: Phantoms.TTerm ErrorCore.InvalidLetBindingNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.InvalidLetBindingNameError
@@ -700,7 +700,7 @@ invalidLetBindingNameErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidLetBindingNameError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1019,7 +1019,7 @@ invalidTypeLambdaParameterNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameErrorName :: Phantoms.TTerm ErrorCore.InvalidTypeLambdaParameterNameError -> Phantoms.TTerm Core.Name
@@ -1027,7 +1027,7 @@ invalidTypeLambdaParameterNameErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameErrorWithLocation :: Phantoms.TTerm ErrorCore.InvalidTypeLambdaParameterNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.InvalidTypeLambdaParameterNameError
@@ -1043,7 +1043,7 @@ invalidTypeLambdaParameterNameErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.InvalidTypeLambdaParameterNameError
 invalidTypeLambdaParameterNameErrorWithName :: Phantoms.TTerm ErrorCore.InvalidTypeLambdaParameterNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.InvalidTypeLambdaParameterNameError
@@ -1056,7 +1056,7 @@ invalidTypeLambdaParameterNameErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeLambdaParameterNameError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1079,7 +1079,7 @@ invalidTypeSchemeVariableNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.InvalidTypeSchemeVariableNameError
 invalidTypeSchemeVariableNameErrorName :: Phantoms.TTerm ErrorCore.InvalidTypeSchemeVariableNameError -> Phantoms.TTerm Core.Name
@@ -1087,7 +1087,7 @@ invalidTypeSchemeVariableNameErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.InvalidTypeSchemeVariableNameError
 invalidTypeSchemeVariableNameErrorWithLocation :: Phantoms.TTerm ErrorCore.InvalidTypeSchemeVariableNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.InvalidTypeSchemeVariableNameError
@@ -1103,7 +1103,7 @@ invalidTypeSchemeVariableNameErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.InvalidTypeSchemeVariableNameError
 invalidTypeSchemeVariableNameErrorWithName :: Phantoms.TTerm ErrorCore.InvalidTypeSchemeVariableNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.InvalidTypeSchemeVariableNameError
@@ -1116,7 +1116,7 @@ invalidTypeSchemeVariableNameErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.InvalidTypeSchemeVariableNameError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1139,7 +1139,7 @@ literalTypeMismatchErrorActualType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
-        Core.projectionField = (Core.Name "actualType")})),
+        Core.projectionFieldName = (Core.Name "actualType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the expectedType field of hydra.error.core.LiteralTypeMismatchError
 literalTypeMismatchErrorExpectedType :: Phantoms.TTerm ErrorCore.LiteralTypeMismatchError -> Phantoms.TTerm Core.LiteralType
@@ -1147,7 +1147,7 @@ literalTypeMismatchErrorExpectedType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
-        Core.projectionField = (Core.Name "expectedType")})),
+        Core.projectionFieldName = (Core.Name "expectedType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the actualType field of hydra.error.core.LiteralTypeMismatchError
 literalTypeMismatchErrorWithActualType :: Phantoms.TTerm ErrorCore.LiteralTypeMismatchError -> Phantoms.TTerm Core.LiteralType -> Phantoms.TTerm ErrorCore.LiteralTypeMismatchError
@@ -1160,7 +1160,7 @@ literalTypeMismatchErrorWithActualType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
-              Core.projectionField = (Core.Name "expectedType")})),
+              Core.projectionFieldName = (Core.Name "expectedType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actualType"),
@@ -1179,7 +1179,7 @@ literalTypeMismatchErrorWithExpectedType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.LiteralTypeMismatchError"),
-              Core.projectionField = (Core.Name "actualType")})),
+              Core.projectionFieldName = (Core.Name "actualType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.core.NestedTermAnnotationError
 nestedTermAnnotationError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.NestedTermAnnotationError
@@ -1196,7 +1196,7 @@ nestedTermAnnotationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.NestedTermAnnotationError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.NestedTermAnnotationError
 nestedTermAnnotationErrorWithLocation :: Phantoms.TTerm ErrorCore.NestedTermAnnotationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.NestedTermAnnotationError
@@ -1222,7 +1222,7 @@ nestedTypeAnnotationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.NestedTypeAnnotationError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.NestedTypeAnnotationError
 nestedTypeAnnotationErrorWithLocation :: Phantoms.TTerm ErrorCore.NestedTypeAnnotationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.NestedTypeAnnotationError
@@ -1251,7 +1251,7 @@ nonComparableMapKeyTypeErrorKeyType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
-        Core.projectionField = (Core.Name "keyType")})),
+        Core.projectionFieldName = (Core.Name "keyType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the location field of hydra.error.core.NonComparableMapKeyTypeError
 nonComparableMapKeyTypeErrorLocation :: Phantoms.TTerm ErrorCore.NonComparableMapKeyTypeError -> Phantoms.TTerm Paths.SubtermPath
@@ -1259,7 +1259,7 @@ nonComparableMapKeyTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the keyType field of hydra.error.core.NonComparableMapKeyTypeError
 nonComparableMapKeyTypeErrorWithKeyType :: Phantoms.TTerm ErrorCore.NonComparableMapKeyTypeError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm ErrorCore.NonComparableMapKeyTypeError
@@ -1272,7 +1272,7 @@ nonComparableMapKeyTypeErrorWithKeyType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "keyType"),
@@ -1291,7 +1291,7 @@ nonComparableMapKeyTypeErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableMapKeyTypeError"),
-              Core.projectionField = (Core.Name "keyType")})),
+              Core.projectionFieldName = (Core.Name "keyType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.core.NonComparableSetElementTypeError
 nonComparableSetElementTypeError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Type -> Phantoms.TTerm ErrorCore.NonComparableSetElementTypeError
@@ -1311,7 +1311,7 @@ nonComparableSetElementTypeErrorElementType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableSetElementTypeError"),
-        Core.projectionField = (Core.Name "elementType")})),
+        Core.projectionFieldName = (Core.Name "elementType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the location field of hydra.error.core.NonComparableSetElementTypeError
 nonComparableSetElementTypeErrorLocation :: Phantoms.TTerm ErrorCore.NonComparableSetElementTypeError -> Phantoms.TTerm Paths.SubtermPath
@@ -1319,7 +1319,7 @@ nonComparableSetElementTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableSetElementTypeError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the elementType field of hydra.error.core.NonComparableSetElementTypeError
 nonComparableSetElementTypeErrorWithElementType :: Phantoms.TTerm ErrorCore.NonComparableSetElementTypeError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm ErrorCore.NonComparableSetElementTypeError
@@ -1332,7 +1332,7 @@ nonComparableSetElementTypeErrorWithElementType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableSetElementTypeError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "elementType"),
@@ -1351,7 +1351,7 @@ nonComparableSetElementTypeErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.NonComparableSetElementTypeError"),
-              Core.projectionField = (Core.Name "elementType")})),
+              Core.projectionFieldName = (Core.Name "elementType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.core.RedundantWrapUnwrapError
 redundantWrapUnwrapError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.RedundantWrapUnwrapError
@@ -1371,7 +1371,7 @@ redundantWrapUnwrapErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeName field of hydra.error.core.RedundantWrapUnwrapError
 redundantWrapUnwrapErrorTypeName :: Phantoms.TTerm ErrorCore.RedundantWrapUnwrapError -> Phantoms.TTerm Core.Name
@@ -1379,7 +1379,7 @@ redundantWrapUnwrapErrorTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.RedundantWrapUnwrapError
 redundantWrapUnwrapErrorWithLocation :: Phantoms.TTerm ErrorCore.RedundantWrapUnwrapError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.RedundantWrapUnwrapError
@@ -1395,7 +1395,7 @@ redundantWrapUnwrapErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeName field of hydra.error.core.RedundantWrapUnwrapError
 redundantWrapUnwrapErrorWithTypeName :: Phantoms.TTerm ErrorCore.RedundantWrapUnwrapError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.RedundantWrapUnwrapError
@@ -1408,7 +1408,7 @@ redundantWrapUnwrapErrorWithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.RedundantWrapUnwrapError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
@@ -1431,7 +1431,7 @@ selfApplicationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.SelfApplicationError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.SelfApplicationError
 selfApplicationErrorName :: Phantoms.TTerm ErrorCore.SelfApplicationError -> Phantoms.TTerm Core.Name
@@ -1439,7 +1439,7 @@ selfApplicationErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.SelfApplicationError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.SelfApplicationError
 selfApplicationErrorWithLocation :: Phantoms.TTerm ErrorCore.SelfApplicationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.SelfApplicationError
@@ -1455,7 +1455,7 @@ selfApplicationErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.SelfApplicationError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.SelfApplicationError
 selfApplicationErrorWithName :: Phantoms.TTerm ErrorCore.SelfApplicationError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.SelfApplicationError
@@ -1468,7 +1468,7 @@ selfApplicationErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.SelfApplicationError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1491,7 +1491,7 @@ singleVariantUnionErrorFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
-        Core.projectionField = (Core.Name "fieldName")})),
+        Core.projectionFieldName = (Core.Name "fieldName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the location field of hydra.error.core.SingleVariantUnionError
 singleVariantUnionErrorLocation :: Phantoms.TTerm ErrorCore.SingleVariantUnionError -> Phantoms.TTerm Paths.SubtermPath
@@ -1499,7 +1499,7 @@ singleVariantUnionErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the fieldName field of hydra.error.core.SingleVariantUnionError
 singleVariantUnionErrorWithFieldName :: Phantoms.TTerm ErrorCore.SingleVariantUnionError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.SingleVariantUnionError
@@ -1512,7 +1512,7 @@ singleVariantUnionErrorWithFieldName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fieldName"),
@@ -1531,7 +1531,7 @@ singleVariantUnionErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.SingleVariantUnionError"),
-              Core.projectionField = (Core.Name "fieldName")})),
+              Core.projectionFieldName = (Core.Name "fieldName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.core.TermVariableShadowingError
 termVariableShadowingError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.TermVariableShadowingError
@@ -1551,7 +1551,7 @@ termVariableShadowingErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.TermVariableShadowingError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.TermVariableShadowingError
 termVariableShadowingErrorName :: Phantoms.TTerm ErrorCore.TermVariableShadowingError -> Phantoms.TTerm Core.Name
@@ -1559,7 +1559,7 @@ termVariableShadowingErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.TermVariableShadowingError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.TermVariableShadowingError
 termVariableShadowingErrorWithLocation :: Phantoms.TTerm ErrorCore.TermVariableShadowingError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.TermVariableShadowingError
@@ -1575,7 +1575,7 @@ termVariableShadowingErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.TermVariableShadowingError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.TermVariableShadowingError
 termVariableShadowingErrorWithName :: Phantoms.TTerm ErrorCore.TermVariableShadowingError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.TermVariableShadowingError
@@ -1588,7 +1588,7 @@ termVariableShadowingErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.TermVariableShadowingError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1611,7 +1611,7 @@ typeVariableShadowingInForallErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.TypeVariableShadowingInForallError
 typeVariableShadowingInForallErrorName :: Phantoms.TTerm ErrorCore.TypeVariableShadowingInForallError -> Phantoms.TTerm Core.Name
@@ -1619,7 +1619,7 @@ typeVariableShadowingInForallErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.TypeVariableShadowingInForallError
 typeVariableShadowingInForallErrorWithLocation :: Phantoms.TTerm ErrorCore.TypeVariableShadowingInForallError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.TypeVariableShadowingInForallError
@@ -1635,7 +1635,7 @@ typeVariableShadowingInForallErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.TypeVariableShadowingInForallError
 typeVariableShadowingInForallErrorWithName :: Phantoms.TTerm ErrorCore.TypeVariableShadowingInForallError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.TypeVariableShadowingInForallError
@@ -1648,7 +1648,7 @@ typeVariableShadowingInForallErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInForallError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1671,7 +1671,7 @@ typeVariableShadowingInTypeLambdaErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaErrorName :: Phantoms.TTerm ErrorCore.TypeVariableShadowingInTypeLambdaError -> Phantoms.TTerm Core.Name
@@ -1679,7 +1679,7 @@ typeVariableShadowingInTypeLambdaErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaErrorWithLocation :: Phantoms.TTerm ErrorCore.TypeVariableShadowingInTypeLambdaError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.TypeVariableShadowingInTypeLambdaError
@@ -1695,7 +1695,7 @@ typeVariableShadowingInTypeLambdaErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.TypeVariableShadowingInTypeLambdaError
 typeVariableShadowingInTypeLambdaErrorWithName :: Phantoms.TTerm ErrorCore.TypeVariableShadowingInTypeLambdaError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.TypeVariableShadowingInTypeLambdaError
@@ -1708,7 +1708,7 @@ typeVariableShadowingInTypeLambdaErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.TypeVariableShadowingInTypeLambdaError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1731,7 +1731,7 @@ undefinedFieldErrorFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedFieldError"),
-        Core.projectionField = (Core.Name "fieldName")})),
+        Core.projectionFieldName = (Core.Name "fieldName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the typeName field of hydra.error.core.UndefinedFieldError
 undefinedFieldErrorTypeName :: Phantoms.TTerm ErrorCore.UndefinedFieldError -> Phantoms.TTerm Core.Name
@@ -1739,7 +1739,7 @@ undefinedFieldErrorTypeName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedFieldError"),
-        Core.projectionField = (Core.Name "typeName")})),
+        Core.projectionFieldName = (Core.Name "typeName")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the fieldName field of hydra.error.core.UndefinedFieldError
 undefinedFieldErrorWithFieldName :: Phantoms.TTerm ErrorCore.UndefinedFieldError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UndefinedFieldError
@@ -1755,7 +1755,7 @@ undefinedFieldErrorWithFieldName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedFieldError"),
-              Core.projectionField = (Core.Name "typeName")})),
+              Core.projectionFieldName = (Core.Name "typeName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the typeName field of hydra.error.core.UndefinedFieldError
 undefinedFieldErrorWithTypeName :: Phantoms.TTerm ErrorCore.UndefinedFieldError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UndefinedFieldError
@@ -1768,7 +1768,7 @@ undefinedFieldErrorWithTypeName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedFieldError"),
-              Core.projectionField = (Core.Name "fieldName")})),
+              Core.projectionFieldName = (Core.Name "fieldName")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "typeName"),
@@ -1791,7 +1791,7 @@ undefinedTermVariableErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTermVariableError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.UndefinedTermVariableError
 undefinedTermVariableErrorName :: Phantoms.TTerm ErrorCore.UndefinedTermVariableError -> Phantoms.TTerm Core.Name
@@ -1799,7 +1799,7 @@ undefinedTermVariableErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTermVariableError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.UndefinedTermVariableError
 undefinedTermVariableErrorWithLocation :: Phantoms.TTerm ErrorCore.UndefinedTermVariableError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.UndefinedTermVariableError
@@ -1815,7 +1815,7 @@ undefinedTermVariableErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTermVariableError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.UndefinedTermVariableError
 undefinedTermVariableErrorWithName :: Phantoms.TTerm ErrorCore.UndefinedTermVariableError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UndefinedTermVariableError
@@ -1828,7 +1828,7 @@ undefinedTermVariableErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTermVariableError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1851,7 +1851,7 @@ undefinedTypeVariableErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.UndefinedTypeVariableError
 undefinedTypeVariableErrorName :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableError -> Phantoms.TTerm Core.Name
@@ -1859,7 +1859,7 @@ undefinedTypeVariableErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.UndefinedTypeVariableError
 undefinedTypeVariableErrorWithLocation :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.UndefinedTypeVariableError
@@ -1875,7 +1875,7 @@ undefinedTypeVariableErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.UndefinedTypeVariableError
 undefinedTypeVariableErrorWithName :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UndefinedTypeVariableError
@@ -1888,7 +1888,7 @@ undefinedTypeVariableErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1911,7 +1911,7 @@ undefinedTypeVariableInBindingTypeErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeErrorName :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInBindingTypeError -> Phantoms.TTerm Core.Name
@@ -1919,7 +1919,7 @@ undefinedTypeVariableInBindingTypeErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeErrorWithLocation :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInBindingTypeError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.UndefinedTypeVariableInBindingTypeError
@@ -1935,7 +1935,7 @@ undefinedTypeVariableInBindingTypeErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.UndefinedTypeVariableInBindingTypeError
 undefinedTypeVariableInBindingTypeErrorWithName :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInBindingTypeError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UndefinedTypeVariableInBindingTypeError
@@ -1948,7 +1948,7 @@ undefinedTypeVariableInBindingTypeErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInBindingTypeError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -1971,7 +1971,7 @@ undefinedTypeVariableInLambdaDomainErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.UndefinedTypeVariableInLambdaDomainError
 undefinedTypeVariableInLambdaDomainErrorName :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInLambdaDomainError -> Phantoms.TTerm Core.Name
@@ -1979,7 +1979,7 @@ undefinedTypeVariableInLambdaDomainErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.UndefinedTypeVariableInLambdaDomainError
 undefinedTypeVariableInLambdaDomainErrorWithLocation :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInLambdaDomainError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.UndefinedTypeVariableInLambdaDomainError
@@ -1995,7 +1995,7 @@ undefinedTypeVariableInLambdaDomainErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.UndefinedTypeVariableInLambdaDomainError
 undefinedTypeVariableInLambdaDomainErrorWithName :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInLambdaDomainError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UndefinedTypeVariableInLambdaDomainError
@@ -2008,7 +2008,7 @@ undefinedTypeVariableInLambdaDomainErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInLambdaDomainError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -2031,7 +2031,7 @@ undefinedTypeVariableInTypeApplicationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationErrorName :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInTypeApplicationError -> Phantoms.TTerm Core.Name
@@ -2039,7 +2039,7 @@ undefinedTypeVariableInTypeApplicationErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationErrorWithLocation :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInTypeApplicationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.UndefinedTypeVariableInTypeApplicationError
@@ -2055,7 +2055,7 @@ undefinedTypeVariableInTypeApplicationErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.UndefinedTypeVariableInTypeApplicationError
 undefinedTypeVariableInTypeApplicationErrorWithName :: Phantoms.TTerm ErrorCore.UndefinedTypeVariableInTypeApplicationError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UndefinedTypeVariableInTypeApplicationError
@@ -2068,7 +2068,7 @@ undefinedTypeVariableInTypeApplicationErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UndefinedTypeVariableInTypeApplicationError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -2091,7 +2091,7 @@ unexpectedTermVariantErrorActualTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UnexpectedTermVariantError"),
-        Core.projectionField = (Core.Name "actualTerm")})),
+        Core.projectionFieldName = (Core.Name "actualTerm")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the expectedVariant field of hydra.error.core.UnexpectedTermVariantError
 unexpectedTermVariantErrorExpectedVariant :: Phantoms.TTerm ErrorCore.UnexpectedTermVariantError -> Phantoms.TTerm Variants.TermVariant
@@ -2099,7 +2099,7 @@ unexpectedTermVariantErrorExpectedVariant x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UnexpectedTermVariantError"),
-        Core.projectionField = (Core.Name "expectedVariant")})),
+        Core.projectionFieldName = (Core.Name "expectedVariant")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the actualTerm field of hydra.error.core.UnexpectedTermVariantError
 unexpectedTermVariantErrorWithActualTerm :: Phantoms.TTerm ErrorCore.UnexpectedTermVariantError -> Phantoms.TTerm Core.Term -> Phantoms.TTerm ErrorCore.UnexpectedTermVariantError
@@ -2112,7 +2112,7 @@ unexpectedTermVariantErrorWithActualTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UnexpectedTermVariantError"),
-              Core.projectionField = (Core.Name "expectedVariant")})),
+              Core.projectionFieldName = (Core.Name "expectedVariant")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actualTerm"),
@@ -2131,7 +2131,7 @@ unexpectedTermVariantErrorWithExpectedVariant original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UnexpectedTermVariantError"),
-              Core.projectionField = (Core.Name "actualTerm")})),
+              Core.projectionFieldName = (Core.Name "actualTerm")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.core.UnexpectedTypeVariantError
 unexpectedTypeVariantError :: Phantoms.TTerm Variants.TypeVariant -> Phantoms.TTerm Core.Type -> Phantoms.TTerm ErrorCore.UnexpectedTypeVariantError
@@ -2151,7 +2151,7 @@ unexpectedTypeVariantErrorActualType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UnexpectedTypeVariantError"),
-        Core.projectionField = (Core.Name "actualType")})),
+        Core.projectionFieldName = (Core.Name "actualType")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the expectedVariant field of hydra.error.core.UnexpectedTypeVariantError
 unexpectedTypeVariantErrorExpectedVariant :: Phantoms.TTerm ErrorCore.UnexpectedTypeVariantError -> Phantoms.TTerm Variants.TypeVariant
@@ -2159,7 +2159,7 @@ unexpectedTypeVariantErrorExpectedVariant x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UnexpectedTypeVariantError"),
-        Core.projectionField = (Core.Name "expectedVariant")})),
+        Core.projectionFieldName = (Core.Name "expectedVariant")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the actualType field of hydra.error.core.UnexpectedTypeVariantError
 unexpectedTypeVariantErrorWithActualType :: Phantoms.TTerm ErrorCore.UnexpectedTypeVariantError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm ErrorCore.UnexpectedTypeVariantError
@@ -2172,7 +2172,7 @@ unexpectedTypeVariantErrorWithActualType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UnexpectedTypeVariantError"),
-              Core.projectionField = (Core.Name "expectedVariant")})),
+              Core.projectionFieldName = (Core.Name "expectedVariant")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "actualType"),
@@ -2191,7 +2191,7 @@ unexpectedTypeVariantErrorWithExpectedVariant original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UnexpectedTypeVariantError"),
-              Core.projectionField = (Core.Name "actualType")})),
+              Core.projectionFieldName = (Core.Name "actualType")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.error.core.UnknownPrimitiveNameError
 unknownPrimitiveNameError :: Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UnknownPrimitiveNameError
@@ -2211,7 +2211,7 @@ unknownPrimitiveNameErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UnknownPrimitiveNameError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.UnknownPrimitiveNameError
 unknownPrimitiveNameErrorName :: Phantoms.TTerm ErrorCore.UnknownPrimitiveNameError -> Phantoms.TTerm Core.Name
@@ -2219,7 +2219,7 @@ unknownPrimitiveNameErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UnknownPrimitiveNameError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.UnknownPrimitiveNameError
 unknownPrimitiveNameErrorWithLocation :: Phantoms.TTerm ErrorCore.UnknownPrimitiveNameError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.UnknownPrimitiveNameError
@@ -2235,7 +2235,7 @@ unknownPrimitiveNameErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UnknownPrimitiveNameError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.UnknownPrimitiveNameError
 unknownPrimitiveNameErrorWithName :: Phantoms.TTerm ErrorCore.UnknownPrimitiveNameError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UnknownPrimitiveNameError
@@ -2248,7 +2248,7 @@ unknownPrimitiveNameErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UnknownPrimitiveNameError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -2268,7 +2268,7 @@ unnecessaryIdentityApplicationErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UnnecessaryIdentityApplicationError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.UnnecessaryIdentityApplicationError
 unnecessaryIdentityApplicationErrorWithLocation :: Phantoms.TTerm ErrorCore.UnnecessaryIdentityApplicationError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.UnnecessaryIdentityApplicationError
@@ -2297,7 +2297,7 @@ untypedTermVariableErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.error.core.UntypedTermVariableError
 untypedTermVariableErrorName :: Phantoms.TTerm ErrorCore.UntypedTermVariableError -> Phantoms.TTerm Core.Name
@@ -2305,7 +2305,7 @@ untypedTermVariableErrorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.UntypedTermVariableError
 untypedTermVariableErrorWithLocation :: Phantoms.TTerm ErrorCore.UntypedTermVariableError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.UntypedTermVariableError
@@ -2321,7 +2321,7 @@ untypedTermVariableErrorWithLocation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.error.core.UntypedTermVariableError
 untypedTermVariableErrorWithName :: Phantoms.TTerm ErrorCore.UntypedTermVariableError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm ErrorCore.UntypedTermVariableError
@@ -2334,7 +2334,7 @@ untypedTermVariableErrorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.error.core.UntypedTermVariableError"),
-              Core.projectionField = (Core.Name "location")})),
+              Core.projectionFieldName = (Core.Name "location")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -2354,7 +2354,7 @@ voidInNonBottomPositionErrorLocation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.error.core.VoidInNonBottomPositionError"),
-        Core.projectionField = (Core.Name "location")})),
+        Core.projectionFieldName = (Core.Name "location")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the location field of hydra.error.core.VoidInNonBottomPositionError
 voidInNonBottomPositionErrorWithLocation :: Phantoms.TTerm ErrorCore.VoidInNonBottomPositionError -> Phantoms.TTerm Paths.SubtermPath -> Phantoms.TTerm ErrorCore.VoidInNonBottomPositionError

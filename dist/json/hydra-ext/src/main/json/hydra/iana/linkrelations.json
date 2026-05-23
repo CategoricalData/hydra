@@ -1203,4 +1203,4 @@
           "variables": []}}}],
   "dependencies": [],
   "description": "All IANA Link Relation Types, as of 2022-10-11. See https://www.iana.org/assignments/link-relations/link-relations.xhtml",
-  "namespace": "hydra.iana.linkrelations"}
+  "name": "hydra.iana.linkrelations"}

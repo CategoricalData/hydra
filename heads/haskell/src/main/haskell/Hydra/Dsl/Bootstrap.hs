@@ -5,9 +5,11 @@ module Hydra.Dsl.Bootstrap (
   bootstrapGraph,
   datatype,
   qualify,
+  qualifiedDep,
   typeref,
   defineType,
   toTypeDef,
+  unqualifiedDep,
   use,
   useType,
 ) where
@@ -41,7 +43,7 @@ bootstrapGraph = Graph {
   graphSchemaTypes = M.empty,
   graphTypeVariables = S.empty}
 
-datatype :: Namespace -> String -> Type -> Binding
+datatype :: ModuleName -> String -> Type -> Binding
 datatype gname lname typ = Binding {
     bindingName = elName,
     bindingTerm = normalizeTermAnnotations (TermAnnotated (AnnotatedTerm {
@@ -55,16 +57,16 @@ datatype gname lname typ = Binding {
   where
     elName = qualify gname (Name lname)
 
-qualify :: Namespace -> Name -> Name
-qualify (Namespace gname) (Name lname) = Name $ gname ++ "." ++ lname
+qualify :: ModuleName -> Name -> Name
+qualify (ModuleName gname) (Name lname) = Name $ gname ++ "." ++ lname
 
-typeref :: Namespace -> String -> Type
+typeref :: ModuleName -> String -> Type
 typeref ns = TypeVariable . qualify ns . Name
 
 -- | New DSL helpers (Option 1 from dsl-redesign-options.md)
 
 -- | Define a type in a namespace
-defineType :: Namespace -> String -> Type -> Binding
+defineType :: ModuleName -> String -> Type -> Binding
 defineType = datatype
 
 -- | Convert a type Binding (from defineType) to a type Definition.
@@ -84,5 +86,13 @@ use :: Binding -> Type
 use b = TypeVariable (bindingName b)
 
 -- | Reference a type in a namespace (old style, for migration)
-useType :: Namespace -> String -> Type
+useType :: ModuleName -> String -> Type
 useType = typeref
+
+-- | An unqualified module dependency (package omitted; resolver searches all packages in scope)
+unqualifiedDep :: ModuleName -> ModuleDependency
+unqualifiedDep ns = ModuleDependency ns Nothing
+
+-- | A module dependency qualified by the providing package, for disambiguation
+qualifiedDep :: PackageName -> ModuleName -> ModuleDependency
+qualifiedDep pkg ns = ModuleDependency ns (Just pkg)

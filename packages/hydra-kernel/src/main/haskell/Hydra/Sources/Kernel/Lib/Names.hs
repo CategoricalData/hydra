@@ -4,6 +4,7 @@ module Hydra.Sources.Kernel.Lib.Names where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (qname)
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Sources.Kernel.Types.All
@@ -11,14 +12,14 @@ import           Prelude hiding ((++))
 import qualified Data.List                  as L
 
 
-ns :: Namespace
-ns = Namespace "hydra.lib.names"
+ns :: ModuleName
+ns = ModuleName "hydra.lib.names"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = Just "Namespaces and primitive names for the Hydra standard library"}
   where
     definitions = [
@@ -284,10 +285,10 @@ define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
 -- | Helper: define a namespace constant
-defineNs :: String -> String -> TTermDefinition Namespace
+defineNs :: String -> String -> TTermDefinition ModuleName
 defineNs name nsStr = define name $
-  doc ("Namespace of the " <> name <> " library") $
-  wrap _Namespace $ string nsStr
+  doc ("ModuleName of the " <> name <> " library") $
+  wrap _ModuleName $ string nsStr
 
 -- | Helper: define a primitive name constant as a simple Name data constructor
 defineName :: String -> String -> String -> TTermDefinition Name
@@ -298,9 +299,9 @@ defineName name nsStr localName = define name $
     -- Last dot-segment of nsStr, e.g. "hydra.lib.chars" -> "chars".
     libName = reverse (takeWhile (/= '.') (reverse nsStr))
 
--- Namespace constants
+-- ModuleName constants
 
-chars :: TTermDefinition Namespace
+chars :: TTermDefinition ModuleName
 chars = defineNs "chars" "hydra.lib.chars"
 
 charsIsAlphaNum = defineName "charsIsAlphaNum" "hydra.lib.chars" "isAlphaNum"
@@ -317,7 +318,7 @@ charsToUpper    = defineName "charsToUpper" "hydra.lib.chars" "toUpper"
 
 -- Eithers primitives
 
-eithers :: TTermDefinition Namespace
+eithers :: TTermDefinition ModuleName
 eithers = defineNs "eithers" "hydra.lib.eithers"
 
 eithersBimap            = defineName "eithersBimap" "hydra.lib.eithers" "bimap"
@@ -344,7 +345,7 @@ eithersPartitionEithers = defineName "eithersPartitionEithers" "hydra.lib.either
 eithersRights           = defineName "eithersRights" "hydra.lib.eithers" "rights"
 
 -- Equality primitives
-equality :: TTermDefinition Namespace
+equality :: TTermDefinition ModuleName
 equality = defineNs "equality" "hydra.lib.equality"
 equalityCompare  = defineName "equalityCompare" "hydra.lib.equality" "compare"
 equalityEqual    = defineName "equalityEqual" "hydra.lib.equality" "equal"
@@ -357,7 +358,7 @@ equalityMax      = defineName "equalityMax" "hydra.lib.equality" "max"
 equalityMin      = defineName "equalityMin" "hydra.lib.equality" "min"
 
 -- Lists primitives
-lists :: TTermDefinition Namespace
+lists :: TTermDefinition ModuleName
 lists = defineNs "lists" "hydra.lib.lists"
 listsApply       = defineName "listsApply" "hydra.lib.lists" "apply"
 
@@ -400,7 +401,7 @@ listsZip         = defineName "listsZip" "hydra.lib.lists" "zip"
 listsZipWith     = defineName "listsZipWith" "hydra.lib.lists" "zipWith"
 
 -- Literals primitives
-literals :: TTermDefinition Namespace
+literals :: TTermDefinition ModuleName
 literals = defineNs "literals" "hydra.lib.literals"
 literalsBigintToDecimal   = defineName "literalsBigintToDecimal" "hydra.lib.literals" "bigintToDecimal"
 literalsBigintToInt16     = defineName "literalsBigintToInt16" "hydra.lib.literals" "bigintToInt16"
@@ -460,7 +461,7 @@ literalsUint64ToBigint    = defineName "literalsUint64ToBigint" "hydra.lib.liter
 
 -- Logic primitives
 literalsUint8ToBigint     = defineName "literalsUint8ToBigint" "hydra.lib.literals" "uint8ToBigint"
-logic :: TTermDefinition Namespace
+logic :: TTermDefinition ModuleName
 logic = defineNs "logic" "hydra.lib.logic"
 logicAnd    = defineName "logicAnd" "hydra.lib.logic" "and"
 logicIfElse = defineName "logicIfElse" "hydra.lib.logic" "ifElse"
@@ -468,7 +469,7 @@ logicNot    = defineName "logicNot" "hydra.lib.logic" "not"
 logicOr     = defineName "logicOr" "hydra.lib.logic" "or"
 
 -- Maps primitives
-maps :: TTermDefinition Namespace
+maps :: TTermDefinition ModuleName
 maps = defineNs "maps" "hydra.lib.maps"
 mapsAlter           = defineName "mapsAlter" "hydra.lib.maps" "alter"
 mapsBimap           = defineName "mapsBimap" "hydra.lib.maps" "bimap"
@@ -494,7 +495,7 @@ mapsToList          = defineName "mapsToList" "hydra.lib.maps" "toList"
 mapsUnion           = defineName "mapsUnion" "hydra.lib.maps" "union"
 
 -- Math primitives
-math :: TTermDefinition Namespace
+math :: TTermDefinition ModuleName
 math = defineNs "math" "hydra.lib.math"
 mathAbs      = defineName "mathAbs" "hydra.lib.math" "abs"
 mathAcos     = defineName "mathAcos" "hydra.lib.math" "acos"
@@ -545,7 +546,7 @@ mathTanh     = defineName "mathTanh" "hydra.lib.math" "tanh"
 mathTruncate = defineName "mathTruncate" "hydra.lib.math" "truncate"
 
 -- Maybes primitives
-maybes :: TTermDefinition Namespace
+maybes :: TTermDefinition ModuleName
 maybes = defineNs "maybes" "hydra.lib.maybes"
 maybesApply     = defineName "maybesApply" "hydra.lib.maybes" "apply"
 maybesBind      = defineName "maybesBind" "hydra.lib.maybes" "bind"
@@ -563,14 +564,14 @@ maybesPure      = defineName "maybesPure" "hydra.lib.maybes" "pure"
 maybesToList    = defineName "maybesToList" "hydra.lib.maybes" "toList"
 
 -- Pairs primitives
-pairs :: TTermDefinition Namespace
+pairs :: TTermDefinition ModuleName
 pairs = defineNs "pairs" "hydra.lib.pairs"
 pairsBimap  = defineName "pairsBimap" "hydra.lib.pairs" "bimap"
 pairsFirst  = defineName "pairsFirst" "hydra.lib.pairs" "first"
 pairsSecond = defineName "pairsSecond" "hydra.lib.pairs" "second"
 
 -- Sets primitives
-regex :: TTermDefinition Namespace
+regex :: TTermDefinition ModuleName
 regex = defineNs "regex" "hydra.lib.regex"
 
 regexFind       = defineName "regexFind" "hydra.lib.regex" "find"
@@ -582,7 +583,7 @@ regexReplaceAll = defineName "regexReplaceAll" "hydra.lib.regex" "replaceAll"
 regexSplit      = defineName "regexSplit" "hydra.lib.regex" "split"
 
 -- Strings primitives
-sets :: TTermDefinition Namespace
+sets :: TTermDefinition ModuleName
 sets = defineNs "sets" "hydra.lib.sets"
 setsDelete       = defineName "setsDelete" "hydra.lib.sets" "delete"
 setsDifference   = defineName "setsDifference" "hydra.lib.sets" "difference"
@@ -601,7 +602,7 @@ setsUnion        = defineName "setsUnion" "hydra.lib.sets" "union"
 setsUnions       = defineName "setsUnions" "hydra.lib.sets" "unions"
 
 -- Regex primitives
-strings :: TTermDefinition Namespace
+strings :: TTermDefinition ModuleName
 strings = defineNs "strings" "hydra.lib.strings"
 stringsCat         = defineName "stringsCat" "hydra.lib.strings" "cat"
 
@@ -619,7 +620,7 @@ stringsToUpper     = defineName "stringsToUpper" "hydra.lib.strings" "toUpper"
 stringsUnlines     = defineName "stringsUnlines" "hydra.lib.strings" "unlines"
 
 -- Type class names
-typeclass :: TTermDefinition Namespace
+typeclass :: TTermDefinition ModuleName
 typeclass = defineNs "typeclass" "hydra.typeclass"
 
 -- Chars primitives

@@ -67,14 +67,14 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.encoding"
+ns :: ModuleName
+ns = ModuleName "hydra.encoding"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns, Namespace "hydra.constants", Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, moduleName DecodeCore.module_, Formatting.ns, Names.ns, Predicates.ns, Rewriting.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Functions for generating term encoders from type modules"}
   where
     definitions = [
@@ -362,25 +362,15 @@ encodeModule = define "encodeModule" $
           ("_e" ~> Error.errorDecoding $ var "_e")
           ("x" ~> var "x")
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
-        -- Encoder modules need:
-        -- 1. hydra.core: encoder bodies build Core.Field/Injection/Term values.
-        -- 2. The original module's namespace (the schema being encoded).
-        -- 3. The original module's declared dependencies, BOTH verbatim AND
-        --    encoded-namespace-prefixed: verbatim because encoder bodies case-match
-        --    on constructors of dep types; prefixed because encoder bodies call
-        --    encoders of dependent types.
+        -- The encoder module depends on encoder modules of the source's dependencies, plus the original module
         right (just (Packaging.module_
           (just (Strings.cat $ list [
             string "Term encoders for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
-          (encodeNamespace @@ (Packaging.moduleNamespace (var "mod")))
-          (Lists.nub (Lists.concat2
-            (Lists.concat2
-              (primitive _lists_map @@ encodeNamespace @@ (Packaging.moduleDependencies (var "mod")))
-              (Packaging.moduleDependencies (var "mod")))
-            (list [
-              Packaging.namespace $ string "hydra.core",
-              Packaging.moduleNamespace (var "mod")])))
+            Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+          (encodeNamespace @@ (Packaging.moduleName (var "mod")))
+          (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
+            (primitive _lists_map @@ encodeNamespace @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))
+            (list [Packaging.moduleName (var "mod")]))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
@@ -397,17 +387,17 @@ encodeName = define "encodeName" $
 -- For example, "hydra.util" -> "hydra.encode.util"
 -- | Generate an encoder module namespace from a source module namespace
 -- For example, "hydra.util" -> "hydra.encode.util"
-encodeNamespace :: TTermDefinition (Namespace -> Namespace)
+encodeNamespace :: TTermDefinition (ModuleName -> ModuleName)
 encodeNamespace = define "encodeNamespace" $
   doc "Generate an encoder module namespace from a source module namespace" $
   "ns" ~>
-  "parts" <~ Strings.splitOn (string ".") (Packaging.unNamespace (var "ns")) $
-  "fallback" <~ Packaging.namespace (Packaging.unNamespace (var "ns")) $
+  "parts" <~ Strings.splitOn (string ".") (Packaging.unModuleName (var "ns")) $
+  "fallback" <~ Packaging.moduleName2 (Packaging.unModuleName (var "ns")) $
   -- Drop the first segment (e.g. "hydra") and prepend "hydra.encode".
   Maybes.maybe
     (var "fallback")
     ("uc" ~>
-      Packaging.namespace (
+      Packaging.moduleName2 (
         Strings.cat $ list [
           string "hydra.encode.",
           Strings.intercalate (string ".") (Pairs.second $ var "uc")]))

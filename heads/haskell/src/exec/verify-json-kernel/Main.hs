@@ -145,8 +145,8 @@ main = do
   -- verification succeeded (so we can record it), empty string on failure or
   -- file-not-found.
   results <- forM kernelModules $ \origMod -> do
-    let ns = moduleNamespace origMod
-        nsStr = unNamespace ns
+    let ns = moduleName origMod
+        nsStr = unModuleName ns
         filePath = basePath </> namespaceToPath ns ++ ".json"
 
     exists <- doesFileExist filePath
@@ -243,8 +243,8 @@ stripTypeAnnotations m = m {
 -- | Find the first difference between two modules
 findDifference :: Module -> Module -> String
 findDifference orig decoded
-  | moduleNamespace orig /= moduleNamespace decoded =
-      "namespace differs: " ++ unNamespace (moduleNamespace orig) ++ " vs " ++ unNamespace (moduleNamespace decoded)
+  | moduleName orig /= moduleName decoded =
+      "namespace differs: " ++ unModuleName (moduleName orig) ++ " vs " ++ unModuleName (moduleName decoded)
   | length (moduleDefinitions orig) /= length (moduleDefinitions decoded) =
       "element count differs: " ++ show (length (moduleDefinitions orig)) ++ " vs " ++ show (length (moduleDefinitions decoded))
   | moduleDependencies orig /= moduleDependencies decoded =

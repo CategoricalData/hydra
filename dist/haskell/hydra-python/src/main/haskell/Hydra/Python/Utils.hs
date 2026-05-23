@@ -117,12 +117,12 @@ dottedAssignmentStatement obj attr expr =
 doubleQuotedString :: String -> Syntax.Expression
 doubleQuotedString s = stringToPyExpression Syntax.QuoteStyleDouble s
 -- | Find all namespaces referenced by a list of definitions, plus the core namespace
-findNamespaces :: Packaging.Namespace -> [Packaging.Definition] -> Util.Namespaces Syntax.DottedName
+findNamespaces :: Packaging.ModuleName -> [Packaging.Definition] -> Util.Namespaces Syntax.DottedName
 findNamespaces focusNs defs =
 
-      let coreNs = Packaging.Namespace "hydra.core"
+      let coreNs = Packaging.ModuleName "hydra.core"
           namespaces = Analysis.namespacesForDefinitions Names.encodeNamespace focusNs defs
-      in (Logic.ifElse (Equality.equal (Packaging.unNamespace (Pairs.first (Util.namespacesFocus namespaces))) (Packaging.unNamespace coreNs)) namespaces (Util.Namespaces {
+      in (Logic.ifElse (Equality.equal (Packaging.unModuleName (Pairs.first (Util.namespacesFocus namespaces))) (Packaging.unModuleName coreNs)) namespaces (Util.Namespaces {
         Util.namespacesFocus = (Util.namespacesFocus namespaces),
         Util.namespacesMapping = (Maps.insert coreNs (Names.encodeNamespace coreNs) (Util.namespacesMapping namespaces))}))
 -- | Create a function call expression

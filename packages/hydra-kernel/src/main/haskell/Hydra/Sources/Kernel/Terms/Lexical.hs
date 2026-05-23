@@ -60,17 +60,17 @@ import qualified Hydra.Sources.Kernel.Terms.Strip as Strip
 import qualified Hydra.Sources.Kernel.Terms.Show.Errors as ShowError
 
 
-ns :: Namespace
-ns = Namespace "hydra.lexical"
+ns :: ModuleName
+ns = ModuleName "hydra.lexical"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns, ShowCore.ns, ShowError.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("A module for lexical operations over graphs.")}
   where
     definitions = [

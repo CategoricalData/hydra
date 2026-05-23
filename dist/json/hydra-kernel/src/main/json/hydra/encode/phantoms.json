@@ -40,7 +40,7 @@
                                                             "application": {
                                                               "argument": {"variable": "x"},
                                                               "function": {
-                                                                "typeApplication": {"body": {"project": {"field": "name", "typeName": "hydra.phantoms.TBinding"}}, "type": {"variable": "t1"}}}}},
+                                                                "typeApplication": {"body": {"project": {"fieldName": "name", "typeName": "hydra.phantoms.TBinding"}}, "type": {"variable": "t1"}}}}},
                                                           "function": {"variable": "hydra.encode.core.name"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
@@ -55,7 +55,7 @@
                                                             "application": {
                                                               "argument": {"variable": "x"},
                                                               "function": {
-                                                                "typeApplication": {"body": {"project": {"field": "term", "typeName": "hydra.phantoms.TBinding"}}, "type": {"variable": "t1"}}}}},
+                                                                "typeApplication": {"body": {"project": {"fieldName": "term", "typeName": "hydra.phantoms.TBinding"}}, "type": {"variable": "t1"}}}}},
                                                           "function": {
                                                             "application": {
                                                               "argument": {"variable": "a"},
@@ -171,7 +171,7 @@
                                                             "application": {
                                                               "argument": {"variable": "x"},
                                                               "function": {
-                                                                "typeApplication": {"body": {"project": {"field": "name", "typeName": "hydra.phantoms.TTermDefinition"}}, "type": {"variable": "t1"}}}}},
+                                                                "typeApplication": {"body": {"project": {"fieldName": "name", "typeName": "hydra.phantoms.TTermDefinition"}}, "type": {"variable": "t1"}}}}},
                                                           "function": {"variable": "hydra.encode.core.name"}}}}],
                                                   "typeName": "hydra.core.Field"}},
                                               {
@@ -186,7 +186,7 @@
                                                             "application": {
                                                               "argument": {"variable": "x"},
                                                               "function": {
-                                                                "typeApplication": {"body": {"project": {"field": "term", "typeName": "hydra.phantoms.TTermDefinition"}}, "type": {"variable": "t1"}}}}},
+                                                                "typeApplication": {"body": {"project": {"fieldName": "term", "typeName": "hydra.phantoms.TTermDefinition"}}, "type": {"variable": "t1"}}}}},
                                                           "function": {
                                                             "application": {
                                                               "argument": {"variable": "a"},
@@ -212,6 +212,6 @@
                   "domain": {"application": {"argument": {"variable": "t1"}, "function": {"variable": "hydra.phantoms.TTermDefinition"}}}}},
               "domain": {"variable": "t0"}}},
           "variables": ["t0", "t1"]}}}],
-  "dependencies": ["hydra.encode.core", "hydra.core", "hydra.phantoms"],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.phantoms"}],
   "description": "Term encoders for hydra.phantoms",
-  "namespace": "hydra.encode.phantoms"}
+  "name": "hydra.encode.phantoms"}

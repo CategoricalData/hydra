@@ -78,14 +78,14 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.json.schema.language"
+ns :: ModuleName
+ns = ModuleName "hydra.json.schema.language"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = [toDefinition jsonSchemaLanguage],
-            moduleDependencies = [Reflect.ns, Namespace "hydra.json.schema"] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reflect.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for JSON Schema"}
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_

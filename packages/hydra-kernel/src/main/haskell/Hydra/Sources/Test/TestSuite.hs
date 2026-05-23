@@ -4,6 +4,7 @@ module Hydra.Sources.Test.TestSuite where
 
 -- Standard imports for deep DSL tests (produces TTerm a with specific types)
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Phantoms                as Phantoms hiding ((++))
 import Hydra.Sources.Kernel.Types.All
@@ -71,14 +72,14 @@ import qualified Hydra.Sources.Test.Validate.Packaging as ValidatePackaging
 import qualified Hydra.Sources.Test.Variables as Variables
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.testSuite"
+ns :: ModuleName
+ns = ModuleName "hydra.test.testSuite"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = namespaces ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> (namespaces ++ kernelTypesModuleNames),
             moduleDescription = Just ("Hydra's common test suite, which is designed to run identically in each Hydra implementation;"
       <> " the criterion for a true Hydra implementation is that all test cases pass.")}
   where
@@ -92,7 +93,7 @@ allTests = definitionInModule module_ "allTests" $
   where
     subgroups = snd <$> testPairs
 
-libPairs :: [(Namespace, TTermDefinition TestGroup)]
+libPairs :: [(ModuleName, TTermDefinition TestGroup)]
 libPairs = [
   (Chars.ns, Chars.allTests),
   (Eithers.ns, Eithers.allTests),
@@ -108,7 +109,7 @@ libPairs = [
   (Sets.ns, Sets.allTests),
   (Strings.ns, Strings.allTests)]
 
-otherPairs :: [(Namespace, TTermDefinition TestGroup)]
+otherPairs :: [(ModuleName, TTermDefinition TestGroup)]
 otherPairs = [
   (Annotations.ns, Annotations.allTests),
   (CheckingAll.ns, CheckingAll.allTests),
@@ -134,7 +135,7 @@ otherPairs = [
   (ValidateAll.ns, ValidateAll.allTests),
   (Variables.ns, Variables.allTests)]
 
-testPairs :: [(Namespace, TTermDefinition TestGroup)]
+testPairs :: [(ModuleName, TTermDefinition TestGroup)]
 testPairs = libPairs ++ otherPairs
 
 -- | All test suite modules (the actual Module values)

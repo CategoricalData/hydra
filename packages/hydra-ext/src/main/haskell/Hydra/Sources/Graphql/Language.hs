@@ -84,9 +84,9 @@ define = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = (Namespace "hydra.graphql.language"),
+            moduleName = (ModuleName "hydra.graphql.language"),
             moduleDefinitions = [toDefinition graphqlLanguage, toDefinition graphqlReservedWords],
-            moduleDependencies = [Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, Strip.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Language constraints and reserved words for GraphQL"}
 graphqlLanguage :: TTermDefinition Language
 graphqlLanguage = define "graphqlLanguage" $

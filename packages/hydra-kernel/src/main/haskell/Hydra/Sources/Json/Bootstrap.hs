@@ -13,6 +13,7 @@ module Hydra.Sources.Json.Bootstrap where
 
 -- Note: non-standard imports; this module is constructed dynamically from other modules.
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
 import qualified Hydra.Sources.Kernel.Types.Context as Context
@@ -25,8 +26,8 @@ import qualified Hydra.Sources.Kernel.Types.Util as Util
 import qualified Data.Map as M
 
 
-ns :: Namespace
-ns = Namespace "hydra.json.bootstrap"
+ns :: ModuleName
+ns = ModuleName "hydra.json.bootstrap"
 
 -- | The kernel type modules whose types are needed to decode Module from JSON
 -- and to provide schema types for inference tests.
@@ -42,9 +43,9 @@ bootstrapTypeModules = [
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = [DefinitionTerm typesByNameDefinition],
-            moduleDependencies = [Namespace "hydra.core", Namespace "hydra.coders", Namespace "hydra.context", Namespace "hydra.error.checking", Namespace "hydra.error.core", Namespace "hydra.errors", Namespace "hydra.graph", Namespace "hydra.packaging", Namespace "hydra.paths", Namespace "hydra.util", Namespace "hydra.variants"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.core", ModuleName "hydra.coders", ModuleName "hydra.context", ModuleName "hydra.error.checking", ModuleName "hydra.error.core", ModuleName "hydra.errors", ModuleName "hydra.graph", ModuleName "hydra.packaging", ModuleName "hydra.paths", ModuleName "hydra.util", ModuleName "hydra.variants"],
             moduleDescription = Just ("A module which provides a minimal typing environment for decoding other modules from JSON."
       ++ " This avoids certain problems with generating entire source modules into target languages like Java,"
       ++ " which is subject to method size limits for large modules like hydra.core.")}

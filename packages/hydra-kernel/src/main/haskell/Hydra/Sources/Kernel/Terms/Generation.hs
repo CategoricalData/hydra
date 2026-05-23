@@ -84,18 +84,18 @@ import qualified Hydra.Sources.Decode.Packaging              as DecodeModule
 import qualified Hydra.Sources.Encode.Packaging              as EncodeModule
 
 
-ns :: Namespace
-ns = Namespace "hydra.codegen"
+ns :: ModuleName
+ns = ModuleName "hydra.codegen"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
      Environment.ns, ShowCore.ns, ShowError.ns, Strip.ns,
-     Namespace "hydra.decoding", Namespace "hydra.encoding",
-     Namespace "hydra.json.decode", Namespace "hydra.json.encode", Namespace "hydra.json.writer",
-     moduleNamespace DecodeCore.module_, moduleNamespace DecodeModule.module_, moduleNamespace EncodeModule.module_, Namespace "hydra.constants", Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
+     ModuleName "hydra.decoding", ModuleName "hydra.encoding",
+     ModuleName "hydra.json.decode", ModuleName "hydra.json.encode", ModuleName "hydra.json.writer",
+     moduleName DecodeCore.module_, moduleName DecodeModule.module_, moduleName EncodeModule.module_] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Pure code generation pipeline for bootstrapping Hydra across languages."}
   where
     definitions = [
@@ -283,7 +283,7 @@ generateCoderModules = define "generateCoderModules" $
   "codec" ~> "bsGraph" ~> "universeModules" ~> "typeModules" ~> "cx" ~>
   -- Build a graph that includes both schema and data elements, since codecs need to dereference type elements
   "universe" <~ Maps.fromList (Lists.map
-    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
+    ("m" ~> pair (Packaging.moduleName $ var "m") (var "m"))
     (Lists.concat2 (var "universeModules") (var "universeModules"))) $
   "closureModules" <~ moduleDepsTransitive @@ var "universe" @@ var "universeModules" $
   "schemaElements" <~ Lists.concat (Lists.map ("m" ~> moduleTypeBindings (var "m"))
@@ -334,7 +334,7 @@ generateSourceFiles = define "generateSourceFiles" $
   "bsGraph" ~> "universeModules" ~> "modsToGenerate" ~> "cx" ~>
 
   "namespaceMap" <~ Maps.fromList (Lists.map
-    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
+    ("m" ~> pair (Packaging.moduleName $ var "m") (var "m"))
     (Lists.concat2 (var "universeModules") (var "modsToGenerate"))) $
 
   "constraints" <~ Coders.languageConstraints (var "lang") $
@@ -374,7 +374,7 @@ generateSourceFiles = define "generateSourceFiles" $
   -- Generate term modules
   "termFiles" <<~ Logic.ifElse (Lists.null $ var "termModulesToGenerate")
     (right (TTerm (Terms.list []) :: TTerm [(String, String)]))
-    ("namespaces" <~ Lists.map ("m" ~> Packaging.moduleNamespace (var "m")) (var "termModulesToGenerate") $
+    ("namespaces" <~ Lists.map ("m" ~> Packaging.moduleName (var "m")) (var "termModulesToGenerate") $
       "dataResult" <<~ Adapt.dataGraphToDefinitions
           @@ var "constraints"
           @@ var "doInfer" @@ var "doExpand" @@ var "doHoistCaseStatements" @@ var "doHoistPolymorphicLetBindings"
@@ -388,7 +388,7 @@ generateSourceFiles = define "generateSourceFiles" $
       "refreshModule" <~ ("els" ~> "m" ~>
         Packaging.module_
           (Packaging.moduleDescription $ var "m")
-          (Packaging.moduleNamespace $ var "m")
+          (Packaging.moduleName $ var "m")
           (Packaging.moduleDependencies $ var "m")
           (Maybes.cat $ Lists.map
             ("d" ~> cases _Definition (var "d") Nothing [
@@ -500,13 +500,13 @@ inferModulesGiven = define "inferModulesGiven" $
   doc "Infer types for target modules in the context of a typed universe" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
-  -- Namespace index over the full universe, used to resolve module dep edges.
+  -- ModuleName index over the full universe, used to resolve module dep edges.
   "nsMap" <~ Maps.fromList (Lists.map
-    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
+    ("m" ~> pair (Packaging.moduleName $ var "m") (var "m"))
     (var "universeMods")) $
   -- Transitive closure of term-deps for the target set (self-inclusive).
   "closureMods" <~ moduleDepsTransitive @@ var "nsMap" @@ var "targetMods" $
-  "targetNamespaces" <~ Sets.fromList (Lists.map (reify Packaging.moduleNamespace) (var "targetMods")) $
+  "targetNamespaces" <~ Sets.fromList (Lists.map (reify Packaging.moduleName) (var "targetMods")) $
   -- Walk each closure module, deciding per-module whether to re-infer all its bindings
   -- (if it's a target) or only its untyped bindings (if it's a transitive dep). Bindings of
   -- non-target closure modules that already carry a scheme are kept verbatim; their schemes
@@ -514,7 +514,7 @@ inferModulesGiven = define "inferModulesGiven" $
   -- through inferTypeOfVariable with correctly-sized TypeApplication wrappers.
   "bindingsToInfer" <~ Lists.concat (Lists.map
     ("m" ~>
-      "isTarget" <~ Sets.member (Packaging.moduleNamespace (var "m")) (var "targetNamespaces") $
+      "isTarget" <~ Sets.member (Packaging.moduleName (var "m")) (var "targetNamespaces") $
       "bs" <~ moduleTermBindings (var "m") $
       Logic.ifElse (var "isTarget")
         (var "bs")
@@ -522,7 +522,7 @@ inferModulesGiven = define "inferModulesGiven" $
     (var "closureMods")) $
   "untouchedTypedBindings" <~ Lists.concat (Lists.map
     ("m" ~>
-      "isTarget" <~ Sets.member (Packaging.moduleNamespace (var "m")) (var "targetNamespaces") $
+      "isTarget" <~ Sets.member (Packaging.moduleName (var "m")) (var "targetNamespaces") $
       "bs" <~ moduleTermBindings (var "m") $
       Logic.ifElse (var "isTarget")
         (TTerm (Terms.list []) :: TTerm [Binding])
@@ -539,13 +539,13 @@ inferModulesGiven = define "inferModulesGiven" $
 -- Returns the generated coder modules (Nothing results are filtered out).
 -- | Compute the transitive closure of dependencies for a set of modules.
 -- Returns the modules that are transitively depended upon (including the input modules).
-moduleDepsTransitive :: TTermDefinition (M.Map Namespace Module -> [Module] -> [Module])
+moduleDepsTransitive :: TTermDefinition (M.Map ModuleName Module -> [Module] -> [Module])
 moduleDepsTransitive = define "moduleDepsTransitive" $
   doc "Compute transitive closure of dependencies for a set of modules" $
   "nsMap" ~> "modules" ~>
   "closure" <~ Sets.union
-    (transitiveDeps @@ ("m" ~> Packaging.moduleDependencies (var "m")) @@ var "nsMap" @@ var "modules")
-    (Sets.fromList $ Lists.map ("m" ~> Packaging.moduleNamespace (var "m")) (var "modules")) $
+    (transitiveDeps @@ ("m" ~> Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "m"))) @@ var "nsMap" @@ var "modules")
+    (Sets.fromList $ Lists.map ("m" ~> Packaging.moduleName (var "m")) (var "modules")) $
   Maybes.cat $ Lists.map
     ("n" ~> Maps.lookup (var "n") (var "nsMap"))
     (Sets.toList $ var "closure")
@@ -576,25 +576,25 @@ moduleToSourceModule = define "moduleToSourceModule" $
   doc "Convert a generated Module into a Source module" $
   "m" ~>
   -- Transform namespace: hydra.encode.util -> hydra.sources.encode.util
-  "sourceNs" <~ wrap _Namespace (
+  "sourceNs" <~ wrap _ModuleName (
     (string "hydra.sources.") ++ Strings.intercalate (string ".")
-      (Lists.drop (int32 1) (Strings.splitOn (string ".") (Packaging.unNamespace $ Packaging.moduleNamespace $ var "m")))) $
+      (Lists.drop (int32 1) (Strings.splitOn (string ".") (Packaging.unModuleName $ Packaging.moduleName $ var "m")))) $
   -- The module type namespace
-  "modTypeNs" <~ (wrap _Namespace (string "hydra.packaging") :: TTerm Namespace) $
+  "modTypeNs" <~ (wrap _ModuleName (string "hydra.packaging") :: TTerm ModuleName) $
   -- Create binding: module_ = <encoded Module term>
   -- The binding is statically typed as hydra.packaging.Module so inference can
   -- skip re-deriving the (large) term's type from scratch.
   "moduleDef" <~ Packaging.definitionTerm (Packaging.termDefinition
-    (wrap _Name (Packaging.unNamespace (var "sourceNs") ++ (string ".module_")))
+    (wrap _Name (Packaging.unModuleName (var "sourceNs") ++ (string ".module_")))
     (encoderFor _Module @@ var "m")
     (just (Scoping.typeSchemeToTermSignature @@ Core.typeScheme
       (list ([] :: [TTerm Name]))
       (Core.typeVariable (wrap _Name (string "hydra.packaging.Module")))
       nothing))) $
   Packaging.module_
-    (just $ (string "Source module for ") ++ Packaging.unNamespace (Packaging.moduleNamespace $ var "m"))
+    (just $ (string "Source module for ") ++ Packaging.unModuleName (Packaging.moduleName $ var "m"))
     (var "sourceNs")
-    (list [var "modTypeNs"])
+    (list [Packaging.moduleDependency (var "modTypeNs") nothing])
     (list [var "moduleDef"])
 
 -- | Build a graph from a list of modules, using an explicit bootstrap graph.
@@ -615,7 +615,7 @@ modulesToGraph = define "modulesToGraph" $
   doc "Build a graph from universe modules and working modules, using an explicit bootstrap graph" $
   "bsGraph" ~> "universeModules" ~> "modules" ~>
   "universe" <~ Maps.fromList (Lists.map
-    ("m" ~> pair (Packaging.moduleNamespace $ var "m") (var "m"))
+    ("m" ~> pair (Packaging.moduleName $ var "m") (var "m"))
     (Lists.concat2 (var "universeModules") (var "modules"))) $
   "closureModules" <~ moduleDepsTransitive @@ var "universe" @@ var "modules" $
   "schemaElements" <~ Lists.concat (Lists.map ("m" ~> moduleTypeBindings (var "m"))
@@ -643,11 +643,11 @@ modulesToGraph = define "modulesToGraph" $
 -- and modules to generate, produce a list of (filePath, content) pairs.
 -- This function contains no I/O and can be generated to other languages.
 -- | Convert a namespace to a file path (e.g., "hydra.core" -> "hydra/core").
-namespaceToPath :: TTermDefinition (Namespace -> String)
+namespaceToPath :: TTermDefinition (ModuleName -> String)
 namespaceToPath = define "namespaceToPath" $
   doc "Convert a namespace to a file path (e.g., hydra.core -> hydra/core)" $
   "ns" ~>
-  Strings.intercalate (string "/") (Strings.splitOn (string ".") (Packaging.unNamespace $ var "ns"))
+  Strings.intercalate (string "/") (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))
 
 -- | Compute transitive closure of dependencies.
 -- Given a function that extracts dependency namespaces from a module,
@@ -664,7 +664,7 @@ refreshModule = define "refreshModule" $
     (var "m")
     (Packaging.module_
       (Packaging.moduleDescription $ var "m")
-      (Packaging.moduleNamespace $ var "m")
+      (Packaging.moduleName $ var "m")
       (Packaging.moduleDependencies $ var "m")
       (Maybes.cat $ Lists.map
         ("d" ~> cases _Definition (var "d") Nothing [
@@ -685,14 +685,14 @@ refreshModule = define "refreshModule" $
 -- Given a function that extracts dependency namespaces from a module,
 -- a namespace-to-module map, and starting modules, returns the transitive closure
 -- of all reachable namespaces (excluding self-references from start modules).
-transitiveDeps :: TTermDefinition ((Module -> [Namespace]) -> M.Map Namespace Module -> [Module] -> S.Set Namespace)
+transitiveDeps :: TTermDefinition ((Module -> [ModuleName]) -> M.Map ModuleName Module -> [Module] -> S.Set ModuleName)
 transitiveDeps = define "transitiveDeps" $
   doc "Compute transitive closure of module dependencies" $
   "getDeps" ~> "nsMap" ~> "startMods" ~>
   -- Start with dependencies of start modules, excluding self-references
   "initialDeps" <~ Sets.fromList (Lists.concat (Lists.map
     ("m" ~> Lists.filter
-      ("dep" ~> Logic.not $ Equality.equal (var "dep") (Packaging.moduleNamespace $ var "m"))
+      ("dep" ~> Logic.not $ Equality.equal (var "dep") (Packaging.moduleName $ var "m"))
       (var "getDeps" @@ var "m"))
     (var "startMods"))) $
   -- Iterative closure: go pending visited
@@ -702,12 +702,12 @@ transitiveDeps = define "transitiveDeps" $
       ("newVisited" <~ Sets.union (var "visited") (var "pending") $
        "nextDeps" <~ Sets.fromList (Lists.concat (Lists.map
          ("nsv" ~> optCases (Maps.lookup (var "nsv") (var "nsMap"))
-           (TTerm (Terms.list []) :: TTerm [Namespace])
+           (TTerm (Terms.list []) :: TTerm [ModuleName])
            ("depMod" ~> var "getDeps" @@ var "depMod"))
          (Sets.toList $ var "pending"))) $
        "newPending" <~ Sets.difference (var "nextDeps") (var "newVisited") $
        var "go" @@ var "newPending" @@ var "newVisited")) $
-  var "go" @@ var "initialDeps" @@ (Sets.empty :: TTerm (S.Set Namespace))
+  var "go" @@ var "initialDeps" @@ (Sets.empty :: TTerm (S.Set ModuleName))
 
 -- | Compute the transitive closure of term dependencies for a set of modules.
 -- Returns the modules that are transitively depended upon (including the input modules).

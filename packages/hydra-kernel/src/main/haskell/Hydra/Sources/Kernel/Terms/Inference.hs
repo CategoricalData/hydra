@@ -91,16 +91,16 @@ import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 import qualified Hydra.Sources.Kernel.Terms.Unification  as Unification
 
 
-ns :: Namespace
-ns = Namespace "hydra.inference"
+ns :: ModuleName
+ns = ModuleName "hydra.inference"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
       Rewriting.ns, Names.ns, Resolution.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns, Variables.ns,
-      Unification.ns] L.++ kernelTypesNamespaces,
+      Unification.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Type inference following Algorithm W, extended for nominal terms and types"}
   where
     definitions = [
@@ -1003,7 +1003,7 @@ inferTypeOfProjection = define "inferTypeOfProjection" $
   doc "Infer the type of a record projection (Either version)" $
   "fcx" ~> "cx" ~> "proj" ~>
   "tname" <~ Core.projectionTypeName (var "proj") $
-  "fname" <~ Core.projectionField (var "proj") $
+  "fname" <~ Core.projectionFieldName (var "proj") $
   "stRp" <<~ Resolution.requireSchemaType @@ var "fcx" @@ (Graph.graphSchemaTypes $ var "cx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "stRp") $
   "fcx2" <~ Pairs.second (var "stRp") $

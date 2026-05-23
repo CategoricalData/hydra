@@ -4,6 +4,7 @@ module Hydra.Sources.Kernel.Terms.Dsls where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Meta.Core         as Core
@@ -40,14 +41,14 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 
 
-ns :: Namespace
-ns = Namespace "hydra.dsls"
+ns :: ModuleName
+ns = ModuleName "hydra.dsls"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns, Namespace "hydra.constants", Namespace "hydra.decode.core", Namespace "hydra.encode.core"] L.++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Annotations.ns, Formatting.ns, Lexical.ns, Names.ns, Strip.ns, ModuleName "hydra.constants", ModuleName "hydra.decode.core", ModuleName "hydra.encode.core"] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Functions for generating domain-specific DSL modules from type modules"}
   where
     definitions = [
@@ -181,7 +182,7 @@ deepProjection typeName fieldName =
   injectTermProject $
     Core.termRecord $ Core.record (Core.nameLift _Projection) (list [
       Core.field (Core.nameLift _Projection_typeName) (deepName (Core.unName typeName)),
-      Core.field (Core.nameLift _Projection_field) (deepName (Core.unName fieldName))])
+      Core.field (Core.nameLift _Projection_fieldName) (deepName (Core.unName fieldName))])
 
 -- | Build a deep Application as a Term value
 deepApplication :: TTerm Term -> TTerm Term -> TTerm Term
@@ -296,34 +297,30 @@ dslModule = define "dslModule" $
         right (just (Packaging.module_
           (just (Strings.cat $ list [
             string "DSL functions for ",
-            Packaging.unNamespace (Packaging.moduleNamespace (var "mod"))]))
-          (dslNamespace @@ (Packaging.moduleNamespace (var "mod")))
+            Packaging.unModuleName (Packaging.moduleName (var "mod"))]))
+          (dslNamespace @@ (Packaging.moduleName (var "mod")))
           -- DSL modules depend on:
           -- (1) the original module + its source dependencies + hydra.phantoms (for TTerm), and
-          -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions),
-          -- (3) hydra.core (for Core.Record/Term/Field constructors emitted by DSL builders).
-          (Lists.nub (Lists.concat2
-            (list [
-              Packaging.moduleNamespace (var "mod"),
-              Packaging.namespace (string "hydra.phantoms"),
-              Packaging.namespace (string "hydra.core")])
+          -- (2) DSL modules for the source's dependencies (to reference other types' DSL functions)
+          (Lists.map ("ns" ~> Packaging.moduleDependency (var "ns") nothing) (Lists.nub (Lists.concat2
+            (list [Packaging.moduleName (var "mod"), Packaging.moduleName2 (string "hydra.phantoms")])
             (Lists.concat2
-              (Packaging.moduleDependencies (var "mod"))
-              (primitive _lists_map @@ dslNamespace @@ (Packaging.moduleDependencies (var "mod"))))))
+              (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod")))
+              (primitive _lists_map @@ dslNamespace @@ (Lists.map ("dep" ~> Packaging.moduleDependencyModule (var "dep")) (Packaging.moduleDependencies (var "mod"))))))))
           (Lists.map ("b" ~> Packaging.definitionTerm (Packaging.termDefinition
             (Core.bindingName $ var "b") (Core.bindingTerm $ var "b")
             (Maybes.map Scoping.typeSchemeToTermSignature $ Core.bindingTypeScheme $ var "b")))
             (deduplicateBindings @@ Lists.concat (var "dslBindings"))))))
 -- | Generate a DSL module namespace from a source module namespace
 -- For example, "hydra.core" -> "hydra.dsl.core"
-dslNamespace :: TTermDefinition (Namespace -> Namespace)
+dslNamespace :: TTermDefinition (ModuleName -> ModuleName)
 dslNamespace = define "dslNamespace" $
   doc "Generate a DSL module namespace from a source module namespace" $
   "ns" ~>
-  "parts" <~ (Strings.splitOn (string ".") (Packaging.unNamespace (var "ns"))) $
-  "prefixFull" <~ (Packaging.namespace (Strings.cat $ list [
+  "parts" <~ (Strings.splitOn (string ".") (Packaging.unModuleName (var "ns"))) $
+  "prefixFull" <~ (Packaging.moduleName2 (Strings.cat $ list [
     string "hydra.dsl.",
-    Packaging.unNamespace (var "ns")])) $
+    Packaging.unModuleName (var "ns")])) $
   -- For hydra.* namespaces: hydra.foo -> hydra.dsl.foo
   -- For other namespaces: foo.bar -> hydra.dsl.foo.bar (preserve full path)
   -- An empty parts list is unreachable for a well-formed namespace; fall back
@@ -332,7 +329,7 @@ dslNamespace = define "dslNamespace" $
     (var "prefixFull")
     ("ht" ~>
       Logic.ifElse (Equality.equal (Pairs.first (var "ht")) (string "hydra"))
-        (Packaging.namespace (Strings.cat $ list [
+        (Packaging.moduleName2 (Strings.cat $ list [
           string "hydra.dsl.",
           Strings.intercalate (string ".") (Pairs.second (var "ht"))]))
         (var "prefixFull"))
@@ -642,7 +639,7 @@ isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
   "ns" <~ (Names.namespaceOf @@ Core.bindingName (var "b")) $
-  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (reify Packaging.unNamespace) (var "ns")) (string "hydra.phantoms"))
+  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (reify Packaging.unModuleName) (var "ns")) (string "hydra.phantoms"))
     (right nothing)
     (right (just (var "b")))
 

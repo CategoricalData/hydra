@@ -9,16 +9,17 @@ from hydra.dsl.python import Just, Nothing
 from hydra.packaging import (
     DefinitionType,
     Module,
-    Namespace,
+    ModuleName,
     TypeDefinition,
 )
 
+from hydra.sources.python._source_dsl import unqualified_dep
 import hydra.dsl.annotations as Annotations
 import hydra.dsl.types as T
 
 
-NS = Namespace("hydra.python.syntax")
-DEPENDENCIES = [Namespace("hydra.core")]
+NS = ModuleName("hydra.python.syntax")
+DEPENDENCIES = [unqualified_dep(ModuleName("hydra.core"))]
 DESCRIPTION = (
     "A Python syntax model, tracking the Python 3.14 PEG grammar:\n"
     "  https://docs.python.org/3.14/reference/grammar.html"

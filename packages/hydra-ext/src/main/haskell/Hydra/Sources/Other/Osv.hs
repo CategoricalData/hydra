@@ -13,8 +13,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.osv.schema"
+ns :: ModuleName
+ns = ModuleName "hydra.osv.schema"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -25,9 +25,9 @@ osv = typeref ns
 -- Note: database_specific and ecosystem_specific fields are ignored, though they must be tolerated when reading entry JSON
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [],
+            moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just "See https://ossf.github.io/osv-schema"}
   where
     definitions = [

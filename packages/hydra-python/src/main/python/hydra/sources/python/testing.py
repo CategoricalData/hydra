@@ -5,7 +5,7 @@ Mirror of packages/hydra-python/src/main/haskell/Hydra/Sources/Python/Testing.hs
 
 from hydra.core import Name
 from hydra.dsl.python import Just, Nothing
-from hydra.packaging import Module, Namespace
+from hydra.packaging import Module, ModuleName
 
 import hydra.dsl.meta.lib.chars as Chars
 import hydra.dsl.meta.lib.eithers as Eithers
@@ -27,24 +27,26 @@ from hydra.sources.python._kernel_refs import (
 # Namespaces
 # ----------------------------------------------------------------------
 
-NS = Namespace("hydra.python.testing")
+NS = ModuleName("hydra.python.testing")
 
 from hydra.sources.python._source_dsl import (
+
     KERNEL_TYPES_NAMESPACES,
     make_def,
     make_local,
+    unqualified_dep,
 )
 
 # Mirror Haskell:
 #   [SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns] L.++
 #   (PySyntax.ns:KernelTypes.kernelTypesNamespaces)
 DEPENDENCIES = [
-    Namespace("hydra.serialization"),
-    Namespace("hydra.formatting"),
-    Namespace("hydra.names"),
-    Namespace("hydra.test.utils"),
-    Namespace("hydra.constants"),
-    Namespace("hydra.python.syntax"),
+    unqualified_dep(ModuleName("hydra.serialization")),
+    unqualified_dep(ModuleName("hydra.formatting")),
+    unqualified_dep(ModuleName("hydra.names")),
+    unqualified_dep(ModuleName("hydra.test.utils")),
+    unqualified_dep(ModuleName("hydra.constants")),
+    unqualified_dep(ModuleName("hydra.python.syntax")),
 ] + KERNEL_TYPES_NAMESPACES
 
 
@@ -65,7 +67,7 @@ _TEST_GROUP = Name("hydra.testing.TestGroup")
 _TEST_CASE = Name("hydra.testing.TestCase")
 _TEST_CASE_WITH_METADATA = Name("hydra.testing.TestCaseWithMetadata")
 _UNIVERSAL_TEST_CASE = Name("hydra.testing.UniversalTestCase")
-_NAMESPACE = Name("hydra.packaging.Namespace")
+_NAMESPACE = Name("hydra.packaging.ModuleName")
 
 
 # ----------------------------------------------------------------------
@@ -315,7 +317,7 @@ def _generate_test_file_with_python_codec():
                 _local("buildPythonTestModule")(var("testModule"), var("testGroup"), var("testBody")),
             ),
             field("ns_",
-                Packaging.module_namespace(var("testModule")),
+                Packaging.module_name(var("testModule")),
             ),
             field("parts",
                 Strings.split_on(
@@ -369,7 +371,7 @@ def _generate_test_file_with_python_codec():
 def _build_module() -> Module:
     return Module(
         _PLACEHOLDER.description,
-        _PLACEHOLDER.namespace,
+        _PLACEHOLDER.name,
         _PLACEHOLDER.dependencies,
         (
             to_definition(_build_python_test_module()),
