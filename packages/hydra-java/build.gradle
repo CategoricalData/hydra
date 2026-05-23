@@ -24,6 +24,7 @@ sourceSets {
             srcDirs += file("$projectDir/../../dist/java/hydra-python/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-scala/src/main/java")
             srcDirs += file("$projectDir/../../dist/java/hydra-lisp/src/main/java")
+            srcDirs += file("$projectDir/../../dist/java/hydra-typescript/src/main/java")
             // Java-language DSL sources for the hydra-java coder
             // (issue #344 self-hosting): packages/hydra-java/src/main/java/
             // mirrors packages/hydra-python/src/main/python/ for the Python
