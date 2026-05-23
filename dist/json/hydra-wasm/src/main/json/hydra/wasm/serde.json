@@ -14,12 +14,16 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.Module"}}}},
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.Module"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "fields",
                         "term": {
-                          "application": {"argument": {"variable": "mod"}, "function": {"project": {"field": "fields", "typeName": "hydra.wasm.syntax.Module"}}}},
+                          "application": {
+                            "argument": {"variable": "mod"},
+                            "function": {"project": {"fieldName": "fields", "typeName": "hydra.wasm.syntax.Module"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.ModuleField"}}, "variables": []}},
                       {
                         "name": "nameStr",
@@ -245,14 +249,16 @@
                       {
                         "name": "params",
                         "term": {
-                          "application": {"argument": {"variable": "ft"}, "function": {"project": {"field": "params", "typeName": "hydra.wasm.syntax.FuncType"}}}},
+                          "application": {
+                            "argument": {"variable": "ft"},
+                            "function": {"project": {"fieldName": "params", "typeName": "hydra.wasm.syntax.FuncType"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.ValType"}}, "variables": []}},
                       {
                         "name": "results",
                         "term": {
                           "application": {
                             "argument": {"variable": "ft"},
-                            "function": {"project": {"field": "results", "typeName": "hydra.wasm.syntax.FuncType"}}}},
+                            "function": {"project": {"fieldName": "results", "typeName": "hydra.wasm.syntax.FuncType"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.ValType"}}, "variables": []}},
                       {
                         "name": "paramParts",
@@ -367,17 +373,23 @@
                       {
                         "name": "idx",
                         "term": {
-                          "application": {"argument": {"variable": "tu"}, "function": {"project": {"field": "index", "typeName": "hydra.wasm.syntax.TypeUse"}}}},
+                          "application": {
+                            "argument": {"variable": "tu"},
+                            "function": {"project": {"fieldName": "index", "typeName": "hydra.wasm.syntax.TypeUse"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "params",
                         "term": {
-                          "application": {"argument": {"variable": "tu"}, "function": {"project": {"field": "params", "typeName": "hydra.wasm.syntax.TypeUse"}}}},
+                          "application": {
+                            "argument": {"variable": "tu"},
+                            "function": {"project": {"fieldName": "params", "typeName": "hydra.wasm.syntax.TypeUse"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.Param"}}, "variables": []}},
                       {
                         "name": "results",
                         "term": {
-                          "application": {"argument": {"variable": "tu"}, "function": {"project": {"field": "results", "typeName": "hydra.wasm.syntax.TypeUse"}}}},
+                          "application": {
+                            "argument": {"variable": "tu"},
+                            "function": {"project": {"fieldName": "results", "typeName": "hydra.wasm.syntax.TypeUse"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.ValType"}}, "variables": []}},
                       {
                         "name": "idxPart",
@@ -493,12 +505,16 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "td"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.TypeDef"}}}},
+                          "application": {
+                            "argument": {"variable": "td"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.TypeDef"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "ft",
                         "term": {
-                          "application": {"argument": {"variable": "td"}, "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.TypeDef"}}}},
+                          "application": {
+                            "argument": {"variable": "td"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.TypeDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.FuncType"}, "variables": []}},
                       {
                         "name": "nameStr",
@@ -556,12 +572,12 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "p"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.Param"}}}},
+                          "application": {"argument": {"variable": "p"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.Param"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
-                          "application": {"argument": {"variable": "p"}, "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.Param"}}}},
+                          "application": {"argument": {"variable": "p"}, "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.Param"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                       {
                         "name": "nameStr",
@@ -618,22 +634,22 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.Func"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.Func"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "typeUse",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "typeUse", "typeName": "hydra.wasm.syntax.Func"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "typeUse", "typeName": "hydra.wasm.syntax.Func"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.TypeUse"}, "variables": []}},
                       {
                         "name": "locals",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "locals", "typeName": "hydra.wasm.syntax.Func"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "locals", "typeName": "hydra.wasm.syntax.Func"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.FuncLocal"}}, "variables": []}},
                       {
                         "name": "body",
                         "term": {
-                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "body", "typeName": "hydra.wasm.syntax.Func"}}}},
+                          "application": {"argument": {"variable": "f"}, "function": {"project": {"fieldName": "body", "typeName": "hydra.wasm.syntax.Func"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}, "variables": []}},
                       {
                         "name": "nameStr",
@@ -783,12 +799,16 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.FuncLocal"}}}},
+                          "application": {
+                            "argument": {"variable": "l"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.FuncLocal"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
-                          "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.FuncLocal"}}}},
+                          "application": {
+                            "argument": {"variable": "l"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.FuncLocal"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                       {
                         "name": "nameStr",
@@ -929,19 +949,21 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "ld"},
-                                            "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "ma",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "ld"},
-                                            "function": {"project": {"field": "memArg", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
+                                            "function": {"project": {"fieldName": "memArg", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.MemArg"}, "variables": []}},
                                       {
                                         "name": "off",
                                         "term": {
-                                          "application": {"argument": {"variable": "ma"}, "function": {"project": {"field": "offset", "typeName": "hydra.wasm.syntax.MemArg"}}}},
+                                          "application": {
+                                            "argument": {"variable": "ma"},
+                                            "function": {"project": {"fieldName": "offset", "typeName": "hydra.wasm.syntax.MemArg"}}}},
                                         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                       {
                                         "name": "offStr",
@@ -990,19 +1012,21 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "st"},
-                                            "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "ma",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "st"},
-                                            "function": {"project": {"field": "memArg", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
+                                            "function": {"project": {"fieldName": "memArg", "typeName": "hydra.wasm.syntax.MemoryInstruction"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.MemArg"}, "variables": []}},
                                       {
                                         "name": "off",
                                         "term": {
-                                          "application": {"argument": {"variable": "ma"}, "function": {"project": {"field": "offset", "typeName": "hydra.wasm.syntax.MemArg"}}}},
+                                          "application": {
+                                            "argument": {"variable": "ma"},
+                                            "function": {"project": {"fieldName": "offset", "typeName": "hydra.wasm.syntax.MemArg"}}}},
                                         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                                       {
                                         "name": "offStr",
@@ -1049,12 +1073,16 @@
                                       {
                                         "name": "vt",
                                         "term": {
-                                          "application": {"argument": {"variable": "op"}, "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
+                                          "application": {
+                                            "argument": {"variable": "op"},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "nm",
                                         "term": {
-                                          "application": {"argument": {"variable": "op"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
+                                          "application": {
+                                            "argument": {"variable": "op"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -1079,12 +1107,16 @@
                                       {
                                         "name": "vt",
                                         "term": {
-                                          "application": {"argument": {"variable": "op"}, "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
+                                          "application": {
+                                            "argument": {"variable": "op"},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "nm",
                                         "term": {
-                                          "application": {"argument": {"variable": "op"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
+                                          "application": {
+                                            "argument": {"variable": "op"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -1109,12 +1141,16 @@
                                       {
                                         "name": "vt",
                                         "term": {
-                                          "application": {"argument": {"variable": "op"}, "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
+                                          "application": {
+                                            "argument": {"variable": "op"},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "nm",
                                         "term": {
-                                          "application": {"argument": {"variable": "op"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
+                                          "application": {
+                                            "argument": {"variable": "op"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -1139,12 +1175,16 @@
                                       {
                                         "name": "vt",
                                         "term": {
-                                          "application": {"argument": {"variable": "op"}, "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
+                                          "application": {
+                                            "argument": {"variable": "op"},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                                       {
                                         "name": "nm",
                                         "term": {
-                                          "application": {"argument": {"variable": "op"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
+                                          "application": {
+                                            "argument": {"variable": "op"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.NumericOp"}}}},
                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -1260,14 +1300,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "bt"},
-                                            "function": {"project": {"field": "labels", "typeName": "hydra.wasm.syntax.BrTableArgs"}}}},
+                                            "function": {"project": {"fieldName": "labels", "typeName": "hydra.wasm.syntax.BrTableArgs"}}}},
                                         "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "def",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "bt"},
-                                            "function": {"project": {"field": "default", "typeName": "hydra.wasm.syntax.BrTableArgs"}}}},
+                                            "function": {"project": {"fieldName": "default", "typeName": "hydra.wasm.syntax.BrTableArgs"}}}},
                                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -1409,21 +1449,21 @@
                             "term": {
                               "application": {
                                 "argument": {"variable": "b"},
-                                "function": {"project": {"field": "label", "typeName": "hydra.wasm.syntax.BlockInstruction"}}}},
+                                "function": {"project": {"fieldName": "label", "typeName": "hydra.wasm.syntax.BlockInstruction"}}}},
                             "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                           {
                             "name": "bt",
                             "term": {
                               "application": {
                                 "argument": {"variable": "b"},
-                                "function": {"project": {"field": "blockType", "typeName": "hydra.wasm.syntax.BlockInstruction"}}}},
+                                "function": {"project": {"fieldName": "blockType", "typeName": "hydra.wasm.syntax.BlockInstruction"}}}},
                             "typeScheme": {"body": {"variable": "hydra.wasm.syntax.BlockType"}, "variables": []}},
                           {
                             "name": "body",
                             "term": {
                               "application": {
                                 "argument": {"variable": "b"},
-                                "function": {"project": {"field": "body", "typeName": "hydra.wasm.syntax.BlockInstruction"}}}},
+                                "function": {"project": {"fieldName": "body", "typeName": "hydra.wasm.syntax.BlockInstruction"}}}},
                             "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}, "variables": []}},
                           {
                             "name": "labelStr",
@@ -1596,28 +1636,28 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "i"},
-                            "function": {"project": {"field": "label", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
+                            "function": {"project": {"fieldName": "label", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "bt",
                         "term": {
                           "application": {
                             "argument": {"variable": "i"},
-                            "function": {"project": {"field": "blockType", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
+                            "function": {"project": {"fieldName": "blockType", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.BlockType"}, "variables": []}},
                       {
                         "name": "thenBranch",
                         "term": {
                           "application": {
                             "argument": {"variable": "i"},
-                            "function": {"project": {"field": "then", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
+                            "function": {"project": {"fieldName": "then", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}, "variables": []}},
                       {
                         "name": "elseBranch",
                         "term": {
                           "application": {
                             "argument": {"variable": "i"},
-                            "function": {"project": {"field": "else", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
+                            "function": {"project": {"fieldName": "else", "typeName": "hydra.wasm.syntax.IfInstruction"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}, "variables": []}},
                       {
                         "name": "labelStr",
@@ -1811,12 +1851,16 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.MemoryDef"}}}},
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.MemoryDef"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "lim",
                         "term": {
-                          "application": {"argument": {"variable": "m"}, "function": {"project": {"field": "limits", "typeName": "hydra.wasm.syntax.MemoryDef"}}}},
+                          "application": {
+                            "argument": {"variable": "m"},
+                            "function": {"project": {"fieldName": "limits", "typeName": "hydra.wasm.syntax.MemoryDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
                       {
                         "name": "nameStr",
@@ -1874,19 +1918,23 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "d"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.DataSegment"}}}},
+                          "application": {
+                            "argument": {"variable": "d"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.DataSegment"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "mode",
                         "term": {
-                          "application": {"argument": {"variable": "d"}, "function": {"project": {"field": "mode", "typeName": "hydra.wasm.syntax.DataSegment"}}}},
+                          "application": {
+                            "argument": {"variable": "d"},
+                            "function": {"project": {"fieldName": "mode", "typeName": "hydra.wasm.syntax.DataSegment"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.DataMode"}, "variables": []}},
                       {
                         "name": "bytes",
                         "term": {
                           "application": {
                             "argument": {"variable": "d"},
-                            "function": {"project": {"field": "bytes", "typeName": "hydra.wasm.syntax.DataSegment"}}}},
+                            "function": {"project": {"fieldName": "bytes", "typeName": "hydra.wasm.syntax.DataSegment"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "nameStr",
@@ -2008,12 +2056,12 @@
                       {
                         "name": "mn",
                         "term": {
-                          "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "min", "typeName": "hydra.wasm.syntax.Limits"}}}},
+                          "application": {"argument": {"variable": "l"}, "function": {"project": {"fieldName": "min", "typeName": "hydra.wasm.syntax.Limits"}}}},
                         "typeScheme": {"body": {"literal": {"integer": {"int32": {}}}}, "variables": []}},
                       {
                         "name": "mx",
                         "term": {
-                          "application": {"argument": {"variable": "l"}, "function": {"project": {"field": "max", "typeName": "hydra.wasm.syntax.Limits"}}}},
+                          "application": {"argument": {"variable": "l"}, "function": {"project": {"fieldName": "max", "typeName": "hydra.wasm.syntax.Limits"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"integer": {"int32": {}}}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -2064,17 +2112,23 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.GlobalDef"}}}},
+                          "application": {
+                            "argument": {"variable": "g"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.GlobalDef"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "gt",
                         "term": {
-                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.GlobalDef"}}}},
+                          "application": {
+                            "argument": {"variable": "g"},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.GlobalDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.GlobalType"}, "variables": []}},
                       {
                         "name": "init",
                         "term": {
-                          "application": {"argument": {"variable": "g"}, "function": {"project": {"field": "init", "typeName": "hydra.wasm.syntax.GlobalDef"}}}},
+                          "application": {
+                            "argument": {"variable": "g"},
+                            "function": {"project": {"fieldName": "init", "typeName": "hydra.wasm.syntax.GlobalDef"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.wasm.syntax.Instruction"}}, "variables": []}},
                       {
                         "name": "nameStr",
@@ -2148,14 +2202,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "gt"},
-                            "function": {"project": {"field": "valType", "typeName": "hydra.wasm.syntax.GlobalType"}}}},
+                            "function": {"project": {"fieldName": "valType", "typeName": "hydra.wasm.syntax.GlobalType"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ValType"}, "variables": []}},
                       {
                         "name": "mut",
                         "term": {
                           "application": {
                             "argument": {"variable": "gt"},
-                            "function": {"project": {"field": "mutable", "typeName": "hydra.wasm.syntax.GlobalType"}}}},
+                            "function": {"project": {"fieldName": "mutable", "typeName": "hydra.wasm.syntax.GlobalType"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -2199,17 +2253,23 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.TableDef"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.TableDef"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "rt",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "refType", "typeName": "hydra.wasm.syntax.TableDef"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "refType", "typeName": "hydra.wasm.syntax.TableDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.RefType"}, "variables": []}},
                       {
                         "name": "lim",
                         "term": {
-                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "limits", "typeName": "hydra.wasm.syntax.TableDef"}}}},
+                          "application": {
+                            "argument": {"variable": "t"},
+                            "function": {"project": {"fieldName": "limits", "typeName": "hydra.wasm.syntax.TableDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
                       {
                         "name": "nameStr",
@@ -2271,17 +2331,23 @@
                       {
                         "name": "modName",
                         "term": {
-                          "application": {"argument": {"variable": "i"}, "function": {"project": {"field": "module", "typeName": "hydra.wasm.syntax.ImportDef"}}}},
+                          "application": {
+                            "argument": {"variable": "i"},
+                            "function": {"project": {"fieldName": "module", "typeName": "hydra.wasm.syntax.ImportDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "i"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportDef"}}}},
+                          "application": {
+                            "argument": {"variable": "i"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.ImportDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "desc",
                         "term": {
-                          "application": {"argument": {"variable": "i"}, "function": {"project": {"field": "desc", "typeName": "hydra.wasm.syntax.ImportDef"}}}},
+                          "application": {
+                            "argument": {"variable": "i"},
+                            "function": {"project": {"fieldName": "desc", "typeName": "hydra.wasm.syntax.ImportDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ImportDesc"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -2334,14 +2400,16 @@
                                       {
                                         "name": "name",
                                         "term": {
-                                          "application": {"argument": {"variable": "f"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportFunc"}}}},
+                                          "application": {
+                                            "argument": {"variable": "f"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.ImportFunc"}}}},
                                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "tu",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "f"},
-                                            "function": {"project": {"field": "typeUse", "typeName": "hydra.wasm.syntax.ImportFunc"}}}},
+                                            "function": {"project": {"fieldName": "typeUse", "typeName": "hydra.wasm.syntax.ImportFunc"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.TypeUse"}, "variables": []}},
                                       {
                                         "name": "nameStr",
@@ -2394,14 +2462,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "m"},
-                                            "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportMemory"}}}},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.ImportMemory"}}}},
                                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "lim",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "m"},
-                                            "function": {"project": {"field": "limits", "typeName": "hydra.wasm.syntax.ImportMemory"}}}},
+                                            "function": {"project": {"fieldName": "limits", "typeName": "hydra.wasm.syntax.ImportMemory"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
                                       {
                                         "name": "nameStr",
@@ -2452,21 +2520,23 @@
                                       {
                                         "name": "name",
                                         "term": {
-                                          "application": {"argument": {"variable": "t"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportTable"}}}},
+                                          "application": {
+                                            "argument": {"variable": "t"},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.ImportTable"}}}},
                                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "rt",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "t"},
-                                            "function": {"project": {"field": "refType", "typeName": "hydra.wasm.syntax.ImportTable"}}}},
+                                            "function": {"project": {"fieldName": "refType", "typeName": "hydra.wasm.syntax.ImportTable"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.RefType"}, "variables": []}},
                                       {
                                         "name": "lim",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "t"},
-                                            "function": {"project": {"field": "limits", "typeName": "hydra.wasm.syntax.ImportTable"}}}},
+                                            "function": {"project": {"fieldName": "limits", "typeName": "hydra.wasm.syntax.ImportTable"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.Limits"}, "variables": []}},
                                       {
                                         "name": "nameStr",
@@ -2523,14 +2593,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "g"},
-                                            "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.ImportGlobal"}}}},
+                                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.ImportGlobal"}}}},
                                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                                       {
                                         "name": "gt",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "g"},
-                                            "function": {"project": {"field": "type", "typeName": "hydra.wasm.syntax.ImportGlobal"}}}},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.wasm.syntax.ImportGlobal"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.GlobalType"}, "variables": []}},
                                       {
                                         "name": "nameStr",
@@ -2591,12 +2661,16 @@
                       {
                         "name": "name",
                         "term": {
-                          "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "name", "typeName": "hydra.wasm.syntax.ExportDef"}}}},
+                          "application": {
+                            "argument": {"variable": "e"},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.wasm.syntax.ExportDef"}}}},
                         "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}},
                       {
                         "name": "desc",
                         "term": {
-                          "application": {"argument": {"variable": "e"}, "function": {"project": {"field": "desc", "typeName": "hydra.wasm.syntax.ExportDef"}}}},
+                          "application": {
+                            "argument": {"variable": "e"},
+                            "function": {"project": {"fieldName": "desc", "typeName": "hydra.wasm.syntax.ExportDef"}}}},
                         "typeScheme": {"body": {"variable": "hydra.wasm.syntax.ExportDesc"}, "variables": []}}],
                     "body": {
                       "application": {
@@ -2806,32 +2880,32 @@
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.constants",
-    "hydra.serialization",
-    "hydra.wasm.syntax",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.constants"},
+    {"module": "hydra.serialization"},
+    {"module": "hydra.wasm.syntax"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "WebAssembly serializer: converts WAT AST to concrete WAT text format",
-  "namespace": "hydra.wasm.serde"}
+  "name": "hydra.wasm.serde"}

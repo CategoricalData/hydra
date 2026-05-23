@@ -129,6 +129,6 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "A thunk producing the expected result string."}}}],
                         "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"unit": {}}}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "A model for unit testing",
-  "namespace": "hydra.testing"}
+  "name": "hydra.testing"}

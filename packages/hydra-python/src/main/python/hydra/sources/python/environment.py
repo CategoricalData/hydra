@@ -8,27 +8,28 @@ from hydra.dsl.python import Just, Nothing
 from hydra.packaging import (
     DefinitionType,
     Module,
-    Namespace,
+    ModuleName,
     TypeDefinition,
 )
 
+from hydra.sources.python._source_dsl import unqualified_dep
 import hydra.dsl.annotations as Annotations
 import hydra.dsl.types as T
 
 
-NS = Namespace("hydra.python.environment")
+NS = ModuleName("hydra.python.environment")
 
 DEPENDENCIES = [
-    Namespace("hydra.python.syntax"),
-    Namespace("hydra.util"),
-    Namespace("hydra.core"),
-    Namespace("hydra.graph"),
-    Namespace("hydra.packaging"),
-    Namespace("hydra.typing"),
+    unqualified_dep(ModuleName("hydra.python.syntax")),
+    unqualified_dep(ModuleName("hydra.util")),
+    unqualified_dep(ModuleName("hydra.core")),
+    unqualified_dep(ModuleName("hydra.graph")),
+    unqualified_dep(ModuleName("hydra.packaging")),
+    unqualified_dep(ModuleName("hydra.typing")),
 ]
 
 
-def _typeref(ns: Namespace, local: str) -> Type:
+def _typeref(ns: ModuleName, local: str) -> Type:
     """Construct a TypeVariable reference: <ns>.<local>."""
     return T.variable(f"{ns.value}.{local}")
 
@@ -38,19 +39,19 @@ def _env(local: str) -> Type:
 
 
 def _syntax(local: str) -> Type:
-    return _typeref(Namespace("hydra.python.syntax"), local)
+    return _typeref(ModuleName("hydra.python.syntax"), local)
 
 
 def _core(local: str) -> Type:
-    return _typeref(Namespace("hydra.core"), local)
+    return _typeref(ModuleName("hydra.core"), local)
 
 
 def _graph(local: str) -> Type:
-    return _typeref(Namespace("hydra.graph"), local)
+    return _typeref(ModuleName("hydra.graph"), local)
 
 
 def _util(local: str) -> Type:
-    return _typeref(Namespace("hydra.util"), local)
+    return _typeref(ModuleName("hydra.util"), local)
 
 
 def _def(local_name: str, typ: Type) -> DefinitionType:
@@ -86,7 +87,7 @@ def _python_environment():
                 T.field(
                     "namespaces",
                     Annotations.doc(
-                        "Namespace mapping for imports",
+                        "ModuleName mapping for imports",
                         T.apply(_util("Namespaces"), _syntax("DottedName")),
                     ),
                 ),
@@ -131,7 +132,7 @@ def _python_module_metadata():
                 T.field(
                     "namespaces",
                     Annotations.doc(
-                        "Namespace mapping for imports",
+                        "ModuleName mapping for imports",
                         T.apply(_util("Namespaces"), _syntax("DottedName")),
                     ),
                 ),

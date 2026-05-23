@@ -16,6 +16,37 @@ The encoding is implemented by the JSON coder in
 `packages/hydra-kernel/src/main/haskell/Hydra/Sources/Json/{Encode,Decode}.hs`.
 Every implementation that reads or writes Hydra JSON modules must conform to the rules below.
 
+## Why JSON?
+
+The exchange format's primary audience is the Hydra toolchain (the per-target coders,
+`bootstrap-from-json`, the per-package digest checks), not humans.
+At 380+ modules with deeply nested term trees, no encoded module is meaningfully
+readable by hand in any text format; debugging uses `jq` or scripts.
+
+That tilts the trade firmly toward JSON over YAML or other text formats:
+
+- **Universal tooling.** Every target language has a first-class JSON parser in its
+  standard library or a single canonical choice. YAML has multiple incompatible dialects
+  (1.1 vs 1.2, flow vs block, anchor semantics) and a long history of parser CVEs.
+  Multiplying that exposure across nine host implementations is not a trade we want to make.
+- **Deterministic serialization.** The byte-equivalence guarantee in
+  [Top-level shape](#top-level-shape) and the digest-driven cache layer depend on a
+  single canonical encoding. YAML admits multiple valid serializations of the same logical
+  document; enforcing a canonical form across nine implementations would be additional work.
+- **Schema fit.** Hydra terms map cleanly onto JSON's primitive set: literals, records as
+  objects, [variants](#tagged-unions) as one-key objects, lists as arrays. None of YAML's
+  distinguishing features — anchors, multi-document streams, custom tags, comments — would
+  add value; Hydra's own [annotation type](#annotations) is the principled place for
+  in-band metadata.
+- **Smaller surface.** The JSON coder is a small, well-tested module sitting on the
+  critical bootstrapping path. Replacing it carries cost.
+
+The one dimension where YAML would win is file size: typically 2-3× smaller for deeply
+nested terms with short keys. That isn't load-bearing — `dist/json/` compresses well in
+git packs, and the dominant time costs in sync are inference and code generation, not I/O.
+If compactness becomes a real bottleneck, a binary encoding (CBOR, protobuf, or a Hydra-native
+schema-driven format) would beat YAML on every dimension that matters.
+
 ## Top-level shape
 
 Every JSON file under `dist/json/**/src/<set>/json/**/*.json` (apart from `manifest.json`)

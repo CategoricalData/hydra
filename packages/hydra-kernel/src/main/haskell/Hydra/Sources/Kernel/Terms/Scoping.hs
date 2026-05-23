@@ -60,17 +60,17 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Kernel.Terms.Sorting as Sorting
 
 
-ns :: Namespace
-ns = Namespace "hydra.scoping"
+ns :: ModuleName
+ns = ModuleName "hydra.scoping"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (kernelTypesModuleNames),
             moduleDescription = Just ("Graph context extension and type scheme conversion")}
   where
    definitions = [

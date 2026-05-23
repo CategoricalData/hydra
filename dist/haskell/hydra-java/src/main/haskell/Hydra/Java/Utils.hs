@@ -117,7 +117,7 @@ finalVarDeclarationStatement id rhs =
 importAliasesForModule :: Packaging.Module -> Environment.Aliases
 importAliasesForModule mod =
     Environment.Aliases {
-      Environment.aliasesCurrentNamespace = (Packaging.moduleNamespace mod),
+      Environment.aliasesCurrentNamespace = (Packaging.moduleName mod),
       Environment.aliasesPackages = Maps.empty,
       Environment.aliasesBranchVars = Sets.empty,
       Environment.aliasesRecursiveVars = Sets.empty,
@@ -445,11 +445,11 @@ javaMethodInvocationToJavaStatement mi =
 javaMultiplicativeExpressionToJavaRelationalExpression :: Syntax.MultiplicativeExpression -> Syntax.RelationalExpression
 javaMultiplicativeExpressionToJavaRelationalExpression me =
     Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary me))
-javaPackageDeclaration :: Packaging.Namespace -> Syntax.PackageDeclaration
+javaPackageDeclaration :: Packaging.ModuleName -> Syntax.PackageDeclaration
 javaPackageDeclaration ns =
     Syntax.PackageDeclaration {
       Syntax.packageDeclarationModifiers = [],
-      Syntax.packageDeclarationIdentifiers = (Lists.map (\s -> Syntax.Identifier s) (Strings.splitOn "." (Packaging.unNamespace ns)))}
+      Syntax.packageDeclarationIdentifiers = (Lists.map (\s -> Syntax.Identifier s) (Strings.splitOn "." (Packaging.unModuleName ns)))}
 javaPostfixExpressionToJavaEqualityExpression :: Syntax.PostfixExpression -> Syntax.EqualityExpression
 javaPostfixExpressionToJavaEqualityExpression pe =
     Syntax.EqualityExpressionUnary (Syntax.RelationalExpressionSimple (Syntax.ShiftExpressionUnary (Syntax.AdditiveExpressionUnary (Syntax.MultiplicativeExpressionUnary (Syntax.UnaryExpressionOther (Syntax.UnaryExpressionNotPlusMinusPostfix pe))))))
@@ -697,11 +697,11 @@ nameToJavaName :: Environment.Aliases -> Core.Name -> Syntax.Identifier
 nameToJavaName aliases name =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameNamespace qn
+          ns_ = Packaging.qualifiedNameModuleName qn
           local = Packaging.qualifiedNameLocal qn
       in (Logic.ifElse (isEscaped (Core.unName name)) (Syntax.Identifier (sanitizeJavaName local)) (Maybes.cases ns_ (Syntax.Identifier local) (\gname ->
         let parts =
-                Maybes.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Packaging.unNamespace gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
+                Maybes.cases (Maps.lookup gname (Environment.aliasesPackages aliases)) (Strings.splitOn "." (Packaging.unModuleName gname)) (\pkgName -> Lists.map (\i -> Syntax.unIdentifier i) (Syntax.unPackageName pkgName))
             allParts = Lists.concat2 parts [
                   sanitizeJavaName local]
         in (Syntax.Identifier (Strings.intercalate "." allParts)))))
@@ -714,10 +714,10 @@ nameToQualifiedJavaName :: Environment.Aliases -> Bool -> Core.Name -> Maybe Str
 nameToQualifiedJavaName aliases qualify name mlocal =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameNamespace qn
+          ns_ = Packaging.qualifiedNameModuleName qn
           local = Packaging.qualifiedNameLocal qn
           alias =
-                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (JavaNames.javaPackageName (Strings.splitOn "." (Packaging.unNamespace n))) (\id -> id)))
+                  Maybes.cases ns_ Nothing (\n -> Just (Maybes.cases (Maps.lookup n (Environment.aliasesPackages aliases)) (JavaNames.javaPackageName (Strings.splitOn "." (Packaging.unModuleName n))) (\id -> id)))
           pkg =
                   Logic.ifElse qualify (Maybes.cases alias Syntax.ClassTypeQualifierNone (\p -> Syntax.ClassTypeQualifierPackage p)) Syntax.ClassTypeQualifierNone
           jid =
@@ -837,13 +837,13 @@ variantClassName :: Bool -> Core.Name -> Core.Name -> Core.Name
 variantClassName qualify elName fname =
 
       let qn = Names.qualifyName elName
-          ns_ = Packaging.qualifiedNameNamespace qn
+          ns_ = Packaging.qualifiedNameModuleName qn
           local = Packaging.qualifiedNameLocal qn
           flocal = Formatting.capitalize (Core.unName fname)
           local1 =
                   Logic.ifElse qualify (Strings.cat2 (Strings.cat2 local ".") flocal) (Logic.ifElse (Equality.equal flocal local) (Strings.cat2 flocal "_") flocal)
       in (Names.unqualifyName (Packaging.QualifiedName {
-        Packaging.qualifiedNameNamespace = ns_,
+        Packaging.qualifiedNameModuleName = ns_,
         Packaging.qualifiedNameLocal = local1}))
 visitorTypeVariable :: Syntax.ReferenceType
 visitorTypeVariable = javaTypeVariable "r"

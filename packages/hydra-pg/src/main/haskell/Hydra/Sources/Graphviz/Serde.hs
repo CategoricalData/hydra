@@ -86,14 +86,14 @@ import qualified Hydra.Sources.Graphviz.Dot as DotSyntax
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.graphviz.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.graphviz.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ (DotSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ (DotSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Serialization functions for converting Graphviz DOT AST to abstract expressions"}
   where
     definitions = [

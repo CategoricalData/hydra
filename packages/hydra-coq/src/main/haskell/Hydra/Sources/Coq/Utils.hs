@@ -8,6 +8,7 @@
 module Hydra.Sources.Coq.Utils where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -38,14 +39,14 @@ import qualified Data.Set                                  as S
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.coq.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.coq.utils"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([Formatting.ns, Rewriting.ns, Sorting.ns, Variables.ns, CoqLanguage.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Pure helpers for the Coq code generator"}
   where
     definitions = [
@@ -389,8 +390,8 @@ moduleDependencyNames :: TTermDefinition (Module -> [String])
 moduleDependencyNames = define "moduleDependencyNames" $
   doc "Return the deduplicated list of dependency namespace strings for a Module, excluding its own namespace" $
   lambda "m" $ lets [
-    "allDeps">: Lists.map (lambda "ns" $ Packaging.unNamespace (var "ns")) (Packaging.moduleDependencies (var "m")),
-    "ownNs">: Packaging.unNamespace (Packaging.moduleNamespace (var "m")),
+    "allDeps">: Lists.map (lambda "dep" $ Packaging.unModuleName (Packaging.moduleDependencyModule (var "dep"))) (Packaging.moduleDependencies (var "m")),
+    "ownNs">: Packaging.unModuleName (Packaging.moduleName (var "m")),
     "filtered">: Lists.filter (lambda "s" $ Logic.not (Equality.equal (var "s") (var "ownNs"))) (var "allDeps")] $
     (Lists.nub :: TTerm [String] -> TTerm [String]) (var "filtered")
 
@@ -577,9 +578,9 @@ rewriteTermFields = define "rewriteTermFields" $
       cases _Term (var "term") (Just $ var "recurse" @@ var "term") [
         _Term_project>>: "p" ~> lets [
           "tname">: unwrap _Name @@ (Core.projectionTypeName $ var "p"),
-          "rawFn">: localNameRaw @@ (unwrap _Name @@ (Core.projectionField $ var "p")),
+          "rawFn">: localNameRaw @@ (unwrap _Name @@ (Core.projectionFieldName $ var "p")),
           "key">: pair (var "tname") (var "rawFn"),
-          "newFname">: Maybes.fromMaybe (Core.projectionField $ var "p")
+          "newFname">: Maybes.fromMaybe (Core.projectionFieldName $ var "p")
             (Maybes.map (lambda "s" $ wrap _Name (var "s")) (Maps.lookup (var "key") (var "fm")))] $
           Core.termProject $ Core.projection
             (Core.projectionTypeName $ var "p")

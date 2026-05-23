@@ -32,7 +32,7 @@ validationProfileErrorRules x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-        Core.projectionField = (Core.Name "errorRules")})),
+        Core.projectionFieldName = (Core.Name "errorRules")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the maxErrors field of hydra.validation.ValidationProfile
 validationProfileMaxErrors :: Phantoms.TTerm Validation.ValidationProfile -> Phantoms.TTerm Int
@@ -40,7 +40,7 @@ validationProfileMaxErrors x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-        Core.projectionField = (Core.Name "maxErrors")})),
+        Core.projectionFieldName = (Core.Name "maxErrors")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the maxWarnings field of hydra.validation.ValidationProfile
 validationProfileMaxWarnings :: Phantoms.TTerm Validation.ValidationProfile -> Phantoms.TTerm Int
@@ -48,7 +48,7 @@ validationProfileMaxWarnings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-        Core.projectionField = (Core.Name "maxWarnings")})),
+        Core.projectionFieldName = (Core.Name "maxWarnings")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the warningRules field of hydra.validation.ValidationProfile
 validationProfileWarningRules :: Phantoms.TTerm Validation.ValidationProfile -> Phantoms.TTerm (S.Set Core.Name)
@@ -56,7 +56,7 @@ validationProfileWarningRules x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-        Core.projectionField = (Core.Name "warningRules")})),
+        Core.projectionFieldName = (Core.Name "warningRules")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the errorRules field of hydra.validation.ValidationProfile
 validationProfileWithErrorRules :: Phantoms.TTerm Validation.ValidationProfile -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Validation.ValidationProfile
@@ -72,21 +72,21 @@ validationProfileWithErrorRules original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "warningRules")})),
+              Core.projectionFieldName = (Core.Name "warningRules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxErrors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "maxErrors")})),
+              Core.projectionFieldName = (Core.Name "maxErrors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxWarnings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "maxWarnings")})),
+              Core.projectionFieldName = (Core.Name "maxWarnings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the maxErrors field of hydra.validation.ValidationProfile
 validationProfileWithMaxErrors :: Phantoms.TTerm Validation.ValidationProfile -> Phantoms.TTerm Int -> Phantoms.TTerm Validation.ValidationProfile
@@ -99,14 +99,14 @@ validationProfileWithMaxErrors original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "errorRules")})),
+              Core.projectionFieldName = (Core.Name "errorRules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "warningRules"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "warningRules")})),
+              Core.projectionFieldName = (Core.Name "warningRules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxErrors"),
@@ -116,7 +116,7 @@ validationProfileWithMaxErrors original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "maxWarnings")})),
+              Core.projectionFieldName = (Core.Name "maxWarnings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the maxWarnings field of hydra.validation.ValidationProfile
 validationProfileWithMaxWarnings :: Phantoms.TTerm Validation.ValidationProfile -> Phantoms.TTerm Int -> Phantoms.TTerm Validation.ValidationProfile
@@ -129,21 +129,21 @@ validationProfileWithMaxWarnings original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "errorRules")})),
+              Core.projectionFieldName = (Core.Name "errorRules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "warningRules"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "warningRules")})),
+              Core.projectionFieldName = (Core.Name "warningRules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxErrors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "maxErrors")})),
+              Core.projectionFieldName = (Core.Name "maxErrors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxWarnings"),
@@ -159,7 +159,7 @@ validationProfileWithWarningRules original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "errorRules")})),
+              Core.projectionFieldName = (Core.Name "errorRules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "warningRules"),
@@ -169,14 +169,14 @@ validationProfileWithWarningRules original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "maxErrors")})),
+              Core.projectionFieldName = (Core.Name "maxErrors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "maxWarnings"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationProfile"),
-              Core.projectionField = (Core.Name "maxWarnings")})),
+              Core.projectionFieldName = (Core.Name "maxWarnings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.validation.ValidationResult
 validationResult :: Phantoms.TTerm [e] -> Phantoms.TTerm [e] -> Phantoms.TTerm (Validation.ValidationResult e)
@@ -196,7 +196,7 @@ validationResultErrors x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationResult"),
-        Core.projectionField = (Core.Name "errors")})),
+        Core.projectionFieldName = (Core.Name "errors")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the warnings field of hydra.validation.ValidationResult
 validationResultWarnings :: Phantoms.TTerm (Validation.ValidationResult e) -> Phantoms.TTerm [e]
@@ -204,7 +204,7 @@ validationResultWarnings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.validation.ValidationResult"),
-        Core.projectionField = (Core.Name "warnings")})),
+        Core.projectionFieldName = (Core.Name "warnings")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the errors field of hydra.validation.ValidationResult
 validationResultWithErrors :: Phantoms.TTerm (Validation.ValidationResult e) -> Phantoms.TTerm [e] -> Phantoms.TTerm (Validation.ValidationResult e)
@@ -220,7 +220,7 @@ validationResultWithErrors original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationResult"),
-              Core.projectionField = (Core.Name "warnings")})),
+              Core.projectionFieldName = (Core.Name "warnings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the warnings field of hydra.validation.ValidationResult
 validationResultWithWarnings :: Phantoms.TTerm (Validation.ValidationResult e) -> Phantoms.TTerm [e] -> Phantoms.TTerm (Validation.ValidationResult e)
@@ -233,7 +233,7 @@ validationResultWithWarnings original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.validation.ValidationResult"),
-              Core.projectionField = (Core.Name "errors")})),
+              Core.projectionFieldName = (Core.Name "errors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "warnings"),

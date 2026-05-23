@@ -19,8 +19,8 @@ import qualified Hydra.Sources.Rdf.Syntax    as RdfSyntax
 import qualified Hydra.Sources.Pg.Model      as PgModel
 
 
-ns :: Namespace
-ns = Namespace "hydra.pg.rdf.environment"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.rdf.environment"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -39,9 +39,9 @@ core = typeref Core.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [RdfSyntax.ns, PgModel.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [RdfSyntax.ns, PgModel.ns, Core.ns],
             moduleDescription = Just "Environment types for property graph to RDF mapping"}
   where
     definitions = [

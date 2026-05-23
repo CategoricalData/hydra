@@ -208,7 +208,7 @@ moduleToLispDialect dialect ext mod defs cx g =
           caseConvention = case dialect of
             LispSyntax.DialectClojure -> Util.CaseConventionCamel
             _ -> Util.CaseConventionLowerSnake
-          filePath = Names.namespaceToFilePath caseConvention (FileExtension ext) (moduleNamespace mod)
+          filePath = Names.namespaceToFilePath caseConvention (FileExtension ext) (moduleName mod)
       in Right (M.singleton filePath code)
 
 writeClojure :: FP.FilePath -> [Module] -> [Module] -> IO [FilePath]

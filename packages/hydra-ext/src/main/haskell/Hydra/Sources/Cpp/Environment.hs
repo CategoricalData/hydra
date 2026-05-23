@@ -12,8 +12,8 @@ import qualified Hydra.Sources.Kernel.Types.Packaging as ModuleTypes
 import qualified Hydra.Sources.Kernel.Types.Util as UtilTypes
 import qualified Hydra.Sources.Cpp.Syntax as CppSyntax
 
-ns :: Namespace
-ns = Namespace "hydra.cpp.environment"
+ns :: ModuleName
+ns = ModuleName "hydra.cpp.environment"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -29,9 +29,9 @@ utilType = typeref UtilTypes.ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [CoreTypes.ns, ModuleTypes.ns, UtilTypes.ns],
+            moduleDependencies = unqualifiedDep <$> [CoreTypes.ns, ModuleTypes.ns, UtilTypes.ns],
             moduleDescription = Just "Type definitions for C++ code generation environment"}
   where
     definitions = [
@@ -43,7 +43,7 @@ cppEnvironmentType = define "CppEnvironment" $
   doc "Environment for C++ code generation" $
   T.record [
     "namespaces" >:
-      doc "Namespace mapping for code generation" $
+      doc "ModuleName mapping for code generation" $
       T.apply (utilType "Namespaces") T.string,
     "boundTypeVariables" >:
       doc "Type variables in scope, with their C++ names" $

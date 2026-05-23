@@ -31,7 +31,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "source", "typeName": "hydra.paths.SubtermEdge"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "source", "typeName": "hydra.paths.SubtermEdge"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermNode"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -43,7 +43,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "path", "typeName": "hydra.paths.SubtermEdge"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "path", "typeName": "hydra.paths.SubtermEdge"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermPath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -55,7 +55,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "target", "typeName": "hydra.paths.SubtermEdge"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "target", "typeName": "hydra.paths.SubtermEdge"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtermNode"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -96,7 +96,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "nodes", "typeName": "hydra.paths.SubtermGraph"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "nodes", "typeName": "hydra.paths.SubtermGraph"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -126,7 +126,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "edges", "typeName": "hydra.paths.SubtermGraph"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "edges", "typeName": "hydra.paths.SubtermGraph"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -185,7 +185,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "name", "typeName": "hydra.paths.SubtermNode"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.paths.SubtermNode"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -197,7 +197,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "label", "typeName": "hydra.paths.SubtermNode"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "label", "typeName": "hydra.paths.SubtermNode"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -218,7 +218,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "id", "typeName": "hydra.paths.SubtermNode"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "id", "typeName": "hydra.paths.SubtermNode"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -1067,7 +1067,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "source", "typeName": "hydra.paths.SubtypeEdge"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "source", "typeName": "hydra.paths.SubtypeEdge"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtypeNode"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -1079,7 +1079,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "path", "typeName": "hydra.paths.SubtypeEdge"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "path", "typeName": "hydra.paths.SubtypeEdge"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtypePath"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -1091,7 +1091,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "target", "typeName": "hydra.paths.SubtypeEdge"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "target", "typeName": "hydra.paths.SubtypeEdge"}}}},
                                               "function": {"variable": "hydra.encode.paths.subtypeNode"}}}}],
                                       "typeName": "hydra.core.Field"}}]}}],
                           "typeName": "hydra.core.Record"}}},
@@ -1132,7 +1132,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "nodes", "typeName": "hydra.paths.SubtypeGraph"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "nodes", "typeName": "hydra.paths.SubtypeGraph"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -1162,7 +1162,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "edges", "typeName": "hydra.paths.SubtypeGraph"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "edges", "typeName": "hydra.paths.SubtypeGraph"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -1221,7 +1221,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "name", "typeName": "hydra.paths.SubtypeNode"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "name", "typeName": "hydra.paths.SubtypeNode"}}}},
                                               "function": {"variable": "hydra.encode.core.name"}}}}],
                                       "typeName": "hydra.core.Field"}},
                                   {
@@ -1233,7 +1233,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "label", "typeName": "hydra.paths.SubtypeNode"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "label", "typeName": "hydra.paths.SubtypeNode"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -1254,7 +1254,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {
-                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"field": "id", "typeName": "hydra.paths.SubtypeNode"}}}},
+                                                "application": {"argument": {"variable": "x"}, "function": {"project": {"fieldName": "id", "typeName": "hydra.paths.SubtypeNode"}}}},
                                               "function": {
                                                 "lambda": {
                                                   "body": {
@@ -1955,6 +1955,6 @@
         "typeScheme": {
           "body": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"variable": "hydra.paths.SubtypeStep"}}},
           "variables": []}}}],
-  "dependencies": ["hydra.encode.core", "hydra.core", "hydra.paths"],
+  "dependencies": [{"module": "hydra.encode.core"}, {"module": "hydra.paths"}],
   "description": "Term encoders for hydra.paths",
-  "namespace": "hydra.encode.paths"}
+  "name": "hydra.encode.paths"}

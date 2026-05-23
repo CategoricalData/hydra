@@ -8,8 +8,8 @@ import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 
 
-ns :: Namespace
-ns = Namespace "hydra.shex.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.shex.syntax"
 
 define :: String -> Type -> Binding
 define = defineType ns
@@ -19,9 +19,9 @@ shex = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [],
+            moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just ("A Shex model. Based on the BNF at:\n" ++
         "  https://github.com/shexSpec/grammar/blob/master/bnf")}
   where

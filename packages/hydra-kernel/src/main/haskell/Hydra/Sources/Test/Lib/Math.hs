@@ -2,6 +2,7 @@ module Hydra.Sources.Test.Lib.Math where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -24,14 +25,14 @@ optionalInt32 :: Maybe Int -> TTerm Term
 optionalInt32 Nothing = Core.termMaybe nothing
 optionalInt32 (Just x) = Core.termMaybe $ just (int32 x)
 
-ns :: Namespace
-ns = Namespace "hydra.test.lib.math"
+ns :: ModuleName
+ns = ModuleName "hydra.test.lib.math"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Namespace "hydra.reduction", Namespace "hydra.show.core", Namespace "hydra.core", Namespace "hydra.errors", Namespace "hydra.test.testGraph", Namespace "hydra.testing"],
+            moduleDependencies = unqualifiedDep <$> [ModuleName "hydra.reduction", ModuleName "hydra.show.core", ModuleName "hydra.core", ModuleName "hydra.errors", ModuleName "hydra.test.testGraph", ModuleName "hydra.testing"],
             moduleDescription = Just "Test cases for hydra.lib.math primitives"}
   where
     definitions = [Phantoms.toDefinition allTests]

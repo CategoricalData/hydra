@@ -21,7 +21,7 @@ import qualified Hydra.Encode.Tabular as EncodeTabular
 -- | The sales module containing sales demo schemas and mapping.
 salesModule :: Module
 salesModule = Module {
-  moduleNamespace = salesNamespace,
+  moduleName = salesNamespace,
   moduleDefinitions = [
     -- salesDatabaseSchema: list[TableType]
     DefinitionTerm $ TermDefinition {
@@ -42,26 +42,26 @@ salesModule = Module {
       termDefinitionTypeScheme = Just lazyGraphTermScheme
     }
   ],
-  moduleDependencies = [Namespace "hydra.tabular",
-    Namespace "hydra.relational",
-    Namespace "hydra.pg.model",
-    Namespace "hydra.core", Namespace "hydra.tabular",
-    Namespace "hydra.relational",
-    Namespace "hydra.pg.model",
-    Namespace "hydra.core"],
+  moduleDependencies = fmap (\ns -> ModuleDependency ns Nothing) [ModuleName "hydra.tabular",
+    ModuleName "hydra.relational",
+    ModuleName "hydra.pg.model",
+    ModuleName "hydra.core", ModuleName "hydra.tabular",
+    ModuleName "hydra.relational",
+    ModuleName "hydra.pg.model",
+    ModuleName "hydra.core"],
   moduleDescription = Just "GenPG schemas for the sales demo"
 }
 
 
--- | Namespace for the generated sales module
-salesNamespace :: Namespace
-salesNamespace = Namespace "hydra.demos.genpg.sales"
+-- | ModuleName for the generated sales module
+salesNamespace :: ModuleName
+salesNamespace = ModuleName "hydra.demos.genpg.sales"
 
 
 -- | The health module containing health demo schemas and mapping.
 healthModule :: Module
 healthModule = Module {
-  moduleNamespace = healthNamespace,
+  moduleName = healthNamespace,
   moduleDefinitions = [
     -- healthDatabaseSchema: list[TableType]
     DefinitionTerm $ TermDefinition {
@@ -82,20 +82,20 @@ healthModule = Module {
       termDefinitionTypeScheme = Just lazyGraphTermScheme
     }
   ],
-  moduleDependencies = [Namespace "hydra.tabular",
-    Namespace "hydra.relational",
-    Namespace "hydra.pg.model",
-    Namespace "hydra.core", Namespace "hydra.tabular",
-    Namespace "hydra.relational",
-    Namespace "hydra.pg.model",
-    Namespace "hydra.core"],
+  moduleDependencies = fmap (\ns -> ModuleDependency ns Nothing) [ModuleName "hydra.tabular",
+    ModuleName "hydra.relational",
+    ModuleName "hydra.pg.model",
+    ModuleName "hydra.core", ModuleName "hydra.tabular",
+    ModuleName "hydra.relational",
+    ModuleName "hydra.pg.model",
+    ModuleName "hydra.core"],
   moduleDescription = Just "GenPG schemas for the health demo"
 }
 
 
--- | Namespace for the generated health module
-healthNamespace :: Namespace
-healthNamespace = Namespace "hydra.demos.genpg.health"
+-- | ModuleName for the generated health module
+healthNamespace :: ModuleName
+healthNamespace = ModuleName "hydra.demos.genpg.health"
 
 
 -- | Type scheme for list of TableType (no type variables)

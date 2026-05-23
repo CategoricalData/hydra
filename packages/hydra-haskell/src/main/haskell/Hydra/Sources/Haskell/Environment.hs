@@ -11,17 +11,17 @@ import           Hydra.Dsl.Types ((>:))
 import qualified Hydra.Dsl.Types as T
 
 
-ns :: Namespace
-ns = Namespace "hydra.haskell.environment"
+ns :: ModuleName
+ns = ModuleName "hydra.haskell.environment"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [],
+            moduleDependencies = unqualifiedDep <$> [],
             moduleDescription = Just "Environment types for Haskell code generation"}
   where
     definitions = [

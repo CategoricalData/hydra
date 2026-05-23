@@ -27,7 +27,7 @@ annotationAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Annotation"),
-        Core.projectionField = (Core.Name "alts")})),
+        Core.projectionFieldName = (Core.Name "alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 annotationPredicate :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.Predicate
@@ -35,7 +35,7 @@ annotationPredicate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Annotation"),
-        Core.projectionField = (Core.Name "Predicate")})),
+        Core.projectionFieldName = (Core.Name "Predicate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 annotationWithAlts :: Phantoms.TTerm Syntax.Annotation -> Phantoms.TTerm Syntax.Annotation_Alts -> Phantoms.TTerm Syntax.Annotation
@@ -48,7 +48,7 @@ annotationWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Annotation"),
-              Core.projectionField = (Core.Name "Predicate")})),
+              Core.projectionFieldName = (Core.Name "Predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alts"),
@@ -67,7 +67,7 @@ annotationWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Annotation"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 annotation_AltsIri :: Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.Annotation_Alts
@@ -103,7 +103,7 @@ atpNameLnPnLocal x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.AtpNameLn"),
-        Core.projectionField = (Core.Name "PnLocal")})),
+        Core.projectionFieldName = (Core.Name "PnLocal")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atpNameLnPnameNs :: Phantoms.TTerm Syntax.AtpNameLn -> Phantoms.TTerm Syntax.PnameNs
@@ -111,7 +111,7 @@ atpNameLnPnameNs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.AtpNameLn"),
-        Core.projectionField = (Core.Name "PnameNs")})),
+        Core.projectionFieldName = (Core.Name "PnameNs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 atpNameLnWithPnLocal :: Phantoms.TTerm Syntax.AtpNameLn -> Phantoms.TTerm Syntax.PnLocal -> Phantoms.TTerm Syntax.AtpNameLn
@@ -124,7 +124,7 @@ atpNameLnWithPnLocal original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.AtpNameLn"),
-              Core.projectionField = (Core.Name "PnameNs")})),
+              Core.projectionFieldName = (Core.Name "PnameNs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "PnLocal"),
@@ -143,7 +143,7 @@ atpNameLnWithPnameNs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.AtpNameLn"),
-              Core.projectionField = (Core.Name "PnLocal")})),
+              Core.projectionFieldName = (Core.Name "PnLocal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 atpNameNs :: Phantoms.TTerm (Maybe Syntax.PnPrefix) -> Phantoms.TTerm Syntax.AtpNameNs
@@ -184,7 +184,7 @@ blankNodeLabelAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel"),
-        Core.projectionField = (Core.Name "alts")})),
+        Core.projectionFieldName = (Core.Name "alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 blankNodeLabelListOfAlts :: Phantoms.TTerm Syntax.BlankNodeLabel -> Phantoms.TTerm (Maybe [Syntax.BlankNodeLabel_ListOfAlts_Option_Elmt])
@@ -192,7 +192,7 @@ blankNodeLabelListOfAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel"),
-        Core.projectionField = (Core.Name "ListOfAlts")})),
+        Core.projectionFieldName = (Core.Name "ListOfAlts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 blankNodeLabelPnChars :: Phantoms.TTerm Syntax.BlankNodeLabel -> Phantoms.TTerm Syntax.PnChars
@@ -200,7 +200,7 @@ blankNodeLabelPnChars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel"),
-        Core.projectionField = (Core.Name "PnChars")})),
+        Core.projectionFieldName = (Core.Name "PnChars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 blankNodeLabelWithAlts :: Phantoms.TTerm Syntax.BlankNodeLabel -> Phantoms.TTerm Syntax.BlankNodeLabel_Alts -> Phantoms.TTerm Syntax.BlankNodeLabel
@@ -216,14 +216,14 @@ blankNodeLabelWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel"),
-              Core.projectionField = (Core.Name "ListOfAlts")})),
+              Core.projectionFieldName = (Core.Name "ListOfAlts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "PnChars"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel"),
-              Core.projectionField = (Core.Name "PnChars")})),
+              Core.projectionFieldName = (Core.Name "PnChars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 blankNodeLabelWithListOfAlts :: Phantoms.TTerm Syntax.BlankNodeLabel -> Phantoms.TTerm (Maybe [Syntax.BlankNodeLabel_ListOfAlts_Option_Elmt]) -> Phantoms.TTerm Syntax.BlankNodeLabel
@@ -236,7 +236,7 @@ blankNodeLabelWithListOfAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ListOfAlts"),
@@ -246,7 +246,7 @@ blankNodeLabelWithListOfAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel"),
-              Core.projectionField = (Core.Name "PnChars")})),
+              Core.projectionFieldName = (Core.Name "PnChars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 blankNodeLabelWithPnChars :: Phantoms.TTerm Syntax.BlankNodeLabel -> Phantoms.TTerm Syntax.PnChars -> Phantoms.TTerm Syntax.BlankNodeLabel
@@ -259,14 +259,14 @@ blankNodeLabelWithPnChars original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ListOfAlts"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BlankNodeLabel"),
-              Core.projectionField = (Core.Name "ListOfAlts")})),
+              Core.projectionFieldName = (Core.Name "ListOfAlts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "PnChars"),
@@ -343,7 +343,7 @@ bracketedTripleExprCardinality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-        Core.projectionField = (Core.Name "Cardinality")})),
+        Core.projectionFieldName = (Core.Name "Cardinality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bracketedTripleExprInnerTripleExpr :: Phantoms.TTerm Syntax.BracketedTripleExpr -> Phantoms.TTerm Syntax.InnerTripleExpr
@@ -351,7 +351,7 @@ bracketedTripleExprInnerTripleExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-        Core.projectionField = (Core.Name "InnerTripleExpr")})),
+        Core.projectionFieldName = (Core.Name "InnerTripleExpr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bracketedTripleExprListOfAnnotation :: Phantoms.TTerm Syntax.BracketedTripleExpr -> Phantoms.TTerm [Syntax.Annotation]
@@ -359,7 +359,7 @@ bracketedTripleExprListOfAnnotation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-        Core.projectionField = (Core.Name "listOfAnnotation")})),
+        Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bracketedTripleExprSemanticActions :: Phantoms.TTerm Syntax.BracketedTripleExpr -> Phantoms.TTerm Syntax.SemanticActions
@@ -367,7 +367,7 @@ bracketedTripleExprSemanticActions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-        Core.projectionField = (Core.Name "SemanticActions")})),
+        Core.projectionFieldName = (Core.Name "SemanticActions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 bracketedTripleExprWithCardinality :: Phantoms.TTerm Syntax.BracketedTripleExpr -> Phantoms.TTerm (Maybe Syntax.Cardinality) -> Phantoms.TTerm Syntax.BracketedTripleExpr
@@ -380,7 +380,7 @@ bracketedTripleExprWithCardinality original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "InnerTripleExpr")})),
+              Core.projectionFieldName = (Core.Name "InnerTripleExpr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Cardinality"),
@@ -390,14 +390,14 @@ bracketedTripleExprWithCardinality original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bracketedTripleExprWithInnerTripleExpr :: Phantoms.TTerm Syntax.BracketedTripleExpr -> Phantoms.TTerm Syntax.InnerTripleExpr -> Phantoms.TTerm Syntax.BracketedTripleExpr
@@ -413,21 +413,21 @@ bracketedTripleExprWithInnerTripleExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "Cardinality")})),
+              Core.projectionFieldName = (Core.Name "Cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bracketedTripleExprWithListOfAnnotation :: Phantoms.TTerm Syntax.BracketedTripleExpr -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.BracketedTripleExpr
@@ -440,14 +440,14 @@ bracketedTripleExprWithListOfAnnotation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "InnerTripleExpr")})),
+              Core.projectionFieldName = (Core.Name "InnerTripleExpr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "Cardinality")})),
+              Core.projectionFieldName = (Core.Name "Cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
@@ -457,7 +457,7 @@ bracketedTripleExprWithListOfAnnotation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 bracketedTripleExprWithSemanticActions :: Phantoms.TTerm Syntax.BracketedTripleExpr -> Phantoms.TTerm Syntax.SemanticActions -> Phantoms.TTerm Syntax.BracketedTripleExpr
@@ -470,21 +470,21 @@ bracketedTripleExprWithSemanticActions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "InnerTripleExpr")})),
+              Core.projectionFieldName = (Core.Name "InnerTripleExpr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "Cardinality")})),
+              Core.projectionFieldName = (Core.Name "Cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.BracketedTripleExpr"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
@@ -545,7 +545,7 @@ codeDeclAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.CodeDecl"),
-        Core.projectionField = (Core.Name "alts")})),
+        Core.projectionFieldName = (Core.Name "alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 codeDeclIri :: Phantoms.TTerm Syntax.CodeDecl -> Phantoms.TTerm Syntax.Iri
@@ -553,7 +553,7 @@ codeDeclIri x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.CodeDecl"),
-        Core.projectionField = (Core.Name "Iri")})),
+        Core.projectionFieldName = (Core.Name "Iri")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 codeDeclWithAlts :: Phantoms.TTerm Syntax.CodeDecl -> Phantoms.TTerm Syntax.CodeDecl_Alts -> Phantoms.TTerm Syntax.CodeDecl
@@ -566,7 +566,7 @@ codeDeclWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.CodeDecl"),
-              Core.projectionField = (Core.Name "Iri")})),
+              Core.projectionFieldName = (Core.Name "Iri")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alts"),
@@ -585,7 +585,7 @@ codeDeclWithIri original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.CodeDecl"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 codeDecl_AltsCode :: Phantoms.TTerm Syntax.Code -> Phantoms.TTerm Syntax.CodeDecl_Alts
@@ -731,7 +731,7 @@ inlineShapeAndInlineShapeNot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAnd"),
-        Core.projectionField = (Core.Name "InlineShapeNot")})),
+        Core.projectionFieldName = (Core.Name "InlineShapeNot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeAndListOfSequence :: Phantoms.TTerm Syntax.InlineShapeAnd -> Phantoms.TTerm [Syntax.InlineShapeNot]
@@ -739,7 +739,7 @@ inlineShapeAndListOfSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAnd"),
-        Core.projectionField = (Core.Name "listOfSequence")})),
+        Core.projectionFieldName = (Core.Name "listOfSequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeAndWithInlineShapeNot :: Phantoms.TTerm Syntax.InlineShapeAnd -> Phantoms.TTerm Syntax.InlineShapeNot -> Phantoms.TTerm Syntax.InlineShapeAnd
@@ -755,7 +755,7 @@ inlineShapeAndWithInlineShapeNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAnd"),
-              Core.projectionField = (Core.Name "listOfSequence")})),
+              Core.projectionFieldName = (Core.Name "listOfSequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 inlineShapeAndWithListOfSequence :: Phantoms.TTerm Syntax.InlineShapeAnd -> Phantoms.TTerm [Syntax.InlineShapeNot] -> Phantoms.TTerm Syntax.InlineShapeAnd
@@ -768,7 +768,7 @@ inlineShapeAndWithListOfSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAnd"),
-              Core.projectionField = (Core.Name "InlineShapeNot")})),
+              Core.projectionFieldName = (Core.Name "InlineShapeNot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfSequence"),
@@ -835,7 +835,7 @@ inlineShapeAtom_Sequence2InlineShapeOrRef x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom_Sequence2"),
-        Core.projectionField = (Core.Name "InlineShapeOrRef")})),
+        Core.projectionFieldName = (Core.Name "InlineShapeOrRef")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeAtom_Sequence2NodeConstraint :: Phantoms.TTerm Syntax.InlineShapeAtom_Sequence2 -> Phantoms.TTerm (Maybe Syntax.NodeConstraint)
@@ -843,7 +843,7 @@ inlineShapeAtom_Sequence2NodeConstraint x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom_Sequence2"),
-        Core.projectionField = (Core.Name "NodeConstraint")})),
+        Core.projectionFieldName = (Core.Name "NodeConstraint")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeAtom_Sequence2WithInlineShapeOrRef :: Phantoms.TTerm Syntax.InlineShapeAtom_Sequence2 -> Phantoms.TTerm Syntax.InlineShapeOrRef -> Phantoms.TTerm Syntax.InlineShapeAtom_Sequence2
@@ -859,7 +859,7 @@ inlineShapeAtom_Sequence2WithInlineShapeOrRef original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom_Sequence2"),
-              Core.projectionField = (Core.Name "NodeConstraint")})),
+              Core.projectionFieldName = (Core.Name "NodeConstraint")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 inlineShapeAtom_Sequence2WithNodeConstraint :: Phantoms.TTerm Syntax.InlineShapeAtom_Sequence2 -> Phantoms.TTerm (Maybe Syntax.NodeConstraint) -> Phantoms.TTerm Syntax.InlineShapeAtom_Sequence2
@@ -872,7 +872,7 @@ inlineShapeAtom_Sequence2WithNodeConstraint original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom_Sequence2"),
-              Core.projectionField = (Core.Name "InlineShapeOrRef")})),
+              Core.projectionFieldName = (Core.Name "InlineShapeOrRef")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "NodeConstraint"),
@@ -883,7 +883,7 @@ inlineShapeAtom_SequenceInlineShapeOrRef x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom_Sequence"),
-        Core.projectionField = (Core.Name "InlineShapeOrRef")})),
+        Core.projectionFieldName = (Core.Name "InlineShapeOrRef")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeAtom_SequenceNodeConstraint :: Phantoms.TTerm Syntax.InlineShapeAtom_Sequence -> Phantoms.TTerm Syntax.NodeConstraint
@@ -891,7 +891,7 @@ inlineShapeAtom_SequenceNodeConstraint x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom_Sequence"),
-        Core.projectionField = (Core.Name "NodeConstraint")})),
+        Core.projectionFieldName = (Core.Name "NodeConstraint")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeAtom_SequenceWithInlineShapeOrRef :: Phantoms.TTerm Syntax.InlineShapeAtom_Sequence -> Phantoms.TTerm (Maybe Syntax.InlineShapeOrRef) -> Phantoms.TTerm Syntax.InlineShapeAtom_Sequence
@@ -904,7 +904,7 @@ inlineShapeAtom_SequenceWithInlineShapeOrRef original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom_Sequence"),
-              Core.projectionField = (Core.Name "NodeConstraint")})),
+              Core.projectionFieldName = (Core.Name "NodeConstraint")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "InlineShapeOrRef"),
@@ -923,7 +923,7 @@ inlineShapeAtom_SequenceWithNodeConstraint original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeAtom_Sequence"),
-              Core.projectionField = (Core.Name "InlineShapeOrRef")})),
+              Core.projectionFieldName = (Core.Name "InlineShapeOrRef")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 inlineShapeDefinition :: Phantoms.TTerm [Syntax.InlineShapeDefinition_ListOfAlts_Elmt] -> Phantoms.TTerm (Maybe Syntax.TripleExpression) -> Phantoms.TTerm Syntax.InlineShapeDefinition
@@ -943,7 +943,7 @@ inlineShapeDefinitionListOfAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeDefinition"),
-        Core.projectionField = (Core.Name "listOfAlts")})),
+        Core.projectionFieldName = (Core.Name "listOfAlts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeDefinitionTripleExpression :: Phantoms.TTerm Syntax.InlineShapeDefinition -> Phantoms.TTerm (Maybe Syntax.TripleExpression)
@@ -951,7 +951,7 @@ inlineShapeDefinitionTripleExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeDefinition"),
-        Core.projectionField = (Core.Name "TripleExpression")})),
+        Core.projectionFieldName = (Core.Name "TripleExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeDefinitionWithListOfAlts :: Phantoms.TTerm Syntax.InlineShapeDefinition -> Phantoms.TTerm [Syntax.InlineShapeDefinition_ListOfAlts_Elmt] -> Phantoms.TTerm Syntax.InlineShapeDefinition
@@ -967,7 +967,7 @@ inlineShapeDefinitionWithListOfAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeDefinition"),
-              Core.projectionField = (Core.Name "TripleExpression")})),
+              Core.projectionFieldName = (Core.Name "TripleExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 inlineShapeDefinitionWithTripleExpression :: Phantoms.TTerm Syntax.InlineShapeDefinition -> Phantoms.TTerm (Maybe Syntax.TripleExpression) -> Phantoms.TTerm Syntax.InlineShapeDefinition
@@ -980,7 +980,7 @@ inlineShapeDefinitionWithTripleExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeDefinition"),
-              Core.projectionField = (Core.Name "listOfAlts")})),
+              Core.projectionFieldName = (Core.Name "listOfAlts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "TripleExpression"),
@@ -1033,7 +1033,7 @@ inlineShapeNotInlineShapeAtom x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeNot"),
-        Core.projectionField = (Core.Name "InlineShapeAtom")})),
+        Core.projectionFieldName = (Core.Name "InlineShapeAtom")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeNotNOT :: Phantoms.TTerm Syntax.InlineShapeNot -> Phantoms.TTerm (Maybe ())
@@ -1041,7 +1041,7 @@ inlineShapeNotNOT x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeNot"),
-        Core.projectionField = (Core.Name "NOT")})),
+        Core.projectionFieldName = (Core.Name "NOT")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeNotWithInlineShapeAtom :: Phantoms.TTerm Syntax.InlineShapeNot -> Phantoms.TTerm Syntax.InlineShapeAtom -> Phantoms.TTerm Syntax.InlineShapeNot
@@ -1054,7 +1054,7 @@ inlineShapeNotWithInlineShapeAtom original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeNot"),
-              Core.projectionField = (Core.Name "NOT")})),
+              Core.projectionFieldName = (Core.Name "NOT")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "InlineShapeAtom"),
@@ -1073,7 +1073,7 @@ inlineShapeNotWithNOT original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeNot"),
-              Core.projectionField = (Core.Name "InlineShapeAtom")})),
+              Core.projectionFieldName = (Core.Name "InlineShapeAtom")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 inlineShapeOr :: Phantoms.TTerm Syntax.ShapeAnd -> Phantoms.TTerm [Syntax.InlineShapeAnd] -> Phantoms.TTerm Syntax.InlineShapeOr
@@ -1093,7 +1093,7 @@ inlineShapeOrListOfSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeOr"),
-        Core.projectionField = (Core.Name "listOfSequence")})),
+        Core.projectionFieldName = (Core.Name "listOfSequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeOrRefAtpNameLn :: Phantoms.TTerm Syntax.AtpNameLn -> Phantoms.TTerm Syntax.InlineShapeOrRef
@@ -1133,7 +1133,7 @@ inlineShapeOrShapeAnd x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeOr"),
-        Core.projectionField = (Core.Name "ShapeAnd")})),
+        Core.projectionFieldName = (Core.Name "ShapeAnd")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 inlineShapeOrWithListOfSequence :: Phantoms.TTerm Syntax.InlineShapeOr -> Phantoms.TTerm [Syntax.InlineShapeAnd] -> Phantoms.TTerm Syntax.InlineShapeOr
@@ -1146,7 +1146,7 @@ inlineShapeOrWithListOfSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeOr"),
-              Core.projectionField = (Core.Name "ShapeAnd")})),
+              Core.projectionFieldName = (Core.Name "ShapeAnd")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfSequence"),
@@ -1165,7 +1165,7 @@ inlineShapeOrWithShapeAnd original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.InlineShapeOr"),
-              Core.projectionField = (Core.Name "listOfSequence")})),
+              Core.projectionFieldName = (Core.Name "listOfSequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 innerTripleExprMultiElementGroup :: Phantoms.TTerm Syntax.MultiElementGroup -> Phantoms.TTerm Syntax.InnerTripleExpr
@@ -1239,7 +1239,7 @@ iriRange_SequenceIri x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.IriRange_Sequence"),
-        Core.projectionField = (Core.Name "Iri")})),
+        Core.projectionFieldName = (Core.Name "Iri")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 iriRange_SequenceSequence :: Phantoms.TTerm Syntax.IriRange_Sequence -> Phantoms.TTerm (Maybe [Syntax.Exclusion])
@@ -1247,7 +1247,7 @@ iriRange_SequenceSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.IriRange_Sequence"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 iriRange_SequenceWithIri :: Phantoms.TTerm Syntax.IriRange_Sequence -> Phantoms.TTerm Syntax.Iri -> Phantoms.TTerm Syntax.IriRange_Sequence
@@ -1263,7 +1263,7 @@ iriRange_SequenceWithIri original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.IriRange_Sequence"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 iriRange_SequenceWithSequence :: Phantoms.TTerm Syntax.IriRange_Sequence -> Phantoms.TTerm (Maybe [Syntax.Exclusion]) -> Phantoms.TTerm Syntax.IriRange_Sequence
@@ -1276,7 +1276,7 @@ iriRange_SequenceWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.IriRange_Sequence"),
-              Core.projectionField = (Core.Name "Iri")})),
+              Core.projectionFieldName = (Core.Name "Iri")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
@@ -1354,7 +1354,7 @@ multiElementGroupListOfSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementGroup"),
-        Core.projectionField = (Core.Name "listOfSequence")})),
+        Core.projectionFieldName = (Core.Name "listOfSequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multiElementGroupSemi :: Phantoms.TTerm Syntax.MultiElementGroup -> Phantoms.TTerm (Maybe ())
@@ -1362,7 +1362,7 @@ multiElementGroupSemi x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementGroup"),
-        Core.projectionField = (Core.Name "Semi")})),
+        Core.projectionFieldName = (Core.Name "Semi")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multiElementGroupUnaryTripleExpr :: Phantoms.TTerm Syntax.MultiElementGroup -> Phantoms.TTerm Syntax.UnaryTripleExpr
@@ -1370,7 +1370,7 @@ multiElementGroupUnaryTripleExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementGroup"),
-        Core.projectionField = (Core.Name "UnaryTripleExpr")})),
+        Core.projectionFieldName = (Core.Name "UnaryTripleExpr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multiElementGroupWithListOfSequence :: Phantoms.TTerm Syntax.MultiElementGroup -> Phantoms.TTerm [Syntax.UnaryTripleExpr] -> Phantoms.TTerm Syntax.MultiElementGroup
@@ -1383,7 +1383,7 @@ multiElementGroupWithListOfSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementGroup"),
-              Core.projectionField = (Core.Name "UnaryTripleExpr")})),
+              Core.projectionFieldName = (Core.Name "UnaryTripleExpr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfSequence"),
@@ -1393,7 +1393,7 @@ multiElementGroupWithListOfSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementGroup"),
-              Core.projectionField = (Core.Name "Semi")})),
+              Core.projectionFieldName = (Core.Name "Semi")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 multiElementGroupWithSemi :: Phantoms.TTerm Syntax.MultiElementGroup -> Phantoms.TTerm (Maybe ()) -> Phantoms.TTerm Syntax.MultiElementGroup
@@ -1406,14 +1406,14 @@ multiElementGroupWithSemi original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementGroup"),
-              Core.projectionField = (Core.Name "UnaryTripleExpr")})),
+              Core.projectionFieldName = (Core.Name "UnaryTripleExpr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfSequence"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementGroup"),
-              Core.projectionField = (Core.Name "listOfSequence")})),
+              Core.projectionFieldName = (Core.Name "listOfSequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Semi"),
@@ -1432,14 +1432,14 @@ multiElementGroupWithUnaryTripleExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementGroup"),
-              Core.projectionField = (Core.Name "listOfSequence")})),
+              Core.projectionFieldName = (Core.Name "listOfSequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Semi"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementGroup"),
-              Core.projectionField = (Core.Name "Semi")})),
+              Core.projectionFieldName = (Core.Name "Semi")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 multiElementOneOf :: Phantoms.TTerm Syntax.GroupTripleExpr -> Phantoms.TTerm [Syntax.GroupTripleExpr] -> Phantoms.TTerm Syntax.MultiElementOneOf
@@ -1459,7 +1459,7 @@ multiElementOneOfGroupTripleExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementOneOf"),
-        Core.projectionField = (Core.Name "GroupTripleExpr")})),
+        Core.projectionFieldName = (Core.Name "GroupTripleExpr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multiElementOneOfListOfSequence :: Phantoms.TTerm Syntax.MultiElementOneOf -> Phantoms.TTerm [Syntax.GroupTripleExpr]
@@ -1467,7 +1467,7 @@ multiElementOneOfListOfSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementOneOf"),
-        Core.projectionField = (Core.Name "listOfSequence")})),
+        Core.projectionFieldName = (Core.Name "listOfSequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 multiElementOneOfWithGroupTripleExpr :: Phantoms.TTerm Syntax.MultiElementOneOf -> Phantoms.TTerm Syntax.GroupTripleExpr -> Phantoms.TTerm Syntax.MultiElementOneOf
@@ -1483,7 +1483,7 @@ multiElementOneOfWithGroupTripleExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementOneOf"),
-              Core.projectionField = (Core.Name "listOfSequence")})),
+              Core.projectionFieldName = (Core.Name "listOfSequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 multiElementOneOfWithListOfSequence :: Phantoms.TTerm Syntax.MultiElementOneOf -> Phantoms.TTerm [Syntax.GroupTripleExpr] -> Phantoms.TTerm Syntax.MultiElementOneOf
@@ -1496,7 +1496,7 @@ multiElementOneOfWithListOfSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.MultiElementOneOf"),
-              Core.projectionField = (Core.Name "GroupTripleExpr")})),
+              Core.projectionFieldName = (Core.Name "GroupTripleExpr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfSequence"),
@@ -1567,7 +1567,7 @@ nodeConstraint_Sequence2ListOfStringFacet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence2"),
-        Core.projectionField = (Core.Name "listOfStringFacet")})),
+        Core.projectionFieldName = (Core.Name "listOfStringFacet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeConstraint_Sequence2NonLiteralKind :: Phantoms.TTerm Syntax.NodeConstraint_Sequence2 -> Phantoms.TTerm Syntax.NonLiteralKind
@@ -1575,7 +1575,7 @@ nodeConstraint_Sequence2NonLiteralKind x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence2"),
-        Core.projectionField = (Core.Name "NonLiteralKind")})),
+        Core.projectionFieldName = (Core.Name "NonLiteralKind")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeConstraint_Sequence2WithListOfStringFacet :: Phantoms.TTerm Syntax.NodeConstraint_Sequence2 -> Phantoms.TTerm [Syntax.StringFacet] -> Phantoms.TTerm Syntax.NodeConstraint_Sequence2
@@ -1588,7 +1588,7 @@ nodeConstraint_Sequence2WithListOfStringFacet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence2"),
-              Core.projectionField = (Core.Name "NonLiteralKind")})),
+              Core.projectionFieldName = (Core.Name "NonLiteralKind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfStringFacet"),
@@ -1607,7 +1607,7 @@ nodeConstraint_Sequence2WithNonLiteralKind original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence2"),
-              Core.projectionField = (Core.Name "listOfStringFacet")})),
+              Core.projectionFieldName = (Core.Name "listOfStringFacet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeConstraint_Sequence3 :: Phantoms.TTerm Syntax.Datatype -> Phantoms.TTerm [Syntax.XsFacet] -> Phantoms.TTerm Syntax.NodeConstraint_Sequence3
@@ -1627,7 +1627,7 @@ nodeConstraint_Sequence3Datatype x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence3"),
-        Core.projectionField = (Core.Name "Datatype")})),
+        Core.projectionFieldName = (Core.Name "Datatype")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeConstraint_Sequence3ListOfXsFacet :: Phantoms.TTerm Syntax.NodeConstraint_Sequence3 -> Phantoms.TTerm [Syntax.XsFacet]
@@ -1635,7 +1635,7 @@ nodeConstraint_Sequence3ListOfXsFacet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence3"),
-        Core.projectionField = (Core.Name "listOfXsFacet")})),
+        Core.projectionFieldName = (Core.Name "listOfXsFacet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeConstraint_Sequence3WithDatatype :: Phantoms.TTerm Syntax.NodeConstraint_Sequence3 -> Phantoms.TTerm Syntax.Datatype -> Phantoms.TTerm Syntax.NodeConstraint_Sequence3
@@ -1651,7 +1651,7 @@ nodeConstraint_Sequence3WithDatatype original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence3"),
-              Core.projectionField = (Core.Name "listOfXsFacet")})),
+              Core.projectionFieldName = (Core.Name "listOfXsFacet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeConstraint_Sequence3WithListOfXsFacet :: Phantoms.TTerm Syntax.NodeConstraint_Sequence3 -> Phantoms.TTerm [Syntax.XsFacet] -> Phantoms.TTerm Syntax.NodeConstraint_Sequence3
@@ -1664,7 +1664,7 @@ nodeConstraint_Sequence3WithListOfXsFacet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence3"),
-              Core.projectionField = (Core.Name "Datatype")})),
+              Core.projectionFieldName = (Core.Name "Datatype")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfXsFacet"),
@@ -1687,7 +1687,7 @@ nodeConstraint_Sequence4ListOfXsFacet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence4"),
-        Core.projectionField = (Core.Name "listOfXsFacet")})),
+        Core.projectionFieldName = (Core.Name "listOfXsFacet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeConstraint_Sequence4ValueSet :: Phantoms.TTerm Syntax.NodeConstraint_Sequence4 -> Phantoms.TTerm Syntax.ValueSet
@@ -1695,7 +1695,7 @@ nodeConstraint_Sequence4ValueSet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence4"),
-        Core.projectionField = (Core.Name "ValueSet")})),
+        Core.projectionFieldName = (Core.Name "ValueSet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeConstraint_Sequence4WithListOfXsFacet :: Phantoms.TTerm Syntax.NodeConstraint_Sequence4 -> Phantoms.TTerm [Syntax.XsFacet] -> Phantoms.TTerm Syntax.NodeConstraint_Sequence4
@@ -1708,7 +1708,7 @@ nodeConstraint_Sequence4WithListOfXsFacet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence4"),
-              Core.projectionField = (Core.Name "ValueSet")})),
+              Core.projectionFieldName = (Core.Name "ValueSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfXsFacet"),
@@ -1727,7 +1727,7 @@ nodeConstraint_Sequence4WithValueSet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence4"),
-              Core.projectionField = (Core.Name "listOfXsFacet")})),
+              Core.projectionFieldName = (Core.Name "listOfXsFacet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nodeConstraint_Sequence5 :: Phantoms.TTerm Syntax.ValueSet -> Phantoms.TTerm [Syntax.XsFacet] -> Phantoms.TTerm Syntax.NodeConstraint_Sequence5
@@ -1747,7 +1747,7 @@ nodeConstraint_Sequence5ListOfXsFacet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence5"),
-        Core.projectionField = (Core.Name "listOfXsFacet")})),
+        Core.projectionFieldName = (Core.Name "listOfXsFacet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeConstraint_Sequence5ValueSet :: Phantoms.TTerm Syntax.NodeConstraint_Sequence5 -> Phantoms.TTerm Syntax.ValueSet
@@ -1755,7 +1755,7 @@ nodeConstraint_Sequence5ValueSet x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence5"),
-        Core.projectionField = (Core.Name "ValueSet")})),
+        Core.projectionFieldName = (Core.Name "ValueSet")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 nodeConstraint_Sequence5WithListOfXsFacet :: Phantoms.TTerm Syntax.NodeConstraint_Sequence5 -> Phantoms.TTerm [Syntax.XsFacet] -> Phantoms.TTerm Syntax.NodeConstraint_Sequence5
@@ -1768,7 +1768,7 @@ nodeConstraint_Sequence5WithListOfXsFacet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence5"),
-              Core.projectionField = (Core.Name "ValueSet")})),
+              Core.projectionFieldName = (Core.Name "ValueSet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfXsFacet"),
@@ -1787,7 +1787,7 @@ nodeConstraint_Sequence5WithValueSet original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NodeConstraint_Sequence5"),
-              Core.projectionField = (Core.Name "listOfXsFacet")})),
+              Core.projectionFieldName = (Core.Name "listOfXsFacet")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 nonLiteralKindBNODE :: Phantoms.TTerm Syntax.NonLiteralKind
@@ -1847,7 +1847,7 @@ notStartAction_ShapeExprDeclAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NotStartAction_ShapeExprDecl"),
-        Core.projectionField = (Core.Name "alts")})),
+        Core.projectionFieldName = (Core.Name "alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notStartAction_ShapeExprDeclShapeExprLabel :: Phantoms.TTerm Syntax.NotStartAction_ShapeExprDecl -> Phantoms.TTerm Syntax.ShapeExprLabel
@@ -1855,7 +1855,7 @@ notStartAction_ShapeExprDeclShapeExprLabel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NotStartAction_ShapeExprDecl"),
-        Core.projectionField = (Core.Name "ShapeExprLabel")})),
+        Core.projectionFieldName = (Core.Name "ShapeExprLabel")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 notStartAction_ShapeExprDeclWithAlts :: Phantoms.TTerm Syntax.NotStartAction_ShapeExprDecl -> Phantoms.TTerm Syntax.NotStartAction_ShapeExprDecl_Alts -> Phantoms.TTerm Syntax.NotStartAction_ShapeExprDecl
@@ -1868,7 +1868,7 @@ notStartAction_ShapeExprDeclWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NotStartAction_ShapeExprDecl"),
-              Core.projectionField = (Core.Name "ShapeExprLabel")})),
+              Core.projectionFieldName = (Core.Name "ShapeExprLabel")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alts"),
@@ -1887,7 +1887,7 @@ notStartAction_ShapeExprDeclWithShapeExprLabel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NotStartAction_ShapeExprDecl"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 notStartAction_ShapeExprDecl_AltsEXTERNAL :: Phantoms.TTerm Syntax.NotStartAction_ShapeExprDecl_Alts
@@ -1951,7 +1951,7 @@ numericFacet_Sequence2Integer x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet_Sequence2"),
-        Core.projectionField = (Core.Name "Integer")})),
+        Core.projectionFieldName = (Core.Name "Integer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 numericFacet_Sequence2NumericLength :: Phantoms.TTerm Syntax.NumericFacet_Sequence2 -> Phantoms.TTerm Syntax.NumericLength
@@ -1959,7 +1959,7 @@ numericFacet_Sequence2NumericLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet_Sequence2"),
-        Core.projectionField = (Core.Name "NumericLength")})),
+        Core.projectionFieldName = (Core.Name "NumericLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 numericFacet_Sequence2WithInteger :: Phantoms.TTerm Syntax.NumericFacet_Sequence2 -> Phantoms.TTerm Syntax.Integer_ -> Phantoms.TTerm Syntax.NumericFacet_Sequence2
@@ -1972,7 +1972,7 @@ numericFacet_Sequence2WithInteger original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet_Sequence2"),
-              Core.projectionField = (Core.Name "NumericLength")})),
+              Core.projectionFieldName = (Core.Name "NumericLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Integer"),
@@ -1991,7 +1991,7 @@ numericFacet_Sequence2WithNumericLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet_Sequence2"),
-              Core.projectionField = (Core.Name "Integer")})),
+              Core.projectionFieldName = (Core.Name "Integer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 numericFacet_SequenceNumericLiteral :: Phantoms.TTerm Syntax.NumericFacet_Sequence -> Phantoms.TTerm Syntax.NumericLiteral
@@ -1999,7 +1999,7 @@ numericFacet_SequenceNumericLiteral x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet_Sequence"),
-        Core.projectionField = (Core.Name "NumericLiteral")})),
+        Core.projectionFieldName = (Core.Name "NumericLiteral")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 numericFacet_SequenceNumericRange :: Phantoms.TTerm Syntax.NumericFacet_Sequence -> Phantoms.TTerm Syntax.NumericRange
@@ -2007,7 +2007,7 @@ numericFacet_SequenceNumericRange x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet_Sequence"),
-        Core.projectionField = (Core.Name "NumericRange")})),
+        Core.projectionFieldName = (Core.Name "NumericRange")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 numericFacet_SequenceWithNumericLiteral :: Phantoms.TTerm Syntax.NumericFacet_Sequence -> Phantoms.TTerm Syntax.NumericLiteral -> Phantoms.TTerm Syntax.NumericFacet_Sequence
@@ -2020,7 +2020,7 @@ numericFacet_SequenceWithNumericLiteral original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet_Sequence"),
-              Core.projectionField = (Core.Name "NumericRange")})),
+              Core.projectionFieldName = (Core.Name "NumericRange")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "NumericLiteral"),
@@ -2039,7 +2039,7 @@ numericFacet_SequenceWithNumericRange original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.NumericFacet_Sequence"),
-              Core.projectionField = (Core.Name "NumericLiteral")})),
+              Core.projectionFieldName = (Core.Name "NumericLiteral")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 numericLengthFRACTIONDIGITS :: Phantoms.TTerm Syntax.NumericLength
@@ -2147,7 +2147,7 @@ percentHex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Percent"),
-        Core.projectionField = (Core.Name "Hex")})),
+        Core.projectionFieldName = (Core.Name "Hex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 percentHex2 :: Phantoms.TTerm Syntax.Percent -> Phantoms.TTerm Syntax.Hex
@@ -2155,7 +2155,7 @@ percentHex2 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Percent"),
-        Core.projectionField = (Core.Name "Hex2")})),
+        Core.projectionFieldName = (Core.Name "Hex2")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 percentWithHex :: Phantoms.TTerm Syntax.Percent -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Percent
@@ -2171,7 +2171,7 @@ percentWithHex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Percent"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 percentWithHex2 :: Phantoms.TTerm Syntax.Percent -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Percent
@@ -2184,7 +2184,7 @@ percentWithHex2 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Percent"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
@@ -2279,7 +2279,7 @@ pnLocalAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal"),
-        Core.projectionField = (Core.Name "alts")})),
+        Core.projectionFieldName = (Core.Name "alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnLocalEsc :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.PnLocalEsc
@@ -2293,7 +2293,7 @@ pnLocalSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnLocalWithAlts :: Phantoms.TTerm Syntax.PnLocal -> Phantoms.TTerm Syntax.PnLocal_Alts -> Phantoms.TTerm Syntax.PnLocal
@@ -2309,7 +2309,7 @@ pnLocalWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pnLocalWithSequence :: Phantoms.TTerm Syntax.PnLocal -> Phantoms.TTerm (Maybe Syntax.PnLocal_Sequence_Option) -> Phantoms.TTerm Syntax.PnLocal
@@ -2322,7 +2322,7 @@ pnLocalWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
@@ -2377,7 +2377,7 @@ pnLocal_Sequence_OptionAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option"),
-        Core.projectionField = (Core.Name "alts")})),
+        Core.projectionFieldName = (Core.Name "alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnLocal_Sequence_OptionListOfAlts :: Phantoms.TTerm Syntax.PnLocal_Sequence_Option -> Phantoms.TTerm [Syntax.PnLocal_Sequence_Option_ListOfAlts_Elmt]
@@ -2385,7 +2385,7 @@ pnLocal_Sequence_OptionListOfAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option"),
-        Core.projectionField = (Core.Name "listOfAlts")})),
+        Core.projectionFieldName = (Core.Name "listOfAlts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnLocal_Sequence_OptionWithAlts :: Phantoms.TTerm Syntax.PnLocal_Sequence_Option -> Phantoms.TTerm Syntax.PnLocal_Sequence_Option_Alts -> Phantoms.TTerm Syntax.PnLocal_Sequence_Option
@@ -2398,7 +2398,7 @@ pnLocal_Sequence_OptionWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option"),
-              Core.projectionField = (Core.Name "listOfAlts")})),
+              Core.projectionFieldName = (Core.Name "listOfAlts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alts"),
@@ -2417,7 +2417,7 @@ pnLocal_Sequence_OptionWithListOfAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnLocal_Sequence_Option"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pnLocal_Sequence_Option_AltsColon :: Phantoms.TTerm Syntax.PnLocal_Sequence_Option_Alts
@@ -2493,7 +2493,7 @@ pnPrefixPnCharsBase x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix"),
-        Core.projectionField = (Core.Name "PnCharsBase")})),
+        Core.projectionFieldName = (Core.Name "PnCharsBase")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnPrefixSequence :: Phantoms.TTerm Syntax.PnPrefix -> Phantoms.TTerm (Maybe Syntax.PnPrefix_Sequence_Option)
@@ -2501,7 +2501,7 @@ pnPrefixSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnPrefixWithPnCharsBase :: Phantoms.TTerm Syntax.PnPrefix -> Phantoms.TTerm Syntax.PnCharsBase -> Phantoms.TTerm Syntax.PnPrefix
@@ -2517,7 +2517,7 @@ pnPrefixWithPnCharsBase original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pnPrefixWithSequence :: Phantoms.TTerm Syntax.PnPrefix -> Phantoms.TTerm (Maybe Syntax.PnPrefix_Sequence_Option) -> Phantoms.TTerm Syntax.PnPrefix
@@ -2530,7 +2530,7 @@ pnPrefixWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix"),
-              Core.projectionField = (Core.Name "PnCharsBase")})),
+              Core.projectionFieldName = (Core.Name "PnCharsBase")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
@@ -2553,7 +2553,7 @@ pnPrefix_Sequence_OptionAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix_Sequence_Option"),
-        Core.projectionField = (Core.Name "alts")})),
+        Core.projectionFieldName = (Core.Name "alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnPrefix_Sequence_OptionPnChars :: Phantoms.TTerm Syntax.PnPrefix_Sequence_Option -> Phantoms.TTerm Syntax.PnChars
@@ -2561,7 +2561,7 @@ pnPrefix_Sequence_OptionPnChars x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix_Sequence_Option"),
-        Core.projectionField = (Core.Name "PnChars")})),
+        Core.projectionFieldName = (Core.Name "PnChars")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnPrefix_Sequence_OptionWithAlts :: Phantoms.TTerm Syntax.PnPrefix_Sequence_Option -> Phantoms.TTerm Syntax.PnPrefix_Sequence_Option_Alts -> Phantoms.TTerm Syntax.PnPrefix_Sequence_Option
@@ -2577,7 +2577,7 @@ pnPrefix_Sequence_OptionWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix_Sequence_Option"),
-              Core.projectionField = (Core.Name "PnChars")})),
+              Core.projectionFieldName = (Core.Name "PnChars")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pnPrefix_Sequence_OptionWithPnChars :: Phantoms.TTerm Syntax.PnPrefix_Sequence_Option -> Phantoms.TTerm Syntax.PnChars -> Phantoms.TTerm Syntax.PnPrefix_Sequence_Option
@@ -2590,7 +2590,7 @@ pnPrefix_Sequence_OptionWithPnChars original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnPrefix_Sequence_Option"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "PnChars"),
@@ -2629,7 +2629,7 @@ pnameLnPnLocal x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnameLn"),
-        Core.projectionField = (Core.Name "PnLocal")})),
+        Core.projectionFieldName = (Core.Name "PnLocal")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnameLnPnameNs :: Phantoms.TTerm Syntax.PnameLn -> Phantoms.TTerm Syntax.PnameNs
@@ -2637,7 +2637,7 @@ pnameLnPnameNs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnameLn"),
-        Core.projectionField = (Core.Name "PnameNs")})),
+        Core.projectionFieldName = (Core.Name "PnameNs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 pnameLnWithPnLocal :: Phantoms.TTerm Syntax.PnameLn -> Phantoms.TTerm Syntax.PnLocal -> Phantoms.TTerm Syntax.PnameLn
@@ -2650,7 +2650,7 @@ pnameLnWithPnLocal original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnameLn"),
-              Core.projectionField = (Core.Name "PnameNs")})),
+              Core.projectionFieldName = (Core.Name "PnameNs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "PnLocal"),
@@ -2669,7 +2669,7 @@ pnameLnWithPnameNs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PnameLn"),
-              Core.projectionField = (Core.Name "PnLocal")})),
+              Core.projectionFieldName = (Core.Name "PnLocal")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 pnameNs :: Phantoms.TTerm (Maybe Syntax.PnPrefix) -> Phantoms.TTerm Syntax.PnameNs
@@ -2711,7 +2711,7 @@ prefixDeclIriRef x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PrefixDecl"),
-        Core.projectionField = (Core.Name "IriRef")})),
+        Core.projectionFieldName = (Core.Name "IriRef")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 prefixDeclPnameNs :: Phantoms.TTerm Syntax.PrefixDecl -> Phantoms.TTerm Syntax.PnameNs
@@ -2719,7 +2719,7 @@ prefixDeclPnameNs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PrefixDecl"),
-        Core.projectionField = (Core.Name "PnameNs")})),
+        Core.projectionFieldName = (Core.Name "PnameNs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 prefixDeclWithIriRef :: Phantoms.TTerm Syntax.PrefixDecl -> Phantoms.TTerm Syntax.IriRef -> Phantoms.TTerm Syntax.PrefixDecl
@@ -2732,7 +2732,7 @@ prefixDeclWithIriRef original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PrefixDecl"),
-              Core.projectionField = (Core.Name "PnameNs")})),
+              Core.projectionFieldName = (Core.Name "PnameNs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "IriRef"),
@@ -2751,7 +2751,7 @@ prefixDeclWithPnameNs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.PrefixDecl"),
-              Core.projectionField = (Core.Name "IriRef")})),
+              Core.projectionFieldName = (Core.Name "IriRef")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 prefixedNamePnameLn :: Phantoms.TTerm Syntax.PnameLn -> Phantoms.TTerm Syntax.PrefixedName
@@ -2787,7 +2787,7 @@ rdfLiteralAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.RdfLiteral"),
-        Core.projectionField = (Core.Name "Alts")})),
+        Core.projectionFieldName = (Core.Name "Alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rdfLiteralString :: Phantoms.TTerm Syntax.RdfLiteral -> Phantoms.TTerm Syntax.String_
@@ -2795,7 +2795,7 @@ rdfLiteralString x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.RdfLiteral"),
-        Core.projectionField = (Core.Name "String")})),
+        Core.projectionFieldName = (Core.Name "String")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 rdfLiteralWithAlts :: Phantoms.TTerm Syntax.RdfLiteral -> Phantoms.TTerm (Maybe Syntax.RdfLiteral_Alts_Option) -> Phantoms.TTerm Syntax.RdfLiteral
@@ -2808,7 +2808,7 @@ rdfLiteralWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.RdfLiteral"),
-              Core.projectionField = (Core.Name "String")})),
+              Core.projectionFieldName = (Core.Name "String")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Alts"),
@@ -2827,7 +2827,7 @@ rdfLiteralWithString original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.RdfLiteral"),
-              Core.projectionField = (Core.Name "Alts")})),
+              Core.projectionFieldName = (Core.Name "Alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 rdfLiteral_Alts_OptionLangTag :: Phantoms.TTerm Syntax.LangTag -> Phantoms.TTerm Syntax.RdfLiteral_Alts_Option
@@ -2869,7 +2869,7 @@ regexpListOfAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Regexp"),
-        Core.projectionField = (Core.Name "listOfAlts")})),
+        Core.projectionFieldName = (Core.Name "listOfAlts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 regexpListOfRegex :: Phantoms.TTerm Syntax.Regexp -> Phantoms.TTerm [String]
@@ -2877,7 +2877,7 @@ regexpListOfRegex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Regexp"),
-        Core.projectionField = (Core.Name "listOfRegex")})),
+        Core.projectionFieldName = (Core.Name "listOfRegex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 regexpWithListOfAlts :: Phantoms.TTerm Syntax.Regexp -> Phantoms.TTerm [Syntax.Regexp_ListOfAlts_Elmt] -> Phantoms.TTerm Syntax.Regexp
@@ -2893,7 +2893,7 @@ regexpWithListOfAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Regexp"),
-              Core.projectionField = (Core.Name "listOfRegex")})),
+              Core.projectionFieldName = (Core.Name "listOfRegex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 regexpWithListOfRegex :: Phantoms.TTerm Syntax.Regexp -> Phantoms.TTerm [String] -> Phantoms.TTerm Syntax.Regexp
@@ -2906,7 +2906,7 @@ regexpWithListOfRegex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Regexp"),
-              Core.projectionField = (Core.Name "listOfAlts")})),
+              Core.projectionFieldName = (Core.Name "listOfAlts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfRegex"),
@@ -2953,7 +2953,7 @@ repeatRangeInteger x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.RepeatRange"),
-        Core.projectionField = (Core.Name "Integer")})),
+        Core.projectionFieldName = (Core.Name "Integer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 repeatRangeSequence :: Phantoms.TTerm Syntax.RepeatRange -> Phantoms.TTerm (Maybe (Maybe (Maybe Syntax.RepeatRange_Sequence_Option_Option_Option)))
@@ -2961,7 +2961,7 @@ repeatRangeSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.RepeatRange"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 repeatRangeWithInteger :: Phantoms.TTerm Syntax.RepeatRange -> Phantoms.TTerm Syntax.Integer_ -> Phantoms.TTerm Syntax.RepeatRange
@@ -2977,7 +2977,7 @@ repeatRangeWithInteger original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.RepeatRange"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 repeatRangeWithSequence :: Phantoms.TTerm Syntax.RepeatRange -> Phantoms.TTerm (Maybe (Maybe (Maybe Syntax.RepeatRange_Sequence_Option_Option_Option))) -> Phantoms.TTerm Syntax.RepeatRange
@@ -2990,7 +2990,7 @@ repeatRangeWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.RepeatRange"),
-              Core.projectionField = (Core.Name "Integer")})),
+              Core.projectionFieldName = (Core.Name "Integer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
@@ -3041,7 +3041,7 @@ shapeAndListOfSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAnd"),
-        Core.projectionField = (Core.Name "listOfSequence")})),
+        Core.projectionFieldName = (Core.Name "listOfSequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeAndShapeNot :: Phantoms.TTerm Syntax.ShapeAnd -> Phantoms.TTerm Syntax.ShapeNot
@@ -3049,7 +3049,7 @@ shapeAndShapeNot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAnd"),
-        Core.projectionField = (Core.Name "ShapeNot")})),
+        Core.projectionFieldName = (Core.Name "ShapeNot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeAndWithListOfSequence :: Phantoms.TTerm Syntax.ShapeAnd -> Phantoms.TTerm [Syntax.ShapeNot] -> Phantoms.TTerm Syntax.ShapeAnd
@@ -3062,7 +3062,7 @@ shapeAndWithListOfSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAnd"),
-              Core.projectionField = (Core.Name "ShapeNot")})),
+              Core.projectionFieldName = (Core.Name "ShapeNot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfSequence"),
@@ -3081,7 +3081,7 @@ shapeAndWithShapeNot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAnd"),
-              Core.projectionField = (Core.Name "listOfSequence")})),
+              Core.projectionFieldName = (Core.Name "listOfSequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shapeAtomPeriod :: Phantoms.TTerm Syntax.ShapeAtom
@@ -3133,7 +3133,7 @@ shapeAtom_SequenceNodeConstraint x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAtom_Sequence"),
-        Core.projectionField = (Core.Name "NodeConstraint")})),
+        Core.projectionFieldName = (Core.Name "NodeConstraint")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeAtom_SequenceShapeOrRef :: Phantoms.TTerm Syntax.ShapeAtom_Sequence -> Phantoms.TTerm (Maybe Syntax.ShapeOrRef)
@@ -3141,7 +3141,7 @@ shapeAtom_SequenceShapeOrRef x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAtom_Sequence"),
-        Core.projectionField = (Core.Name "ShapeOrRef")})),
+        Core.projectionFieldName = (Core.Name "ShapeOrRef")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeAtom_SequenceWithNodeConstraint :: Phantoms.TTerm Syntax.ShapeAtom_Sequence -> Phantoms.TTerm Syntax.NodeConstraint -> Phantoms.TTerm Syntax.ShapeAtom_Sequence
@@ -3157,7 +3157,7 @@ shapeAtom_SequenceWithNodeConstraint original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAtom_Sequence"),
-              Core.projectionField = (Core.Name "ShapeOrRef")})),
+              Core.projectionFieldName = (Core.Name "ShapeOrRef")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shapeAtom_SequenceWithShapeOrRef :: Phantoms.TTerm Syntax.ShapeAtom_Sequence -> Phantoms.TTerm (Maybe Syntax.ShapeOrRef) -> Phantoms.TTerm Syntax.ShapeAtom_Sequence
@@ -3170,7 +3170,7 @@ shapeAtom_SequenceWithShapeOrRef original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeAtom_Sequence"),
-              Core.projectionField = (Core.Name "NodeConstraint")})),
+              Core.projectionFieldName = (Core.Name "NodeConstraint")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ShapeOrRef"),
@@ -3199,7 +3199,7 @@ shapeDefinitionListOfAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-        Core.projectionField = (Core.Name "listOfAlts")})),
+        Core.projectionFieldName = (Core.Name "listOfAlts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeDefinitionListOfAnnotation :: Phantoms.TTerm Syntax.ShapeDefinition -> Phantoms.TTerm [Syntax.Annotation]
@@ -3207,7 +3207,7 @@ shapeDefinitionListOfAnnotation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-        Core.projectionField = (Core.Name "listOfAnnotation")})),
+        Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeDefinitionSemanticActions :: Phantoms.TTerm Syntax.ShapeDefinition -> Phantoms.TTerm Syntax.SemanticActions
@@ -3215,7 +3215,7 @@ shapeDefinitionSemanticActions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-        Core.projectionField = (Core.Name "SemanticActions")})),
+        Core.projectionFieldName = (Core.Name "SemanticActions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeDefinitionTripleExpression :: Phantoms.TTerm Syntax.ShapeDefinition -> Phantoms.TTerm (Maybe Syntax.TripleExpression)
@@ -3223,7 +3223,7 @@ shapeDefinitionTripleExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-        Core.projectionField = (Core.Name "TripleExpression")})),
+        Core.projectionFieldName = (Core.Name "TripleExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeDefinitionWithListOfAlts :: Phantoms.TTerm Syntax.ShapeDefinition -> Phantoms.TTerm [Syntax.ShapeDefinition_ListOfAlts_Elmt] -> Phantoms.TTerm Syntax.ShapeDefinition
@@ -3239,21 +3239,21 @@ shapeDefinitionWithListOfAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "TripleExpression")})),
+              Core.projectionFieldName = (Core.Name "TripleExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shapeDefinitionWithListOfAnnotation :: Phantoms.TTerm Syntax.ShapeDefinition -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.ShapeDefinition
@@ -3266,14 +3266,14 @@ shapeDefinitionWithListOfAnnotation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "listOfAlts")})),
+              Core.projectionFieldName = (Core.Name "listOfAlts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "TripleExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "TripleExpression")})),
+              Core.projectionFieldName = (Core.Name "TripleExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
@@ -3283,7 +3283,7 @@ shapeDefinitionWithListOfAnnotation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shapeDefinitionWithSemanticActions :: Phantoms.TTerm Syntax.ShapeDefinition -> Phantoms.TTerm Syntax.SemanticActions -> Phantoms.TTerm Syntax.ShapeDefinition
@@ -3296,21 +3296,21 @@ shapeDefinitionWithSemanticActions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "listOfAlts")})),
+              Core.projectionFieldName = (Core.Name "listOfAlts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "TripleExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "TripleExpression")})),
+              Core.projectionFieldName = (Core.Name "TripleExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
@@ -3326,7 +3326,7 @@ shapeDefinitionWithTripleExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "listOfAlts")})),
+              Core.projectionFieldName = (Core.Name "listOfAlts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "TripleExpression"),
@@ -3336,14 +3336,14 @@ shapeDefinitionWithTripleExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeDefinition"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shapeDefinition_ListOfAlts_ElmtCLOSED :: Phantoms.TTerm Syntax.ShapeDefinition_ListOfAlts_Elmt
@@ -3409,7 +3409,7 @@ shapeNotNOT x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeNot"),
-        Core.projectionField = (Core.Name "NOT")})),
+        Core.projectionFieldName = (Core.Name "NOT")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeNotShapeAtom :: Phantoms.TTerm Syntax.ShapeNot -> Phantoms.TTerm Syntax.ShapeAtom
@@ -3417,7 +3417,7 @@ shapeNotShapeAtom x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeNot"),
-        Core.projectionField = (Core.Name "ShapeAtom")})),
+        Core.projectionFieldName = (Core.Name "ShapeAtom")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeNotWithNOT :: Phantoms.TTerm Syntax.ShapeNot -> Phantoms.TTerm (Maybe ()) -> Phantoms.TTerm Syntax.ShapeNot
@@ -3433,7 +3433,7 @@ shapeNotWithNOT original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeNot"),
-              Core.projectionField = (Core.Name "ShapeAtom")})),
+              Core.projectionFieldName = (Core.Name "ShapeAtom")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shapeNotWithShapeAtom :: Phantoms.TTerm Syntax.ShapeNot -> Phantoms.TTerm Syntax.ShapeAtom -> Phantoms.TTerm Syntax.ShapeNot
@@ -3446,7 +3446,7 @@ shapeNotWithShapeAtom original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeNot"),
-              Core.projectionField = (Core.Name "NOT")})),
+              Core.projectionFieldName = (Core.Name "NOT")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ShapeAtom"),
@@ -3469,7 +3469,7 @@ shapeOrListOfSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeOr"),
-        Core.projectionField = (Core.Name "listOfSequence")})),
+        Core.projectionFieldName = (Core.Name "listOfSequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeOrRefAtpNameLn :: Phantoms.TTerm Syntax.AtpNameLn -> Phantoms.TTerm Syntax.ShapeOrRef
@@ -3509,7 +3509,7 @@ shapeOrShapeAnd x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeOr"),
-        Core.projectionField = (Core.Name "ShapeAnd")})),
+        Core.projectionFieldName = (Core.Name "ShapeAnd")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shapeOrWithListOfSequence :: Phantoms.TTerm Syntax.ShapeOr -> Phantoms.TTerm [Syntax.ShapeAnd] -> Phantoms.TTerm Syntax.ShapeOr
@@ -3522,7 +3522,7 @@ shapeOrWithListOfSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeOr"),
-              Core.projectionField = (Core.Name "ShapeAnd")})),
+              Core.projectionFieldName = (Core.Name "ShapeAnd")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfSequence"),
@@ -3541,7 +3541,7 @@ shapeOrWithShapeAnd original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShapeOr"),
-              Core.projectionField = (Core.Name "listOfSequence")})),
+              Core.projectionFieldName = (Core.Name "listOfSequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shexDoc :: Phantoms.TTerm [Syntax.Directive] -> Phantoms.TTerm (Maybe Syntax.ShexDoc_Sequence_Option) -> Phantoms.TTerm Syntax.PrefixDecl -> Phantoms.TTerm Syntax.ShexDoc
@@ -3564,7 +3564,7 @@ shexDocListOfDirective x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc"),
-        Core.projectionField = (Core.Name "listOfDirective")})),
+        Core.projectionFieldName = (Core.Name "listOfDirective")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shexDocPrefixDecl :: Phantoms.TTerm Syntax.ShexDoc -> Phantoms.TTerm Syntax.PrefixDecl
@@ -3572,7 +3572,7 @@ shexDocPrefixDecl x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc"),
-        Core.projectionField = (Core.Name "PrefixDecl")})),
+        Core.projectionFieldName = (Core.Name "PrefixDecl")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shexDocSequence :: Phantoms.TTerm Syntax.ShexDoc -> Phantoms.TTerm (Maybe Syntax.ShexDoc_Sequence_Option)
@@ -3580,7 +3580,7 @@ shexDocSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shexDocWithListOfDirective :: Phantoms.TTerm Syntax.ShexDoc -> Phantoms.TTerm [Syntax.Directive] -> Phantoms.TTerm Syntax.ShexDoc
@@ -3596,14 +3596,14 @@ shexDocWithListOfDirective original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "PrefixDecl"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc"),
-              Core.projectionField = (Core.Name "PrefixDecl")})),
+              Core.projectionFieldName = (Core.Name "PrefixDecl")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shexDocWithPrefixDecl :: Phantoms.TTerm Syntax.ShexDoc -> Phantoms.TTerm Syntax.PrefixDecl -> Phantoms.TTerm Syntax.ShexDoc
@@ -3616,14 +3616,14 @@ shexDocWithPrefixDecl original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc"),
-              Core.projectionField = (Core.Name "listOfDirective")})),
+              Core.projectionFieldName = (Core.Name "listOfDirective")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "PrefixDecl"),
@@ -3639,7 +3639,7 @@ shexDocWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc"),
-              Core.projectionField = (Core.Name "listOfDirective")})),
+              Core.projectionFieldName = (Core.Name "listOfDirective")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Sequence"),
@@ -3649,7 +3649,7 @@ shexDocWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc"),
-              Core.projectionField = (Core.Name "PrefixDecl")})),
+              Core.projectionFieldName = (Core.Name "PrefixDecl")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shexDoc_Sequence_Option :: Phantoms.TTerm Syntax.ShexDoc_Sequence_Option_Alts -> Phantoms.TTerm [Syntax.Statement] -> Phantoms.TTerm Syntax.ShexDoc_Sequence_Option
@@ -3669,7 +3669,7 @@ shexDoc_Sequence_OptionAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc_Sequence_Option"),
-        Core.projectionField = (Core.Name "alts")})),
+        Core.projectionFieldName = (Core.Name "alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shexDoc_Sequence_OptionListOfStatement :: Phantoms.TTerm Syntax.ShexDoc_Sequence_Option -> Phantoms.TTerm [Syntax.Statement]
@@ -3677,7 +3677,7 @@ shexDoc_Sequence_OptionListOfStatement x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc_Sequence_Option"),
-        Core.projectionField = (Core.Name "listOfStatement")})),
+        Core.projectionFieldName = (Core.Name "listOfStatement")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 shexDoc_Sequence_OptionWithAlts :: Phantoms.TTerm Syntax.ShexDoc_Sequence_Option -> Phantoms.TTerm Syntax.ShexDoc_Sequence_Option_Alts -> Phantoms.TTerm Syntax.ShexDoc_Sequence_Option
@@ -3693,7 +3693,7 @@ shexDoc_Sequence_OptionWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc_Sequence_Option"),
-              Core.projectionField = (Core.Name "listOfStatement")})),
+              Core.projectionFieldName = (Core.Name "listOfStatement")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 shexDoc_Sequence_OptionWithListOfStatement :: Phantoms.TTerm Syntax.ShexDoc_Sequence_Option -> Phantoms.TTerm [Syntax.Statement] -> Phantoms.TTerm Syntax.ShexDoc_Sequence_Option
@@ -3706,7 +3706,7 @@ shexDoc_Sequence_OptionWithListOfStatement original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.ShexDoc_Sequence_Option"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfStatement"),
@@ -3745,7 +3745,7 @@ singleElementGroupSemi x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.SingleElementGroup"),
-        Core.projectionField = (Core.Name "Semi")})),
+        Core.projectionFieldName = (Core.Name "Semi")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 singleElementGroupUnaryTripleExpr :: Phantoms.TTerm Syntax.SingleElementGroup -> Phantoms.TTerm Syntax.UnaryTripleExpr
@@ -3753,7 +3753,7 @@ singleElementGroupUnaryTripleExpr x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.SingleElementGroup"),
-        Core.projectionField = (Core.Name "UnaryTripleExpr")})),
+        Core.projectionFieldName = (Core.Name "UnaryTripleExpr")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 singleElementGroupWithSemi :: Phantoms.TTerm Syntax.SingleElementGroup -> Phantoms.TTerm (Maybe ()) -> Phantoms.TTerm Syntax.SingleElementGroup
@@ -3766,7 +3766,7 @@ singleElementGroupWithSemi original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.SingleElementGroup"),
-              Core.projectionField = (Core.Name "UnaryTripleExpr")})),
+              Core.projectionFieldName = (Core.Name "UnaryTripleExpr")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Semi"),
@@ -3785,7 +3785,7 @@ singleElementGroupWithUnaryTripleExpr original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.SingleElementGroup"),
-              Core.projectionField = (Core.Name "Semi")})),
+              Core.projectionFieldName = (Core.Name "Semi")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 startActions :: Phantoms.TTerm [Syntax.CodeDecl] -> Phantoms.TTerm Syntax.StartActions
@@ -3843,7 +3843,7 @@ stringFacet_SequenceInteger x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringFacet_Sequence"),
-        Core.projectionField = (Core.Name "Integer")})),
+        Core.projectionFieldName = (Core.Name "Integer")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 stringFacet_SequenceStringLength :: Phantoms.TTerm Syntax.StringFacet_Sequence -> Phantoms.TTerm Syntax.StringLength
@@ -3851,7 +3851,7 @@ stringFacet_SequenceStringLength x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringFacet_Sequence"),
-        Core.projectionField = (Core.Name "StringLength")})),
+        Core.projectionFieldName = (Core.Name "StringLength")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 stringFacet_SequenceWithInteger :: Phantoms.TTerm Syntax.StringFacet_Sequence -> Phantoms.TTerm Syntax.Integer_ -> Phantoms.TTerm Syntax.StringFacet_Sequence
@@ -3864,7 +3864,7 @@ stringFacet_SequenceWithInteger original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringFacet_Sequence"),
-              Core.projectionField = (Core.Name "StringLength")})),
+              Core.projectionFieldName = (Core.Name "StringLength")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Integer"),
@@ -3883,7 +3883,7 @@ stringFacet_SequenceWithStringLength original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringFacet_Sequence"),
-              Core.projectionField = (Core.Name "Integer")})),
+              Core.projectionFieldName = (Core.Name "Integer")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 stringLengthLENGTH :: Phantoms.TTerm Syntax.StringLength
@@ -4017,7 +4017,7 @@ stringLiteralLong1_Elmt_SequenceAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong1_Elmt_Sequence"),
-        Core.projectionField = (Core.Name "Alts")})),
+        Core.projectionFieldName = (Core.Name "Alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 stringLiteralLong1_Elmt_SequenceRegex :: Phantoms.TTerm Syntax.StringLiteralLong1_Elmt_Sequence -> Phantoms.TTerm String
@@ -4025,7 +4025,7 @@ stringLiteralLong1_Elmt_SequenceRegex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong1_Elmt_Sequence"),
-        Core.projectionField = (Core.Name "regex")})),
+        Core.projectionFieldName = (Core.Name "regex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 stringLiteralLong1_Elmt_SequenceWithAlts :: Phantoms.TTerm Syntax.StringLiteralLong1_Elmt_Sequence -> Phantoms.TTerm (Maybe Syntax.StringLiteralLong1_Elmt_Sequence_Alts_Option) -> Phantoms.TTerm Syntax.StringLiteralLong1_Elmt_Sequence
@@ -4041,7 +4041,7 @@ stringLiteralLong1_Elmt_SequenceWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong1_Elmt_Sequence"),
-              Core.projectionField = (Core.Name "regex")})),
+              Core.projectionFieldName = (Core.Name "regex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 stringLiteralLong1_Elmt_SequenceWithRegex :: Phantoms.TTerm Syntax.StringLiteralLong1_Elmt_Sequence -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.StringLiteralLong1_Elmt_Sequence
@@ -4054,7 +4054,7 @@ stringLiteralLong1_Elmt_SequenceWithRegex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong1_Elmt_Sequence"),
-              Core.projectionField = (Core.Name "Alts")})),
+              Core.projectionFieldName = (Core.Name "Alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "regex"),
@@ -4129,7 +4129,7 @@ stringLiteralLong2_Elmt_SequenceAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong2_Elmt_Sequence"),
-        Core.projectionField = (Core.Name "Alts")})),
+        Core.projectionFieldName = (Core.Name "Alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 stringLiteralLong2_Elmt_SequenceRegex :: Phantoms.TTerm Syntax.StringLiteralLong2_Elmt_Sequence -> Phantoms.TTerm String
@@ -4137,7 +4137,7 @@ stringLiteralLong2_Elmt_SequenceRegex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong2_Elmt_Sequence"),
-        Core.projectionField = (Core.Name "regex")})),
+        Core.projectionFieldName = (Core.Name "regex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 stringLiteralLong2_Elmt_SequenceWithAlts :: Phantoms.TTerm Syntax.StringLiteralLong2_Elmt_Sequence -> Phantoms.TTerm (Maybe Syntax.StringLiteralLong2_Elmt_Sequence_Alts_Option) -> Phantoms.TTerm Syntax.StringLiteralLong2_Elmt_Sequence
@@ -4153,7 +4153,7 @@ stringLiteralLong2_Elmt_SequenceWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong2_Elmt_Sequence"),
-              Core.projectionField = (Core.Name "regex")})),
+              Core.projectionFieldName = (Core.Name "regex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 stringLiteralLong2_Elmt_SequenceWithRegex :: Phantoms.TTerm Syntax.StringLiteralLong2_Elmt_Sequence -> Phantoms.TTerm String -> Phantoms.TTerm Syntax.StringLiteralLong2_Elmt_Sequence
@@ -4166,7 +4166,7 @@ stringLiteralLong2_Elmt_SequenceWithRegex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.StringLiteralLong2_Elmt_Sequence"),
-              Core.projectionField = (Core.Name "Alts")})),
+              Core.projectionFieldName = (Core.Name "Alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "regex"),
@@ -4255,7 +4255,7 @@ tripleConstraintCardinality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-        Core.projectionField = (Core.Name "Cardinality")})),
+        Core.projectionFieldName = (Core.Name "Cardinality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tripleConstraintInlineShapeExpression :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm Syntax.InlineShapeExpression
@@ -4263,7 +4263,7 @@ tripleConstraintInlineShapeExpression x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-        Core.projectionField = (Core.Name "InlineShapeExpression")})),
+        Core.projectionFieldName = (Core.Name "InlineShapeExpression")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tripleConstraintListOfAnnotation :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm [Syntax.Annotation]
@@ -4271,7 +4271,7 @@ tripleConstraintListOfAnnotation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-        Core.projectionField = (Core.Name "listOfAnnotation")})),
+        Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tripleConstraintPredicate :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm Syntax.Predicate
@@ -4279,7 +4279,7 @@ tripleConstraintPredicate x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-        Core.projectionField = (Core.Name "Predicate")})),
+        Core.projectionFieldName = (Core.Name "Predicate")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tripleConstraintSemanticActions :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm Syntax.SemanticActions
@@ -4287,7 +4287,7 @@ tripleConstraintSemanticActions x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-        Core.projectionField = (Core.Name "SemanticActions")})),
+        Core.projectionFieldName = (Core.Name "SemanticActions")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tripleConstraintSenseFlags :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm (Maybe Syntax.SenseFlags)
@@ -4295,7 +4295,7 @@ tripleConstraintSenseFlags x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-        Core.projectionField = (Core.Name "SenseFlags")})),
+        Core.projectionFieldName = (Core.Name "SenseFlags")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 tripleConstraintWithCardinality :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm (Maybe Syntax.Cardinality) -> Phantoms.TTerm Syntax.TripleConstraint
@@ -4308,21 +4308,21 @@ tripleConstraintWithCardinality original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SenseFlags")})),
+              Core.projectionFieldName = (Core.Name "SenseFlags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Predicate")})),
+              Core.projectionFieldName = (Core.Name "Predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "InlineShapeExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "InlineShapeExpression")})),
+              Core.projectionFieldName = (Core.Name "InlineShapeExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Cardinality"),
@@ -4332,14 +4332,14 @@ tripleConstraintWithCardinality original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tripleConstraintWithInlineShapeExpression :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm Syntax.InlineShapeExpression -> Phantoms.TTerm Syntax.TripleConstraint
@@ -4352,14 +4352,14 @@ tripleConstraintWithInlineShapeExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SenseFlags")})),
+              Core.projectionFieldName = (Core.Name "SenseFlags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Predicate")})),
+              Core.projectionFieldName = (Core.Name "Predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "InlineShapeExpression"),
@@ -4369,21 +4369,21 @@ tripleConstraintWithInlineShapeExpression original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Cardinality")})),
+              Core.projectionFieldName = (Core.Name "Cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tripleConstraintWithListOfAnnotation :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm [Syntax.Annotation] -> Phantoms.TTerm Syntax.TripleConstraint
@@ -4396,28 +4396,28 @@ tripleConstraintWithListOfAnnotation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SenseFlags")})),
+              Core.projectionFieldName = (Core.Name "SenseFlags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Predicate")})),
+              Core.projectionFieldName = (Core.Name "Predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "InlineShapeExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "InlineShapeExpression")})),
+              Core.projectionFieldName = (Core.Name "InlineShapeExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Cardinality")})),
+              Core.projectionFieldName = (Core.Name "Cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
@@ -4427,7 +4427,7 @@ tripleConstraintWithListOfAnnotation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tripleConstraintWithPredicate :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm Syntax.Predicate -> Phantoms.TTerm Syntax.TripleConstraint
@@ -4440,7 +4440,7 @@ tripleConstraintWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SenseFlags")})),
+              Core.projectionFieldName = (Core.Name "SenseFlags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Predicate"),
@@ -4450,28 +4450,28 @@ tripleConstraintWithPredicate original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "InlineShapeExpression")})),
+              Core.projectionFieldName = (Core.Name "InlineShapeExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Cardinality")})),
+              Core.projectionFieldName = (Core.Name "Cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tripleConstraintWithSemanticActions :: Phantoms.TTerm Syntax.TripleConstraint -> Phantoms.TTerm Syntax.SemanticActions -> Phantoms.TTerm Syntax.TripleConstraint
@@ -4484,35 +4484,35 @@ tripleConstraintWithSemanticActions original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SenseFlags")})),
+              Core.projectionFieldName = (Core.Name "SenseFlags")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Predicate"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Predicate")})),
+              Core.projectionFieldName = (Core.Name "Predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "InlineShapeExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "InlineShapeExpression")})),
+              Core.projectionFieldName = (Core.Name "InlineShapeExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Cardinality")})),
+              Core.projectionFieldName = (Core.Name "Cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
@@ -4531,35 +4531,35 @@ tripleConstraintWithSenseFlags original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Predicate")})),
+              Core.projectionFieldName = (Core.Name "Predicate")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "InlineShapeExpression"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "InlineShapeExpression")})),
+              Core.projectionFieldName = (Core.Name "InlineShapeExpression")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Cardinality"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "Cardinality")})),
+              Core.projectionFieldName = (Core.Name "Cardinality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "listOfAnnotation"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "listOfAnnotation")})),
+              Core.projectionFieldName = (Core.Name "listOfAnnotation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "SemanticActions"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.TripleConstraint"),
-              Core.projectionField = (Core.Name "SemanticActions")})),
+              Core.projectionFieldName = (Core.Name "SemanticActions")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 tripleExprLabelBlankNode :: Phantoms.TTerm Syntax.BlankNode -> Phantoms.TTerm Syntax.TripleExprLabel
@@ -4653,7 +4653,7 @@ uchar_Sequence2Hex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-        Core.projectionField = (Core.Name "Hex")})),
+        Core.projectionFieldName = (Core.Name "Hex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_Sequence2Hex2 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex
@@ -4661,7 +4661,7 @@ uchar_Sequence2Hex2 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-        Core.projectionField = (Core.Name "Hex2")})),
+        Core.projectionFieldName = (Core.Name "Hex2")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_Sequence2Hex3 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex
@@ -4669,7 +4669,7 @@ uchar_Sequence2Hex3 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-        Core.projectionField = (Core.Name "Hex3")})),
+        Core.projectionFieldName = (Core.Name "Hex3")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_Sequence2Hex4 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex
@@ -4677,7 +4677,7 @@ uchar_Sequence2Hex4 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-        Core.projectionField = (Core.Name "Hex4")})),
+        Core.projectionFieldName = (Core.Name "Hex4")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_Sequence2Hex5 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex
@@ -4685,7 +4685,7 @@ uchar_Sequence2Hex5 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-        Core.projectionField = (Core.Name "Hex5")})),
+        Core.projectionFieldName = (Core.Name "Hex5")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_Sequence2Hex6 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex
@@ -4693,7 +4693,7 @@ uchar_Sequence2Hex6 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-        Core.projectionField = (Core.Name "Hex6")})),
+        Core.projectionFieldName = (Core.Name "Hex6")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_Sequence2Hex7 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex
@@ -4701,7 +4701,7 @@ uchar_Sequence2Hex7 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-        Core.projectionField = (Core.Name "Hex7")})),
+        Core.projectionFieldName = (Core.Name "Hex7")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_Sequence2Hex8 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex
@@ -4709,7 +4709,7 @@ uchar_Sequence2Hex8 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-        Core.projectionField = (Core.Name "Hex8")})),
+        Core.projectionFieldName = (Core.Name "Hex8")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_Sequence2WithHex :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence2
@@ -4725,49 +4725,49 @@ uchar_Sequence2WithHex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex5"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex5")})),
+              Core.projectionFieldName = (Core.Name "Hex5")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex6"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex6")})),
+              Core.projectionFieldName = (Core.Name "Hex6")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex7"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex7")})),
+              Core.projectionFieldName = (Core.Name "Hex7")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex8"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex8")})),
+              Core.projectionFieldName = (Core.Name "Hex8")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_Sequence2WithHex2 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence2
@@ -4780,7 +4780,7 @@ uchar_Sequence2WithHex2 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
@@ -4790,42 +4790,42 @@ uchar_Sequence2WithHex2 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex5"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex5")})),
+              Core.projectionFieldName = (Core.Name "Hex5")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex6"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex6")})),
+              Core.projectionFieldName = (Core.Name "Hex6")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex7"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex7")})),
+              Core.projectionFieldName = (Core.Name "Hex7")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex8"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex8")})),
+              Core.projectionFieldName = (Core.Name "Hex8")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_Sequence2WithHex3 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence2
@@ -4838,14 +4838,14 @@ uchar_Sequence2WithHex3 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
@@ -4855,35 +4855,35 @@ uchar_Sequence2WithHex3 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex5"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex5")})),
+              Core.projectionFieldName = (Core.Name "Hex5")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex6"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex6")})),
+              Core.projectionFieldName = (Core.Name "Hex6")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex7"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex7")})),
+              Core.projectionFieldName = (Core.Name "Hex7")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex8"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex8")})),
+              Core.projectionFieldName = (Core.Name "Hex8")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_Sequence2WithHex4 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence2
@@ -4896,21 +4896,21 @@ uchar_Sequence2WithHex4 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
@@ -4920,28 +4920,28 @@ uchar_Sequence2WithHex4 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex5")})),
+              Core.projectionFieldName = (Core.Name "Hex5")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex6"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex6")})),
+              Core.projectionFieldName = (Core.Name "Hex6")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex7"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex7")})),
+              Core.projectionFieldName = (Core.Name "Hex7")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex8"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex8")})),
+              Core.projectionFieldName = (Core.Name "Hex8")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_Sequence2WithHex5 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence2
@@ -4954,28 +4954,28 @@ uchar_Sequence2WithHex5 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex5"),
@@ -4985,21 +4985,21 @@ uchar_Sequence2WithHex5 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex6")})),
+              Core.projectionFieldName = (Core.Name "Hex6")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex7"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex7")})),
+              Core.projectionFieldName = (Core.Name "Hex7")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex8"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex8")})),
+              Core.projectionFieldName = (Core.Name "Hex8")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_Sequence2WithHex6 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence2
@@ -5012,35 +5012,35 @@ uchar_Sequence2WithHex6 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex5"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex5")})),
+              Core.projectionFieldName = (Core.Name "Hex5")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex6"),
@@ -5050,14 +5050,14 @@ uchar_Sequence2WithHex6 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex7")})),
+              Core.projectionFieldName = (Core.Name "Hex7")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex8"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex8")})),
+              Core.projectionFieldName = (Core.Name "Hex8")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_Sequence2WithHex7 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence2
@@ -5070,42 +5070,42 @@ uchar_Sequence2WithHex7 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex5"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex5")})),
+              Core.projectionFieldName = (Core.Name "Hex5")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex6"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex6")})),
+              Core.projectionFieldName = (Core.Name "Hex6")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex7"),
@@ -5115,7 +5115,7 @@ uchar_Sequence2WithHex7 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex8")})),
+              Core.projectionFieldName = (Core.Name "Hex8")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_Sequence2WithHex8 :: Phantoms.TTerm Syntax.Uchar_Sequence2 -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence2
@@ -5128,49 +5128,49 @@ uchar_Sequence2WithHex8 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex5"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex5")})),
+              Core.projectionFieldName = (Core.Name "Hex5")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex6"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex6")})),
+              Core.projectionFieldName = (Core.Name "Hex6")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex7"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence2"),
-              Core.projectionField = (Core.Name "Hex7")})),
+              Core.projectionFieldName = (Core.Name "Hex7")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex8"),
@@ -5181,7 +5181,7 @@ uchar_SequenceHex x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-        Core.projectionField = (Core.Name "Hex")})),
+        Core.projectionFieldName = (Core.Name "Hex")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_SequenceHex2 :: Phantoms.TTerm Syntax.Uchar_Sequence -> Phantoms.TTerm Syntax.Hex
@@ -5189,7 +5189,7 @@ uchar_SequenceHex2 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-        Core.projectionField = (Core.Name "Hex2")})),
+        Core.projectionFieldName = (Core.Name "Hex2")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_SequenceHex3 :: Phantoms.TTerm Syntax.Uchar_Sequence -> Phantoms.TTerm Syntax.Hex
@@ -5197,7 +5197,7 @@ uchar_SequenceHex3 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-        Core.projectionField = (Core.Name "Hex3")})),
+        Core.projectionFieldName = (Core.Name "Hex3")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_SequenceHex4 :: Phantoms.TTerm Syntax.Uchar_Sequence -> Phantoms.TTerm Syntax.Hex
@@ -5205,7 +5205,7 @@ uchar_SequenceHex4 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-        Core.projectionField = (Core.Name "Hex4")})),
+        Core.projectionFieldName = (Core.Name "Hex4")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 uchar_SequenceWithHex :: Phantoms.TTerm Syntax.Uchar_Sequence -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence
@@ -5221,21 +5221,21 @@ uchar_SequenceWithHex original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_SequenceWithHex2 :: Phantoms.TTerm Syntax.Uchar_Sequence -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence
@@ -5248,7 +5248,7 @@ uchar_SequenceWithHex2 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
@@ -5258,14 +5258,14 @@ uchar_SequenceWithHex2 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_SequenceWithHex3 :: Phantoms.TTerm Syntax.Uchar_Sequence -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence
@@ -5278,14 +5278,14 @@ uchar_SequenceWithHex3 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
@@ -5295,7 +5295,7 @@ uchar_SequenceWithHex3 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex4")})),
+              Core.projectionFieldName = (Core.Name "Hex4")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 uchar_SequenceWithHex4 :: Phantoms.TTerm Syntax.Uchar_Sequence -> Phantoms.TTerm Syntax.Hex -> Phantoms.TTerm Syntax.Uchar_Sequence
@@ -5308,21 +5308,21 @@ uchar_SequenceWithHex4 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex")})),
+              Core.projectionFieldName = (Core.Name "Hex")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex2")})),
+              Core.projectionFieldName = (Core.Name "Hex2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex3"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.Uchar_Sequence"),
-              Core.projectionField = (Core.Name "Hex3")})),
+              Core.projectionFieldName = (Core.Name "Hex3")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "Hex4"),
@@ -5541,7 +5541,7 @@ unaryTripleExpr_SequenceAlts x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.UnaryTripleExpr_Sequence"),
-        Core.projectionField = (Core.Name "alts")})),
+        Core.projectionFieldName = (Core.Name "alts")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unaryTripleExpr_SequenceSequence :: Phantoms.TTerm Syntax.UnaryTripleExpr_Sequence -> Phantoms.TTerm (Maybe Syntax.TripleExprLabel)
@@ -5549,7 +5549,7 @@ unaryTripleExpr_SequenceSequence x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.shex.syntax.UnaryTripleExpr_Sequence"),
-        Core.projectionField = (Core.Name "Sequence")})),
+        Core.projectionFieldName = (Core.Name "Sequence")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 
 unaryTripleExpr_SequenceWithAlts :: Phantoms.TTerm Syntax.UnaryTripleExpr_Sequence -> Phantoms.TTerm Syntax.UnaryTripleExpr_Sequence_Alts -> Phantoms.TTerm Syntax.UnaryTripleExpr_Sequence
@@ -5562,7 +5562,7 @@ unaryTripleExpr_SequenceWithAlts original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.UnaryTripleExpr_Sequence"),
-              Core.projectionField = (Core.Name "Sequence")})),
+              Core.projectionFieldName = (Core.Name "Sequence")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "alts"),
@@ -5581,7 +5581,7 @@ unaryTripleExpr_SequenceWithSequence original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.shex.syntax.UnaryTripleExpr_Sequence"),
-              Core.projectionField = (Core.Name "alts")})),
+              Core.projectionFieldName = (Core.Name "alts")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 
 unaryTripleExpr_Sequence_AltsBracketedTripleExpr :: Phantoms.TTerm Syntax.BracketedTripleExpr -> Phantoms.TTerm Syntax.UnaryTripleExpr_Sequence_Alts

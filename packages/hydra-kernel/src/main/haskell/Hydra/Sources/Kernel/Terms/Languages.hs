@@ -54,14 +54,14 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Kernel.Terms.Reflect as Reflect
 
 
-ns :: Namespace
-ns = Namespace "hydra.languages"
+ns :: ModuleName
+ns = ModuleName "hydra.languages"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = [toDefinition hydraLanguage],
-            moduleDependencies = [Reflect.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Reflect.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "Language constraints for Hydra Core"}
 hydraLanguage :: TTermDefinition Language
 hydraLanguage = definitionInModule module_ "hydraLanguage" $

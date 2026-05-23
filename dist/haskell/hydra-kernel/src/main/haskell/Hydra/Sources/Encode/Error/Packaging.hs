@@ -11,18 +11,23 @@ module_ :: Packaging.Module
 module_ =
     Packaging.Module {
       Packaging.moduleDescription = (Just "Term encoders for hydra.error.packaging"),
-      Packaging.moduleNamespace = (Packaging.Namespace "hydra.encode.error.packaging"),
+      Packaging.moduleName = (Packaging.ModuleName "hydra.encode.error.packaging"),
       Packaging.moduleDependencies = [
-        Packaging.Namespace "hydra.encode.core",
-        (Packaging.Namespace "hydra.encode.packaging"),
-        (Packaging.Namespace "hydra.encode.util"),
-        (Packaging.Namespace "hydra.core"),
-        (Packaging.Namespace "hydra.packaging"),
-        (Packaging.Namespace "hydra.util"),
-        (Packaging.Namespace "hydra.error.packaging")],
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.core"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.packaging"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.encode.util"),
+          Packaging.moduleDependencyPackage = Nothing},
+        Packaging.ModuleDependency {
+          Packaging.moduleDependencyModule = (Packaging.ModuleName "hydra.error.packaging"),
+          Packaging.moduleDependencyPackage = Nothing}],
       Packaging.moduleDefinitions = [
         Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.conflictingModuleNamespaceError"),
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.conflictingModuleNameError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
@@ -38,7 +43,7 @@ module_ =
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.packaging.ConflictingModuleNamespaceError"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.packaging.ConflictingModuleNameError"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "fields"),
                         Core.fieldTerm = (Core.TermList [
@@ -53,11 +58,11 @@ module_ =
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"),
-                                      Core.projectionField = (Core.Name "first")})),
+                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNameError"),
+                                      Core.projectionFieldName = (Core.Name "first")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -70,20 +75,20 @@ module_ =
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError"),
-                                      Core.projectionField = (Core.Name "second")})),
+                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingModuleNameError"),
+                                      Core.projectionFieldName = (Core.Name "second")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingModuleNamespaceError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.ConflictingModuleNameError")))])})),
           Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.packaging.ConflictingModuleNamespaceError")),
+              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.packaging.ConflictingModuleNameError")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))}),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -114,15 +119,15 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "namespace"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "moduleName"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-                                      Core.projectionField = (Core.Name "namespace")})),
+                                      Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -139,7 +144,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-                                      Core.projectionField = (Core.Name "typeName")})),
+                                      Core.projectionFieldName = (Core.Name "typeName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -156,7 +161,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-                                      Core.projectionField = (Core.Name "variantName")})),
+                                      Core.projectionFieldName = (Core.Name "variantName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -173,7 +178,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.ConflictingVariantNameError"),
-                                      Core.projectionField = (Core.Name "conflictingName")})),
+                                      Core.projectionFieldName = (Core.Name "conflictingName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (
@@ -186,7 +191,7 @@ module_ =
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.definitionNotInModuleNamespaceError"),
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.definitionNotInModuleNameError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
@@ -202,7 +207,7 @@ module_ =
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.packaging.DefinitionNotInModuleNamespaceError"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.packaging.DefinitionNotInModuleNameError"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "fields"),
                         Core.fieldTerm = (Core.TermList [
@@ -213,15 +218,15 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "namespace"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "moduleName"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError"),
-                                      Core.projectionField = (Core.Name "namespace")})),
+                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNameError"),
+                                      Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -237,17 +242,17 @@ module_ =
                                   Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.name")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError"),
-                                      Core.projectionField = (Core.Name "name")})),
+                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionNotInModuleNameError"),
+                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionNotInModuleNamespaceError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DefinitionNotInModuleNameError")))])})),
           Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.packaging.DefinitionNotInModuleNamespaceError")),
+              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.packaging.DefinitionNotInModuleNameError")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -278,15 +283,15 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "namespace"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "moduleName"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-                                      Core.projectionField = (Core.Name "namespace")})),
+                                      Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -303,7 +308,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-                                      Core.projectionField = (Core.Name "precedingName")})),
+                                      Core.projectionFieldName = (Core.Name "precedingName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -320,7 +325,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.DefinitionsOutOfOrderError"),
-                                      Core.projectionField = (Core.Name "followingName")})),
+                                      Core.projectionFieldName = (Core.Name "followingName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (
@@ -360,15 +365,15 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "namespace"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "moduleName"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError"),
-                                      Core.projectionField = (Core.Name "namespace")})),
+                                      Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -385,7 +390,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateDefinitionNameError"),
-                                      Core.projectionField = (Core.Name "name")})),
+                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (
@@ -398,7 +403,7 @@ module_ =
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.duplicateModuleNamespaceError"),
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.duplicateModuleNameError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
@@ -414,7 +419,7 @@ module_ =
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.packaging.DuplicateModuleNamespaceError"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.packaging.DuplicateModuleNameError"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "fields"),
                         Core.fieldTerm = (Core.TermList [
@@ -425,24 +430,24 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "namespace"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "moduleName"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateModuleNamespaceError"),
-                                      Core.projectionField = (Core.Name "namespace")})),
+                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.DuplicateModuleNameError"),
+                                      Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateModuleNamespaceError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.DuplicateModuleNameError")))])})),
           Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.packaging.DuplicateModuleNamespaceError")),
+              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.packaging.DuplicateModuleNameError")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -473,15 +478,15 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "namespace"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "moduleName"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-                                      Core.projectionField = (Core.Name "namespace")})),
+                                      Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -498,7 +503,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-                                      Core.projectionField = (Core.Name "name")})),
+                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -515,7 +520,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidDefinitionNameError"),
-                                      Core.projectionField = (Core.Name "expectedConvention")})),
+                                      Core.projectionFieldName = (Core.Name "expectedConvention")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (
@@ -567,7 +572,7 @@ module_ =
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.conflictingVariantNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
                 Core.Field {
-                  Core.fieldName = (Core.Name "definitionNotInModuleNamespace"),
+                  Core.fieldName = (Core.Name "definitionNotInModuleName"),
                   Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -592,11 +597,11 @@ module_ =
                                     Core.fieldName = (Core.Name "name"),
                                     Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "definitionNotInModuleNamespace"))}))},
+                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "definitionNotInModuleName"))}))},
                                   Core.Field {
                                     Core.fieldName = (Core.Name "term"),
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.definitionNotInModuleNamespaceError")),
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.definitionNotInModuleNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
                 Core.Field {
                   Core.fieldName = (Core.Name "definitionsOutOfOrder"),
@@ -695,7 +700,7 @@ module_ =
                                       Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.invalidDefinitionNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
                 Core.Field {
-                  Core.fieldName = (Core.Name "invalidNamespaceConvention"),
+                  Core.fieldName = (Core.Name "invalidModuleNameConvention"),
                   Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -720,11 +725,11 @@ module_ =
                                     Core.fieldName = (Core.Name "name"),
                                     Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "invalidNamespaceConvention"))}))},
+                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "invalidModuleNameConvention"))}))},
                                   Core.Field {
                                     Core.fieldName = (Core.Name "term"),
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.invalidNamespaceConventionError")),
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.invalidModuleNameConventionError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
                 Core.Field {
                   Core.fieldName = (Core.Name "missingDocumentation"),
@@ -767,7 +772,7 @@ module_ =
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
-          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidNamespaceConventionError"),
+          Packaging.termDefinitionName = (Core.Name "hydra.encode.error.packaging.invalidModuleNameConventionError"),
           Packaging.termDefinitionTerm = (Core.TermAnnotated (Core.AnnotatedTerm {
             Core.annotatedTermBody = (Core.TermLambda (Core.Lambda {
               Core.lambdaParameter = (Core.Name "x"),
@@ -783,7 +788,7 @@ module_ =
                         Core.fieldName = (Core.Name "typeName"),
                         Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                           Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.packaging.InvalidNamespaceConventionError"))}))},
+                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.error.packaging.InvalidModuleNameConventionError"))}))},
                       Core.Field {
                         Core.fieldName = (Core.Name "fields"),
                         Core.fieldTerm = (Core.TermList [
@@ -794,24 +799,24 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "namespace"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "moduleName"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
-                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidNamespaceConventionError"),
-                                      Core.projectionField = (Core.Name "namespace")})),
+                                      Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidModuleNameConventionError"),
+                                      Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (
                 Core.Name "description",
-                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidNamespaceConventionError")))])})),
+                (Core.TermLiteral (Core.LiteralString "Encoder for hydra.error.packaging.InvalidModuleNameConventionError")))])})),
           Packaging.termDefinitionTypeScheme = (Just (Core.TypeScheme {
             Core.typeSchemeVariables = [],
             Core.typeSchemeBody = (Core.TypeFunction (Core.FunctionType {
-              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidNamespaceConventionError")),
+              Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.packaging.InvalidModuleNameConventionError")),
               Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
             Core.typeSchemeConstraints = Nothing}))})),
         (Packaging.DefinitionTerm (Packaging.TermDefinition {
@@ -822,7 +827,7 @@ module_ =
               Core.caseStatementDefault = Nothing,
               Core.caseStatementCases = [
                 Core.Field {
-                  Core.fieldName = (Core.Name "conflictingModuleNamespace"),
+                  Core.fieldName = (Core.Name "conflictingModuleName"),
                   Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -847,14 +852,14 @@ module_ =
                                     Core.fieldName = (Core.Name "name"),
                                     Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "conflictingModuleNamespace"))}))},
+                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "conflictingModuleName"))}))},
                                   Core.Field {
                                     Core.fieldName = (Core.Name "term"),
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.conflictingModuleNamespaceError")),
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.conflictingModuleNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
                 Core.Field {
-                  Core.fieldName = (Core.Name "duplicateModuleNamespace"),
+                  Core.fieldName = (Core.Name "duplicateModuleName"),
                   Core.fieldTerm = (Core.TermLambda (Core.Lambda {
                     Core.lambdaParameter = (Core.Name "y"),
                     Core.lambdaDomain = Nothing,
@@ -879,11 +884,11 @@ module_ =
                                     Core.fieldName = (Core.Name "name"),
                                     Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                       Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "duplicateModuleNamespace"))}))},
+                                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "duplicateModuleName"))}))},
                                   Core.Field {
                                     Core.fieldName = (Core.Name "term"),
                                     Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.duplicateModuleNamespaceError")),
+                                      Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.packaging.duplicateModuleNameError")),
                                       Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))}))},
                 Core.Field {
                   Core.fieldName = (Core.Name "invalidModule"),
@@ -993,7 +998,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.InvalidPackageNameError"),
-                                      Core.projectionField = (Core.Name "packageName")})),
+                                      Core.projectionFieldName = (Core.Name "packageName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (
@@ -1033,15 +1038,15 @@ module_ =
                                 Core.fieldName = (Core.Name "name"),
                                 Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
                                   Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "namespace"))}))},
+                                  Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "moduleName"))}))},
                               Core.Field {
                                 Core.fieldName = (Core.Name "term"),
                                 Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.namespace")),
+                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.packaging.moduleName")),
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.MissingDocumentationError"),
-                                      Core.projectionField = (Core.Name "namespace")})),
+                                      Core.projectionFieldName = (Core.Name "moduleName")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
                           (Core.TermRecord (Core.Record {
                             Core.recordTypeName = (Core.Name "hydra.core.Field"),
@@ -1058,7 +1063,7 @@ module_ =
                                   Core.applicationArgument = (Core.TermApplication (Core.Application {
                                     Core.applicationFunction = (Core.TermProject (Core.Projection {
                                       Core.projectionTypeName = (Core.Name "hydra.error.packaging.MissingDocumentationError"),
-                                      Core.projectionField = (Core.Name "name")})),
+                                      Core.projectionFieldName = (Core.Name "name")})),
                                     Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})),
             Core.annotatedTermAnnotation = (M.fromList [
               (

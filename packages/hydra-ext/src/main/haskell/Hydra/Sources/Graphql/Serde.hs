@@ -86,14 +86,14 @@ import qualified Hydra.Sources.Graphql.Syntax as GraphqlSyntax
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.graphql.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.graphql.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ (moduleNamespace GraphqlSyntax.module_:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ (moduleName GraphqlSyntax.module_:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Serialization functions for converting GraphQL AST to abstract expressions"}
   where
     definitions = [

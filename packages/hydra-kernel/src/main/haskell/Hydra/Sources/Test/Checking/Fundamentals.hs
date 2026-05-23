@@ -4,6 +4,7 @@ module Hydra.Sources.Test.Checking.Fundamentals where
 
 -- Standard imports for term-encoded tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms
 import Hydra.Sources.Kernel.Types.All
@@ -20,14 +21,14 @@ import qualified Data.ByteString              as B
 import qualified Data.ByteString.Char8        as BC
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.checking.fundamentals"
+ns :: ModuleName
+ns = ModuleName "hydra.test.checking.fundamentals"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [TestGraph.ns, Namespace "hydra.rewriting", Namespace "hydra.inference", Namespace "hydra.scoping", Namespace "hydra.show.core", Namespace "hydra.test.testTypes"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([TestGraph.ns, ModuleName "hydra.rewriting", ModuleName "hydra.inference", ModuleName "hydra.scoping", ModuleName "hydra.show.core", ModuleName "hydra.test.testTypes"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Fundamental type checking test cases: literals, variables, lambdas, applications, let terms, and primitives")}
   where
     definitions = [

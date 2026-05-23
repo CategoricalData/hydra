@@ -18,7 +18,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "alt"},
-                                "function": {"project": {"field": "pattern", "typeName": "hydra.haskell.syntax.Alternative"}}}},
+                                "function": {"project": {"fieldName": "pattern", "typeName": "hydra.haskell.syntax.Alternative"}}}},
                             "function": {"variable": "hydra.haskell.serde.patternToExpr"}}},
                         {"application": {"argument": {"literal": {"string": "->"}}, "function": {"variable": "hydra.serialization.cst"}}},
                         {
@@ -26,7 +26,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "alt"},
-                                "function": {"project": {"field": "rhs", "typeName": "hydra.haskell.syntax.Alternative"}}}},
+                                "function": {"project": {"fieldName": "rhs", "typeName": "hydra.haskell.syntax.Alternative"}}}},
                             "function": {"variable": "hydra.haskell.serde.caseRhsToExpr"}}}]},
                     "function": {"variable": "hydra.serialization.structuralSpaceSep"}}},
                 "domain": {"variable": "hydra.haskell.syntax.Alternative"},
@@ -52,7 +52,7 @@
                         "argument": {
                           "application": {
                             "argument": {"variable": "app"},
-                            "function": {"project": {"field": "argument", "typeName": "hydra.haskell.syntax.ApplicationExpression"}}}},
+                            "function": {"project": {"fieldName": "argument", "typeName": "hydra.haskell.syntax.ApplicationExpression"}}}},
                         "function": {"variable": "hydra.haskell.serde.expressionToExpr"}}},
                     "function": {
                       "application": {
@@ -61,7 +61,7 @@
                             "argument": {
                               "application": {
                                 "argument": {"variable": "app"},
-                                "function": {"project": {"field": "function", "typeName": "hydra.haskell.syntax.ApplicationExpression"}}}},
+                                "function": {"project": {"fieldName": "function", "typeName": "hydra.haskell.syntax.ApplicationExpression"}}}},
                             "function": {"variable": "hydra.haskell.serde.expressionToExpr"}}},
                         "function": {
                           "application": {"argument": {"variable": "hydra.haskell.operators.appOp"}, "function": {"variable": "hydra.serialization.ifx"}}}}}}},
@@ -87,14 +87,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "appPat"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.ApplicationPattern"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.ApplicationPattern"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Name"}, "variables": []}},
                       {
                         "name": "pats",
                         "term": {
                           "application": {
                             "argument": {"variable": "appPat"},
-                            "function": {"project": {"field": "args", "typeName": "hydra.haskell.syntax.ApplicationPattern"}}}},
+                            "function": {"project": {"fieldName": "args", "typeName": "hydra.haskell.syntax.ApplicationPattern"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Pattern"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -186,14 +186,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "caseExpr"},
-                            "function": {"project": {"field": "case", "typeName": "hydra.haskell.syntax.CaseExpression"}}}},
+                            "function": {"project": {"fieldName": "case", "typeName": "hydra.haskell.syntax.CaseExpression"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Expression"}, "variables": []}},
                       {
                         "name": "alts",
                         "term": {
                           "application": {
                             "argument": {"variable": "caseExpr"},
-                            "function": {"project": {"field": "alternatives", "typeName": "hydra.haskell.syntax.CaseExpression"}}}},
+                            "function": {"project": {"fieldName": "alternatives", "typeName": "hydra.haskell.syntax.CaseExpression"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Alternative"}}, "variables": []}},
                       {
                         "name": "ofOp",
@@ -292,14 +292,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "clsAsrt"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.ClassConstraint"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.ClassConstraint"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Name"}, "variables": []}},
                       {
                         "name": "types",
                         "term": {
                           "application": {
                             "argument": {"variable": "clsAsrt"},
-                            "function": {"project": {"field": "types", "typeName": "hydra.haskell.syntax.ClassConstraint"}}}},
+                            "function": {"project": {"fieldName": "types", "typeName": "hydra.haskell.syntax.ClassConstraint"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Type"}}, "variables": []}}],
                     "body": {
                       "application": {
@@ -353,14 +353,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "constructRecord"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.RecordExpression"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.RecordExpression"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Name"}, "variables": []}},
                       {
                         "name": "updates",
                         "term": {
                           "application": {
                             "argument": {"variable": "constructRecord"},
-                            "function": {"project": {"field": "fields", "typeName": "hydra.haskell.syntax.RecordExpression"}}}},
+                            "function": {"project": {"fieldName": "fields", "typeName": "hydra.haskell.syntax.RecordExpression"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.FieldUpdate"}}, "variables": []}},
                       {
                         "name": "fromUpdate",
@@ -374,14 +374,14 @@
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "update"},
-                                        "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.FieldUpdate"}}}},
+                                        "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.FieldUpdate"}}}},
                                     "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Name"}, "variables": []}},
                                   {
                                     "name": "val",
                                     "term": {
                                       "application": {
                                         "argument": {"variable": "update"},
-                                        "function": {"project": {"field": "value", "typeName": "hydra.haskell.syntax.FieldUpdate"}}}},
+                                        "function": {"project": {"fieldName": "value", "typeName": "hydra.haskell.syntax.FieldUpdate"}}}},
                                     "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Expression"}, "variables": []}}],
                                 "body": {
                                   "application": {
@@ -467,7 +467,7 @@
                                         "body": {
                                           "application": {
                                             "argument": {"variable": "ord"},
-                                            "function": {"project": {"field": "comments", "typeName": "hydra.haskell.syntax.PositionalConstructor"}}}},
+                                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.PositionalConstructor"}}}},
                                         "domain": {"variable": "hydra.haskell.syntax.PositionalConstructor"},
                                         "parameter": "ord"}}},
                                   {
@@ -477,7 +477,7 @@
                                         "body": {
                                           "application": {
                                             "argument": {"variable": "rec"},
-                                            "function": {"project": {"field": "comments", "typeName": "hydra.haskell.syntax.RecordConstructor"}}}},
+                                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.RecordConstructor"}}}},
                                         "domain": {"variable": "hydra.haskell.syntax.RecordConstructor"},
                                         "parameter": "rec"}}}],
                                 "typeName": "hydra.haskell.syntax.Constructor"}}}},
@@ -502,14 +502,14 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "ord"},
-                                                    "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.PositionalConstructor"}}}},
+                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.PositionalConstructor"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Name"}, "variables": []}},
                                               {
                                                 "name": "types",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "ord"},
-                                                    "function": {"project": {"field": "fields", "typeName": "hydra.haskell.syntax.PositionalConstructor"}}}},
+                                                    "function": {"project": {"fieldName": "fields", "typeName": "hydra.haskell.syntax.PositionalConstructor"}}}},
                                                 "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Type"}}, "variables": []}}],
                                             "body": {
                                               "application": {
@@ -549,14 +549,14 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "rec"},
-                                                    "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.RecordConstructor"}}}},
+                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.RecordConstructor"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Name"}, "variables": []}},
                                               {
                                                 "name": "fields",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "rec"},
-                                                    "function": {"project": {"field": "fields", "typeName": "hydra.haskell.syntax.RecordConstructor"}}}},
+                                                    "function": {"project": {"fieldName": "fields", "typeName": "hydra.haskell.syntax.RecordConstructor"}}}},
                                                 "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Field"}}, "variables": []}}],
                                             "body": {
                                               "application": {
@@ -686,14 +686,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "appHead"},
-                                            "function": {"project": {"field": "function", "typeName": "hydra.haskell.syntax.ApplicationDeclarationHead"}}}},
+                                            "function": {"project": {"fieldName": "function", "typeName": "hydra.haskell.syntax.ApplicationDeclarationHead"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.DeclarationHead"}, "variables": []}},
                                       {
                                         "name": "op",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "appHead"},
-                                            "function": {"project": {"field": "operand", "typeName": "hydra.haskell.syntax.ApplicationDeclarationHead"}}}},
+                                            "function": {"project": {"fieldName": "operand", "typeName": "hydra.haskell.syntax.ApplicationDeclarationHead"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Variable"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -749,7 +749,7 @@
                                         "body": {
                                           "application": {
                                             "argument": {"variable": "d"},
-                                            "function": {"project": {"field": "comments", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
+                                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
                                         "domain": {"variable": "hydra.haskell.syntax.DataDeclaration"},
                                         "parameter": "d"}}},
                                   {
@@ -759,7 +759,7 @@
                                         "body": {
                                           "application": {
                                             "argument": {"variable": "t"},
-                                            "function": {"project": {"field": "comments", "typeName": "hydra.haskell.syntax.TypeSynonymDeclaration"}}}},
+                                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.TypeSynonymDeclaration"}}}},
                                         "domain": {"variable": "hydra.haskell.syntax.TypeSynonymDeclaration"},
                                         "parameter": "t"}}},
                                   {
@@ -779,7 +779,7 @@
                                                         "body": {
                                                           "application": {
                                                             "argument": {"variable": "s"},
-                                                            "function": {"project": {"field": "comments", "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}}},
+                                                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}}},
                                                         "domain": {"variable": "hydra.haskell.syntax.SimpleValueBinding"},
                                                         "parameter": "s"}}}],
                                                 "typeName": "hydra.haskell.syntax.ValueBinding"}}}},
@@ -792,7 +792,7 @@
                                         "body": {
                                           "application": {
                                             "argument": {"variable": "tb"},
-                                            "function": {"project": {"field": "comments", "typeName": "hydra.haskell.syntax.TypedBinding"}}}},
+                                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.TypedBinding"}}}},
                                         "domain": {"variable": "hydra.haskell.syntax.TypedBinding"},
                                         "parameter": "tb"}}}],
                                 "typeName": "hydra.haskell.syntax.Declaration"}}}},
@@ -817,28 +817,28 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "dataDecl"},
-                                                    "function": {"project": {"field": "keyword", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
+                                                    "function": {"project": {"fieldName": "keyword", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.DataKeyword"}, "variables": []}},
                                               {
                                                 "name": "hd",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "dataDecl"},
-                                                    "function": {"project": {"field": "head", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
+                                                    "function": {"project": {"fieldName": "head", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.DeclarationHead"}, "variables": []}},
                                               {
                                                 "name": "cons",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "dataDecl"},
-                                                    "function": {"project": {"field": "constructors", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
+                                                    "function": {"project": {"fieldName": "constructors", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
                                                 "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Constructor"}}, "variables": []}},
                                               {
                                                 "name": "deriv",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "dataDecl"},
-                                                    "function": {"project": {"field": "deriving", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
+                                                    "function": {"project": {"fieldName": "deriving", "typeName": "hydra.haskell.syntax.DataDeclaration"}}}},
                                                 "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.DerivingClause"}}, "variables": []}},
                                               {
                                                 "name": "derivCat",
@@ -964,14 +964,14 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "typeDecl"},
-                                                    "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.TypeSynonymDeclaration"}}}},
+                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.TypeSynonymDeclaration"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.DeclarationHead"}, "variables": []}},
                                               {
                                                 "name": "typ",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "typeDecl"},
-                                                    "function": {"project": {"field": "type", "typeName": "hydra.haskell.syntax.TypeSynonymDeclaration"}}}},
+                                                    "function": {"project": {"fieldName": "type", "typeName": "hydra.haskell.syntax.TypeSynonymDeclaration"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}}],
                                             "body": {
                                               "application": {
@@ -1017,28 +1017,28 @@
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "typedBinding"},
-                                                    "function": {"project": {"field": "typeSignature", "typeName": "hydra.haskell.syntax.TypedBinding"}}}},
+                                                    "function": {"project": {"fieldName": "typeSignature", "typeName": "hydra.haskell.syntax.TypedBinding"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.TypeSignature"}, "variables": []}},
                                               {
                                                 "name": "vb",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "typedBinding"},
-                                                    "function": {"project": {"field": "valueBinding", "typeName": "hydra.haskell.syntax.TypedBinding"}}}},
+                                                    "function": {"project": {"fieldName": "valueBinding", "typeName": "hydra.haskell.syntax.TypedBinding"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.ValueBinding"}, "variables": []}},
                                               {
                                                 "name": "name",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "typeSig"},
-                                                    "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.TypeSignature"}}}},
+                                                    "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.TypeSignature"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Name"}, "variables": []}},
                                               {
                                                 "name": "htype",
                                                 "term": {
                                                   "application": {
                                                     "argument": {"variable": "typeSig"},
-                                                    "function": {"project": {"field": "type", "typeName": "hydra.haskell.syntax.TypeSignature"}}}},
+                                                    "function": {"project": {"fieldName": "type", "typeName": "hydra.haskell.syntax.TypeSignature"}}}},
                                                 "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}}],
                                             "body": {
                                               "application": {
@@ -1196,14 +1196,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "letExpr"},
-                                            "function": {"project": {"field": "bindings", "typeName": "hydra.haskell.syntax.LetExpression"}}}},
+                                            "function": {"project": {"fieldName": "bindings", "typeName": "hydra.haskell.syntax.LetExpression"}}}},
                                         "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.LocalBinding"}}, "variables": []}},
                                       {
                                         "name": "inner",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "letExpr"},
-                                            "function": {"project": {"field": "inner", "typeName": "hydra.haskell.syntax.LetExpression"}}}},
+                                            "function": {"project": {"fieldName": "inner", "typeName": "hydra.haskell.syntax.LetExpression"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Expression"}, "variables": []}},
                                       {
                                         "name": "encodeBinding",
@@ -1347,21 +1347,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "field"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.Field"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.Field"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Name"}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "argument": {"variable": "field"},
-                            "function": {"project": {"field": "type", "typeName": "hydra.haskell.syntax.Field"}}}},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.haskell.syntax.Field"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}},
                       {
                         "name": "mc",
                         "term": {
                           "application": {
                             "argument": {"variable": "field"},
-                            "function": {"project": {"field": "comments", "typeName": "hydra.haskell.syntax.Field"}}}},
+                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.Field"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "body",
@@ -1433,21 +1433,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "ifExpr"},
-                            "function": {"project": {"field": "condition", "typeName": "hydra.haskell.syntax.IfExpression"}}}},
+                            "function": {"project": {"fieldName": "condition", "typeName": "hydra.haskell.syntax.IfExpression"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Expression"}, "variables": []}},
                       {
                         "name": "ethen",
                         "term": {
                           "application": {
                             "argument": {"variable": "ifExpr"},
-                            "function": {"project": {"field": "then", "typeName": "hydra.haskell.syntax.IfExpression"}}}},
+                            "function": {"project": {"fieldName": "then", "typeName": "hydra.haskell.syntax.IfExpression"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Expression"}, "variables": []}},
                       {
                         "name": "eelse",
                         "term": {
                           "application": {
                             "argument": {"variable": "ifExpr"},
-                            "function": {"project": {"field": "else", "typeName": "hydra.haskell.syntax.IfExpression"}}}},
+                            "function": {"project": {"fieldName": "else", "typeName": "hydra.haskell.syntax.IfExpression"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Expression"}, "variables": []}},
                       {
                         "name": "ifOp",
@@ -1544,7 +1544,7 @@
                     "argument": {
                       "application": {
                         "argument": {"variable": "spec"},
-                        "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.NamedImportExport"}}}},
+                        "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.NamedImportExport"}}}},
                     "function": {"variable": "hydra.haskell.serde.nameToExpr"}}},
                 "domain": {"variable": "hydra.haskell.syntax.NamedImportExport"},
                 "parameter": "spec"}}}},
@@ -1568,28 +1568,28 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "import"},
-                            "function": {"project": {"field": "qualified", "typeName": "hydra.haskell.syntax.Import"}}}},
+                            "function": {"project": {"fieldName": "qualified", "typeName": "hydra.haskell.syntax.Import"}}}},
                         "typeScheme": {"body": {"literal": {"boolean": {}}}, "variables": []}},
                       {
                         "name": "modName",
                         "term": {
                           "application": {
                             "argument": {"variable": "import"},
-                            "function": {"project": {"field": "module", "typeName": "hydra.haskell.syntax.Import"}}}},
+                            "function": {"project": {"fieldName": "module", "typeName": "hydra.haskell.syntax.Import"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.ModuleName"}, "variables": []}},
                       {
                         "name": "mod",
                         "term": {
                           "application": {
                             "argument": {"variable": "import"},
-                            "function": {"project": {"field": "as", "typeName": "hydra.haskell.syntax.Import"}}}},
+                            "function": {"project": {"fieldName": "as", "typeName": "hydra.haskell.syntax.Import"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.ModuleName"}}, "variables": []}},
                       {
                         "name": "mspec",
                         "term": {
                           "application": {
                             "argument": {"variable": "import"},
-                            "function": {"project": {"field": "spec", "typeName": "hydra.haskell.syntax.Import"}}}},
+                            "function": {"project": {"fieldName": "spec", "typeName": "hydra.haskell.syntax.Import"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.ImportSpec"}}, "variables": []}},
                       {
                         "name": "name",
@@ -1722,14 +1722,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "lambdaExpr"},
-                            "function": {"project": {"field": "bindings", "typeName": "hydra.haskell.syntax.LambdaExpression"}}}},
+                            "function": {"project": {"fieldName": "bindings", "typeName": "hydra.haskell.syntax.LambdaExpression"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Pattern"}}, "variables": []}},
                       {
                         "name": "inner",
                         "term": {
                           "application": {
                             "argument": {"variable": "lambdaExpr"},
-                            "function": {"project": {"field": "inner", "typeName": "hydra.haskell.syntax.LambdaExpression"}}}},
+                            "function": {"project": {"fieldName": "inner", "typeName": "hydra.haskell.syntax.LambdaExpression"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Expression"}, "variables": []}},
                       {
                         "name": "head",
@@ -2060,14 +2060,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "moduleHead"},
-                            "function": {"project": {"field": "comments", "typeName": "hydra.haskell.syntax.ModuleHead"}}}},
+                            "function": {"project": {"fieldName": "comments", "typeName": "hydra.haskell.syntax.ModuleHead"}}}},
                         "typeScheme": {"body": {"maybe": {"literal": {"string": {}}}}, "variables": []}},
                       {
                         "name": "modName",
                         "term": {
                           "application": {
                             "argument": {"variable": "moduleHead"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.ModuleHead"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.ModuleHead"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.ModuleName"}, "variables": []}},
                       {
                         "name": "mname",
@@ -2149,21 +2149,21 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "module"},
-                            "function": {"project": {"field": "head", "typeName": "hydra.haskell.syntax.Module"}}}},
+                            "function": {"project": {"fieldName": "head", "typeName": "hydra.haskell.syntax.Module"}}}},
                         "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.ModuleHead"}}, "variables": []}},
                       {
                         "name": "imports",
                         "term": {
                           "application": {
                             "argument": {"variable": "module"},
-                            "function": {"project": {"field": "imports", "typeName": "hydra.haskell.syntax.Module"}}}},
+                            "function": {"project": {"fieldName": "imports", "typeName": "hydra.haskell.syntax.Module"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Import"}}, "variables": []}},
                       {
                         "name": "decls",
                         "term": {
                           "application": {
                             "argument": {"variable": "module"},
-                            "function": {"project": {"field": "declarations", "typeName": "hydra.haskell.syntax.Module"}}}},
+                            "function": {"project": {"fieldName": "declarations", "typeName": "hydra.haskell.syntax.Module"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.Declaration"}}, "variables": []}},
                       {
                         "name": "warning",
@@ -2540,14 +2540,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "typeSig"},
-                            "function": {"project": {"field": "name", "typeName": "hydra.haskell.syntax.TypeSignature"}}}},
+                            "function": {"project": {"fieldName": "name", "typeName": "hydra.haskell.syntax.TypeSignature"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Name"}, "variables": []}},
                       {
                         "name": "typ",
                         "term": {
                           "application": {
                             "argument": {"variable": "typeSig"},
-                            "function": {"project": {"field": "type", "typeName": "hydra.haskell.syntax.TypeSignature"}}}},
+                            "function": {"project": {"fieldName": "type", "typeName": "hydra.haskell.syntax.TypeSignature"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}},
                       {
                         "name": "nameExpr",
@@ -2621,14 +2621,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "appType"},
-                                            "function": {"project": {"field": "context", "typeName": "hydra.haskell.syntax.ApplicationType"}}}},
+                                            "function": {"project": {"fieldName": "context", "typeName": "hydra.haskell.syntax.ApplicationType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}},
                                       {
                                         "name": "rhs",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "appType"},
-                                            "function": {"project": {"field": "argument", "typeName": "hydra.haskell.syntax.ApplicationType"}}}},
+                                            "function": {"project": {"fieldName": "argument", "typeName": "hydra.haskell.syntax.ApplicationType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -2652,14 +2652,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "ctxType"},
-                                            "function": {"project": {"field": "ctx", "typeName": "hydra.haskell.syntax.ConstrainedType"}}}},
+                                            "function": {"project": {"fieldName": "ctx", "typeName": "hydra.haskell.syntax.ConstrainedType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Constraint"}, "variables": []}},
                                       {
                                         "name": "typ",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "ctxType"},
-                                            "function": {"project": {"field": "type", "typeName": "hydra.haskell.syntax.ConstrainedType"}}}},
+                                            "function": {"project": {"fieldName": "type", "typeName": "hydra.haskell.syntax.ConstrainedType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -2683,14 +2683,14 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "funType"},
-                                            "function": {"project": {"field": "domain", "typeName": "hydra.haskell.syntax.FunctionType"}}}},
+                                            "function": {"project": {"fieldName": "domain", "typeName": "hydra.haskell.syntax.FunctionType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}},
                                       {
                                         "name": "cod",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "funType"},
-                                            "function": {"project": {"field": "codomain", "typeName": "hydra.haskell.syntax.FunctionType"}}}},
+                                            "function": {"project": {"fieldName": "codomain", "typeName": "hydra.haskell.syntax.FunctionType"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Type"}, "variables": []}}],
                                     "body": {
                                       "application": {
@@ -2774,21 +2774,21 @@
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "simpleVB"},
-                                            "function": {"project": {"field": "pattern", "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}}},
+                                            "function": {"project": {"fieldName": "pattern", "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.Pattern"}, "variables": []}},
                                       {
                                         "name": "rhs",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "simpleVB"},
-                                            "function": {"project": {"field": "rhs", "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}}},
+                                            "function": {"project": {"fieldName": "rhs", "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}}},
                                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.RightHandSide"}, "variables": []}},
                                       {
                                         "name": "local",
                                         "term": {
                                           "application": {
                                             "argument": {"variable": "simpleVB"},
-                                            "function": {"project": {"field": "localBindings", "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}}},
+                                            "function": {"project": {"fieldName": "localBindings", "typeName": "hydra.haskell.syntax.SimpleValueBinding"}}}},
                                         "typeScheme": {"body": {"maybe": {"variable": "hydra.haskell.syntax.LocalBindings"}}, "variables": []}},
                                       {
                                         "name": "lhsExpr",
@@ -2930,14 +2930,14 @@
                         "term": {
                           "application": {
                             "argument": {"variable": "qname"},
-                            "function": {"project": {"field": "qualifiers", "typeName": "hydra.haskell.syntax.QualifiedName"}}}},
+                            "function": {"project": {"fieldName": "qualifiers", "typeName": "hydra.haskell.syntax.QualifiedName"}}}},
                         "typeScheme": {"body": {"list": {"variable": "hydra.haskell.syntax.NamePart"}}, "variables": []}},
                       {
                         "name": "unqual",
                         "term": {
                           "application": {
                             "argument": {"variable": "qname"},
-                            "function": {"project": {"field": "unqualified", "typeName": "hydra.haskell.syntax.QualifiedName"}}}},
+                            "function": {"project": {"fieldName": "unqualified", "typeName": "hydra.haskell.syntax.QualifiedName"}}}},
                         "typeScheme": {"body": {"variable": "hydra.haskell.syntax.NamePart"}, "variables": []}},
                       {
                         "name": "h",
@@ -2979,33 +2979,33 @@
           "body": {"function": {"codomain": {"literal": {"string": {}}}, "domain": {"variable": "hydra.haskell.syntax.QualifiedName"}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.constants",
-    "hydra.serialization",
-    "hydra.haskell.operators",
-    "hydra.haskell.syntax",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.constants"},
+    {"module": "hydra.serialization"},
+    {"module": "hydra.haskell.operators"},
+    {"module": "hydra.haskell.syntax"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Haskell operator precendence and associativity are drawn from:\nhttps://self-learning-java-tutorial.blogspot.com/2016/04/haskell-operator-precedence.html\nOther operators were investigated using GHCi, e.g. \":info (->)\"\nOperator names are drawn (loosely) from:\nhttps://stackoverflow.com/questions/7746894/are-there-pronounceable-names-for-common-haskell-operators",
-  "namespace": "hydra.haskell.serde"}
+  "name": "hydra.haskell.serde"}

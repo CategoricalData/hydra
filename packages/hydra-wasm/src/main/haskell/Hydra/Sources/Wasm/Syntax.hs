@@ -16,8 +16,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.wasm.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.wasm.syntax"
 
 define :: String -> Type -> Binding
 define = datatype ns
@@ -27,9 +27,9 @@ wasm = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A WebAssembly text format (WAT) syntax model, based on the WebAssembly spec"
       ++ " (https://webassembly.github.io/spec/core/), retrieved 2026-04-06")}
   where

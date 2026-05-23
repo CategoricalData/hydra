@@ -42,11 +42,11 @@ encodeName isQualified conv env name =
       let focusNs = Pairs.first (Util.namespacesFocus (Environment.cppEnvironmentNamespaces env))
           boundVars = Pairs.second (Environment.cppEnvironmentBoundTypeVariables env)
           qualName = Names.qualifyName name
-          mns = Packaging.qualifiedNameNamespace qualName
+          mns = Packaging.qualifiedNameModuleName qualName
           local = Packaging.qualifiedNameLocal qualName
           cppLocal = sanitizeCppName (Formatting.convertCase Util.CaseConventionCamel conv local)
           cppNs =
-                  \nsVal -> Strings.intercalate "::" (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unNamespace nsVal)))
+                  \nsVal -> Strings.intercalate "::" (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
       in (Logic.ifElse isQualified (Maybes.maybe (Maybes.maybe cppLocal (\nsVal -> Strings.cat2 (cppNs nsVal) (Strings.cat2 "::" cppLocal)) mns) (\n -> n) (Maps.lookup name boundVars)) cppLocal)
 -- | Encode a qualified name with namespace
 encodeNameQualified :: Environment.CppEnvironment -> Core.Name -> String
@@ -55,24 +55,24 @@ encodeNameQualified env name =
       let boundVars = Pairs.second (Environment.cppEnvironmentBoundTypeVariables env)
           focusNs = Pairs.first (Util.namespacesFocus (Environment.cppEnvironmentNamespaces env))
           qualName = Names.qualifyName name
-          mns = Packaging.qualifiedNameNamespace qualName
+          mns = Packaging.qualifiedNameModuleName qualName
           local = Packaging.qualifiedNameLocal qualName
       in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (sanitizeCppName local) (Strings.intercalate "::" (Lists.map sanitizeCppName (Strings.splitOn "." (Core.unName name))))) (\n -> n) (Maps.lookup name boundVars))
 -- | Encode a namespace as a C++ namespace string
-encodeNamespace :: Packaging.Namespace -> String
+encodeNamespace :: Packaging.ModuleName -> String
 encodeNamespace nsVal =
-    Strings.intercalate "::" (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unNamespace nsVal)))
+    Strings.intercalate "::" (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unModuleName nsVal)))
 -- | Encode a type variable name
 encodeTypeVariable :: Core.Name -> String
 encodeTypeVariable name = Formatting.capitalize (Core.unName name)
 -- | Get the forward header name for a namespace
-fwdHeaderName :: Packaging.Namespace -> Core.Name
+fwdHeaderName :: Packaging.ModuleName -> Core.Name
 fwdHeaderName nsVal =
     Names.unqualifyName (Packaging.QualifiedName {
-      Packaging.qualifiedNameNamespace = (Just nsVal),
+      Packaging.qualifiedNameModuleName = (Just nsVal),
       Packaging.qualifiedNameLocal = "Fwd"})
 -- | Create a namespace declaration wrapping inner declarations
-namespaceDecl :: Packaging.Namespace -> [Syntax.Declaration] -> Syntax.Declaration
+namespaceDecl :: Packaging.ModuleName -> [Syntax.Declaration] -> Syntax.Declaration
 namespaceDecl nsVal decls =
     Syntax.DeclarationNamespace (Syntax.NamespaceDeclaration {
       Syntax.namespaceDeclarationName = (encodeNamespace nsVal),

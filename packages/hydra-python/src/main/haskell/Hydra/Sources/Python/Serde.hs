@@ -89,14 +89,14 @@ import qualified Hydra.Sources.Python.Syntax as PySyntax
 def :: String -> TTerm a -> TTermDefinition a
 def = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.python.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.python.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns] L.++ (PySyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Python serializer: converts Python AST to concrete syntax"}
   where
     definitions = [

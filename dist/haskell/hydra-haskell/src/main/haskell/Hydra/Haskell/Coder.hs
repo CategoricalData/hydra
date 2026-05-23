@@ -69,7 +69,7 @@ constantForTypeName tname = Strings.cat2 "_" (Names.localNameOf tname)
 constructModule :: Util.Namespaces Syntax.ModuleName -> Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Module
 constructModule namespaces mod defs cx g =
 
-      let h = \namespace -> Packaging.unNamespace namespace
+      let h = \namespace -> Packaging.unModuleName namespace
           createDeclarations =
                   \def -> case def of
                     Packaging.DefinitionType v0 ->
@@ -141,7 +141,7 @@ constructModule namespaces mod defs cx g =
         in (Right (Syntax.Module {
           Syntax.moduleHead = (Just (Syntax.ModuleHead {
             Syntax.moduleHeadComments = mc,
-            Syntax.moduleHeadName = (importName (h (Packaging.moduleNamespace mod))),
+            Syntax.moduleHeadName = (importName (h (Packaging.moduleName mod))),
             Syntax.moduleHeadExports = []})),
           Syntax.moduleImports = imports,
           Syntax.moduleDeclarations = decls}))))
@@ -237,7 +237,7 @@ encodeProjection :: Util.Namespaces Syntax.ModuleName -> Core.Projection -> Eith
 encodeProjection namespaces proj =
 
       let dn = Core.projectionTypeName proj
-          fname = Core.projectionField proj
+          fname = Core.projectionFieldName proj
       in (Right (Syntax.ExpressionVariable (Utils.recordFieldReference namespaces dn fname)))
 -- | Encode a standalone (un-applied) case statement as a Haskell lambda over a case expression
 encodeStandaloneCases :: Int -> Util.Namespaces Syntax.ModuleName -> Core.CaseStatement -> t0 -> Graph.Graph -> Either Errors.Error Syntax.Expression
@@ -461,7 +461,7 @@ encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =
 -- | Encode an unwrap term as a Haskell expression
 encodeUnwrap :: Util.Namespaces Syntax.ModuleName -> Core.Name -> Either t0 Syntax.Expression
 encodeUnwrap namespaces name =
-    Right (Syntax.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromMaybe (Packaging.Namespace "") (Names.namespaceOf name)) (Utils.newtypeAccessorName name))))
+    Right (Syntax.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromMaybe (Packaging.ModuleName "") (Names.namespaceOf name)) (Utils.newtypeAccessorName name))))
 -- | Extend metadata by analyzing a term for standard import usage (bottom-up step function)
 extendMetaForTerm :: Environment.HaskellModuleMetadata -> Core.Term -> Environment.HaskellModuleMetadata
 extendMetaForTerm meta term =
@@ -533,8 +533,7 @@ moduleToHaskell :: Packaging.Module -> [Packaging.Definition] -> Context.Context
 moduleToHaskell mod defs cx g =
     Eithers.bind (moduleToHaskellModule mod defs cx g) (\hsmod ->
       let s = Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr hsmod))
-          filepath =
-                  Names.namespaceToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") (Packaging.moduleNamespace mod)
+          filepath = Names.namespaceToFilePath Util.CaseConventionPascal (Packaging.FileExtension "hs") (Packaging.moduleName mod)
       in (Right (Maps.singleton filepath s)))
 -- | Convert a Hydra module and definitions to a Haskell module AST
 moduleToHaskellModule :: Packaging.Module -> [Packaging.Definition] -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Module
@@ -705,7 +704,7 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
                                 \name ->
                                   let tname =
                                           Names.unqualifyName (Packaging.QualifiedName {
-                                            Packaging.qualifiedNameNamespace = (Just (Pairs.first (Util.namespacesFocus namespaces))),
+                                            Packaging.qualifiedNameModuleName = (Just (Pairs.first (Util.namespacesFocus namespaces))),
                                             Packaging.qualifiedNameLocal = name})
                                   in (Logic.ifElse (Sets.member tname boundNames_) (deconflict (Strings.cat2 name "_")) name)
                     in (Eithers.bind (Annotations.getTypeDescription cx g ftype) (\comments ->
@@ -799,7 +798,7 @@ typeDecl namespaces name typ cx g =
                         forVariableType =
                                 \vname ->
                                   let qname = Names.qualifyName vname
-                                      mns = Packaging.qualifiedNameNamespace qname
+                                      mns = Packaging.qualifiedNameModuleName qname
                                       local = Packaging.qualifiedNameLocal qname
                                   in (Maybes.map (\ns -> Core.TermVariable (Names.qname ns (Strings.cat [
                                     "_",

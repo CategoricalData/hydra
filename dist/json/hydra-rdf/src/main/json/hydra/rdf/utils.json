@@ -649,14 +649,14 @@
                             "term": {
                               "application": {
                                 "argument": {"variable": "qualName"},
-                                "function": {"project": {"field": "namespace", "typeName": "hydra.packaging.QualifiedName"}}}},
-                            "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.Namespace"}}, "variables": []}},
+                                "function": {"project": {"fieldName": "moduleName", "typeName": "hydra.packaging.QualifiedName"}}}},
+                            "typeScheme": {"body": {"maybe": {"variable": "hydra.packaging.ModuleName"}}, "variables": []}},
                           {
                             "name": "local_",
                             "term": {
                               "application": {
                                 "argument": {"variable": "qualName"},
-                                "function": {"project": {"field": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
+                                "function": {"project": {"fieldName": "local", "typeName": "hydra.packaging.QualifiedName"}}}},
                             "typeScheme": {"body": {"literal": {"string": {}}}, "variables": []}}],
                         "body": {
                           "wrap": {
@@ -670,14 +670,14 @@
                                         "argument": {"variable": "gname"},
                                         "function": {
                                           "application": {
-                                            "argument": {"unwrap": "hydra.packaging.Namespace"},
+                                            "argument": {"unwrap": "hydra.packaging.ModuleName"},
                                             "function": {
                                               "application": {
                                                 "argument": {"literal": {"string": ""}},
                                                 "function": {
                                                   "typeApplication": {
                                                     "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.maybe"}, "type": {"literal": {"string": {}}}}},
-                                                    "type": {"variable": "hydra.packaging.Namespace"}}}}}}}}},
+                                                    "type": {"variable": "hydra.packaging.ModuleName"}}}}}}}}},
                                     {"literal": {"string": "#"}},
                                     {"application": {"argument": {"variable": "local_"}, "function": {"variable": "hydra.formatting.decapitalize"}}},
                                     {
@@ -763,7 +763,7 @@
                     "argument": {"variable": "descs"},
                     "function": {
                       "application": {
-                        "argument": {"project": {"field": "subject", "typeName": "hydra.rdf.syntax.Description"}},
+                        "argument": {"project": {"fieldName": "subject", "typeName": "hydra.rdf.syntax.Description"}},
                         "function": {
                           "typeApplication": {
                             "body": {"typeApplication": {"body": {"variable": "hydra.lib.lists.map"}, "type": {"variable": "hydra.rdf.syntax.Description"}}},
@@ -798,7 +798,9 @@
                                     "argument": {
                                       "application": {
                                         "argument": {
-                                          "application": {"argument": {"variable": "d"}, "function": {"project": {"field": "graph", "typeName": "hydra.rdf.syntax.Description"}}}},
+                                          "application": {
+                                            "argument": {"variable": "d"},
+                                            "function": {"project": {"fieldName": "graph", "typeName": "hydra.rdf.syntax.Description"}}}},
                                         "function": {"unwrap": "hydra.rdf.syntax.Graph"}}},
                                     "function": {"typeApplication": {"body": {"variable": "hydra.lib.sets.toList"}, "type": {"variable": "hydra.rdf.syntax.Triple"}}}}},
                                 "domain": {"variable": "hydra.rdf.syntax.Description"},
@@ -837,33 +839,33 @@
           "body": {"function": {"codomain": {"variable": "hydra.rdf.syntax.Iri"}, "domain": {"literal": {"string": {}}}}},
           "variables": []}}}],
   "dependencies": [
-    "hydra.formatting",
-    "hydra.names",
-    "hydra.annotations",
-    "hydra.rdf.syntax",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.formatting"},
+    {"module": "hydra.names"},
+    {"module": "hydra.annotations"},
+    {"module": "hydra.rdf.syntax"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Utility functions for working with RDF graphs and descriptions",
-  "namespace": "hydra.rdf.utils"}
+  "name": "hydra.rdf.utils"}

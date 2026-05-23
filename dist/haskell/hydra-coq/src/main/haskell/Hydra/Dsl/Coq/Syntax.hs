@@ -25,7 +25,7 @@ annotatedApplicationAnnot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AnnotatedApplication"),
-        Core.projectionField = (Core.Name "annot")})),
+        Core.projectionFieldName = (Core.Name "annot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the terms field of hydra.coq.syntax.AnnotatedApplication
 annotatedApplicationTerms :: Phantoms.TTerm Syntax.AnnotatedApplication -> Phantoms.TTerm [Syntax.Term1]
@@ -33,7 +33,7 @@ annotatedApplicationTerms x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AnnotatedApplication"),
-        Core.projectionField = (Core.Name "terms")})),
+        Core.projectionFieldName = (Core.Name "terms")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the annot field of hydra.coq.syntax.AnnotatedApplication
 annotatedApplicationWithAnnot :: Phantoms.TTerm Syntax.AnnotatedApplication -> Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm Syntax.AnnotatedApplication
@@ -49,7 +49,7 @@ annotatedApplicationWithAnnot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AnnotatedApplication"),
-              Core.projectionField = (Core.Name "terms")})),
+              Core.projectionFieldName = (Core.Name "terms")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the terms field of hydra.coq.syntax.AnnotatedApplication
 annotatedApplicationWithTerms :: Phantoms.TTerm Syntax.AnnotatedApplication -> Phantoms.TTerm [Syntax.Term1] -> Phantoms.TTerm Syntax.AnnotatedApplication
@@ -62,7 +62,7 @@ annotatedApplicationWithTerms original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AnnotatedApplication"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "terms"),
@@ -125,7 +125,7 @@ axiomDeclarationName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.AxiomDeclaration
 axiomDeclarationType :: Phantoms.TTerm Syntax.AxiomDeclaration -> Phantoms.TTerm Syntax.Type
@@ -133,7 +133,7 @@ axiomDeclarationType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.coq.syntax.AxiomDeclaration
 axiomDeclarationWithName :: Phantoms.TTerm Syntax.AxiomDeclaration -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.AxiomDeclaration
@@ -149,7 +149,7 @@ axiomDeclarationWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.coq.syntax.AxiomDeclaration
 axiomDeclarationWithType :: Phantoms.TTerm Syntax.AxiomDeclaration -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.AxiomDeclaration
@@ -162,7 +162,7 @@ axiomDeclarationWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.AxiomDeclaration"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -236,7 +236,7 @@ caseItemAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-        Core.projectionField = (Core.Name "as")})),
+        Core.projectionFieldName = (Core.Name "as")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the in field of hydra.coq.syntax.CaseItem
 caseItemIn :: Phantoms.TTerm Syntax.CaseItem -> Phantoms.TTerm (Maybe Syntax.Pattern)
@@ -244,7 +244,7 @@ caseItemIn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-        Core.projectionField = (Core.Name "in")})),
+        Core.projectionFieldName = (Core.Name "in")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.CaseItem
 caseItemTerm :: Phantoms.TTerm Syntax.CaseItem -> Phantoms.TTerm Syntax.Term100
@@ -252,7 +252,7 @@ caseItemTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the as field of hydra.coq.syntax.CaseItem
 caseItemWithAs :: Phantoms.TTerm Syntax.CaseItem -> Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Syntax.CaseItem
@@ -265,7 +265,7 @@ caseItemWithAs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "as"),
@@ -275,7 +275,7 @@ caseItemWithAs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "in")})),
+              Core.projectionFieldName = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the in field of hydra.coq.syntax.CaseItem
 caseItemWithIn :: Phantoms.TTerm Syntax.CaseItem -> Phantoms.TTerm (Maybe Syntax.Pattern) -> Phantoms.TTerm Syntax.CaseItem
@@ -288,14 +288,14 @@ caseItemWithIn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "as"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "as")})),
+              Core.projectionFieldName = (Core.Name "as")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
@@ -314,14 +314,14 @@ caseItemWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "as")})),
+              Core.projectionFieldName = (Core.Name "as")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CaseItem"),
-              Core.projectionField = (Core.Name "in")})),
+              Core.projectionFieldName = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.Cofix
 cofix :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm (Maybe Syntax.CofixQual) -> Phantoms.TTerm Syntax.Cofix
@@ -341,7 +341,7 @@ cofixBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Cofix"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL constructor for hydra.coq.syntax.CofixBody
 cofixBody2 :: Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.CofixBody
@@ -367,7 +367,7 @@ cofixBodyBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the ident field of hydra.coq.syntax.CofixBody
 cofixBodyIdent :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm Syntax.Ident
@@ -375,7 +375,7 @@ cofixBodyIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-        Core.projectionField = (Core.Name "ident")})),
+        Core.projectionFieldName = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.CofixBody
 cofixBodyTerm :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm Syntax.Term
@@ -383,7 +383,7 @@ cofixBodyTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.CofixBody
 cofixBodyType :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -391,7 +391,7 @@ cofixBodyType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the binders field of hydra.coq.syntax.CofixBody
 cofixBodyWithBinders :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.CofixBody
@@ -404,7 +404,7 @@ cofixBodyWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -414,14 +414,14 @@ cofixBodyWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the ident field of hydra.coq.syntax.CofixBody
 cofixBodyWithIdent :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.CofixBody
@@ -437,21 +437,21 @@ cofixBodyWithIdent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.coq.syntax.CofixBody
 cofixBodyWithTerm :: Phantoms.TTerm Syntax.CofixBody -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.CofixBody
@@ -464,21 +464,21 @@ cofixBodyWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -494,14 +494,14 @@ cofixBodyWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -511,7 +511,7 @@ cofixBodyWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixBody"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL accessor for the qual field of hydra.coq.syntax.Cofix
 cofixQual :: Phantoms.TTerm Syntax.Cofix -> Phantoms.TTerm (Maybe Syntax.CofixQual)
@@ -519,7 +519,7 @@ cofixQual x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Cofix"),
-        Core.projectionField = (Core.Name "qual")})),
+        Core.projectionFieldName = (Core.Name "qual")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL injection for the in variant of hydra.coq.syntax.CofixQual
 cofixQualIn :: Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.CofixQual
@@ -563,7 +563,7 @@ cofixWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Cofix"),
-              Core.projectionField = (Core.Name "qual")})),
+              Core.projectionFieldName = (Core.Name "qual")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL accessor for the for field of hydra.coq.syntax.CofixWith
 cofixWithFor :: Phantoms.TTerm Syntax.CofixWith -> Phantoms.TTerm (Maybe Syntax.Ident)
@@ -571,7 +571,7 @@ cofixWithFor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixWith"),
-        Core.projectionField = (Core.Name "for")})),
+        Core.projectionFieldName = (Core.Name "for")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the qual field of hydra.coq.syntax.Cofix
 cofixWithQual :: Phantoms.TTerm Syntax.Cofix -> Phantoms.TTerm (Maybe Syntax.CofixQual) -> Phantoms.TTerm Syntax.Cofix
@@ -584,7 +584,7 @@ cofixWithQual original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Cofix"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qual"),
@@ -595,7 +595,7 @@ cofixWithWith x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixWith"),
-        Core.projectionField = (Core.Name "with")})),
+        Core.projectionFieldName = (Core.Name "with")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the for field of hydra.coq.syntax.CofixWith
 cofixWithWithFor :: Phantoms.TTerm Syntax.CofixWith -> Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm Syntax.CofixWith
@@ -608,7 +608,7 @@ cofixWithWithFor original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixWith"),
-              Core.projectionField = (Core.Name "with")})),
+              Core.projectionFieldName = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "for"),
@@ -627,7 +627,7 @@ cofixWithWithWith original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.CofixWith"),
-              Core.projectionField = (Core.Name "for")})),
+              Core.projectionFieldName = (Core.Name "for")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.coq.syntax.Comment wrapper
 comment :: Phantoms.TTerm String -> Phantoms.TTerm Syntax.Comment
@@ -656,7 +656,7 @@ constructorBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.coq.syntax.Constructor
 constructorName :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm Syntax.Ident
@@ -664,7 +664,7 @@ constructorName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.Constructor
 constructorType :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -672,7 +672,7 @@ constructorType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the binders field of hydra.coq.syntax.Constructor
 constructorWithBinders :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.Constructor
@@ -685,7 +685,7 @@ constructorWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -695,7 +695,7 @@ constructorWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.coq.syntax.Constructor
 constructorWithName :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.Constructor
@@ -711,14 +711,14 @@ constructorWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.coq.syntax.Constructor
 constructorWithType :: Phantoms.TTerm Syntax.Constructor -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.Constructor
@@ -731,14 +731,14 @@ constructorWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Constructor"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -770,7 +770,7 @@ definitionBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body field of hydra.coq.syntax.Definition
 definitionBody :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.Term
@@ -778,7 +778,7 @@ definitionBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the locality field of hydra.coq.syntax.Definition
 definitionLocality :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm (Maybe Syntax.Locality)
@@ -786,7 +786,7 @@ definitionLocality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "locality")})),
+        Core.projectionFieldName = (Core.Name "locality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.coq.syntax.Definition
 definitionName :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.Ident
@@ -794,7 +794,7 @@ definitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.Definition
 definitionType :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -802,7 +802,7 @@ definitionType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the binders field of hydra.coq.syntax.Definition
 definitionWithBinders :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.Definition
@@ -815,14 +815,14 @@ definitionWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -832,14 +832,14 @@ definitionWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the body field of hydra.coq.syntax.Definition
 definitionWithBody :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Definition
@@ -852,28 +852,28 @@ definitionWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -892,28 +892,28 @@ definitionWithLocality original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.coq.syntax.Definition
 definitionWithName :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.Definition
@@ -926,7 +926,7 @@ definitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -936,21 +936,21 @@ definitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.coq.syntax.Definition
 definitionWithType :: Phantoms.TTerm Syntax.Definition -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.Definition
@@ -963,21 +963,21 @@ definitionWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -987,7 +987,7 @@ definitionWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Definition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.Document
 document :: Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.Document
@@ -1004,7 +1004,7 @@ documentSentences x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Document"),
-        Core.projectionField = (Core.Name "sentences")})),
+        Core.projectionFieldName = (Core.Name "sentences")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the sentences field of hydra.coq.syntax.Document
 documentWithSentences :: Phantoms.TTerm Syntax.Document -> Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.Document
@@ -1033,7 +1033,7 @@ equationPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Equation"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.Equation
 equationTerm :: Phantoms.TTerm Syntax.Equation -> Phantoms.TTerm Syntax.Term
@@ -1041,7 +1041,7 @@ equationTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Equation"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the pattern field of hydra.coq.syntax.Equation
 equationWithPattern :: Phantoms.TTerm Syntax.Equation -> Phantoms.TTerm [[Syntax.Pattern]] -> Phantoms.TTerm Syntax.Equation
@@ -1057,7 +1057,7 @@ equationWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Equation"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.coq.syntax.Equation
 equationWithTerm :: Phantoms.TTerm Syntax.Equation -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Equation
@@ -1070,7 +1070,7 @@ equationWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Equation"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -1093,7 +1093,7 @@ existentialVariableIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ExistentialVariable"),
-        Core.projectionField = (Core.Name "ident")})),
+        Core.projectionFieldName = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the variant field of hydra.coq.syntax.ExistentialVariable
 existentialVariableVariant :: Phantoms.TTerm Syntax.ExistentialVariable -> Phantoms.TTerm Syntax.ExistentialVariableVariant
@@ -1101,7 +1101,7 @@ existentialVariableVariant x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ExistentialVariable"),
-        Core.projectionField = (Core.Name "variant")})),
+        Core.projectionFieldName = (Core.Name "variant")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL injection for the inside1 variant of hydra.coq.syntax.ExistentialVariableVariant
 existentialVariableVariantInside1 :: Phantoms.TTerm Syntax.ExistentialVariableVariant
@@ -1149,7 +1149,7 @@ existentialVariableWithIdent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ExistentialVariable"),
-              Core.projectionField = (Core.Name "variant")})),
+              Core.projectionFieldName = (Core.Name "variant")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the variant field of hydra.coq.syntax.ExistentialVariable
 existentialVariableWithVariant :: Phantoms.TTerm Syntax.ExistentialVariable -> Phantoms.TTerm Syntax.ExistentialVariableVariant -> Phantoms.TTerm Syntax.ExistentialVariable
@@ -1162,7 +1162,7 @@ existentialVariableWithVariant original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ExistentialVariable"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "variant"),
@@ -1218,7 +1218,7 @@ fixAnnot_MeasureIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-        Core.projectionField = (Core.Name "ident")})),
+        Core.projectionFieldName = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.FixAnnot_Measure
 fixAnnot_MeasureTerm :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm Syntax.OneTerm
@@ -1226,7 +1226,7 @@ fixAnnot_MeasureTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term2 field of hydra.coq.syntax.FixAnnot_Measure
 fixAnnot_MeasureTerm2 :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm (Maybe Syntax.OneTerm)
@@ -1234,7 +1234,7 @@ fixAnnot_MeasureTerm2 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-        Core.projectionField = (Core.Name "term2")})),
+        Core.projectionFieldName = (Core.Name "term2")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the ident field of hydra.coq.syntax.FixAnnot_Measure
 fixAnnot_MeasureWithIdent :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm Syntax.FixAnnot_Measure
@@ -1247,7 +1247,7 @@ fixAnnot_MeasureWithIdent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
@@ -1257,7 +1257,7 @@ fixAnnot_MeasureWithIdent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "term2")})),
+              Core.projectionFieldName = (Core.Name "term2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.coq.syntax.FixAnnot_Measure
 fixAnnot_MeasureWithTerm :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm Syntax.OneTerm -> Phantoms.TTerm Syntax.FixAnnot_Measure
@@ -1273,14 +1273,14 @@ fixAnnot_MeasureWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "term2")})),
+              Core.projectionFieldName = (Core.Name "term2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term2 field of hydra.coq.syntax.FixAnnot_Measure
 fixAnnot_MeasureWithTerm2 :: Phantoms.TTerm Syntax.FixAnnot_Measure -> Phantoms.TTerm (Maybe Syntax.OneTerm) -> Phantoms.TTerm Syntax.FixAnnot_Measure
@@ -1293,14 +1293,14 @@ fixAnnot_MeasureWithTerm2 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Measure"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term2"),
@@ -1323,7 +1323,7 @@ fixAnnot_WfIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Wf"),
-        Core.projectionField = (Core.Name "ident")})),
+        Core.projectionFieldName = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.FixAnnot_Wf
 fixAnnot_WfTerm :: Phantoms.TTerm Syntax.FixAnnot_Wf -> Phantoms.TTerm Syntax.OneTerm
@@ -1331,7 +1331,7 @@ fixAnnot_WfTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Wf"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the ident field of hydra.coq.syntax.FixAnnot_Wf
 fixAnnot_WfWithIdent :: Phantoms.TTerm Syntax.FixAnnot_Wf -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.FixAnnot_Wf
@@ -1344,7 +1344,7 @@ fixAnnot_WfWithIdent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Wf"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "ident"),
@@ -1363,7 +1363,7 @@ fixAnnot_WfWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixAnnot_Wf"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the decl variant of hydra.coq.syntax.Fix
 fixDecl :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Fix
@@ -1399,7 +1399,7 @@ fixWithDecls x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixWith"),
-        Core.projectionField = (Core.Name "decls")})),
+        Core.projectionFieldName = (Core.Name "decls")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the for field of hydra.coq.syntax.FixWith
 fixWithFor :: Phantoms.TTerm Syntax.FixWith -> Phantoms.TTerm (Maybe Syntax.Ident)
@@ -1407,7 +1407,7 @@ fixWithFor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixWith"),
-        Core.projectionField = (Core.Name "for")})),
+        Core.projectionFieldName = (Core.Name "for")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the decls field of hydra.coq.syntax.FixWith
 fixWithWithDecls :: Phantoms.TTerm Syntax.FixWith -> Phantoms.TTerm [Syntax.Fix_Decl] -> Phantoms.TTerm Syntax.FixWith
@@ -1423,7 +1423,7 @@ fixWithWithDecls original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixWith"),
-              Core.projectionField = (Core.Name "for")})),
+              Core.projectionFieldName = (Core.Name "for")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the for field of hydra.coq.syntax.FixWith
 fixWithWithFor :: Phantoms.TTerm Syntax.FixWith -> Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm Syntax.FixWith
@@ -1436,7 +1436,7 @@ fixWithWithFor original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixWith"),
-              Core.projectionField = (Core.Name "decls")})),
+              Core.projectionFieldName = (Core.Name "decls")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "for"),
@@ -1468,7 +1468,7 @@ fix_DeclAnnot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "annot")})),
+        Core.projectionFieldName = (Core.Name "annot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the binders field of hydra.coq.syntax.Fix_Decl
 fix_DeclBinders :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm [Syntax.Binder]
@@ -1476,7 +1476,7 @@ fix_DeclBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the ident field of hydra.coq.syntax.Fix_Decl
 fix_DeclIdent :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Ident
@@ -1484,7 +1484,7 @@ fix_DeclIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "ident")})),
+        Core.projectionFieldName = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.Fix_Decl
 fix_DeclTerm :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Term
@@ -1492,7 +1492,7 @@ fix_DeclTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.Fix_Decl
 fix_DeclType :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -1500,7 +1500,7 @@ fix_DeclType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the annot field of hydra.coq.syntax.Fix_Decl
 fix_DeclWithAnnot :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm (Maybe Syntax.FixAnnot) -> Phantoms.TTerm Syntax.Fix_Decl
@@ -1513,14 +1513,14 @@ fix_DeclWithAnnot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
@@ -1530,14 +1530,14 @@ fix_DeclWithAnnot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the binders field of hydra.coq.syntax.Fix_Decl
 fix_DeclWithBinders :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.Fix_Decl
@@ -1550,7 +1550,7 @@ fix_DeclWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -1560,21 +1560,21 @@ fix_DeclWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the ident field of hydra.coq.syntax.Fix_Decl
 fix_DeclWithIdent :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.Fix_Decl
@@ -1590,28 +1590,28 @@ fix_DeclWithIdent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.coq.syntax.Fix_Decl
 fix_DeclWithTerm :: Phantoms.TTerm Syntax.Fix_Decl -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Fix_Decl
@@ -1624,28 +1624,28 @@ fix_DeclWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -1661,21 +1661,21 @@ fix_DeclWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -1685,7 +1685,7 @@ fix_DeclWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fix_Decl"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the in variant of hydra.coq.syntax.Fix_Qual
 fix_QualIn :: Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Fix_Qual
@@ -1736,7 +1736,7 @@ fixpointDefinitionAnnot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "annot")})),
+        Core.projectionFieldName = (Core.Name "annot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the binders field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionBinders :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm [Syntax.Binder]
@@ -1744,7 +1744,7 @@ fixpointDefinitionBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionBody :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm Syntax.Term
@@ -1752,7 +1752,7 @@ fixpointDefinitionBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the locality field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionLocality :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.Locality)
@@ -1760,7 +1760,7 @@ fixpointDefinitionLocality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "locality")})),
+        Core.projectionFieldName = (Core.Name "locality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionName :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm Syntax.Ident
@@ -1768,7 +1768,7 @@ fixpointDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionType :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -1776,7 +1776,7 @@ fixpointDefinitionType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the with field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionWith :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm [Syntax.Fix_Decl]
@@ -1784,7 +1784,7 @@ fixpointDefinitionWith x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-        Core.projectionField = (Core.Name "with")})),
+        Core.projectionFieldName = (Core.Name "with")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the annot field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionWithAnnot :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.FixAnnot) -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1797,21 +1797,21 @@ fixpointDefinitionWithAnnot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
@@ -1821,21 +1821,21 @@ fixpointDefinitionWithAnnot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})),
+              Core.projectionFieldName = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the binders field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionWithBinders :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1848,14 +1848,14 @@ fixpointDefinitionWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -1865,28 +1865,28 @@ fixpointDefinitionWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})),
+              Core.projectionFieldName = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the body field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionWithBody :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1899,35 +1899,35 @@ fixpointDefinitionWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -1937,7 +1937,7 @@ fixpointDefinitionWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})),
+              Core.projectionFieldName = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the locality field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionWithLocality :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.Locality) -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -1953,42 +1953,42 @@ fixpointDefinitionWithLocality original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})),
+              Core.projectionFieldName = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionWithName :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -2001,7 +2001,7 @@ fixpointDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -2011,35 +2011,35 @@ fixpointDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})),
+              Core.projectionFieldName = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionWithType :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -2052,28 +2052,28 @@ fixpointDefinitionWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -2083,14 +2083,14 @@ fixpointDefinitionWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "with")})),
+              Core.projectionFieldName = (Core.Name "with")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the with field of hydra.coq.syntax.FixpointDefinition
 fixpointDefinitionWithWith :: Phantoms.TTerm Syntax.FixpointDefinition -> Phantoms.TTerm [Syntax.Fix_Decl] -> Phantoms.TTerm Syntax.FixpointDefinition
@@ -2103,42 +2103,42 @@ fixpointDefinitionWithWith original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "annot"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "annot")})),
+              Core.projectionFieldName = (Core.Name "annot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.FixpointDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "with"),
@@ -2161,7 +2161,7 @@ forallBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Forall"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL injection for the forall variant of hydra.coq.syntax.ForallOrFun
 forallOrFunForall :: Phantoms.TTerm Syntax.Forall -> Phantoms.TTerm Syntax.ForallOrFun
@@ -2185,7 +2185,7 @@ forallType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Forall"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the binders field of hydra.coq.syntax.Forall
 forallWithBinders :: Phantoms.TTerm Syntax.Forall -> Phantoms.TTerm Syntax.OpenBinders -> Phantoms.TTerm Syntax.Forall
@@ -2201,7 +2201,7 @@ forallWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Forall"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.coq.syntax.Forall
 forallWithType :: Phantoms.TTerm Syntax.Forall -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.Forall
@@ -2214,7 +2214,7 @@ forallWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Forall"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -2237,7 +2237,7 @@ funBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fun"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body field of hydra.coq.syntax.Fun
 funBody :: Phantoms.TTerm Syntax.Fun -> Phantoms.TTerm Syntax.Term
@@ -2245,7 +2245,7 @@ funBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fun"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the binders field of hydra.coq.syntax.Fun
 funWithBinders :: Phantoms.TTerm Syntax.Fun -> Phantoms.TTerm Syntax.OpenBinders -> Phantoms.TTerm Syntax.Fun
@@ -2261,7 +2261,7 @@ funWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fun"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the body field of hydra.coq.syntax.Fun
 funWithBody :: Phantoms.TTerm Syntax.Fun -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Fun
@@ -2274,7 +2274,7 @@ funWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Fun"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -2327,7 +2327,7 @@ identArgIdent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.IdentArg"),
-        Core.projectionField = (Core.Name "ident")})),
+        Core.projectionFieldName = (Core.Name "ident")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.IdentArg
 identArgTerm :: Phantoms.TTerm Syntax.IdentArg -> Phantoms.TTerm Syntax.Term
@@ -2335,7 +2335,7 @@ identArgTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.IdentArg"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the ident field of hydra.coq.syntax.IdentArg
 identArgWithIdent :: Phantoms.TTerm Syntax.IdentArg -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.IdentArg
@@ -2351,7 +2351,7 @@ identArgWithIdent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.IdentArg"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.coq.syntax.IdentArg
 identArgWithTerm :: Phantoms.TTerm Syntax.IdentArg -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.IdentArg
@@ -2364,7 +2364,7 @@ identArgWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.IdentArg"),
-              Core.projectionField = (Core.Name "ident")})),
+              Core.projectionFieldName = (Core.Name "ident")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -2393,7 +2393,7 @@ ifCondition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-        Core.projectionField = (Core.Name "condition")})),
+        Core.projectionFieldName = (Core.Name "condition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the else field of hydra.coq.syntax.If
 ifElse :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term
@@ -2401,7 +2401,7 @@ ifElse x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-        Core.projectionField = (Core.Name "else")})),
+        Core.projectionFieldName = (Core.Name "else")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the returnAs field of hydra.coq.syntax.If
 ifReturnAs :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm (Maybe Syntax.ReturnAs)
@@ -2409,7 +2409,7 @@ ifReturnAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-        Core.projectionField = (Core.Name "returnAs")})),
+        Core.projectionFieldName = (Core.Name "returnAs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the then field of hydra.coq.syntax.If
 ifThen :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term
@@ -2417,7 +2417,7 @@ ifThen x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-        Core.projectionField = (Core.Name "then")})),
+        Core.projectionFieldName = (Core.Name "then")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the condition field of hydra.coq.syntax.If
 ifWithCondition :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.If
@@ -2433,21 +2433,21 @@ ifWithCondition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "returnAs")})),
+              Core.projectionFieldName = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "then")})),
+              Core.projectionFieldName = (Core.Name "then")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "else")})),
+              Core.projectionFieldName = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the else field of hydra.coq.syntax.If
 ifWithElse :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.If
@@ -2460,21 +2460,21 @@ ifWithElse original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "returnAs")})),
+              Core.projectionFieldName = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "then")})),
+              Core.projectionFieldName = (Core.Name "then")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
@@ -2490,7 +2490,7 @@ ifWithReturnAs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
@@ -2500,14 +2500,14 @@ ifWithReturnAs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "then")})),
+              Core.projectionFieldName = (Core.Name "then")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "else"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "else")})),
+              Core.projectionFieldName = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the then field of hydra.coq.syntax.If
 ifWithThen :: Phantoms.TTerm Syntax.If -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.If
@@ -2520,14 +2520,14 @@ ifWithThen original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "condition")})),
+              Core.projectionFieldName = (Core.Name "condition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "returnAs")})),
+              Core.projectionFieldName = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "then"),
@@ -2537,7 +2537,7 @@ ifWithThen original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.If"),
-              Core.projectionField = (Core.Name "else")})),
+              Core.projectionFieldName = (Core.Name "else")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the maximallyInserted variant of hydra.coq.syntax.ImplicitBinders
 implicitBindersMaximallyInserted :: Phantoms.TTerm Syntax.TypeBinders -> Phantoms.TTerm Syntax.ImplicitBinders
@@ -2595,7 +2595,7 @@ inductiveBodyBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the constructors field of hydra.coq.syntax.InductiveBody
 inductiveBodyConstructors :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm [Syntax.Constructor]
@@ -2603,7 +2603,7 @@ inductiveBodyConstructors x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-        Core.projectionField = (Core.Name "constructors")})),
+        Core.projectionFieldName = (Core.Name "constructors")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.coq.syntax.InductiveBody
 inductiveBodyName :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm Syntax.Ident
@@ -2611,7 +2611,7 @@ inductiveBodyName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.InductiveBody
 inductiveBodyType :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -2619,7 +2619,7 @@ inductiveBodyType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the binders field of hydra.coq.syntax.InductiveBody
 inductiveBodyWithBinders :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.InductiveBody
@@ -2632,7 +2632,7 @@ inductiveBodyWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -2642,14 +2642,14 @@ inductiveBodyWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "constructors")})),
+              Core.projectionFieldName = (Core.Name "constructors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the constructors field of hydra.coq.syntax.InductiveBody
 inductiveBodyWithConstructors :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm [Syntax.Constructor] -> Phantoms.TTerm Syntax.InductiveBody
@@ -2662,21 +2662,21 @@ inductiveBodyWithConstructors original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructors"),
@@ -2695,21 +2695,21 @@ inductiveBodyWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "constructors"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "constructors")})),
+              Core.projectionFieldName = (Core.Name "constructors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.coq.syntax.InductiveBody
 inductiveBodyWithType :: Phantoms.TTerm Syntax.InductiveBody -> Phantoms.TTerm (Maybe Syntax.Type) -> Phantoms.TTerm Syntax.InductiveBody
@@ -2722,14 +2722,14 @@ inductiveBodyWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -2739,7 +2739,7 @@ inductiveBodyWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveBody"),
-              Core.projectionField = (Core.Name "constructors")})),
+              Core.projectionFieldName = (Core.Name "constructors")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.InductiveDefinition
 inductiveDefinition :: Phantoms.TTerm (Maybe Syntax.Locality) -> Phantoms.TTerm Bool -> Phantoms.TTerm [Syntax.InductiveBody] -> Phantoms.TTerm Syntax.InductiveDefinition
@@ -2762,7 +2762,7 @@ inductiveDefinitionBodies x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-        Core.projectionField = (Core.Name "bodies")})),
+        Core.projectionFieldName = (Core.Name "bodies")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the coinductive field of hydra.coq.syntax.InductiveDefinition
 inductiveDefinitionCoinductive :: Phantoms.TTerm Syntax.InductiveDefinition -> Phantoms.TTerm Bool
@@ -2770,7 +2770,7 @@ inductiveDefinitionCoinductive x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-        Core.projectionField = (Core.Name "coinductive")})),
+        Core.projectionFieldName = (Core.Name "coinductive")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the locality field of hydra.coq.syntax.InductiveDefinition
 inductiveDefinitionLocality :: Phantoms.TTerm Syntax.InductiveDefinition -> Phantoms.TTerm (Maybe Syntax.Locality)
@@ -2778,7 +2778,7 @@ inductiveDefinitionLocality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-        Core.projectionField = (Core.Name "locality")})),
+        Core.projectionFieldName = (Core.Name "locality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the bodies field of hydra.coq.syntax.InductiveDefinition
 inductiveDefinitionWithBodies :: Phantoms.TTerm Syntax.InductiveDefinition -> Phantoms.TTerm [Syntax.InductiveBody] -> Phantoms.TTerm Syntax.InductiveDefinition
@@ -2791,14 +2791,14 @@ inductiveDefinitionWithBodies original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "coinductive"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "coinductive")})),
+              Core.projectionFieldName = (Core.Name "coinductive")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bodies"),
@@ -2814,7 +2814,7 @@ inductiveDefinitionWithCoinductive original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "coinductive"),
@@ -2824,7 +2824,7 @@ inductiveDefinitionWithCoinductive original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "bodies")})),
+              Core.projectionFieldName = (Core.Name "bodies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the locality field of hydra.coq.syntax.InductiveDefinition
 inductiveDefinitionWithLocality :: Phantoms.TTerm Syntax.InductiveDefinition -> Phantoms.TTerm (Maybe Syntax.Locality) -> Phantoms.TTerm Syntax.InductiveDefinition
@@ -2840,14 +2840,14 @@ inductiveDefinitionWithLocality original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "coinductive")})),
+              Core.projectionFieldName = (Core.Name "coinductive")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "bodies"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.InductiveDefinition"),
-              Core.projectionField = (Core.Name "bodies")})),
+              Core.projectionFieldName = (Core.Name "bodies")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.Let
 let_ :: Phantoms.TTerm Syntax.LetBindings -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Let
@@ -2882,7 +2882,7 @@ letBinderName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.LetBinder
 letBinderTerm :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm Syntax.Term
@@ -2890,7 +2890,7 @@ letBinderTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.LetBinder
 letBinderType :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm (Maybe Syntax.Type)
@@ -2898,7 +2898,7 @@ letBinderType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.coq.syntax.LetBinder
 letBinderWithName :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.LetBinder
@@ -2914,14 +2914,14 @@ letBinderWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.coq.syntax.LetBinder
 letBinderWithTerm :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.LetBinder
@@ -2934,14 +2934,14 @@ letBinderWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -2957,7 +2957,7 @@ letBinderWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -2967,7 +2967,7 @@ letBinderWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetBinder"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL accessor for the bindings field of hydra.coq.syntax.Let
 letBindings :: Phantoms.TTerm Syntax.Let -> Phantoms.TTerm Syntax.LetBindings
@@ -2975,7 +2975,7 @@ letBindings x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Let"),
-        Core.projectionField = (Core.Name "bindings")})),
+        Core.projectionFieldName = (Core.Name "bindings")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL injection for the destructuring variant of hydra.coq.syntax.LetBindings
 letBindingsDestructuring :: Phantoms.TTerm Syntax.LetDestructuring -> Phantoms.TTerm Syntax.LetBindings
@@ -3038,7 +3038,7 @@ letDestructuring_Variant1Names x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-        Core.projectionField = (Core.Name "names")})),
+        Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the returnAs field of hydra.coq.syntax.LetDestructuring_Variant1
 letDestructuring_Variant1ReturnAs :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm (Maybe Syntax.ReturnAs)
@@ -3046,7 +3046,7 @@ letDestructuring_Variant1ReturnAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-        Core.projectionField = (Core.Name "returnAs")})),
+        Core.projectionFieldName = (Core.Name "returnAs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.LetDestructuring_Variant1
 letDestructuring_Variant1Term :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm Syntax.Term
@@ -3054,7 +3054,7 @@ letDestructuring_Variant1Term x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the names field of hydra.coq.syntax.LetDestructuring_Variant1
 letDestructuring_Variant1WithNames :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm [Syntax.Name] -> Phantoms.TTerm Syntax.LetDestructuring_Variant1
@@ -3070,14 +3070,14 @@ letDestructuring_Variant1WithNames original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "returnAs")})),
+              Core.projectionFieldName = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the returnAs field of hydra.coq.syntax.LetDestructuring_Variant1
 letDestructuring_Variant1WithReturnAs :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm (Maybe Syntax.ReturnAs) -> Phantoms.TTerm Syntax.LetDestructuring_Variant1
@@ -3090,7 +3090,7 @@ letDestructuring_Variant1WithReturnAs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
@@ -3100,7 +3100,7 @@ letDestructuring_Variant1WithReturnAs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.coq.syntax.LetDestructuring_Variant1
 letDestructuring_Variant1WithTerm :: Phantoms.TTerm Syntax.LetDestructuring_Variant1 -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.LetDestructuring_Variant1
@@ -3113,14 +3113,14 @@ letDestructuring_Variant1WithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "returnAs"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant1"),
-              Core.projectionField = (Core.Name "returnAs")})),
+              Core.projectionFieldName = (Core.Name "returnAs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -3146,7 +3146,7 @@ letDestructuring_Variant2Pattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the return field of hydra.coq.syntax.LetDestructuring_Variant2
 letDestructuring_Variant2Return :: Phantoms.TTerm Syntax.LetDestructuring_Variant2 -> Phantoms.TTerm (Maybe Syntax.Term100)
@@ -3154,7 +3154,7 @@ letDestructuring_Variant2Return x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-        Core.projectionField = (Core.Name "return")})),
+        Core.projectionFieldName = (Core.Name "return")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.LetDestructuring_Variant2
 letDestructuring_Variant2Term :: Phantoms.TTerm Syntax.LetDestructuring_Variant2 -> Phantoms.TTerm Syntax.Term
@@ -3162,7 +3162,7 @@ letDestructuring_Variant2Term x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the pattern field of hydra.coq.syntax.LetDestructuring_Variant2
 letDestructuring_Variant2WithPattern :: Phantoms.TTerm Syntax.LetDestructuring_Variant2 -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.LetDestructuring_Variant2
@@ -3178,14 +3178,14 @@ letDestructuring_Variant2WithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the return field of hydra.coq.syntax.LetDestructuring_Variant2
 letDestructuring_Variant2WithReturn :: Phantoms.TTerm Syntax.LetDestructuring_Variant2 -> Phantoms.TTerm (Maybe Syntax.Term100) -> Phantoms.TTerm Syntax.LetDestructuring_Variant2
@@ -3198,14 +3198,14 @@ letDestructuring_Variant2WithReturn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
@@ -3221,7 +3221,7 @@ letDestructuring_Variant2WithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -3231,7 +3231,7 @@ letDestructuring_Variant2WithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant2"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.LetDestructuring_Variant3
 letDestructuring_Variant3 :: Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Term100 -> Phantoms.TTerm Syntax.LetDestructuring_Variant3
@@ -3257,7 +3257,7 @@ letDestructuring_Variant3Pattern1 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-        Core.projectionField = (Core.Name "pattern1")})),
+        Core.projectionFieldName = (Core.Name "pattern1")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the pattern2 field of hydra.coq.syntax.LetDestructuring_Variant3
 letDestructuring_Variant3Pattern2 :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Pattern
@@ -3265,7 +3265,7 @@ letDestructuring_Variant3Pattern2 x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-        Core.projectionField = (Core.Name "pattern2")})),
+        Core.projectionFieldName = (Core.Name "pattern2")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the return field of hydra.coq.syntax.LetDestructuring_Variant3
 letDestructuring_Variant3Return :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Term100
@@ -3273,7 +3273,7 @@ letDestructuring_Variant3Return x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-        Core.projectionField = (Core.Name "return")})),
+        Core.projectionFieldName = (Core.Name "return")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.LetDestructuring_Variant3
 letDestructuring_Variant3Term :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Term
@@ -3281,7 +3281,7 @@ letDestructuring_Variant3Term x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the pattern1 field of hydra.coq.syntax.LetDestructuring_Variant3
 letDestructuring_Variant3WithPattern1 :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.LetDestructuring_Variant3
@@ -3297,21 +3297,21 @@ letDestructuring_Variant3WithPattern1 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern2")})),
+              Core.projectionFieldName = (Core.Name "pattern2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the pattern2 field of hydra.coq.syntax.LetDestructuring_Variant3
 letDestructuring_Variant3WithPattern2 :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.LetDestructuring_Variant3
@@ -3324,7 +3324,7 @@ letDestructuring_Variant3WithPattern2 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern1")})),
+              Core.projectionFieldName = (Core.Name "pattern1")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern2"),
@@ -3334,14 +3334,14 @@ letDestructuring_Variant3WithPattern2 original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the return field of hydra.coq.syntax.LetDestructuring_Variant3
 letDestructuring_Variant3WithReturn :: Phantoms.TTerm Syntax.LetDestructuring_Variant3 -> Phantoms.TTerm Syntax.Term100 -> Phantoms.TTerm Syntax.LetDestructuring_Variant3
@@ -3354,21 +3354,21 @@ letDestructuring_Variant3WithReturn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern1")})),
+              Core.projectionFieldName = (Core.Name "pattern1")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern2")})),
+              Core.projectionFieldName = (Core.Name "pattern2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
@@ -3384,14 +3384,14 @@ letDestructuring_Variant3WithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern1")})),
+              Core.projectionFieldName = (Core.Name "pattern1")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern2"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "pattern2")})),
+              Core.projectionFieldName = (Core.Name "pattern2")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -3401,7 +3401,7 @@ letDestructuring_Variant3WithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetDestructuring_Variant3"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL accessor for the in field of hydra.coq.syntax.Let
 letIn :: Phantoms.TTerm Syntax.Let -> Phantoms.TTerm Syntax.Term
@@ -3409,7 +3409,7 @@ letIn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Let"),
-        Core.projectionField = (Core.Name "in")})),
+        Core.projectionFieldName = (Core.Name "in")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL constructor for hydra.coq.syntax.LetNamed
 letNamed :: Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.LetNamed
@@ -3429,7 +3429,7 @@ letNamedBinder x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetNamed"),
-        Core.projectionField = (Core.Name "binder")})),
+        Core.projectionFieldName = (Core.Name "binder")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the binders field of hydra.coq.syntax.LetNamed
 letNamedBinders :: Phantoms.TTerm Syntax.LetNamed -> Phantoms.TTerm [Syntax.Binder]
@@ -3437,7 +3437,7 @@ letNamedBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetNamed"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the binder field of hydra.coq.syntax.LetNamed
 letNamedWithBinder :: Phantoms.TTerm Syntax.LetNamed -> Phantoms.TTerm Syntax.LetBinder -> Phantoms.TTerm Syntax.LetNamed
@@ -3453,7 +3453,7 @@ letNamedWithBinder original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetNamed"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the binders field of hydra.coq.syntax.LetNamed
 letNamedWithBinders :: Phantoms.TTerm Syntax.LetNamed -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.LetNamed
@@ -3466,7 +3466,7 @@ letNamedWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.LetNamed"),
-              Core.projectionField = (Core.Name "binder")})),
+              Core.projectionFieldName = (Core.Name "binder")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -3485,7 +3485,7 @@ letWithBindings original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Let"),
-              Core.projectionField = (Core.Name "in")})),
+              Core.projectionFieldName = (Core.Name "in")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the in field of hydra.coq.syntax.Let
 letWithIn :: Phantoms.TTerm Syntax.Let -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.Let
@@ -3498,7 +3498,7 @@ letWithIn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Let"),
-              Core.projectionField = (Core.Name "bindings")})),
+              Core.projectionFieldName = (Core.Name "bindings")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "in"),
@@ -3543,7 +3543,7 @@ matchCaseItems x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-        Core.projectionField = (Core.Name "caseItems")})),
+        Core.projectionFieldName = (Core.Name "caseItems")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the equations field of hydra.coq.syntax.Match
 matchEquations :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm [Syntax.Equation]
@@ -3551,7 +3551,7 @@ matchEquations x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-        Core.projectionField = (Core.Name "equations")})),
+        Core.projectionFieldName = (Core.Name "equations")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the pipe field of hydra.coq.syntax.Match
 matchPipe :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm Bool
@@ -3559,7 +3559,7 @@ matchPipe x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-        Core.projectionField = (Core.Name "pipe")})),
+        Core.projectionFieldName = (Core.Name "pipe")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the return field of hydra.coq.syntax.Match
 matchReturn :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm (Maybe Syntax.Term100)
@@ -3567,7 +3567,7 @@ matchReturn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-        Core.projectionField = (Core.Name "return")})),
+        Core.projectionFieldName = (Core.Name "return")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the caseItems field of hydra.coq.syntax.Match
 matchWithCaseItems :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm [Syntax.CaseItem] -> Phantoms.TTerm Syntax.Match
@@ -3583,21 +3583,21 @@ matchWithCaseItems original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pipe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "pipe")})),
+              Core.projectionFieldName = (Core.Name "pipe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "equations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "equations")})),
+              Core.projectionFieldName = (Core.Name "equations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the equations field of hydra.coq.syntax.Match
 matchWithEquations :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm [Syntax.Equation] -> Phantoms.TTerm Syntax.Match
@@ -3610,21 +3610,21 @@ matchWithEquations original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "caseItems")})),
+              Core.projectionFieldName = (Core.Name "caseItems")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pipe"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "pipe")})),
+              Core.projectionFieldName = (Core.Name "pipe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "equations"),
@@ -3640,14 +3640,14 @@ matchWithPipe original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "caseItems")})),
+              Core.projectionFieldName = (Core.Name "caseItems")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pipe"),
@@ -3657,7 +3657,7 @@ matchWithPipe original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "equations")})),
+              Core.projectionFieldName = (Core.Name "equations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the return field of hydra.coq.syntax.Match
 matchWithReturn :: Phantoms.TTerm Syntax.Match -> Phantoms.TTerm (Maybe Syntax.Term100) -> Phantoms.TTerm Syntax.Match
@@ -3670,7 +3670,7 @@ matchWithReturn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "caseItems")})),
+              Core.projectionFieldName = (Core.Name "caseItems")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
@@ -3680,14 +3680,14 @@ matchWithReturn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "pipe")})),
+              Core.projectionFieldName = (Core.Name "pipe")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "equations"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Match"),
-              Core.projectionField = (Core.Name "equations")})),
+              Core.projectionFieldName = (Core.Name "equations")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.ModuleDefinition
 moduleDefinition :: Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.ModuleDefinition
@@ -3707,7 +3707,7 @@ moduleDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ModuleDefinition"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the sentences field of hydra.coq.syntax.ModuleDefinition
 moduleDefinitionSentences :: Phantoms.TTerm Syntax.ModuleDefinition -> Phantoms.TTerm [Syntax.Sentence]
@@ -3715,7 +3715,7 @@ moduleDefinitionSentences x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ModuleDefinition"),
-        Core.projectionField = (Core.Name "sentences")})),
+        Core.projectionFieldName = (Core.Name "sentences")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.coq.syntax.ModuleDefinition
 moduleDefinitionWithName :: Phantoms.TTerm Syntax.ModuleDefinition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.ModuleDefinition
@@ -3731,7 +3731,7 @@ moduleDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ModuleDefinition"),
-              Core.projectionField = (Core.Name "sentences")})),
+              Core.projectionFieldName = (Core.Name "sentences")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the sentences field of hydra.coq.syntax.ModuleDefinition
 moduleDefinitionWithSentences :: Phantoms.TTerm Syntax.ModuleDefinition -> Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.ModuleDefinition
@@ -3744,7 +3744,7 @@ moduleDefinitionWithSentences original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ModuleDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sentences"),
@@ -3779,7 +3779,7 @@ naturalArgNatural x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NaturalArg"),
-        Core.projectionField = (Core.Name "natural")})),
+        Core.projectionFieldName = (Core.Name "natural")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.NaturalArg
 naturalArgTerm :: Phantoms.TTerm Syntax.NaturalArg -> Phantoms.TTerm Syntax.Term
@@ -3787,7 +3787,7 @@ naturalArgTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NaturalArg"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the natural field of hydra.coq.syntax.NaturalArg
 naturalArgWithNatural :: Phantoms.TTerm Syntax.NaturalArg -> Phantoms.TTerm Syntax.Natural -> Phantoms.TTerm Syntax.NaturalArg
@@ -3803,7 +3803,7 @@ naturalArgWithNatural original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NaturalArg"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.coq.syntax.NaturalArg
 naturalArgWithTerm :: Phantoms.TTerm Syntax.NaturalArg -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.NaturalArg
@@ -3816,7 +3816,7 @@ naturalArgWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NaturalArg"),
-              Core.projectionField = (Core.Name "natural")})),
+              Core.projectionFieldName = (Core.Name "natural")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -3839,7 +3839,7 @@ normalApplicationLhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NormalApplication"),
-        Core.projectionField = (Core.Name "lhs")})),
+        Core.projectionFieldName = (Core.Name "lhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the rhs field of hydra.coq.syntax.NormalApplication
 normalApplicationRhs :: Phantoms.TTerm Syntax.NormalApplication -> Phantoms.TTerm [Syntax.Arg]
@@ -3847,7 +3847,7 @@ normalApplicationRhs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NormalApplication"),
-        Core.projectionField = (Core.Name "rhs")})),
+        Core.projectionFieldName = (Core.Name "rhs")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the lhs field of hydra.coq.syntax.NormalApplication
 normalApplicationWithLhs :: Phantoms.TTerm Syntax.NormalApplication -> Phantoms.TTerm Syntax.Term1 -> Phantoms.TTerm Syntax.NormalApplication
@@ -3863,7 +3863,7 @@ normalApplicationWithLhs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NormalApplication"),
-              Core.projectionField = (Core.Name "rhs")})),
+              Core.projectionFieldName = (Core.Name "rhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the rhs field of hydra.coq.syntax.NormalApplication
 normalApplicationWithRhs :: Phantoms.TTerm Syntax.NormalApplication -> Phantoms.TTerm [Syntax.Arg] -> Phantoms.TTerm Syntax.NormalApplication
@@ -3876,7 +3876,7 @@ normalApplicationWithRhs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NormalApplication"),
-              Core.projectionField = (Core.Name "lhs")})),
+              Core.projectionFieldName = (Core.Name "lhs")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "rhs"),
@@ -3905,7 +3905,7 @@ notationDeclarationAssociativity x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-        Core.projectionField = (Core.Name "associativity")})),
+        Core.projectionFieldName = (Core.Name "associativity")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the definition field of hydra.coq.syntax.NotationDeclaration
 notationDeclarationDefinition :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm Syntax.Term
@@ -3913,7 +3913,7 @@ notationDeclarationDefinition x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-        Core.projectionField = (Core.Name "definition")})),
+        Core.projectionFieldName = (Core.Name "definition")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the level field of hydra.coq.syntax.NotationDeclaration
 notationDeclarationLevel :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm (Maybe Syntax.Natural)
@@ -3921,7 +3921,7 @@ notationDeclarationLevel x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-        Core.projectionField = (Core.Name "level")})),
+        Core.projectionFieldName = (Core.Name "level")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the notation field of hydra.coq.syntax.NotationDeclaration
 notationDeclarationNotation :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm Syntax.String_
@@ -3929,7 +3929,7 @@ notationDeclarationNotation x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-        Core.projectionField = (Core.Name "notation")})),
+        Core.projectionFieldName = (Core.Name "notation")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the associativity field of hydra.coq.syntax.NotationDeclaration
 notationDeclarationWithAssociativity :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm (Maybe String) -> Phantoms.TTerm Syntax.NotationDeclaration
@@ -3942,21 +3942,21 @@ notationDeclarationWithAssociativity original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "notation")})),
+              Core.projectionFieldName = (Core.Name "notation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "definition")})),
+              Core.projectionFieldName = (Core.Name "definition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "level"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "level")})),
+              Core.projectionFieldName = (Core.Name "level")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "associativity"),
@@ -3972,7 +3972,7 @@ notationDeclarationWithDefinition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "notation")})),
+              Core.projectionFieldName = (Core.Name "notation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definition"),
@@ -3982,14 +3982,14 @@ notationDeclarationWithDefinition original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "level")})),
+              Core.projectionFieldName = (Core.Name "level")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "associativity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "associativity")})),
+              Core.projectionFieldName = (Core.Name "associativity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the level field of hydra.coq.syntax.NotationDeclaration
 notationDeclarationWithLevel :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm (Maybe Syntax.Natural) -> Phantoms.TTerm Syntax.NotationDeclaration
@@ -4002,14 +4002,14 @@ notationDeclarationWithLevel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "notation")})),
+              Core.projectionFieldName = (Core.Name "notation")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "definition"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "definition")})),
+              Core.projectionFieldName = (Core.Name "definition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "level"),
@@ -4019,7 +4019,7 @@ notationDeclarationWithLevel original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "associativity")})),
+              Core.projectionFieldName = (Core.Name "associativity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the notation field of hydra.coq.syntax.NotationDeclaration
 notationDeclarationWithNotation :: Phantoms.TTerm Syntax.NotationDeclaration -> Phantoms.TTerm Syntax.String_ -> Phantoms.TTerm Syntax.NotationDeclaration
@@ -4035,21 +4035,21 @@ notationDeclarationWithNotation original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "definition")})),
+              Core.projectionFieldName = (Core.Name "definition")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "level"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "level")})),
+              Core.projectionFieldName = (Core.Name "level")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "associativity"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.NotationDeclaration"),
-              Core.projectionField = (Core.Name "associativity")})),
+              Core.projectionFieldName = (Core.Name "associativity")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for the hydra.coq.syntax.Number wrapper
 number :: Phantoms.TTerm Double -> Phantoms.TTerm Syntax.Number
@@ -4191,7 +4191,7 @@ pattern10_AsAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_As"),
-        Core.projectionField = (Core.Name "as")})),
+        Core.projectionFieldName = (Core.Name "as")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the pattern field of hydra.coq.syntax.Pattern10_As
 pattern10_AsPattern :: Phantoms.TTerm Syntax.Pattern10_As -> Phantoms.TTerm Syntax.Pattern1
@@ -4199,7 +4199,7 @@ pattern10_AsPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_As"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the as field of hydra.coq.syntax.Pattern10_As
 pattern10_AsWithAs :: Phantoms.TTerm Syntax.Pattern10_As -> Phantoms.TTerm Syntax.Name -> Phantoms.TTerm Syntax.Pattern10_As
@@ -4212,7 +4212,7 @@ pattern10_AsWithAs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_As"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "as"),
@@ -4231,7 +4231,7 @@ pattern10_AsWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_As"),
-              Core.projectionField = (Core.Name "as")})),
+              Core.projectionFieldName = (Core.Name "as")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.Pattern10_Patterns
 pattern10_Patterns :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm [Syntax.Pattern1] -> Phantoms.TTerm Syntax.Pattern10_Patterns
@@ -4251,7 +4251,7 @@ pattern10_PatternsPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Patterns"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the patterns field of hydra.coq.syntax.Pattern10_Patterns
 pattern10_PatternsPatterns :: Phantoms.TTerm Syntax.Pattern10_Patterns -> Phantoms.TTerm [Syntax.Pattern1]
@@ -4259,7 +4259,7 @@ pattern10_PatternsPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Patterns"),
-        Core.projectionField = (Core.Name "patterns")})),
+        Core.projectionFieldName = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the pattern field of hydra.coq.syntax.Pattern10_Patterns
 pattern10_PatternsWithPattern :: Phantoms.TTerm Syntax.Pattern10_Patterns -> Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm Syntax.Pattern10_Patterns
@@ -4275,7 +4275,7 @@ pattern10_PatternsWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Patterns"),
-              Core.projectionField = (Core.Name "patterns")})),
+              Core.projectionFieldName = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the patterns field of hydra.coq.syntax.Pattern10_Patterns
 pattern10_PatternsWithPatterns :: Phantoms.TTerm Syntax.Pattern10_Patterns -> Phantoms.TTerm [Syntax.Pattern1] -> Phantoms.TTerm Syntax.Pattern10_Patterns
@@ -4288,7 +4288,7 @@ pattern10_PatternsWithPatterns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Patterns"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
@@ -4311,7 +4311,7 @@ pattern10_QualidPatterns x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Qualid"),
-        Core.projectionField = (Core.Name "patterns")})),
+        Core.projectionFieldName = (Core.Name "patterns")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the qualid field of hydra.coq.syntax.Pattern10_Qualid
 pattern10_QualidQualid :: Phantoms.TTerm Syntax.Pattern10_Qualid -> Phantoms.TTerm Syntax.Qualid
@@ -4319,7 +4319,7 @@ pattern10_QualidQualid x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Qualid"),
-        Core.projectionField = (Core.Name "qualid")})),
+        Core.projectionFieldName = (Core.Name "qualid")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the patterns field of hydra.coq.syntax.Pattern10_Qualid
 pattern10_QualidWithPatterns :: Phantoms.TTerm Syntax.Pattern10_Qualid -> Phantoms.TTerm [Syntax.Pattern1] -> Phantoms.TTerm Syntax.Pattern10_Qualid
@@ -4332,7 +4332,7 @@ pattern10_QualidWithPatterns original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Qualid"),
-              Core.projectionField = (Core.Name "qualid")})),
+              Core.projectionFieldName = (Core.Name "qualid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "patterns"),
@@ -4351,7 +4351,7 @@ pattern10_QualidWithQualid original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern10_Qualid"),
-              Core.projectionField = (Core.Name "patterns")})),
+              Core.projectionFieldName = (Core.Name "patterns")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL accessor for the pattern field of hydra.coq.syntax.Pattern1
 pattern1Pattern :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm Syntax.Pattern0
@@ -4359,7 +4359,7 @@ pattern1Pattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern1"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the scope field of hydra.coq.syntax.Pattern1
 pattern1Scope :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm (Maybe Syntax.ScopeKey)
@@ -4367,7 +4367,7 @@ pattern1Scope x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern1"),
-        Core.projectionField = (Core.Name "scope")})),
+        Core.projectionFieldName = (Core.Name "scope")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the pattern field of hydra.coq.syntax.Pattern1
 pattern1WithPattern :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm Syntax.Pattern0 -> Phantoms.TTerm Syntax.Pattern1
@@ -4383,7 +4383,7 @@ pattern1WithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern1"),
-              Core.projectionField = (Core.Name "scope")})),
+              Core.projectionFieldName = (Core.Name "scope")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the scope field of hydra.coq.syntax.Pattern1
 pattern1WithScope :: Phantoms.TTerm Syntax.Pattern1 -> Phantoms.TTerm (Maybe Syntax.ScopeKey) -> Phantoms.TTerm Syntax.Pattern1
@@ -4396,7 +4396,7 @@ pattern1WithScope original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Pattern1"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "scope"),
@@ -4463,7 +4463,7 @@ qualidAndPatternPattern x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAndPattern"),
-        Core.projectionField = (Core.Name "pattern")})),
+        Core.projectionFieldName = (Core.Name "pattern")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the qualid field of hydra.coq.syntax.QualidAndPattern
 qualidAndPatternQualid :: Phantoms.TTerm Syntax.QualidAndPattern -> Phantoms.TTerm Syntax.Qualid
@@ -4471,7 +4471,7 @@ qualidAndPatternQualid x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAndPattern"),
-        Core.projectionField = (Core.Name "qualid")})),
+        Core.projectionFieldName = (Core.Name "qualid")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the pattern field of hydra.coq.syntax.QualidAndPattern
 qualidAndPatternWithPattern :: Phantoms.TTerm Syntax.QualidAndPattern -> Phantoms.TTerm Syntax.Pattern -> Phantoms.TTerm Syntax.QualidAndPattern
@@ -4484,7 +4484,7 @@ qualidAndPatternWithPattern original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAndPattern"),
-              Core.projectionField = (Core.Name "qualid")})),
+              Core.projectionFieldName = (Core.Name "qualid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "pattern"),
@@ -4503,7 +4503,7 @@ qualidAndPatternWithQualid original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAndPattern"),
-              Core.projectionField = (Core.Name "pattern")})),
+              Core.projectionFieldName = (Core.Name "pattern")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.QualidAnnotated
 qualidAnnotated :: Phantoms.TTerm Syntax.Qualid -> Phantoms.TTerm (Maybe Syntax.UnivAnnot) -> Phantoms.TTerm Syntax.QualidAnnotated
@@ -4523,7 +4523,7 @@ qualidAnnotatedQualid x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAnnotated"),
-        Core.projectionField = (Core.Name "qualid")})),
+        Core.projectionFieldName = (Core.Name "qualid")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the univAnnot field of hydra.coq.syntax.QualidAnnotated
 qualidAnnotatedUnivAnnot :: Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm (Maybe Syntax.UnivAnnot)
@@ -4531,7 +4531,7 @@ qualidAnnotatedUnivAnnot x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAnnotated"),
-        Core.projectionField = (Core.Name "univAnnot")})),
+        Core.projectionFieldName = (Core.Name "univAnnot")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the qualid field of hydra.coq.syntax.QualidAnnotated
 qualidAnnotatedWithQualid :: Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm Syntax.Qualid -> Phantoms.TTerm Syntax.QualidAnnotated
@@ -4547,7 +4547,7 @@ qualidAnnotatedWithQualid original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAnnotated"),
-              Core.projectionField = (Core.Name "univAnnot")})),
+              Core.projectionFieldName = (Core.Name "univAnnot")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the univAnnot field of hydra.coq.syntax.QualidAnnotated
 qualidAnnotatedWithUnivAnnot :: Phantoms.TTerm Syntax.QualidAnnotated -> Phantoms.TTerm (Maybe Syntax.UnivAnnot) -> Phantoms.TTerm Syntax.QualidAnnotated
@@ -4560,7 +4560,7 @@ qualidAnnotatedWithUnivAnnot original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.QualidAnnotated"),
-              Core.projectionField = (Core.Name "qualid")})),
+              Core.projectionFieldName = (Core.Name "qualid")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "univAnnot"),
@@ -4571,7 +4571,7 @@ qualidFieldIds x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Qualid"),
-        Core.projectionField = (Core.Name "fieldIds")})),
+        Core.projectionFieldName = (Core.Name "fieldIds")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the id field of hydra.coq.syntax.Qualid
 qualidId :: Phantoms.TTerm Syntax.Qualid -> Phantoms.TTerm Syntax.Ident
@@ -4579,7 +4579,7 @@ qualidId x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Qualid"),
-        Core.projectionField = (Core.Name "id")})),
+        Core.projectionFieldName = (Core.Name "id")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the fieldIds field of hydra.coq.syntax.Qualid
 qualidWithFieldIds :: Phantoms.TTerm Syntax.Qualid -> Phantoms.TTerm [Syntax.FieldIdent] -> Phantoms.TTerm Syntax.Qualid
@@ -4592,7 +4592,7 @@ qualidWithFieldIds original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Qualid"),
-              Core.projectionField = (Core.Name "id")})),
+              Core.projectionFieldName = (Core.Name "id")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fieldIds"),
@@ -4611,7 +4611,7 @@ qualidWithId original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Qualid"),
-              Core.projectionField = (Core.Name "fieldIds")})),
+              Core.projectionFieldName = (Core.Name "fieldIds")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.RecordBody
 recordBody :: Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm [Syntax.RecordField] -> Phantoms.TTerm Syntax.RecordBody
@@ -4631,7 +4631,7 @@ recordBodyConstructor x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordBody"),
-        Core.projectionField = (Core.Name "constructor")})),
+        Core.projectionFieldName = (Core.Name "constructor")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the fields field of hydra.coq.syntax.RecordBody
 recordBodyFields :: Phantoms.TTerm Syntax.RecordBody -> Phantoms.TTerm [Syntax.RecordField]
@@ -4639,7 +4639,7 @@ recordBodyFields x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordBody"),
-        Core.projectionField = (Core.Name "fields")})),
+        Core.projectionFieldName = (Core.Name "fields")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the constructor field of hydra.coq.syntax.RecordBody
 recordBodyWithConstructor :: Phantoms.TTerm Syntax.RecordBody -> Phantoms.TTerm (Maybe Syntax.Ident) -> Phantoms.TTerm Syntax.RecordBody
@@ -4655,7 +4655,7 @@ recordBodyWithConstructor original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordBody"),
-              Core.projectionField = (Core.Name "fields")})),
+              Core.projectionFieldName = (Core.Name "fields")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the fields field of hydra.coq.syntax.RecordBody
 recordBodyWithFields :: Phantoms.TTerm Syntax.RecordBody -> Phantoms.TTerm [Syntax.RecordField] -> Phantoms.TTerm Syntax.RecordBody
@@ -4668,7 +4668,7 @@ recordBodyWithFields original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordBody"),
-              Core.projectionField = (Core.Name "constructor")})),
+              Core.projectionFieldName = (Core.Name "constructor")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "fields"),
@@ -4700,7 +4700,7 @@ recordDefinitionBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the body field of hydra.coq.syntax.RecordDefinition
 recordDefinitionBody :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm Syntax.RecordBody
@@ -4708,7 +4708,7 @@ recordDefinitionBody x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "body")})),
+        Core.projectionFieldName = (Core.Name "body")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the locality field of hydra.coq.syntax.RecordDefinition
 recordDefinitionLocality :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm (Maybe Syntax.Locality)
@@ -4716,7 +4716,7 @@ recordDefinitionLocality x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "locality")})),
+        Core.projectionFieldName = (Core.Name "locality")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.coq.syntax.RecordDefinition
 recordDefinitionName :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm Syntax.Ident
@@ -4724,7 +4724,7 @@ recordDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the sort field of hydra.coq.syntax.RecordDefinition
 recordDefinitionSort :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm (Maybe Syntax.Sort)
@@ -4732,7 +4732,7 @@ recordDefinitionSort x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-        Core.projectionField = (Core.Name "sort")})),
+        Core.projectionFieldName = (Core.Name "sort")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the binders field of hydra.coq.syntax.RecordDefinition
 recordDefinitionWithBinders :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.RecordDefinition
@@ -4745,14 +4745,14 @@ recordDefinitionWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -4762,14 +4762,14 @@ recordDefinitionWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "sort")})),
+              Core.projectionFieldName = (Core.Name "sort")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the body field of hydra.coq.syntax.RecordDefinition
 recordDefinitionWithBody :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm Syntax.RecordBody -> Phantoms.TTerm Syntax.RecordDefinition
@@ -4782,28 +4782,28 @@ recordDefinitionWithBody original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "sort")})),
+              Core.projectionFieldName = (Core.Name "sort")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
@@ -4822,28 +4822,28 @@ recordDefinitionWithLocality original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "sort")})),
+              Core.projectionFieldName = (Core.Name "sort")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.coq.syntax.RecordDefinition
 recordDefinitionWithName :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.RecordDefinition
@@ -4856,7 +4856,7 @@ recordDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -4866,21 +4866,21 @@ recordDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "sort")})),
+              Core.projectionFieldName = (Core.Name "sort")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "body"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the sort field of hydra.coq.syntax.RecordDefinition
 recordDefinitionWithSort :: Phantoms.TTerm Syntax.RecordDefinition -> Phantoms.TTerm (Maybe Syntax.Sort) -> Phantoms.TTerm Syntax.RecordDefinition
@@ -4893,21 +4893,21 @@ recordDefinitionWithSort original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "locality")})),
+              Core.projectionFieldName = (Core.Name "locality")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sort"),
@@ -4917,7 +4917,7 @@ recordDefinitionWithSort original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordDefinition"),
-              Core.projectionField = (Core.Name "body")})),
+              Core.projectionFieldName = (Core.Name "body")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.RecordField
 recordField :: Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.RecordField
@@ -4937,7 +4937,7 @@ recordFieldName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordField"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.RecordField
 recordFieldType :: Phantoms.TTerm Syntax.RecordField -> Phantoms.TTerm Syntax.Type
@@ -4945,7 +4945,7 @@ recordFieldType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordField"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.coq.syntax.RecordField
 recordFieldWithName :: Phantoms.TTerm Syntax.RecordField -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.RecordField
@@ -4961,7 +4961,7 @@ recordFieldWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordField"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.coq.syntax.RecordField
 recordFieldWithType :: Phantoms.TTerm Syntax.RecordField -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.RecordField
@@ -4974,7 +4974,7 @@ recordFieldWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RecordField"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -5003,7 +5003,7 @@ requireImportFrom x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-        Core.projectionField = (Core.Name "from")})),
+        Core.projectionFieldName = (Core.Name "from")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the modules field of hydra.coq.syntax.RequireImport
 requireImportModules :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm [Syntax.Qualid]
@@ -5011,7 +5011,7 @@ requireImportModules x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-        Core.projectionField = (Core.Name "modules")})),
+        Core.projectionFieldName = (Core.Name "modules")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the qualification field of hydra.coq.syntax.RequireImport
 requireImportQualification :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm (Maybe Syntax.ImportQualification)
@@ -5019,7 +5019,7 @@ requireImportQualification x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-        Core.projectionField = (Core.Name "qualification")})),
+        Core.projectionFieldName = (Core.Name "qualification")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the require field of hydra.coq.syntax.RequireImport
 requireImportRequire :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm Bool
@@ -5027,7 +5027,7 @@ requireImportRequire x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-        Core.projectionField = (Core.Name "require")})),
+        Core.projectionFieldName = (Core.Name "require")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the from field of hydra.coq.syntax.RequireImport
 requireImportWithFrom :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm (Maybe Syntax.Qualid) -> Phantoms.TTerm Syntax.RequireImport
@@ -5043,21 +5043,21 @@ requireImportWithFrom original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "require")})),
+              Core.projectionFieldName = (Core.Name "require")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "qualification")})),
+              Core.projectionFieldName = (Core.Name "qualification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "modules")})),
+              Core.projectionFieldName = (Core.Name "modules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the modules field of hydra.coq.syntax.RequireImport
 requireImportWithModules :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm [Syntax.Qualid] -> Phantoms.TTerm Syntax.RequireImport
@@ -5070,21 +5070,21 @@ requireImportWithModules original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "from")})),
+              Core.projectionFieldName = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "require"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "require")})),
+              Core.projectionFieldName = (Core.Name "require")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualification"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "qualification")})),
+              Core.projectionFieldName = (Core.Name "qualification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
@@ -5100,14 +5100,14 @@ requireImportWithQualification original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "from")})),
+              Core.projectionFieldName = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "require"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "require")})),
+              Core.projectionFieldName = (Core.Name "require")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "qualification"),
@@ -5117,7 +5117,7 @@ requireImportWithQualification original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "modules")})),
+              Core.projectionFieldName = (Core.Name "modules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the require field of hydra.coq.syntax.RequireImport
 requireImportWithRequire :: Phantoms.TTerm Syntax.RequireImport -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.RequireImport
@@ -5130,7 +5130,7 @@ requireImportWithRequire original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "from")})),
+              Core.projectionFieldName = (Core.Name "from")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "require"),
@@ -5140,14 +5140,14 @@ requireImportWithRequire original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "qualification")})),
+              Core.projectionFieldName = (Core.Name "qualification")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "modules"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.RequireImport"),
-              Core.projectionField = (Core.Name "modules")})),
+              Core.projectionFieldName = (Core.Name "modules")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.ReturnAs
 returnAs :: Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Syntax.Term100 -> Phantoms.TTerm Syntax.ReturnAs
@@ -5167,7 +5167,7 @@ returnAsAs x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ReturnAs"),
-        Core.projectionField = (Core.Name "as")})),
+        Core.projectionFieldName = (Core.Name "as")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the return field of hydra.coq.syntax.ReturnAs
 returnAsReturn :: Phantoms.TTerm Syntax.ReturnAs -> Phantoms.TTerm Syntax.Term100
@@ -5175,7 +5175,7 @@ returnAsReturn x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ReturnAs"),
-        Core.projectionField = (Core.Name "return")})),
+        Core.projectionFieldName = (Core.Name "return")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the as field of hydra.coq.syntax.ReturnAs
 returnAsWithAs :: Phantoms.TTerm Syntax.ReturnAs -> Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Syntax.ReturnAs
@@ -5191,7 +5191,7 @@ returnAsWithAs original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ReturnAs"),
-              Core.projectionField = (Core.Name "return")})),
+              Core.projectionFieldName = (Core.Name "return")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the return field of hydra.coq.syntax.ReturnAs
 returnAsWithReturn :: Phantoms.TTerm Syntax.ReturnAs -> Phantoms.TTerm Syntax.Term100 -> Phantoms.TTerm Syntax.ReturnAs
@@ -5204,7 +5204,7 @@ returnAsWithReturn original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.ReturnAs"),
-              Core.projectionField = (Core.Name "as")})),
+              Core.projectionFieldName = (Core.Name "as")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "return"),
@@ -5233,7 +5233,7 @@ sectionDefinitionName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.SectionDefinition"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the sentences field of hydra.coq.syntax.SectionDefinition
 sectionDefinitionSentences :: Phantoms.TTerm Syntax.SectionDefinition -> Phantoms.TTerm [Syntax.Sentence]
@@ -5241,7 +5241,7 @@ sectionDefinitionSentences x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.SectionDefinition"),
-        Core.projectionField = (Core.Name "sentences")})),
+        Core.projectionFieldName = (Core.Name "sentences")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.coq.syntax.SectionDefinition
 sectionDefinitionWithName :: Phantoms.TTerm Syntax.SectionDefinition -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.SectionDefinition
@@ -5257,7 +5257,7 @@ sectionDefinitionWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.SectionDefinition"),
-              Core.projectionField = (Core.Name "sentences")})),
+              Core.projectionFieldName = (Core.Name "sentences")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the sentences field of hydra.coq.syntax.SectionDefinition
 sectionDefinitionWithSentences :: Phantoms.TTerm Syntax.SectionDefinition -> Phantoms.TTerm [Syntax.Sentence] -> Phantoms.TTerm Syntax.SectionDefinition
@@ -5270,7 +5270,7 @@ sectionDefinitionWithSentences original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.SectionDefinition"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "sentences"),
@@ -5293,7 +5293,7 @@ sentenceComment x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Sentence"),
-        Core.projectionField = (Core.Name "comment")})),
+        Core.projectionFieldName = (Core.Name "comment")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the content field of hydra.coq.syntax.Sentence
 sentenceContent :: Phantoms.TTerm Syntax.Sentence -> Phantoms.TTerm Syntax.SentenceContent
@@ -5301,7 +5301,7 @@ sentenceContent x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Sentence"),
-        Core.projectionField = (Core.Name "content")})),
+        Core.projectionFieldName = (Core.Name "content")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL injection for the axiom variant of hydra.coq.syntax.SentenceContent
 sentenceContentAxiom :: Phantoms.TTerm Syntax.AxiomDeclaration -> Phantoms.TTerm Syntax.SentenceContent
@@ -5397,7 +5397,7 @@ sentenceWithComment original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Sentence"),
-              Core.projectionField = (Core.Name "content")})),
+              Core.projectionFieldName = (Core.Name "content")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the content field of hydra.coq.syntax.Sentence
 sentenceWithContent :: Phantoms.TTerm Syntax.Sentence -> Phantoms.TTerm Syntax.SentenceContent -> Phantoms.TTerm Syntax.Sentence
@@ -5410,7 +5410,7 @@ sentenceWithContent original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Sentence"),
-              Core.projectionField = (Core.Name "comment")})),
+              Core.projectionFieldName = (Core.Name "comment")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "content"),
@@ -5672,7 +5672,7 @@ theoremBodyBinders x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "binders")})),
+        Core.projectionFieldName = (Core.Name "binders")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the kind field of hydra.coq.syntax.TheoremBody
 theoremBodyKind :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.TheoremKind
@@ -5680,7 +5680,7 @@ theoremBodyKind x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "kind")})),
+        Core.projectionFieldName = (Core.Name "kind")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.coq.syntax.TheoremBody
 theoremBodyName :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Ident
@@ -5688,7 +5688,7 @@ theoremBodyName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the proof field of hydra.coq.syntax.TheoremBody
 theoremBodyProof :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Term
@@ -5696,7 +5696,7 @@ theoremBodyProof x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "proof")})),
+        Core.projectionFieldName = (Core.Name "proof")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.TheoremBody
 theoremBodyType :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Type
@@ -5704,7 +5704,7 @@ theoremBodyType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the binders field of hydra.coq.syntax.TheoremBody
 theoremBodyWithBinders :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm [Syntax.Binder] -> Phantoms.TTerm Syntax.TheoremBody
@@ -5717,14 +5717,14 @@ theoremBodyWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
@@ -5734,14 +5734,14 @@ theoremBodyWithBinders original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "proof"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "proof")})),
+              Core.projectionFieldName = (Core.Name "proof")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the kind field of hydra.coq.syntax.TheoremBody
 theoremBodyWithKind :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.TheoremKind -> Phantoms.TTerm Syntax.TheoremBody
@@ -5757,28 +5757,28 @@ theoremBodyWithKind original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "proof"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "proof")})),
+              Core.projectionFieldName = (Core.Name "proof")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.coq.syntax.TheoremBody
 theoremBodyWithName :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Ident -> Phantoms.TTerm Syntax.TheoremBody
@@ -5791,7 +5791,7 @@ theoremBodyWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
@@ -5801,21 +5801,21 @@ theoremBodyWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "proof"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "proof")})),
+              Core.projectionFieldName = (Core.Name "proof")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the proof field of hydra.coq.syntax.TheoremBody
 theoremBodyWithProof :: Phantoms.TTerm Syntax.TheoremBody -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.TheoremBody
@@ -5828,28 +5828,28 @@ theoremBodyWithProof original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "proof"),
@@ -5865,21 +5865,21 @@ theoremBodyWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "kind")})),
+              Core.projectionFieldName = (Core.Name "kind")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "name"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "binders"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "binders")})),
+              Core.projectionFieldName = (Core.Name "binders")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -5889,7 +5889,7 @@ theoremBodyWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TheoremBody"),
-              Core.projectionField = (Core.Name "proof")})),
+              Core.projectionFieldName = (Core.Name "proof")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL injection for the corollary variant of hydra.coq.syntax.TheoremKind
 theoremKindCorollary :: Phantoms.TTerm Syntax.TheoremKind
@@ -5955,7 +5955,7 @@ typeBindersNames x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeBinders"),
-        Core.projectionField = (Core.Name "names")})),
+        Core.projectionFieldName = (Core.Name "names")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.TypeBinders
 typeBindersType :: Phantoms.TTerm Syntax.TypeBinders -> Phantoms.TTerm Syntax.Type
@@ -5963,7 +5963,7 @@ typeBindersType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeBinders"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the names field of hydra.coq.syntax.TypeBinders
 typeBindersWithNames :: Phantoms.TTerm Syntax.TypeBinders -> Phantoms.TTerm [Syntax.Name] -> Phantoms.TTerm Syntax.TypeBinders
@@ -5979,7 +5979,7 @@ typeBindersWithNames original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeBinders"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.coq.syntax.TypeBinders
 typeBindersWithType :: Phantoms.TTerm Syntax.TypeBinders -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeBinders
@@ -5992,7 +5992,7 @@ typeBindersWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeBinders"),
-              Core.projectionField = (Core.Name "names")})),
+              Core.projectionFieldName = (Core.Name "names")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -6018,7 +6018,7 @@ typeCastOperator x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-        Core.projectionField = (Core.Name "operator")})),
+        Core.projectionFieldName = (Core.Name "operator")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL injection for the nativeCompute variant of hydra.coq.syntax.TypeCastOperator
 typeCastOperatorNativeCompute :: Phantoms.TTerm Syntax.TypeCastOperator
@@ -6050,7 +6050,7 @@ typeCastTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the type field of hydra.coq.syntax.TypeCast
 typeCastType :: Phantoms.TTerm Syntax.TypeCast -> Phantoms.TTerm Syntax.Type
@@ -6058,7 +6058,7 @@ typeCastType x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-        Core.projectionField = (Core.Name "type")})),
+        Core.projectionFieldName = (Core.Name "type")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the operator field of hydra.coq.syntax.TypeCast
 typeCastWithOperator :: Phantoms.TTerm Syntax.TypeCast -> Phantoms.TTerm Syntax.TypeCastOperator -> Phantoms.TTerm Syntax.TypeCast
@@ -6071,14 +6071,14 @@ typeCastWithOperator original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
@@ -6097,14 +6097,14 @@ typeCastWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "type")})),
+              Core.projectionFieldName = (Core.Name "type")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "operator"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the type field of hydra.coq.syntax.TypeCast
 typeCastWithType :: Phantoms.TTerm Syntax.TypeCast -> Phantoms.TTerm Syntax.Type -> Phantoms.TTerm Syntax.TypeCast
@@ -6117,7 +6117,7 @@ typeCastWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "type"),
@@ -6127,7 +6127,7 @@ typeCastWithType original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeCast"),
-              Core.projectionField = (Core.Name "operator")})),
+              Core.projectionFieldName = (Core.Name "operator")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL constructor for hydra.coq.syntax.TypeclassConstraint
 typeclassConstraint :: Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.TypeclassConstraint
@@ -6150,7 +6150,7 @@ typeclassConstraintGeneralizing x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-        Core.projectionField = (Core.Name "generalizing")})),
+        Core.projectionFieldName = (Core.Name "generalizing")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the name field of hydra.coq.syntax.TypeclassConstraint
 typeclassConstraintName :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm (Maybe Syntax.Name)
@@ -6158,7 +6158,7 @@ typeclassConstraintName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the term field of hydra.coq.syntax.TypeclassConstraint
 typeclassConstraintTerm :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm Syntax.Term
@@ -6166,7 +6166,7 @@ typeclassConstraintTerm x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-        Core.projectionField = (Core.Name "term")})),
+        Core.projectionFieldName = (Core.Name "term")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the generalizing field of hydra.coq.syntax.TypeclassConstraint
 typeclassConstraintWithGeneralizing :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm Bool -> Phantoms.TTerm Syntax.TypeclassConstraint
@@ -6179,7 +6179,7 @@ typeclassConstraintWithGeneralizing original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generalizing"),
@@ -6189,7 +6189,7 @@ typeclassConstraintWithGeneralizing original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the name field of hydra.coq.syntax.TypeclassConstraint
 typeclassConstraintWithName :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm (Maybe Syntax.Name) -> Phantoms.TTerm Syntax.TypeclassConstraint
@@ -6205,14 +6205,14 @@ typeclassConstraintWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "generalizing")})),
+              Core.projectionFieldName = (Core.Name "generalizing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "term")})),
+              Core.projectionFieldName = (Core.Name "term")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the term field of hydra.coq.syntax.TypeclassConstraint
 typeclassConstraintWithTerm :: Phantoms.TTerm Syntax.TypeclassConstraint -> Phantoms.TTerm Syntax.Term -> Phantoms.TTerm Syntax.TypeclassConstraint
@@ -6225,14 +6225,14 @@ typeclassConstraintWithTerm original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "generalizing"),
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.TypeclassConstraint"),
-              Core.projectionField = (Core.Name "generalizing")})),
+              Core.projectionFieldName = (Core.Name "generalizing")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "term"),
@@ -6401,7 +6401,7 @@ universe_ExprName x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Universe_Expr"),
-        Core.projectionField = (Core.Name "name")})),
+        Core.projectionFieldName = (Core.Name "name")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL accessor for the number field of hydra.coq.syntax.Universe_Expr
 universe_ExprNumber :: Phantoms.TTerm Syntax.Universe_Expr -> Phantoms.TTerm (Maybe Syntax.Natural)
@@ -6409,7 +6409,7 @@ universe_ExprNumber x =
     Phantoms.TTerm (Core.TermApplication (Core.Application {
       Core.applicationFunction = (Core.TermProject (Core.Projection {
         Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Universe_Expr"),
-        Core.projectionField = (Core.Name "number")})),
+        Core.projectionFieldName = (Core.Name "number")})),
       Core.applicationArgument = (Phantoms.unTTerm x)}))
 -- | DSL updater for the name field of hydra.coq.syntax.Universe_Expr
 universe_ExprWithName :: Phantoms.TTerm Syntax.Universe_Expr -> Phantoms.TTerm Syntax.UniverseName -> Phantoms.TTerm Syntax.Universe_Expr
@@ -6425,7 +6425,7 @@ universe_ExprWithName original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Universe_Expr"),
-              Core.projectionField = (Core.Name "number")})),
+              Core.projectionFieldName = (Core.Name "number")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))}]}))
 -- | DSL updater for the number field of hydra.coq.syntax.Universe_Expr
 universe_ExprWithNumber :: Phantoms.TTerm Syntax.Universe_Expr -> Phantoms.TTerm (Maybe Syntax.Natural) -> Phantoms.TTerm Syntax.Universe_Expr
@@ -6438,7 +6438,7 @@ universe_ExprWithNumber original newVal =
           Core.fieldTerm = (Core.TermApplication (Core.Application {
             Core.applicationFunction = (Core.TermProject (Core.Projection {
               Core.projectionTypeName = (Core.Name "hydra.coq.syntax.Universe_Expr"),
-              Core.projectionField = (Core.Name "name")})),
+              Core.projectionFieldName = (Core.Name "name")})),
             Core.applicationArgument = (Phantoms.unTTerm original)}))},
         Core.Field {
           Core.fieldName = (Core.Name "number"),

@@ -9,6 +9,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "Any of a small number of built-in type classes"}}}],
               "body": {"union": [{"name": "equality", "type": {"unit": {}}}, {"name": "ordering", "type": {"unit": {}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core"],
+  "dependencies": [{"module": "hydra.core"}],
   "description": "Type classes",
-  "namespace": "hydra.classes"}
+  "name": "hydra.classes"}

@@ -25,13 +25,13 @@ import qualified Data.Set as S
 import Prelude hiding ((++))
 
 
-testNs = Namespace "hydra.demos.meteredEvaluation"
+testNs = ModuleName "hydra.demos.meteredEvaluation"
 
 testModule :: Module
 testModule = Module {
-               moduleNamespace = testNs,
+               moduleName = testNs,
                moduleDefinitions = definitions,
-               moduleDependencies = [],
+               moduleDependencies = [] :: [ModuleDependency],
                moduleDescription = Nothing}
   where
     test local tterm = TTermDefinition (unqualifyName $ QualifiedName (Just testNs) local) tterm

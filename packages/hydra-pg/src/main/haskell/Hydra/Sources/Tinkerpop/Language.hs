@@ -86,14 +86,14 @@ import qualified Hydra.Sources.Tinkerpop.Features as TinkerpopFeatures
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.tinkerpop.language"
+ns :: ModuleName
+ns = ModuleName "hydra.tinkerpop.language"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Strip.ns] L.++ (TinkerpopFeatures.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Strip.ns] L.++ (TinkerpopFeatures.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Language constraints based on TinkerPop Graph.Features"}
   where
     definitions = [

@@ -3,6 +3,7 @@ module Hydra.Sources.Yaml.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -41,18 +42,17 @@ import qualified Hydra.Yaml.Model as YM
 liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either Error a)
 liftStringError cx = Eithers.bimap ("_s" ~> Error.errorOther (Error.otherError $ var "_s")) ("_x" ~> var "_x")
 
-ns :: Namespace
-ns = Namespace "hydra.yaml.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.yaml.coder"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Adapt.ns,
-     ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns, Namespace "hydra.show.core"] L.++ (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.yaml.model"]),
+            moduleDependencies = unqualifiedDep <$> ([Adapt.ns, ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Strip.ns, ModuleName "hydra.show.core"] L.++ (KernelTypes.kernelTypesModuleNames L.++ [ModuleName "hydra.yaml.model"])),
             moduleDescription = Just "YAML encoding and decoding for Hydra terms"}
   where
     definitions = [

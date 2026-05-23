@@ -840,4 +840,4 @@
           "variables": []}}}],
   "dependencies": [],
   "description": "A GraphQL model. Based on the (extended) BNF at:\n  https://spec.graphql.org/draft/#sec-Appendix-Grammar-Summary",
-  "namespace": "hydra.graphql.syntax"}
+  "name": "hydra.graphql.syntax"}

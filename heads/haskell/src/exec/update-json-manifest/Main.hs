@@ -37,7 +37,7 @@ dedupByNamespace = go S.empty
     go seen (m:ms)
       | ns `S.member` seen = go seen ms
       | otherwise          = m : go (S.insert ns seen) ms
-      where ns = Kernel.moduleNamespace m
+      where ns = Kernel.moduleName m
 
 main :: IO ()
 main = do

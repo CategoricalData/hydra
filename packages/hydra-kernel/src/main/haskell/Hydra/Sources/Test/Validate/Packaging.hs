@@ -4,6 +4,7 @@ module Hydra.Sources.Test.Validate.Packaging where
 
 -- Standard imports for tests
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Error.Packaging
 import Hydra.Dsl.Meta.Testing                 as Testing
 import Hydra.Dsl.Meta.Terms                   as Terms hiding ((@@))
@@ -22,28 +23,28 @@ import Hydra.Testing
 import Hydra.Sources.Libraries
 
 
-ns :: Namespace
-ns = Namespace "hydra.test.validate.packaging"
+ns :: ModuleName
+ns = ModuleName "hydra.test.validate.packaging"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Namespace "hydra.validate.packaging",
-              Namespace "hydra.show.error.packaging"] ++ kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([ModuleName "hydra.validate.packaging",
+              ModuleName "hydra.show.error.packaging"] ++ kernelTypesModuleNames),
             moduleDescription = (Just "Test cases for module and package validation")}
   where
     definitions = [
       Phantoms.toDefinition allTests,
-      Phantoms.toDefinition checkConflictingModuleNamespacesTests,
+      Phantoms.toDefinition checkConflictingModuleNamesTests,
       Phantoms.toDefinition checkConflictingVariantNamesTests,
       Phantoms.toDefinition checkDefinitionDocumentationTests,
       Phantoms.toDefinition checkDefinitionNameConventionTests,
-      Phantoms.toDefinition checkDefinitionNamespacesTests,
+      Phantoms.toDefinition checkDefinitionModuleNamesTests,
       Phantoms.toDefinition checkDefinitionOrderingTests,
       Phantoms.toDefinition checkDuplicateDefinitionNamesTests,
-      Phantoms.toDefinition checkDuplicateModuleNamespacesTests,
-      Phantoms.toDefinition checkModuleNamespaceConventionTests,
+      Phantoms.toDefinition checkDuplicateModuleNamesTests,
+      Phantoms.toDefinition checkModuleNameConventionTests,
       Phantoms.toDefinition checkPackageNameConventionTests,
       Phantoms.toDefinition kernelModuleTests,
       Phantoms.toDefinition kernelPackageTests,
@@ -60,9 +61,9 @@ define = definitionInModule module_
 nm :: String -> TTerm Name
 nm s = Core.name $ Phantoms.string s
 
--- | Build a Namespace from a String literal.
-nsLit :: String -> TTerm Namespace
-nsLit s = Packaging.namespace $ Phantoms.string s
+-- | Build a ModuleName from a String literal.
+nsLit :: String -> TTerm ModuleName
+nsLit s = Packaging.moduleName2 $ Phantoms.string s
 
 -- | Build a PackageName from a String literal.
 pn :: String -> TTerm PackageName
@@ -73,7 +74,7 @@ mkModule :: String -> [TTerm Definition] -> TTerm Module
 mkModule nsStr defs = Packaging.module_
   (Phantoms.just $ Phantoms.string ("Test module " <> nsStr))
   (nsLit nsStr)
-  (Phantoms.list ([] :: [TTerm Namespace]))
+  (Phantoms.list ([] :: [TTerm ModuleDependency]))
   (Phantoms.list defs)
 
 -- | Build a Package with the given name and modules.
@@ -137,7 +138,7 @@ definitionsOutOfOrderErr :: String -> String -> String -> TTerm (Maybe InvalidMo
 definitionsOutOfOrderErr nsStr precedingNm followingNm = justModuleError $
   Phantoms.inject _InvalidModuleError _InvalidModuleError_definitionsOutOfOrder $
     Phantoms.record _DefinitionsOutOfOrderError [
-      unName _DefinitionsOutOfOrderError_namespace Phantoms.>: nsLit nsStr,
+      unName _DefinitionsOutOfOrderError_moduleName Phantoms.>: nsLit nsStr,
       unName _DefinitionsOutOfOrderError_precedingName Phantoms.>: nm precedingNm,
       unName _DefinitionsOutOfOrderError_followingName Phantoms.>: nm followingNm]
 
@@ -145,49 +146,49 @@ invalidDefinitionNameErr :: String -> String -> TTerm CaseConvention -> TTerm (M
 invalidDefinitionNameErr nsStr nameStr expectedConv = justModuleError $
   Phantoms.inject _InvalidModuleError _InvalidModuleError_invalidDefinitionName $
     Phantoms.record _InvalidDefinitionNameError [
-      unName _InvalidDefinitionNameError_namespace Phantoms.>: nsLit nsStr,
+      unName _InvalidDefinitionNameError_moduleName Phantoms.>: nsLit nsStr,
       unName _InvalidDefinitionNameError_name Phantoms.>: nm nameStr,
       unName _InvalidDefinitionNameError_expectedConvention Phantoms.>: expectedConv]
 
 invalidNamespaceConventionErr :: String -> TTerm (Maybe InvalidModuleError)
 invalidNamespaceConventionErr nsStr = justModuleError $
-  Phantoms.inject _InvalidModuleError _InvalidModuleError_invalidNamespaceConvention $
-    Phantoms.record _InvalidNamespaceConventionError [
-      unName _InvalidNamespaceConventionError_namespace Phantoms.>: nsLit nsStr]
+  Phantoms.inject _InvalidModuleError _InvalidModuleError_invalidModuleNameConvention $
+    Phantoms.record _InvalidModuleNameConventionError [
+      unName _InvalidModuleNameConventionError_moduleName Phantoms.>: nsLit nsStr]
 
 missingDocumentationErr :: String -> String -> TTerm (Maybe InvalidModuleError)
 missingDocumentationErr nsStr nameStr = justModuleError $
   Phantoms.inject _InvalidModuleError _InvalidModuleError_missingDocumentation $
     Phantoms.record _MissingDocumentationError [
-      unName _MissingDocumentationError_namespace Phantoms.>: nsLit nsStr,
+      unName _MissingDocumentationError_moduleName Phantoms.>: nsLit nsStr,
       unName _MissingDocumentationError_name Phantoms.>: nm nameStr]
 
 definitionNotInModuleNamespaceErr :: String -> String -> TTerm (Maybe InvalidModuleError)
 definitionNotInModuleNamespaceErr nsStr nameStr = justModuleError $
-  Phantoms.inject _InvalidModuleError _InvalidModuleError_definitionNotInModuleNamespace $
-    Phantoms.record _DefinitionNotInModuleNamespaceError [
-      unName _DefinitionNotInModuleNamespaceError_namespace Phantoms.>: nsLit nsStr,
-      unName _DefinitionNotInModuleNamespaceError_name Phantoms.>: nm nameStr]
+  Phantoms.inject _InvalidModuleError _InvalidModuleError_definitionNotInModuleName $
+    Phantoms.record _DefinitionNotInModuleNameError [
+      unName _DefinitionNotInModuleNameError_moduleName Phantoms.>: nsLit nsStr,
+      unName _DefinitionNotInModuleNameError_name Phantoms.>: nm nameStr]
 
 duplicateDefinitionNameErr :: String -> String -> TTerm (Maybe InvalidModuleError)
 duplicateDefinitionNameErr nsStr nameStr = justModuleError $
   Phantoms.inject _InvalidModuleError _InvalidModuleError_duplicateDefinitionName $
     Phantoms.record _DuplicateDefinitionNameError [
-      unName _DuplicateDefinitionNameError_namespace Phantoms.>: nsLit nsStr,
+      unName _DuplicateDefinitionNameError_moduleName Phantoms.>: nsLit nsStr,
       unName _DuplicateDefinitionNameError_name Phantoms.>: nm nameStr]
 
 duplicateModuleNamespaceErr :: String -> TTerm (Maybe InvalidPackageError)
 duplicateModuleNamespaceErr nsStr = justPackageError $
-  Phantoms.inject _InvalidPackageError _InvalidPackageError_duplicateModuleNamespace $
-    Phantoms.record _DuplicateModuleNamespaceError [
-      unName _DuplicateModuleNamespaceError_namespace Phantoms.>: nsLit nsStr]
+  Phantoms.inject _InvalidPackageError _InvalidPackageError_duplicateModuleName $
+    Phantoms.record _DuplicateModuleNameError [
+      unName _DuplicateModuleNameError_moduleName Phantoms.>: nsLit nsStr]
 
 conflictingModuleNamespaceErr :: String -> String -> TTerm (Maybe InvalidPackageError)
 conflictingModuleNamespaceErr firstNs secondNs = justPackageError $
-  Phantoms.inject _InvalidPackageError _InvalidPackageError_conflictingModuleNamespace $
-    Phantoms.record _ConflictingModuleNamespaceError [
-      unName _ConflictingModuleNamespaceError_first Phantoms.>: nsLit firstNs,
-      unName _ConflictingModuleNamespaceError_second Phantoms.>: nsLit secondNs]
+  Phantoms.inject _InvalidPackageError _InvalidPackageError_conflictingModuleName $
+    Phantoms.record _ConflictingModuleNameError [
+      unName _ConflictingModuleNameError_first Phantoms.>: nsLit firstNs,
+      unName _ConflictingModuleNameError_second Phantoms.>: nsLit secondNs]
 
 invalidPackageNameErr :: String -> TTerm (Maybe InvalidPackageError)
 invalidPackageNameErr nameStr = justPackageError $
@@ -203,15 +204,15 @@ allTests :: TTermDefinition TestGroup
 allTests = define "allTests" $
   Phantoms.doc "All test cases for hydra.validate.packaging" $
   supergroup "validate.packaging" [
-    checkConflictingModuleNamespacesTests,
+    checkConflictingModuleNamesTests,
     checkConflictingVariantNamesTests,
     checkDefinitionDocumentationTests,
     checkDefinitionNameConventionTests,
-    checkDefinitionNamespacesTests,
+    checkDefinitionModuleNamesTests,
     checkDefinitionOrderingTests,
     checkDuplicateDefinitionNamesTests,
-    checkDuplicateModuleNamespacesTests,
-    checkModuleNamespaceConventionTests,
+    checkDuplicateModuleNamesTests,
+    checkModuleNameConventionTests,
     checkPackageNameConventionTests,
     kernelModuleTests,
     kernelPackageTests,
@@ -225,23 +226,23 @@ mc = validatePackagingModuleCase
 pc :: String -> TTerm (Package -> Maybe InvalidPackageError) -> TTerm Package -> TTerm (Maybe InvalidPackageError) -> TTerm TestCaseWithMetadata
 pc = validatePackagingPackageCase
 
-checkConflictingModuleNamespacesTests :: TTermDefinition TestGroup
-checkConflictingModuleNamespacesTests = define "checkConflictingModuleNamespacesTests" $
-  subgroup "checkConflictingModuleNamespaces" [
+checkConflictingModuleNamesTests :: TTermDefinition TestGroup
+checkConflictingModuleNamesTests = define "checkConflictingModuleNamesTests" $
+  subgroup "checkConflictingModuleNames" [
     pc "empty package: no conflicts"
-      checkConflictingModuleNamespacesRef
+      checkConflictingModuleNamesRef
       (mkPackage "test-pkg" [])
       noPackageError,
     pc "single module: no conflicts"
-      checkConflictingModuleNamespacesRef
+      checkConflictingModuleNamesRef
       (mkPackage "test-pkg" [mkModule "hydra.foo" []])
       noPackageError,
     pc "distinct lowercase namespaces: no conflicts"
-      checkConflictingModuleNamespacesRef
+      checkConflictingModuleNamesRef
       (mkPackage "test-pkg" [mkModule "hydra.foo" [], mkModule "hydra.bar" []])
       noPackageError,
     pc "case-insensitive collision: hydra.fooBar vs hydra.foobar"
-      checkConflictingModuleNamespacesRef
+      checkConflictingModuleNamesRef
       (mkPackage "test-pkg" [mkModule "hydra.fooBar" [], mkModule "hydra.foobar" []])
       (conflictingModuleNamespaceErr "hydra.fooBar" "hydra.foobar")]
 
@@ -298,19 +299,19 @@ checkDefinitionNameConventionTests = define "checkDefinitionNameConventionTests"
       (mkModule "hydra.foo" [mkDocumentedTermDef "hydra.foo.BadName"])
       (invalidDefinitionNameErr "hydra.foo" "hydra.foo.BadName" Util.caseConventionCamel)]
 
-checkDefinitionNamespacesTests :: TTermDefinition TestGroup
-checkDefinitionNamespacesTests = define "checkDefinitionNamespacesTests" $
-  subgroup "checkDefinitionNamespaces" [
+checkDefinitionModuleNamesTests :: TTermDefinition TestGroup
+checkDefinitionModuleNamesTests = define "checkDefinitionModuleNamesTests" $
+  subgroup "checkDefinitionModuleNames" [
     mc "empty module: no error"
-      checkDefinitionNamespacesRef
+      checkDefinitionModuleNamesRef
       (mkModule "hydra.foo" [])
       noModuleError,
     mc "definition with matching namespace: no error"
-      checkDefinitionNamespacesRef
+      checkDefinitionModuleNamesRef
       (mkModule "hydra.foo" [mkDocumentedTermDef "hydra.foo.bar"])
       noModuleError,
     mc "definition outside namespace: error"
-      checkDefinitionNamespacesRef
+      checkDefinitionModuleNamesRef
       (mkModule "hydra.foo" [mkDocumentedTermDef "hydra.baz.qux"])
       (definitionNotInModuleNamespaceErr "hydra.foo" "hydra.baz.qux")]
 
@@ -365,43 +366,43 @@ checkDuplicateDefinitionNamesTests = define "checkDuplicateDefinitionNamesTests"
         mkDocumentedTermDef "hydra.foo.aaa"])
       (duplicateDefinitionNameErr "hydra.foo" "hydra.foo.aaa")]
 
-checkDuplicateModuleNamespacesTests :: TTermDefinition TestGroup
-checkDuplicateModuleNamespacesTests = define "checkDuplicateModuleNamespacesTests" $
-  subgroup "checkDuplicateModuleNamespaces" [
+checkDuplicateModuleNamesTests :: TTermDefinition TestGroup
+checkDuplicateModuleNamesTests = define "checkDuplicateModuleNamesTests" $
+  subgroup "checkDuplicateModuleNames" [
     pc "empty package: no error"
-      checkDuplicateModuleNamespacesRef
+      checkDuplicateModuleNamesRef
       (mkPackage "test-pkg" [])
       noPackageError,
     pc "distinct namespaces: no error"
-      checkDuplicateModuleNamespacesRef
+      checkDuplicateModuleNamesRef
       (mkPackage "test-pkg" [mkModule "hydra.foo" [], mkModule "hydra.bar" []])
       noPackageError,
     pc "duplicate namespaces: error"
-      checkDuplicateModuleNamespacesRef
+      checkDuplicateModuleNamesRef
       (mkPackage "test-pkg" [mkModule "hydra.foo" [], mkModule "hydra.foo" []])
       (duplicateModuleNamespaceErr "hydra.foo")]
 
-checkModuleNamespaceConventionTests :: TTermDefinition TestGroup
-checkModuleNamespaceConventionTests = define "checkModuleNamespaceConventionTests" $
-  subgroup "checkModuleNamespaceConvention" [
+checkModuleNameConventionTests :: TTermDefinition TestGroup
+checkModuleNameConventionTests = define "checkModuleNameConventionTests" $
+  subgroup "checkModuleNameConvention" [
     mc "single segment lowercase: no error"
-      checkModuleNamespaceConventionRef
+      checkModuleNameConventionRef
       (mkModule "hydra" [])
       noModuleError,
     mc "dotted lowercase: no error"
-      checkModuleNamespaceConventionRef
+      checkModuleNameConventionRef
       (mkModule "hydra.foo.bar" [])
       noModuleError,
     mc "dotted camelCase segments: no error"
-      checkModuleNamespaceConventionRef
+      checkModuleNameConventionRef
       (mkModule "hydra.test.testGraph" [])
       noModuleError,
     mc "uppercase first letter of segment: error"
-      checkModuleNamespaceConventionRef
+      checkModuleNameConventionRef
       (mkModule "hydra.Foo" [])
       (invalidNamespaceConventionErr "hydra.Foo"),
     mc "underscore in segment: error"
-      checkModuleNamespaceConventionRef
+      checkModuleNameConventionRef
       (mkModule "hydra.foo_bar" [])
       (invalidNamespaceConventionErr "hydra.foo_bar")]
 
@@ -501,7 +502,7 @@ missingDocErrAt :: String -> String -> TTerm InvalidModuleError
 missingDocErrAt nsStr nameStr =
   Phantoms.inject _InvalidModuleError _InvalidModuleError_missingDocumentation $
     Phantoms.record _MissingDocumentationError [
-      unName _MissingDocumentationError_namespace Phantoms.>: nsLit nsStr,
+      unName _MissingDocumentationError_moduleName Phantoms.>: nsLit nsStr,
       unName _MissingDocumentationError_name Phantoms.>: nm nameStr]
 
 -- | Bare InvalidModuleError for a duplicate-definition-name finding.
@@ -509,7 +510,7 @@ duplicateDefErrAt :: String -> String -> TTerm InvalidModuleError
 duplicateDefErrAt nsStr nameStr =
   Phantoms.inject _InvalidModuleError _InvalidModuleError_duplicateDefinitionName $
     Phantoms.record _DuplicateDefinitionNameError [
-      unName _DuplicateDefinitionNameError_namespace Phantoms.>: nsLit nsStr,
+      unName _DuplicateDefinitionNameError_moduleName Phantoms.>: nsLit nsStr,
       unName _DuplicateDefinitionNameError_name Phantoms.>: nm nameStr]
 
 -- | Fully qualified rule names used by the profile-aware tests.

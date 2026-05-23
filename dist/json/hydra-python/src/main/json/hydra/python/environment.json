@@ -22,7 +22,7 @@
                     "name": "namespaces",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                         "body": {
                           "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}}},
                   {
@@ -84,7 +84,7 @@
                     "name": "namespaces",
                     "type": {
                       "annotated": {
-                        "annotation": [{"key": "description", "value": {"literal": {"string": "Namespace mapping for imports"}}}],
+                        "annotation": [{"key": "description", "value": {"literal": {"string": "ModuleName mapping for imports"}}}],
                         "body": {
                           "application": {"argument": {"variable": "hydra.python.syntax.DottedName"}, "function": {"variable": "hydra.util.Namespaces"}}}}}},
                   {
@@ -138,6 +138,12 @@
                         "annotation": [{"key": "description", "value": {"literal": {"string": "Accumulated module metadata"}}}],
                         "body": {"variable": "hydra.python.environment.PythonModuleMetadata"}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.python.syntax", "hydra.util", "hydra.core", "hydra.graph", "hydra.packaging", "hydra.typing"],
+  "dependencies": [
+    {"module": "hydra.python.syntax"},
+    {"module": "hydra.util"},
+    {"module": "hydra.core"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.typing"}],
   "description": "Environment types for Python code generation",
-  "namespace": "hydra.python.environment"}
+  "name": "hydra.python.environment"}

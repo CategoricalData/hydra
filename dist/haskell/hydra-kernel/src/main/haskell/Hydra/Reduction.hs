@@ -467,9 +467,9 @@ reduceTerm cx graph eager term =
           mapErrorToString = \e -> Errors.ErrorOther (Errors.OtherError (ShowErrors.error e))
           applyProjection =
                   \proj -> \reducedArg -> Eithers.bind (ExtractCore.record (Core.projectionTypeName proj) graph (Strip.deannotateTerm reducedArg)) (\fields ->
-                    let matching = Lists.find (\f -> Equality.equal (Core.fieldName f) (Core.projectionField proj)) fields
+                    let matching = Lists.find (\f -> Equality.equal (Core.fieldName f) (Core.projectionFieldName proj)) fields
                     in (Maybes.maybe (Left (Errors.ErrorResolution (Errors.ResolutionErrorNoMatchingField (Errors.NoMatchingFieldError {
-                      Errors.noMatchingFieldErrorFieldName = (Core.projectionField proj)})))) (\mf -> Right (Core.fieldTerm mf)) matching))
+                      Errors.noMatchingFieldErrorFieldName = (Core.projectionFieldName proj)})))) (\mf -> Right (Core.fieldTerm mf)) matching))
           applyCases =
                   \cs -> \reducedArg -> Eithers.bind (ExtractCore.injection (Core.caseStatementTypeName cs) graph reducedArg) (\field ->
                     let matching = Lists.find (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases cs)

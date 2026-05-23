@@ -93,14 +93,14 @@ import qualified Hydra.Pg.Model as PG            -- Generated PG model types
 import qualified Hydra.Json.Model as JM          -- Generated JSON types
 
 
-ns :: Namespace
-ns = Namespace "hydra.pg.graphson.utils"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.graphson.utils"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = ([GraphsonConstruct.ns, Strip.ns] L.++ (kernelTypesNamespaces L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns])),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> (([GraphsonConstruct.ns, Strip.ns] L.++ (kernelTypesModuleNames L.++ [GraphsonSyntax.ns, PgModel.ns, JsonModel.ns]))),
             moduleDescription = Just "Utility functions for GraphSON encoding and property graph conversion."}
   where
     definitions = [

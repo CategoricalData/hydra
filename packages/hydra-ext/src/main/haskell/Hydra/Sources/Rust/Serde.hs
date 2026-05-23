@@ -90,14 +90,14 @@ import qualified Hydra.Sources.Rust.Operators as RustOperators
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.rust.serde"
+ns :: ModuleName
+ns = ModuleName "hydra.rust.serde"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, Serialization.ns, RustOperators.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, Serialization.ns, RustOperators.ns] L.++ (RustSyntax.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Rust serializer: converts Rust AST to concrete syntax"}
   where
     definitions = [

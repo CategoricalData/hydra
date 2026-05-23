@@ -30,7 +30,7 @@ import qualified Data.List as L
 -- Compatibility aliases for legacy _* names (from the old Staging.Lib.Names module).
 -- These map old names to the new generated Hydra.Lib.Names constants.
 
--- Namespace aliases
+-- ModuleName aliases
 _hydra_lib_chars    = LibNames.chars
 _hydra_lib_eithers  = LibNames.eithers
 _hydra_lib_equality = LibNames.equality
@@ -384,10 +384,10 @@ standardLibraries = [
   hydraLibSets,
   hydraLibStrings]
 
-standardLibrary :: Namespace -> [Primitive] -> Library
+standardLibrary :: ModuleName -> [Primitive] -> Library
 standardLibrary ns prims = Library {
   libraryNamespace = ns,
-  libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unNamespace ns,
+  libraryPrefix = L.drop (L.length ("hydra.lib." :: String)) $ unModuleName ns,
   libraryPrimitives = prims}
 
 -- | A TermCoder for function types which uses beta reduction to bridge term-level

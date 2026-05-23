@@ -57,14 +57,14 @@ import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
-ns :: Namespace
-ns = Namespace "hydra.templates"
+ns :: ModuleName
+ns = ModuleName "hydra.templates"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Constants.ns, moduleNamespace DecodeCore.module_, ShowCore.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Constants.ns, moduleName DecodeCore.module_, ShowCore.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just "A utility which instantiates a nonrecursive type with default values"}
   where
    definitions = [

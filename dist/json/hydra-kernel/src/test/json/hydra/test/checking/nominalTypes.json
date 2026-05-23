@@ -3064,7 +3064,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -3185,7 +3185,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lastName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lastName"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -3306,7 +3306,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -3432,7 +3432,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -3558,7 +3558,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lon"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lon"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -3710,7 +3710,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                               "typeName": "hydra.core.Projection"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -3886,7 +3886,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
                                                                               "typeName": "hydra.core.Projection"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -4067,7 +4067,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonName"}},
-                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
                                                                               "typeName": "hydra.core.Projection"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -4253,7 +4253,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -4401,7 +4401,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lon"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lon"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -4549,7 +4549,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "head"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "head"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -4697,7 +4697,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -4893,7 +4893,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"}},
-                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
                                                                               "typeName": "hydra.core.Projection"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -5067,7 +5067,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"}},
-                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lon"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lon"}}, "typeName": "hydra.core.Name"}}}],
                                                                               "typeName": "hydra.core.Projection"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -5245,7 +5245,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
-                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "head"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "head"}}, "typeName": "hydra.core.Name"}}}],
                                                                               "typeName": "hydra.core.Projection"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -5428,7 +5428,7 @@
                                                                                           "record": {
                                                                                             "fields": [
                                                                                               {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                             "typeName": "hydra.core.Projection"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {
@@ -5579,7 +5579,7 @@
                                                                                           "record": {
                                                                                             "fields": [
                                                                                               {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"}},
-                                                                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
                                                                                             "typeName": "hydra.core.Projection"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {
@@ -5767,7 +5767,7 @@
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
@@ -5795,7 +5795,7 @@
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lastName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lastName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
@@ -6051,7 +6051,7 @@
                                                                                         "record": {
                                                                                           "fields": [
                                                                                             {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                           "typeName": "hydra.core.Projection"}}},
                                                                                     "typeName": "hydra.core.Term"}}},
                                                                               {
@@ -6194,7 +6194,7 @@
                                                                                 "record": {
                                                                                   "fields": [
                                                                                     {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                    {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                    {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                   "typeName": "hydra.core.Projection"}}},
                                                                             "typeName": "hydra.core.Term"}},
                                                                         "second": {
@@ -6205,7 +6205,7 @@
                                                                                 "record": {
                                                                                   "fields": [
                                                                                     {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                    {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                    {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
                                                                                   "typeName": "hydra.core.Projection"}}},
                                                                             "typeName": "hydra.core.Term"}}}},
                                                                     "type": {"variable": "hydra.core.Term"}}},
@@ -6376,7 +6376,7 @@
                                                                         "record": {
                                                                           "fields": [
                                                                             {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}},
                                                                 {
@@ -6387,7 +6387,7 @@
                                                                         "record": {
                                                                           "fields": [
                                                                             {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lastName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lastName"}}, "typeName": "hydra.core.Name"}}}],
                                                                           "typeName": "hydra.core.Projection"}}},
                                                                     "typeName": "hydra.core.Term"}}]}},
                                                           "typeName": "hydra.core.Term"}},
@@ -6531,7 +6531,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -6746,7 +6746,7 @@
                                                                             "record": {
                                                                               "fields": [
                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
                                                                               "typeName": "hydra.core.Projection"}}},
                                                                         "typeName": "hydra.core.Term"}}},
                                                                   {
@@ -7056,7 +7056,7 @@
                                                                                                                       "record": {
                                                                                                                         "fields": [
                                                                                                                           {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                                                                          {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                          {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                         "typeName": "hydra.core.Projection"}}},
                                                                                                                   "typeName": "hydra.core.Term"}}},
                                                                                                             {
@@ -7387,7 +7387,7 @@
                                                                                           "record": {
                                                                                             "fields": [
                                                                                               {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                             "typeName": "hydra.core.Projection"}}},
                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                               "typeName": "hydra.core.Application"}}},
@@ -7653,7 +7653,7 @@
                                                                                           "record": {
                                                                                             "fields": [
                                                                                               {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"}},
-                                                                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
                                                                                             "typeName": "hydra.core.Projection"}}},
                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                               "typeName": "hydra.core.Application"}}},
@@ -7956,7 +7956,7 @@
                                                                                                                                                   "record": {
                                                                                                                                                     "fields": [
                                                                                                                                                       {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                                                      {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                      {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                                     "typeName": "hydra.core.Projection"}}},
                                                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                                                         {
@@ -8301,7 +8301,7 @@
                                                                                                         "record": {
                                                                                                           "fields": [
                                                                                                             {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeIntListName"}},
-                                                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "head"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "head"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                           "typeName": "hydra.core.Projection"}}},
                                                                                                     "typeName": "hydra.core.Term"}}}],
                                                                                             "typeName": "hydra.core.Application"}}},
@@ -8325,7 +8325,7 @@
                                                                                                         "record": {
                                                                                                           "fields": [
                                                                                                             {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeIntListName"}},
-                                                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                           "typeName": "hydra.core.Projection"}}},
                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                               {
@@ -8480,7 +8480,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "head"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "head"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -8628,7 +8628,7 @@
                                                               "record": {
                                                                 "fields": [
                                                                   {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeBuddyListBName"}},
-                                                                  {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
+                                                                  {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
                                                                 "typeName": "hydra.core.Projection"}}},
                                                           "typeName": "hydra.core.Term"}},
                                                       "function": {
@@ -8906,7 +8906,7 @@
                                                                                                                                                   "record": {
                                                                                                                                                     "fields": [
                                                                                                                                                       {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
-                                                                                                                                                      {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                      {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                                     "typeName": "hydra.core.Projection"}}},
                                                                                                                                               "typeName": "hydra.core.Term"}}}],
                                                                                                                                       "typeName": "hydra.core.Application"}}},
@@ -8930,7 +8930,7 @@
                                                                                                                                                   "record": {
                                                                                                                                                     "fields": [
                                                                                                                                                       {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeBuddyListBName"}},
-                                                                                                                                                      {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                      {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                                     "typeName": "hydra.core.Projection"}}},
                                                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                                                         {
@@ -8966,7 +8966,7 @@
                                                                                                         "record": {
                                                                                                           "fields": [
                                                                                                             {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
-                                                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "tail"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                           "typeName": "hydra.core.Projection"}}},
                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                               {
@@ -14598,7 +14598,7 @@
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                        {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                       "typeName": "hydra.core.Projection"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
@@ -14823,7 +14823,7 @@
                                                                                                                                   "record": {
                                                                                                                                     "fields": [
                                                                                                                                       {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                                      {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                      {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                     "typeName": "hydra.core.Projection"}}},
                                                                                                                               "typeName": "hydra.core.Term"}}},
                                                                                                                         {
@@ -16088,7 +16088,7 @@
                                                                                                                                                                                               {
                                                                                                                                                                                                 "name": "typeName",
                                                                                                                                                                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Coder"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "encode"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                                                                             "typeName": "hydra.core.Projection"}}},
                                                                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                 {
@@ -16168,7 +16168,7 @@
                                                                                                                                                                                               {
                                                                                                                                                                                                 "name": "typeName",
                                                                                                                                                                                                 "term": {"wrap": {"body": {"literal": {"string": "hydra.coders.Coder"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                                                                                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "decode"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                                                                             "typeName": "hydra.core.Projection"}}},
                                                                                                                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                                                                                                                 {
@@ -17072,7 +17072,7 @@
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                        {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                       "typeName": "hydra.core.Projection"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
@@ -17940,7 +17940,7 @@
                                                                                                                                                             "record": {
                                                                                                                                                               "fields": [
                                                                                                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                                                   {
@@ -18197,7 +18197,7 @@
                                                                                                                                             "record": {
                                                                                                                                               "fields": [
                                                                                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "age"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                                   {
@@ -18999,7 +18999,7 @@
                                                                                                                                                 "record": {
                                                                                                                                                   "fields": [
                                                                                                                                                     {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"}},
-                                                                                                                                                    {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                    {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                                   "typeName": "hydra.core.Projection"}}},
                                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                                       {
@@ -19047,7 +19047,7 @@
                                                                                                                                                 "record": {
                                                                                                                                                   "fields": [
                                                                                                                                                     {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                                                                                                    {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                    {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                                   "typeName": "hydra.core.Projection"}}},
                                                                                                                                             "typeName": "hydra.core.Term"}}},
                                                                                                                                       {
@@ -19082,7 +19082,7 @@
                                                                                                         "record": {
                                                                                                           "fields": [
                                                                                                             {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                                                            {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                            {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                           "typeName": "hydra.core.Projection"}}},
                                                                                                     "typeName": "hydra.core.Term"}}},
                                                                                               {
@@ -25395,7 +25395,7 @@
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "first"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
@@ -25440,7 +25440,7 @@
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "third"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "third"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
@@ -25701,7 +25701,7 @@
                                                                                                                     "record": {
                                                                                                                       "fields": [
                                                                                                                         {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                                                                        {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                        {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                       "typeName": "hydra.core.Projection"}}},
                                                                                                                 "typeName": "hydra.core.Term"}}},
                                                                                                           {
@@ -26055,7 +26055,7 @@
                                                                                                                                             "record": {
                                                                                                                                               "fields": [
                                                                                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "second"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                                                   {
@@ -27059,7 +27059,7 @@
                                                                                           "record": {
                                                                                             "fields": [
                                                                                               {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                             "typeName": "hydra.core.Projection"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {
@@ -27210,7 +27210,7 @@
                                                                                           "record": {
                                                                                             "fields": [
                                                                                               {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"}},
-                                                                                              {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                              {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lat"}}, "typeName": "hydra.core.Name"}}}],
                                                                                             "typeName": "hydra.core.Projection"}}},
                                                                                       "typeName": "hydra.core.Term"}}},
                                                                                 {
@@ -27398,7 +27398,7 @@
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "firstName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
@@ -27426,7 +27426,7 @@
                                                                                                             "record": {
                                                                                                               "fields": [
                                                                                                                 {"name": "typeName", "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                                                                                {"name": "field", "term": {"wrap": {"body": {"literal": {"string": "lastName"}}, "typeName": "hydra.core.Name"}}}],
+                                                                                                                {"name": "fieldName", "term": {"wrap": {"body": {"literal": {"string": "lastName"}}, "typeName": "hydra.core.Name"}}}],
                                                                                                               "typeName": "hydra.core.Projection"}}},
                                                                                                         "typeName": "hydra.core.Term"}}},
                                                                                                   {
@@ -27553,35 +27553,35 @@
             "typeName": "hydra.testing.TestGroup"}},
         "typeScheme": {"body": {"variable": "hydra.testing.TestGroup"}, "variables": []}}}],
   "dependencies": [
-    "hydra.test.testGraph",
-    "hydra.rewriting",
-    "hydra.inference",
-    "hydra.scoping",
-    "hydra.show.core",
-    "hydra.test.testTypes",
-    "hydra.paths",
-    "hydra.ast",
-    "hydra.classes",
-    "hydra.coders",
-    "hydra.context",
-    "hydra.core",
-    "hydra.error.checking",
-    "hydra.error.core",
-    "hydra.error.packaging",
-    "hydra.errors",
-    "hydra.graph",
-    "hydra.json.model",
-    "hydra.packaging",
-    "hydra.parsing",
-    "hydra.phantoms",
-    "hydra.query",
-    "hydra.relational",
-    "hydra.tabular",
-    "hydra.testing",
-    "hydra.topology",
-    "hydra.typing",
-    "hydra.util",
-    "hydra.validation",
-    "hydra.variants"],
+    {"module": "hydra.test.testGraph"},
+    {"module": "hydra.rewriting"},
+    {"module": "hydra.inference"},
+    {"module": "hydra.scoping"},
+    {"module": "hydra.show.core"},
+    {"module": "hydra.test.testTypes"},
+    {"module": "hydra.paths"},
+    {"module": "hydra.ast"},
+    {"module": "hydra.classes"},
+    {"module": "hydra.coders"},
+    {"module": "hydra.context"},
+    {"module": "hydra.core"},
+    {"module": "hydra.error.checking"},
+    {"module": "hydra.error.core"},
+    {"module": "hydra.error.packaging"},
+    {"module": "hydra.errors"},
+    {"module": "hydra.graph"},
+    {"module": "hydra.json.model"},
+    {"module": "hydra.packaging"},
+    {"module": "hydra.parsing"},
+    {"module": "hydra.phantoms"},
+    {"module": "hydra.query"},
+    {"module": "hydra.relational"},
+    {"module": "hydra.tabular"},
+    {"module": "hydra.testing"},
+    {"module": "hydra.topology"},
+    {"module": "hydra.typing"},
+    {"module": "hydra.util"},
+    {"module": "hydra.validation"},
+    {"module": "hydra.variants"}],
   "description": "Nominal type checking test cases: records, unions, field access, injection, projection",
-  "namespace": "hydra.test.checking.nominalTypes"}
+  "name": "hydra.test.checking.nominalTypes"}

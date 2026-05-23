@@ -161,6 +161,6 @@
               "annotation": [{"key": "description", "value": {"literal": {"string": "A substitution of type variables for types"}}}],
               "body": {"wrap": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.Type"}}}}}},
           "variables": []}}}],
-  "dependencies": ["hydra.core", "hydra.context"],
+  "dependencies": [{"module": "hydra.core"}, {"module": "hydra.context"}],
   "description": "Types supporting type inference and type reconstruction.",
-  "namespace": "hydra.typing"}
+  "name": "hydra.typing"}

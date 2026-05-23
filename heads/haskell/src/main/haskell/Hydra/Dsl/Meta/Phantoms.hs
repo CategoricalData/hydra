@@ -115,12 +115,12 @@ constant t = TTerm $ Terms.constant (unTTerm $ asTerm t)
 -- | Create a definition in a module
 -- Example: definitionInModule myModule "addInts" (lambda "x" (lambda "y" (add @@ var "x" @@ var "y")))
 definitionInModule :: Module -> String -> TTerm a -> TTermDefinition a
-definitionInModule mod = definitionInNamespace $ moduleNamespace mod
+definitionInModule mod = definitionInModuleName $ moduleName mod
 
 -- | Create a definition in a namespace
--- Example: definitionInNamespace (Namespace "com.example") "addInts" myFunction
-definitionInNamespace :: Namespace -> String -> TTerm a -> TTermDefinition a
-definitionInNamespace ns lname = TTermDefinition $ unqualifyName $ QualifiedName (Just ns) lname
+-- Example: definitionInModuleName (ModuleName "com.example") "addInts" myFunction
+definitionInModuleName :: ModuleName -> String -> TTerm a -> TTermDefinition a
+definitionInModuleName ns lname = TTermDefinition $ unqualifyName $ QualifiedName (Just ns) lname
 
 -- | Add documentation to a term
 -- Example: doc "Adds two integers" addFunction

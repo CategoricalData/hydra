@@ -89,12 +89,12 @@ jsonSerdeDefinition = definitionInModule module_
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Serialization.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Serialization.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "JSON serialization functions using the Hydra AST"}
   where
-    ns = Namespace "hydra.json.writer"
+    ns = ModuleName "hydra.json.writer"
     definitions = [
       toDefinition colonOp,
       toDefinition hexByte,

@@ -253,6 +253,6 @@
                           {"key": "description", "value": {"literal": {"string": "Zero or more property specifications for each target vertex"}}}],
                         "body": {"list": {"variable": "hydra.pg.mapping.PropertySpec"}}}}}]}}},
           "variables": []}}}],
-  "dependencies": ["hydra.pg.model", "hydra.coders", "hydra.core"],
+  "dependencies": [{"module": "hydra.pg.model"}, {"module": "hydra.coders"}, {"module": "hydra.core"}],
   "description": "A model for property graph mapping specifications. See https://github.com/CategoricalData/hydra/wiki/Property-graphs",
-  "namespace": "hydra.pg.mapping"}
+  "name": "hydra.pg.mapping"}

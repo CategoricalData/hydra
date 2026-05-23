@@ -92,26 +92,26 @@ type Result a = Either Error a
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-avroSchemaPhantomNs :: Namespace
-avroSchemaPhantomNs = Namespace "hydra.avro.schema"
+avroSchemaPhantomNs :: ModuleName
+avroSchemaPhantomNs = ModuleName "hydra.avro.schema"
 
-jsonModelNs :: Namespace
-jsonModelNs = Namespace "hydra.json.model"
+jsonModelNs :: ModuleName
+jsonModelNs = ModuleName "hydra.json.model"
 
-jsonParserNs :: Namespace
-jsonParserNs = Namespace "hydra.json.parser"
+jsonParserNs :: ModuleName
+jsonParserNs = ModuleName "hydra.json.parser"
 
-jsonWriterNs :: Namespace
-jsonWriterNs = Namespace "hydra.json.writer"
+jsonWriterNs :: ModuleName
+jsonWriterNs = ModuleName "hydra.json.writer"
 
-ns :: Namespace
-ns = Namespace "hydra.avro.schemaJson"
+ns :: ModuleName
+ns = ModuleName "hydra.avro.schemaJson"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [jsonWriterNs, jsonParserNs] L.++ (AvroSchema.ns:jsonModelNs:Namespace "hydra.parsing":KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([jsonWriterNs, jsonParserNs] L.++ (AvroSchema.ns:jsonModelNs:ModuleName "hydra.parsing":KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "JSON serialization and deserialization for Avro schemas"}
   where
     definitions = [

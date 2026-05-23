@@ -103,7 +103,7 @@ import _root_.java.io.File
   println(s"  Time: ${Generation.formatTime(stepTime)}")
   println()
 
-  val kernelNsSet = kernelMods.map(_.namespace).toSet
+  val kernelNsSet = kernelMods.map(_.name).toSet
 
   // Step 3: Optionally load coder packages.
   var coderMods: Seq[hydra.packaging.Module] = Seq.empty
@@ -125,8 +125,8 @@ import _root_.java.io.File
   var modsToGenerate = allMainMods
   if kernelOnly then
     val before = modsToGenerate.size
-    modsToGenerate = modsToGenerate.filter(m => kernelNsSet.contains(m.namespace))
-    allMainMods = allMainMods.filter(m => kernelNsSet.contains(m.namespace))
+    modsToGenerate = modsToGenerate.filter(m => kernelNsSet.contains(m.name))
+    allMainMods = allMainMods.filter(m => kernelNsSet.contains(m.name))
     println(s"Filtering to kernel modules... $before -> ${modsToGenerate.size}")
     println()
 
@@ -181,7 +181,7 @@ import _root_.java.io.File
     // testSkipEmitNamespaces in Hydra.Sources.Test.All and the equivalent
     // filter in heads/python/.../bootstrap.py.
     val testSkipEmit = Set("hydra.test.testEnv")
-    val testModsToEmit = testMods.filter(m => !testSkipEmit.contains(m.namespace))
+    val testModsToEmit = testMods.filter(m => !testSkipEmit.contains(m.name))
 
     val outTest = outDir + File.separator + "src/test"
 

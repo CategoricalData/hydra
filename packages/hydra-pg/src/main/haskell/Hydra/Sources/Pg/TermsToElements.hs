@@ -98,14 +98,14 @@ import qualified Hydra.Sources.Pg.Mapping as PgMapping
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.pg.termsToElements"
+ns :: ModuleName
+ns = ModuleName "hydra.pg.termsToElements"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, ExtractCore.ns, Strip.ns, Resolution.ns, ShowCore.ns] L.++ (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, ExtractCore.ns, Strip.ns, Resolution.ns, ShowCore.ns] L.++ (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesModuleNames)),
             moduleDescription = Just "Functions for mapping Hydra terms to property graph elements using mapping specifications"}
   where
     definitions = [

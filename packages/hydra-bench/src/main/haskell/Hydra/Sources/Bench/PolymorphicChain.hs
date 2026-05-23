@@ -16,6 +16,7 @@
 module Hydra.Sources.Bench.PolymorphicChain where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Maybes   as Maybes
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
@@ -24,8 +25,8 @@ import           Hydra.Sources.Kernel.Types.All
 import qualified Data.List                   as L
 import           Prelude                     hiding ((++))
 
-ns :: Namespace
-ns = Namespace "hydra.bench.polymorphicChain"
+ns :: ModuleName
+ns = ModuleName "hydra.bench.polymorphicChain"
 
 -- | Number of polyWalker definitions in the chain. Bench runners take prefixes
 -- (e.g. first 10 / 25 / 50 / 100) to build scaling curves.
@@ -63,13 +64,13 @@ mkPolyWalker k = define (L.concat ["polyWalker", show k])
   $ polyWalkerBody k
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-  moduleNamespace = ns,
+  moduleName = ns,
   moduleDefinitions = definitions,
-  moduleDependencies = kernelTypesNamespaces,
+  moduleDependencies = unqualifiedDep <$> (kernelTypesModuleNames),
   moduleDescription = Just "Polymorphic-chain inference benchmark. polyWalker_K :: Maybe a -> Maybe a; chains via Maybes.bind, instantiating forall a at each cross-def call site."
   }
   where

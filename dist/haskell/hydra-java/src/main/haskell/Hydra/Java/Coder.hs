@@ -249,12 +249,12 @@ bindingNameToFilePath :: Core.Name -> String
 bindingNameToFilePath name =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameNamespace qn
+          ns_ = Packaging.qualifiedNameModuleName qn
           local = Packaging.qualifiedNameLocal qn
           sanitized = Formatting.sanitizeWithUnderscores Language.reservedWords local
           unq =
                   Names.unqualifyName (Packaging.QualifiedName {
-                    Packaging.qualifiedNameNamespace = ns_,
+                    Packaging.qualifiedNameModuleName = ns_,
                     Packaging.qualifiedNameLocal = sanitized})
       in (Names.nameToFilePath Util.CaseConventionCamel Util.CaseConventionPascal (Packaging.FileExtension "java") unq)
 bindingsToStatements :: JavaEnvironment.JavaEnvironment -> [Core.Binding] -> Context.Context -> Graph.Graph -> Either Errors.Error ([Syntax.BlockStatement], JavaEnvironment.JavaEnvironment)
@@ -284,7 +284,7 @@ bindingsToStatements env bindings cx g0 =
           thunkedVars =
                   Sets.fromList (Lists.concat (Lists.map (\b ->
                     let bname = Core.bindingName b
-                    in (Logic.ifElse (Logic.and (Logic.not (Sets.member bname recursiveVars)) (Logic.and (needsThunking (Core.bindingTerm b)) (Logic.not (bindingIsFunctionType b)))) [
+                    in (Logic.ifElse (Logic.and (Logic.not (Sets.member bname recursiveVars)) (Logic.and (Predicates.isComplexBinding gExtended b) (Logic.and (Logic.not (Predicates.isTrivialTerm (Core.bindingTerm b))) (Logic.not (bindingIsFunctionType b))))) [
                       bname] [])) flatBindings))
           aliasesExtended =
                   JavaEnvironment.Aliases {
@@ -621,7 +621,7 @@ constantDeclForTypeName aliases name cx g =
 constructElementsInterface :: Packaging.Module -> [Syntax.InterfaceMemberDeclarationWithComments] -> (Core.Name, Syntax.CompilationUnit)
 constructElementsInterface mod members =
 
-      let ns = Packaging.moduleNamespace mod
+      let ns = Packaging.moduleName mod
           parentNs = namespaceParent ns
           pkg = Maybes.cases parentNs (Utils.javaPackageDeclaration ns) (\pns -> Utils.javaPackageDeclaration pns)
           mods = [
@@ -967,25 +967,25 @@ elementJavaIdentifier :: Bool -> Bool -> JavaEnvironment.Aliases -> Core.Name ->
 elementJavaIdentifier isPrim isMethod aliases name =
 
       let qn = Names.qualifyName name
-          ns_ = Packaging.qualifiedNameNamespace qn
+          ns_ = Packaging.qualifiedNameModuleName qn
           local = Packaging.qualifiedNameLocal qn
           sep = Logic.ifElse isMethod "::" "."
       in (Logic.ifElse isPrim (Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases ns_ (Formatting.capitalize local)) ".") JavaNames.applyMethodName)) (Maybes.cases ns_ (Syntax.Identifier (Utils.sanitizeJavaName local)) (\n -> Syntax.Identifier (Strings.cat2 (Strings.cat2 (elementJavaIdentifier_qualify aliases (namespaceParent n) (elementsClassName n)) sep) (Utils.sanitizeJavaName local)))))
-elementJavaIdentifier_qualify :: JavaEnvironment.Aliases -> Maybe Packaging.Namespace -> String -> String
+elementJavaIdentifier_qualify :: JavaEnvironment.Aliases -> Maybe Packaging.ModuleName -> String -> String
 elementJavaIdentifier_qualify aliases mns s =
     Syntax.unIdentifier (Utils.nameToJavaName aliases (Names.unqualifyName (Packaging.QualifiedName {
-      Packaging.qualifiedNameNamespace = mns,
+      Packaging.qualifiedNameModuleName = mns,
       Packaging.qualifiedNameLocal = s})))
-elementsClassName :: Packaging.Namespace -> String
+elementsClassName :: Packaging.ModuleName -> String
 elementsClassName ns =
 
-      let nsStr = Packaging.unNamespace ns
+      let nsStr = Packaging.unModuleName ns
           parts = Strings.splitOn "." nsStr
       in (Formatting.sanitizeWithUnderscores Language.reservedWords (Formatting.capitalize (Maybes.fromMaybe nsStr (Lists.maybeLast parts))))
-elementsQualifiedName :: Packaging.Namespace -> Core.Name
+elementsQualifiedName :: Packaging.ModuleName -> Core.Name
 elementsQualifiedName ns =
     Names.unqualifyName (Packaging.QualifiedName {
-      Packaging.qualifiedNameNamespace = (namespaceParent ns),
+      Packaging.qualifiedNameModuleName = (namespaceParent ns),
       Packaging.qualifiedNameLocal = (elementsClassName ns)})
 encodeApplication :: JavaEnvironment.JavaEnvironment -> Core.Application -> Context.Context -> Graph.Graph -> Either Errors.Error Syntax.Expression
 encodeApplication env app cx g0 =
@@ -1046,7 +1046,7 @@ encodeDefinitions mod defs cx g =
                   JavaEnvironment.JavaEnvironment {
                     JavaEnvironment.javaEnvironmentAliases = aliases,
                     JavaEnvironment.javaEnvironmentGraph = g}
-          pkg = Utils.javaPackageDeclaration (Packaging.moduleNamespace mod)
+          pkg = Utils.javaPackageDeclaration (Packaging.moduleName mod)
           partitioned = Environment.partitionDefinitions defs
           typeDefs = Pairs.first partitioned
           termDefs = Pairs.second partitioned
@@ -1062,8 +1062,8 @@ encodeElimination env marg dom cod elimTerm cx g =
       let aliases = JavaEnvironment.javaEnvironmentAliases env
       in case (Strip.deannotateAndDetypeTerm elimTerm) of
         Core.TermProject v0 ->
-          let fname = Core.projectionField v0
-          in (Eithers.bind (encodeType aliases Sets.empty dom cx g) (\jdom0 -> Eithers.bind (Utils.javaTypeToJavaReferenceType jdom0 cx) (\_ -> Maybes.cases marg (
+          let fname = Core.projectionFieldName v0
+          in (Eithers.bind (encodeType aliases Sets.empty dom cx g) (\jdom0 -> Eithers.bind (Utils.javaTypeToJavaReferenceType jdom0 cx) (\jdomr -> Maybes.cases marg (
             let projVar = Core.Name "projected"
                 jbody =
                         Utils.javaExpressionNameToJavaExpression (Utils.fieldExpression (Utils.variableToJavaIdentifier projVar) (Utils.javaIdentifier (Core.unName fname)))
@@ -1540,7 +1540,7 @@ encodeTermInternal env anns tyapps term cx g0 =
                         (Utils.sanitizeJavaName (Formatting.capitalize (Core.unName injFieldName)))])
           in (Eithers.bind (isFieldUnitType injTypeName injFieldName cx g) (\fieldIsUnit -> Eithers.bind (Logic.ifElse (Logic.or (Predicates.isUnitTerm (Strip.deannotateTerm injFieldTerm)) fieldIsUnit) (Right []) (Eithers.bind (encode injFieldTerm) (\ex -> Right [
             ex]))) (\args -> Right (Utils.javaConstructorCall (Utils.javaConstructorName consId Nothing) args Nothing))))
-        Core.TermVariable v0 -> Maybes.cases (Maps.lookup v0 (Graph.graphPrimitives g)) (encodeVariable env v0 cx g) (\_ ->
+        Core.TermVariable v0 -> Maybes.cases (Maps.lookup v0 (Graph.graphPrimitives g)) (encodeVariable env v0 cx g) (\_prim ->
           let combinedAnns = Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns
           in (Eithers.bind (Eithers.bimap (\_de -> Errors.ErrorOther (Errors.OtherError (Errors.unDecodingError _de))) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mt -> Eithers.bind (Maybes.cases mt (Checking.typeOfTerm cx g term) (\t -> Right t)) (\typ -> case (Strip.deannotateType typ) of
             Core.TypeFunction v1 -> encodeFunctionPrimitiveByName env (Core.functionTypeDomain v1) (Core.functionTypeCodomain v1) v0 cx g
@@ -1983,7 +1983,7 @@ functionCall env isPrim name args typeApps cx g =
               Syntax.methodInvocationHeader = header,
               Syntax.methodInvocationArguments = jargs})))) (
             let qn = Names.qualifyName name
-                mns = Packaging.qualifiedNameNamespace qn
+                mns = Packaging.qualifiedNameModuleName qn
                 localName = Packaging.qualifiedNameLocal qn
             in (Maybes.cases mns (
               let header =
@@ -1994,7 +1994,7 @@ functionCall env isPrim name args typeApps cx g =
               let classId = Utils.nameToJavaName aliases (elementsQualifiedName ns_)
                   methodId =
                           Logic.ifElse isPrim (overrideMethodName (Syntax.Identifier (Strings.cat2 (Syntax.unIdentifier (Utils.nameToJavaName aliases (Names.unqualifyName (Packaging.QualifiedName {
-                            Packaging.qualifiedNameNamespace = (Just ns_),
+                            Packaging.qualifiedNameModuleName = (Just ns_),
                             Packaging.qualifiedNameLocal = (Formatting.capitalize localName)})))) (Strings.cat2 "." JavaNames.applyMethodName)))) (Syntax.Identifier (Utils.sanitizeJavaName localName))
               in (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Eithers.bind (Utils.javaTypeToJavaReferenceType jt cx) (\rt -> Right (Syntax.TypeArgumentReference rt)))) typeApps) (\jTypeArgs -> Right (Utils.javaMethodInvocationToJavaExpression (Utils.methodInvocationStaticWithTypeArgs classId methodId jTypeArgs jargs))))))))))))
 getCodomain :: M.Map Core.Name Core.Term -> t0 -> Graph.Graph -> Either Errors.Error Core.Type
@@ -2134,14 +2134,14 @@ isLambdaBoundIn :: Core.Name -> S.Set Core.Name -> Bool
 isLambdaBoundIn name lambdaVars =
     Logic.or (Sets.member name lambdaVars) (Logic.or (Logic.and (isLambdaBoundIn_isQualified name) (Maybes.isJust (Lists.find (\lv -> Logic.and (isLambdaBoundIn_isQualified lv) (Equality.equal (Names.localNameOf lv) (Names.localNameOf name))) (Sets.toList lambdaVars)))) (Logic.and (Logic.not (isLambdaBoundIn_isQualified name)) (Sets.member (Core.Name (Names.localNameOf name)) lambdaVars)))
 isLambdaBoundIn_isQualified :: Core.Name -> Bool
-isLambdaBoundIn_isQualified n = Maybes.isJust (Packaging.qualifiedNameNamespace (Names.qualifyName n))
+isLambdaBoundIn_isQualified n = Maybes.isJust (Packaging.qualifiedNameModuleName (Names.qualifyName n))
 isLambdaBoundVariable :: Core.Name -> Bool
 isLambdaBoundVariable name =
 
       let v = Core.unName name
       in (Equality.lte (Strings.length v) 4)
 isLocalVariable :: Core.Name -> Bool
-isLocalVariable name = Maybes.isNothing (Packaging.qualifiedNameNamespace (Names.qualifyName name))
+isLocalVariable name = Maybes.isNothing (Packaging.qualifiedNameModuleName (Names.qualifyName name))
 isNonComparableType :: Core.Type -> Bool
 isNonComparableType typ =
     case (Strip.deannotateType typ) of
@@ -2219,12 +2219,12 @@ moduleToJava mod defs cx g =
       in (bindingNameToFilePath name, (Serialization.printExpr (Serialization.parenthesize (Serde.compilationUnitToExpr unit))))) (Maps.toList units))))
 nameMapToTypeMap :: Ord t0 => (M.Map t0 Core.Name -> M.Map t0 Core.Type)
 nameMapToTypeMap m = Maps.map (\v -> Core.TypeVariable v) m
-namespaceParent :: Packaging.Namespace -> Maybe Packaging.Namespace
+namespaceParent :: Packaging.ModuleName -> Maybe Packaging.ModuleName
 namespaceParent ns =
 
-      let parts = Strings.splitOn "." (Packaging.unNamespace ns)
+      let parts = Strings.splitOn "." (Packaging.unModuleName ns)
           initParts = Maybes.fromMaybe [] (Lists.maybeInit parts)
-      in (Logic.ifElse (Lists.null initParts) Nothing (Just (Packaging.Namespace (Strings.intercalate "." initParts))))
+      in (Logic.ifElse (Lists.null initParts) Nothing (Just (Packaging.ModuleName (Strings.intercalate "." initParts))))
 needsThunking :: Core.Term -> Bool
 needsThunking t =
     case (Strip.deannotateTerm t) of
@@ -2741,7 +2741,7 @@ typeAppNullaryOrHoisted :: JavaEnvironment.JavaEnvironment -> JavaEnvironment.Al
 typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp varName cls allTypeArgs cx g =
 
       let qn = Names.qualifyName varName
-          mns = Packaging.qualifiedNameNamespace qn
+          mns = Packaging.qualifiedNameModuleName qn
           localName = Packaging.qualifiedNameLocal qn
       in case cls of
         JavaEnvironment.JavaSymbolClassNullaryFunction -> Maybes.cases mns (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g) (\ns_ ->

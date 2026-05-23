@@ -117,4 +117,4 @@
           "variables": []}}}],
   "dependencies": [],
   "description": "A basic Datalog model",
-  "namespace": "hydra.datalog.syntax"}
+  "name": "hydra.datalog.syntax"}

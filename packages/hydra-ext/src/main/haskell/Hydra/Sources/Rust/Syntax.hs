@@ -16,8 +16,8 @@ import qualified Data.Set                        as S
 import qualified Data.Maybe                      as Y
 
 
-ns :: Namespace
-ns = Namespace "hydra.rust.syntax"
+ns :: ModuleName
+ns = ModuleName "hydra.rust.syntax"
 
 define :: String -> Type -> Binding
 define = datatype ns
@@ -27,9 +27,9 @@ rust = typeref ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Core.ns],
             moduleDescription = Just ("A Rust syntax model, based on the Rust Reference grammar"
       ++ " (https://doc.rust-lang.org/reference/), retrieved 2025-01-29")}
   where

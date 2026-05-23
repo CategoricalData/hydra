@@ -74,17 +74,17 @@ import qualified Hydra.Sources.Decode.Core  as DecodeCore
 import qualified Hydra.Sources.Encode.Core  as EncodeCore
 
 
-ns :: Namespace
-ns = Namespace "hydra.environment"
+ns :: ModuleName
+ns = ModuleName "hydra.environment"
 
 define :: String -> TTerm a -> TTermDefinition a
-define = definitionInNamespace ns
+define = definitionInModuleName ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Lexical.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Lexical.ns, moduleName DecodeCore.module_, moduleName EncodeCore.module_, Scoping.ns, Sorting.ns, Strip.ns, Variables.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Graph to type environment conversions")}
   where
     definitions = [

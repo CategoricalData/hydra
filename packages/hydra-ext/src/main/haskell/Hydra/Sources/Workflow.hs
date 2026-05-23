@@ -11,17 +11,17 @@ import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Packaging as Module
 
 
-ns :: Namespace
-ns = Namespace "hydra.workflow"
+ns :: ModuleName
+ns = ModuleName "hydra.workflow"
 
 define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = (map toTypeDef definitions),
-            moduleDependencies = [Graph.ns, Module.ns, Core.ns],
+            moduleDependencies = unqualifiedDep <$> [Graph.ns, Module.ns, Core.ns],
             moduleDescription = Just "A model for Hydra transformation workflows"}
   where
     definitions = [

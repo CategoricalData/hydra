@@ -84,14 +84,14 @@ import qualified Hydra.Graphviz.Dot as Dot
 import qualified Hydra.Sources.Graphviz.Dot as DotSyntax
 
 
-ns :: Namespace
-ns = Namespace "hydra.graphviz.coder"
+ns :: ModuleName
+ns = ModuleName "hydra.graphviz.coder"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [ShowPaths.ns, Names.ns, Rewriting.ns] L.++ (DotSyntax.ns:kernelTypesNamespaces),
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([ShowPaths.ns, Names.ns, Rewriting.ns] L.++ (DotSyntax.ns:kernelTypesModuleNames)),
             moduleDescription = Just "Functions for converting Hydra terms to Graphviz DOT graphs"}
   where
     definitions = [
@@ -168,13 +168,13 @@ nodeStyleVariable = define "nodeStyleVariable" $
   string "variable"
 
 -- | Construct the standard namespaces map from the standard libraries
-standardNamespaces :: TTermDefinition (M.Map Namespace String)
+standardNamespaces :: TTermDefinition (M.Map ModuleName String)
 standardNamespaces = define "standardNamespaces" $
   doc "Construct a map from namespace to prefix for all standard libraries" $
-  Phantoms.map $ M.fromList [(wrap _Namespace (string (unNamespace ns_)), string (libraryPrefix lib)) | lib <- standardLibraries, let ns_ = libraryNamespace lib]
+  Phantoms.map $ M.fromList [(wrap _ModuleName (string (unModuleName ns_)), string (libraryPrefix lib)) | lib <- standardLibraries, let ns_ = libraryNamespace lib]
 
 -- | Compute the label and style for a term
-termLabel :: TTermDefinition (Bool -> M.Map Namespace String -> Term -> (String, String))
+termLabel :: TTermDefinition (Bool -> M.Map ModuleName String -> Term -> (String, String))
 termLabel = define "termLabel" $
   doc "Compute a label and node style for a term" $
   "compact" ~> "namespaces" ~> "term" ~> lets [
@@ -188,7 +188,7 @@ termLabel = define "termLabel" $
           string "{",
           Names.compactName @@ var "namespaces" @@ (project _Projection _Projection_typeName @@ var "proj"),
           string "}.",
-          Core.unName (project _Projection _Projection_field @@ var "proj")]),
+          Core.unName (project _Projection _Projection_fieldName @@ var "proj")]),
       _Term_cases>>: "cs" ~>
         var "simpleLabel" @@ Strings.cat (list [
           string "cases_{",
@@ -253,7 +253,7 @@ termToDotGraph = define "termToDotGraph" $
       Dot._Graph_statements>>: termToDotStmts @@ standardNamespaces @@ var "term"]
 
 -- | Convert a term to full DOT statements with structural detail
-termToDotStmts :: TTermDefinition (M.Map Namespace String -> Term -> [Dot.Stmt])
+termToDotStmts :: TTermDefinition (M.Map ModuleName String -> Term -> [Dot.Stmt])
 termToDotStmts = define "termToDotStmts" $
   doc "Convert a term to full DOT statements showing term structure" $
   "namespaces" ~> "term" ~> lets [
@@ -381,7 +381,7 @@ termToSubtermDotGraph = define "termToSubtermDotGraph" $
       Dot._Graph_statements>>: termToSubtermDotStmts @@ standardNamespaces @@ var "term"]
 
 -- | Convert a term to subterm-style DOT statements
-termToSubtermDotStmts :: TTermDefinition (M.Map Namespace String -> Term -> [Dot.Stmt])
+termToSubtermDotStmts :: TTermDefinition (M.Map ModuleName String -> Term -> [Dot.Stmt])
 termToSubtermDotStmts = define "termToSubtermDotStmts" $
   doc "Convert a term to subterm-style DOT statements" $
   "namespaces" ~> "term" ~> lets [

@@ -8,6 +8,7 @@
 module Hydra.Sources.Coq.Generate where
 
 import Hydra.Kernel
+import           Hydra.Dsl.Bootstrap (unqualifiedDep)
 import Hydra.Dsl.AsTerm (asTerm)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Lib.Strings                as Strings
@@ -48,15 +49,15 @@ import qualified Hydra.Coq.Environment as CE
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-ns :: Namespace
-ns = Namespace "hydra.coq.generate"
+ns :: ModuleName
+ns = ModuleName "hydra.coq.generate"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
-     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns] L.++ KernelTypes.kernelTypesNamespaces,
+            moduleDependencies = unqualifiedDep <$> ([CoqUtils.ns, CoqCoderSource.ns, CoqSerdeSource.ns, Formatting.ns, Serialization.ns,
+     CoqLanguage.ns, CoqEnvironmentSource.ns, CoqSyntax.ns] L.++ KernelTypes.kernelTypesModuleNames),
             moduleDescription = Just "Coq code generation driver — pre-passes, sentence producers, and per-module pipeline"}
   where
     definitions = [
@@ -141,7 +142,7 @@ globalAmbiguousNames = define "globalAmbiguousNames" $
   lambda "modules" $ lets [
     "allNames">: Lists.concat $ Lists.map
       ("m" ~> lets [
-        "nsStr">: Packaging.unNamespace (Packaging.moduleNamespace $ var "m"),
+        "nsStr">: Packaging.unModuleName (Packaging.moduleName $ var "m"),
         "fromDef">: lambda "def_" $ cases _Definition (var "def_")
           (Just (Phantoms.nothing :: TTerm (Maybe (String, String)))) [
             _Definition_type>>: "td" ~> Phantoms.just $ pair
@@ -1089,7 +1090,7 @@ moduleToCoq :: TTermDefinition (M.Map (String, String) String
 moduleToCoq = define "moduleToCoq" $
   doc "Top-level driver: dispatch a module to either full-emission or axiom-only emission, producing (path, content) pairs" $
   lambdas ["fieldMap", "constrCounts", "ambiguousNames", "globalSanitizedAcc", "mod_", "defs"] $
-  "nsStr" <~ (Packaging.unNamespace (Packaging.moduleNamespace $ var "mod_")) $
+  "nsStr" <~ (Packaging.unModuleName (Packaging.moduleName $ var "mod_")) $
   "path" <~ (namespaceToPath @@ var "nsStr") $
   "desc" <~ Maybes.maybe
     (string "")

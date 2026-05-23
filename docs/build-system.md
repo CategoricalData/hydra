@@ -41,7 +41,7 @@ short-circuits in seconds.
 | Layer | Where | What it does |
 |-------|-------|--------------|
 | 1. Transform | `heads/haskell/bin/transform-haskell-dsl-to-json.sh`, `transform-json-to-<lang>.sh` | One-shot conversion, one direction, one package or `--all` |
-| 2. Assemble | `heads/<lang>/bin/assemble-distribution.sh <pkg>` (one package), `assemble-all.sh` (batch) | Run Layer 1 + per-target post-processing (TestGraph patches, line-wrap, etc.) |
+| 2. Assemble | `heads/<lang>/bin/assemble-distribution.sh <pkg>` (one package), `assemble-all.sh` (batch) | Run Layer 1 + per-target post-processing (TestGraph patches, line-wrap, etc.). For Java/Python/TypeScript `hydra-kernel`, also copies hand-written runtime support — see [Hand-written runtime in hydra-kernel](#hand-written-runtime-in-hydra-kernel) below. |
 | 2.5. Test | `heads/<lang>/bin/test-distribution.sh` | Compile and run the target's test suite |
 | 3. Orchestrate | `bin/sync.sh`, `bin/sync-packages.sh`, `bin/sync-all.sh`, per-lang `bin/sync-<lang>.sh` | Walk the matrix; gate each step on its cache |
 
@@ -51,6 +51,43 @@ iterating on a single package.
 For the full script inventory and per-script semantics, see
 [implementation.md §Sync system](implementation.md) and
 [recipes/code-generation.md §The sync scripts](recipes/code-generation.md#the-sync-scripts).
+
+## Hand-written runtime in hydra-kernel
+
+Not every file under `dist/` is generated. For Java, Python, and TypeScript,
+`hydra-kernel` ships with a hand-written runtime tree alongside the generated
+kernel types so the published package is self-contained — downstream Gradle /
+pip / npm consumers do not need to know about Hydra's `heads/` layout.
+
+The mechanism: when `heads/<lang>/bin/assemble-distribution.sh hydra-kernel`
+runs, its **Step 0** invokes `heads/<lang>/bin/copy-kernel-runtime.sh`, which
+copies a selected subtree of `heads/<lang>/src/main/<lang>/` into
+`dist/<lang>/hydra-kernel/src/main/<lang>/`. It runs only for `hydra-kernel`,
+and only for languages that have a `copy-kernel-runtime.sh` script.
+
+The copy is a *merge* into the generated tree, not a wholesale overwrite —
+several subdirectories (e.g. `hydra/json/`) contain both generated and
+hand-written files and would clobber the generator's output if replaced.
+The script appends every copied path to a manifest consumed by
+`bootstrap-from-json --keep-paths-from`, which protects hand-copied files
+from the `--prune-stale` deletion pass.
+
+| Language | Copy script | Subtrees copied | Approx. file count |
+|----------|-------------|-----------------|--------------------|
+| Java | `heads/java/bin/copy-kernel-runtime.sh` | `Adapters.java`, `Coders.java`, plus full `hydra/{util,lib,dsl,json,tools}/` (skips multi-coder drivers `Bootstrap.java`, `Generation.java`, `HydraTestBase.java`, and dependencies like `tools/AntlrReaderBase.java`, `json/JsonIoCoder.java`, `json/JsonSerde.java`) | ~290 |
+| Python | `heads/python/bin/copy-kernel-runtime.sh` | `hydra/{dsl,lib,sources,tools.py}/` consolidated runtime files, including the whole `dsl/meta/` subtree | ~45 |
+| TypeScript | `heads/typescript/bin/copy-kernel-runtime.sh` | `hydra/{bootstrap,primitives,runtime}.ts`, `hydra/lib/*.ts`, plus test helpers under `hydra/test/` | ~19 |
+| Haskell, Scala, Go, Lisp dialects | — none — | Their runtimes live under `heads/<lang>/` and are referenced via build-tool source-dir paths (Stack's `hs-source-dirs`, sbt's `unmanagedSourceDirectories`, etc.). Nothing is copied. | 0 |
+
+The canonical edit point is always `heads/<lang>/src/main/<lang>/`. Editing the
+copy in `dist/` is wrong for the same reason editing any other `dist/` file is
+wrong: the next assemble overwrites it. (See CLAUDE.md hard rule 3.)
+
+These files **do not carry** the `// Note: this is an automatically generated
+file. Do not edit.` header that generated files carry — they aren't generated.
+A future grep that scans `dist/` for files missing the header will surface
+this set as false positives; cross-reference against the `copy-kernel-runtime.sh`
+manifests when triaging.
 
 ## Phases of `bin/sync.sh`
 

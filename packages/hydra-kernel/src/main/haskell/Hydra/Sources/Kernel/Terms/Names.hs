@@ -59,14 +59,14 @@ import qualified Hydra.Sources.Kernel.Terms.Constants  as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 
 
-ns :: Namespace
-ns = Namespace "hydra.names"
+ns :: ModuleName
+ns = ModuleName "hydra.names"
 
 module_ :: Module
 module_ = Module {
-            moduleNamespace = ns,
+            moduleName = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = [Annotations.ns, Constants.ns, Formatting.ns] L.++ kernelTypesNamespaces,
+            moduleDependencies = Bootstrap.unqualifiedDep <$> ([Annotations.ns, Constants.ns, Formatting.ns] L.++ kernelTypesModuleNames),
             moduleDescription = Just ("Functions for working with qualified names.")}
   where
    definitions = [
@@ -86,12 +86,12 @@ module_ = Module {
 define :: String -> TTerm a -> TTermDefinition a
 define = definitionInModule module_
 
-compactName :: TTermDefinition (M.Map Namespace String -> Name -> String)
+compactName :: TTermDefinition (M.Map ModuleName String -> Name -> String)
 compactName = define "compactName" $
   doc "Given a mapping of namespaces to prefixes, convert a name to a compact string representation" $
   lambda "namespaces" $ lambda "name" $ lets [
     "qualName">: qualifyName @@ var "name",
-    "mns">: Packaging.qualifiedNameNamespace $ var "qualName",
+    "mns">: Packaging.qualifiedNameModuleName $ var "qualName",
     "local">: Packaging.qualifiedNameLocal $ var "qualName"]
     $ Maybes.maybe
         (Core.unName $ var "name")
@@ -111,39 +111,39 @@ nameToFilePath = define "nameToFilePath" $
   doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
   "nsConv" ~> "localConv" ~> "ext" ~> "name" ~>
   "qualName" <~ qualifyName @@ var "name" $
-  "ns" <~ Packaging.qualifiedNameNamespace (var "qualName") $
+  "ns" <~ Packaging.qualifiedNameModuleName (var "qualName") $
   "local" <~ Packaging.qualifiedNameLocal (var "qualName") $
   "nsToFilePath" <~ ("nsArg" ~>
     Strings.intercalate (string "/") (Lists.map
       ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
-      (Strings.splitOn (string ".") (Packaging.unNamespace (var "nsArg"))))) $
+      (Strings.splitOn (string ".") (Packaging.unModuleName (var "nsArg"))))) $
   "prefix" <~ Maybes.maybe (string "")
     ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
     (var "ns") $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
   Strings.cat (list [var "prefix", var "suffix", string ".", Packaging.unFileExtension (var "ext")])
 
-namespaceOf :: TTermDefinition (Name -> Maybe Namespace)
+namespaceOf :: TTermDefinition (Name -> Maybe ModuleName)
 namespaceOf = define "namespaceOf" $
   doc "Extract the namespace of a name, if any" $
-  reify Packaging.qualifiedNameNamespace <.> qualifyName
+  reify Packaging.qualifiedNameModuleName <.> qualifyName
 
-namespaceToFilePath :: TTermDefinition (CaseConvention -> FileExtension -> Namespace -> String)
+namespaceToFilePath :: TTermDefinition (CaseConvention -> FileExtension -> ModuleName -> String)
 namespaceToFilePath = define "namespaceToFilePath" $
   doc "Convert a namespace to a file path with the given case convention and file extension" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
     "parts">: Lists.map
       (Formatting.convertCase @@ Util.caseConventionCamel @@ var "caseConv")
-      (Strings.splitOn (string ".") (Packaging.unNamespace $ var "ns"))]
+      (Strings.splitOn (string ".") (Packaging.unModuleName $ var "ns"))]
     $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Packaging.unFileExtension $ var "ext")
 
-qname :: TTermDefinition (Namespace -> String -> Name)
+qname :: TTermDefinition (ModuleName -> String -> Name)
 qname = define "qname" $
   doc "Construct a qualified (dot-separated) name" $
   lambda "ns" $ lambda "name" $
     wrap _Name $
       Strings.cat $
-        list [apply (unwrap _Namespace) (var "ns"), string ".", var "name"]
+        list [apply (unwrap _ModuleName) (var "ns"), string ".", var "name"]
 
 qualifyName :: TTermDefinition (Name -> QualifiedName)
 qualifyName = define "qualifyName" $
@@ -162,7 +162,7 @@ qualifyName = define "qualifyName" $
           (Lists.null $ var "restReversed")
           (Packaging.qualifiedName nothing (Core.unName $ var "name"))
           (Packaging.qualifiedName
-            (just $ wrap _Namespace (Strings.intercalate (string ".") (Lists.reverse (var "restReversed"))))
+            (just $ wrap _ModuleName (Strings.intercalate (string ".") (Lists.reverse (var "restReversed"))))
             (var "localName")))
       (Lists.uncons $ var "parts")
 
@@ -180,8 +180,8 @@ unqualifyName = define "unqualifyName" $
   lambda "qname" $ lets [
     "prefix">: Maybes.maybe
       (string "")
-      (lambda "n" $ (unwrap _Namespace @@ var "n") ++ string ".")
-      (project _QualifiedName _QualifiedName_namespace @@ var "qname")]
+      (lambda "n" $ (unwrap _ModuleName @@ var "n") ++ string ".")
+      (project _QualifiedName _QualifiedName_moduleName @@ var "qname")]
     $ wrap _Name $ var "prefix" ++ (project _QualifiedName _QualifiedName_local @@ var "qname")
 
 freshName :: TTermDefinition (Context -> (Name, Context))

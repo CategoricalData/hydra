@@ -26,24 +26,35 @@ data Module =
   Module {
     -- | An optional human-readable description of the module
     moduleDescription :: (Maybe String),
-    -- | A common prefix for all element names in the module
-    moduleNamespace :: Namespace,
+    -- | The name of the module, which is also the common prefix for all element names in the module
+    moduleName :: ModuleName,
     -- | Any modules which this module directly depends on
-    moduleDependencies :: [Namespace],
+    moduleDependencies :: [ModuleDependency],
     -- | The definitions in this module
     moduleDefinitions :: [Definition]}
   deriving (Eq, Ord, Read, Show)
 _Module = Core.Name "hydra.packaging.Module"
 _Module_description = Core.Name "description"
-_Module_namespace = Core.Name "namespace"
+_Module_name = Core.Name "name"
 _Module_dependencies = Core.Name "dependencies"
 _Module_definitions = Core.Name "definitions"
--- | A prefix for element names
-newtype Namespace =
-  Namespace {
-    unNamespace :: String}
+-- | A dependency on another module, identified by its name and (optionally) the package which provides it. When the package is omitted, the resolver searches all packages in scope; a duplicate module name across packages is a resolution error which can be disambiguated by naming the intended package explicitly.
+data ModuleDependency =
+  ModuleDependency {
+    -- | The name of the depended-on module
+    moduleDependencyModule :: ModuleName,
+    -- | The package providing the depended-on module, if disambiguation is required
+    moduleDependencyPackage :: (Maybe PackageName)}
   deriving (Eq, Ord, Read, Show)
-_Namespace = Core.Name "hydra.packaging.Namespace"
+_ModuleDependency = Core.Name "hydra.packaging.ModuleDependency"
+_ModuleDependency_module = Core.Name "module"
+_ModuleDependency_package = Core.Name "package"
+-- | The unique name of a module; a prefix for the names of elements defined in the module.
+newtype ModuleName =
+  ModuleName {
+    unModuleName :: String}
+  deriving (Eq, Ord, Read, Show)
+_ModuleName = Core.Name "hydra.packaging.ModuleName"
 -- | A package, which is a named collection of modules with metadata and dependencies
 data Package =
   Package {
@@ -85,16 +96,16 @@ data PackageVersionSpecifier =
   deriving (Eq, Ord, Read, Show)
 _PackageVersionSpecifier = Core.Name "hydra.packaging.PackageVersionSpecifier"
 _PackageVersionSpecifier_any = Core.Name "any"
--- | A qualified name consisting of an optional namespace together with a mandatory local name
+-- | A qualified name consisting of an optional module name together with a mandatory local name
 data QualifiedName =
   QualifiedName {
-    -- | The optional namespace
-    qualifiedNameNamespace :: (Maybe Namespace),
+    -- | The optional module name
+    qualifiedNameModuleName :: (Maybe ModuleName),
     -- | The local name
     qualifiedNameLocal :: String}
   deriving (Eq, Ord, Read, Show)
 _QualifiedName = Core.Name "hydra.packaging.QualifiedName"
-_QualifiedName_namespace = Core.Name "namespace"
+_QualifiedName_moduleName = Core.Name "moduleName"
 _QualifiedName_local = Core.Name "local"
 -- | A term-level definition, including a name, a term, and the type scheme of the term
 data TermDefinition =

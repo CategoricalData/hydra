@@ -168,8 +168,8 @@ serialization_tab_indent_double_space = var("hydra.serialization.tabIndentDouble
 # namespaces_focus moved to hydra.dsl.util in #369 (Namespaces<n> lives in hydra.util).
 from hydra.dsl.packaging import (
     qualified_name_local as packaging_qualified_name_local,
-    qualified_name_namespace as packaging_qualified_name_namespace,
-    un_namespace as packaging_un_namespace,
+    qualified_name_module_name as packaging_qualified_name_namespace,
+    un_module_name as packaging_un_module_name,
 )
 from hydra.dsl.util import (
     namespaces_focus as packaging_namespaces_focus,
