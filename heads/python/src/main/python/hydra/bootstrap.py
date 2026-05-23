@@ -287,9 +287,9 @@ def main():
         if args.kernel_only:
             test_ext_deps = set()
             for m in test_mods:
-                for ns in m.dependencies:
-                    if ns.value.startswith("hydra."):
-                        test_ext_deps.add(ns.value)
+                for dep in m.dependencies:
+                    if dep.module.value.startswith("hydra."):
+                        test_ext_deps.add(dep.module.value)
             if test_ext_deps:
                 ext_mods_for_tests = [m for m in full_mods if m.name.value in test_ext_deps]
                 if ext_mods_for_tests:

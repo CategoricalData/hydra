@@ -101,9 +101,20 @@ java -Xss64m -Xmx8g -cp "$JAVA_CP" hydra.JavaSelfHostDemo \
     "${EXTRA_ARGS[@]+"${EXTRA_ARGS[@]}"}"
 
 if [ "$DO_COMPARE" = "1" ]; then
+    # Per-package driver writes under <dist-json-root>/hydra-java/src/main/json/.
+    # When --out-root was the per-package tail path (canonical mode), the demo
+    # strips four segments to recover the dist-json root and writes back
+    # through the same tail; ours_path matches the original out-root. When
+    # --out-root was a tmp directory (the default --compare-without-out-root
+    # flow), the demo treats it as the dist-json root, so the actual
+    # per-package output lives at <out-root>/hydra-java/src/main/json/.
+    OURS_PATH="$ACTUAL_OUT_ROOT"
+    if [ "$USER_SET_OUT_ROOT" = "0" ]; then
+        OURS_PATH="$ACTUAL_OUT_ROOT/hydra-java/src/main/json"
+    fi
     echo ""
-    echo "=== Byte-comparing $ACTUAL_OUT_ROOT against the Haskell-generated canonical at $CANON_ROOT ==="
-    python3 - "$ACTUAL_OUT_ROOT" "$CANON_ROOT" <<'PY'
+    echo "=== Byte-comparing $OURS_PATH against the Haskell-generated canonical at $CANON_ROOT ==="
+    python3 - "$OURS_PATH" "$CANON_ROOT" <<'PY'
 import os, subprocess, sys
 ours_root, canon_root = sys.argv[1], sys.argv[2]
 canon_dir = os.path.join(canon_root, "hydra", "java")

@@ -1,5 +1,7 @@
 -- | Entry point for Hydra code generation utilities
 
+{-# LANGUAGE BangPatterns #-}
+
 module Hydra.Generation (
   module Hydra.Generation,
 ) where
@@ -23,6 +25,7 @@ import qualified Hydra.Show.Errors as ShowError
 import qualified Hydra.Sources.Kernel.Lib.Defaults.All as DefaultAll
 import qualified Hydra.Codegen as CodeGeneration
 import qualified Hydra.Encode.Core as EncodeCore
+import qualified Hydra.Inference as Inference
 
 import qualified Control.Exception as E
 import qualified Control.Monad as CM
@@ -238,8 +241,53 @@ inferModulesGivenIO universeMods targetMods = do
 -- inferred modules through to NF, which is what dodges the lazy
 -- thunk chain that wrecked the per-SCC attempt
 -- (see docs/history/inferModules-per-scc-attempt.md on staging).
-inferAndWriteByPackage :: FilePath -> [Module] -> [Module] -> IO [Module]
-inferAndWriteByPackage distJsonRoot universeMods mods = do
+inferAndWriteByPackage :: FilePath -> [Module] -> [Module] -> IO ()
+inferAndWriteByPackage distJsonRoot universeMods mods =
+  inferAndWriteByPackageSeeded distJsonRoot M.empty M.empty [] universeMods mods
+
+-- | As 'inferAndWriteByPackage' but with a 'seedSchemes' map of
+-- 'Name -> TypeScheme' for bindings that are already typed (e.g. clean
+-- modules loaded from JSON with their TypeSchemes baked in). The seed
+-- pre-populates the typed-so-far accumulator so downstream packages can
+-- resolve cross-package type references against it without paying for
+-- re-inference, and *without* retaining the full Module structure of
+-- the upstream packages — only their (Name, TypeScheme) pairs.
+--
+-- Used by 'tryIncrementalInference' to thread the JSON-loaded clean
+-- universe through as type-resolution context while running the
+-- per-package re-inference only on the dirty subset.
+--
+-- Memory shape: the foldl accumulator is a 'Map Name TypeScheme', not
+-- a '[Module]'. After each package writes its JSON, only the newly
+-- inferred bindings' (Name, TypeScheme) pairs are folded into the
+-- accumulator; the inferred Module values themselves are dropped on the
+-- floor so GC can reclaim their term bodies. Cf. the prior shape, which
+-- retained every prior package's full payload (term bodies, annotations,
+-- everything) — fine for ~10 modules dirty, OOM at -M6G for ~250.
+inferAndWriteByPackageSeeded
+  :: FilePath
+  -> M.Map Name TypeScheme  -- ^ accumulated term-binding schemes from prior packages
+  -> M.Map Name TypeScheme  -- ^ accumulated type-def schemes from prior packages
+  -> [Module]               -- ^ schema-context-only modules (e.g. clean modules
+                            --   loaded from JSON); used to build the JSON-write
+                            --   schemaMap once and then dropped. Never iterated.
+  -> [Module]               -- ^ universe modules that participate in grouping
+                            --   and iteration (the "dirty" set in the warm
+                            --   incremental path; the full set in the cold path).
+  -> [Module]               -- ^ target subset to re-infer + write
+  -> IO ()
+inferAndWriteByPackageSeeded
+    distJsonRoot seedBindingSchemes seedSchemaSchemes schemaContextMods universeMods mods = do
+  -- Build the JSON-write schemaMap ONCE, up front, from the full module
+  -- universe (schemaContextMods + universeMods). The encoder needs every
+  -- universe type reachable from this map — in particular
+  -- hydra.packaging.Module, without which Maybe String fields encode as
+  -- single-element arrays (see comment on writePackageSplitJson).
+  --
+  -- After this point, schemaContextMods is unreferenced and can be GC'd.
+  let schemaMap = buildSchemaMap
+        (modulesToGraph (schemaContextMods ++ universeMods)
+                        (schemaContextMods ++ universeMods))
   -- Group both the target set (mods, what we write) and the full universe
   -- (universeMods, what participates in type resolution) by owning package.
   -- pkgsInScope is the union — every package whose modules appear in either
@@ -247,8 +295,7 @@ inferAndWriteByPackage distJsonRoot universeMods mods = do
   -- references resolve. Packages that have universe modules but no target
   -- modules (e.g. hydra-java when #344 excludes its JSON from this write
   -- pass) still get inferred so their TypeSchemes seed the typed universe
-  -- for downstream packages; their inferred output is held in the
-  -- accumulator but never reaches writePackageSplitJson.
+  -- for downstream packages.
   let targetGroups    = groupByPackage mods
       universeGroups  = groupByPackage universeMods
       pkgToMods       = M.fromList targetGroups
@@ -267,14 +314,19 @@ inferAndWriteByPackage distJsonRoot universeMods mods = do
                        ++ show cycles
   putStrLn $ "  Per-package inference: " ++ show (length topoResult)
     ++ " packages in dep order: " ++ L.intercalate " -> " topoResult
-  -- Iterate packages in topo order, accumulating typed-so-far modules.
-  -- Strictness: each iteration ends with a writePackageSplitJson call,
-  -- which forces the inferred modules through JSON serialization. That
-  -- forces the spine of the [Module] list AND every TypeScheme inside,
-  -- so the accumulator passed to the next iteration is fully evaluated.
-  -- Without this, the lazy thunk chain hypothesis from the per-SCC
-  -- write-up would apply at package granularity too.
-  let processOne acc pkg = do
+  -- Iterate packages in topo order, accumulating typed-so-far bindings as
+  -- a Map Name TypeScheme. Strictness: each iteration ends with a
+  -- writePackageSplitJson call, which forces the inferred modules through
+  -- JSON serialization. After the write, we extract (Name, TypeScheme)
+  -- pairs into the accumulator and drop the inferred Modules so GC can
+  -- reclaim their term bodies. The Map's spine and TypeScheme nodes stay
+  -- in memory across iterations, but a TypeScheme is typically 1-3 orders
+  -- of magnitude smaller than the term body it types.
+  let processOne
+        :: (M.Map Name TypeScheme, M.Map Name TypeScheme)
+        -> String
+        -> IO (M.Map Name TypeScheme, M.Map Name TypeScheme)
+      processOne (accBindingSchemes, accSchemaSchemes) pkg = do
         let pkgTargets   = M.findWithDefault [] pkg pkgToMods
             pkgUniverse  = M.findWithDefault [] pkg pkgToUniverse
             targetNs     = S.fromList (map moduleName pkgTargets)
@@ -285,25 +337,130 @@ inferAndWriteByPackage distJsonRoot universeMods mods = do
             -- under #344 — we still infer the whole package so its types
             -- seed downstream packages, but skip the write step below.)
             inferTargets = if null pkgTargets then pkgUniverse else pkgTargets
-            typedUniverse = acc ++ pkgUniverse
         putStrLn $ "  [" ++ pkg ++ "] "
           ++ show (length pkgTargets) ++ " write / "
           ++ show (length inferTargets) ++ " infer / "
-          ++ show (length acc) ++ " typed-so-far"
+          ++ show (M.size accBindingSchemes) ++ " typed-so-far term schemes / "
+          ++ show (M.size accSchemaSchemes) ++ " type schemas"
         inferred <- if null inferTargets
           then return []
-          else inferModulesGivenIO typedUniverse inferTargets
+          else case inferModulesGivenSchemes
+                    (Context [] [] M.empty) bootstrapGraph
+                    accBindingSchemes accSchemaSchemes
+                    pkgUniverse inferTargets of
+                  Left err -> fail $ "Per-package inference failed for "
+                                  ++ pkg ++ ": " ++ showError err
+                                  ++ " (raw: " ++ show err ++ ")"
+                  Right ms -> return ms
         -- Filter inferred modules down to those in the original target set
         -- for the write step. Packages with no target mods (e.g. hydra-java
-        -- under #344) write nothing; their inferred output flows into the
-        -- accumulator so dependents can resolve cross-package type refs.
+        -- under #344) write nothing; their inferred schemes still flow into
+        -- the accumulators so dependents can resolve cross-package refs.
         let toWrite = filter (\m -> moduleName m `S.member` targetNs) inferred
-        CM.when (not (null toWrite)) $
-          writePackageSplitJson distJsonRoot typedUniverse inferred toWrite
-        return (acc ++ inferred)
-  L.foldl' (\ioAcc pkg -> ioAcc >>= \acc -> processOne acc pkg)
-           (return [])
-           topoResult
+        CM.when (not (null toWrite)) $ do
+          -- Write each module using the pre-built schemaMap. The schemaMap
+          -- covers the full universe (built once at the top of this
+          -- function), so encoder lookups for hydra.packaging.Module and
+          -- other cross-package schema types resolve correctly. Without
+          -- this, prior packages' types are absent from the per-iteration
+          -- schemaMap and Maybe String fields mis-serialize as arrays.
+          let pkgDir = distJsonRoot FP.</> pkg FP.</> "src" FP.</> "main" FP.</> "json"
+          putStrLn $ "  " ++ pkg ++ ": " ++ show (length toWrite)
+            ++ " modules -> " ++ pkgDir
+          mapM_ (writeModuleJson schemaMap pkgDir) toWrite
+        -- Force the writes to disk before folding the new schemes into
+        -- the accumulators; this also forces 'inferred' to NF, breaking
+        -- any lazy thunk chain across iterations.
+        let !newBindingSchemes = M.fromList
+              [ (termDefinitionName td, ts)
+              | m <- inferred
+              , DefinitionTerm td <- moduleDefinitions m
+              , Just ts <- [termDefinitionTypeScheme td]
+              ]
+            !newSchemaSchemes = M.fromList
+              [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionTypeScheme td))
+              | m <- inferred
+              , DefinitionType td <- moduleDefinitions m
+              ]
+            !accBindingSchemes' = M.union newBindingSchemes accBindingSchemes
+            !accSchemaSchemes'  = M.union newSchemaSchemes  accSchemaSchemes
+        return (accBindingSchemes', accSchemaSchemes')
+  _ <- L.foldl' (\ioAcc pkg -> ioAcc >>= \acc -> processOne acc pkg)
+                (return (seedBindingSchemes, seedSchemaSchemes))
+                topoResult
+  return ()
+
+-- | Normalize a TypeScheme by pulling any TypeForall wrappers from its
+-- body into typeSchemeVariables. DSL-authored type definitions encode
+-- polymorphism as nested TypeForalls in the body (with empty variables);
+-- the kernel's 'schemaGraphToTypingEnvironment' applies this unwrapping
+-- at schema-graph lookup time. When we feed a TypeScheme directly into
+-- 'graphSchemaTypes' (bypassing the schema graph), we have to apply the
+-- same normalization ourselves; otherwise downstream consumers that
+-- pattern-match on the body shape (e.g. expecting `record{...}`) hit
+-- an UnexpectedShape error against the raw `∀.∀.…record{...}` form.
+normalizeTypeScheme :: TypeScheme -> TypeScheme
+normalizeTypeScheme ts =
+  let unwrapped = fTypeToTypeScheme (typeSchemeBody ts)
+  in TypeScheme
+       { typeSchemeVariables   = typeSchemeVariables ts ++ typeSchemeVariables unwrapped
+       , typeSchemeBody        = typeSchemeBody unwrapped
+       , typeSchemeConstraints = typeSchemeConstraints ts
+       }
+
+-- | Map-based variant of 'Hydra.Codegen.inferModulesGiven' that takes
+-- pre-built maps of already-typed term bindings and schema types, and
+-- merges them into the inference graph directly. This lets the caller
+-- thread small Maps across iterations instead of full 'Module' values.
+--
+-- Used by 'inferAndWriteByPackageSeeded' to keep the per-package
+-- accumulator small: only (Name, TypeScheme) pairs are retained across
+-- iterations; the upstream packages' inferred Modules are dropped after
+-- their JSON is written.
+--
+-- Closure / bindingsToInfer logic mirrors the kernel
+-- 'inferModulesGiven'; the differences are (a) graphBoundTypes is
+-- augmented with the caller's accumulated term schemes, (b)
+-- graphSchemaTypes is augmented with the caller's accumulated type-def
+-- schemes, and (c) the universe is sized to the current package only.
+inferModulesGivenSchemes
+  :: Context
+  -> Graph
+  -> M.Map Name TypeScheme  -- ^ accumulated term-binding schemes from prior packages
+  -> M.Map Name TypeScheme  -- ^ accumulated type-def schemes (graphSchemaTypes)
+  -> [Module]               -- ^ current-package universe (small)
+  -> [Module]               -- ^ target subset to re-infer + write
+  -> Either Error [Module]
+inferModulesGivenSchemes cx bsGraph accBindingSchemes accSchemaSchemes universeMods targetMods =
+    let g0 = CodeGeneration.modulesToGraph bsGraph universeMods universeMods
+        g0Augmented = g0
+          { graphBoundTypes  = M.union (graphBoundTypes g0)  accBindingSchemes
+          , graphSchemaTypes = M.union (graphSchemaTypes g0) accSchemaSchemes
+          }
+        nsMap = M.fromList [(moduleName m, m) | m <- universeMods]
+        closureMods = CodeGeneration.moduleDepsTransitive nsMap targetMods
+        targetNamespaces = S.fromList (map moduleName targetMods)
+        termBindingsOf m =
+          [ Binding { bindingName = termDefinitionName td
+                    , bindingTerm = termDefinitionTerm td
+                    , bindingTypeScheme = termDefinitionTypeScheme td
+                    }
+          | DefinitionTerm td <- moduleDefinitions m ]
+        (bindingsToInfer, untouchedTypedBindings) =
+          let go m =
+                let isTarget = moduleName m `S.member` targetNamespaces
+                    bs = termBindingsOf m
+                in if isTarget
+                     then (bs, [])
+                     else ( filter (Y.isNothing . bindingTypeScheme) bs
+                          , filter (Y.isJust . bindingTypeScheme) bs )
+              parts = map go closureMods
+          in (concatMap fst parts, concatMap snd parts)
+    in case Inference.inferGraphTypes cx bindingsToInfer g0Augmented of
+        Left e -> Left e
+        Right ((_, newlyInferred), _) ->
+          let allInferred = newlyInferred ++ untouchedTypedBindings
+          in Right (map (CodeGeneration.refreshModule allInferred) targetMods)
 
 ----------------------------------------
 -- JSON Module Export
@@ -427,6 +584,16 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
             refreshPerPackageDigests distJsonRoot universeMods allMods
+        Just IncrementalPartialPreWritten -> do
+          -- #381 follow-up: tryIncrementalInference routed through
+          -- inferAndWriteByPackage, which already inferred and wrote JSON
+          -- per package. Skip the write step here; refresh digests from
+          -- the caller's own universeMods (the driver discards inferred
+          -- modules to keep memory bounded — only their schemes flow
+          -- through the foldl).
+          CM.when doInfer $ do
+            refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
+            refreshPerPackageDigests distJsonRoot universeMods mods
         Nothing -> do
           -- #381: per-package iterative inference. Replaces the
           -- universe-wide 'inferModulesIO universeMods mods' that runs
@@ -437,19 +604,27 @@ writeModulesJsonPackageSplit doInfer distJsonRoot universeMods mods = do
           -- emitted as a side effect inside the loop; we still need to
           -- refresh the universe-wide + per-package digests below.
           putStrLn "  Incremental inference unavailable; running per-package inference."
-          allMods <- inferAndWriteByPackage distJsonRoot universeMods mods
+          inferAndWriteByPackage distJsonRoot universeMods mods
           CM.when doInfer $ do
             refreshDigestAt (packageSplitDigestAnchor distJsonRoot) universeMods
-            refreshPerPackageDigests distJsonRoot universeMods allMods
+            refreshPerPackageDigests distJsonRoot universeMods mods
 
 -- | Incremental inference result. 'IncrementalFull mods' means all
 -- modules need a fresh write; 'IncrementalPartial all dirty' means
 -- only the dirty subset needs writing (the clean modules' on-disk
--- JSON is already correct).
+-- JSON is already correct). 'IncrementalPartialPreWritten all' means
+-- inference and writes already happened inside tryIncrementalInference
+-- (via the per-package driver); the caller refreshes digests from its
+-- own 'universeMods' rather than receiving a returned module set, since
+-- the driver discards inferred Module values to keep memory bounded
+-- (only their (Name, TypeScheme) pairs flow through the foldl).
 data IncrementalResult
   = IncrementalFull [Module]
   | IncrementalPartial [Module] [Module]
   -- ^ IncrementalPartial all-modules dirty-modules
+  | IncrementalPartialPreWritten
+  -- ^ Per-package driver inferred + wrote everything; caller refreshes
+  --   digests from its own universeMods.
 
 -- | Shared writer: build the schemaMap from the full module universe
 -- and write the subset that needs to hit disk. 'universeForSchema' is
@@ -750,14 +925,39 @@ tryIncrementalInference distJsonRoot universeMods targetMods = do
                   putStrLn $ "  Incremental load failed: " ++ show e
                   return Nothing
                 Right cleanLoaded -> do
-                  let typedUniverse = cleanLoaded ++ dirtyMods
-                  inferred <- inferModulesGivenIO typedUniverse dirtyMods
-                  -- Return:
-                  --   * all modules (cleanLoaded ++ inferred), so the
-                  --     schemaMap can be built over the complete set.
-                  --   * dirty subset (inferred), so the caller writes
-                  --     JSON only for the modules that actually changed.
-                  return (Just (IncrementalPartial (cleanLoaded ++ inferred) inferred))
+                  -- #381 follow-up: route the incremental dirty set through
+                  -- the per-package driver, seeded with maps of the
+                  -- JSON-loaded clean modules' (Name, TypeScheme) pairs.
+                  -- Two maps: term-binding schemes (graphBoundTypes) and
+                  -- type-def schemes (graphSchemaTypes). Carrying these as
+                  -- Maps (not as [Module]) lets GC reclaim the cleanLoaded
+                  -- term bodies and annotations once we've extracted what
+                  -- inference actually consults. On a #369-style mass-
+                  -- rename, dirtyMods ≈ 250 and cleanLoaded ≈ 70 with full
+                  -- term ASTs; the prior [Module] accumulator blew past
+                  -- -M6G even with per-package iteration.
+                  let seedBindingSchemes = M.fromList
+                        [ (termDefinitionName td, ts)
+                        | m <- cleanLoaded
+                        , DefinitionTerm td <- moduleDefinitions m
+                        , Just ts <- [termDefinitionTypeScheme td]
+                        ]
+                      seedSchemaSchemes = M.fromList
+                        [ (typeDefinitionName td, normalizeTypeScheme (typeDefinitionTypeScheme td))
+                        | m <- cleanLoaded
+                        , DefinitionType td <- moduleDefinitions m
+                        ]
+                  -- Driver iteration universe = dirtyMods only; seed Maps
+                  -- carry the cleanLoaded types so cross-package refs
+                  -- resolve during inference. cleanLoaded is also passed
+                  -- as the schema-context-only set so the JSON-write
+                  -- schemaMap (built once up front) covers prior-package
+                  -- types like hydra.packaging.Module — without that,
+                  -- Maybe String fields encode as single-element arrays.
+                  inferAndWriteByPackageSeeded distJsonRoot
+                    seedBindingSchemes seedSchemaSchemes
+                    cleanLoaded dirtyMods dirtyMods
+                  return (Just IncrementalPartialPreWritten)
 
 -- | Load modules from per-package JSON paths. The dist-json-root
 -- layout is dist/json/<pkg>/src/main/json/<ns-path>.json; we route
