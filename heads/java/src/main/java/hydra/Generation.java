@@ -2,6 +2,7 @@ package hydra;
 
 import hydra.Annotations;
 import hydra.Codegen;
+import hydra.Sorting;
 import hydra.core.Binding;
 import hydra.core.Name;
 import hydra.core.Term;
@@ -576,5 +577,358 @@ public class Generation {
             }
         }
         return result;
+    }
+
+    /**
+     * Prefix-to-package table. Order matters: more-specific prefixes first.
+     * Any namespace not matching any prefix falls through to "hydra-kernel".
+     * Mirrors Hydra.PackageRouting.packagePrefixes on the Haskell side.
+     */
+    private static final List<Pair<String, String>> PACKAGE_PREFIXES = java.util.Arrays.asList(
+        // Coder packages (main runtime modules)
+        new Pair<>("hydra.haskell.",              "hydra-haskell"),
+        new Pair<>("hydra.java.",                 "hydra-java"),
+        new Pair<>("hydra.python.",               "hydra-python"),
+        new Pair<>("hydra.scala.",                "hydra-scala"),
+        new Pair<>("hydra.lisp.",                 "hydra-lisp"),
+        new Pair<>("hydra.coq.",                  "hydra-coq"),
+        new Pair<>("hydra.typeScript.",           "hydra-typescript"),
+        new Pair<>("hydra.go.",                   "hydra-go"),
+        // DSL wrapper modules for coder packages
+        new Pair<>("hydra.dsl.haskell.",          "hydra-haskell"),
+        new Pair<>("hydra.dsl.java.",             "hydra-java"),
+        new Pair<>("hydra.dsl.python.",           "hydra-python"),
+        new Pair<>("hydra.dsl.scala.",            "hydra-scala"),
+        new Pair<>("hydra.dsl.lisp.",             "hydra-lisp"),
+        new Pair<>("hydra.dsl.coq.",              "hydra-coq"),
+        new Pair<>("hydra.dsl.typeScript.",       "hydra-typescript"),
+        new Pair<>("hydra.dsl.go.",               "hydra-go"),
+        // Synthesized decoder source modules for coder packages
+        new Pair<>("hydra.sources.decode.haskell.",    "hydra-haskell"),
+        new Pair<>("hydra.sources.decode.java.",       "hydra-java"),
+        new Pair<>("hydra.sources.decode.python.",     "hydra-python"),
+        new Pair<>("hydra.sources.decode.scala.",      "hydra-scala"),
+        new Pair<>("hydra.sources.decode.lisp.",       "hydra-lisp"),
+        new Pair<>("hydra.sources.decode.coq.",        "hydra-coq"),
+        new Pair<>("hydra.sources.decode.typeScript.", "hydra-typescript"),
+        // Synthesized encoder source modules for coder packages
+        new Pair<>("hydra.sources.encode.haskell.",    "hydra-haskell"),
+        new Pair<>("hydra.sources.encode.java.",       "hydra-java"),
+        new Pair<>("hydra.sources.encode.python.",     "hydra-python"),
+        new Pair<>("hydra.sources.encode.scala.",      "hydra-scala"),
+        new Pair<>("hydra.sources.encode.lisp.",       "hydra-lisp"),
+        new Pair<>("hydra.sources.encode.coq.",        "hydra-coq"),
+        new Pair<>("hydra.sources.encode.typeScript.", "hydra-typescript"),
+        // Property graph package
+        new Pair<>("hydra.pg.",                   "hydra-pg"),
+        new Pair<>("hydra.cypher.",               "hydra-pg"),
+        new Pair<>("hydra.graphviz.",             "hydra-pg"),
+        new Pair<>("hydra.tinkerpop.",            "hydra-pg"),
+        new Pair<>("hydra.error.pg",              "hydra-pg"),
+        new Pair<>("hydra.show.error.pg",         "hydra-pg"),
+        new Pair<>("hydra.validate.pg",           "hydra-pg"),
+        new Pair<>("hydra.decode.pg.",            "hydra-pg"),
+        new Pair<>("hydra.encode.pg.",            "hydra-pg"),
+        new Pair<>("hydra.sources.decode.pg.",    "hydra-pg"),
+        new Pair<>("hydra.sources.encode.pg.",    "hydra-pg"),
+        new Pair<>("hydra.demos.genpg.",          "hydra-pg"),
+        new Pair<>("openGql.grammar",             "hydra-pg"),
+        new Pair<>("com.gdblab.pathAlgebra.",     "hydra-pg"),
+        new Pair<>("hydra.dsl.pg.",               "hydra-pg"),
+        new Pair<>("hydra.dsl.cypher.",           "hydra-pg"),
+        new Pair<>("hydra.dsl.graphviz.",         "hydra-pg"),
+        new Pair<>("hydra.dsl.tinkerpop.",        "hydra-pg"),
+        new Pair<>("hydra.dsl.error.pg",          "hydra-pg"),
+        new Pair<>("hydra.dsl.openGql.",          "hydra-pg"),
+        new Pair<>("hydra.dsl.com.gdblab.pathAlgebra.", "hydra-pg"),
+        // RDF / OWL / SHACL / ShEx / XML schema package
+        new Pair<>("hydra.rdf.",                  "hydra-rdf"),
+        new Pair<>("hydra.owl.",                  "hydra-rdf"),
+        new Pair<>("hydra.shacl.",                "hydra-rdf"),
+        new Pair<>("hydra.shex.",                 "hydra-rdf"),
+        new Pair<>("hydra.xml.schema",            "hydra-rdf"),
+        new Pair<>("hydra.dsl.rdf.",              "hydra-rdf"),
+        new Pair<>("hydra.dsl.owl.",              "hydra-rdf"),
+        new Pair<>("hydra.dsl.shacl.",            "hydra-rdf"),
+        new Pair<>("hydra.dsl.shex.",             "hydra-rdf"),
+        new Pair<>("hydra.dsl.xml.schema",        "hydra-rdf"),
+        // WebAssembly package
+        new Pair<>("hydra.wasm.",                 "hydra-wasm"),
+        new Pair<>("hydra.dsl.wasm.",             "hydra-wasm"),
+        // Benchmark package
+        new Pair<>("hydra.bench.",                "hydra-bench"),
+        // Extension package (truly-ext coders: Avro, Protobuf, GraphQL, etc.)
+        new Pair<>("hydra.atlas",                 "hydra-ext"),
+        new Pair<>("hydra.avro.",                 "hydra-ext"),
+        new Pair<>("hydra.azure.",                "hydra-ext"),
+        new Pair<>("hydra.cpp.",                  "hydra-ext"),
+        new Pair<>("hydra.csharp.",               "hydra-ext"),
+        new Pair<>("hydra.datalog.",              "hydra-ext"),
+        new Pair<>("hydra.delta.",                "hydra-ext"),
+        new Pair<>("hydra.geojson.",              "hydra-ext"),
+        new Pair<>("hydra.graphql.",              "hydra-ext"),
+        new Pair<>("hydra.iana.",                 "hydra-ext"),
+        new Pair<>("hydra.json.schema",           "hydra-ext"),
+        new Pair<>("hydra.kusto.",                "hydra-ext"),
+        new Pair<>("hydra.osv.",                  "hydra-ext"),
+        new Pair<>("hydra.parquet.",              "hydra-ext"),
+        new Pair<>("hydra.pegasus.",              "hydra-ext"),
+        new Pair<>("hydra.protobuf.",             "hydra-ext"),
+        new Pair<>("hydra.rust.",                 "hydra-ext"),
+        new Pair<>("hydra.sql.",                  "hydra-ext"),
+        new Pair<>("hydra.stac.",                 "hydra-ext"),
+        new Pair<>("hydra.typeScript.",           "hydra-ext"),
+        new Pair<>("hydra.workflow",              "hydra-ext"),
+        new Pair<>("hydra.dsl.atlas",             "hydra-ext"),
+        new Pair<>("hydra.dsl.avro.",             "hydra-ext"),
+        new Pair<>("hydra.dsl.azure.",            "hydra-ext"),
+        new Pair<>("hydra.dsl.cpp.",              "hydra-ext"),
+        new Pair<>("hydra.dsl.csharp.",           "hydra-ext"),
+        new Pair<>("hydra.dsl.datalog.",          "hydra-ext"),
+        new Pair<>("hydra.dsl.delta.",            "hydra-ext"),
+        new Pair<>("hydra.dsl.geojson.",          "hydra-ext"),
+        new Pair<>("hydra.dsl.graphql.",          "hydra-ext"),
+        new Pair<>("hydra.dsl.iana.",             "hydra-ext"),
+        new Pair<>("hydra.dsl.json.schema",       "hydra-ext"),
+        new Pair<>("hydra.dsl.kusto.",            "hydra-ext"),
+        new Pair<>("hydra.dsl.osv.",              "hydra-ext"),
+        new Pair<>("hydra.dsl.parquet.",          "hydra-ext"),
+        new Pair<>("hydra.dsl.pegasus.",          "hydra-ext"),
+        new Pair<>("hydra.dsl.protobuf.",         "hydra-ext"),
+        new Pair<>("hydra.dsl.rust.",             "hydra-ext"),
+        new Pair<>("hydra.dsl.sql.",              "hydra-ext"),
+        new Pair<>("hydra.dsl.stac.",             "hydra-ext"),
+        new Pair<>("hydra.dsl.typeScript.",       "hydra-ext"),
+        new Pair<>("hydra.dsl.workflow",          "hydra-ext"),
+        // hydra.yaml.model lives in hydra-kernel; route ext-owned yaml modules explicitly.
+        new Pair<>("hydra.yaml.coder",            "hydra-ext"),
+        new Pair<>("hydra.yaml.language",         "hydra-ext"),
+        new Pair<>("hydra.yaml.serde",            "hydra-ext")
+    );
+
+    /**
+     * Map a ModuleName to its owning package name. Mirrors
+     * {@code Hydra.PackageRouting.namespaceToPackage}. Falls back to
+     * {@code "hydra-kernel"} if no prefix matches.
+     */
+    public static String namespaceToPackage(ModuleName ns) {
+        String s = ns.value;
+        for (Pair<String, String> p : PACKAGE_PREFIXES) {
+            if (s.startsWith(p.first)) {
+                return p.second;
+            }
+        }
+        return "hydra-kernel";
+    }
+
+    /**
+     * Partition a list of modules by owning package. Returns groups sorted
+     * by package name for deterministic ordering. Mirrors
+     * {@code Hydra.PackageRouting.groupByPackage}.
+     */
+    public static List<Pair<String, List<Module>>> groupByPackage(List<Module> mods) {
+        Map<String, List<Module>> byPkg = new java.util.TreeMap<>();
+        for (Module m : mods) {
+            byPkg.computeIfAbsent(namespaceToPackage(m.name), k -> new ArrayList<>()).add(m);
+        }
+        List<Pair<String, List<Module>>> out = new ArrayList<>();
+        for (Map.Entry<String, List<Module>> e : byPkg.entrySet()) {
+            out.add(new Pair<>(e.getKey(), e.getValue()));
+        }
+        return out;
+    }
+
+    /**
+     * Read a package's declared dependencies from
+     * {@code packages/<pkg>/package.json}. Returns the values of the
+     * top-level {@code "dependencies"} array, or empty if absent /
+     * unreadable. Mirrors {@code Hydra.Generation.loadPackageDeps}.
+     */
+    public static List<String> loadPackageDeps(String hydraRoot, String pkg) {
+        Path path = Paths.get(hydraRoot, "packages", pkg, "package.json");
+        if (!Files.isRegularFile(path)) return java.util.Collections.emptyList();
+        try {
+            Value v = parseJsonFile(path.toString());
+            if (!(v instanceof Value.Object_)) return java.util.Collections.emptyList();
+            Value deps = null;
+            for (Map.Entry<String, Value> e : ((Value.Object_) v).value.entrySet()) {
+                if ("dependencies".equals(e.getKey())) { deps = e.getValue(); break; }
+            }
+            if (!(deps instanceof Value.Array)) return java.util.Collections.emptyList();
+            List<String> out = new ArrayList<>();
+            for (Value e : ((Value.Array) deps).value) {
+                if (e instanceof Value.String_) {
+                    out.add(((Value.String_) e).value);
+                }
+            }
+            return out;
+        } catch (IOException ex) {
+            return java.util.Collections.emptyList();
+        }
+    }
+
+    /**
+     * Per-package iterative inference + JSON write driver. Mirrors
+     * {@code Hydra.Generation.inferAndWriteByPackage} on the Haskell side.
+     *
+     * <p>Processes packages in dependency order (topo sort over each
+     * {@code package.json}'s {@code "dependencies"} field) and runs
+     * {@link Codegen#inferModulesGiven} once per package, threading the
+     * typed-so-far output of upstream packages through as the universe.
+     * Each iteration writes its package's JSON to disk immediately.</p>
+     *
+     * @param hydraRoot     Worktree root; used to locate
+     *                      {@code packages/<pkg>/package.json}.
+     * @param distJsonRoot  Output JSON root (e.g. {@code <root>/dist/json}).
+     *                      Per-package outputs are written to
+     *                      {@code <root>/dist/json/<pkg>/src/main/json/}.
+     * @param universeMods  All modules participating in type resolution
+     *                      (kernel + sources). Grouped + iterated.
+     * @param mods          Subset that should actually be re-inferred + written.
+     * @param seedAcc       Pre-typed modules to seed the accumulator with
+     *                      (e.g. kernel modules already loaded from JSON).
+     *                      Excluded from grouping/iteration.
+     * @return The full set of inferred target modules, concatenated across
+     *         packages in topo order.
+     */
+    public static List<Module> inferAndWriteByPackage(
+            String hydraRoot,
+            String distJsonRoot,
+            List<Module> universeMods,
+            List<Module> mods,
+            List<Module> seedAcc) throws IOException {
+        java.util.Set<String> seedNs = new HashSet<>();
+        for (Module m : seedAcc) seedNs.add(m.name.value);
+
+        List<Module> groupingUniverse = new ArrayList<>();
+        for (Module m : universeMods) {
+            if (!seedNs.contains(m.name.value)) groupingUniverse.add(m);
+        }
+        List<Module> groupingTargets = new ArrayList<>();
+        for (Module m : mods) {
+            if (!seedNs.contains(m.name.value)) groupingTargets.add(m);
+        }
+
+        List<Pair<String, List<Module>>> universeGroups = groupByPackage(groupingUniverse);
+        List<Pair<String, List<Module>>> targetGroups   = groupByPackage(groupingTargets);
+        Map<String, List<Module>> pkgToUniverse = new HashMap<>();
+        for (Pair<String, List<Module>> p : universeGroups) pkgToUniverse.put(p.first, p.second);
+        Map<String, List<Module>> pkgToMods = new HashMap<>();
+        for (Pair<String, List<Module>> p : targetGroups) pkgToMods.put(p.first, p.second);
+
+        List<String> pkgsInScope = new ArrayList<>();
+        HashSet<String> seen = new HashSet<>();
+        for (Pair<String, List<Module>> p : universeGroups) {
+            if (seen.add(p.first)) pkgsInScope.add(p.first);
+        }
+        for (Pair<String, List<Module>> p : targetGroups) {
+            if (seen.add(p.first)) pkgsInScope.add(p.first);
+        }
+
+        List<Pair<String, List<String>>> pkgDeps = new ArrayList<>();
+        for (String p : pkgsInScope) {
+            List<String> deps = loadPackageDeps(hydraRoot, p);
+            List<String> inScope = new ArrayList<>();
+            for (String d : deps) {
+                if (pkgsInScope.contains(d)) inScope.add(d);
+            }
+            pkgDeps.add(new Pair<>(p, inScope));
+        }
+
+        Either<List<List<String>>, List<String>> topoResult = Sorting.topologicalSort(pkgDeps);
+        List<String> ordered;
+        if (topoResult instanceof Either.Right) {
+            ordered = ((Either.Right<List<List<String>>, List<String>>) topoResult).value;
+        } else {
+            List<List<String>> cycles =
+                ((Either.Left<List<List<String>>, List<String>>) topoResult).value;
+            throw new RuntimeException(
+                "inferAndWriteByPackage: package dep graph has cycles: " + cycles);
+        }
+
+        System.err.println("  Per-package inference: " + ordered.size()
+            + " packages in dep order: " + String.join(" -> ", ordered));
+
+        hydra.context.Context ctx = new hydra.context.Context(
+            java.util.Collections.emptyList(),
+            java.util.Collections.emptyList(),
+            java.util.Collections.emptyMap());
+        Graph bsGraph = bootstrapGraph();
+        List<Module> acc = new ArrayList<>(seedAcc);
+        List<Module> inferredAll = new ArrayList<>();
+        for (String pkg : ordered) {
+            List<Module> pkgTargets  = pkgToMods.getOrDefault(pkg, java.util.Collections.emptyList());
+            List<Module> pkgUniverse = pkgToUniverse.getOrDefault(pkg, java.util.Collections.emptyList());
+            java.util.Set<String> targetNs = new HashSet<>();
+            for (Module m : pkgTargets) targetNs.add(m.name.value);
+            List<Module> inferTargets = pkgTargets.isEmpty() ? pkgUniverse : pkgTargets;
+            List<Module> typedUniverse = new ArrayList<>(acc);
+            typedUniverse.addAll(pkgUniverse);
+            System.err.println("  [" + pkg + "] " + pkgTargets.size() + " write / "
+                + inferTargets.size() + " infer / " + acc.size() + " typed-so-far");
+            if (inferTargets.isEmpty()) continue;
+            Either<hydra.errors.Error_, List<Module>> result =
+                Codegen.inferModulesGiven(ctx, bsGraph, typedUniverse, inferTargets);
+            List<Module> inferred;
+            if (result instanceof Either.Right) {
+                inferred = ((Either.Right<hydra.errors.Error_, List<Module>>) result).value;
+            } else {
+                hydra.errors.Error_ err =
+                    ((Either.Left<hydra.errors.Error_, List<Module>>) result).value;
+                throw new RuntimeException(
+                    "inferAndWriteByPackage: inference failed for " + pkg + ": " + err);
+            }
+            List<Module> toWrite = new ArrayList<>();
+            for (Module m : inferred) {
+                if (targetNs.contains(m.name.value)) toWrite.add(m);
+            }
+            if (!toWrite.isEmpty()) {
+                writePackageSplitJson(distJsonRoot, typedUniverse, inferred, toWrite);
+            }
+            acc.addAll(inferred);
+            inferredAll.addAll(inferred);
+        }
+        return inferredAll;
+    }
+
+    /**
+     * Encode a set of inferred modules to JSON and write them under
+     * {@code distJsonRoot/<pkg>/src/main/json/}. Mirrors
+     * {@code Hydra.Generation.writePackageSplitJson}.
+     */
+    private static void writePackageSplitJson(
+            String distJsonRoot,
+            List<Module> universeMods,
+            List<Module> universeForSchema,
+            List<Module> toWrite) throws IOException {
+        List<Module> combined = new ArrayList<>(universeMods);
+        combined.addAll(universeForSchema);
+        Graph graph = Codegen.modulesToGraph(bootstrapGraph(), combined, universeMods);
+        Map<Name, hydra.core.Type> schemaMap = Codegen.buildSchemaMap(graph);
+        for (Pair<String, List<Module>> grp : groupByPackage(toWrite)) {
+            String pkg = grp.first;
+            List<Module> pkgMods = grp.second;
+            Path pkgDir = Paths.get(distJsonRoot, pkg, "src", "main", "json");
+            System.err.println("  " + pkg + ": " + pkgMods.size() + " modules -> " + pkgDir);
+            for (Module m : pkgMods) {
+                Either<hydra.errors.Error_, String> encoded = Codegen.moduleToJson(schemaMap, m);
+                if (encoded instanceof Either.Left) {
+                    hydra.errors.Error_ err =
+                        ((Either.Left<hydra.errors.Error_, String>) encoded).value;
+                    throw new RuntimeException(
+                        "writePackageSplitJson: encode failed for "
+                        + m.name.value + ": " + err);
+                }
+                String jsonStr = ((Either.Right<hydra.errors.Error_, String>) encoded).value;
+                Path filePath = pkgDir.resolve(namespaceToPath(m.name) + ".json");
+                Files.createDirectories(filePath.getParent());
+                String newContent = jsonStr + "\n";
+                if (Files.exists(filePath)) {
+                    String old = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
+                    if (old.equals(newContent)) continue;
+                }
+                Files.write(filePath, newContent.getBytes(StandardCharsets.UTF_8));
+            }
+        }
     }
 }
