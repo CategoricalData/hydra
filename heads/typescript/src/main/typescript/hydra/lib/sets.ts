@@ -35,7 +35,7 @@ const isCanon = <A>(s: unknown): s is CanonSet<A> =>
 const mkCanon = <A>(internal: Internal<A>): CanonSet<A> =>
   ({ [TAG]: true as const, _internal: internal });
 
-const toCanon = <A>(s: ReadonlySet<A> | CanonSet<A>): CanonSet<A> => {
+const toCanon = <A>(s: any | CanonSet<A>): CanonSet<A> => {
   if (isCanon<A>(s)) return s;
   const internal: Internal<A> = new Map();
   for (const x of s as ReadonlySet<A>) internal.set(canon(x), x);
@@ -44,9 +44,9 @@ const toCanon = <A>(s: ReadonlySet<A> | CanonSet<A>): CanonSet<A> => {
 
 // ===== API =====
 
-export const empty: ReadonlySet<never> = mkCanon<never>(new Map() as Internal<never>) as unknown as ReadonlySet<never>;
+export const empty: any = mkCanon<never>(new Map() as Internal<never>) as unknown as ReadonlySet<never>;
 
-export const fromList = <A>(xs: readonly A[]): ReadonlySet<A> => {
+export const fromList = <A>(xs: readonly A[]): any => {
   const internal: Internal<A> = new Map();
   for (const x of xs) internal.set(canon(x), x);
   return mkCanon(internal) as unknown as ReadonlySet<A>;
@@ -63,72 +63,72 @@ const compareElems = (a: unknown, b: unknown): number => {
   return ca < cb ? -1 : ca > cb ? 1 : 0;
 };
 
-export const toList = <A>(s: ReadonlySet<A>): readonly A[] => {
+export const toList = (s: any): readonly any[] => {
   const c = toCanon(s);
   const entries = [...c._internal.entries()];
   entries.sort((a, b) => compareElems(a[1], b[1]));
   return entries.map((e) => e[1]);
 };
 
-export const insert = <A>(x: A) => (s: ReadonlySet<A>): ReadonlySet<A> => {
+export const insert = <A>(x: A, s: any): any => {
   const c = toCanon(s);
-  const next: Internal<A> = new Map(c._internal);
+  const next: any = new Map(c._internal);
   next.set(canon(x), x);
   return mkCanon(next) as unknown as ReadonlySet<A>;
 };
 
-export const delete_ = <A>(x: A) => (s: ReadonlySet<A>): ReadonlySet<A> => {
+export const delete_ = <A>(x: A, s: any): any => {
   const c = toCanon(s);
-  const next: Internal<A> = new Map(c._internal);
+  const next: any = new Map(c._internal);
   next.delete(canon(x));
   return mkCanon(next) as unknown as ReadonlySet<A>;
 };
 
-export const member = <A>(x: A) => (s: ReadonlySet<A>): boolean => toCanon(s)._internal.has(canon(x));
+export const member = <A>(x: A, s: any): boolean => toCanon(s)._internal.has(canon(x));
 
-export const size = <A>(s: ReadonlySet<A>): number => toCanon(s)._internal.size;
+export const size = <A>(s: any): number => toCanon(s)._internal.size;
 
-export const union = <A>(a: ReadonlySet<A>) => (b: ReadonlySet<A>): ReadonlySet<A> => {
+export const union = <A>(a: any, b: any): any => {
   const ca = toCanon(a);
   const cb = toCanon(b);
-  const next: Internal<A> = new Map(ca._internal);
+  const next: any = new Map(ca._internal);
   for (const [ck, v] of cb._internal) next.set(ck, v);
   return mkCanon(next) as unknown as ReadonlySet<A>;
 };
 
-export const intersection = <A>(a: ReadonlySet<A>) => (b: ReadonlySet<A>): ReadonlySet<A> => {
+export const intersection = <A>(a: any, b: any): any => {
   const ca = toCanon(a);
   const cb = toCanon(b);
-  const next: Internal<A> = new Map();
+  const next: any = new Map();
   for (const [ck, v] of ca._internal) if (cb._internal.has(ck)) next.set(ck, v);
   return mkCanon(next) as unknown as ReadonlySet<A>;
 };
 
-export const difference = <A>(a: ReadonlySet<A>) => (b: ReadonlySet<A>): ReadonlySet<A> => {
+export const difference = <A>(a: any, b: any): any => {
   const ca = toCanon(a);
   const cb = toCanon(b);
-  const next: Internal<A> = new Map();
+  const next: any = new Map();
   for (const [ck, v] of ca._internal) if (!cb._internal.has(ck)) next.set(ck, v);
   return mkCanon(next) as unknown as ReadonlySet<A>;
 };
 
-export const singleton = <A>(x: A): ReadonlySet<A> => {
-  const next: Internal<A> = new Map();
+export const singleton = <A>(x: A): any => {
+  const next: any = new Map();
   next.set(canon(x), x);
   return mkCanon(next) as unknown as ReadonlySet<A>;
 };
 
-export const map = <A, B>(f: (a: A) => B) => (s: ReadonlySet<A>): ReadonlySet<B> => {
+export const map = (f: (a: any) => any, s: any): any => {
   const c = toCanon(s);
-  const next: Internal<B> = new Map();
+  const next: any = new Map();
   for (const x of c._internal.values()) { const nx = f(x); next.set(canon(nx), nx); }
-  return mkCanon(next) as unknown as ReadonlySet<B>;
+  return mkCanon(next);
 };
 
-export const null_ = <A>(s: ReadonlySet<A>): boolean => toCanon(s)._internal.size === 0;
+export const null_ = (s: any): boolean => toCanon(s)._internal.size === 0;
 
-export const unions = <A>(ss: readonly ReadonlySet<A>[]): ReadonlySet<A> => {
-  const next: Internal<A> = new Map();
-  for (const s of ss) for (const [ck, v] of toCanon(s)._internal) next.set(ck, v);
-  return mkCanon(next) as unknown as ReadonlySet<A>;
+export const unions = (ss: any): any => {
+  const next: any = new Map();
+  for (const s of (ss as readonly any[])) for (const [ck, v] of toCanon(s)._internal) next.set(ck, v);
+  return mkCanon(next);
 };

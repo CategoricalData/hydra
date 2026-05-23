@@ -4,7 +4,7 @@
 // For objects we use JSON.stringify as a pragmatic fallback; this matches the
 // behavior of Hydra's encode-and-compare semantics for serializable data.
 
-export const equal = <A>(a: A) => (b: A): boolean => {
+export const equal = <A>(a: A, b: A): boolean => {
   if (Object.is(a, b)) return true;
   if (typeof a !== "object" || typeof b !== "object" || a === null || b === null) return false;
   return JSON.stringify(a) === JSON.stringify(b);
@@ -34,7 +34,7 @@ const unwrapForOrdering = (x: unknown): unknown => {
   return x;
 };
 
-export const lt = <A>(a: A) => (b: A): boolean => {
+export const lt = <A>(a: A, b: A): boolean => {
   const ua = unwrapForOrdering(a);
   const ub = unwrapForOrdering(b);
   if (typeof ua === "number" && typeof ub === "number") return ua < ub;
@@ -44,9 +44,9 @@ export const lt = <A>(a: A) => (b: A): boolean => {
   return JSON.stringify(a) < JSON.stringify(b);
 };
 
-export const lte = <A>(a: A) => (b: A): boolean => equal(a)(b) || lt(a)(b);
-export const gt = <A>(a: A) => (b: A): boolean => lt(b)(a);
-export const gte = <A>(a: A) => (b: A): boolean => equal(a)(b) || gt(a)(b);
+export const lte = <A>(a: A, b: A): boolean => equal(a, b) || lt(a, b);
+export const gt = <A>(a: A, b: A): boolean => lt(b, a);
+export const gte = <A>(a: A, b: A): boolean => equal(a, b) || gt(a, b);
 
 // Hydra `compare` returns a hydra.util.Comparison value:
 //   { tag: "lessThan" } | { tag: "equalTo" } | { tag: "greaterThan" }
@@ -58,12 +58,12 @@ export type Comparison =
   | { readonly tag: "equalTo" }
   | { readonly tag: "greaterThan" };
 
-export const compare = <A>(a: A) => (b: A): Comparison => {
-  if (equal(a)(b)) return { tag: "equalTo" } as const;
-  return lt(a)(b) ? { tag: "lessThan" } as const : { tag: "greaterThan" } as const;
+export const compare = <A>(a: A, b: A): Comparison => {
+  if (equal(a, b)) return { tag: "equalTo" } as const;
+  return lt(a, b) ? { tag: "lessThan" } as const : { tag: "greaterThan" } as const;
 };
 
 export const identity = <A>(a: A): A => a;
 
-export const min = <A>(a: A) => (b: A): A => lt(a)(b) ? a : b;
-export const max = <A>(a: A) => (b: A): A => lt(b)(a) ? a : b;
+export const min = <A>(a: A, b: A): A => lt(a, b) ? a : b;
+export const max = <A>(a: A, b: A): A => lt(b, a) ? a : b;

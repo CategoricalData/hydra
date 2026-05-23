@@ -15,21 +15,20 @@
 /** A Hydra namespace, the fully-qualified prefix shared by every element of a module. */
 export interface Namespace {
   readonly value: string;
-  readonly _brand: "Namespace";
 }
 
 export function Namespace(value: string): Namespace {
-  return { value, _brand: "Namespace" };
+  return { value };
 }
 
-/** A fully-qualified Hydra name; equivalent to `Hydra.Core.Name`. */
+/** A fully-qualified Hydra name; structurally compatible with the
+ * generated kernel `Name` (both declare `{ value: string }`). */
 export interface Name {
   readonly value: string;
-  readonly _brand: "Name";
 }
 
 export function Name(value: string): Name {
-  return { value, _brand: "Name" };
+  return { value };
 }
 
 /** Maybe<T> — discriminated union mirroring Hydra's `optional`. */

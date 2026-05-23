@@ -15,17 +15,20 @@ import {
   isJust,
   isLeft,
   isRight,
-} from "../../../main/typescript/hydra/core.js";
+} from "../../../main/typescript/hydra/runtime.js";
 
 describe("core", () => {
   it("wraps Name and Namespace", () => {
+    // `Name`/`Namespace` are now plain `{value: string}` records so the
+    // shape matches the generated kernel `core.Name`. Branded variants
+    // were dropped in the runtime.ts split because the brand mismatch
+    // produced canonical-map-key drift between hand-written and
+    // generated code paths.
     const n: Name = Name("hydra.core.Term");
     expect(n.value).toBe("hydra.core.Term");
-    expect(n._brand).toBe("Name");
 
     const ns: Namespace = Namespace("hydra.core");
     expect(ns.value).toBe("hydra.core");
-    expect(ns._brand).toBe("Namespace");
   });
 
   it("constructs and inspects Maybe", () => {

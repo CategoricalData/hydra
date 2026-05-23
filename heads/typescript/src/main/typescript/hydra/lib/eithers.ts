@@ -1,26 +1,33 @@
 // Hand-written runtime: hydra.lib.eithers primitives.
+//
+// Signatures are flat (positional), matching Python's heads/python/lib/eithers.py.
+//
+// Callback and Either parameters take `any` rather than precise `Either<L,R>`
+// because the kernel-generated coder routes Either values through positions
+// typed as `any`. Tightening these wastes type-checker time on synthesized
+// code without catching real bugs; the runtime checks `tag` directly.
 
-import type { Either, Maybe } from "../core.js";
-import { Left, Right, Just, Nothing } from "../core.js";
+import type { Either, Maybe } from "../runtime.js";
+import { Left, Right, Just, Nothing } from "../runtime.js";
 
-export const bimap = <L, R, L2, R2>(fl: (l: L) => L2) => (fr: (r: R) => R2) => (e: Either<L, R>): Either<L2, R2> =>
+export const bimap = (fl: (l: any) => any, fr: (r: any) => any, e: any): Either<any, any> =>
   e.tag === "left" ? Left(fl(e.value)) : Right(fr(e.value));
 
-export const bind = <L, R, R2>(e: Either<L, R>) => (f: (r: R) => Either<L, R2>): Either<L, R2> =>
-  e.tag === "right" ? f(e.value) : (e as unknown as Either<L, R2>);
+export const bind = (e: any, f: (r: any) => any): Either<any, any> =>
+  e.tag === "right" ? f(e.value) : (e as unknown as Either<any, any>);
 
-export const either = <L, R, B>(fl: (l: L) => B) => (fr: (r: R) => B) => (e: Either<L, R>): B =>
+export const either = (fl: (l: any) => any, fr: (r: any) => any, e: any): any =>
   e.tag === "left" ? fl(e.value) : fr(e.value);
 
 export const either_ = either;
 
-export const isLeft = <L, R>(e: Either<L, R>): boolean => e.tag === "left";
-export const isRight = <L, R>(e: Either<L, R>): boolean => e.tag === "right";
+export const isLeft = (e: any): boolean => e.tag === "left";
+export const isRight = (e: any): boolean => e.tag === "right";
 
-export const map = <L, R, R2>(f: (r: R) => R2) => (e: Either<L, R>): Either<L, R2> =>
-  e.tag === "right" ? Right(f(e.value)) : (e as unknown as Either<L, R2>);
+export const map = (f: (r: any) => any, e: any): Either<any, any> =>
+  e.tag === "right" ? Right(f(e.value)) : (e as unknown as Either<any, any>);
 
-export const mapList = <A, L, B>(f: (a: A) => Either<L, B>) => (xs: readonly A[]): Either<L, readonly B[]> => {
+export const mapList = <A, L, B>(f: (a: A) => Either<L, B>, xs: readonly A[]): Either<L, readonly B[]> => {
   const out: B[] = [];
   for (const x of xs) {
     const r = f(x);
@@ -37,10 +44,10 @@ export const pure = <R, L = never>(x: R): Either<L, R> => Right(x);
 const force = <A>(x: A | (() => A)): A =>
   typeof x === "function" ? (x as () => A)() : x;
 
-export const fromLeft = <L>(d: L | (() => L)) => <R>(e: Either<L, R>): L =>
+export const fromLeft = <L, R>(d: L | (() => L), e: Either<L, R>): L =>
   e.tag === "left" ? e.value : force(d);
 
-export const fromRight = <R>(d: R | (() => R)) => <L>(e: Either<L, R>): R =>
+export const fromRight = <L, R>(d: R | (() => R), e: Either<L, R>): R =>
   e.tag === "right" ? e.value : force(d);
 
 export const lefts = <L, R>(es: readonly Either<L, R>[]): readonly L[] => {
@@ -55,14 +62,14 @@ export const rights = <L, R>(es: readonly Either<L, R>[]): readonly R[] => {
   return out;
 };
 
-export const mapMaybe = <A, L, B>(f: (a: A) => Either<L, B>) => (m: Maybe<A>): Either<L, Maybe<B>> => {
+export const mapMaybe = (f: (a: any) => any, m: any): Either<any, Maybe<any>> => {
   if (m.tag === "nothing") return Right(Nothing);
   const r = f(m.value);
-  if (r.tag === "left") return r as unknown as Either<L, Maybe<B>>;
+  if (r.tag === "left") return r as unknown as Either<any, Maybe<any>>;
   return Right(Just(r.value));
 };
 
-export const mapSet = <A, L, B>(f: (a: A) => Either<L, B>) => (s: ReadonlySet<A>): Either<L, ReadonlySet<B>> => {
+export const mapSet = <A, L, B>(f: (a: A) => Either<L, B>, s: ReadonlySet<A>): Either<L, ReadonlySet<B>> => {
   const out = new Set<B>();
   for (const x of s) {
     const r = f(x);
@@ -77,4 +84,17 @@ export const partitionEithers = <L, R>(es: readonly Either<L, R>[]): readonly [r
   const rs: R[] = [];
   for (const e of es) (e.tag === "left" ? ls : rs).push(e.value as never);
   return [ls, rs] as const;
+};
+
+// Left-fold over a list with an Either-returning function, short-
+// circuiting on Left. Mirrors Python's `eithers.foldl`. The kernel
+// emits `f` curried (`(acc) => (x) => Either<L, A>`); call accordingly.
+export const foldl = (f: (acc: any) => (x: any) => any, acc: any, xs: readonly any[]): any => {
+  let r = acc;
+  for (const x of xs) {
+    const e = f(r)(x);
+    if (e.tag === "left") return e;
+    r = e.value;
+  }
+  return Right(r);
 };
