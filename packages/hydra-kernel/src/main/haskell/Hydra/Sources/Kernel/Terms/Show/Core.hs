@@ -559,7 +559,8 @@ typeScheme = define "typeScheme" $
       Strings.intercalate (string ",") (var "varNames"),
       string ". "]) $
   "toConstraintPair" <~ ("v" ~> "c" ~> Strings.cat $ list [
-    Core.unName (var "c"),
+    match _TypeClassConstraint Nothing [
+      _TypeClassConstraint_simple>>: "n" ~> Core.unName (var "n")] @@ (var "c"),
     string " ",
     Core.unName (var "v")]) $
   "toConstraintPairs" <~ ("p" ~> Lists.map
