@@ -3,6 +3,14 @@
     {
       "term": {
         "name": "hydra.rust.coder.encodeEnumVariant",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.FieldType"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.EnumVariant"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -219,22 +227,14 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.EnumVariant"}}},
-                      "domain": {"variable": "hydra.core.FieldType"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeLiteral",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.Literal"}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Expression"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -555,13 +555,14 @@
                             "parameter": "iv"}}}],
                     "typeName": "hydra.core.Literal"}}}},
             "domain": {"variable": "hydra.core.Literal"},
-            "parameter": "lit"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.rust.syntax.Expression"}, "domain": {"variable": "hydra.core.Literal"}}},
-          "variables": []}}},
+            "parameter": "lit"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeLiteralType",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"variable": "hydra.core.LiteralType"}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Type"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -702,13 +703,19 @@
                             "parameter": "_"}}}],
                     "typeName": "hydra.core.LiteralType"}}}},
             "domain": {"variable": "hydra.core.LiteralType"},
-            "parameter": "lt"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.rust.syntax.Type"}, "domain": {"variable": "hydra.core.LiteralType"}}},
-          "variables": []}}},
+            "parameter": "lt"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeProjectionElim",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Projection"}},
+            {"isLazy": false, "name": "arg3", "type": {"maybe": {"variable": "hydra.core.Term"}}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Expression"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -831,25 +838,18 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Expression"}}},
-                          "domain": {"maybe": {"variable": "hydra.core.Term"}}}},
-                      "domain": {"variable": "hydra.core.Projection"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeStructField",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.FieldType"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.StructField"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -941,22 +941,18 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.StructField"}}},
-                      "domain": {"variable": "hydra.core.FieldType"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeTerm",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Term"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Expression"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -2385,22 +2381,18 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Expression"}}},
-                      "domain": {"variable": "hydra.core.Term"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeTermDefinition",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.TermDefinition"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.ItemWithComments"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -2450,8 +2442,17 @@
                                                   "application": {
                                                     "argument": {
                                                       "application": {
-                                                        "argument": {"variable": "tdef"},
-                                                        "function": {"project": {"fieldName": "typeScheme", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "tdef"},
+                                                            "function": {"project": {"fieldName": "signature", "typeName": "hydra.packaging.TermDefinition"}}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "hydra.scoping.termSignatureToTypeScheme"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"typeApplication": {"body": {"variable": "hydra.lib.maybes.map"}, "type": {"variable": "hydra.typing.TermSignature"}}},
+                                                                "type": {"variable": "hydra.core.TypeScheme"}}}}}}},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"project": {"fieldName": "body", "typeName": "hydra.core.TypeScheme"}},
@@ -2584,22 +2585,17 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.ItemWithComments"}}},
-                      "domain": {"variable": "hydra.packaging.TermDefinition"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeType",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Type"}}],
+          "result": {"type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Type"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -3281,22 +3277,18 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Type"}}},
-                      "domain": {"variable": "hydra.core.Type"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeTypeDefinition",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.packaging.TypeDefinition"}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.ItemWithComments"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -3719,22 +3711,19 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.ItemWithComments"}}},
-                      "domain": {"variable": "hydra.packaging.TypeDefinition"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeUnionElim",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.CaseStatement"}},
+            {"isLazy": false, "name": "arg3", "type": {"maybe": {"variable": "hydra.core.Term"}}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Expression"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -4153,25 +4142,19 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Expression"}}},
-                          "domain": {"maybe": {"variable": "hydra.core.Term"}}}},
-                      "domain": {"variable": "hydra.core.CaseStatement"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.encodeUnwrapElim",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "t1"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.core.Name"}},
+            {"isLazy": false, "name": "arg3", "type": {"maybe": {"variable": "hydra.core.Term"}}}],
+          "result": {
+            "type": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Expression"}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -4278,25 +4261,22 @@
                     "domain": {"variable": "t0"},
                     "parameter": "cx"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {"either": {"left": {"variable": "hydra.errors.Error"}, "right": {"variable": "hydra.rust.syntax.Expression"}}},
-                          "domain": {"maybe": {"variable": "hydra.core.Term"}}}},
-                      "domain": {"variable": "hydra.core.Name"}}},
-                  "domain": {"variable": "t1"}}},
-              "domain": {"variable": "t0"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.moduleToRust",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.packaging.Module"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.packaging.Definition"}}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "t0"}},
+            {"isLazy": false, "name": "arg3", "type": {"variable": "t1"}}],
+          "result": {
+            "type": {
+              "either": {
+                "left": {"variable": "hydra.errors.Error"},
+                "right": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}}},
+          "typeParameters": [{"constraints": [], "name": "t0"}, {"constraints": [], "name": "t1"}]},
         "term": {
           "typeLambda": {
             "body": {
@@ -4503,28 +4483,16 @@
                     "domain": {"variable": "hydra.packaging.Module"},
                     "parameter": "mod"}},
                 "parameter": "t1"}},
-            "parameter": "t0"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {
-                    "function": {
-                      "codomain": {
-                        "function": {
-                          "codomain": {
-                            "either": {
-                              "left": {"variable": "hydra.errors.Error"},
-                              "right": {"map": {"keys": {"literal": {"string": {}}}, "values": {"literal": {"string": {}}}}}}},
-                          "domain": {"variable": "t1"}}},
-                      "domain": {"variable": "t0"}}},
-                  "domain": {"list": {"variable": "hydra.packaging.Definition"}}}},
-              "domain": {"variable": "hydra.packaging.Module"}}},
-          "variables": ["t0", "t1"]}}},
+            "parameter": "t0"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustApply1",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.rust.syntax.Type"}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Type"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4566,16 +4534,17 @@
                 "domain": {"variable": "hydra.rust.syntax.Type"},
                 "parameter": "arg"}},
             "domain": {"literal": {"string": {}}},
-            "parameter": "name"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.rust.syntax.Type"}, "domain": {"variable": "hydra.rust.syntax.Type"}}},
-              "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+            "parameter": "name"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustApply2",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.rust.syntax.Type"}},
+            {"isLazy": false, "name": "arg2", "type": {"variable": "hydra.rust.syntax.Type"}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Type"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4623,19 +4592,16 @@
                 "domain": {"variable": "hydra.rust.syntax.Type"},
                 "parameter": "arg1"}},
             "domain": {"literal": {"string": {}}},
-            "parameter": "name"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"function": {"codomain": {"variable": "hydra.rust.syntax.Type"}, "domain": {"variable": "hydra.rust.syntax.Type"}}},
-                  "domain": {"variable": "hydra.rust.syntax.Type"}}},
-              "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+            "parameter": "name"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustBlock",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"list": {"variable": "hydra.rust.syntax.Statement"}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.rust.syntax.Expression"}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Expression"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4652,17 +4618,16 @@
                 "domain": {"variable": "hydra.rust.syntax.Expression"},
                 "parameter": "expr"}},
             "domain": {"list": {"variable": "hydra.rust.syntax.Statement"}},
-            "parameter": "stmts"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.rust.syntax.Expression"}, "domain": {"variable": "hydra.rust.syntax.Expression"}}},
-              "domain": {"list": {"variable": "hydra.rust.syntax.Statement"}}}},
-          "variables": []}}},
+            "parameter": "stmts"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustCall",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"variable": "hydra.rust.syntax.Expression"}},
+            {"isLazy": false, "name": "arg1", "type": {"list": {"variable": "hydra.rust.syntax.Expression"}}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Expression"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4679,19 +4644,16 @@
                 "domain": {"list": {"variable": "hydra.rust.syntax.Expression"}},
                 "parameter": "args"}},
             "domain": {"variable": "hydra.rust.syntax.Expression"},
-            "parameter": "fun"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {
-                  "codomain": {"variable": "hydra.rust.syntax.Expression"},
-                  "domain": {"list": {"variable": "hydra.rust.syntax.Expression"}}}},
-              "domain": {"variable": "hydra.rust.syntax.Expression"}}},
-          "variables": []}}},
+            "parameter": "fun"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustClosure",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.rust.syntax.Expression"}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Expression"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4749,17 +4711,14 @@
                 "domain": {"variable": "hydra.rust.syntax.Expression"},
                 "parameter": "body"}},
             "domain": {"list": {"literal": {"string": {}}}},
-            "parameter": "params"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.rust.syntax.Expression"}, "domain": {"variable": "hydra.rust.syntax.Expression"}}},
-              "domain": {"list": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+            "parameter": "params"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustExprPath",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Expression"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4785,13 +4744,16 @@
                       "typeName": "hydra.rust.syntax.ExprPath"}}},
                 "typeName": "hydra.rust.syntax.Expression"}},
             "domain": {"literal": {"string": {}}},
-            "parameter": "name"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.rust.syntax.Expression"}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+            "parameter": "name"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustLetStmt",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}},
+            {"isLazy": false, "name": "arg1", "type": {"variable": "hydra.rust.syntax.Expression"}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Statement"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4827,17 +4789,14 @@
                 "domain": {"variable": "hydra.rust.syntax.Expression"},
                 "parameter": "expr"}},
             "domain": {"literal": {"string": {}}},
-            "parameter": "name"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {
-                "function": {"codomain": {"variable": "hydra.rust.syntax.Statement"}, "domain": {"variable": "hydra.rust.syntax.Expression"}}},
-              "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+            "parameter": "name"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustPath",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"literal": {"string": {}}}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Type"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4863,13 +4822,14 @@
                       "typeName": "hydra.rust.syntax.TypePath"}}},
                 "typeName": "hydra.rust.syntax.Type"}},
             "domain": {"literal": {"string": {}}},
-            "parameter": "name"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.rust.syntax.Type"}, "domain": {"literal": {"string": {}}}}},
-          "variables": []}}},
+            "parameter": "name"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustPathSegmented",
+        "signature": {
+          "parameters": [{"isLazy": false, "name": "arg0", "type": {"list": {"literal": {"string": {}}}}}],
+          "result": {"type": {"variable": "hydra.rust.syntax.Type"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -4906,18 +4866,16 @@
                       "typeName": "hydra.rust.syntax.TypePath"}}},
                 "typeName": "hydra.rust.syntax.Type"}},
             "domain": {"list": {"literal": {"string": {}}}},
-            "parameter": "segs"}},
-        "typeScheme": {
-          "body": {"function": {"codomain": {"variable": "hydra.rust.syntax.Type"}, "domain": {"list": {"literal": {"string": {}}}}}},
-          "variables": []}}},
+            "parameter": "segs"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.rustUnit",
-        "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.rust.syntax.Type"}},
-        "typeScheme": {"body": {"variable": "hydra.rust.syntax.Type"}, "variables": []}}},
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.rust.syntax.Type"}}, "typeParameters": []},
+        "term": {"inject": {"field": {"name": "unit", "term": {"unit": {}}}, "typeName": "hydra.rust.syntax.Type"}}}},
     {
       "term": {
         "name": "hydra.rust.coder.standardDerives",
+        "signature": {"parameters": [], "result": {"type": {"list": {"literal": {"string": {}}}}}, "typeParameters": []},
         "term": {
           "list": [
             {"literal": {"string": "Clone"}},
@@ -4925,8 +4883,7 @@
             {"literal": {"string": "PartialEq"}},
             {"literal": {"string": "Eq"}},
             {"literal": {"string": "PartialOrd"}},
-            {"literal": {"string": "Ord"}}]},
-        "typeScheme": {"body": {"list": {"literal": {"string": {}}}}, "variables": []}}}],
+            {"literal": {"string": "Ord"}}]}}}],
   "dependencies": [
     {"module": "hydra.rust.serde"},
     {"module": "hydra.rust.language"},

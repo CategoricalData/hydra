@@ -3,6 +3,12 @@
     {
       "term": {
         "name": "hydra.test.testTerms.latlonRecord",
+        "signature": {
+          "parameters": [
+            {"isLazy": false, "name": "arg0", "type": {"literal": {"float": {"float32": {}}}}},
+            {"isLazy": false, "name": "arg1", "type": {"literal": {"float": {"float32": {}}}}}],
+          "result": {"type": {"variable": "hydra.core.Term"}},
+          "typeParameters": []},
         "term": {
           "lambda": {
             "body": {
@@ -60,16 +66,11 @@
                 "domain": {"literal": {"float": {"float32": {}}}},
                 "parameter": "lon"}},
             "domain": {"literal": {"float": {"float32": {}}}},
-            "parameter": "lat"}},
-        "typeScheme": {
-          "body": {
-            "function": {
-              "codomain": {"function": {"codomain": {"variable": "hydra.core.Term"}, "domain": {"literal": {"float": {"float32": {}}}}}},
-              "domain": {"literal": {"float": {"float32": {}}}}}},
-          "variables": []}}},
+            "parameter": "lat"}}}},
     {
       "term": {
         "name": "hydra.test.testTerms.testDataArthur",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Term"}}, "typeParameters": []},
         "term": {
           "inject": {
             "field": {
@@ -128,11 +129,11 @@
                                       "typeName": "hydra.core.Term"}}}],
                               "typeName": "hydra.core.Field"}}]}}],
                   "typeName": "hydra.core.Record"}}},
-            "typeName": "hydra.core.Term"}},
-        "typeScheme": {"body": {"variable": "hydra.core.Term"}, "variables": []}}},
+            "typeName": "hydra.core.Term"}}}},
     {
       "term": {
         "name": "hydra.test.testTerms.testElementArthur",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Binding"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -158,11 +159,11 @@
                               "body": {"maybe": null},
                               "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
                       "typeName": "hydra.core.TypeScheme"}}}}],
-            "typeName": "hydra.core.Binding"}},
-        "typeScheme": {"body": {"variable": "hydra.core.Binding"}, "variables": []}}},
+            "typeName": "hydra.core.Binding"}}}},
     {
       "term": {
         "name": "hydra.test.testTerms.testElementFirstName",
+        "signature": {"parameters": [], "result": {"type": {"variable": "hydra.core.Binding"}}, "typeParameters": []},
         "term": {
           "record": {
             "fields": [
@@ -219,8 +220,7 @@
                               "body": {"maybe": null},
                               "type": {"map": {"keys": {"variable": "hydra.core.Name"}, "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
                       "typeName": "hydra.core.TypeScheme"}}}}],
-            "typeName": "hydra.core.Binding"}},
-        "typeScheme": {"body": {"variable": "hydra.core.Binding"}, "variables": []}}}],
+            "typeName": "hydra.core.Binding"}}}}],
   "dependencies": [{"module": "hydra.test.testTypes"}, {"module": "hydra.core"}],
   "description": "Term definitions for the test suite",
   "name": "hydra.test.testTerms"}

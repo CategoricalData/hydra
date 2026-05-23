@@ -10,8 +10,6 @@ import qualified Hydra.Errors as Errors
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Lexical as Lexical
-import qualified Hydra.Packaging as Packaging
-import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -24,9 +22,11 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
+import qualified Hydra.Packaging as Packaging
 import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Resolution as Resolution
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Show.Typing as ShowTyping
 import qualified Hydra.Sorting as Sorting
@@ -383,7 +383,7 @@ inferTypeOfCollection fcx cx typCons trmCons desc classNames els =
           fcx2 = Pairs.second varResult
           classConstraints =
                   Logic.ifElse (Sets.null classNames) Maps.empty (Maps.singleton var (Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.map Core.TypeClassConstraintSimple classNames)}))
+                    Core.typeVariableMetadataClasses = (Sets.map (\n -> Core.TypeClassConstraintSimple n) classNames)}))
       in (Logic.ifElse (Lists.null els) (Right (yieldWithConstraints fcx2 (buildTypeApplicationTerm [
         var] (trmCons [])) (typCons (Core.TypeVariable var)) Substitution.idTypeSubst classConstraints)) (Eithers.bind (inferMany fcx2 cx (Lists.zip els (Lists.map (\i -> Strings.cat [
         "#",

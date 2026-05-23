@@ -21,8 +21,8 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Names as Names
 import qualified Hydra.Packaging as Packaging
-import qualified Hydra.Scoping as Scoping
 import qualified Hydra.Predicates as Predicates
+import qualified Hydra.Scoping as Scoping
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.Scientific as Sci
 -- | Transform a type binding into an encoder binding
@@ -641,8 +641,10 @@ encoderTypeScheme typ =
           allOrdVars = encoderCollectOrdVars typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = encoderFunType,
@@ -656,8 +658,10 @@ encoderTypeSchemeNamed ename typ =
           allOrdVars = encoderCollectOrdVars typ
           ordVars = Lists.filter (\v -> Lists.elem v typeVars) allOrdVars
           constraints =
-                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
-                    Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
+                  Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (
+                    v,
+                    Core.TypeVariableMetadata {
+                      Core.typeVariableMetadataClasses = (Sets.singleton (Core.TypeClassConstraintSimple (Core.Name "ordering")))})) ordVars)))
       in Core.TypeScheme {
         Core.typeSchemeVariables = typeVars,
         Core.typeSchemeBody = encoderFunType,
