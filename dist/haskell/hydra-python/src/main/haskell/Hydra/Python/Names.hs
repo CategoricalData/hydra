@@ -59,9 +59,7 @@ encodeNameQualified env name =
           qualName = Names.qualifyName name
           mns = Packaging.qualifiedNameModuleName qualName
           local = Packaging.qualifiedNameLocal qualName
-          pyNs =
-                  \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Packaging.unNamespace nsVal)))
-      in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Maybes.maybe (Syntax.Name (sanitizePythonName local)) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." (sanitizePythonName local)))) mns)) (\n -> n) (Maps.lookup name boundVars))
+      in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Syntax.Name (Strings.intercalate "." (Lists.map sanitizePythonName (Strings.splitOn "." (Core.unName name)))))) (\n -> n) (Maps.lookup name boundVars))
 -- | Encode a namespace as a Python dotted name
 encodeNamespace :: Packaging.ModuleName -> Syntax.DottedName
 encodeNamespace nsVal =
