@@ -7090,6 +7090,10 @@
   "dependencies": [
     "hydra.test.testGraph",
     "hydra.rewriting",
+    "hydra.inference",
+    "hydra.scoping",
+    "hydra.show.core",
+    "hydra.test.testTypes",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

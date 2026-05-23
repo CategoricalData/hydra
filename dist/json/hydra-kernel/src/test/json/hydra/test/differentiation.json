@@ -7948,6 +7948,8 @@
     "hydra.differentiation",
     "hydra.variables",
     "hydra.show.core",
+    "hydra.reduction",
+    "hydra.test.testGraph",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",

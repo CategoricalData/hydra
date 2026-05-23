@@ -24,7 +24,7 @@ module_ :: Module
 module_ = Module {
             moduleNamespace = ns,
             moduleDefinitions = definitions,
-            moduleDependencies = (ErrorPg.ns:KernelTypes.kernelTypesNamespaces),
+            moduleDependencies = (ErrorPg.ns:Namespace "hydra.pg.model":KernelTypes.kernelTypesNamespaces),
             moduleDescription = Just "String representations of hydra.error.pg types"}
   where
     definitions = [

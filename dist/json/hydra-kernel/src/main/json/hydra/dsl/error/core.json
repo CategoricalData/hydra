@@ -16960,8 +16960,8 @@
   "dependencies": [
     "hydra.error.core",
     "hydra.phantoms",
-    "hydra.paths",
     "hydra.core",
+    "hydra.paths",
     "hydra.variants",
     "hydra.dsl.paths",
     "hydra.dsl.core",

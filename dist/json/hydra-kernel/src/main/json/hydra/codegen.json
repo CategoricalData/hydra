@@ -5228,6 +5228,8 @@
     "hydra.decode.core",
     "hydra.decode.packaging",
     "hydra.encode.packaging",
+    "hydra.constants",
+    "hydra.encode.core",
     "hydra.paths",
     "hydra.ast",
     "hydra.classes",
