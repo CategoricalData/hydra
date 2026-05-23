@@ -231,4 +231,4 @@ step_cache_record() {
 # the temporary headroom until per-module incremental inference is
 # wired through writeModulesJson (see project memory
 # incremental_inference_wiring; tracks the #247 follow-up).
-RTS_FLAGS="+RTS -K256M -A32M -M6G -RTS"
+RTS_FLAGS="${RTS_FLAGS:-+RTS -K256M -A32M -M6G -RTS}"
